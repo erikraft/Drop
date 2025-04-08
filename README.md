@@ -3,19 +3,19 @@
     <img src="public/images/android-chrome-512x512.png" alt="Logo"  width="150" height="150">
   </a>
  
-  # _Send it_, with [PairDrop](https://pairdrop.net)
+  # _Send it_, with [ErikrafT Drop](https://drop.erikraft.com/)
 
   <p>
-    Local file sharing <a href="https://pairdrop.net"><strong>in your web browser</strong></a>. 
+    Local file sharing <a href="https://drop.erikraft.com/"><strong>in your web browser</strong></a>. 
     <br>
     Inspired by Apple's AirDrop.
     <br> 
     Fork of Snapdrop.
     <br>
     <br>
-    <a href="https://github.com/schlagmichdoch/PairDrop/issues">Report a bug</a>
+    <a href="https://github.com/erikraft/Drop/issues">Report a bug</a>
     <br />
-    <a href="https://github.com/schlagmichdoch/PairDrop/issues">Request feature</a>
+    <a href="https://github.com/erikraft/Drop/issues">Request feature</a>
   </p>
 </div>
 <br>
