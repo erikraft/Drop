@@ -147,36 +147,28 @@
         </div>
     </div>
     <!-- Footer -->
-    <footer class="column opacity-0">
-        <svg class="icon logo">
-            <defs>
-                <linearGradient id="primaryGradient" gradientTransform="rotate(90)">
-                    <stop offset="0%" class="start-color" />
-                    <stop offset="100%" class="stop-color" />
-                </linearGradient>
-            </defs>
-            <use xlink:href="#wifi-tethering" style="fill: url(#primaryGradient);"></use>
-        </svg>
-        <div class="column">
-            <div class="known-as-wrapper">
-                <span data-i18n-key="footer.known-as" data-i18n-attrs="text"></span>
-                <div id="display-name" class="badge" data-i18n-key="footer.display-name" data-i18n-attrs="data-placeholder title" autocorrect="off" autocomplete="off" autocapitalize="none" spellcheck="false" contenteditable></div>
-                <svg class="icon edit-pen">
-                    <use xlink:href="#edit-pen-icon"></use>
-                </svg>
+<footer class="column opacity-0">
+    <img src="public/images/logo_transparent_white_512x512.png" width="96" height="96" alt="Logo" onerror="this.onerror=null; this.src='public/images/ErikrafT Drop_Black.svg';">
+    <div class="column">
+        <div class="known-as-wrapper">
+            <span data-i18n-key="footer.known-as" data-i18n-attrs="text"></span>
+            <div id="display-name" class="badge" data-i18n-key="footer.display-name" data-i18n-attrs="data-placeholder title" autocorrect="off" autocomplete="off" autocapitalize="none" spellcheck="false" contenteditable></div>
+            <svg class="icon edit-pen">
+                <use xlink:href="#edit-pen-icon"></use>
+            </svg>
+        </div>
+        <div class="discovery-wrapper panel border row">
+            <div class="row center">
+                <span data-i18n-key="footer.discovery" data-i18n-attrs="text"></span>
             </div>
-            <div class="discovery-wrapper panel border row">
-                <div class="row center">
-                    <span data-i18n-key="footer.discovery" data-i18n-attrs="text"></span>
-                </div>
-                <div class="row center wrap">
-                    <span class="badge badge-room-ip" data-i18n-key="footer.on-this-network" data-i18n-attrs="text title"></span>
-                    <span class="badge badge-room-secret pointer" data-i18n-key="footer.paired-devices" data-i18n-attrs="text title" hidden></span>
-                    <span class="badge badge-room-public-id pointer" data-i18n-key="footer.public-room-devices" data-i18n-attrs="title" hidden>in room IAIAI</span>
-                </div>
+            <div class="row center wrap">
+                <span class="badge badge-room-ip" data-i18n-key="footer.on-this-network" data-i18n-attrs="text title"></span>
+                <span class="badge badge-room-secret pointer" data-i18n-key="footer.paired-devices" data-i18n-attrs="text title" hidden></span>
+                <span class="badge badge-room-public-id pointer" data-i18n-key="footer.public-room-devices" data-i18n-attrs="title" hidden>in room IAIAI</span>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
     <!-- Language Select Dialog -->
     <x-dialog id="language-select-dialog">
         <x-background class="full center">
@@ -654,68 +646,32 @@
         </x-toast>
     </div>
     <!-- About Page -->
-    <x-about id="about" class="full center column">
-        <header class="row-reverse">
-            <a href="#" class="close icon-button" data-i18n-key="about.close-about" data-i18n-attrs="aria-label">
+<x-about id="about" class="full center column">
+    <header class="row-reverse">
+        <a href="#" class="close icon-button" data-i18n-key="about.close-about" data-i18n-attrs="aria-label">
+            <svg class="icon">
+                <use xlink:href="#close-icon"></use>
+            </svg>
+        </a>
+    </header>
+    <section class="center column">
+        <img src="public/images/logo_transparent_white_512x512.png" width="96" height="96" alt="Logo" onerror="this.onerror=null; this.src='public/images/ErikrafT Drop_Black.svg';">
+        <div class="title-wrapper" dir="ltr">
+            <h1>ErikrafT Drop</h1>
+            <div class="font-subheading">v1.11.2</div>
+        </div>
+        <div class="font-subheading" data-i18n-key="about.claim" data-i18n-attrs="text"></div>
+        <div class="row">
+            <a class="icon-button" target="_blank" href="https://github.com/erikraft/Drop/tree/master" rel="noreferrer" data-i18n-key="about.github" data-i18n-attrs="title">
                 <svg class="icon">
-                    <use xlink:href="#close-icon"></use>
+                    <use xlink:href="#github"></use>
                 </svg>
             </a>
-        </header>
-        <section class="center column">
-            <svg class="icon logo">
-                <use xlink:href="#wifi-tethering"></use>
-            </svg>
-            <div class="title-wrapper" dir="ltr">
-                <h1>ErikrafT Drop</h1>
-                <div class="font-subheading">v1.11.2</div>
-            </div>
-            <div class="font-subheading" data-i18n-key="about.claim" data-i18n-attrs="text"></div>
-            <div class="row">
-                <a class="icon-button" target="_blank" href="https://github.com/erikraft/Drop/tree/master" rel="noreferrer" data-i18n-key="about.github" data-i18n-attrs="title">
-                    <svg class="icon">
-                        <use xlink:href="#github"></use>
-                    </svg>
-                </a>
-                <a class="icon-button" id="donation-btn" target="_blank" href="https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL" rel="noreferrer" data-i18n-key="about.buy-me-a-coffee" data-i18n-attrs="title">
-                    <svg class="icon">
-                        <use xlink:href="#donation"></use>
-                    </svg>
-                </a>
-                <a class="icon-button" id="x-twitter-btn" target="_blank" href="https://x.com/ErikrafTbr" rel="noreferrer" data-i18n-key="about.tweet" data-i18n-attrs="title">
-                    <svg class="icon">
-                        <use xlink:href="#x-twitter"></use>
-                    </svg>
-                </a>
-                <a class="icon-button" id="mastodon-btn" target="_blank" rel="noreferrer" data-i18n-key="about.mastodon" data-i18n-attrs="title" hidden>
-                    <svg class="icon">
-                        <use xlink:href="#mastodon"></use>
-                    </svg>
-                </a>
-                <a class="icon-button" id="bluesky-btn" target="_blank" rel="noreferrer" data-i18n-key="about.bluesky" data-i18n-attrs="title" hidden>
-                    <svg class="icon">
-                        <use xlink:href="#bluesky"></use>
-                    </svg>
-                </a>
-                <a class="icon-button" id="custom-btn" target="_blank" rel="noreferrer" data-i18n-key="about.custom" data-i18n-attrs="title" hidden>
-                    <svg class="icon">
-                        <use xlink:href="#custom"></use>
-                    </svg>
-                </a>
-                <a class="icon-button" id="privacypolicy-btn" target="_blank" rel="noreferrer" data-i18n-key="about.privacypolicy" data-i18n-attrs="title" hidden>
-                    <svg class="icon">
-                        <use xlink:href="#privacypolicy"></use>
-                    </svg>
-                </a>
-                <a class="icon-button" target="_blank" href="https://github.com/erikraft/Drop/blob/master/docs/faq.md" rel="noreferrer" data-i18n-key="about.faq" data-i18n-attrs="title">
-                    <svg class="icon">
-                        <use xlink:href="#help-outline"></use>
-                    </svg>
-                </a>
-            </div>
-        </section>
-        <x-background></x-background>
-    </x-about>
+            ...
+        </div>
+    </section>
+    <x-background></x-background>
+</x-about>
     <canvas class="circles opacity-0"></canvas>
     <!-- SVG Icon Library -->
     <svg style="display: none;">
