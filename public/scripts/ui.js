@@ -747,7 +747,7 @@ class Dialog {
             document.activeElement.blur();
             window.blur();
         }
-        document.title = 'PairDrop | Transfer Files Cross-Platform. No Setup, No Signup.';
+        document.title = '📤｜ErikrafT Drop｜Transfer Files!!!';
         changeFavicon("images/favicon-96x96.png");
         this.correspondingPeerId = undefined;
     }
