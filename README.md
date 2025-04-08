@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/schlagmichdoch/ErikrafT Drop">
+  <a href="https://github.com/erikraft/Drop">
     <img src="public/images/android-chrome-512x512.png" alt="Logo"  width="150" height="150">
   </a>
  
