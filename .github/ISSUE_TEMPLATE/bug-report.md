@@ -34,7 +34,7 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**Bug occurs on official PairDrop instance https://pairdrop.net/**
+**Bug occurs on official PairDrop instance https://drop.erikraft.com/**
 No | Yes
 Version: v1.11.2
 
