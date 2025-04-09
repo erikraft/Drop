@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/erikraft/Drop">
-    <img src="public/images/android-chrome-512x512.png" alt="Logo"  width="150" height="150">
+    <img src="public/images/(2)ErikrafT Drop - Redondado.png" alt="Logo"  width="150" height="150">
   </a>
  
   # _Send it_, with [ErikrafT Drop](https://drop.erikraft.com/)
