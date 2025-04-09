@@ -8,9 +8,9 @@
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"><strong>in your web browser</strong></a>. 
     <br>
-    Inspired by Apple's AirDrop.
+    Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.
     <br> 
-    Fork of Snapdrop.
+    Fork of PairDrop.
     <br>
     <br>
     <a href="https://github.com/erikraft/Drop/issues">Report a bug</a>
