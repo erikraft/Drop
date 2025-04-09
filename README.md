@@ -113,7 +113,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ## Support
 <a href="https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL" target="_blank">
-<img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy me a coffee" style="height: 60px !important;width: 217px !important;" >
+<img src="https://i.imgur.com/slSSrpB.png" alt="Donate" style="height: 60px !important;width: 217px !important;" >
 </a>
 <br />
 <br />
