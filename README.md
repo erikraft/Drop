@@ -94,11 +94,6 @@ Connect to others in complex network situations, or over the Internet.
 
 </details>
 
-## Translate ErikrafT Drop on [Hosted Weblate](https://hosted.weblate.org/engage/pairdrop/)
-<a href="https://hosted.weblate.org/engage/pairdrop/">
-<img src="https://hosted.weblate.org/widget/pairdrop/horizontal-blue.svg" alt="Translation status" style="width: 300px" />
-</a>
-
 ## Built with the following awesome technologies:
 * Vanilla HTML5 / JS ES6 / CSS 3 frontend
 * [WebRTC](http://webrtc.org/) / WebSockets
@@ -127,8 +122,3 @@ ErikrafT Drop is libre, and always will be. \
 If you find it useful and want to support free and open-source software, please consider donating using the button above. \
 I footed the bill for the domain and the server, and you can help create and maintain great software by supporting me. \
 Thank you very much for your contribution!
-
-## Contributing
-Feel free to [open an issue](https://github.com/schlagmichdoch/ErikrafT Drop/issues/new/choose) or a
-[pull request](https://github.com/schlagmichdoch/ErikrafT Drop/pulls), following the
-[Contributing Guidelines](CONTRIBUTING.md).
