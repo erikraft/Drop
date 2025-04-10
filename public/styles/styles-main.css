@@ -166,6 +166,12 @@ header > .icon-button {
     height: 40px;
 }
 
+.android-icon {
+  font-size: 24px;
+  color: inherit; /* Herdará a cor do texto pai, se adaptando ao tema */
+}
+
+
 header * {
     transition: all 300ms;
 }
