@@ -50,6 +50,10 @@
                 <use xlink:href="#info-outline"></use>
             </svg>
         </a>
+        
+        <a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" class="icon-button" data-i18n-key="header.android" data-i18n-attrs="title aria-label">
+    <i class="fa-brands fa-android icon" aria-hidden="true"></i>
+</a>
         <div id="language-selector" class="icon-button" data-i18n-key="header.language-selector" data-i18n-attrs="title">
             <svg class="icon">
                 <use xlink:href="#icon-language-selector"></use>
@@ -821,6 +825,39 @@
         </symbol>
     </svg>
     <!-- Scripts -->
+
+<!-- Script de Download para Android -->
+<script>
+    document.getElementById('githubDownloadAndroid').addEventListener('click', async function(event) {
+        event.preventDefault();
+
+        const owner = 'erikraft';
+        const repo = 'App-Drop-Apk';
+        const path = 'ErikrafT%20Drop.apk';
+        const branch = 'main';
+
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Erro: ${response.status}`);
+
+            const data = await response.json();
+            const downloadUrl = data.download_url;
+
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = decodeURIComponent(path);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Erro ao baixar o APK:', error);
+        }
+    });
+</script>
+
+    
     <script src="scripts/localization.js" defer></script>
     <script src="scripts/persistent-storage.js" defer></script>
     <script src="scripts/ui-main.js" defer></script>
