@@ -113,11 +113,11 @@ Connect to others in complex network situations, or over the Internet.
 
 ## Getting ErikrafT Drop
 
-<a href="https://drop.erikraft.com/" target="_blank" style="display: inline-block; margin-right: 10px;">
+<a href="https://drop.erikraft.com/" target="_blank" style="display: inline-block; margin-right: 10px; text-decoration: none;">
   <img src="https://i.imgur.com/9uq39iu.png" alt="Get it on WEB" style="width: 217px; height: auto;">
 </a>
 
-<a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank" style="display: inline-block;">
+<a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank" style="display: inline-block; text-decoration: none;">
   <img src="https://i.imgur.com/nxlokSi.png" alt="Get it on APK" style="width: 217px; height: auto;">
 </a>
 
