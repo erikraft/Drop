@@ -111,6 +111,18 @@ Connect to others in complex network situations, or over the Internet.
 
 [Host your own instance with Docker or Node.js](docs/host-your-own.md).
 
+## Getting ErikrafT Drop
+
+<a href="https://drop.erikraft.com/" target="_blank">
+<img src="https://i.imgur.com/9uq39iu.png" alt="Get it on WEB" style="height: 60px !important;width: 217px !important;" >
+</a>
+
+<a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank">
+<img src="https://i.imgur.com/nxlokSi.png" alt="Get it on APK" style="height: 60px !important;width: 217px !important;" >
+</a>
+
+---
+
 ## Support
 <a href="https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL" target="_blank">
 <img src="https://i.imgur.com/slSSrpB.png" alt="Donate" style="height: 60px !important;width: 217px !important;" >
