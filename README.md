@@ -20,6 +20,8 @@
 </div>
 <br>
 
+---
+
 ## Features
 File sharing on your local network that works on all platforms.
 
@@ -35,6 +37,8 @@ Send a file from your phone to your laptop?
 <br>Share private files peer-to-peer between Linux systems?
 
 <img src="docs/pairdrop_screenshot_mobile.gif" alt="Screenshot GIF showing ErikrafT Drop in use" style="width: 300px">
+
+---
 
 ## Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
 <details><summary>View all differences</summary>
@@ -94,6 +98,8 @@ Connect to others in complex network situations, or over the Internet.
 
 </details>
 
+---
+
 ## Built with the following awesome technologies:
 * Vanilla HTML5 / JS ES6 / CSS 3 frontend
 * [WebRTC](http://webrtc.org/) / WebSockets
@@ -111,15 +117,11 @@ Connect to others in complex network situations, or over the Internet.
 
 [Host your own instance with Docker or Node.js](docs/host-your-own.md).
 
+---
+
 ## Getting ErikrafT Drop
 
-<a href="https://drop.erikraft.com/" target="_blank" style="display: inline-block; margin-right: 10px; text-decoration: none;">
-  <img src="https://i.imgur.com/9uq39iu.png" alt="Get it on WEB" style="width: 217px; height: auto;">
-</a>
-
-<a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank" style="display: inline-block; text-decoration: none;">
-  <img src="https://i.imgur.com/nxlokSi.png" alt="Get it on APK" style="width: 217px; height: auto;">
-</a>
+<a href="https://drop.erikraft.com/"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a>
 
 ---
 
