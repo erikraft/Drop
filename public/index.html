@@ -953,26 +953,62 @@
     </svg>
     <!-- Scripts -->
 
-<script>
-  document.getElementById("bluetoothBtn").addEventListener("click", async () => {
-    if (!navigator.bluetooth) {
-      alert("Bluetooth Web API não é suportado neste navegador.");
-      return;
-    }
+  <script>
+    document.getElementById("bluetoothBtn").addEventListener("click", async () => {
+      if (!navigator.bluetooth) {
+        alert("Bluetooth Web API não é suportado neste navegador.");
+        return;
+      }
 
-    try {
-      const device = await navigator.bluetooth.requestDevice({
-        acceptAllDevices: true
-      });
+      try {
+        // Solicitar ao usuário que selecione um dispositivo Bluetooth
+        const device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: ['file_transfer_service'] // Serviço customizado para transferência de arquivos
+        });
 
-      alert(`🔗 Dispositivo pareado: ${device.name || 'Sem nome'}`);
-      // Aqui você pode iniciar conexão GATT e enviar info
-    } catch (error) {
-      console.error("Erro ao conectar:", error);
-      alert("❌ Conexão cancelada ou falhou.");
-    }
-  });
-</script>
+        alert(`🔗 Dispositivo pareado: ${device.name || 'Sem nome'}`);
+        
+        // Conectar ao dispositivo via GATT
+        const server = await device.gatt.connect();
+        console.log("Conectado ao dispositivo!");
+
+        // Obter o serviço e a característica para enviar o arquivo
+        const service = await server.getPrimaryService('file_transfer_service'); // Ajuste para o UUID correto
+        const characteristic = await service.getCharacteristic('file_transfer_characteristic'); // Ajuste para o UUID correto
+
+        // Obter o arquivo selecionado pelo usuário
+        const file = document.getElementById("fileInput").files[0];
+        if (!file) {
+          alert("Por favor, selecione um arquivo para enviar.");
+          return;
+        }
+
+        // Dividir o arquivo em pedaços e enviar via Bluetooth
+        const reader = file.stream().getReader();
+        let done = false;
+        let chunk;
+        
+        while (!done) {
+          chunk = await reader.read();
+          done = chunk.done;
+
+          // Enviar pedaço do arquivo via a característica GATT
+          if (!done) {
+            await characteristic.writeValue(chunk.value);
+            console.log("Pedaço do arquivo enviado...");
+          }
+        }
+
+        alert("Arquivo enviado com sucesso!");
+      } catch (error) {
+        console.error("Erro ao conectar:", error);
+        alert("❌ Conexão falhou ou cancelada.");
+      }
+    });
+  </script>
+
+
 
 
 <!-- Script de Download para Android -->
