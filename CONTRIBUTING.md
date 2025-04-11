@@ -11,7 +11,7 @@ We are not trying to optimize for some edge-cases. We are optimizing the user fl
 If you want to learn more about simplicity you can read [Insanely Simple: The Obsession that Drives Apple's Success](https://www.amazon.com/Insanely-Simple-Ken-Segall-audiobook/dp/B007Z9686O) or [Thinking, Fast and Slow](https://www.amazon.com/Thinking-Fast-Slow-Daniel-Kahneman/dp/0374533555).
 
 # Contributing guidelines
-Make sure to follow these guidelines before opening an [issue](https://github.com/schlagmichdoch/pairdrop/issues/new/choose) or a [pull request](https://github.com/schlagmichdoch/pairdrop/pulls):
+Make sure to follow these guidelines before opening an [issue](https://github.com/erikraft/Drop/issues) or a [pull request](https://github.com/schlagmichdoch/pairdrop/pulls):
 
 - Before opening an issue of a pull request, please check if the issue or the pull request already exists.
 - Pull requests for packages updates are not allowed since there is [Dependabot](https://github.com/schlagmichdoch/pairdrop/blob/master/.github/dependabot.yml) that checks them automatically.
