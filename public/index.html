@@ -95,6 +95,12 @@
                 <use xlink:href="#homescreen"></use>
             </svg>
         </div>
+
+	
+	<button id="bluetoothBtn" class="bluetooth-button"> 
+	  <i class="fa-brands fa-bluetooth-b"></i>
+	</button>
+
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
             <svg class="icon">
                 <use xlink:href="#pair-device-icon"></use>
@@ -946,6 +952,28 @@
         </symbol>
     </svg>
     <!-- Scripts -->
+
+<script>
+  document.getElementById("bluetoothBtn").addEventListener("click", async () => {
+    if (!navigator.bluetooth) {
+      alert("Bluetooth Web API não é suportado neste navegador.");
+      return;
+    }
+
+    try {
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true
+      });
+
+      alert(`🔗 Dispositivo pareado: ${device.name || 'Sem nome'}`);
+      // Aqui você pode iniciar conexão GATT e enviar info
+    } catch (error) {
+      console.error("Erro ao conectar:", error);
+      alert("❌ Conexão cancelada ou falhou.");
+    }
+  });
+</script>
+
 
 <!-- Script de Download para Android -->
 <script>
