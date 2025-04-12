@@ -37,6 +37,8 @@
     <meta name="twitter:image" content="images/logo_transparent_512x512.png">
     <meta property="og:image" content="images/logo_transparent_512x512.png">
     <!-- Resources -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
     <link rel="preload" href="lang/en.json" as="fetch">
     <link rel="preload" href="fonts/OpenSans/static/OpenSans-Medium.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" type="text/css" href="styles/styles-main.css">
@@ -99,6 +101,15 @@
 <!-- 	<div id="bluetoothBtn" class="icon-button" data-i18n-key="header.bluetooth" data-i18n-attrs="title">
 	    <i class="fa-brands fa-bluetooth-b icon" style="font-size: 24px;"></i>
 	</div> -->
+
+	    <!-- Botão estilo PairDrop para abrir o leitor de QR Code -->
+<div id="openQRScanner" class="icon-button" data-i18n-key="header.qr-scan" data-i18n-attrs="title">
+    <i class="fa-solid fa-qrcode"></i>
+</div>
+
+<!-- Div onde o leitor será exibido -->
+<div id="qr-reader" style="width: 300px; margin: 20px auto; display: none;"></div>
+
 
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
             <svg class="icon">
@@ -951,6 +962,33 @@
         </symbol>
     </svg>
     <!-- Scripts -->
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+  document.getElementById("openQRScanner").addEventListener("click", () => {
+    const qrReader = document.getElementById("qr-reader");
+    qrReader.style.display = "block";
+
+    const html5QrCode = new Html5Qrcode("qr-reader");
+
+    html5QrCode.start(
+      { facingMode: "environment" }, // Câmera traseira
+      { fps: 10, qrbox: 250 },
+      qrCodeMessage => {
+        console.log("QR Code detectado:", qrCodeMessage);
+        html5QrCode.stop().then(() => {
+          qrReader.style.display = "none";
+          window.location.href = qrCodeMessage; // Redireciona
+        });
+      },
+      error => {
+        // Erros de leitura ignorados (podem ser logados se quiser)
+      }
+    ).catch(err => {
+      alert("Erro ao acessar a câmera: " + err);
+    });
+  });
+</script>
 
   <!-- 
   <input type="file" id="fileInput" />
