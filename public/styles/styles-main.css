@@ -695,23 +695,6 @@ button::-moz-focus-inner {
     border-radius: 50%;
 }
 
-/* QR Reader */
-#qr-reader {
-  display: block; /* Torna o leitor de QR code visível */
-  margin: 0 auto;
-  width: 100%; /* Ou ajuste a largura conforme necessário */
-  max-width: 400px; /* Tamanho máximo */
-  height: auto;
-  background-color: #f1f1f1; /* Cor de fundo para destacar */
-  border-radius: 8px; /* Bordas arredondadas para aparência mais moderna */
-  padding: 20px; /* Espaçamento interno */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombras para profundidade */
-}
-
-#qr-reader.hidden {
-  display: none; /* Se você quiser ocultar com uma classe adicional */
-}
-
 /* Info Animation */
 #about {
     color: white;
