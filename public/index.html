@@ -100,9 +100,9 @@
 	    <i class="fa-brands fa-bluetooth-b icon" style="font-size: 24px;"></i>
 	</div> -->
 
-	<div id="openQRScanner" class="icon-button" title="Escanear QR Code" data-i18n-key="header.scan-qr" data-i18n-attrs="title">
+<!-- 	<<div id="openQRScanner" class="icon-button" title="Escanear QR Code" data-i18n-key="header.scan-qr" data-i18n-attrs="title">
 	  <i class="fa-solid fa-qrcode" style="font-size: 24px;"></i>
-	</div>
+	</div> -->
 
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
             <svg class="icon">
@@ -964,7 +964,7 @@
     </svg>
     <!-- Scripts -->
 
-<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+<!-- 	<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const resultInput = document.getElementById("result");
@@ -1018,43 +1018,7 @@
     document.getElementById('show-reader-button').addEventListener('click', showQRReader);
     document.getElementById('hide-reader-button').addEventListener('click', hideQRReader);
   });
-</script>
-
-  <!-- 
-  <input type="file" id="fileInput" />
-  
-  <script>
-    document.getElementById("bluetoothBtn").addEventListener("click", async () => {
-      if (!navigator.bluetooth) {
-        alert("Bluetooth Web API não é suportado neste navegador.");
-        return;
-      }
-
-      try {
-        const device = await navigator.bluetooth.requestDevice({
-          acceptAllDevices: true,
-          optionalServices: ['file_transfer_service'] // Certifique-se de que o dispositivo tenha esse serviço
-        });
-
-        alert(`🔗 Dispositivo pareado: ${device.name || 'Sem nome'}`);
-
-        const server = await device.gatt.connect();
-        console.log("Conectado ao dispositivo!");
-
-        // Teste para ver quais serviços o dispositivo oferece
-        const services = await server.getPrimaryServices();
-        services.forEach(service => {
-          console.log(service.uuid); // Imprime os UUIDs dos serviços disponíveis
-        });
-
-        // Se encontrar o serviço correto, você pode conectar e enviar dados aqui
-
-      } catch (error) {
-        console.error("Erro ao conectar:", error);
-        alert("❌ Conexão falhou ou cancelada.");
-      }
-    });
-  </script> -->
+</script> -->
 
 <!-- Script de Download para Android -->
 <script>
