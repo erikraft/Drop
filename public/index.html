@@ -964,7 +964,9 @@
   const qrReader = document.getElementById("qr-reader");
 
   qrBtn.addEventListener("click", async () => {
+    // Garantir que o leitor de QR Code esteja visível
     qrReader.style.display = "block";
+
     const html5QrCode = new Html5Qrcode("qr-reader");
 
     try {
@@ -985,13 +987,14 @@
             });
           },
           error => {
-            // Erro de leitura silencioso
+            console.error("Erro na leitura do QR Code", error);
           }
         );
       } else {
-        alert("Nenhuma câmera encontrada");
+        alert("Nenhuma câmera encontrada.");
       }
     } catch (err) {
+      console.error("Erro ao acessar a câmera: ", err);
       alert("Erro ao acessar a câmera: " + err);
     }
   });
