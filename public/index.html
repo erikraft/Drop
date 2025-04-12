@@ -102,14 +102,9 @@
 	    <i class="fa-brands fa-bluetooth-b icon" style="font-size: 24px;"></i>
 	</div> -->
 
-	    <!-- Botão estilo PairDrop para abrir o leitor de QR Code -->
-<div id="openQRScanner" class="icon-button" data-i18n-key="header.qr-scan" data-i18n-attrs="title">
-    <i class="fa-solid fa-qrcode"></i>
-</div>
-
-<!-- Div onde o leitor será exibido -->
-<div id="qr-reader" style="width: 300px; margin: 20px auto; display: none;"></div>
-
+	<div  id="openQRScanner"  class="icon-button"  title="Escanear QR Code"  data-i18n-key="header.scan-qr"  data-i18n-attrs="title">
+	  <i class="fa-solid fa-qrcode"></i>
+	</div>
 
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
             <svg class="icon">
@@ -963,31 +958,33 @@
     </svg>
     <!-- Scripts -->
 
-<script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-  document.getElementById("openQRScanner").addEventListener("click", () => {
-    const qrReader = document.getElementById("qr-reader");
-    qrReader.style.display = "block";
+    const qrReaderDiv = document.getElementById("qr-reader");
+    const qrButton = document.getElementById("openQRScanner");
 
-    const html5QrCode = new Html5Qrcode("qr-reader");
+    qrButton.addEventListener("click", () => {
+        qrReaderDiv.style.display = "block";
+        const html5QrCode = new Html5Qrcode("qr-reader");
 
-    html5QrCode.start(
-      { facingMode: "environment" }, // Câmera traseira
-      { fps: 10, qrbox: 250 },
-      qrCodeMessage => {
-        console.log("QR Code detectado:", qrCodeMessage);
-        html5QrCode.stop().then(() => {
-          qrReader.style.display = "none";
-          window.location.href = qrCodeMessage; // Redireciona
+        html5QrCode.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            qrCodeMessage => {
+                console.log("QR Code:", qrCodeMessage);
+                // Redireciona ou insere o link escaneado
+                window.location.href = qrCodeMessage;
+                html5QrCode.stop();
+            },
+            errorMessage => {
+                console.warn("Erro QR:", errorMessage);
+            }
+        ).catch(err => {
+            console.error("Erro ao iniciar o leitor", err);
         });
-      },
-      error => {
-        // Erros de leitura ignorados (podem ser logados se quiser)
-      }
-    ).catch(err => {
-      alert("Erro ao acessar a câmera: " + err);
     });
-  });
 </script>
 
   <!-- 
