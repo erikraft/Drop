@@ -37,8 +37,6 @@
     <meta name="twitter:image" content="images/logo_transparent_512x512.png">
     <meta property="og:image" content="images/logo_transparent_512x512.png">
     <!-- Resources -->
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
-    
     <link rel="preload" href="lang/en.json" as="fetch">
     <link rel="preload" href="fonts/OpenSans/static/OpenSans-Medium.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" type="text/css" href="styles/styles-main.css">
@@ -194,7 +192,12 @@
         </div>
     </header>
 
-    <div id="qr-reader" style="display: none;"></div>
+<div id="qr-reader" style="width: 300px; height: 300px;"></div>
+
+<input type="text" id="result" placeholder="Resultado do QR Code" />
+<div class="app__dialog app__dialog--hide">
+  <button class="app__dialog-close">Fechar</button>
+</div>
 	
     <!-- Center -->
     <div id="center" class="opacity-0">
@@ -961,47 +964,46 @@
     </svg>
     <!-- Scripts -->
 
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const qrBtn = document.getElementById("openQRScanner");
-            const qrReader = document.getElementById("qr-reader");
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const resultInput = document.getElementById("result");
+    const qrCodeDialog = document.querySelector(".app__dialog");
 
-            if (qrBtn) {
-                qrBtn.addEventListener("click", async () => {
-                    qrReader.style.display = "block"; // Mostrar o reador
-                    const html5QrCode = new Html5Qrcode("qr-reader");
+    const qrCodeScanner = new Html5Qrcode("qr-reader");
 
-                    try {
-                        const devices = await Html5Qrcode.getCameras();
+    Html5Qrcode.getCameras()
+      .then(devices => {
+        if (devices.length) {
+          const cameraId = devices[0].id;
 
-                        if (devices && devices.length) {
-                            const backCamera = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
-
-                            await html5QrCode.start(
-                                backCamera.id,
-                                { fps: 10, qrbox: 250 },
-                                qrCodeMessage => {
-                                    console.log("QR Detected:", qrCodeMessage);
-                                    html5QrCode.stop(); // Para leitura
-                                    qrReader.style.display = "none"; // Oculta o leitor
-                                    window.location.href = qrCodeMessage; // Redireciona
-                                },
-                                error => {
-                                    console.warn("QR Code no detected: ", error);
-                                }
-                            );
-                        } else {
-                            alert("📷｜Nenhuma câmera encontrada.");
-                        }
-                    } catch (error) {
-                        console.error("Erro ao acessar a câmera: ", error);
-                        alert("🪲｜Erro ao acessar a câmera: " + error);
-                    }
-                });
+          qrCodeScanner.start(
+            cameraId,
+            { fps: 10, qrbox: 250 },
+            qrCodeMessage => {
+              resultInput.value = qrCodeMessage;
+              qrCodeDialog.classList.remove("app__dialog--hide");
+              qrCodeScanner.stop();
+            },
+            errorMessage => {
+              console.warn("Erro de leitura QR:", errorMessage);
             }
-        });
-    </script>
+          ).catch(err => {
+            console.error("Erro ao iniciar scanner:", err);
+          });
+        } else {
+          alert("Nenhuma câmera disponível.");
+        }
+      })
+      .catch(err => {
+        console.error("Erro ao acessar as câmeras:", err);
+      });
+
+    document.querySelector(".app__dialog-close").addEventListener("click", () => {
+      qrCodeDialog.classList.add("app__dialog--hide");
+    });
+  });
+</script>
 
   <!-- 
   <input type="file" id="fileInput" />
