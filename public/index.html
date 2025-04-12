@@ -956,47 +956,49 @@
     </svg>
     <!-- Scripts -->
 
-<script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-  const qrBtn = document.getElementById("openQRScanner");
-  const qrReader = document.getElementById("qr-reader");
+  document.addEventListener("DOMContentLoaded", function() {
+    const qrBtn = document.getElementById("openQRScanner");
+    const qrReader = document.getElementById("qr-reader");
 
-  // Verifique se o botão foi encontrado
-  console.log(qrBtn); // Verificar se o botão foi encontrado corretamente.
+    // Verifique se o botão foi encontrado
+    console.log(qrBtn); // Verificar se o botão foi encontrado corretamente.
 
-  qrBtn.addEventListener("click", async () => {
-    console.log("Botão clicado"); // Verifique se o evento de clique foi acionado
-    qrReader.style.display = "block";  // Tornar o leitor visível ao clicar
+    if (qrBtn) {
+      qrBtn.addEventListener("click", async () => {
+        console.log("Botão clicado");
+        qrReader.style.display = "block";  // Tornar o leitor visível ao clicar
 
-    const html5QrCode = new Html5Qrcode("qr-reader");
+        const html5QrCode = new Html5Qrcode("qr-reader");
 
-    try {
-      const devices = await Html5Qrcode.getCameras();
+        try {
+          const devices = await Html5Qrcode.getCameras();
 
-      if (devices && devices.length) {
-        // Tenta achar a traseira com base no nome
-        const backCamera = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
+          if (devices && devices.length) {
+            const backCamera = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
 
-        await html5QrCode.start(
-          backCamera.id,
-          { fps: 10, qrbox: 250 },
-          qrCodeMessage => {
-            console.log("QR:", qrCodeMessage);
-            html5QrCode.stop().then(() => {
-              qrReader.style.display = "none";
-              window.location.href = qrCodeMessage;
-            });
-          },
-          error => {
-            console.error("Erro na leitura do QR Code", error);
+            await html5QrCode.start(
+              backCamera.id,
+              { fps: 10, qrbox: 250 },
+              qrCodeMessage => {
+                console.log("QR:", qrCodeMessage);
+                html5QrCode.stop().then(() => {
+                  qrReader.style.display = "none";
+                  window.location.href = qrCodeMessage;
+                });
+              },
+              error => {
+                console.error("Erro na leitura do QR Code", error);
+              }
+            );
+          } else {
+            alert("📷｜Nenhuma câmera encontrada.");
           }
-        );
-      } else {
-        alert("Nenhuma câmera encontrada.");
-      }
-    } catch (err) {
-      console.error("Erro ao acessar a câmera: ", err);
-      alert("Erro ao acessar a câmera: " + err);
+        } catch (err) {
+          console.error("Erro ao acessar a câmera: ", err);
+          alert("🪲｜Erro ao acessar a câmera: " + err);
+        }
+      });
     }
   });
 </script>
