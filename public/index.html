@@ -969,6 +969,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     const resultInput = document.getElementById("result");
     const qrCodeDialog = document.querySelector(".app__dialog");
+    const qrReader = document.getElementById('qr-reader');  // Referência ao leitor de QR code
 
     const qrCodeScanner = new Html5Qrcode("qr-reader");
 
@@ -1002,6 +1003,20 @@
     document.querySelector(".app__dialog-close").addEventListener("click", () => {
       qrCodeDialog.classList.add("app__dialog--hide");
     });
+
+    // Função para mostrar o leitor
+    function showQRReader() {
+      qrReader.style.display = 'block';
+    }
+
+    // Função para esconder o leitor
+    function hideQRReader() {
+      qrReader.style.display = 'none';
+    }
+
+    // Exemplo de uso
+    document.getElementById('show-reader-button').addEventListener('click', showQRReader);
+    document.getElementById('hide-reader-button').addEventListener('click', hideQRReader);
   });
 </script>
 
