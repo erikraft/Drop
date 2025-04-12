@@ -37,6 +37,8 @@
     <meta name="twitter:image" content="images/logo_transparent_512x512.png">
     <meta property="og:image" content="images/logo_transparent_512x512.png">
     <!-- Resources -->
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    
     <link rel="preload" href="lang/en.json" as="fetch">
     <link rel="preload" href="fonts/OpenSans/static/OpenSans-Medium.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" type="text/css" href="styles/styles-main.css">
@@ -191,6 +193,9 @@
             </svg>
         </div>
     </header>
+
+    <div id="qr-reader" style="display: none;"></div>
+	
     <!-- Center -->
     <div id="center" class="opacity-0">
         <!-- Peers -->
@@ -956,52 +961,47 @@
     </svg>
     <!-- Scripts -->
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const qrBtn = document.getElementById("openQRScanner");
-    const qrReader = document.getElementById("qr-reader");
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const qrBtn = document.getElementById("openQRScanner");
+            const qrReader = document.getElementById("qr-reader");
 
-    // Verifique se o botão foi encontrado
-    console.log(qrBtn); // Verificar se o botão foi encontrado corretamente.
+            if (qrBtn) {
+                qrBtn.addEventListener("click", async () => {
+                    qrReader.style.display = "block"; // Mostrar o reador
+                    const html5QrCode = new Html5Qrcode("qr-reader");
 
-    if (qrBtn) {
-      qrBtn.addEventListener("click", async () => {
-        console.log("Botão clicado");
-        qrReader.style.display = "block";  // Tornar o leitor visível ao clicar
+                    try {
+                        const devices = await Html5Qrcode.getCameras();
 
-        const html5QrCode = new Html5Qrcode("qr-reader");
+                        if (devices && devices.length) {
+                            const backCamera = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
 
-        try {
-          const devices = await Html5Qrcode.getCameras();
-
-          if (devices && devices.length) {
-            const backCamera = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
-
-            await html5QrCode.start(
-              backCamera.id,
-              { fps: 10, qrbox: 250 },
-              qrCodeMessage => {
-                console.log("QR:", qrCodeMessage);
-                html5QrCode.stop().then(() => {
-                  qrReader.style.display = "none";
-                  window.location.href = qrCodeMessage;
+                            await html5QrCode.start(
+                                backCamera.id,
+                                { fps: 10, qrbox: 250 },
+                                qrCodeMessage => {
+                                    console.log("QR Detected:", qrCodeMessage);
+                                    html5QrCode.stop(); // Para leitura
+                                    qrReader.style.display = "none"; // Oculta o leitor
+                                    window.location.href = qrCodeMessage; // Redireciona
+                                },
+                                error => {
+                                    console.warn("QR Code no detected: ", error);
+                                }
+                            );
+                        } else {
+                            alert("📷｜Nenhuma câmera encontrada.");
+                        }
+                    } catch (error) {
+                        console.error("Erro ao acessar a câmera: ", error);
+                        alert("🪲｜Erro ao acessar a câmera: " + error);
+                    }
                 });
-              },
-              error => {
-                console.error("Erro na leitura do QR Code", error);
-              }
-            );
-          } else {
-            alert("📷｜Nenhuma câmera encontrada.");
-          }
-        } catch (err) {
-          console.error("Erro ao acessar a câmera: ", err);
-          alert("🪲｜Erro ao acessar a câmera: " + err);
-        }
-      });
-    }
-  });
-</script>
+            }
+        });
+    </script>
 
   <!-- 
   <input type="file" id="fileInput" />
@@ -1087,5 +1087,6 @@
             <h3>ErikrafT Drop works only with JavaScript</h3>
         </x-noscript>
     </noscript>
+	
 </body>
 </html>
