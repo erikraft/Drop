@@ -37,8 +37,6 @@
     <meta name="twitter:image" content="images/logo_transparent_512x512.png">
     <meta property="og:image" content="images/logo_transparent_512x512.png">
     <!-- Resources -->
-    <script src="https://unpkg.com/html5-qrcode"></script>
-    
     <link rel="preload" href="lang/en.json" as="fetch">
     <link rel="preload" href="fonts/OpenSans/static/OpenSans-Medium.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" type="text/css" href="styles/styles-main.css">
@@ -102,8 +100,8 @@
 	    <i class="fa-brands fa-bluetooth-b icon" style="font-size: 24px;"></i>
 	</div> -->
 
-	<div  id="openQRScanner"  class="icon-button"  title="Escanear QR Code"  data-i18n-key="header.scan-qr"  data-i18n-attrs="title">
-	  <i class="fa-solid fa-qrcode"></i>
+	<div id="openQRScanner" class="icon-button" title="Escanear QR Code" data-i18n-key="header.scan-qr" data-i18n-attrs="title">
+	  <i class="fa-solid fa-qrcode" style="font-size: 24px;"></i>
 	</div>
 
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
@@ -963,9 +961,12 @@
   const qrBtn = document.getElementById("openQRScanner");
   const qrReader = document.getElementById("qr-reader");
 
+  // Verifique se o botão foi encontrado
+  console.log(qrBtn); // Verificar se o botão foi encontrado corretamente.
+
   qrBtn.addEventListener("click", async () => {
-    // Garantir que o leitor de QR Code esteja visível
-    qrReader.style.display = "block";
+    console.log("Botão clicado"); // Verifique se o evento de clique foi acionado
+    qrReader.style.display = "block";  // Tornar o leitor visível ao clicar
 
     const html5QrCode = new Html5Qrcode("qr-reader");
 
