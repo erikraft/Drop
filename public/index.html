@@ -958,33 +958,43 @@
     </svg>
     <!-- Scripts -->
 
+<script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-    const qrReaderDiv = document.getElementById("qr-reader");
-    const qrButton = document.getElementById("openQRScanner");
+  const qrBtn = document.getElementById("openQRScanner");
+  const qrReader = document.getElementById("qr-reader");
 
-    qrButton.addEventListener("click", () => {
-        qrReaderDiv.style.display = "block";
-        const html5QrCode = new Html5Qrcode("qr-reader");
+  qrBtn.addEventListener("click", async () => {
+    qrReader.style.display = "block";
+    const html5QrCode = new Html5Qrcode("qr-reader");
 
-        html5QrCode.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: 250
-            },
-            qrCodeMessage => {
-                console.log("QR Code:", qrCodeMessage);
-                // Redireciona ou insere o link escaneado
-                window.location.href = qrCodeMessage;
-                html5QrCode.stop();
-            },
-            errorMessage => {
-                console.warn("Erro QR:", errorMessage);
-            }
-        ).catch(err => {
-            console.error("Erro ao iniciar o leitor", err);
-        });
-    });
+    try {
+      const devices = await Html5Qrcode.getCameras();
+
+      if (devices && devices.length) {
+        // Tenta achar a traseira com base no nome
+        const backCamera = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
+
+        await html5QrCode.start(
+          backCamera.id,
+          { fps: 10, qrbox: 250 },
+          qrCodeMessage => {
+            console.log("QR:", qrCodeMessage);
+            html5QrCode.stop().then(() => {
+              qrReader.style.display = "none";
+              window.location.href = qrCodeMessage;
+            });
+          },
+          error => {
+            // Erro de leitura silencioso
+          }
+        );
+      } else {
+        alert("Nenhuma câmera encontrada");
+      }
+    } catch (err) {
+      alert("Erro ao acessar a câmera: " + err);
+    }
+  });
 </script>
 
   <!-- 
