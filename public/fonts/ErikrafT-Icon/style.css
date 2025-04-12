@@ -1,0 +1,354 @@
+@font-face {
+  font-family: 'ErikrafT-Icons';
+  src:  url('fonts/ErikrafT-Icons.eot?krj6');
+  src:  url('fonts/ErikrafT-Icons.eot?krj6#iefix') format('embedded-opentype'),
+    url('fonts/ErikrafT-Icons.ttf?krj6') format('truetype'),
+    url('fonts/ErikrafT-Icons.woff?krj6') format('woff'),
+    url('fonts/ErikrafT-Icons.svg?krj6#ErikrafT-Icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'ErikrafT-Icons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xiaomi .path1:before {
+  content: "\e900";
+  color: rgb(255, 105, 0);
+}
+.icon-xiaomi .path2:before {
+  content: "\e901";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-google .path1:before {
+  content: "\e902";
+  color: rgb(66, 133, 244);
+}
+.icon-google .path2:before {
+  content: "\e903";
+  margin-left: -1em;
+  color: rgb(52, 168, 83);
+}
+.icon-google .path3:before {
+  content: "\e904";
+  margin-left: -1em;
+  color: rgb(251, 188, 5);
+}
+.icon-google .path4:before {
+  content: "\e905";
+  margin-left: -1em;
+  color: rgb(235, 67, 53);
+}
+.icon-microsoft .path1:before {
+  content: "\e906";
+  color: rgb(243, 83, 37);
+}
+.icon-microsoft .path2:before {
+  content: "\e907";
+  margin-left: -1em;
+  color: rgb(129, 188, 6);
+}
+.icon-microsoft .path3:before {
+  content: "\e908";
+  margin-left: -1em;
+  color: rgb(5, 166, 240);
+}
+.icon-microsoft .path4:before {
+  content: "\e909";
+  margin-left: -1em;
+  color: rgb(255, 186, 8);
+}
+.icon-limewire .path1:before {
+  content: "\e90a";
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path2:before {
+  content: "\e90b";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path3:before {
+  content: "\e90c";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-limewire .path4:before {
+  content: "\e90d";
+  margin-left: -1em;
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path5:before {
+  content: "\e90e";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path6:before {
+  content: "\e90f";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-limewire .path7:before {
+  content: "\e910";
+  margin-left: -1em;
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path8:before {
+  content: "\e911";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path9:before {
+  content: "\e912";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-limewire .path10:before {
+  content: "\e913";
+  margin-left: -1em;
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path11:before {
+  content: "\e914";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path12:before {
+  content: "\e915";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-limewire .path13:before {
+  content: "\e916";
+  margin-left: -1em;
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path14:before {
+  content: "\e917";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path15:before {
+  content: "\e918";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-limewire .path16:before {
+  content: "\e919";
+  margin-left: -1em;
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path17:before {
+  content: "\e91a";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path18:before {
+  content: "\e91b";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-limewire .path19:before {
+  content: "\e91c";
+  margin-left: -1em;
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path20:before {
+  content: "\e91d";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path21:before {
+  content: "\e91e";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-limewire .path22:before {
+  content: "\e91f";
+  margin-left: -1em;
+  color: rgb(0, 147, 75);
+}
+.icon-limewire .path23:before {
+  content: "\e920";
+  margin-left: -1em;
+  color: rgb(34, 213, 17);
+}
+.icon-limewire .path24:before {
+  content: "\e921";
+  margin-left: -1em;
+  color: rgb(190, 240, 0);
+}
+.icon-html .path1:before {
+  content: "\e922";
+  color: rgb(228, 77, 38);
+}
+.icon-html .path2:before {
+  content: "\e923";
+  margin-left: -1em;
+  color: rgb(241, 101, 41);
+}
+.icon-html .path3:before {
+  content: "\e924";
+  margin-left: -1em;
+  color: rgb(235, 235, 235);
+}
+.icon-html .path4:before {
+  content: "\e925";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-css .path1:before {
+  content: "\e926";
+  color: rgb(21, 114, 182);
+}
+.icon-css .path2:before {
+  content: "\e927";
+  margin-left: -1em;
+  color: rgb(51, 169, 220);
+}
+.icon-css .path3:before {
+  content: "\e928";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-css .path4:before {
+  content: "\e929";
+  margin-left: -1em;
+  color: rgb(235, 235, 235);
+}
+.icon-css .path5:before {
+  content: "\e92a";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-css .path6:before {
+  content: "\e92b";
+  margin-left: -1em;
+  color: rgb(235, 235, 235);
+}
+.icon-js .path1:before {
+  content: "\e92c";
+  color: rgb(247, 223, 30);
+}
+.icon-js .path2:before {
+  content: "\e92d";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-typescript .path1:before {
+  content: "\e92e";
+  color: rgb(49, 120, 198);
+}
+.icon-typescript .path2:before {
+  content: "\e92f";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-php .path1:before {
+  content: "\e930";
+  color: rgb(0, 0, 0);
+}
+.icon-php .path2:before {
+  content: "\e931";
+  margin-left: -1em;
+  color: rgb(119, 123, 179);
+}
+.icon-php .path3:before {
+  content: "\e932";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-php .path4:before {
+  content: "\e933";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-php .path5:before {
+  content: "\e934";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-php .path6:before {
+  content: "\e935";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-php .path7:before {
+  content: "\e936";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-php .path8:before {
+  content: "\e937";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-trash:before {
+  content: "\e938";
+  color: #f23f42;
+}
+.icon-alert .path1:before {
+  content: "\e939";
+  color: rgb(253, 214, 99);
+}
+.icon-alert .path2:before {
+  content: "\e93a";
+  margin-left: -1em;
+  color: rgb(32, 33, 36);
+}
+.icon-google-mic .path1:before {
+  content: "\e93b";
+  color: rgb(66, 133, 244);
+}
+.icon-google-mic .path2:before {
+  content: "\e93c";
+  margin-left: -1em;
+  color: rgb(52, 168, 83);
+}
+.icon-google-mic .path3:before {
+  content: "\e93d";
+  margin-left: -1em;
+  color: rgb(251, 188, 4);
+}
+.icon-google-mic .path4:before {
+  content: "\e93e";
+  margin-left: -1em;
+  color: rgb(234, 67, 53);
+}
+.icon-google-lens .path1:before {
+  content: "\e93f";
+  color: rgb(52, 168, 83);
+}
+.icon-google-lens .path2:before {
+  content: "\e940";
+  margin-left: -1em;
+  color: rgb(66, 133, 244);
+}
+.icon-google-lens .path3:before {
+  content: "\e941";
+  margin-left: -1em;
+  color: rgb(234, 67, 53);
+}
+.icon-google-lens .path4:before {
+  content: "\e942";
+  margin-left: -1em;
+  color: rgb(251, 188, 4);
+}
+.icon-google-lens .path5:before {
+  content: "\e943";
+  margin-left: -1em;
+  color: rgb(66, 133, 244);
+}
