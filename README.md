@@ -36,10 +36,12 @@ Send a file from your phone to your laptop?
 <br>Share photos in original quality with friends using Android and iOS?
 <br>Share private files peer-to-peer between Linux systems?
 
-<p align="center">
-  <img src="docs/erikraft-drop_screenshot_mobile1.gif" alt="Screenshot GIF showing ErikrafT Drop in use" style="width: 300px; margin-right: 10px;">
-  <img src="docs/erikraft-drop_screenshot_mobile2.gif" alt="Screenshot GIF showing ErikrafT Drop in use" style="width: 300px;">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/erikraft-drop_screenshot_mobile1.gif" alt="Screenshot GIF 1" width="300"/></td>
+    <td><img src="docs/erikraft-drop_screenshot_mobile2.gif" alt="Screenshot GIF 2" width="300"/></td>
+  </tr>
+</table>
 
 ---
 
