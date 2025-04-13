@@ -85,6 +85,21 @@
             "sizes": "1170x2532",
             "type": "image/png"
         },
+        {
+            "src": "images/ErikrafTdrop_screenshot_mobile_12.png",
+            "sizes": "1170x2532",
+            "type": "image/png"
+        },
+        {
+            "src": "images/ErikrafTdrop_screenshot_mobile_13.png",
+            "sizes": "1170x2532",
+            "type": "image/png"
+        },
+        {
+            "src": "images/ErikrafTdrop_screenshot_mobile_14.png",
+            "sizes": "1170x2532",
+            "type": "image/png"
+        }
     ],
     "share_target": {
         "action": "/",
