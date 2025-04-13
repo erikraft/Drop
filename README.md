@@ -37,6 +37,7 @@ Send a file from your phone to your laptop?
 <br>Share private files peer-to-peer between Linux systems?
 
 <img src="docs/erikraft-drop_screenshot_mobile1.gif" alt="Screenshot GIF showing ErikrafT Drop in use" style="width: 300px">
+<img src="docs/erikraft-drop_screenshot_mobile2.gif" alt="Screenshot GIF showing ErikrafT Drop in use" style="width: 300px">
 
 ---
 
