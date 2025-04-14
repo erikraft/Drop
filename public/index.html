@@ -984,6 +984,33 @@
     </svg>
     <!-- Scripts -->
 
+  <!-- Script de Instalação PWA -->
+  <script>
+    let deferredPrompt;
+    const botao = document.getElementById('botaoInstalar');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      botao.style.display = 'block';
+    });
+
+    botao.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Usuário aceitou a instalação');
+          } else {
+            console.log('Usuário recusou a instalação');
+          }
+          deferredPrompt = null;
+          botao.style.display = 'none';
+        });
+      }
+    });
+  </script>
+
 <!-- 	<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
