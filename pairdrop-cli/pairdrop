@@ -17,7 +17,7 @@ help()
    echo -e "Open PairDrop:\t\t$(basename "$0")"
    echo -e "Send files:\t\t$(basename "$0") file1/directory1 (file2/directory2 file3/directory3 ...)"
    echo -e "Send text:\t\t$(basename "$0") -t \"text\""
-   echo -e "Specify domain:\t\t$(basename "$0") -d \"https://pairdrop.net/\""
+   echo -e "Specify domain:\t\t$(basename "$0") -d \"https://drop.erikraft.com/\""
    echo -e "Show this help text:\t$(basename "$0") (-h|--help)"
    echo
    echo "This pairdrop-cli version was released alongside ${version}"
