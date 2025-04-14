@@ -126,7 +126,9 @@ Connect to others in complex network situations, or over the Internet.
 
 ## Getting ErikrafT Drop
 
-<a href="https://drop.erikraft.com/"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a>
+<a href="https://drop.erikraft.com/" target="_blank"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img src="https://i.imgur.com/7sEGbKf.png" width="217" alt="Firefox Browser ADD-ONS"/>
+
+
 
 ---
 
