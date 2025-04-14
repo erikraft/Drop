@@ -126,7 +126,7 @@ if (conf.signalingServer) {
     const endsWithSlash = /\/$/.test(conf.signalingServer)
     if (!isValidUrl || containsProtocol) {
         console.error("SIGNALING_SERVER must be a valid url without the protocol prefix.\n" +
-            "Examples of valid values: `pairdrop.net`, `pairdrop.example.com:3000`, `example.com/pairdrop`");
+            "Examples of valid values: `drop.erikraft.com`, `erikraftdrop.example.com:3000`, `example.com/erikraftdrop`");
         process.exit(1);
     }
 
