@@ -126,7 +126,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ## Getting ErikrafT Drop
 
-<a href="https://drop.erikraft.com/" target="_blank"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img src="https://i.imgur.com/7sEGbKf.png" width="217" alt="Firefox Browser ADD-ONS"/>
+<a href="https://drop.erikraft.com/" target="_blank"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img src="https://i.imgur.com/2MubKYT.png" width="217" alt="Firefox Browser ADD-ONS"/>
 
 
 
@@ -134,7 +134,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ## Support
 <a href="https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL" target="_blank">
-<img src="https://i.imgur.com/slSSrpB.png" alt="Donate" style="height: 60px !important;width: 217px !important;" >
+<img src="https://i.imgur.com/51lm3n2.png" alt="Donate" style="height: 60px !important;width: 217px !important;" >
 </a>
 <br />
 <br />
