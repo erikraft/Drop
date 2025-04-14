@@ -51,16 +51,6 @@
             "type": "image/png"
         },
         {
-            "src": "images/ErikrafTdrop_screenshot_mobile_5.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_6.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
             "src": "images/ErikrafTdrop_screenshot_mobile_7.png",
             "sizes": "1170x2532",
             "type": "image/png"
@@ -77,26 +67,6 @@
         },
         {
             "src": "images/ErikrafTdrop_screenshot_mobile_10.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_11.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_12.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_13.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_14.png",
             "sizes": "1170x2532",
             "type": "image/png"
         }
