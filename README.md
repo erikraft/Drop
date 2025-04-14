@@ -134,7 +134,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ## Support
 <a href="https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL" target="_blank">
-<img src="https://i.imgur.com/51lm3n2.png" alt="Donate" style="height: 60px !important;width: 217px !important;" >
+<img src="https://i.imgur.com/51lm3n2.png" width="217" alt="Donate"/>
 </a>
 <br />
 <br />
