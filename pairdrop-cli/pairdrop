@@ -184,12 +184,12 @@ sendFiles()
       # remove all special characters
       zipName=${baseNameTrunk//[^a-zA-Z0-9_]/}
       
-      zipToSendAbs="${tmpDir}${zipName}_pairdrop.zip"
-      wrapperZipAbs="${tmpDir}${zipName}_pairdrop_wrapper.zip"
+      zipToSendAbs="${tmpDir}ErikrafT_Drop.zip"
+      wrapperZipAbs="${tmpDir}ErikrafT_Drop_wrapper.zip"
 
-      if [[ $OS == "Windows" ]];then
-        zipToSendAbsPS="${tmpDirPS}${zipName}_pairdrop.zip"
-        wrapperZipAbsPS="${tmpDirPS}${zipName}_pairdrop_wrapper.zip"
+      if [[ $OS == "Windows" ]]; then
+          zipToSendAbsPS="${tmpDirPS}ErikrafT_Drop.zip"
+          wrapperZipAbsPS="${tmpDirPS}ErikrafT_Drop_wrapper.zip"
       fi
     fi
 
