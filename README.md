@@ -133,7 +133,9 @@ Connect to others in complex network situations, or over the Internet.
 ## Links
 
 [drop.erikraft.com](https://drop.erikraft.com/)
+<br />
 [drop.erikraft.com/#about](https://drop.erikraft.com/#about)
+<br />
 [biodrop.erikraft.com](https://biodrop.erikraft.com/)
 
 ---
