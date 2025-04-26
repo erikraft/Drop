@@ -29,47 +29,21 @@
     "start_url": "./",
     "display": "standalone",
     "theme_color": "#3367d6",
-    "screenshots" : [
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_1.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_2.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_3.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_4.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_7.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_8.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_9.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        },
-        {
-            "src": "images/ErikrafTdrop_screenshot_mobile_10.png",
-            "sizes": "1170x2532",
-            "type": "image/png"
-        }
+    "screenshots": [
+        {"src": "images/ErikrafTdrop_screenshot_mobile_1.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_2.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_3.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_4.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_5.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_6.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_7.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_8.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_9.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_10.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_11.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_12.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_13.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_14.png", "sizes": "1170x2532", "type": "image/png"}
     ],
     "share_target": {
         "action": "/",
