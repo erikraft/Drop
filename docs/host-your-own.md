@@ -156,7 +156,7 @@ Run the compose file with `docker compose up -d`.
 Clone this repository and enter the folder
 
 ```bash
-git clone https://github.com/schlagmichdoch/PairDrop.git && cd PairDrop
+git clone https://github.com/erikraft/Drop.git && cd Drop
 ```
 
 Install all dependencies with NPM:
