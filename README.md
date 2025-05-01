@@ -138,6 +138,14 @@ Connect to others in complex network situations, or over the Internet.
 <br />
 [drop.erikraft.com/#about](https://drop.erikraft.com/#about)
 <br />
+[drop.erikraft.com/ads.html](https://drop.erikraft.com/ads.html)
+<br />
+[Terms of Use](https://drop.erikraft.com/terms-of-use.html)
+<br />
+[Privacy Policy](https://drop.erikraft.com/privacy-policy.html)
+<br />
+[License](https://github.com/erikraft/Drop/blob/master/LICENSE)
+<br />
 
 ---
 
