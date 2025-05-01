@@ -1,117 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service</title>
+  <style>
         /* Estilos base */
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #444444;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  :root {
+    --main-text-color: #444444;
+    --link-color: #0066cc;
+    --accent-color: #f0f0f0;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
 
-        h2.section-title {
-            color: #444444;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-top: 30px;
-        }
+  /* Estilos base */
+  body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--main-text-color);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
 
-        h3.subsection-title {
-            color: #444444;
-            margin-top: 25px;
-        }
+  /* Typography */
+  h2, h3 {
+    color: var(--main-text-color);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--accent-color);
+  }
 
-        .content-text {
-            color: #444444;
-            margin-bottom: 15px;
-        }
+  h2:first-of-type {
+    margin-top: 0;
+  }
 
-        a.link-style {
-            color: #007BFF;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+  h2.section-title {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 30px;
+  }
 
-        a.link-style:hover {
-            color: #0056b3;
-            text-decoration: underline;
-        }
+  h3.subsection-title {
+    margin-top: 25px;
+  }
 
-        ol {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
+  p {
+    margin-bottom: 1.2rem;
+    text-align: justify;
+  }
 
-        li {
-            margin-bottom: 8px;
-        }
+  /* Listas */
+  ol, ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
 
-        .indent {
-            margin-left: 20px;
-        }
+  li {
+    margin-bottom: 0.5rem;
+  }
 
-        .disclaimer {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
+  /* Links */
+  a {
+    color: var(--link-color);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--link-color);
+    transition: all 0.3s ease;
+  }
 
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-        }
-    </style>
+  a:hover {
+    color: #004499;
+    border-bottom-color: #004499;
+  }
+
+  /* Containers */
+  .privacy-policy-container {
+    padding: 2rem;
+  }
+
+  .policy-section {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+  }
+
+  .disclaimer {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+  }
+
+  .effective-date {
+    font-style: italic;
+    color: #666;
+    margin-top: 2rem;
+    display: block;
+  }
+
+  /* Layout */
+  .indent {
+    margin-left: 20px;
+  }
+
+  /* Media Queries */
+  @media (max-width: 600px) {
+    body,
+    .privacy-policy-container {
+        padding: 10px;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+  }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2 class="section-title">1. Terms of Service</h2>
-        
-        <h3 class="subsection-title">1. Terms</h3>
-        <p class="content-text">
-            By accessing the website at <a href="https://drop.erikraft.com/" class="link-style">ErikrafT Drop</a> you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.
-        </p>
-
-        <h3 class="subsection-title">2. Use License</h3>
-        <ol>
-            <li class="content-text">Permission is granted to temporarily download one copy of the materials (information or software) on ErikrafT Drop's website for personal, non-commercial transitory viewing only. This is the grant of a licence, not a transfer of title, and under this licence you may not:</li>
-            <li class="indent">modify or copy the materials;</li>
-            <li class="indent">use the materials for any commercial purpose, or for any public display (commercial or non-commercial);</li>
-            <li class="indent">attempt to decompile or reverse engineer any software contained on ErikrafT Drop website;</li>
-            <li class="indent">remove any copyright or other proprietary notations from the materials; or</li>
-            <li class="indent">transfer the materials to another person or 'mirror' the materials on any other server.</li>
-            <li class="content-text">This licence shall automatically terminate if you violate any of these restrictions and may be terminated by ErikrafT Drop at any time. Upon terminating your viewing of these materials or upon the termination of this licence, you must destroy any downloaded materials in your possession whether in electronic or printed format.</li>
-        </ol>
-
-        <h3 class="subsection-title">3. Disclaimer</h3>
-        <div class="disclaimer">
-            <ol>
-                <li class="content-text">The materials on ErikrafT Drop's website are provided on an 'as is' basis. ErikrafT Drop makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</li>
-                <li class="content-text">Further, ErikrafT Drop does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on its website or otherwise relating to such materials or on any sites linked to this site.</li>
-            </ol>
-        </div>
-
-        <h3 class="subsection-title">4. Limitations</h3>
-        <p class="content-text">In no event shall ErikrafT Drop or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on ErikrafT Drop's website, even if ErikrafT Drop or a ErikrafT Drop authorised representative has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.</p>
-
-        <h3 class="subsection-title">5. Accuracy of materials</h3>
-        <p class="content-text">The materials appearing on ErikrafT Drop's website could include technical, typographical, or photographic errors. ErikrafT Drop does not warrant that any of the materials on its website are accurate, complete or current. ErikrafT Drop may make changes to the materials contained on its website at any time without notice. However ErikrafT Drop does not make any commitment to update the materials.</p>
-
-        <h3 class="subsection-title">6. Links</h3>
-        <p class="content-text">ErikrafT Drop has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by ErikrafT Drop of the site. Use of any such linked website is at the user's own risk.</p>
-
-        <h3 class="subsection-title">7. Modifications</h3>
-        <p class="content-text">ErikrafT Drop may revise these terms of service for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these terms of service.</p>
-
-        <h3 class="subsection-title">8. Governing Law</h3>
-        <p class="content-text">These terms and conditions are governed by and construed in accordance with the laws of ErikrafT Drop and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.</p>
+  <div class="container">
+    <h2 class="section-title">1. Terms of Service</h2>
+    <h3 class="subsection-title">1. Terms</h3>
+    <p class="content-text">By accessing the website at <a href="https://drop.erikraft.com/" class="link-style">ErikrafT Drop</a> you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.</p>
+    <h3 class="subsection-title">2. Use License</h3>
+    <ol>
+      <li class="content-text">Permission is granted to temporarily download one copy of the materials (information or software) on ErikrafT Drop's website for personal, non-commercial transitory viewing only. This is the grant of a licence, not a transfer of title, and under this licence you may not:</li>
+      <li class="indent">modify or copy the materials;</li>
+      <li class="indent">use the materials for any commercial purpose, or for any public display (commercial or non-commercial);</li>
+      <li class="indent">attempt to decompile or reverse engineer any software contained on ErikrafT Drop website;</li>
+      <li class="indent">remove any copyright or other proprietary notations from the materials; or</li>
+      <li class="indent">transfer the materials to another person or 'mirror' the materials on any other server.</li>
+      <li class="content-text">This licence shall automatically terminate if you violate any of these restrictions and may be terminated by ErikrafT Drop at any time. Upon terminating your viewing of these materials or upon the termination of this licence, you must destroy any downloaded materials in your possession whether in electronic or printed format.</li>
+    </ol>
+    <h3 class="subsection-title">3. Disclaimer</h3>
+    <div class="disclaimer">
+      <ol>
+        <li class="content-text">The materials on ErikrafT Drop's website are provided on an 'as is' basis. ErikrafT Drop makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</li>
+        <li class="content-text">Further, ErikrafT Drop does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on its website or otherwise relating to such materials or on any sites linked to this site.</li>
+      </ol>
     </div>
+    <h3 class="subsection-title">4. Limitations</h3>
+    <p class="content-text">In no event shall ErikrafT Drop or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on ErikrafT Drop's website, even if ErikrafT Drop or a ErikrafT Drop authorised representative has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.</p>
+    <h3 class="subsection-title">5. Accuracy of materials</h3>
+    <p class="content-text">The materials appearing on ErikrafT Drop's website could include technical, typographical, or photographic errors. ErikrafT Drop does not warrant that any of the materials on its website are accurate, complete or current. ErikrafT Drop may make changes to the materials contained on its website at any time without notice. However ErikrafT Drop does not make any commitment to update the materials.</p>
+    <h3 class="subsection-title">6. Links</h3>
+    <p class="content-text">ErikrafT Drop has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by ErikrafT Drop of the site. Use of any such linked website is at the user's own risk.</p>
+    <h3 class="subsection-title">7. Modifications</h3>
+    <p class="content-text">ErikrafT Drop may revise these terms of service for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these terms of service.</p>
+    <h3 class="subsection-title">8. Governing Law</h3>
+    <p class="content-text">These terms and conditions are governed by and construed in accordance with the laws of ErikrafT Drop and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.</p>
+  </div>
 </body>
 </html>
