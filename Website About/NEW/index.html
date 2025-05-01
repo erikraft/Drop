@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" href="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/(2)ErikrafT%20Drop%20-%20Redondado.png" type="image/png">
+      <title>ErikrafT Drop - Compartilhamento de arquivos P2P seguro</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://cdn.lordicon.com/lordicon.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <style>
+         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+         body {
+         font-family: 'Inter', sans-serif;
+         background-color: #f8fafc;
+         margin: 0;
+         padding: 0;
+         }
+         .gradient-bg {
+         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+         }
+         .feature-card:hover {
+         transform: translateY(-5px);
+         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+         }
+         .dropzone {
+         border: 2px dashed #cbd5e1;
+         transition: all 0.3s ease;
+         }
+         .dropzone.active {
+         border-color: #6366f1;
+         background-color: #eef2ff;
+         }
+         /* Estilo padrão (desktop) */
+         .iframe-container {
+         position: relative;
+         overflow: hidden;
+         padding-top: 56.25%; /* 16:9 aspect ratio */
+         border-radius: 0.5rem;
+         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+         0 10px 10px -5px rgba(0, 0, 0, 0.04);
+         }
+         .iframe-container iframe {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         border: 0;
+         }
+         /* Estilo para telas menores que 600px (mobile) */
+         @media (max-width: 600px) {
+         body {
+         width: 400px;
+         height: 600px;
+         }
+         .iframe-container {
+         padding-top: 0;
+         width: 100%;
+         height: 100vh;
+         border-radius: 0;
+         box-shadow: none;
+         }
+         .iframe-container iframe {
+         position: static;
+         width: 100%;
+         height: 100%;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <!-- Header/Navigation -->
+      <header class="bg-white shadow-sm sticky top-0 z-50 header-container">
+         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+               <a href="https://biodrop.erikraft.com/" target="_blank" rel="noopener noreferrer">
+               <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/(2)ErikrafT%20Drop%20-%20Redondado.png" alt="ErikrafT Drop" width="50" style="user-select: none;" oncontextmenu="return false" draggable="false">
+               </a>
+               <span class="text-xl font-bold text-gray-800 whitespace-nowrap">ErikrafT Drop</span>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+               <a href="#features" class="text-gray-600 hover:text-indigo-600 font-medium">Recursos</a>
+               <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 font-medium">Como funciona</a>
+               <a href="#advantages" class="text-gray-600 hover:text-indigo-600 font-medium">Vantagens</a>
+               <a href="#self-host" class="text-gray-600 hover:text-indigo-600 font-medium">Auto-hospedagem</a>
+            </nav>
+            <a href="https://drop.erikraft.com" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-colors">
+            Experimente agora <i class="fa-solid fa-up-right-from-square"></i>
+            </a>
+            <button class="md:hidden text-gray-600">
+            <i class="fas fa-bars text-xl"></i>
+            </button>
+         </div>
+      </header>
+      <!-- Hero Section -->
+      <section class="gradient-bg text-white">
+         <div class="container mx-auto px-4 py-20 md:py-28">
+            <div class="max-w-4xl mx-auto text-center">
+               <h1 class="text-4xl md:text-5xl font-bold mb-6">Compartilhamento de arquivos <span class="text-indigo-200">direto no navegador</span></h1>
+               <p class="text-xl md:text-2xl mb-8 opacity-90">Envie arquivos entre dispositivos com segurança, sem instalação ou cadastro, utilizando tecnologia P2P com criptografia de ponta a ponta.</p>
+               <div class="flex flex-col sm:flex-row justify-center gap-4">
+                  <a href="https://drop.erikraft.com" class="bg-white text-indigo-600 hover:bg-gray-100 px-6 py-3 rounded-md font-semibold text-lg transition-colors">
+                  <i class="fas fa-bolt mr-2"></i> Começar agora
+                  </a>
+                  <a href="#how-it-works" class="bg-indigo-800 hover:bg-indigo-900 px-6 py-3 rounded-md font-semibold text-lg transition-colors">
+                  <i class="fas fa-info-circle mr-2"></i> Saiba mais
+                  </a>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- Demo Section -->
+      <section class="py-16 bg-white">
+         <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Experimente agora mesmo</h2>
+            <div class="max-w-4xl mx-auto">
+               <div class="iframe-container">
+                  <iframe src="https://drop.erikraft.com/"></iframe>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- Features Section -->
+      <section id="features" class="py-16 bg-gray-50">
+         <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Recursos poderosos</h2>
+            <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Tudo que você precisa para compartilhar arquivos com segurança e privacidade</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+               <!-- Feature 1 -->
+               <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                  <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                     <i class="fas fa-lock text-indigo-600 text-2xl"></i>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-3">Criptografia de ponta a ponta</h3>
+                  <p class="text-gray-600">Seus arquivos são criptografados antes de sair do seu dispositivo e só podem ser descriptografados pelo destinatário.</p>
+               </div>
+               <!-- Feature 2 -->
+               <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                  <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                     <i class="fas fa-plug text-indigo-600 text-2xl"></i>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-3">Sem servidores intermediários</h3>
+                  <p class="text-gray-600">Conexão direta entre dispositivos usando WebRTC. Seus arquivos nunca passam por servidores de terceiros.</p>
+               </div>
+               <!-- Feature 3 -->
+               <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                  <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                     <i class="fas fa-desktop text-indigo-600 text-2xl"></i>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-3">Funciona no navegador</h3>
+                  <p class="text-gray-600">Sem instalação necessária. Basta acessar o site em qualquer navegador moderno e começar a compartilhar.</p>
+               </div>
+               <!-- Feature 4 -->
+               <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                  <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                     <lord-icon src="https://cdn.lordicon.com/xpgofwru.json" trigger="loop" delay="2000" colors="primary:#5046e5" style="width:40px;height:40px"></lord-icon>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-3">Suporte a diversos arquivos</h3>
+                  <p class="text-gray-600">Envie fotos, vídeos, documentos, arquivos compactados e qualquer outro tipo de arquivo sem restrições.</p>
+               </div>
+               <!-- Feature 5 -->
+               <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                  <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                     <i class="fas fa-mobile-alt text-indigo-600 text-3xl"></i>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-3">Multiplataforma</h3>
+                  <p class="text-gray-600">Funciona em Windows, macOS, Linux, Android e iOS. Qualquer dispositivo com um navegador moderno.</p>
+               </div>
+               <!-- Feature 6 -->
+               <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                  <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                     <lord-icon src="https://cdn.lordicon.com/fowixcuo.json" trigger="loop" delay="2000" colors="primary:#5046e5" style="width:40px;height:40px"></lord-icon>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-3">Interface arrastar e soltar</h3>
+                  <p class="text-gray-600">Interface intuitiva que permite enviar arquivos simplesmente arrastando e soltando na janela do navegador.</p>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- How It Works Section -->
+      <section id="how-it-works" class="py-16 bg-white">
+         <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Como funciona</h2>
+            <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">O ErikrafT Drop utiliza tecnologia WebRTC para criar conexões diretas e seguras entre navegadores</p>
+            <div class="max-w-4xl mx-auto">
+               <div class="grid md:grid-cols-4 gap-8">
+                  <!-- Step 1 -->
+                  <div class="text-center">
+                     <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-indigo-600 font-bold text-xl">1</span>
+                     </div>
+                     <h3 class="font-semibold text-gray-800 mb-2">Acesse o site</h3>
+                     <p class="text-gray-600 text-sm">Ambas as partes acessam drop.erikraft.com em seus navegadores</p>
+                  </div>
+                  <!-- Step 2 -->
+                  <div class="text-center">
+                     <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-indigo-600 font-bold text-xl">2</span>
+                     </div>
+                     <h3 class="font-semibold text-gray-800 mb-2">Conecte-se</h3>
+                     <p class="text-gray-600 text-sm">Um código de conexão é gerado e compartilhado entre os dispositivos</p>
+                  </div>
+                  <!-- Step 3 -->
+                  <div class="text-center">
+                     <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-indigo-600 font-bold text-xl">3</span>
+                     </div>
+                     <h3 class="font-semibold text-gray-800 mb-2">Envie arquivos</h3>
+                     <p class="text-gray-600 text-sm">Arraste e solte os arquivos para enviá-los diretamente ao outro dispositivo</p>
+                  </div>
+                  <!-- Step 4 -->
+                  <div class="text-center">
+                     <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-indigo-600 font-bold text-xl">4</span>
+                     </div>
+                     <h3 class="font-semibold text-gray-800 mb-2">Receba</h3>
+                     <p class="text-gray-600 text-sm">O destinatário recebe os arquivos com segurança, prontos para download</p>
+                  </div>
+               </div>
+               <div class="mt-16 bg-gray-50 p-8 rounded-xl">
+                  <h3 class="text-xl font-semibold text-gray-800 mb-4">Tecnologia por trás do ErikrafT Drop</h3>
+                  <p class="text-gray-600 mb-4">
+                     O ErikrafT Drop utiliza WebRTC (Web Real-Time Communication), uma tecnologia aberta que permite comunicação em tempo real diretamente entre navegadores. Isso significa que seus arquivos são transferidos diretamente entre os dispositivos envolvidos, sem passar por servidores intermediários.
+                  </p>
+                  <p class="text-gray-600">
+                     Para estabelecer a conexão inicial, é usado um servidor de sinalização mínimo (que não tem acesso aos arquivos transferidos) apenas para ajudar os dispositivos a se encontrarem na rede. Uma vez conectados, toda comunicação ocorre diretamente entre eles com criptografia de ponta a ponta.
+                  </p>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- Advantages Section -->
+      <section id="advantages" class="py-16 bg-gray-50">
+         <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Por que escolher o ErikrafT Drop?</h2>
+            <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Comparado a outras soluções de compartilhamento de arquivos</p>
+            <div class="max-w-5xl mx-auto">
+               <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                  <div class="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+                     <!-- ErikrafT Drop -->
+                     <div class="p-8 text-center">
+                        <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                           <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/(2)ErikrafT%20Drop%20-%20Redondado.png" alt="ErikrafT Drop" width="50" style="user-select: none; pointer-events: none;" oncontextmenu="return false" draggable="false">
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">ErikrafT Drop</h3>
+                        <ul class="space-y-3 text-left">
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Sem instalação necessária</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Sem cadastro ou login</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Criptografia de ponta a ponta</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Sem limites de tamanho de arquivo</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Funciona em qualquer dispositivo</span>
+                           </li>
+                        </ul>
+                     </div>
+                     <!-- AirDrop -->
+                     <div class="p-8 text-center">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                           <i class="fab fa-apple text-gray-600" style="font-size: 50px;"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">AirDrop</h3>
+                        <ul class="space-y-3 text-left">
+                           <li class="flex items-start">
+                              <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                              <span>Restrito a dispositivos Apple</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Fácil de usar</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-question text-yellow-500 mt-1 mr-2"></i>
+                              <span>Criptografia não transparente</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Rápido na mesma rede</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                              <span>Não funciona na internet</span>
+                           </li>
+                        </ul>
+                     </div>
+                     <!-- Serviços de nuvem -->
+                     <div class="p-8 text-center">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                           <i class="fas fa-cloud text-gray-600" style="font-size: 40px;"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Serviços de Nuvem</h3>
+                        <ul class="space-y-3 text-left">
+                           <li class="flex items-start">
+                              <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                              <span>Arquivos armazenados em servidores</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                              <span>Requer cadastro/login</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-question text-yellow-500 mt-1 mr-2"></i>
+                              <span>Criptografia variável</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                              <span>Limites de armazenamento</span>
+                           </li>
+                           <li class="flex items-start">
+                              <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                              <span>Acesso de qualquer lugar</span>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- Self Host Section -->
+      <section id="self-host" class="py-16 bg-white">
+         <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Hospede seu próprio ErikrafT Drop</h2>
+            <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Código aberto e fácil de implementar em sua própria infraestrutura</p>
+            <div class="max-w-4xl mx-auto bg-gray-50 p-8 rounded-xl">
+               <div class="grid md:grid-cols-2 gap-8">
+                  <div>
+                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Por que hospedar você mesmo?</h3>
+                     <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                           <i class="fas fa-server text-indigo-500 mt-1 mr-3"></i>
+                           <span>Controle total sobre seus dados e privacidade</span>
+                        </li>
+                        <li class="flex items-start">
+                           <i class="fas fa-shield-alt text-indigo-500 mt-1 mr-3"></i>
+                           <span>Implementação interna para equipes ou organizações</span>
+                        </li>
+                        <li class="flex items-start">
+                           <i class="fas fa-tachometer-alt text-indigo-500 mt-1 mr-3"></i>
+                           <span>Maior velocidade em redes locais</span>
+                        </li>
+                        <li class="flex items-start">
+                           <i class="fas fa-code text-indigo-500 mt-1 mr-3"></i>
+                           <span>Personalização e extensão do código fonte</span>
+                        </li>
+                     </ul>
+                  </div>
+                  <div>
+                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Como implementar</h3>
+                     <div class="bg-gray-800 rounded-lg p-4 text-gray-100 font-mono text-sm overflow-x-auto">
+                        <p class="mb-2"># Clone o repositório</p>
+                        <p class="mb-2 text-green-400">git clone https://github.com/erikraft/Drop.git</p>
+                        <p class="mb-2"># Instale as dependências</p>
+                        <p class="mb-2 text-green-400">npm install</p>
+                        <p class="mb-2"># Inicie o servidor</p>
+                        <p class="text-green-400">npm start</p>
+                     </div>
+                     <a href="https://github.com/erikraft/drop" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                     <i class="fab fa-github mr-2"></i> Ver no GitHub
+                     </a>
+                     <br/>
+                     <a href="https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                     <i class="fab fa-github mr-2"></i> Ver Tutorial
+                     <br/>
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- CTA Section -->
+      <section class="py-16 gradient-bg text-white">
+         <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+               <h2 class="text-3xl md:text-4xl font-bold mb-6">Pronto para compartilhar arquivos com segurança?</h2>
+               <p class="text-xl mb-8 opacity-90">Experimente agora mesmo o ErikrafT Drop - rápido, seguro e sem complicações.</p>
+               <a href="https://drop.erikraft.com" class="inline-block bg-white text-indigo-600 hover:bg-gray-100 px-8 py-4 rounded-md font-semibold text-lg transition-colors">
+               <i class="fa-solid fa-paper-plane"></i> Começar a compartilhar
+               </a>
+            </div>
+         </div>
+      </section>
+      <!-- Footer -->
+      <footer class="bg-gray-900 text-gray-400 py-12">
+         <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+               <div>
+                  <div class="flex items-center space-x-2 mb-4">
+                     <a href="https://biodrop.erikraft.com/" target="_blank" rel="noopener noreferrer">
+                     <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/(2)ErikrafT%20Drop%20-%20Redondado.png" alt="ErikrafT Drop" width="50" style="user-select: none;" oncontextmenu="return false" draggable="false">
+                     </a>
+                     <span class="text-xl font-bold text-white">ErikrafT Drop</span>
+                  </div>
+                  <p class="mb-4">A maneira mais fácil de transferir arquivos entre dispositivos de forma segura e direto no navegador.</p>
+                  <div class="flex space-x-4">
+                     <a href="https://github.com/erikraft/" class="text-gray-400 hover:text-white">
+                     <i class="fab fa-github text-xl"></i>
+                     </a>
+                     <a href="https://www.instagram.com/erikraft.yt/" class="text-gray-400 hover:text-white">
+                     <i class="fa-brands fa-instagram text-xl"></i>
+                     </a>
+                     <a href="https://discord.erikraft.com/" class="text-gray-400 hover:text-white">
+                     <i class="fab fa-discord text-xl"></i>
+                     </a>
+                  </div>
+               </div>
+               <div>
+                  <h3 class="text-white font-semibold text-lg mb-4">Links úteis</h3>
+                  <ul class="space-y-2">
+                     <li><a href="https://drop.erikraft.com" class="hover:text-white"><i class="fa-solid fa-link"></i> Aplicação web</a></li>
+                     <li><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" class="hover:text-white"><i class="fa-brands fa-android"></i> APK</a></li>
+                     <li><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" class="hover:text-white"><i class="fa-solid fa-puzzle-piece"></i> Extensions</a></li>
+                     <li><a href="https://github.com/erikraft/drop" class="hover:text-white"><i class="fa-solid fa-folder-open"></i> Código fonte</a></li>
+                     <li><a href="https://github.com/erikraft/Drop/tree/master/docs" class="hover:text-white"><i class="fa-solid fa-book"></i> Documentação</a></li>
+                     <li><a href="https://github.com/erikraft/Drop/blob/master/docs/faq.md" class="hover:text-white"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                     <li><a href="https://680c1335649735008c05fd2e--biodrop.netlify.app/" class="hover:text-white"><i class="fa-solid fa-person-cane"></i> Site OLD</a></li>
+                  </ul>
+               </div>
+               <div>
+                  <h3 class="text-white font-semibold text-lg mb-4">Legal</h3>
+                  <ul class="space-y-2">
+                     <li><a href="https://drop.erikraft.com/terms-of-use.html" class="hover:text-white"><i class="fa-solid fa-shield-halved"></i> Termos de uso</a></li>
+                     <li><a href="https://drop.erikraft.com/privacy-policy.html" class="hover:text-white"><i class="fa-solid fa-shield-halved"></i> Política de privacidade</a></li>
+                     <li><a href="https://github.com/erikraft/Drop/blob/master/LICENSE" class="hover:text-white"><i class="fa-solid fa-shield-halved"></i> Licença</a></li>
+                  </ul>
+               </div>
+               <div>
+                  <h3 class="text-white font-semibold text-lg mb-4">Contato</h3>
+                  <ul class="space-y-2">
+                     <li class="flex items-start">
+                        <i class="fas fa-envelope mt-1 mr-2"></i>
+                        <span><a href="mailto:erikraft43@gmail.com" class="hover:text-white">erikraft43@gmail.com</a></span>
+                     </li>
+                     <li class="flex items-start">
+                        <i class="fab fa-github mt-1 mr-2"></i>
+                        <span><a href="https://github.com/erikraft" class="hover:text-white">github.com/erikraft</a></span>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+               <p>&copy; 2025 ErikrafT Drop. Todos os direitos reservados.</p>
+            </div>
+         </div>
+      </footer>
+      <script>
+         // Mobile menu toggle functionality
+         document.querySelector('button.md\\:hidden').addEventListener('click', function() {
+             const nav = document.querySelector('nav.hidden.md\\:flex');
+             nav.classList.toggle('hidden');
+             nav.classList.toggle('flex');
+             nav.classList.toggle('flex-col');
+             nav.classList.toggle('absolute');
+             nav.classList.toggle('top-16');
+             nav.classList.toggle('right-4');
+             nav.classList.toggle('bg-white');
+             nav.classList.toggle('p-4');
+             nav.classList.toggle('rounded-md');
+             nav.classList.toggle('shadow-md');
+             nav.classList.toggle('space-y-4');
+             nav.classList.toggle('space-x-8');
+         });
+         
+         // Smooth scrolling for anchor links
+         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+             anchor.addEventListener('click', function (e) {
+                 e.preventDefault();
+                 
+                 const targetId = this.getAttribute('href');
+                 if (targetId === '#') return;
+                 
+                 const targetElement = document.querySelector(targetId);
+                 if (targetElement) {
+                     targetElement.scrollIntoView({
+                         behavior: 'smooth'
+                     });
+                     
+                     // Close mobile menu if open
+                     const nav = document.querySelector('nav');
+                     if (nav.classList.contains('absolute')) {
+                         nav.classList.add('hidden');
+                         nav.classList.remove('flex', 'flex-col', 'absolute', 'top-16', 'right-4', 
+                                            'bg-white', 'p-4', 'rounded-md', 'shadow-md', 'space-y-4');
+                     }
+                 }
+             });
+         });
+         
+         // Add active class to navigation items when scrolling
+         const sections = document.querySelectorAll('section');
+         const navItems = document.querySelectorAll('nav a');
+         
+         window.addEventListener('scroll', function() {
+             let current = '';
+             
+             sections.forEach(section => {
+                 const sectionTop = section.offsetTop;
+                 const sectionHeight = section.clientHeight;
+                 
+                 if (pageYOffset >= (sectionTop - 300)) {
+                     current = section.getAttribute('id');
+                 }
+             });
+             
+             navItems.forEach(item => {
+                 item.classList.remove('text-indigo-600');
+                 if (item.getAttribute('href').includes(current)) {
+                     item.classList.add('text-indigo-600');
+                 }
+             });
+         });
+      </script>
+   </body>
+</html>
