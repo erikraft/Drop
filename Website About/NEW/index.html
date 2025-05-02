@@ -31,6 +31,70 @@
          border-color: #6366f1;
          background-color: #eef2ff;
          }
+
+         /* Header responsivo */
+         .header-container {
+           width: 100%;
+           overflow: hidden;
+         }
+
+         /* Desktop styles */
+         @media (min-width: 1024px) {
+           .header-container nav {
+             display: flex !important;
+           }
+           .mobile-menu {
+             display: none !important;
+           }
+           .mobile-only {
+             display: none !important;
+           }
+           .desktop-nav {
+             display: flex !important;
+           }
+         }
+         
+         /* Mobile e Tablet styles */
+         @media (max-width: 1023px) {
+           .mobile-menu {
+             position: fixed;
+             top: 72px;
+             right: 0;
+             width: 100%;
+             background-color: white;
+             padding: 1rem;
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+             z-index: 50;
+             display: none;
+           }
+           
+           .mobile-menu.active {
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             gap: 1rem;
+           }
+           
+           .mobile-menu a {
+             width: 100%;
+             text-align: center;
+             padding: 0.5rem;
+           }
+           
+           .mobile-menu .mobile-cta {
+             width: 100%;
+             margin-top: 1rem;
+           }
+
+           .desktop-nav {
+             display: none !important;
+           }
+
+           .desktop-only {
+             display: none !important;
+           }
+         }
+
          /* Estilo padrão (desktop) */
          .iframe-container {
          position: relative;
@@ -79,18 +143,28 @@
                </a>
                <span class="text-xl font-bold text-gray-800 whitespace-nowrap">ErikrafT Drop</span>
             </div>
-            <nav class="hidden md:flex space-x-8">
+            <nav class="desktop-nav hidden lg:flex items-center space-x-8">
                <a href="#features" class="text-gray-600 hover:text-indigo-600 font-medium">Recursos</a>
                <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 font-medium">Como funciona</a>
                <a href="#advantages" class="text-gray-600 hover:text-indigo-600 font-medium">Vantagens</a>
                <a href="#self-host" class="text-gray-600 hover:text-indigo-600 font-medium">Auto-hospedagem</a>
+               <a href="https://drop.erikraft.com" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-colors">
+                 <i class="fa-solid fa-up-right-from-square fa-beat"></i> Experimente agora
+               </a>
             </nav>
-            <a href="https://drop.erikraft.com" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-colors">
-            <i class="fa-solid fa-up-right-from-square fa-beat"></i> Experimente agora
-            </a>
-            <button class="md:hidden text-gray-600">
-            <i class="fas fa-bars text-xl"></i>
+            <button class="lg:hidden text-gray-600" id="mobile-menu-button">
+              <i class="fas fa-bars text-xl"></i>
             </button>
+         </div>
+         <!-- Menu mobile -->
+         <div class="mobile-menu" id="mobile-menu">
+           <a href="#features" class="text-gray-600 hover:text-indigo-600 font-medium">Recursos</a>
+           <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 font-medium">Como funciona</a>
+           <a href="#advantages" class="text-gray-600 hover:text-indigo-600 font-medium">Vantagens</a>
+           <a href="#self-host" class="text-gray-600 hover:text-indigo-600 font-medium">Auto-hospedagem</a>
+           <a href="https://drop.erikraft.com" class="mobile-cta bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-colors text-center">
+             <i class="fa-solid fa-up-right-from-square fa-beat"></i> Experimente agora
+           </a>
          </div>
       </header>
       <!-- Hero Section -->
@@ -458,20 +532,30 @@
       </footer>
       <script>
          // Mobile menu toggle functionality
-         document.querySelector('button.md\\:hidden').addEventListener('click', function() {
-             const nav = document.querySelector('nav.hidden.md\\:flex');
-             nav.classList.toggle('hidden');
-             nav.classList.toggle('flex');
-             nav.classList.toggle('flex-col');
-             nav.classList.toggle('absolute');
-             nav.classList.toggle('top-16');
-             nav.classList.toggle('right-4');
-             nav.classList.toggle('bg-white');
-             nav.classList.toggle('p-4');
-             nav.classList.toggle('rounded-md');
-             nav.classList.toggle('shadow-md');
-             nav.classList.toggle('space-y-4');
-             nav.classList.toggle('space-x-8');
+         const mobileMenuButton = document.getElementById('mobile-menu-button');
+         const mobileMenu = document.getElementById('mobile-menu');
+         
+         mobileMenuButton.addEventListener('click', function() {
+           mobileMenu.classList.toggle('active');
+           // Alterna o ícone do botão
+           const icon = this.querySelector('i');
+           if (mobileMenu.classList.contains('active')) {
+             icon.classList.remove('fa-bars');
+             icon.classList.add('fa-times');
+           } else {
+             icon.classList.remove('fa-times');
+             icon.classList.add('fa-bars');
+           }
+         });
+         
+         // Fecha o menu mobile ao clicar em um link
+         document.querySelectorAll('#mobile-menu a').forEach(link => {
+           link.addEventListener('click', () => {
+             mobileMenu.classList.remove('active');
+             const icon = mobileMenuButton.querySelector('i');
+             icon.classList.remove('fa-times');
+             icon.classList.add('fa-bars');
+           });
          });
          
          // Smooth scrolling for anchor links
@@ -487,14 +571,6 @@
                      targetElement.scrollIntoView({
                          behavior: 'smooth'
                      });
-                     
-                     // Close mobile menu if open
-                     const nav = document.querySelector('nav');
-                     if (nav.classList.contains('absolute')) {
-                         nav.classList.add('hidden');
-                         nav.classList.remove('flex', 'flex-col', 'absolute', 'top-16', 'right-4', 
-                                            'bg-white', 'p-4', 'rounded-md', 'shadow-md', 'space-y-4');
-                     }
                  }
              });
          });
