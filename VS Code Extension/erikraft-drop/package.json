@@ -8,27 +8,25 @@
   },
   "icon": "images/icon.png",
   "activationEvents": [
-    "onView:erikraftDropView"
+    "onView:erikraftDrop"
   ],
   "main": "./src/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "erikraftDropViewContainer",
+          "id": "erikraftDrop",
           "title": "ErikrafT Drop",
-          "icon": {
-            "light": "images/ui-icon-light.svg",
-            "dark": "images/ui-icon-dark.svg"
-          }
+          "icon": "images/icon.png"
         }
       ]
     },
     "views": {
-      "erikraftDropViewContainer": [
+      "erikraftDrop": [
         {
-          "id": "erikraftDropView",
-          "name": "ErikrafT Drop"
+          "id": "erikraftDrop.view",
+          "name": "ErikrafT Drop",
+          "type": "webview"
         }
       ]
     }
