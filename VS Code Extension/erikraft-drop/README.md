@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://drop.erikraft.com">
-    <img src="https://raw.githubusercontent.com/erikraft/Drop/main/public/images/(2)ErikrafT%20Drop%20-%20Redondado.png" width="120" alt="ErikrafT Drop Logo">
+    <img src="images/icon.png" width="120" alt="ErikrafT Drop Logo">
   </a>
 </div>
 
@@ -55,8 +55,8 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in VS Code (`Ctrl+S
 
 <table>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/erikraft/Drop/main/docs/erikraft-drop_screenshot_mobile1.gif" width="300" alt="Demo 1"></td>
-    <td><img src="https://raw.githubusercontent.com/erikraft/Drop/main/docs/erikraft-drop_screenshot_mobile2.gif" width="300" alt="Demo 2"></td>
+    <td><img src="images/screenshot1.gif" width="300" alt="Demo 1"></td>
+    <td><img src="images/screenshot2.gif" width="300" alt="Demo 2"></td>
   </tr>
 </table>
 
