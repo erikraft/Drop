@@ -10,7 +10,7 @@ function activate(context) {
   // Registrar o provedor de visualização
   const viewProvider = new ErikrafTDropViewProvider(context.extensionPath);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('erikraftDrop.view', viewProvider)
+    vscode.window.registerWebviewViewProvider('erikraftDropView', viewProvider)
   );
 
   context.subscriptions.push(disposable);
@@ -62,14 +62,23 @@ class ErikrafTDropViewProvider {
             width: 100%;
             height: calc(100% - 40px);
             max-width: 400px;
-            margin: 0 auto;
+            margin: 0;
             display: block;
+            position: fixed;
+            left: 0;
+            top: 40px;
           }
           .icon-container {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--vscode-editor-background);
+            z-index: 1;
           }
           .icon-container img {
             max-width: 80px;
