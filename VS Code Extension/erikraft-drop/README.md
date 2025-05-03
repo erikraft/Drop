@@ -1,8 +1,8 @@
 <div align="center">
   <a href="https://drop.erikraft.com">
-    <img src="images/icon.png" width="120" alt="ErikrafT Drop Logo">
+    <img src="https://i.imgur.com/bLNnAlU.png" width="120" alt="ErikrafT Drop Logo">
   </a>
-</div>
+</div>	
 
 # ErikrafT Drop for VS Code
 
@@ -55,8 +55,8 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in VS Code (`Ctrl+S
 
 <table>
   <tr>
-    <td><img src="images/screenshot1.gif" width="300" alt="Demo 1"></td>
-    <td><img src="images/screenshot2.gif" width="300" alt="Demo 2"></td>
+    <td><img src="https://i.imgur.com/74c1uYW.gif" width="300" alt="Demo 1"></td>
+    <td><img src="https://i.imgur.com/Sss2QaL.gif" width="300" alt="Demo 2"></td>
   </tr>
 </table>
 
