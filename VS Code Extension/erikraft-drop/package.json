@@ -2,21 +2,56 @@
   "name": "erikraft-drop",
   "displayName": "ErikrafT Drop",
   "description": "A maneira mais fácil de transferir arquivos entre dispositivos.",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "engines": {
     "vscode": "^1.70.0"
   },
+  "icon": "images/icon.png",
   "activationEvents": [
-    "onCommand:erikraftDrop.open"
+    "onCommand:erikraftDrop.open",
+    "onView:erikraftDrop.view"
   ],
   "main": "./src/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "erikraftDrop",
+          "title": "ErikrafT Drop",
+          "icon": {
+            "light": "images/ui-icon-light.svg",
+            "dark": "images/ui-icon-dark.svg"
+          }
+        }
+      ]
+    },
+    "views": {
+      "erikraftDrop": [
+        {
+          "type": "webview",
+          "id": "erikraftDrop.view",
+          "name": "ErikrafT Drop"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "erikraftDrop.open",
-        "title": "Abrir ErikrafT Drop"
+        "title": "Abrir ErikrafT Drop",
+        "icon": {
+          "light": "images/ui-icon-light.svg",
+          "dark": "images/ui-icon-dark.svg"
+        }
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "erikraftDrop.open",
+          "when": "true"
+        }
+      ]
+    }
   },
   "categories": ["Other"],
   "publisher": "ErikrafT",
