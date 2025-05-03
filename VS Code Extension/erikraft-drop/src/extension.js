@@ -10,7 +10,7 @@ function activate(context) {
   // Registrar o provedor de visualização
   const viewProvider = new ErikrafTDropViewProvider(context.extensionPath);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('erikraftDropView', viewProvider)
+    vscode.window.registerWebviewViewProvider('erikraftDrop.view', viewProvider)
   );
 
   context.subscriptions.push(disposable);
@@ -34,11 +34,8 @@ class ErikrafTDropViewProvider {
   }
 
   getWebviewContent(webview) {
-    const darkIconPath = webview.asWebviewUri(vscode.Uri.file(
-      path.join(this.extensionPath, 'images', 'ui-icon-dark.svg')
-    ));
-    const lightIconPath = webview.asWebviewUri(vscode.Uri.file(
-      path.join(this.extensionPath, 'images', 'ui-icon-light.svg')
+    const iconPath = webview.asWebviewUri(vscode.Uri.file(
+      path.join(this.extensionPath, 'images', 'icon.png')
     ));
 
     return `
@@ -88,10 +85,7 @@ class ErikrafTDropViewProvider {
       </head>
       <body>
         <div class="icon-container">
-          <picture>
-            <source srcset="${darkIconPath}" media="(prefers-color-scheme: dark)" />
-            <img src="${lightIconPath}" alt="ErikrafT Drop Icon" />
-          </picture>
+          <img src="${iconPath}" alt="ErikrafT Drop Icon" />
         </div>
 
         <iframe 
