@@ -1,0 +1,33 @@
+{
+  "name": "erikraft-drop",
+  "displayName": "ErikrafT Drop",
+  "description": "A maneira mais fácil de transferir arquivos entre dispositivos.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "activationEvents": [
+    "onCommand:erikraftDrop.open"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "erikraftDrop.open",
+        "title": "Abrir ErikrafT Drop"
+      }
+    ]
+  },
+  "categories": ["Other"],
+  "publisher": "ErikrafT",
+  "scripts": {
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^2.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikraft/Drop"
+  }
+}
