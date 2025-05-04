@@ -17,7 +17,10 @@
         {
           "id": "erikraftDrop",
           "title": "ErikrafT Drop",
-          "icon": "images/icon.png"
+          "icon": {
+            "light": "images/ui-icon-light.svg",
+            "dark": "images/ui-icon-dark.svg"
+          }
         }
       ]
     },
