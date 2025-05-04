@@ -27,14 +27,6 @@ class ErikrafTDropViewProvider {
   }
 
   getWebviewContent(webview) {
-    const darkIconPath = webview.asWebviewUri(vscode.Uri.file(
-      path.join(this.extensionPath, 'images', 'icon2.svg')
-    ));
-    const lightIconPath = webview.asWebviewUri(vscode.Uri.file(
-      path.join(this.extensionPath, 'images', 'icon2.svg')
-    ));
-    const iconPath = path.join(this.extensionPath, 'images', 'icon2.svg');
-
     return `
       <!DOCTYPE html>
       <html lang="pt-br">
@@ -54,40 +46,17 @@ class ErikrafTDropViewProvider {
           iframe {
             border: none;
             width: 100%;
-            height: calc(100% - 40px);
+            height: 100%;
             max-width: 400px;
             margin: 0;
             display: block;
             position: fixed;
             left: 0;
-            top: 40px;
-          }
-          .icon-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--vscode-editor-background);
-            z-index: 1;
-          }
-          .icon-container img {
-            max-width: 80px;
-            height: auto;
           }
         </style>
       </head>
       <body>
-        <div class="icon-container">
-          <picture>
-            <source srcset="${darkIconPath}" media="(prefers-color-scheme: dark)" />
-            <img src="${lightIconPath}" alt="ErikrafT Drop Icon" />
-          </picture>
-        </div>
-
         <iframe 
           src="https://drop.erikraft.com/" 
           width="390" 
