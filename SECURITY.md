@@ -25,7 +25,7 @@ As seguintes versões do **ErikrafT Drop** estão atualmente recebendo atualiza�
 Se você identificar uma vulnerabilidade de segurança no **ErikrafT Drop**, siga as instruções abaixo para reportá-la de forma responsável:
 
 * **Contato 1:** Envie um e-mail para: [erikraft43@gmail.com](mailto:erikraft43@gmail.com)  
-* **Contato 2:** Envie uma mensagem em #ticket dentro do link: [discord.erikraft.com](https://discord.erikraft.com/)
+* **Contato 2:** Envie uma mensagem em `#ticket` dentro do link: [discord.erikraft.com](https://discord.erikraft.com/)
 
 ### Informações a incluir:
 - Descrição detalhada da vulnerabilidade.
