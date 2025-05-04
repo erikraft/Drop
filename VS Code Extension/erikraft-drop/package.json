@@ -2,7 +2,7 @@
   "name": "erikraft-drop",
   "displayName": "ErikrafT Drop",
   "description": "A maneira mais fácil de transferir arquivos entre dispositivos.",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "engines": {
     "vscode": "^1.70.0"
   },
@@ -18,8 +18,8 @@
           "id": "erikraftDrop",
           "title": "ErikrafT Drop",
           "icon": {
-            "light": "images/ui-icon-light.svg",
-            "dark": "images/ui-icon-dark.svg"
+            "light": "images/ui-icon.svg",
+            "dark": "images/ui-icon.svg"
           }
         }
       ]
