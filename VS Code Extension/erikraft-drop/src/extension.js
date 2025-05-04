@@ -28,11 +28,12 @@ class ErikrafTDropViewProvider {
 
   getWebviewContent(webview) {
     const darkIconPath = webview.asWebviewUri(vscode.Uri.file(
-      path.join(this.extensionPath, 'images', 'ui-icon-dark.svg')
+      path.join(this.extensionPath, 'images', 'icon2.svg')
     ));
     const lightIconPath = webview.asWebviewUri(vscode.Uri.file(
-      path.join(this.extensionPath, 'images', 'ui-icon-light.svg')
+      path.join(this.extensionPath, 'images', 'icon2.svg')
     ));
+    const iconPath = path.join(this.extensionPath, 'images', 'icon2.svg');
 
     return `
       <!DOCTYPE html>
@@ -89,6 +90,9 @@ class ErikrafTDropViewProvider {
 
         <iframe 
           src="https://drop.erikraft.com/" 
+          width="390" 
+          height="844" 
+          style="border: none; border-radius: 16px;"
           allow="clipboard-write; camera; microphone; autoplay;"
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         ></iframe>
