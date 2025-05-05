@@ -1,39 +1,39 @@
-# Política de Segurança
+# Security Policy
 
-## Versões Suportadas
+## Supported Versions
 
-As seguintes versões do **ErikrafT Drop** estão atualmente recebendo atualizações de segurança:
+The following versions of **ErikrafT Drop** are currently receiving security updates:
 
-| Versão | Suporte         |
-| ------ | --------------- |
-| 1.11.x | ✅ Suportada     |
-| 1.10.x | ✅ Suportada     |
-| 1.9.x  | ✅ Suportada     |
-| 1.8.x  | ✅ Suportada     |
-| 1.7.x  | ✅ Suportada     |
-| 1.6.x  | ✅ Suportada     |
-| 1.5.x  | ✅ Suportada     |
-| 1.4.x  | ✅ Suportada     |
-| 1.3.x  | ✅ Suportada     |
-| 1.2.x  | ✅ Suportada     |
-| 1.1.x  | ✅ Suportada     |
-| 1.0.x  | ✅ Suportada     |
-| < 1.0  | ❌ Não suportada |
+| Version | Support Status    |
+| ------- | ----------------- |
+| 1.11.x  | ✅ Supported       |
+| 1.10.x  | ✅ Supported       |
+| 1.9.x   | ✅ Supported       |
+| 1.8.x   | ✅ Supported       |
+| 1.7.x   | ✅ Supported       |
+| 1.6.x   | ✅ Supported       |
+| 1.5.x   | ✅ Supported       |
+| 1.4.x   | ✅ Supported       |
+| 1.3.x   | ✅ Supported       |
+| 1.2.x   | ✅ Supported       |
+| 1.1.x   | ✅ Supported       |
+| 1.0.x   | ✅ Supported       |
+| < 1.0   | ❌ Not supported   |
 
-## Reportando uma Vulnerabilidade
+## Reporting a Vulnerability
 
-Se você identificar uma vulnerabilidade de segurança no **ErikrafT Drop**, siga as instruções abaixo para reportá-la de forma responsável:
+If you discover a security vulnerability in **ErikrafT Drop**, please follow the instructions below to report it responsibly:
 
-* **Contato 1:** Envie um e-mail para: [erikraft43@gmail.com](mailto:erikraft43@gmail.com)  
-* **Contato 2:** Envie uma mensagem em `#ticket` dentro do link: [discord.erikraft.com](https://discord.erikraft.com/)
+* **Contact 1:** Send an email to: [erikraft43@gmail.com](mailto:erikraft43@gmail.com)  
+* **Contact 2:** Send a message in `#ticket` via: [discord.erikraft.com](https://discord.erikraft.com/)
 
-### Informações a incluir:
-- Descrição detalhada da vulnerabilidade.
-- Passos para reproduzir o problema.
-- Impacto potencial da falha.
-- Qualquer código de prova de conceito (se disponível).
+### Information to include:
+- A detailed description of the vulnerability.
+- Steps to reproduce the issue.
+- The potential impact of the vulnerability.
+- Any proof-of-concept code (if available).
 
-**Tempo de resposta:** Você receberá uma resposta inicial dentro de **5 dias úteis**.  
-**Divulgação responsável:** Pedimos que não divulgue publicamente detalhes da vulnerabilidade até que tenhamos lançado uma correção.
+**Response time:** You will receive an initial response within **5 business days**.  
+**Responsible disclosure:** We kindly ask that you do not publicly disclose any details of the vulnerability until a fix has been released.
 
-Agradecemos por contribuir para a segurança e confiabilidade do **ErikrafT Drop**!
+Thank you for helping keep **ErikrafT Drop** secure and reliable!
