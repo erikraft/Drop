@@ -179,41 +179,42 @@ class ContentModeration {
             if (this.isMediaFile(file)) {
                 const objectUrl = URL.createObjectURL(file);
                 if (file.type.startsWith('image/')) {
-                    mediaPreview = `<div class="media-preview blurred">
-                        <img src="${objectUrl}" alt="Preview">
-                        <div class="warning-overlay">
-                            <div class="warning-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                                    <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
-                                </svg>
-                            </div>
+                    mediaPreview = `
+                        <div class="warning-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                                <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
+                            </svg>
                         </div>
-                    </div>`;
+                        <div class="warning-text">
+                            <p>Conteúdo Sensível</p>
+                            <p>Este conteúdo pode ser impróprio ou conter golpes</p>
+                        </div>
+                        <div class="media-preview blurred">
+                            <img src="${objectUrl}" alt="Preview">
+                        </div>`;
                 } else if (file.type.startsWith('video/')) {
-                    mediaPreview = `<div class="media-preview blurred">
-                        <video src="${objectUrl}" muted></video>
-                        <div class="warning-overlay">
-                            <div class="warning-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                                    <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
-                                </svg>
-                            </div>
+                    mediaPreview = `
+                        <div class="warning-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                                <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
+                            </svg>
                         </div>
-                    </div>`;
+                        <div class="warning-text">
+                            <p>Conteúdo Sensível</p>
+                            <p>Este conteúdo pode ser impróprio ou conter golpes</p>
+                        </div>
+                        <div class="media-preview blurred">
+                            <video src="${objectUrl}" muted></video>
+                        </div>`;
                 }
             }
 
             dialog.innerHTML = `
                 <div class="warning-content">
-                    <h3>⚠️ Aviso de Conteúdo Sensível</h3>
                     ${mediaPreview}
-                    <div class="warning-message">
-                        <p>Este conteúdo pode ser impróprio ou conter golpes.</p>
-                        <p>Tem certeza que deseja visualizar?</p>
-                        <div class="warning-buttons">
-                            <button class="btn-cancel">Recusar</button>
-                            <button class="btn-view">Ver</button>
-                        </div>
+                    <div class="warning-buttons">
+                        <button class="btn-cancel">Recusar</button>
+                        <button class="btn-view">Ver</button>
                     </div>
                 </div>
             `;
@@ -278,21 +279,55 @@ style.textContent = `
 
     .warning-content {
         background: #1a1a1a;
-        padding: 20px;
+        padding: 30px;
         border-radius: 12px;
         max-width: 500px;
         text-align: center;
         color: white;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .warning-icon {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .warning-icon svg {
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+    }
+
+    .warning-text {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .warning-text p:first-child {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #ff4444;
+    }
+
+    .warning-text p:last-child {
+        font-size: 16px;
+        color: #e3e3e3;
     }
 
     .media-preview {
         position: relative;
         width: 100%;
         max-height: 300px;
-        margin: 20px 0;
         border-radius: 8px;
         overflow: hidden;
+        margin-top: 10px;
     }
 
     .media-preview img,
@@ -307,55 +342,12 @@ style.textContent = `
         filter: blur(20px);
     }
 
-    .warning-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(0, 0, 0, 0.5);
-    }
-
-    .warning-icon {
-        position: relative;
-        width: 64px;
-        height: 64px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .warning-icon svg {
-        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
-    }
-
-    .warning-slash {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-45deg);
-        font-size: 48px;
-        color: #ff4444;
-        font-weight: bold;
-    }
-
-    .warning-message {
-        margin-top: 20px;
-    }
-
-    .warning-message p {
-        margin: 10px 0;
-        font-size: 16px;
-    }
-
     .warning-buttons {
         display: flex;
         justify-content: center;
         gap: 20px;
         margin-top: 20px;
+        width: 100%;
     }
 
     .warning-buttons button {
@@ -366,6 +358,8 @@ style.textContent = `
         font-size: 16px;
         font-weight: bold;
         transition: all 0.3s ease;
+        flex: 1;
+        max-width: 200px;
     }
 
     .btn-cancel {
