@@ -66,7 +66,7 @@ main {
 }
 
 h1 {
-    font-size: 5rem; /* Aumenta o tamanho do texto 404 */
+    font-size: 7rem; /* Bem grande para o 404 */
     margin-bottom: 8px;
     color: #fff;
     font-weight: bold;
@@ -74,7 +74,7 @@ h1 {
 }
 
 h2 {
-    font-size: 1.5rem;
+    font-size: 2.5rem; /* Maior para dar destaque */
     margin-bottom: 12px;
     color: #fff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
