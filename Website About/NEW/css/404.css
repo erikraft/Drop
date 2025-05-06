@@ -1,14 +1,13 @@
-@import url('stylebase.css');
-
 body {
     font-family: Arial, sans-serif;
-    background-image: url('../images/Gato-Comeu-Pagina-HTML.png');
-    background-repeat: repeat;
-    background-size: 500px;
-    background-position: center;
+    background-image: url('/images/Gato-Comeu-Pagina-HTML.png');
+    background-size: contain;
+    background-position: center center;
     background-attachment: fixed;
     background-color: var(--background-color);
     position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 body::before {
