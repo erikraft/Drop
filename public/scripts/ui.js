@@ -179,7 +179,7 @@ class PeersUI {
         $peer.ui.setProgress(progress.progress, progress.status)
     }
 
-    _onDrop(e) {
+    async _onDrop(e) {
         if (this.shareMode.active || Dialog.anyDialogShown()) return;
 
         e.preventDefault();
@@ -195,11 +195,24 @@ class PeersUI {
         files = [...files];
 
         if (files.length > 0) {
-            Events.fire('activate-share-mode', {
-                files: files
-            });
+            try {
+                // Verifica cada arquivo antes de ativar o modo de compartilhamento
+                for (const file of files) {
+                    await window.pairdrop.contentModeration.processFile(file);
+                }
+                
+                Events.fire('activate-share-mode', {
+                    files: files
+                });
+            } catch (error) {
+                window.pairdrop.toast.show(error.message);
+            }
         }
-        else if(text.length > 0) {
+        else if (text) {
+            if (window.pairdrop.contentModeration.isSpam(text)) {
+                window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
+                return;
+            }
             Events.fire('activate-share-mode', {
                 text: text
             });
@@ -220,25 +233,37 @@ class PeersUI {
         this.$xNoPeers.removeAttribute('drop-bg');
     }
 
-    _onPaste(e) {
-        // prevent send on paste when dialog is open
+    async _onPaste(e) {
         if (this.shareMode.active || Dialog.anyDialogShown()) return;
 
-        e.preventDefault()
         let files = e.clipboardData.files;
-        let text = e.clipboardData.getData("Text");
+        let text = e.clipboardData.getData("text");
 
         // convert FileList to Array
         files = [...files];
 
         if (files.length > 0) {
-            Events.fire('activate-share-mode', {files: files});
-        } else if (text.length > 0) {
-            if (ShareTextDialog.isApproveShareTextSet()) {
-                Events.fire('share-text-dialog', text);
-            } else {
-                Events.fire('activate-share-mode', {text: text});
+            try {
+                // Verifica cada arquivo antes de ativar o modo de compartilhamento
+                for (const file of files) {
+                    await window.pairdrop.contentModeration.processFile(file);
+                }
+                
+                Events.fire('activate-share-mode', {
+                    files: files
+                });
+            } catch (error) {
+                window.pairdrop.toast.show(error.message);
             }
+        }
+        else if (text) {
+            if (window.pairdrop.contentModeration.isSpam(text)) {
+                window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
+                return;
+            }
+            Events.fire('activate-share-mode', {
+                text: text
+            });
         }
     }
 
@@ -887,42 +912,45 @@ class ReceiveDialog extends Dialog {
 }
 
 class ReceiveFileDialog extends ReceiveDialog {
-
     constructor() {
         super('receive-file-dialog');
+        this.filesQueue = [];
+        this.currentFiles = null;
+        this.currentPeerId = null;
+        this.currentDisplayName = null;
+        this.currentConnectionHash = null;
+        this.currentBadgeClassName = null;
 
-        this.$downloadBtn = this.$el.querySelector('#download-btn');
-        this.$shareBtn = this.$el.querySelector('#share-btn');
-
-        Events.on('files-received', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
-        this._filesQueue = [];
+        Events.on('files', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
     }
 
     async _onFilesReceived(peerId, files, imagesOnly, totalSize) {
-        const displayName = $(peerId).ui._displayName();
-        const connectionHash = $(peerId).ui._connectionHash;
-        const badgeClassName = $(peerId).ui._badgeClassName();
+        try {
+            // Verifica cada arquivo antes de mostrar o diálogo
+            for (const file of files) {
+                await window.pairdrop.contentModeration.processFile(file);
+            }
 
-        this._filesQueue.push({
-            peerId: peerId,
-            displayName: displayName,
-            connectionHash: connectionHash,
-            files: files,
-            imagesOnly: imagesOnly,
-            totalSize: totalSize,
-            badgeClassName: badgeClassName
-        });
+            this.filesQueue.push({
+                peerId: peerId,
+                files: files,
+                imagesOnly: imagesOnly,
+                totalSize: totalSize
+            });
 
-        window.blop.play();
-
-        await this._nextFiles();
+            if (!this.isShown()) {
+                await this._nextFiles();
+            }
+        } catch (error) {
+            window.pairdrop.toast.show(error.message);
+        }
     }
 
     async _nextFiles() {
-        if (this._busy || !this._filesQueue.length) return;
+        if (this._busy || !this.filesQueue.length) return;
         this._busy = true;
-        const {peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName} = this._filesQueue.shift();
-        await this._displayFiles(peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName);
+        const {peerId, files, imagesOnly, totalSize, badgeClassName} = this.filesQueue.shift();
+        await this._displayFiles(peerId, files, imagesOnly, totalSize, badgeClassName);
     }
 
     createPreviewElement(file) {
@@ -960,8 +988,8 @@ class ReceiveFileDialog extends ReceiveDialog {
         });
     }
 
-    async _displayFiles(peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName) {
-        this._parseFileData(displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName);
+    async _displayFiles(peerId, files, imagesOnly, totalSize, badgeClassName) {
+        this._parseFileData(peerId, files, imagesOnly, totalSize, badgeClassName);
 
         let descriptor, url, filenameDownload;
         if (files.length === 1) {
@@ -2016,52 +2044,37 @@ class SendTextDialog extends Dialog {
 class ReceiveTextDialog extends Dialog {
     constructor() {
         super('receive-text-dialog');
-        Events.on('text-received', e => this._onText(e.detail.text, e.detail.peerId));
-        this.$text = this.$el.querySelector('#text');
-        this.$copy = this.$el.querySelector('#copy');
-        this.$close = this.$el.querySelector('#close');
+        this.textQueue = [];
 
-        this.$copy.addEventListener('click', _ => this._onCopy());
-        this.$close.addEventListener('click', _ => this.hide());
-
-        Events.on('keydown', e => this._onKeyDown(e));
-
-        this.$displayName = this.$el.querySelector('.display-name');
-        this._receiveTextQueue = [];
-        this._hideTimeout = null;
+        Events.on('text', e => this._onText(e.detail.text, e.detail.peerId));
     }
 
-    selectionEmpty() {
-        return !window.getSelection().toString()
-    }
+    async _onText(text, peerId) {
+        try {
+            // Verifica se o texto é spam
+            if (window.pairdrop.contentModeration.isSpam(text)) {
+                window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
+                return;
+            }
 
-    async _onKeyDown(e) {
-        if (!this.isShown()) return
+            this.textQueue.push({
+                text: text,
+                peerId: peerId
+            });
 
-        if (e.code === "KeyC" && (e.ctrlKey || e.metaKey) && this.selectionEmpty()) {
-            await this._onCopy()
+            if (!this.isShown()) {
+                await this._dequeueRequests();
+            }
+        } catch (error) {
+            window.pairdrop.toast.show(error.message);
         }
-        else if (e.code === "Escape") {
-            this.hide();
-        }
-    }
-
-    _onText(text, peerId) {
-        window.blop.play();
-        this._receiveTextQueue.push({text: text, peerId: peerId});
-        this._setDocumentTitleMessages();
-        changeFavicon("images/favicon-96x96-notification.png");
-
-        if (this.isShown() || this._hideTimeout) return;
-
-        this._dequeueRequests();
     }
 
     _dequeueRequests() {
         this._setDocumentTitleMessages();
         changeFavicon("images/favicon-96x96-notification.png");
 
-        let {text, peerId} = this._receiveTextQueue.shift();
+        let {text, peerId} = this.textQueue.shift();
         this._showReceiveTextDialog(text, peerId);
     }
 
@@ -2145,22 +2158,9 @@ class ReceiveTextDialog extends Dialog {
     }
 
     _setDocumentTitleMessages() {
-        document.title = this._receiveTextQueue.length <= 1
+        document.title = this.textQueue.length <= 1
             ? `${ Localization.getTranslation("document-titles.message-received") } - PairDrop`
-            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this._receiveTextQueue.length + 1}) } - PairDrop`;
-    }
-
-    async _onCopy() {
-        const sanitizedText = this.$text.innerText.replace(/\u00A0/gm, ' ');
-        navigator.clipboard
-            .writeText(sanitizedText)
-            .then(_ => {
-                Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard"));
-                this.hide();
-            })
-            .catch(_ => {
-                Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard-error"));
-            });
+            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this.textQueue.length + 1}) } - PairDrop`;
     }
 
     hide() {
@@ -2168,7 +2168,7 @@ class ReceiveTextDialog extends Dialog {
 
         // If queue is empty -> clear text field | else -> open next message
         this._hideTimeout = setTimeout(() => {
-            if (!this._receiveTextQueue.length) {
+            if (!this.textQueue.length) {
                 this.$text.innerHTML = "";
             }
             else {
