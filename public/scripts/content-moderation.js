@@ -18,10 +18,17 @@ class ContentModeration {
             'otário', 'pau', 'pinto', 'porra', 'puta', 'putas', 'puto', 'quenga', 'quengo', 'retardado',
             'safado', 'shit', 'shitty', 'viad', 'viado', 'xereca', 'xoxota', 'xvideos', 'xxxvideos',
             
+            // Novos termos ofensivos
+            'arrobado', 'vadia', 'vadio', 'vagabunda', 'vagabundo', 'piranha', 'prostituta', 'prostituto',
+            'putinha', 'putinho', 'viadinho', 'viadinha', 'bocetinha', 'bucetinha', 'cuzinho', 'cuzinha',
+            'caralhinho', 'caralhinha', 'pauzinho', 'pauzinha', 'pintinho', 'pintinha', 'merdinha',
+            'merdinho', 'bostinha', 'bostinho', 'fodinha', 'fodinho', 'putinha', 'putinho',
+            
             // Termos NSFW e conteúdo adulto
             '🔞', '🍆', '🍑', '🥒', '🥵', 'PORN', 'Pornografia', 'pornografía', 'pornography',
             'nude', 'nudes', 'Onlyfans', 'OnlyFans', 'Leaks', 'Hentai', 'Teen Porn', 'E-Girls Porn',
-            'Latina Nudes', 'xnudes',
+            'Latina Nudes', 'xnudes', 'xvideos', 'pornhub', 'xhamster', 'redtube', 'sexy', 'sexy girl',
+            'sexo', 'sex',
             
             // Spam e golpes
             '$100', '$20 gift', '20$ gift', 'Bilhão de reais', 'Billion Dollars', 'Billion of reais',
@@ -169,10 +176,41 @@ class ContentModeration {
     }
 
     // Mostra o diálogo de aviso
-    showWarningDialog(file) {
+    showWarningDialog(file, contentType = 'explicit') {
         return new Promise((resolve) => {
             const dialog = document.createElement('div');
             dialog.className = 'content-warning-dialog';
+            
+            // Define o ícone e mensagem baseado no tipo de conteúdo
+            let iconSvg = '';
+            let warningTitle = '';
+            let warningMessage = '';
+
+            switch(contentType) {
+                case 'explicit':
+                    iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                        <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
+                    </svg>`;
+                    warningTitle = 'Conteúdo Explícito';
+                    warningMessage = 'Este conteúdo pode conter material adulto ou impróprio';
+                    break;
+
+                case 'profanity':
+                    iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q54 0 104-17.5t92-50.5L228-676q-33 42-50.5 92T160-480q0 134 93 227t227 93Zm252-124q33-42 50.5-92T800-480q0-134-93-227t-227-93q-54 0-104 17.5T284-732l448 448Z"/>
+                    </svg>`;
+                    warningTitle = 'Linguagem Imprópria';
+                    warningMessage = 'Este conteúdo contém linguagem ofensiva ou inadequada';
+                    break;
+
+                case 'spam':
+                    iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                        <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
+                    </svg>`;
+                    warningTitle = 'Possível Spam';
+                    warningMessage = 'Este conteúdo pode ser spam ou tentativa de golpe';
+                    break;
+            }
             
             // Cria um preview da imagem/vídeo com desfoque
             let mediaPreview = '';
@@ -181,13 +219,11 @@ class ContentModeration {
                 if (file.type.startsWith('image/')) {
                     mediaPreview = `
                         <div class="warning-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                                <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
-                            </svg>
+                            ${iconSvg}
                         </div>
                         <div class="warning-text">
-                            <p>Conteúdo Sensível</p>
-                            <p>Este conteúdo pode ser impróprio ou conter golpes</p>
+                            <p>${warningTitle}</p>
+                            <p>${warningMessage}</p>
                         </div>
                         <div class="media-preview blurred">
                             <img src="${objectUrl}" alt="Preview">
@@ -195,18 +231,26 @@ class ContentModeration {
                 } else if (file.type.startsWith('video/')) {
                     mediaPreview = `
                         <div class="warning-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                                <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
-                            </svg>
+                            ${iconSvg}
                         </div>
                         <div class="warning-text">
-                            <p>Conteúdo Sensível</p>
-                            <p>Este conteúdo pode ser impróprio ou conter golpes</p>
+                            <p>${warningTitle}</p>
+                            <p>${warningMessage}</p>
                         </div>
                         <div class="media-preview blurred">
                             <video src="${objectUrl}" muted></video>
                         </div>`;
                 }
+            } else {
+                // Para conteúdo que não é mídia (texto, etc)
+                mediaPreview = `
+                    <div class="warning-icon">
+                        ${iconSvg}
+                    </div>
+                    <div class="warning-text">
+                        <p>${warningTitle}</p>
+                        <p>${warningMessage}</p>
+                    </div>`;
             }
 
             dialog.innerHTML = `
@@ -246,14 +290,25 @@ class ContentModeration {
     async processFile(file) {
         // Verifica spam no nome do arquivo
         if (this.isSpam(file.name)) {
-            throw new Error('Arquivo bloqueado: Conteúdo impróprio detectado');
+            const shouldView = await this.showWarningDialog(file, 'spam');
+            if (!shouldView) {
+                throw new Error('Arquivo bloqueado: Possível spam detectado');
+            }
         }
 
         // Verifica conteúdo NSFW
         if (await this.checkNSFW(file)) {
-            const shouldView = await this.showWarningDialog(file);
+            const shouldView = await this.showWarningDialog(file, 'explicit');
             if (!shouldView) {
                 throw new Error('Arquivo bloqueado: Conteúdo impróprio');
+            }
+        }
+
+        // Verifica linguagem imprópria
+        if (this.hasBlockedWordsWithSubstitutions(file.name)) {
+            const shouldView = await this.showWarningDialog(file, 'profanity');
+            if (!shouldView) {
+                throw new Error('Arquivo bloqueado: Linguagem imprópria');
             }
         }
 
