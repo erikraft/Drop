@@ -2,7 +2,7 @@
   "name": "ErikrafT Drop",
   "version": "1.11.3",
   "type": "module",
-  "description": "A maneira mais fácil de transferir arquivos entre dispositivos e Servidor de compartilhamento de arquivos com moderação de conteúdo",
+  "description": "A maneira mais fácil de transferir arquivos entre dispositivos",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
