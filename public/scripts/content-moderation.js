@@ -93,6 +93,19 @@ class ContentModeration {
             'ю': 'yu', // cirílico 'ю' vs latino 'yu'
             'я': 'ya'  // cirílico 'я' vs latino 'ya'
         };
+
+        // Inicializa o modelo NSFW
+        this.nsfwModel = null;
+        this.initNSFWModel();
+    }
+
+    async initNSFWModel() {
+        try {
+            // Carrega o modelo NSFW do TensorFlow.js
+            this.nsfwModel = await tf.loadGraphModel('https://d1zv2aa70wpiur.cloudfront.net/tfjs_models/tfjs_nsfw_mobilenet/model.json');
+        } catch (error) {
+            console.error('Erro ao carregar modelo NSFW:', error);
+        }
     }
 
     // Normaliza o texto removendo substituições de caracteres
@@ -124,10 +137,97 @@ class ContentModeration {
     async checkNSFW(file) {
         if (!this.isMediaFile(file)) return false;
 
-        // Aqui você pode integrar com APIs de detecção de conteúdo NSFW
-        // Por enquanto, vamos usar uma verificação básica de nome de arquivo
-        const fileName = file.name.toLowerCase();
-        return this.blockedWords.some(word => fileName.includes(word.toLowerCase()));
+        try {
+            // Verifica primeiro pelo nome do arquivo
+            const fileName = file.name.toLowerCase();
+            if (this.blockedWords.some(word => fileName.includes(word.toLowerCase()))) {
+                return true;
+            }
+
+            // Se for uma imagem ou vídeo, verifica o conteúdo
+            if (file.type.startsWith('image/')) {
+                return await this.checkImageNSFW(file);
+            } else if (file.type.startsWith('video/')) {
+                return await this.checkVideoNSFW(file);
+            }
+
+            return false;
+        } catch (error) {
+            console.error('Erro ao verificar NSFW:', error);
+            return false;
+        }
+    }
+
+    async checkImageNSFW(file) {
+        if (!this.nsfwModel) return false;
+
+        try {
+            const img = await createImageBitmap(file);
+            const tensor = tf.browser.fromPixels(img)
+                .resizeBilinear([224, 224])
+                .expandDims()
+                .toFloat()
+                .div(255.0);
+
+            const predictions = await this.nsfwModel.predict(tensor).data();
+            tensor.dispose();
+
+            // Verifica se o conteúdo é NSFW
+            const nsfwScore = predictions[1]; // Índice 1 é para conteúdo NSFW
+            return nsfwScore > 0.5; // Threshold de 50%
+        } catch (error) {
+            console.error('Erro ao verificar imagem NSFW:', error);
+            return false;
+        }
+    }
+
+    async checkVideoNSFW(file) {
+        if (!this.nsfwModel) return false;
+
+        try {
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(file);
+            
+            return new Promise((resolve) => {
+                video.onloadeddata = async () => {
+                    // Captura frames do vídeo para análise
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const ctx = canvas.getContext('2d');
+
+                    // Analisa alguns frames do vídeo
+                    const frameCount = 5;
+                    const interval = video.duration / frameCount;
+                    let nsfwFrames = 0;
+
+                    for (let i = 0; i < frameCount; i++) {
+                        video.currentTime = i * interval;
+                        await new Promise(r => video.onseeked = r);
+                        
+                        ctx.drawImage(video, 0, 0);
+                        const tensor = tf.browser.fromPixels(canvas)
+                            .resizeBilinear([224, 224])
+                            .expandDims()
+                            .toFloat()
+                            .div(255.0);
+
+                        const predictions = await this.nsfwModel.predict(tensor).data();
+                        tensor.dispose();
+
+                        if (predictions[1] > 0.5) {
+                            nsfwFrames++;
+                        }
+                    }
+
+                    URL.revokeObjectURL(video.src);
+                    resolve(nsfwFrames > frameCount / 2); // Se mais da metade dos frames for NSFW
+                };
+            });
+        } catch (error) {
+            console.error('Erro ao verificar vídeo NSFW:', error);
+            return false;
+        }
     }
 
     // Verifica se uma URL contém caracteres cirílicos
@@ -158,161 +258,208 @@ class ContentModeration {
     }
 
     // Verifica se é spam ou contém palavras bloqueadas
-    isSpam(text) {
-        // Verifica se é uma URL
-        const urlMatch = text.match(/^(https?:\/\/[^\s]+)|([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})$/);
-        if (urlMatch) {
-            // Se for uma URL, verifica se é suspeita
-            return this.isSuspiciousUrl(urlMatch[0]);
+    isSpam(text, file) {
+        // Verifica se o texto contém palavras bloqueadas
+        const hasBlockedWords = this.blockedWords.some(word => {
+            const regex = new RegExp(`\\b${word}\\b`, 'i');
+            return regex.test(text);
+        });
+
+        // Verifica se o texto contém palavras bloqueadas com substituições
+        const hasBlockedWordsWithSubs = this.hasBlockedWordsWithSubstitutions(text);
+
+        // Verifica se o texto contém URLs suspeitas
+        const hasSuspiciousUrls = this.isSuspiciousUrl(text);
+
+        // Verifica se o texto contém caracteres cirílicos
+        const hasCyrillicChars = this.hasCyrillicChars(text);
+
+        // Verifica se o texto contém emojis impróprios
+        const hasInappropriateEmojis = this.hasInappropriateEmojis(text);
+
+        // Verifica se o texto contém padrões de spam
+        const hasSpamPatterns = this.spamPatterns.some(pattern => {
+            if (pattern.type === 'repeated') {
+                return pattern.regex.test(text);
+            } else if (pattern.type === 'length') {
+                return text.length > pattern.threshold;
+            } else if (pattern.type === 'repetitive') {
+                return pattern.regex.test(text);
+            }
+            return false;
+        });
+
+        // Determina o tipo de conteúdo impróprio
+        let contentType = 'spam';
+        if (hasBlockedWords || hasBlockedWordsWithSubs) {
+            contentType = 'profanity';
+        }
+        if (hasInappropriateEmojis || this.isExplicitContent(text)) {
+            contentType = 'explicit';
+        }
+        if (hasSuspiciousUrls || hasCyrillicChars) {
+            contentType = 'scam';
         }
 
-        // Verifica palavras bloqueadas com substituições
-        if (this.hasBlockedWordsWithSubstitutions(text)) {
-            return true;
-        }
-        
-        // Verifica padrões de spam
-        return this.spamPatterns.some(pattern => pattern.test(text));
+        // Retorna o resultado com o tipo de conteúdo
+        return {
+            isSpam: hasBlockedWords || hasBlockedWordsWithSubs || hasSuspiciousUrls || 
+                   hasCyrillicChars || hasInappropriateEmojis || hasSpamPatterns,
+            contentType: contentType
+        };
+    }
+
+    // Método para verificar emojis impróprios
+    hasInappropriateEmojis(text) {
+        const inappropriateEmojis = ['🔞', '🍆', '🍑', '🥒', '🥵', '💦', '👅', '👙', '👄', '💋'];
+        return inappropriateEmojis.some(emoji => text.includes(emoji));
+    }
+
+    // Método para verificar conteúdo explícito
+    isExplicitContent(text) {
+        const explicitTerms = ['porn', 'sex', 'nude', 'nudes', 'onlyfans', 'leaks', 'hentai'];
+        return explicitTerms.some(term => text.toLowerCase().includes(term));
     }
 
     // Mostra o diálogo de aviso
-    showWarningDialog(file, contentType = 'explicit') {
-        return new Promise((resolve) => {
-            const dialog = document.createElement('div');
-            dialog.className = 'content-warning-dialog';
-            
-            // Define o ícone e mensagem baseado no tipo de conteúdo
-            let iconSvg = '';
-            let warningTitle = '';
-            let warningMessage = '';
+    showWarningDialog(file, contentType = 'spam') {
+        const dialog = document.createElement('div');
+        dialog.className = 'content-warning-dialog';
 
-            switch(contentType) {
-                case 'explicit':
-                    iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                        <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
-                    </svg>`;
-                    warningTitle = 'Conteúdo Explícito';
-                    warningMessage = 'Este conteúdo pode conter material adulto ou impróprio';
-                    break;
+        // Define o ícone e mensagem baseado no tipo de conteúdo
+        let icon, title, message;
+        switch (contentType) {
+            case 'explicit':
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <line x1="3" y1="3" x2="21" y2="21"/>
+                </svg>`;
+                title = 'Conteúdo Explícito';
+                message = 'Este conteúdo pode conter material adulto ou impróprio';
+                break;
+            case 'profanity':
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="4.93" y1="19.07" x2="19.07" y2="4.93"/>
+                </svg>`;
+                title = 'Linguagem Imprópria';
+                message = 'Este conteúdo contém linguagem ofensiva ou inadequada';
+                break;
+            case 'scam':
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>`;
+                title = 'Possível Golpe';
+                message = 'Este conteúdo pode ser uma tentativa de golpe ou fraude';
+                break;
+            default:
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>`;
+                title = 'Possível Spam';
+                message = 'Este conteúdo pode ser spam ou tentativa de golpe';
+        }
 
-                case 'profanity':
-                    iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q54 0 104-17.5t92-50.5L228-676q-33 42-50.5 92T160-480q0 134 93 227t227 93Zm252-124q33-42 50.5-92T800-480q0-134-93-227t-227-93q-54 0-104 17.5T284-732l448 448Z"/>
-                    </svg>`;
-                    warningTitle = 'Linguagem Imprópria';
-                    warningMessage = 'Este conteúdo contém linguagem ofensiva ou inadequada';
-                    break;
-
-                case 'spam':
-                    iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                        <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
-                    </svg>`;
-                    warningTitle = 'Possível Spam';
-                    warningMessage = 'Este conteúdo pode ser spam ou tentativa de golpe';
-                    break;
-            }
-            
-            // Cria um preview da imagem/vídeo com desfoque
-            let mediaPreview = '';
-            if (this.isMediaFile(file)) {
-                const objectUrl = URL.createObjectURL(file);
-                if (file.type.startsWith('image/')) {
-                    mediaPreview = `
-                        <div class="warning-icon">
-                            ${iconSvg}
-                        </div>
-                        <div class="warning-text">
-                            <p>${warningTitle}</p>
-                            <p>${warningMessage}</p>
-                        </div>
-                        <div class="media-preview blurred">
-                            <img src="${objectUrl}" alt="Preview">
-                        </div>`;
-                } else if (file.type.startsWith('video/')) {
-                    mediaPreview = `
-                        <div class="warning-icon">
-                            ${iconSvg}
-                        </div>
-                        <div class="warning-text">
-                            <p>${warningTitle}</p>
-                            <p>${warningMessage}</p>
-                        </div>
-                        <div class="media-preview blurred">
-                            <video src="${objectUrl}" muted></video>
-                        </div>`;
+        const content = document.createElement('div');
+        content.className = 'warning-content';
+        content.innerHTML = `
+            <div class="warning-icon">
+                ${icon}
+            </div>
+            <div class="warning-text">
+                <p>${title}</p>
+                <p>${message}</p>
+            </div>
+            <div class="media-preview blurred">
+                ${file.type.startsWith('image/') ? 
+                    `<img src="${URL.createObjectURL(file)}" alt="Preview">` :
+                    `<video src="${URL.createObjectURL(file)}" muted></video>`
                 }
-            } else {
-                // Para conteúdo que não é mídia (texto, etc)
-                mediaPreview = `
-                    <div class="warning-icon">
-                        ${iconSvg}
-                    </div>
-                    <div class="warning-text">
-                        <p>${warningTitle}</p>
-                        <p>${warningMessage}</p>
-                    </div>`;
+            </div>
+            <div class="warning-buttons">
+                <button class="btn-cancel">Recusar</button>
+                <button class="btn-view">Ver</button>
+            </div>
+        `;
+
+        dialog.appendChild(content);
+        document.body.appendChild(dialog);
+
+        // Adiciona eventos aos botões
+        const cancelBtn = content.querySelector('.btn-cancel');
+        const viewBtn = content.querySelector('.btn-view');
+        const mediaPreview = content.querySelector('.media-preview');
+
+        cancelBtn.onclick = () => {
+            dialog.remove();
+            URL.revokeObjectURL(mediaPreview.querySelector('img, video').src);
+        };
+
+        viewBtn.onclick = () => {
+            mediaPreview.classList.remove('blurred');
+            viewBtn.style.display = 'none';
+            cancelBtn.textContent = 'Fechar';
+        };
+
+        // Adiciona evento para fechar com ESC
+        document.addEventListener('keydown', function escHandler(e) {
+            if (e.key === 'Escape') {
+                dialog.remove();
+                URL.revokeObjectURL(mediaPreview.querySelector('img, video').src);
+                document.removeEventListener('keydown', escHandler);
             }
-
-            dialog.innerHTML = `
-                <div class="warning-content">
-                    ${mediaPreview}
-                    <div class="warning-buttons">
-                        <button class="btn-cancel">Recusar</button>
-                        <button class="btn-view">Ver</button>
-                    </div>
-                </div>
-            `;
-
-            document.body.appendChild(dialog);
-
-            // Adiciona evento para remover o URL do objeto quando o diálogo for fechado
-            const cleanup = () => {
-                if (this.isMediaFile(file)) {
-                    URL.revokeObjectURL(objectUrl);
-                }
-            };
-
-            dialog.querySelector('.btn-cancel').onclick = () => {
-                cleanup();
-                document.body.removeChild(dialog);
-                resolve(false);
-            };
-
-            dialog.querySelector('.btn-view').onclick = () => {
-                cleanup();
-                document.body.removeChild(dialog);
-                resolve(true);
-            };
         });
     }
 
     // Processa um arquivo antes de enviar
     async processFile(file) {
-        // Verifica spam no nome do arquivo
-        if (this.isSpam(file.name)) {
-            const shouldView = await this.showWarningDialog(file, 'spam');
-            if (!shouldView) {
-                throw new Error('Arquivo bloqueado: Possível spam detectado');
-            }
-        }
+        try {
+            // Verifica o arquivo no servidor proxy
+            const formData = new FormData();
+            formData.append('file', file);
 
-        // Verifica conteúdo NSFW
-        if (await this.checkNSFW(file)) {
-            const shouldView = await this.showWarningDialog(file, 'explicit');
-            if (!shouldView) {
-                throw new Error('Arquivo bloqueado: Conteúdo impróprio');
-            }
-        }
+            const response = await fetch('http://localhost:3001/check-content', {
+                method: 'POST',
+                body: formData
+            });
 
-        // Verifica linguagem imprópria
-        if (this.hasBlockedWordsWithSubstitutions(file.name)) {
-            const shouldView = await this.showWarningDialog(file, 'profanity');
-            if (!shouldView) {
-                throw new Error('Arquivo bloqueado: Linguagem imprópria');
-            }
-        }
+            const result = await response.json();
 
-        return file;
+            if (result.blocked) {
+                const shouldView = await this.showWarningDialog(file, 'explicit');
+                if (!shouldView) {
+                    throw new Error(`Arquivo bloqueado: ${result.reason}`);
+                }
+            }
+
+            return file;
+        } catch (error) {
+            console.error('Erro ao processar arquivo:', error);
+            throw error;
+        }
+    }
+
+    async checkUrl(url) {
+        try {
+            const response = await fetch('http://localhost:3001/check-url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url })
+            });
+
+            const result = await response.json();
+            return result.blocked;
+        } catch (error) {
+            console.error('Erro ao verificar URL:', error);
+            return false;
+        }
     }
 }
 
@@ -325,64 +472,105 @@ style.textContent = `
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(0, 0, 0, 0.95);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 9999;
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 
     .warning-content {
         background: #1a1a1a;
         padding: 30px;
-        border-radius: 12px;
+        border-radius: 16px;
         max-width: 500px;
         text-align: center;
         color: white;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 20px;
+        animation: slideUp 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
     }
 
     .warning-icon {
-        width: 64px;
-        height: 64px;
+        width: 80px;
+        height: 80px;
         display: flex;
         justify-content: center;
         align-items: center;
         margin-bottom: 10px;
+        animation: pulse 2s infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+    }
+
+    @keyframes pulse {
+        0% { transform: translate(-50%, -50%) scale(1); }
+        50% { transform: translate(-50%, -50%) scale(1.05); }
+        100% { transform: translate(-50%, -50%) scale(1); }
     }
 
     .warning-icon svg {
-        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        width: 64px;
+        height: 64px;
     }
 
     .warning-text {
         text-align: center;
         margin-bottom: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 100%;
+        padding: 0 20px;
     }
 
     .warning-text p:first-child {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
         margin-bottom: 10px;
-        color: #ff4444;
+        background: linear-gradient(45deg, #ff4444, #ff0000);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .warning-text p:last-child {
-        font-size: 16px;
+        font-size: 18px;
         color: #e3e3e3;
+        line-height: 1.5;
     }
 
     .media-preview {
         position: relative;
         width: 100%;
         max-height: 300px;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
         margin-top: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     }
 
     .media-preview img,
@@ -390,11 +578,12 @@ style.textContent = `
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: filter 0.3s ease;
     }
 
     .blurred img,
     .blurred video {
-        filter: blur(20px);
+        filter: blur(25px) brightness(0.7);
     }
 
     .warning-buttons {
@@ -403,36 +592,66 @@ style.textContent = `
         gap: 20px;
         margin-top: 20px;
         width: 100%;
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        z-index: 2;
     }
 
     .warning-buttons button {
-        padding: 12px 24px;
+        padding: 14px 28px;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
         font-weight: bold;
         transition: all 0.3s ease;
         flex: 1;
         max-width: 200px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .btn-cancel {
-        background: #ff4444;
+        background: linear-gradient(45deg, #ff4444, #ff0000);
         color: white;
+        box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
     }
 
     .btn-cancel:hover {
-        background: #ff0000;
+        background: linear-gradient(45deg, #ff0000, #cc0000);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
     }
 
     .btn-view {
-        background: #4CAF50;
+        background: linear-gradient(45deg, #4CAF50, #45a049);
         color: white;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
     }
 
     .btn-view:hover {
-        background: #45a049;
+        background: linear-gradient(45deg, #45a049, #388e3c);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    /* Estilo para notificações de golpe */
+    .scam-warning {
+        background: linear-gradient(45deg, #ff6b6b, #ff0000);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        font-weight: bold;
+        text-align: center;
+        animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
     }
 `;
 document.head.appendChild(style);
