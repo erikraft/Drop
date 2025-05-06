@@ -17,7 +17,8 @@ class PairDrop {
             "scripts/libs/heic2any.min.js",
             "scripts/libs/no-sleep.min.js",
             "scripts/libs/qr-code.min.js",
-            "scripts/libs/zip.min.js"
+            "scripts/libs/zip.min.js",
+            "scripts/content-moderation.js"
         ];
 
         this.registerServiceWorker();
@@ -186,6 +187,7 @@ class PairDrop {
         this.broadCast = new BrowserTabsConnector();
         this.server = new ServerConnection();
         this.peers = new PeersManager(this.server);
+        this.contentModeration = new ContentModeration();
     }
 
     async evaluateUrlParams() {
