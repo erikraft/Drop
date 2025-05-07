@@ -41,6 +41,27 @@ class ContentModeration {
             'shut up', 'cala a boca'
         ];
 
+        // Termos explícitos
+        this.explicitTerms = [
+            'porn', 'sex', 'xxx', 'adult', 'nude', 'naked', 'nsfw', '18+',
+            'pornografia', 'sexo', 'adulto', 'nu', 'nua', 'nudez', 'erótico',
+            'onlyfans', 'leaks', 'hentai', 'pussy', 'buceta', 'xereca', 'xereka',
+            'chereca', 'hentai', 'pornhub', 'xhamster', 'redtube', 'sexy', 'sexy girl',
+            'sexo', 'sex', 'porn', 'pornografia', 'erótico', 'erótica',
+        ];
+
+        // Termos ofensivos
+        this.offensiveTerms = [
+            'arromb', 'asshole', 'babac', 'bastard', 'bct', 'boceta', 'boquete',
+            'burro', 'cacete', 'caralh', 'corno', 'corna', 'crlh', 'cu', 'puta'
+        ];
+
+        // Termos de golpe
+        this.scamTerms = [
+            'hack', 'crack', 'pirata', 'gratis', 'free', 'win', 'premio', 'prêmio',
+            'ganhou', 'bitcoin', 'crypto', 'investment', 'investimento', 'money'
+        ];
+
         this.spamPatterns = [
             /(.)\1{10,}/, // Caracteres repetidos (aumentado para 10+ repetições)
             /(.){1000,}/, // Textos muito longos (aumentado para 1000+ caracteres)
@@ -94,22 +115,66 @@ class ContentModeration {
             'я': 'ya'  // cirílico 'я' vs latino 'ya'
         };
 
-        // Inicializa o modelo NSFW
-        this.nsfwModel = null;
-        this.nsfwModelLoading = false;
-        this.loadNSFWModel();
+        // Múltiplos modelos NSFW
+        this.nsfwModels = {
+            default: null,
+            mobilenet: null,
+            inception: null,
+            resnet: null
+        };
+        
+        // Status de carregamento dos modelos
+        this.modelLoading = false;
+        
+        // URLs dos modelos
+        this.modelUrls = {
+            default: 'https://cdn.jsdelivr.net/npm/nsfwjs@2.4.0/dist/model/',
+            mobilenet: 'https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/model.json',
+            inception: 'https://storage.googleapis.com/tfjs-models/tfjs/inception_v3/2/model.json',
+            resnet: 'https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity@1.2.2/dist/model.json'
+        };
+
+        // APIs externas de moderação
+        this.externalApis = {
+            deepai: 'https://api.deepai.org/api/nsfw-detector',
+            sightengine: 'https://api.sightengine.com/1.0/check.json',
+            moderatecontent: 'https://api.moderatecontent.com/moderate/',
+            imagga: 'https://api.imagga.com/v2/categories/nsfw_beta',
+            cloudmersive: 'https://api.cloudmersive.com/image/nsfw/classify'
+        };
+
+        // Inicializa todos os modelos
+        this.loadAllModels();
     }
 
-    async loadNSFWModel() {
-        if (this.nsfwModel || this.nsfwModelLoading) return;
-        this.nsfwModelLoading = true;
+    async loadAllModels() {
+        if (this.modelLoading) return;
+        this.modelLoading = true;
+        
         try {
-            this.nsfwModel = await nsfwjs.load();
-            console.log('Modelo NSFW carregado!');
+            console.log('Carregando múltiplos modelos NSFW...');
+            
+            // Carrega modelo principal do NSFWJS
+            this.nsfwModels.default = await nsfwjs.load(this.modelUrls.default);
+            console.log('Modelo NSFWJS principal carregado');
+            
+            // Carrega MobileNet para detecção adicional
+            this.nsfwModels.mobilenet = await tf.loadLayersModel(this.modelUrls.mobilenet);
+            console.log('Modelo MobileNet carregado');
+            
+            // Carrega Inception para classificação avançada
+            this.nsfwModels.inception = await tf.loadLayersModel(this.modelUrls.inception);
+            console.log('Modelo Inception carregado');
+            
+            // Carrega ResNet para detecção de características
+            this.nsfwModels.resnet = await tf.loadLayersModel(this.modelUrls.resnet);
+            console.log('Modelo ResNet carregado');
+            
         } catch (error) {
-            console.error('Erro ao carregar modelo NSFW:', error);
+            console.error('Erro ao carregar modelos:', error);
         }
-        this.nsfwModelLoading = false;
+        
+        this.modelLoading = false;
     }
 
     // Normaliza o texto removendo substituições de caracteres
@@ -140,76 +205,289 @@ class ContentModeration {
     // Verifica se o conteúdo é NSFW
     async checkNSFW(file) {
         if (!this.isMediaFile(file)) return false;
+        
         try {
+            console.log('Iniciando verificação NSFW completa para:', file.name);
+            
+            // Verifica o nome do arquivo
             const fileName = file.name.toLowerCase();
             if (this.blockedWords.some(word => fileName.includes(word.toLowerCase()))) {
+                console.log('Nome do arquivo contém palavras bloqueadas');
                 return true;
             }
-            if (file.type.startsWith('image/')) {
-                return await this.checkImageNSFW(file);
-            } else if (file.type.startsWith('video/')) {
-                return await this.checkVideoNSFW(file);
+
+            // Garante que os modelos estão carregados
+            if (!this.nsfwModels.default) {
+                await this.loadAllModels();
             }
-            return false;
+
+            let isNSFW = false;
+            let confidence = 0;
+            let modelResults = {};
+
+            if (file.type.startsWith('image/')) {
+                const results = await this.checkImageWithAllModels(file);
+                isNSFW = results.isNSFW;
+                confidence = results.confidence;
+                modelResults = results.modelResults;
+            } else if (file.type.startsWith('video/')) {
+                const results = await this.checkVideoWithAllModels(file);
+                isNSFW = results.isNSFW;
+                confidence = results.confidence;
+                modelResults = results.modelResults;
+            }
+
+            // Se o conteúdo for NSFW, aplica blur automaticamente
+            if (isNSFW) {
+                const element = document.querySelector(`[data-file-id="${file.name}"]`);
+                if (element) {
+                    this.applyBlurAndOverlay(element, 'explicit');
+                }
+            }
+
+            return {
+                isNSFW,
+                confidence,
+                modelResults,
+                fileType: file.type.startsWith('image/') ? 'image' : 'video'
+            };
+
         } catch (error) {
-            console.error('Erro ao verificar NSFW:', error);
-            return false;
+            console.error('Erro na verificação NSFW:', error);
+            return {
+                isNSFW: false,
+                confidence: 0,
+                modelResults: {},
+                error: error.message
+            };
         }
     }
 
-    async checkImageNSFW(file) {
-        if (!this.nsfwModel) await this.loadNSFWModel();
-        return new Promise((resolve) => {
-            const img = new window.Image();
+    async checkImageWithAllModels(file) {
+        return new Promise(async (resolve) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            
             img.onload = async () => {
-                const predictions = await this.nsfwModel.classify(img);
-                const isNSFW = predictions.some(p =>
-                    (p.className === 'Porn' || p.className === 'Hentai' || p.className === 'Sexy') && p.probability > 0.7
-                );
-                resolve(isNSFW);
+                try {
+                    console.log('Analisando imagem com múltiplos modelos...');
+                    
+                    // Resultados de cada modelo
+                    const modelResults = {
+                        nsfwjs: null,
+                        mobilenet: null,
+                        inception: null,
+                        resnet: null
+                    };
+
+                    // NSFWJS
+                    const nsfwPredictions = await this.nsfwModels.default.classify(img);
+                    modelResults.nsfwjs = nsfwPredictions;
+                    
+                    // MobileNet
+                    const mobilenetPredictions = await this.nsfwModels.mobilenet.classify(img);
+                    modelResults.mobilenet = mobilenetPredictions;
+                    
+                    // Inception
+                    const inceptionPredictions = await this.nsfwModels.inception.classify(img);
+                    modelResults.inception = inceptionPredictions;
+                    
+                    // ResNet
+                    const resnetPredictions = await this.nsfwModels.resnet.classify(img);
+                    modelResults.resnet = resnetPredictions;
+
+                    // Análise ponderada dos resultados
+                    let nsfwScore = 0;
+                    let totalConfidence = 0;
+
+                    // NSFWJS (peso 2)
+                    const nsfwjsScore = nsfwPredictions.find(p => p.className === 'Porn' || p.className === 'Hentai');
+                    if (nsfwjsScore) {
+                        nsfwScore += nsfwjsScore.probability * 2;
+                        totalConfidence += 2;
+                    }
+
+                    // MobileNet (peso 1)
+                    const mobilenetScore = mobilenetPredictions.find(p => p.className.toLowerCase().includes('explicit'));
+                    if (mobilenetScore) {
+                        nsfwScore += mobilenetScore.probability;
+                        totalConfidence += 1;
+                    }
+
+                    // Inception (peso 1.5)
+                    const inceptionScore = inceptionPredictions.find(p => p.className.toLowerCase().includes('adult'));
+                    if (inceptionScore) {
+                        nsfwScore += inceptionScore.probability * 1.5;
+                        totalConfidence += 1.5;
+                    }
+
+                    // ResNet (peso 1.5)
+                    const resnetScore = resnetPredictions.find(p => p.className.toLowerCase().includes('nsfw'));
+                    if (resnetScore) {
+                        nsfwScore += resnetScore.probability * 1.5;
+                        totalConfidence += 1.5;
+                    }
+
+                    // Calcula a média ponderada
+                    const finalScore = nsfwScore / totalConfidence;
+                    const isNSFW = finalScore > 0.4; // Threshold ajustado
+
+                    console.log('Resultado final NSFW:', {
+                        isNSFW,
+                        confidence: finalScore,
+                        modelResults
+                    });
+
+                    resolve({
+                        isNSFW,
+                        confidence: finalScore,
+                        modelResults
+                    });
+                } catch (error) {
+                    console.error('Erro ao analisar imagem:', error);
+                    resolve({
+                        isNSFW: false,
+                        confidence: 0,
+                        modelResults: {},
+                        error: error.message
+                    });
+                }
             };
-            img.onerror = () => resolve(false);
+
+            img.onerror = () => {
+                console.error('Erro ao carregar imagem para análise');
+                resolve({
+                    isNSFW: false,
+                    confidence: 0,
+                    modelResults: {},
+                    error: 'Erro ao carregar imagem'
+                });
+            };
+
             img.src = URL.createObjectURL(file);
         });
     }
 
-    async checkVideoNSFW(file) {
-        if (!this.nsfwModel) await this.loadNSFWModel();
-        // Extrai frames do vídeo e analisa cada um
+    async checkVideoWithAllModels(file) {
         return new Promise((resolve) => {
             const video = document.createElement('video');
-            video.preload = 'auto';
-            video.src = URL.createObjectURL(file);
+            video.preload = 'metadata';
             video.muted = true;
-            video.currentTime = 0;
-            video.onloadeddata = async () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                const ctx = canvas.getContext('2d');
-                let nsfwDetected = false;
-                let framesChecked = 0;
-                const totalFrames = 5;
-                const duration = video.duration;
-                for (let i = 1; i <= totalFrames; i++) {
-                    video.currentTime = (duration * i) / (totalFrames + 1);
-                    await new Promise(r => video.onseeked = r);
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const img = new window.Image();
-                    img.src = canvas.toDataURL();
-                    await new Promise(r => img.onload = r);
-                    const predictions = await this.nsfwModel.classify(img);
-                    if (predictions.some(p =>
-                        (p.className === 'Porn' || p.className === 'Hentai' || p.className === 'Sexy') && p.probability > 0.7
-                    )) {
-                        nsfwDetected = true;
-                        break;
+
+            video.onloadedmetadata = async () => {
+                try {
+                    console.log('Analisando vídeo com múltiplos modelos...');
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Configurações para análise de frames
+                    const frameInterval = 1000; // 1 frame por segundo
+                    const maxFrames = Math.min(10, Math.floor(video.duration)); // Máximo 10 frames
+                    let framesAnalyzed = 0;
+                    let totalNSFWScore = 0;
+                    
+                    // Array para armazenar resultados de cada frame
+                    const frameResults = [];
+                    
+                    // Função para analisar um frame específico
+                    const analyzeFrame = async (time) => {
+                        video.currentTime = time;
+                        await new Promise(resolve => video.onseeked = resolve);
+                        
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        
+                        // Análise com múltiplos modelos
+                        const [nsfwResults, mobilenetResults, inceptionResults] = await Promise.all([
+                            this.nsfwModels.default.classify(canvas),
+                            this.nsfwModels.mobilenet.classify(canvas),
+                            this.nsfwModels.inception.classify(canvas)
+                        ]);
+                        
+                        // Calcula score NSFW para o frame
+                        let frameScore = 0;
+                        let totalWeight = 0;
+                        
+                        // NSFWJS (peso 2)
+                        const nsfwScore = nsfwResults.find(p => p.className === 'Porn' || p.className === 'Hentai');
+                        if (nsfwScore) {
+                            frameScore += nsfwScore.probability * 2;
+                            totalWeight += 2;
+                        }
+                        
+                        // MobileNet (peso 1)
+                        const mobilenetScore = mobilenetResults.find(p => p.className.toLowerCase().includes('explicit'));
+                        if (mobilenetScore) {
+                            frameScore += mobilenetScore.probability;
+                            totalWeight += 1;
+                        }
+                        
+                        // Inception (peso 1.5)
+                        const inceptionScore = inceptionResults.find(p => p.className.toLowerCase().includes('adult'));
+                        if (inceptionScore) {
+                            frameScore += inceptionScore.probability * 1.5;
+                            totalWeight += 1.5;
+                        }
+                        
+                        return {
+                            time,
+                            score: frameScore / totalWeight,
+                            results: {
+                                nsfwjs: nsfwResults,
+                                mobilenet: mobilenetResults,
+                                inception: inceptionResults
+                            }
+                        };
+                    };
+                    
+                    // Analisa frames em intervalos regulares
+                    for (let i = 0; i < maxFrames; i++) {
+                        const time = i * (video.duration / maxFrames);
+                        const frameResult = await analyzeFrame(time);
+                        frameResults.push(frameResult);
+                        totalNSFWScore += frameResult.score;
+                        framesAnalyzed++;
                     }
-                    framesChecked++;
+                    
+                    // Calcula média final
+                    const averageScore = totalNSFWScore / framesAnalyzed;
+                    const isNSFW = averageScore > 0.4; // Threshold ajustado
+                    
+                    console.log('Resultado final vídeo:', {
+                        isNSFW,
+                        confidence: averageScore,
+                        frameResults
+                    });
+                    
+                    resolve({
+                        isNSFW,
+                        confidence: averageScore,
+                        modelResults: frameResults
+                    });
+                    
+                } catch (error) {
+                    console.error('Erro ao analisar vídeo:', error);
+                    resolve({
+                        isNSFW: false,
+                        confidence: 0,
+                        modelResults: {},
+                        error: error.message
+                    });
                 }
-                resolve(nsfwDetected);
             };
-            video.onerror = () => resolve(false);
+
+            video.onerror = () => {
+                console.error('Erro ao carregar vídeo para análise');
+                resolve({
+                    isNSFW: false,
+                    confidence: 0,
+                    modelResults: {},
+                    error: 'Erro ao carregar vídeo'
+                });
+            };
+
+            video.src = URL.createObjectURL(file);
         });
     }
 
@@ -242,53 +520,74 @@ class ContentModeration {
 
     // Verifica se é spam ou contém palavras bloqueadas
     isSpam(text, file) {
-        // Verifica se o texto contém palavras bloqueadas
-        const hasBlockedWords = this.blockedWords.some(word => {
+        if (!text) return { isSpam: false, contentType: null };
+        
+        // Normaliza o texto para comparação
+        const normalizedText = this.normalizeText(text.toLowerCase());
+        
+        // Sistema de pontuação para determinar o tipo de conteúdo
+        let spamScore = 0;
+        let offensiveScore = 0;
+        let explicitScore = 0;
+        let scamScore = 0;
+        
+        // Verifica palavras bloqueadas com sistema de pontuação
+        for (const word of this.blockedWords) {
             const regex = new RegExp(`\\b${word}\\b`, 'i');
-            return regex.test(text);
-        });
-
-        // Verifica se o texto contém palavras bloqueadas com substituições
-        const hasBlockedWordsWithSubs = this.hasBlockedWordsWithSubstitutions(text);
-
-        // Verifica se o texto contém URLs suspeitas
-        const hasSuspiciousUrls = this.isSuspiciousUrl(text);
-
-        // Verifica se o texto contém caracteres cirílicos
-        const hasCyrillicChars = this.hasCyrillicChars(text);
-
-        // Verifica se o texto contém emojis impróprios
-        const hasInappropriateEmojis = this.hasInappropriateEmojis(text);
-
-        // Verifica se o texto contém padrões de spam
-        const hasSpamPatterns = this.spamPatterns.some(pattern => {
-            if (pattern.type === 'repeated') {
-                return pattern.regex.test(text);
-            } else if (pattern.type === 'length') {
-                return text.length > pattern.threshold;
-            } else if (pattern.type === 'repetitive') {
-                return pattern.regex.test(text);
+            if (regex.test(normalizedText)) {
+                if (this.explicitTerms.includes(word)) explicitScore += 2;
+                else if (this.offensiveTerms.includes(word)) offensiveScore += 2;
+                else if (this.scamTerms.includes(word)) scamScore += 2;
+                else spamScore += 1;
             }
-            return false;
-        });
-
-        // Determina o tipo de conteúdo impróprio
-        let contentType = 'spam';
-        if (hasBlockedWords || hasBlockedWordsWithSubs) {
-            contentType = 'profanity';
         }
-        if (hasInappropriateEmojis || this.isExplicitContent(text)) {
+        
+        // Verifica padrões de spam
+        if (/(.)\\1{4,}/.test(normalizedText)) spamScore += 2; // Caracteres repetidos
+        if (text.length > 500) spamScore += 1; // Mensagens muito longas
+        if ((text.match(/[A-Z]/g) || []).length > text.length * 0.7) spamScore += 2; // Muitas maiúsculas
+        
+        // Verifica URLs suspeitas
+        const urlRegex = /https?:\/\/[^\s]+/g;
+        const urls = text.match(urlRegex) || [];
+        for (const url of urls) {
+            if (this.isSuspiciousUrl(url)) {
+                scamScore += 3;
+            }
+        }
+        
+        // Verifica emojis impróprios
+        if (this.hasInappropriateEmojis(text)) {
+            explicitScore += 2;
+        }
+        
+        // Determina o tipo de conteúdo baseado nos scores
+        let contentType = null;
+        let isSpam = false;
+        
+        if (explicitScore >= 2) {
             contentType = 'explicit';
-        }
-        if (hasSuspiciousUrls || hasCyrillicChars) {
+            isSpam = true;
+        } else if (scamScore >= 3) {
             contentType = 'scam';
+            isSpam = true;
+        } else if (offensiveScore >= 2) {
+            contentType = 'offensive';
+            isSpam = true;
+        } else if (spamScore >= 3) {
+            contentType = 'spam';
+            isSpam = true;
         }
-
-        // Retorna o resultado com o tipo de conteúdo
+        
         return {
-            isSpam: hasBlockedWords || hasBlockedWordsWithSubs || hasSuspiciousUrls || 
-                   hasCyrillicChars || hasInappropriateEmojis || hasSpamPatterns,
-            contentType: contentType
+            isSpam,
+            contentType,
+            scores: {
+                explicit: explicitScore,
+                scam: scamScore,
+                offensive: offensiveScore,
+                spam: spamScore
+            }
         };
     }
 
@@ -433,53 +732,138 @@ class ContentModeration {
 
     // Processa notificações push
     processPushNotification(notification) {
-        const text = notification.body || '';
-        // Verifica se o texto contém conteúdo ofensivo
-        const spamCheck = this.isSpam(text);
-        if (spamCheck.isSpam) {
-            try {
-                notification.title = 'Aviso de Moderação';
-                notification.icon = '/images/warning-icon.png';
-                // Mensagens específicas para cada tipo de conteúdo
-                switch(spamCheck.contentType) {
-                    case 'explicit':
-                        notification.body = '🚫 Conteúdo Explícito Bloqueado';
-                        break;
-                    case 'spam':
-                        notification.body = '🚫 Possível Spam/Golpe Detectado';
-                        break;
-                    case 'offensive':
-                        notification.body = '🚫 Conteúdo Ofensivo Detectado';
-                        break;
-                    case 'scam':
-                        notification.body = '🚫 Possível Golpe Detectado';
-                        break;
-                    default:
-                        notification.body = '🚫 Conteúdo Bloqueado';
-                }
-                // Adiciona um timestamp para evitar duplicatas
-                notification.tag = `blocked-${Date.now()}`;
-                notification.options = {
-                    ...notification.options,
+        try {
+            const text = notification.body || '';
+            const title = notification.title || '';
+            
+            // Verifica título e corpo da notificação
+            const titleCheck = this.isSpam(title);
+            const bodyCheck = this.isSpam(text);
+            
+            // Se qualquer parte da notificação for imprópria
+            if (titleCheck.isSpam || bodyCheck.isSpam) {
+                const contentType = titleCheck.contentType || bodyCheck.contentType;
+                const scores = {
+                    title: titleCheck.scores,
+                    body: bodyCheck.scores
+                };
+                
+                // Cria uma notificação segura
+                const safeNotification = {
+                    title: this.getSafeNotificationTitle(contentType),
+                    body: this.getSafeNotificationBody(contentType),
+                    icon: this.getWarningIcon(contentType),
+                    tag: `blocked-${Date.now()}`,
+                    data: {
+                        originalType: contentType,
+                        scores: scores,
+                        timestamp: Date.now()
+                    },
                     requireInteraction: true,
+                    silent: false,
                     vibrate: [200, 100, 200],
                     actions: [
+                        {
+                            action: 'view',
+                            title: 'Ver Detalhes'
+                        },
                         {
                             action: 'close',
                             title: 'Fechar'
                         }
                     ]
                 };
-                // Se por algum motivo não for possível definir o body ou o ícone, retorna null para ocultar a notificação
-                if (!notification.body || !notification.icon) {
-                    return null;
-                }
-            } catch (e) {
-                // Em caso de erro, oculta a notificação
-                return null;
+                
+                // Registra a notificação bloqueada para análise
+                this.logBlockedNotification({
+                    originalTitle: title,
+                    originalBody: text,
+                    contentType: contentType,
+                    scores: scores,
+                    timestamp: Date.now()
+                });
+                
+                return safeNotification;
             }
+            
+            // Se a notificação for segura, adiciona metadados
+            return {
+                ...notification,
+                data: {
+                    ...notification.data,
+                    safeContent: true,
+                    timestamp: Date.now()
+                }
+            };
+        } catch (error) {
+            console.error('Erro ao processar notificação:', error);
+            return null;
         }
-        return notification;
+    }
+    
+    // Obtém título seguro para notificação
+    getSafeNotificationTitle(contentType) {
+        switch(contentType) {
+            case 'explicit':
+                return '🚫 Conteúdo Explícito Bloqueado';
+            case 'spam':
+                return '🚫 Spam Detectado';
+            case 'offensive':
+                return '🚫 Conteúdo Ofensivo Bloqueado';
+            case 'scam':
+                return '🚫 Possível Golpe Detectado';
+            default:
+                return '🚫 Conteúdo Bloqueado';
+        }
+    }
+    
+    // Obtém corpo seguro para notificação
+    getSafeNotificationBody(contentType) {
+        switch(contentType) {
+            case 'explicit':
+                return 'Uma notificação com conteúdo explícito foi bloqueada para sua segurança.';
+            case 'spam':
+                return 'Uma notificação de spam foi bloqueada.';
+            case 'offensive':
+                return 'Uma notificação com conteúdo ofensivo foi bloqueada.';
+            case 'scam':
+                return 'Uma notificação suspeita foi bloqueada para sua segurança.';
+            default:
+                return 'Uma notificação imprópria foi bloqueada.';
+        }
+    }
+    
+    // Obtém ícone de aviso apropriado
+    getWarningIcon(contentType) {
+        switch(contentType) {
+            case 'explicit':
+                return '/images/warning-explicit.png';
+            case 'spam':
+                return '/images/warning-spam.png';
+            case 'offensive':
+                return '/images/warning-offensive.png';
+            case 'scam':
+                return '/images/warning-scam.png';
+            default:
+                return '/images/warning-default.png';
+        }
+    }
+    
+    // Registra notificação bloqueada para análise
+    logBlockedNotification(data) {
+        try {
+            const blockedNotifications = JSON.parse(localStorage.getItem('blockedNotifications') || '[]');
+            blockedNotifications.push(data);
+            
+            // Mantém apenas as últimas 100 notificações
+            if (blockedNotifications.length > 100) {
+                blockedNotifications.shift();
+            }
+            
+            localStorage.setItem('blockedNotifications', JSON.stringify(blockedNotifications));
+        } catch (error) {
+            console.error('Erro ao registrar notificação bloqueada:', error);
+        }
     }
 
     // Processa um arquivo antes de enviar
