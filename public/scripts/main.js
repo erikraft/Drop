@@ -256,7 +256,7 @@ async function handleReceivedFile(file) {
         }
 
         // Verifica se é spam
-        if (contentModeration.isSpam(file.name)) {
+        if (contentModeration.isSpam(file.name).isSpam) {
             const shouldView = await contentModeration.showWarningDialog(file, 'spam');
             if (!shouldView) return;
         }
@@ -287,7 +287,7 @@ function handleReceivedMessage(message) {
         }
 
         // Verifica se é spam
-        if (contentModeration.isSpam(message)) {
+        if (contentModeration.isSpam(message).isSpam) {
             const messageElement = document.createElement('div');
             messageElement.className = 'message blurred-content';
             messageElement.textContent = message;
