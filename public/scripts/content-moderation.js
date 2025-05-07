@@ -332,21 +332,21 @@ class ContentModeration {
             switch(contentType) {
                 case 'explicit':
                     title = '🚫 Conteúdo Explícito Detectado';
-                    message = 'Este conteúdo pode conter material explícito ou inadequado. Tem certeza que deseja visualizar?';
+                    message = 'Este conteúdo pode conter material explícito ou inadequado.';
                     icon = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#ff4444">
                         <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
                     </svg>`;
                     break;
                 case 'spam':
                     title = '🚫 Possível Spam/Golpe Detectado';
-                    message = 'Este conteúdo pode ser spam ou tentativa de golpe. Deseja visualizar mesmo assim?';
+                    message = 'Este conteúdo pode ser spam ou tentativa de golpe.';
                     icon = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#ff4444">
                         <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Zm371-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm0-120q17 0 28.5-11.5T520-400v-120q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v120q0 17 11.5 28.5T480-360Z"/>
                     </svg>`;
                     break;
                 case 'offensive':
                     title = '🚫 Conteúdo Ofensivo Detectado';
-                    message = 'Este conteúdo contém linguagem ofensiva. Deseja visualizar mesmo assim?';
+                    message = 'Este conteúdo contém linguagem ofensiva.';
                     icon = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#ff4444">
                         <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
                     </svg>`;
@@ -354,26 +354,48 @@ class ContentModeration {
             }
 
             dialog.innerHTML = `
-                <div class="warning-icon">${icon}</div>
-                <div class="warning-title">${title}</div>
-                <div class="warning-message">${message}</div>
-                <div class="warning-buttons">
-                    <button class="warning-button view">Ver</button>
-                    <button class="warning-button reject">Recusar</button>
+                <div class="warning-content">
+                    <div class="warning-icon" data-type="${contentType}">${icon}</div>
+                    <div class="warning-title" data-type="${contentType}">${title}</div>
+                    <div class="warning-message">${message}</div>
+                    <div class="warning-preview blurred">
+                        ${file.type.startsWith('image/') ? 
+                            `<img src="${URL.createObjectURL(file)}" alt="Preview">` :
+                            file.type.startsWith('video/') ?
+                            `<video src="${URL.createObjectURL(file)}" controls></video>` :
+                            `<div class="file-info">${file.name}</div>`
+                        }
+                    </div>
+                    <div class="warning-notice" data-type="${contentType}">
+                        <p>⚠️ Este conteúdo foi identificado como potencialmente perigoso.</p>
+                    </div>
+                    <div class="warning-buttons">
+                        <button class="warning-button show">Mostrar Conteúdo</button>
+                        <button class="warning-button close">Fechar</button>
+                        <button class="warning-button block">Sempre Recusar Conteúdos Perigosos</button>
+                    </div>
                 </div>
             `;
 
             document.body.appendChild(dialog);
 
-            const viewButton = dialog.querySelector('.warning-button.view');
-            const rejectButton = dialog.querySelector('.warning-button.reject');
+            const showButton = dialog.querySelector('.warning-button.show');
+            const closeButton = dialog.querySelector('.warning-button.close');
+            const blockButton = dialog.querySelector('.warning-button.block');
+            const preview = dialog.querySelector('.warning-preview');
 
-            viewButton.onclick = () => {
-                document.body.removeChild(dialog);
-                resolve(true);
+            showButton.onclick = () => {
+                preview.classList.remove('blurred');
+                showButton.style.display = 'none';
             };
 
-            rejectButton.onclick = () => {
+            closeButton.onclick = () => {
+                document.body.removeChild(dialog);
+                resolve(false);
+            };
+
+            blockButton.onclick = () => {
+                localStorage.setItem('blockDangerousContent', 'true');
                 document.body.removeChild(dialog);
                 resolve(false);
             };
@@ -399,19 +421,19 @@ class ContentModeration {
         let icon, text;
         switch(contentType) {
             case 'explicit':
-                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ffdd00">
                     <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
                 </svg>`;
                 text = 'Conteúdo Explícito Detectado';
                 break;
             case 'spam':
-                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff0000">
                     <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Zm371-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm0-120q17 0 28.5-11.5T520-400v-120q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v120q0 17 11.5 28.5T480-360Z"/>
                 </svg>`;
                 text = 'Possível Spam/Golpe Detectado';
                 break;
             case 'offensive':
-                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ffdd00">
                     <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
                 </svg>`;
                 text = 'Conteúdo Ofensivo Detectado';
@@ -430,9 +452,47 @@ class ContentModeration {
     processPushNotification(notification) {
         const text = notification.body || '';
         
-        if (this.hasBlockedWordsWithSubstitutions(text) || this.isSpam(text)) {
-            notification.body = '🚫 CONTEÚDO BLOQUEADO';
+        // Verifica se o texto contém conteúdo ofensivo
+        const spamCheck = this.isSpam(text);
+        
+        if (spamCheck.isSpam) {
+            // Substitui o texto ofensivo por uma mensagem genérica
+            notification.title = 'Aviso de Moderação';
             notification.icon = '/images/warning-icon.png';
+            
+            // Mensagens específicas para cada tipo de conteúdo
+            switch(spamCheck.contentType) {
+                case 'explicit':
+                    notification.body = '🚫 Conteúdo Explícito Bloqueado';
+                    break;
+                case 'spam':
+                    notification.body = '🚫 Possível Spam/Golpe Detectado';
+                    break;
+                case 'offensive':
+                    notification.body = '🚫 Conteúdo Ofensivo Detectado';
+                    break;
+                case 'scam':
+                    notification.body = '🚫 Possível Golpe Detectado';
+                    break;
+                default:
+                    notification.body = '🚫 Conteúdo Bloqueado';
+            }
+            
+            // Adiciona um timestamp para evitar duplicatas
+            notification.tag = `blocked-${Date.now()}`;
+            
+            // Adiciona opções extras para a notificação
+            notification.options = {
+                ...notification.options,
+                requireInteraction: true,
+                vibrate: [200, 100, 200],
+                actions: [
+                    {
+                        action: 'close',
+                        title: 'Fechar'
+                    }
+                ]
+            };
         }
         
         return notification;
