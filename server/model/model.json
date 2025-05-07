@@ -1,0 +1,101 @@
+{
+    "format": "layers-model",
+    "generatedBy": "keras v2.15.0",
+    "convertedBy": "TensorFlow.js Converter v4.17.0",
+    "modelTopology": {
+        "keras_version": "2.15.0",
+        "backend": "tensorflow",
+        "model_config": {
+            "class_name": "Sequential",
+            "config": {
+                "name": "nsfw_model",
+                "layers": [
+                    {
+                        "class_name": "Conv2D",
+                        "config": {
+                            "filters": 32,
+                            "kernel_size": [3, 3],
+                            "activation": "relu",
+                            "input_shape": [224, 224, 3]
+                        }
+                    },
+                    {
+                        "class_name": "MaxPooling2D",
+                        "config": {
+                            "pool_size": [2, 2]
+                        }
+                    },
+                    {
+                        "class_name": "Conv2D",
+                        "config": {
+                            "filters": 64,
+                            "kernel_size": [3, 3],
+                            "activation": "relu"
+                        }
+                    },
+                    {
+                        "class_name": "MaxPooling2D",
+                        "config": {
+                            "pool_size": [2, 2]
+                        }
+                    },
+                    {
+                        "class_name": "Conv2D",
+                        "config": {
+                            "filters": 128,
+                            "kernel_size": [3, 3],
+                            "activation": "relu"
+                        }
+                    },
+                    {
+                        "class_name": "MaxPooling2D",
+                        "config": {
+                            "pool_size": [2, 2]
+                        }
+                    },
+                    {
+                        "class_name": "Flatten",
+                        "config": {}
+                    },
+                    {
+                        "class_name": "Dense",
+                        "config": {
+                            "units": 128,
+                            "activation": "relu"
+                        }
+                    },
+                    {
+                        "class_name": "Dropout",
+                        "config": {
+                            "rate": 0.5
+                        }
+                    },
+                    {
+                        "class_name": "Dense",
+                        "config": {
+                            "units": 5,
+                            "activation": "softmax"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "weightsManifest": [
+        {
+            "paths": ["group1-shard1of1.bin"],
+            "weights": [
+                {"name": "conv2d/kernel", "shape": [3, 3, 3, 32], "dtype": "float32"},
+                {"name": "conv2d/bias", "shape": [32], "dtype": "float32"},
+                {"name": "conv2d_1/kernel", "shape": [3, 3, 32, 64], "dtype": "float32"},
+                {"name": "conv2d_1/bias", "shape": [64], "dtype": "float32"},
+                {"name": "conv2d_2/kernel", "shape": [3, 3, 64, 128], "dtype": "float32"},
+                {"name": "conv2d_2/bias", "shape": [128], "dtype": "float32"},
+                {"name": "dense/kernel", "shape": [128, 128], "dtype": "float32"},
+                {"name": "dense/bias", "shape": [128], "dtype": "float32"},
+                {"name": "dense_1/kernel", "shape": [128, 5], "dtype": "float32"},
+                {"name": "dense_1/bias", "shape": [5], "dtype": "float32"}
+            ]
+        }
+    ]
+} 
