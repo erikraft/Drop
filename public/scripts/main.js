@@ -277,21 +277,21 @@ async function handleReceivedFile(file) {
 // Função para processar mensagens recebidas
 function handleReceivedMessage(message) {
     try {
-        // Verifica se a mensagem contém conteúdo ofensivo
-        if (contentModeration.hasBlockedWordsWithSubstitutions(message)) {
+        // Verifica se a mensagem contém conteúdo ofensivo ou é spam
+        const spamCheck = contentModeration.isSpam(message);
+        if (spamCheck.isSpam || contentModeration.hasBlockedWordsWithSubstitutions(message)) {
+            // Mostra o diálogo de aviso
+            contentModeration.showWarningDialog({
+                type: 'text',
+                name: 'Mensagem',
+                content: message
+            }, spamCheck.contentType || 'offensive');
+            
+            // Cria elemento borrado
             const messageElement = document.createElement('div');
             messageElement.className = 'message blurred-content';
-            messageElement.textContent = message;
-            contentModeration.applyBlurAndOverlay(messageElement, 'offensive');
-            return messageElement;
-        }
-
-        // Verifica se é spam
-        if (contentModeration.isSpam(message).isSpam) {
-            const messageElement = document.createElement('div');
-            messageElement.className = 'message blurred-content';
-            messageElement.textContent = message;
-            contentModeration.applyBlurAndOverlay(messageElement, 'spam');
+            messageElement.textContent = '🚫 Conteúdo Bloqueado';
+            contentModeration.applyBlurAndOverlay(messageElement, spamCheck.contentType || 'offensive');
             return messageElement;
         }
 
