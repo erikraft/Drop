@@ -253,11 +253,12 @@ async function handleReceivedFile(file) {
         // Verifica se é uma imagem ou vídeo
         if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
             console.log('Verificando conteúdo NSFW...');
-            const isNSFW = await contentModeration.checkNSFW(file);
-            console.log('Resultado NSFW:', isNSFW);
+            const nsfwResult = await contentModeration.checkNSFW(file);
+            console.log('Resultado NSFW:', nsfwResult);
             
-            if (isNSFW) {
+            if (nsfwResult.isNSFW) {
                 console.log('Conteúdo explícito detectado, mostrando aviso...');
+                
                 // Cria elemento borrado
                 const mediaElement = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
                 mediaElement.className = 'media-preview blurred-content';
@@ -280,22 +281,71 @@ async function handleReceivedFile(file) {
         const hasOffensiveWords = contentModeration.hasBlockedWordsWithSubstitutions(file.name);
         
         if (spamCheck.isSpam || hasOffensiveWords) {
-            console.log('Nome do arquivo contém conteúdo impróprio');
-            const contentType = hasOffensiveWords ? 'offensive' : 'spam';
-            const shouldView = await contentModeration.showWarningDialog(file, contentType);
+            console.log('Conteúdo potencialmente perigoso detectado');
+            const shouldView = await contentModeration.showWarningDialog(file, spamCheck.contentType || 'spam');
             if (!shouldView) {
-                console.log('Usuário recusou visualizar o arquivo');
+                console.log('Usuário recusou visualizar o conteúdo');
                 return;
             }
         }
 
-        // Se chegou aqui, processa o arquivo normalmente
-        console.log('Processando arquivo normalmente');
-        processFile(file);
+        // Verifica URLs no conteúdo
+        if (file.type === 'text/plain') {
+            const text = await file.text();
+            const urlRegex = /https?:\/\/[^\s]+/g;
+            const urls = text.match(urlRegex) || [];
+            
+            for (const url of urls) {
+                const isSuspicious = await contentModeration.checkUrl(url);
+                if (isSuspicious) {
+                    console.log('URL suspeita detectada:', url);
+                    const shouldView = await contentModeration.showWarningDialog(file, 'scam');
+                    if (!shouldView) {
+                        console.log('Usuário recusou visualizar o conteúdo');
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Processa o arquivo normalmente
+        return file;
     } catch (error) {
         console.error('Erro ao processar arquivo:', error);
+        throw error;
     }
 }
+
+// Intercepta o WebRTC para verificar arquivos antes do compartilhamento
+function interceptWebRTC() {
+    const originalPeerConnection = window.RTCPeerConnection;
+    window.RTCPeerConnection = function(...args) {
+        const pc = new originalPeerConnection(...args);
+        
+        // Intercepta o método de envio de dados
+        const originalSend = pc.send;
+        pc.send = async function(data) {
+            if (data instanceof Blob || data instanceof File) {
+                try {
+                    const processedFile = await handleReceivedFile(data);
+                    if (!processedFile) {
+                        throw new Error('Arquivo bloqueado pelo sistema de moderação');
+                    }
+                    return originalSend.call(this, processedFile);
+                } catch (error) {
+                    console.error('Erro ao processar arquivo:', error);
+                    throw error;
+                }
+            }
+            return originalSend.call(this, data);
+        };
+        
+        return pc;
+    };
+}
+
+// Inicializa a interceptação do WebRTC
+interceptWebRTC();
 
 // Função para processar mensagens recebidas
 function handleReceivedMessage(message) {
