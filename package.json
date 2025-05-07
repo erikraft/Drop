@@ -7,8 +7,7 @@
   "scripts": {
     "start": "node server/index.js",
     "start:prod": "node server/index.js --rate-limit --auto-restart",
-    "build": "npm install --omit=dev",
-    "postinstall": "npm run build"
+    "build": "npm install --omit=dev"
   },
   "author": "",
   "license": "ISC",
