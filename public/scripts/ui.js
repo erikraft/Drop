@@ -209,7 +209,7 @@ class PeersUI {
             }
         }
         else if (text) {
-            if (window.pairdrop.contentModeration.isSpam(text)) {
+            if (window.pairdrop.contentModeration.isSpam(text).isSpam) {
                 window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
                 return;
             }
@@ -257,7 +257,7 @@ class PeersUI {
             }
         }
         else if (text) {
-            if (window.pairdrop.contentModeration.isSpam(text)) {
+            if (window.pairdrop.contentModeration.isSpam(text).isSpam) {
                 window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
                 return;
             }
@@ -2052,7 +2052,7 @@ class ReceiveTextDialog extends Dialog {
     async _onText(text, peerId) {
         try {
             // Verifica se o texto é spam
-            if (window.pairdrop.contentModeration.isSpam(text)) {
+            if (window.pairdrop.contentModeration.isSpam(text).isSpam) {
                 window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
                 return;
             }
