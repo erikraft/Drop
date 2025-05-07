@@ -201,9 +201,9 @@ class PeersUI {
                     await window.pairdrop.contentModeration.processFile(file);
                 }
                 
-                Events.fire('activate-share-mode', {
-                    files: files
-                });
+            Events.fire('activate-share-mode', {
+                files: files
+            });
             } catch (error) {
                 window.pairdrop.toast.show(error.message);
             }
@@ -932,14 +932,14 @@ class ReceiveFileDialog extends ReceiveDialog {
             }
 
             this.filesQueue.push({
-                peerId: peerId,
-                files: files,
-                imagesOnly: imagesOnly,
+            peerId: peerId,
+            files: files,
+            imagesOnly: imagesOnly,
                 totalSize: totalSize
-            });
+        });
 
             if (!this.isShown()) {
-                await this._nextFiles();
+        await this._nextFiles();
             }
         } catch (error) {
             window.pairdrop.toast.show(error.message);
