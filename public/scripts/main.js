@@ -248,26 +248,49 @@ const contentModeration = new ContentModeration();
 // Função para processar arquivos recebidos
 async function handleReceivedFile(file) {
     try {
-        // Verifica se o conteúdo é NSFW
-        const isNSFW = await contentModeration.checkNSFW(file);
-        if (isNSFW) {
-            const shouldView = await contentModeration.showWarningDialog(file, 'explicit');
-            if (!shouldView) return;
+        console.log('Processando arquivo:', file.name, file.type);
+        
+        // Verifica se é uma imagem ou vídeo
+        if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
+            console.log('Verificando conteúdo NSFW...');
+            const isNSFW = await contentModeration.checkNSFW(file);
+            console.log('Resultado NSFW:', isNSFW);
+            
+            if (isNSFW) {
+                console.log('Conteúdo explícito detectado, mostrando aviso...');
+                // Cria elemento borrado
+                const mediaElement = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
+                mediaElement.className = 'media-preview blurred-content';
+                mediaElement.src = URL.createObjectURL(file);
+                
+                // Aplica blur e overlay
+                contentModeration.applyBlurAndOverlay(mediaElement, 'explicit');
+                
+                // Mostra diálogo de aviso
+                const shouldView = await contentModeration.showWarningDialog(file, 'explicit');
+                if (!shouldView) {
+                    console.log('Usuário recusou visualizar o conteúdo');
+                    return;
+                }
+            }
         }
 
-        // Verifica se é spam
-        if (contentModeration.isSpam(file.name).isSpam) {
-            const shouldView = await contentModeration.showWarningDialog(file, 'spam');
-            if (!shouldView) return;
+        // Verifica nome do arquivo por spam/ofensas
+        const spamCheck = contentModeration.isSpam(file.name);
+        const hasOffensiveWords = contentModeration.hasBlockedWordsWithSubstitutions(file.name);
+        
+        if (spamCheck.isSpam || hasOffensiveWords) {
+            console.log('Nome do arquivo contém conteúdo impróprio');
+            const contentType = hasOffensiveWords ? 'offensive' : 'spam';
+            const shouldView = await contentModeration.showWarningDialog(file, contentType);
+            if (!shouldView) {
+                console.log('Usuário recusou visualizar o arquivo');
+                return;
+            }
         }
 
-        // Verifica se contém linguagem ofensiva
-        if (contentModeration.hasBlockedWordsWithSubstitutions(file.name)) {
-            const shouldView = await contentModeration.showWarningDialog(file, 'offensive');
-            if (!shouldView) return;
-        }
-
-        // Processa o arquivo normalmente
+        // Se chegou aqui, processa o arquivo normalmente
+        console.log('Processando arquivo normalmente');
         processFile(file);
     } catch (error) {
         console.error('Erro ao processar arquivo:', error);
