@@ -434,50 +434,51 @@ class ContentModeration {
     // Processa notificações push
     processPushNotification(notification) {
         const text = notification.body || '';
-        
         // Verifica se o texto contém conteúdo ofensivo
         const spamCheck = this.isSpam(text);
-        
         if (spamCheck.isSpam) {
-            // Substitui o texto ofensivo por uma mensagem genérica
-            notification.title = 'Aviso de Moderação';
-            notification.icon = '/images/warning-icon.png';
-            
-            // Mensagens específicas para cada tipo de conteúdo
-            switch(spamCheck.contentType) {
-                case 'explicit':
-                    notification.body = '🚫 Conteúdo Explícito Bloqueado';
-                    break;
-                case 'spam':
-                    notification.body = '🚫 Possível Spam/Golpe Detectado';
-                    break;
-                case 'offensive':
-                    notification.body = '🚫 Conteúdo Ofensivo Detectado';
-                    break;
-                case 'scam':
-                    notification.body = '🚫 Possível Golpe Detectado';
-                    break;
-                default:
-                    notification.body = '🚫 Conteúdo Bloqueado';
+            try {
+                notification.title = 'Aviso de Moderação';
+                notification.icon = '/images/warning-icon.png';
+                // Mensagens específicas para cada tipo de conteúdo
+                switch(spamCheck.contentType) {
+                    case 'explicit':
+                        notification.body = '🚫 Conteúdo Explícito Bloqueado';
+                        break;
+                    case 'spam':
+                        notification.body = '🚫 Possível Spam/Golpe Detectado';
+                        break;
+                    case 'offensive':
+                        notification.body = '🚫 Conteúdo Ofensivo Detectado';
+                        break;
+                    case 'scam':
+                        notification.body = '🚫 Possível Golpe Detectado';
+                        break;
+                    default:
+                        notification.body = '🚫 Conteúdo Bloqueado';
+                }
+                // Adiciona um timestamp para evitar duplicatas
+                notification.tag = `blocked-${Date.now()}`;
+                notification.options = {
+                    ...notification.options,
+                    requireInteraction: true,
+                    vibrate: [200, 100, 200],
+                    actions: [
+                        {
+                            action: 'close',
+                            title: 'Fechar'
+                        }
+                    ]
+                };
+                // Se por algum motivo não for possível definir o body ou o ícone, retorna null para ocultar a notificação
+                if (!notification.body || !notification.icon) {
+                    return null;
+                }
+            } catch (e) {
+                // Em caso de erro, oculta a notificação
+                return null;
             }
-            
-            // Adiciona um timestamp para evitar duplicatas
-            notification.tag = `blocked-${Date.now()}`;
-            
-            // Adiciona opções extras para a notificação
-            notification.options = {
-                ...notification.options,
-                requireInteraction: true,
-                vibrate: [200, 100, 200],
-                actions: [
-                    {
-                        action: 'close',
-                        title: 'Fechar'
-                    }
-                ]
-            };
         }
-        
         return notification;
     }
 
