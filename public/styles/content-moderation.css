@@ -4,140 +4,207 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.95);
-    border-radius: 12px;
-    padding: 24px;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
     z-index: 9999;
     max-width: 90%;
-    width: 400px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 500px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 0, 0, 0.1);
 }
 
-.content-moderation-warning .warning-icon {
+.warning-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.warning-icon {
     width: 64px;
     height: 64px;
-    margin: 0 auto 16px;
-    display: block;
-    filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
+    margin-bottom: 1rem;
     animation: pulse 2s infinite;
 }
 
-.content-moderation-warning .warning-title {
-    color: #ff4444;
-    font-size: 24px;
+/* Estilos específicos para cada tipo de conteúdo */
+.warning-icon[data-type="explicit"] {
+    filter: drop-shadow(0 0 8px rgba(255, 221, 0, 0.4));
+}
+
+.warning-icon[data-type="spam"] {
+    filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.4));
+}
+
+.warning-icon[data-type="offensive"] {
+    filter: drop-shadow(0 0 8px rgba(255, 221, 0, 0.4));
+}
+
+.warning-title {
+    font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 16px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.content-moderation-warning .warning-message {
-    color: #ffffff;
-    font-size: 16px;
+/* Títulos específicos para cada tipo */
+.warning-title[data-type="explicit"] {
+    color: #ffdd00;
+    text-shadow: 0 0 8px rgba(255, 221, 0, 0.3);
+}
+
+.warning-title[data-type="spam"] {
+    color: #ff0000;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+}
+
+.warning-title[data-type="offensive"] {
+    color: #ffdd00;
+    text-shadow: 0 0 8px rgba(255, 221, 0, 0.3);
+}
+
+.warning-message {
+    color: #fff;
     text-align: center;
-    margin-bottom: 24px;
-    line-height: 1.5;
+    margin-bottom: 1rem;
 }
 
-.content-moderation-warning .warning-buttons {
+.warning-preview {
+    width: 100%;
+    max-height: 300px;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.warning-preview.blurred {
+    filter: blur(20px);
+}
+
+.warning-preview img,
+.warning-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.warning-notice {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+/* Avisos específicos para cada tipo */
+.warning-notice[data-type="explicit"] {
+    background: rgba(255, 221, 0, 0.1);
+}
+
+.warning-notice[data-type="spam"] {
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.warning-notice[data-type="offensive"] {
+    background: rgba(255, 221, 0, 0.1);
+}
+
+.warning-notice p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Texto do aviso específico para cada tipo */
+.warning-notice[data-type="explicit"] p {
+    color: #ffdd00;
+}
+
+.warning-notice[data-type="spam"] p {
+    color: #ff0000;
+}
+
+.warning-notice[data-type="offensive"] p {
+    color: #ffdd00;
+}
+
+.warning-buttons {
     display: flex;
-    gap: 12px;
+    gap: 1rem;
+    flex-wrap: wrap;
     justify-content: center;
+    margin-top: 1rem;
 }
 
-.content-moderation-warning .warning-button {
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+.warning-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: none;
-    outline: none;
+    min-width: 150px;
 }
 
-.content-moderation-warning .warning-button.view {
+.warning-button.show {
     background: #4CAF50;
     color: white;
 }
 
-.content-moderation-warning .warning-button.view:hover {
-    background: #45a049;
-    transform: translateY(-2px);
-}
-
-.content-moderation-warning .warning-button.reject {
-    background: #f44336;
+.warning-button.close {
+    background: #666;
     color: white;
 }
 
-.content-moderation-warning .warning-button.reject:hover {
-    background: #da190b;
+.warning-button.block {
+    background: #ffdd00;
+    color: #000;
+}
+
+.warning-button:hover {
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.blurred-content {
-    filter: blur(20px);
-    transition: filter 0.3s ease;
-    position: relative;
+.warning-button.show:hover {
+    background: #45a049;
 }
 
-.blurred-content .warning-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1000;
-    backdrop-filter: blur(4px);
+.warning-button.close:hover {
+    background: #555;
 }
 
-.blurred-content .warning-overlay .warning-icon {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 12px;
-    filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
-    animation: pulse 2s infinite;
+.warning-button.block:hover {
+    background: #ffd700;
 }
 
-.blurred-content .warning-overlay .warning-text {
-    color: #ffffff;
-    font-size: 14px;
-    text-align: center;
-    padding: 0 16px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* Animações */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-/* Responsividade */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .content-moderation-warning {
         width: 95%;
-        padding: 16px;
+        padding: 1rem;
     }
 
-    .content-moderation-warning .warning-title {
-        font-size: 20px;
+    .warning-title {
+        font-size: 1.2rem;
     }
 
-    .content-moderation-warning .warning-message {
-        font-size: 14px;
+    .warning-button {
+        width: 100%;
+        min-width: unset;
     }
 
-    .content-moderation-warning .warning-button {
-        padding: 10px 20px;
-        font-size: 14px;
+    .warning-buttons {
+        flex-direction: column;
     }
 } 
