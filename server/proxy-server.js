@@ -66,6 +66,17 @@ async function checkNSFW(file) {
         const isImage = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp'].includes(fileExt);
         const isVideo = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.webm'].includes(fileExt);
 
+        // Verifica metadados do arquivo
+        const metadata = await extractMetadata(file);
+        if (metadata.isNSFW) {
+            return {
+                isNSFW: true,
+                score: metadata.confidence,
+                type: 'metadata',
+                details: metadata
+            };
+        }
+
         if (isImage) {
             // Processa a imagem em diferentes tamanhos para melhor detecção
             const image = await tf.node.decodeImage(file.buffer);
@@ -84,6 +95,23 @@ async function checkNSFW(file) {
             // Calcula o score NSFW
             const nsfwScore = predictions[1]; // Índice 1 é geralmente a classe NSFW
             
+            // Verifica APIs externas se necessário
+            if (nsfwScore > 0.1) {
+                const externalResults = await checkExternalApis(file);
+                if (externalResults.isNSFW) {
+                    return {
+                        isNSFW: true,
+                        score: Math.max(nsfwScore, externalResults.confidence),
+                        type: 'image',
+                        details: {
+                            safe: predictions[0],
+                            nsfw: predictions[1],
+                            external: externalResults
+                        }
+                    };
+                }
+            }
+
             return {
                 isNSFW: nsfwScore > NSFW_THRESHOLD,
                 score: nsfwScore,
@@ -115,11 +143,98 @@ async function checkNSFW(file) {
     } catch (error) {
         console.error('Erro ao verificar NSFW:', error);
         return {
-            isNSFW: false,
-            score: 0,
-            type: 'error'
+            isNSFW: true, // Em caso de erro, bloqueia por segurança
+            score: 1.0,
+            type: 'error',
+            details: { error: error.message }
         };
     }
+}
+
+// Extrai metadados do arquivo
+async function extractMetadata(file) {
+    try {
+        if (file.mimetype.startsWith('image/')) {
+            const image = await tf.node.decodeImage(file.buffer);
+            
+            // Verifica dimensões suspeitas
+            const isSuspiciousSize = image.shape[0] > 2000 || image.shape[1] > 2000;
+            
+            // Verifica proporção suspeita
+            const ratio = image.shape[1] / image.shape[0];
+            const isSuspiciousRatio = ratio < 0.5 || ratio > 2;
+            
+            // Verifica tamanho do arquivo
+            const isSuspiciousFileSize = file.size > 10 * 1024 * 1024; // 10MB
+            
+            image.dispose();
+            
+            return {
+                isNSFW: isSuspiciousSize || isSuspiciousRatio || isSuspiciousFileSize,
+                confidence: (isSuspiciousSize || isSuspiciousRatio || isSuspiciousFileSize) ? 0.3 : 0,
+                width: image.shape[1],
+                height: image.shape[0],
+                ratio: ratio,
+                fileSize: file.size
+            };
+        }
+        
+        return { isNSFW: false, confidence: 0 };
+    } catch (error) {
+        console.error('Erro ao extrair metadados:', error);
+        return { isNSFW: true, confidence: 0.5 }; // Em caso de erro, bloqueia por segurança
+    }
+}
+
+// Verifica APIs externas
+async function checkExternalApis(file) {
+    const apis = [
+        {
+            name: 'deepai',
+            url: 'https://api.deepai.org/api/nsfw-detector',
+            key: process.env.DEEPAI_API_KEY
+        },
+        {
+            name: 'sightengine',
+            url: 'https://api.sightengine.com/1.0/check.json',
+            key: process.env.SIGHTENGINE_API_KEY
+        },
+        {
+            name: 'moderatecontent',
+            url: 'https://api.moderatecontent.com/moderate/',
+            key: process.env.MODERATECONTENT_API_KEY
+        }
+    ];
+
+    for (const api of apis) {
+        try {
+            const formData = new FormData();
+            formData.append('file', file.buffer);
+            if (api.key) {
+                formData.append('api_key', api.key);
+            }
+
+            const response = await fetch(api.url, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.isNSFW || result.nsfw_score > 0.15) {
+                    return {
+                        isNSFW: true,
+                        confidence: result.nsfw_score || 0.5,
+                        api: api.name
+                    };
+                }
+            }
+        } catch (error) {
+            console.error(`Erro na API ${api.name}:`, error);
+        }
+    }
+
+    return { isNSFW: false, confidence: 0 };
 }
 
 // Função para verificar nome do arquivo
