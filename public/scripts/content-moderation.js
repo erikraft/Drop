@@ -322,98 +322,120 @@ class ContentModeration {
     }
 
     // Mostra o diálogo de aviso
-    showWarningDialog(file, contentType = 'spam') {
-        const dialog = document.createElement('div');
-        dialog.className = 'content-warning-dialog';
-
-        // Define o ícone e mensagem baseado no tipo de conteúdo
-        let icon, title, message;
-        switch (contentType) {
-            case 'explicit':
-                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                    <line x1="3" y1="3" x2="21" y2="21"/>
-                </svg>`;
-                title = 'Conteúdo Explícito';
-                message = 'Este conteúdo pode conter material adulto ou impróprio';
-                break;
-            case 'profanity':
-                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="4.93" y1="19.07" x2="19.07" y2="4.93"/>
-                </svg>`;
-                title = 'Linguagem Imprópria';
-                message = 'Este conteúdo contém linguagem ofensiva ou inadequada';
-                break;
-            case 'scam':
-                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>`;
-                title = 'Possível Golpe';
-                message = 'Este conteúdo pode ser uma tentativa de golpe ou fraude';
-                break;
-            default:
-                icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>`;
-                title = 'Possível Spam';
-                message = 'Este conteúdo pode ser spam ou tentativa de golpe';
-        }
-
-        const content = document.createElement('div');
-        content.className = 'warning-content';
-        content.innerHTML = `
-            <div class="warning-icon">
-                ${icon}
-            </div>
-            <div class="warning-text">
-                <p>${title}</p>
-                <p>${message}</p>
-            </div>
-            <div class="media-preview blurred">
-                ${file.type.startsWith('image/') ? 
-                    `<img src="${URL.createObjectURL(file)}" alt="Preview">` :
-                    `<video src="${URL.createObjectURL(file)}" muted></video>`
-                }
-            </div>
-            <div class="warning-buttons">
-                <button class="btn-cancel">Recusar</button>
-                <button class="btn-view">Ver</button>
-            </div>
-        `;
-
-        dialog.appendChild(content);
-        document.body.appendChild(dialog);
-
-        // Adiciona eventos aos botões
-        const cancelBtn = content.querySelector('.btn-cancel');
-        const viewBtn = content.querySelector('.btn-view');
-        const mediaPreview = content.querySelector('.media-preview');
-
-        cancelBtn.onclick = () => {
-            dialog.remove();
-            URL.revokeObjectURL(mediaPreview.querySelector('img, video').src);
-        };
-
-        viewBtn.onclick = () => {
-            mediaPreview.classList.remove('blurred');
-            viewBtn.style.display = 'none';
-            cancelBtn.textContent = 'Fechar';
-        };
-
-        // Adiciona evento para fechar com ESC
-        document.addEventListener('keydown', function escHandler(e) {
-            if (e.key === 'Escape') {
-                dialog.remove();
-                URL.revokeObjectURL(mediaPreview.querySelector('img, video').src);
-                document.removeEventListener('keydown', escHandler);
+    async showWarningDialog(file, contentType = 'spam') {
+        return new Promise((resolve) => {
+            const dialog = document.createElement('div');
+            dialog.className = 'content-moderation-warning';
+            
+            let title, message, icon;
+            
+            switch(contentType) {
+                case 'explicit':
+                    title = '🚫 Conteúdo Explícito Detectado';
+                    message = 'Este conteúdo pode conter material explícito ou inadequado. Tem certeza que deseja visualizar?';
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#ff4444">
+                        <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
+                    </svg>`;
+                    break;
+                case 'spam':
+                    title = '🚫 Possível Spam/Golpe Detectado';
+                    message = 'Este conteúdo pode ser spam ou tentativa de golpe. Deseja visualizar mesmo assim?';
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#ff4444">
+                        <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Zm371-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm0-120q17 0 28.5-11.5T520-400v-120q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v120q0 17 11.5 28.5T480-360Z"/>
+                    </svg>`;
+                    break;
+                case 'offensive':
+                    title = '🚫 Conteúdo Ofensivo Detectado';
+                    message = 'Este conteúdo contém linguagem ofensiva. Deseja visualizar mesmo assim?';
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#ff4444">
+                        <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
+                    </svg>`;
+                    break;
             }
+
+            dialog.innerHTML = `
+                <div class="warning-icon">${icon}</div>
+                <div class="warning-title">${title}</div>
+                <div class="warning-message">${message}</div>
+                <div class="warning-buttons">
+                    <button class="warning-button view">Ver</button>
+                    <button class="warning-button reject">Recusar</button>
+                </div>
+            `;
+
+            document.body.appendChild(dialog);
+
+            const viewButton = dialog.querySelector('.warning-button.view');
+            const rejectButton = dialog.querySelector('.warning-button.reject');
+
+            viewButton.onclick = () => {
+                document.body.removeChild(dialog);
+                resolve(true);
+            };
+
+            rejectButton.onclick = () => {
+                document.body.removeChild(dialog);
+                resolve(false);
+            };
+
+            // Fecha o diálogo com ESC
+            document.addEventListener('keydown', function escHandler(e) {
+                if (e.key === 'Escape') {
+                    document.body.removeChild(dialog);
+                    document.removeEventListener('keydown', escHandler);
+                    resolve(false);
+                }
+            });
         });
+    }
+
+    // Aplica blur e overlay em conteúdo sensível
+    applyBlurAndOverlay(element, contentType) {
+        element.classList.add('blurred-content');
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'warning-overlay';
+        
+        let icon, text;
+        switch(contentType) {
+            case 'explicit':
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
+                    <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
+                </svg>`;
+                text = 'Conteúdo Explícito Detectado';
+                break;
+            case 'spam':
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
+                    <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Zm371-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm0-120q17 0 28.5-11.5T520-400v-120q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v120q0 17 11.5 28.5T480-360Z"/>
+                </svg>`;
+                text = 'Possível Spam/Golpe Detectado';
+                break;
+            case 'offensive':
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
+                    <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
+                </svg>`;
+                text = 'Conteúdo Ofensivo Detectado';
+                break;
+        }
+        
+        overlay.innerHTML = `
+            <div class="warning-icon">${icon}</div>
+            <div class="warning-text">${text}</div>
+        `;
+        
+        element.appendChild(overlay);
+    }
+
+    // Processa notificações push
+    processPushNotification(notification) {
+        const text = notification.body || '';
+        
+        if (this.hasBlockedWordsWithSubstitutions(text) || this.isSpam(text)) {
+            notification.body = '🚫 CONTEÚDO BLOQUEADO';
+            notification.icon = '/images/warning-icon.png';
+        }
+        
+        return notification;
     }
 
     // Processa um arquivo antes de enviar
@@ -466,7 +488,7 @@ class ContentModeration {
 // Adiciona estilos para o diálogo de aviso
 const style = document.createElement('style');
 style.textContent = `
-    .content-warning-dialog {
+    .content-moderation-warning {
         position: fixed;
         top: 0;
         left: 0;
