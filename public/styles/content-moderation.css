@@ -1,210 +1,233 @@
-.content-moderation-warning {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.95);
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
-    z-index: 9999;
-    max-width: 90%;
-    width: 500px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 0, 0, 0.1);
-}
+import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import multer from 'multer';
+import bodyParser from 'body-parser';
+import * as tf from '@tensorflow/tfjs-node';
+import fs from 'fs';
+import path from 'path';
 
-.warning-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
+const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
 
-.warning-icon {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 1rem;
-    animation: pulse 2s infinite;
-}
+// Configurações do modelo NSFW
+const NSFW_THRESHOLD = 0.15; // Reduzido para ser mais sensível
+const NSFW_CATEGORIES = ['porn', 'sexy', 'hentai', 'drawings', 'neutral', 'violence', 'gore'];
 
-/* Estilos específicos para cada tipo de conteúdo */
-.warning-icon[data-type="explicit"] {
-    filter: drop-shadow(0 0 8px rgba(255, 221, 0, 0.4));
-}
+// Lista de palavras-chave bloqueadas
+const BLOCKED_KEYWORDS = [
+    // Palavras em português
+    'porn', 'sex', 'xxx', 'adult', 'nude', 'naked', 'nsfw', '18+',
+    'pornografia', 'sexo', 'adulto', 'nu', 'nua', 'nudez', 'erótico',
+    'erotico', 'sensual', 'proibido', 'proibida', 'privado', 'privada',
+    'intimo', 'íntimo', 'intima', 'íntima', 'mulher', 'homem', 'corpo',
+    'peito', 'bunda', 'pernas', 'lingerie', 'biquini', 'calcinha', 'cueca',
+    // Palavras relacionadas a golpes
+    'golpe', 'scam', 'fraude', 'phishing', 'hack', 'crack', 'pirata',
+    'pirataria', 'ilegal', 'contrabando', 'drogas', 'drogas ilícitas',
+    // Palavras de violência
+    'violência', 'violencia', 'sangue', 'morte', 'assassinato', 'crime',
+    // Emojis e símbolos
+    '🔞', '🍆', '🍑', '🥒', '🥵', '💦', '👙', '👄', '💋', '💘',
+    // Termos do Instagram/Facebook
+    'onlyfans', 'leaks', 'vazados', 'vazado', 'privado', 'privada',
+    'conteúdo adulto', 'conteudo adulto', 'conteúdo +18', 'conteudo +18'
+];
 
-.warning-icon[data-type="spam"] {
-    filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.4));
-}
+// Lista de domínios bloqueados
+const BLOCKED_DOMAINS = [
+    // Sites adultos
+    'pornhub.com', 'xvideos.com', 'xnxx.com', 'redtube.com',
+    'youporn.com', 'xhamster.com', 'brazzers.com', 'onlyfans.com',
+    'chaturbate.com', 'myfreecams.com', 'stripchat.com', 'bongacams.com',
+    'cam4.com', 'streamate.com', 'adultfriendfinder.com', 'ashleymadison.com',
+    'fling.com', 'adultmatchmaker.com', 'adultdating.com', 'adultchat.com',
+    // Sites de golpes
+    'hack.com', 'crack.com', 'pirate.com', 'torrent.com', 'warez.com',
+    // Sites de conteúdo ilegal
+    'illegal.com', 'drugs.com', 'weapons.com', 'hacking.com'
+];
 
-.warning-icon[data-type="offensive"] {
-    filter: drop-shadow(0 0 8px rgba(255, 221, 0, 0.4));
-}
-
-.warning-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Títulos específicos para cada tipo */
-.warning-title[data-type="explicit"] {
-    color: #ffdd00;
-    text-shadow: 0 0 8px rgba(255, 221, 0, 0.3);
-}
-
-.warning-title[data-type="spam"] {
-    color: #ff0000;
-    text-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
-}
-
-.warning-title[data-type="offensive"] {
-    color: #ffdd00;
-    text-shadow: 0 0 8px rgba(255, 221, 0, 0.3);
-}
-
-.warning-message {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.warning-preview {
-    width: 100%;
-    max-height: 300px;
-    overflow: hidden;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
-    position: relative;
-}
-
-.warning-preview.blurred {
-    filter: blur(20px);
-}
-
-.warning-preview img,
-.warning-preview video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.warning-notice {
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
-    text-align: center;
-}
-
-/* Avisos específicos para cada tipo */
-.warning-notice[data-type="explicit"] {
-    background: rgba(255, 221, 0, 0.1);
-}
-
-.warning-notice[data-type="spam"] {
-    background: rgba(255, 0, 0, 0.1);
-}
-
-.warning-notice[data-type="offensive"] {
-    background: rgba(255, 221, 0, 0.1);
-}
-
-.warning-notice p {
-    margin: 0;
-    font-size: 0.9rem;
-}
-
-/* Texto do aviso específico para cada tipo */
-.warning-notice[data-type="explicit"] p {
-    color: #ffdd00;
-}
-
-.warning-notice[data-type="spam"] p {
-    color: #ff0000;
-}
-
-.warning-notice[data-type="offensive"] p {
-    color: #ffdd00;
-}
-
-.warning-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 1rem;
-}
-
-.warning-button {
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 150px;
-}
-
-.warning-button.show {
-    background: #4CAF50;
-    color: white;
-}
-
-.warning-button.close {
-    background: #666;
-    color: white;
-}
-
-.warning-button.block {
-    background: #ffdd00;
-    color: #000;
-}
-
-.warning-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.warning-button.show:hover {
-    background: #45a049;
-}
-
-.warning-button.close:hover {
-    background: #555;
-}
-
-.warning-button.block:hover {
-    background: #ffd700;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
+// Carrega o modelo NSFW
+let model;
+async function loadModel() {
+    try {
+        model = await tf.loadLayersModel('file://./model/model.json');
+        console.log('Modelo NSFW carregado com sucesso');
+    } catch (error) {
+        console.error('Erro ao carregar modelo NSFW:', error);
     }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
+}
+loadModel();
+
+// Função para verificar conteúdo NSFW
+async function checkNSFW(file) {
+    try {
+        const fileExt = path.extname(file.originalname).toLowerCase();
+        const isImage = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp'].includes(fileExt);
+        const isVideo = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.webm'].includes(fileExt);
+
+        if (isImage) {
+            // Processa a imagem em diferentes tamanhos para melhor detecção
+            const image = await tf.node.decodeImage(file.buffer);
+            const resized = tf.image.resizeBilinear(image, [224, 224]);
+            const expanded = resized.expandDims(0);
+            const normalized = expanded.div(255.0);
+
+            const predictions = await model.predict(normalized).data();
+            
+            // Libera a memória
+            image.dispose();
+            resized.dispose();
+            expanded.dispose();
+            normalized.dispose();
+
+            // Calcula o score NSFW
+            const nsfwScore = predictions[1]; // Índice 1 é geralmente a classe NSFW
+            
+            return {
+                isNSFW: nsfwScore > NSFW_THRESHOLD,
+                score: nsfwScore,
+                type: 'image',
+                details: {
+                    safe: predictions[0],
+                    nsfw: predictions[1]
+                }
+            };
+        } else if (isVideo) {
+            // Para vídeos, verifica o nome e extensão
+            const isBlocked = isBlockedFilename(file.originalname);
+            return {
+                isNSFW: isBlocked,
+                score: isBlocked ? 1.0 : 0.0,
+                type: 'video',
+                details: {
+                    filename: file.originalname,
+                    size: file.size
+                }
+            };
+        }
+
+        return {
+            isNSFW: false,
+            score: 0,
+            type: 'other'
+        };
+    } catch (error) {
+        console.error('Erro ao verificar NSFW:', error);
+        return {
+            isNSFW: false,
+            score: 0,
+            type: 'error'
+        };
     }
 }
 
-@media (max-width: 600px) {
-    .content-moderation-warning {
-        width: 95%;
-        padding: 1rem;
-    }
+// Função para verificar nome do arquivo
+function isBlockedFilename(filename) {
+    const lowerFilename = filename.toLowerCase();
+    return BLOCKED_KEYWORDS.some(keyword => lowerFilename.includes(keyword));
+}
 
-    .warning-title {
-        font-size: 1.2rem;
+// Função para verificar URL
+function isBlockedUrl(url) {
+    try {
+        const urlObj = new URL(url);
+        const lowerUrl = url.toLowerCase();
+        
+        if (BLOCKED_DOMAINS.some(domain => urlObj.hostname.includes(domain))) {
+            return true;
+        }
+        
+        return BLOCKED_KEYWORDS.some(keyword => lowerUrl.includes(keyword));
+    } catch {
+        return false;
     }
+}
 
-    .warning-button {
-        width: 100%;
-        min-width: unset;
-    }
+// Middleware para verificar conteúdo
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-    .warning-buttons {
-        flex-direction: column;
+// Rota para upload de arquivos
+app.post('/upload', upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ 
+                error: '🚫 CONTEÚDO BLOQUEADO',
+                message: 'Nenhum arquivo enviado'
+            });
+        }
+
+        // Verifica o nome do arquivo
+        if (isBlockedFilename(req.file.originalname)) {
+            return res.status(403).json({
+                error: '🚫 CONTEÚDO BLOQUEADO',
+                message: 'Este conteúdo pode ser sensível',
+                warning: true,
+                options: {
+                    view: 'Ver conteúdo',
+                    reject: 'Recusar'
+                }
+            });
+        }
+
+        // Verifica o conteúdo do arquivo
+        const nsfwCheck = await checkNSFW(req.file);
+        if (nsfwCheck.isNSFW) {
+            return res.status(403).json({
+                error: '🚫 CONTEÚDO BLOQUEADO',
+                message: 'Este conteúdo pode ser sensível',
+                warning: true,
+                options: {
+                    view: 'Ver conteúdo',
+                    reject: 'Recusar'
+                },
+                type: nsfwCheck.type,
+                score: nsfwCheck.score,
+                details: nsfwCheck.details
+            });
+        }
+
+        // Processa o arquivo normalmente
+        res.json({ 
+            message: 'Arquivo processado com sucesso',
+            type: nsfwCheck.type
+        });
+    } catch (error) {
+        console.error('Erro no upload:', error);
+        res.status(500).json({ 
+            error: '🚫 CONTEÚDO BLOQUEADO',
+            message: 'Erro ao processar arquivo'
+        });
     }
-} 
+});
+
+// Configuração do proxy
+const proxy = createProxyMiddleware({
+    target: 'http://localhost:3000',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api': ''
+    },
+    onProxyReq: (proxyReq, req, res) => {
+        if (isBlockedUrl(req.url)) {
+            res.status(403).json({
+                error: '🚫 CONTEÚDO BLOQUEADO',
+                message: 'Este conteúdo pode ser sensível',
+                warning: true,
+                options: {
+                    view: 'Ver conteúdo',
+                    reject: 'Recusar'
+                }
+            });
+            return;
+        }
+    }
+});
+
+app.use('/api', proxy);
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Servidor proxy rodando na porta ${PORT}`);
+}); 
