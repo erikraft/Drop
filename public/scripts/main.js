@@ -241,3 +241,72 @@ class PairDrop {
 }
 
 const pairDrop = new PairDrop();
+
+// Inicializa o sistema de moderação
+const contentModeration = new ContentModeration();
+
+// Função para processar arquivos recebidos
+async function handleReceivedFile(file) {
+    try {
+        // Verifica se o conteúdo é NSFW
+        const isNSFW = await contentModeration.checkNSFW(file);
+        if (isNSFW) {
+            const shouldView = await contentModeration.showWarningDialog(file, 'explicit');
+            if (!shouldView) return;
+        }
+
+        // Verifica se é spam
+        if (contentModeration.isSpam(file.name)) {
+            const shouldView = await contentModeration.showWarningDialog(file, 'spam');
+            if (!shouldView) return;
+        }
+
+        // Verifica se contém linguagem ofensiva
+        if (contentModeration.hasBlockedWordsWithSubstitutions(file.name)) {
+            const shouldView = await contentModeration.showWarningDialog(file, 'offensive');
+            if (!shouldView) return;
+        }
+
+        // Processa o arquivo normalmente
+        processFile(file);
+    } catch (error) {
+        console.error('Erro ao processar arquivo:', error);
+    }
+}
+
+// Função para processar mensagens recebidas
+function handleReceivedMessage(message) {
+    try {
+        // Verifica se a mensagem contém conteúdo ofensivo
+        if (contentModeration.hasBlockedWordsWithSubstitutions(message)) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message blurred-content';
+            messageElement.textContent = message;
+            contentModeration.applyBlurAndOverlay(messageElement, 'offensive');
+            return messageElement;
+        }
+
+        // Verifica se é spam
+        if (contentModeration.isSpam(message)) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message blurred-content';
+            messageElement.textContent = message;
+            contentModeration.applyBlurAndOverlay(messageElement, 'spam');
+            return messageElement;
+        }
+
+        // Retorna a mensagem normalmente
+        const messageElement = document.createElement('div');
+        messageElement.className = 'message';
+        messageElement.textContent = message;
+        return messageElement;
+    } catch (error) {
+        console.error('Erro ao processar mensagem:', error);
+        return null;
+    }
+}
+
+// Função para processar notificações push
+function handlePushNotification(notification) {
+    return contentModeration.processPushNotification(notification);
+}
