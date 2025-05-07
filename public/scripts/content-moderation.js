@@ -209,11 +209,27 @@ class ContentModeration {
         try {
             console.log('Iniciando verificação NSFW completa para:', file.name);
             
-            // Verifica o nome do arquivo
+            // Verifica o nome do arquivo primeiro
             const fileName = file.name.toLowerCase();
             if (this.blockedWords.some(word => fileName.includes(word.toLowerCase()))) {
                 console.log('Nome do arquivo contém palavras bloqueadas');
-                return true;
+                return {
+                    isNSFW: true,
+                    confidence: 1.0,
+                    reason: 'Nome do arquivo bloqueado'
+                };
+            }
+
+            // Verifica metadados do arquivo
+            if (file.type.includes('image') || file.type.includes('video')) {
+                const metadata = await this.extractMetadata(file);
+                if (metadata.isNSFW) {
+                    return {
+                        isNSFW: true,
+                        confidence: metadata.confidence,
+                        reason: 'Metadados suspeitos'
+                    };
+                }
             }
 
             // Garante que os modelos estão carregados
@@ -235,6 +251,15 @@ class ContentModeration {
                 isNSFW = results.isNSFW;
                 confidence = results.confidence;
                 modelResults = results.modelResults;
+            }
+
+            // Verifica APIs externas se necessário
+            if (confidence > 0.1) { // Se houver alguma suspeita
+                const externalResults = await this.checkExternalApis(file);
+                if (externalResults.isNSFW) {
+                    isNSFW = true;
+                    confidence = Math.max(confidence, externalResults.confidence);
+                }
             }
 
             // Se o conteúdo for NSFW, aplica blur automaticamente
@@ -260,6 +285,69 @@ class ContentModeration {
                 modelResults: {},
                 error: error.message
             };
+        }
+    }
+
+    // Extrai metadados do arquivo
+    async extractMetadata(file) {
+        return new Promise((resolve) => {
+            if (file.type.startsWith('image/')) {
+                const img = new Image();
+                img.onload = () => {
+                    // Verifica dimensões suspeitas
+                    const isSuspiciousSize = img.width > 2000 || img.height > 2000;
+                    // Verifica proporção suspeita
+                    const ratio = img.width / img.height;
+                    const isSuspiciousRatio = ratio < 0.5 || ratio > 2;
+                    
+                    resolve({
+                        isNSFW: isSuspiciousSize || isSuspiciousRatio,
+                        confidence: (isSuspiciousSize || isSuspiciousRatio) ? 0.3 : 0,
+                        width: img.width,
+                        height: img.height,
+                        ratio: ratio
+                    });
+                };
+                img.src = URL.createObjectURL(file);
+            } else {
+                resolve({ isNSFW: false, confidence: 0 });
+            }
+        });
+    }
+
+    // Verifica APIs externas
+    async checkExternalApis(file) {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Tenta cada API em sequência
+            for (const [name, url] of Object.entries(this.externalApis)) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.isNSFW || result.nsfw_score > 0.15) {
+                            return {
+                                isNSFW: true,
+                                confidence: result.nsfw_score || 0.5,
+                                api: name
+                            };
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Erro na API ${name}:`, error);
+                }
+            }
+            
+            return { isNSFW: false, confidence: 0 };
+        } catch (error) {
+            console.error('Erro ao verificar APIs externas:', error);
+            return { isNSFW: false, confidence: 0 };
         }
     }
 
@@ -330,7 +418,7 @@ class ContentModeration {
 
                     // Calcula a média ponderada
                     const finalScore = nsfwScore / totalConfidence;
-                    const isNSFW = finalScore > 0.4; // Threshold ajustado
+                    const isNSFW = finalScore > 0.15; // Threshold reduzido para 15%
 
                     console.log('Resultado final NSFW:', {
                         isNSFW,
@@ -452,7 +540,7 @@ class ContentModeration {
                     
                     // Calcula média final
                     const averageScore = totalNSFWScore / framesAnalyzed;
-                    const isNSFW = averageScore > 0.4; // Threshold ajustado
+                    const isNSFW = averageScore > 0.15; // Threshold reduzido para 15%
                     
                     console.log('Resultado final vídeo:', {
                         isNSFW,
