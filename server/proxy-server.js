@@ -10,10 +10,10 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Configurações do modelo NSFW
-const NSFW_THRESHOLD = 0.2; // Limiar para detecção de conteúdo explícito
+const NSFW_THRESHOLD = 0.15; // Reduzido para ser mais sensível
 const NSFW_CATEGORIES = ['porn', 'sexy', 'hentai', 'drawings', 'neutral', 'violence', 'gore'];
 
-// Lista de palavras-chave bloqueadas (baseada em filtros do Google, Instagram e Facebook)
+// Lista de palavras-chave bloqueadas
 const BLOCKED_KEYWORDS = [
     // Palavras em português
     'porn', 'sex', 'xxx', 'adult', 'nude', 'naked', 'nsfw', '18+',
@@ -67,28 +67,43 @@ async function checkNSFW(file) {
         const isVideo = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.webm'].includes(fileExt);
 
         if (isImage) {
+            // Processa a imagem em diferentes tamanhos para melhor detecção
             const image = await tf.node.decodeImage(file.buffer);
-            const predictions = await model.classify(image);
-            
-            const nsfwScore = predictions.reduce((score, pred) => {
-                if (NSFW_CATEGORIES.includes(pred.className)) {
-                    return score + pred.probability;
-                }
-                return score;
-            }, 0);
+            const resized = tf.image.resizeBilinear(image, [224, 224]);
+            const expanded = resized.expandDims(0);
+            const normalized = expanded.div(255.0);
 
+            const predictions = await model.predict(normalized).data();
+            
+            // Libera a memória
             image.dispose();
+            resized.dispose();
+            expanded.dispose();
+            normalized.dispose();
+
+            // Calcula o score NSFW
+            const nsfwScore = predictions[1]; // Índice 1 é geralmente a classe NSFW
             
             return {
                 isNSFW: nsfwScore > NSFW_THRESHOLD,
                 score: nsfwScore,
-                type: 'image'
+                type: 'image',
+                details: {
+                    safe: predictions[0],
+                    nsfw: predictions[1]
+                }
             };
         } else if (isVideo) {
+            // Para vídeos, verifica o nome e extensão
+            const isBlocked = isBlockedFilename(file.originalname);
             return {
-                isNSFW: isBlockedFilename(file.originalname),
-                score: 1.0,
-                type: 'video'
+                isNSFW: isBlocked,
+                score: isBlocked ? 1.0 : 0.0,
+                type: 'video',
+                details: {
+                    filename: file.originalname,
+                    size: file.size
+                }
             };
         }
 
@@ -119,12 +134,10 @@ function isBlockedUrl(url) {
         const urlObj = new URL(url);
         const lowerUrl = url.toLowerCase();
         
-        // Verifica domínios bloqueados
         if (BLOCKED_DOMAINS.some(domain => urlObj.hostname.includes(domain))) {
             return true;
         }
         
-        // Verifica palavras-chave na URL
         return BLOCKED_KEYWORDS.some(keyword => lowerUrl.includes(keyword));
     } catch {
         return false;
@@ -170,7 +183,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
                     reject: 'Recusar'
                 },
                 type: nsfwCheck.type,
-                score: nsfwCheck.score
+                score: nsfwCheck.score,
+                details: nsfwCheck.details
             });
         }
 
@@ -196,7 +210,6 @@ const proxy = createProxyMiddleware({
         '^/api': ''
     },
     onProxyReq: (proxyReq, req, res) => {
-        // Verifica URLs bloqueadas
         if (isBlockedUrl(req.url)) {
             res.status(403).json({
                 error: '🚫 CONTEÚDO BLOQUEADO',
