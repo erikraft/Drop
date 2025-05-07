@@ -1,11 +1,10 @@
-FROM alpine:latest
+FROM node:20-alpine
 
 WORKDIR /home/node/app
 
 COPY package*.json ./
 
-RUN apk add --no-cache nodejs npm
-RUN NODE_ENV="production" npm ci --omit=dev
+RUN npm ci --omit=dev
 
 # Directories and files excluded via .dockerignore
 COPY . .
