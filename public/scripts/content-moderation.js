@@ -96,16 +96,20 @@ class ContentModeration {
 
         // Inicializa o modelo NSFW
         this.nsfwModel = null;
-        this.initNSFWModel();
+        this.nsfwModelLoading = false;
+        this.loadNSFWModel();
     }
 
-    async initNSFWModel() {
+    async loadNSFWModel() {
+        if (this.nsfwModel || this.nsfwModelLoading) return;
+        this.nsfwModelLoading = true;
         try {
-            // Carrega o modelo NSFW do TensorFlow.js
-            this.nsfwModel = await tf.loadGraphModel('https://d1zv2aa70wpiur.cloudfront.net/tfjs_models/tfjs_nsfw_mobilenet/model.json');
+            this.nsfwModel = await nsfwjs.load();
+            console.log('Modelo NSFW carregado!');
         } catch (error) {
             console.error('Erro ao carregar modelo NSFW:', error);
         }
+        this.nsfwModelLoading = false;
     }
 
     // Normaliza o texto removendo substituições de caracteres
@@ -136,21 +140,16 @@ class ContentModeration {
     // Verifica se o conteúdo é NSFW
     async checkNSFW(file) {
         if (!this.isMediaFile(file)) return false;
-
         try {
-            // Verifica primeiro pelo nome do arquivo
             const fileName = file.name.toLowerCase();
             if (this.blockedWords.some(word => fileName.includes(word.toLowerCase()))) {
                 return true;
             }
-
-            // Se for uma imagem ou vídeo, verifica o conteúdo
             if (file.type.startsWith('image/')) {
                 return await this.checkImageNSFW(file);
             } else if (file.type.startsWith('video/')) {
                 return await this.checkVideoNSFW(file);
             }
-
             return false;
         } catch (error) {
             console.error('Erro ao verificar NSFW:', error);
@@ -159,75 +158,59 @@ class ContentModeration {
     }
 
     async checkImageNSFW(file) {
-        if (!this.nsfwModel) return false;
-
-        try {
-            const img = await createImageBitmap(file);
-            const tensor = tf.browser.fromPixels(img)
-                .resizeBilinear([224, 224])
-                .expandDims()
-                .toFloat()
-                .div(255.0);
-
-            const predictions = await this.nsfwModel.predict(tensor).data();
-            tensor.dispose();
-
-            // Verifica se o conteúdo é NSFW
-            const nsfwScore = predictions[1]; // Índice 1 é para conteúdo NSFW
-            return nsfwScore > 0.5; // Threshold de 50%
-        } catch (error) {
-            console.error('Erro ao verificar imagem NSFW:', error);
-            return false;
-        }
+        if (!this.nsfwModel) await this.loadNSFWModel();
+        return new Promise((resolve) => {
+            const img = new window.Image();
+            img.onload = async () => {
+                const predictions = await this.nsfwModel.classify(img);
+                const isNSFW = predictions.some(p =>
+                    (p.className === 'Porn' || p.className === 'Hentai' || p.className === 'Sexy') && p.probability > 0.7
+                );
+                resolve(isNSFW);
+            };
+            img.onerror = () => resolve(false);
+            img.src = URL.createObjectURL(file);
+        });
     }
 
     async checkVideoNSFW(file) {
-        if (!this.nsfwModel) return false;
-
-        try {
+        if (!this.nsfwModel) await this.loadNSFWModel();
+        // Extrai frames do vídeo e analisa cada um
+        return new Promise((resolve) => {
             const video = document.createElement('video');
+            video.preload = 'auto';
             video.src = URL.createObjectURL(file);
-            
-            return new Promise((resolve) => {
-                video.onloadeddata = async () => {
-                    // Captura frames do vídeo para análise
-                    const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    const ctx = canvas.getContext('2d');
-
-                    // Analisa alguns frames do vídeo
-                    const frameCount = 5;
-                    const interval = video.duration / frameCount;
-                    let nsfwFrames = 0;
-
-                    for (let i = 0; i < frameCount; i++) {
-                        video.currentTime = i * interval;
-                        await new Promise(r => video.onseeked = r);
-                        
-                        ctx.drawImage(video, 0, 0);
-                        const tensor = tf.browser.fromPixels(canvas)
-                            .resizeBilinear([224, 224])
-                            .expandDims()
-                            .toFloat()
-                            .div(255.0);
-
-                        const predictions = await this.nsfwModel.predict(tensor).data();
-                        tensor.dispose();
-
-                        if (predictions[1] > 0.5) {
-                            nsfwFrames++;
-                        }
+            video.muted = true;
+            video.currentTime = 0;
+            video.onloadeddata = async () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                let nsfwDetected = false;
+                let framesChecked = 0;
+                const totalFrames = 5;
+                const duration = video.duration;
+                for (let i = 1; i <= totalFrames; i++) {
+                    video.currentTime = (duration * i) / (totalFrames + 1);
+                    await new Promise(r => video.onseeked = r);
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const img = new window.Image();
+                    img.src = canvas.toDataURL();
+                    await new Promise(r => img.onload = r);
+                    const predictions = await this.nsfwModel.classify(img);
+                    if (predictions.some(p =>
+                        (p.className === 'Porn' || p.className === 'Hentai' || p.className === 'Sexy') && p.probability > 0.7
+                    )) {
+                        nsfwDetected = true;
+                        break;
                     }
-
-                    URL.revokeObjectURL(video.src);
-                    resolve(nsfwFrames > frameCount / 2); // Se mais da metade dos frames for NSFW
-                };
-            });
-        } catch (error) {
-            console.error('Erro ao verificar vídeo NSFW:', error);
-            return false;
-        }
+                    framesChecked++;
+                }
+                resolve(nsfwDetected);
+            };
+            video.onerror = () => resolve(false);
+        });
     }
 
     // Verifica se uma URL contém caracteres cirílicos
