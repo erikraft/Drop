@@ -319,19 +319,34 @@ async function handleReceivedFile(file) {
 // Intercepta o WebRTC para verificar arquivos antes do compartilhamento
 function interceptWebRTC() {
     const originalPeerConnection = window.RTCPeerConnection;
+    
     window.RTCPeerConnection = function(...args) {
         const pc = new originalPeerConnection(...args);
         
-        // Intercepta o método de envio de dados
         const originalSend = pc.send;
         pc.send = async function(data) {
             if (data instanceof Blob || data instanceof File) {
                 try {
-                    const processedFile = await handleReceivedFile(data);
-                    if (!processedFile) {
-                        throw new Error('Arquivo bloqueado pelo sistema de moderação');
+                    // Verifica conteúdo explícito
+                    const result = await contentModeration.checkNSFW(data);
+                    
+                    if (result.isNSFW) {
+                        if (localStorage.getItem('blockExplicitContent') === 'true') {
+                            throw new Error('Conteúdo bloqueado pelas configurações do usuário');
+                        }
+                        
+                        const userResponse = await contentModeration.showFrameWarningDialog(
+                            data, 
+                            result.blurredMedia,
+                            result.contentType
+                        );
+                        
+                        if (!userResponse) {
+                            throw new Error('Envio cancelado pelo usuário');
+                        }
                     }
-                    return originalSend.call(this, processedFile);
+                    
+                    return originalSend.call(this, data);
                 } catch (error) {
                     console.error('Erro ao processar arquivo:', error);
                     throw error;
