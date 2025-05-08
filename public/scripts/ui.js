@@ -201,18 +201,15 @@ class PeersUI {
                     await window.pairdrop.contentModeration.processFile(file);
                 }
                 
-            Events.fire('activate-share-mode', {
-                files: files
-            });
+                Events.fire('activate-share-mode', {
+                    files: files
+                });
             } catch (error) {
                 window.pairdrop.toast.show(error.message);
             }
         }
         else if (text) {
-            if (window.pairdrop.contentModeration.isSpam(text).isSpam) {
-                window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
-                return;
-            }
+            // Remove verificação de spam para texto
             Events.fire('activate-share-mode', {
                 text: text
             });
@@ -257,10 +254,7 @@ class PeersUI {
             }
         }
         else if (text) {
-            if (window.pairdrop.contentModeration.isSpam(text).isSpam) {
-                window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
-                return;
-            }
+            // Remove verificação de spam para texto
             Events.fire('activate-share-mode', {
                 text: text
             });
@@ -2051,12 +2045,7 @@ class ReceiveTextDialog extends Dialog {
 
     async _onText(text, peerId) {
         try {
-            // Verifica se o texto é spam
-            if (window.pairdrop.contentModeration.isSpam(text).isSpam) {
-                window.pairdrop.toast.show('Texto bloqueado: Possível spam detectado');
-                return;
-            }
-
+            // Remove verificação de spam para texto recebido
             this.textQueue.push({
                 text: text,
                 peerId: peerId
@@ -2067,6 +2056,76 @@ class ReceiveTextDialog extends Dialog {
             }
         } catch (error) {
             window.pairdrop.toast.show(error.message);
+        }
+    }
+
+    async showBlockedMessageDialog(text, contentType) {
+        return new Promise((resolve) => {
+            const dialog = document.createElement('div');
+            dialog.className = 'dialog blocked-message-dialog';
+            
+            const title = this.getBlockedMessageReason(contentType);
+            const icon = this.getWarningIcon(contentType);
+            
+            dialog.innerHTML = `
+                <div class="dialog-content">
+                    <div class="warning-icon">${icon}</div>
+                    <div class="warning-title">${title}</div>
+                    <div class="warning-message">
+                        <p>Esta mensagem foi bloqueada pelo sistema de moderação.</p>
+                        <p>Deseja visualizar mesmo assim?</p>
+                    </div>
+                    <div class="warning-buttons">
+                        <button class="warning-button show">Visualizar</button>
+                        <button class="warning-button close">Fechar</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            const showButton = dialog.querySelector('.warning-button.show');
+            const closeButton = dialog.querySelector('.warning-button.close');
+            
+            showButton.onclick = () => {
+                document.body.removeChild(dialog);
+                resolve(true);
+            };
+            
+            closeButton.onclick = () => {
+                document.body.removeChild(dialog);
+                resolve(false);
+            };
+            
+            // Fecha o diálogo com ESC
+            document.addEventListener('keydown', function escHandler(e) {
+                if (e.key === 'Escape') {
+                    document.body.removeChild(dialog);
+                    document.removeEventListener('keydown', escHandler);
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+    getWarningIcon(contentType) {
+        switch(contentType) {
+            case 'explicit':
+                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ffdd00">
+                    <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11Z"/>
+                </svg>`;
+            case 'spam':
+                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff0000">
+                    <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Z"/>
+                </svg>`;
+            case 'offensive':
+                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
+                    <path d="M363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
+                </svg>`;
+            default:
+                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff8800">
+                    <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440Z"/>
+                </svg>`;
         }
     }
 
