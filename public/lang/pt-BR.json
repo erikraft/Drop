@@ -13,7 +13,9 @@
         "join-public-room_title": "Entrar em uma sala pública temporariamente",
         "cancel-share-mode": "Cancelar",
         "edit-share-mode": "Editar",
-        "expand_title": "Expandir linha de botões de cabeçalho"
+        "expand_title": "Expandir linha de botões de cabeçalho",
+        "bluetooth": "Transferir via Bluetooth",
+        "scan-qr": "Escanear QR Code"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Solte para selecionar o destinatário",
@@ -162,7 +164,14 @@
         "message-transfer-completed": "Transferência de mensagem concluída",
         "unfinished-transfers-warning": "Há transferências inacabadas. Tem certeza de que deseja fechar o ErikrafT Drop?",
         "rate-limit-join-key": "Limite de taxa atingido. Aguarde 10 segundos e tente novamente.",
-        "selected-peer-left": "Par selecionado saiu"
+        "selected-peer-left": "Par selecionado saiu",
+        "bluetooth-unsupported": "Seu navegador não suporta Bluetooth",
+        "bluetooth-success": "Arquivo transferido com sucesso",
+        "bluetooth-error": "Erro na transferência Bluetooth",
+        "bluetooth-connecting": "Conectando ao dispositivo...",
+        "bluetooth-preparing": "Preparando arquivo para transferência...",
+        "bluetooth-sending": "Enviando arquivo: {progress}%",
+        "bluetooth-device-error": "Erro ao transferir arquivo. Verifique se o dispositivo suporta transferência de arquivos."
     },
     "document-titles": {
         "file-received": "Arquivo recebido",
