@@ -186,6 +186,12 @@ class PeersUI {
 
         this._onDragEnd();
 
+        // Verifica se há peers conectados
+        if (!$$('x-peer')) {
+            window.pairdrop.toast.show('Nenhum dispositivo conectado para compartilhar');
+            return;
+        }
+
         if ($$('x-peer') && $$('x-peer').contains(e.target)) return; // dropped on peer
 
         let files = e.dataTransfer.files;
