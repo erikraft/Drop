@@ -350,25 +350,7 @@ interceptWebRTC();
 // Função para processar mensagens recebidas
 function handleReceivedMessage(message) {
     try {
-        // Verifica se a mensagem contém conteúdo ofensivo ou é spam
-        const spamCheck = contentModeration.isSpam(message);
-        if (spamCheck.isSpam || contentModeration.hasBlockedWordsWithSubstitutions(message)) {
-            // Mostra o diálogo de aviso
-            contentModeration.showWarningDialog({
-                type: 'text',
-                name: 'Mensagem',
-                content: message
-            }, spamCheck.contentType || 'offensive');
-            
-            // Cria elemento borrado
-            const messageElement = document.createElement('div');
-            messageElement.className = 'message blurred-content';
-            messageElement.textContent = '🚫 Conteúdo Bloqueado';
-            contentModeration.applyBlurAndOverlay(messageElement, spamCheck.contentType || 'offensive');
-            return messageElement;
-        }
-
-        // Retorna a mensagem normalmente
+        // Retorna a mensagem normalmente sem verificação
         const messageElement = document.createElement('div');
         messageElement.className = 'message';
         messageElement.textContent = message;
