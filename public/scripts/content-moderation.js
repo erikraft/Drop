@@ -619,21 +619,45 @@ class ContentModeration {
         let explicitScore = 0;
         let scamScore = 0;
         
+        // Log inicial
+        console.log('Verificando mensagem:', text);
+        
         // Verifica palavras bloqueadas com sistema de pontuação
         for (const word of this.blockedWords) {
             const regex = new RegExp(`\\b${word}\\b`, 'i');
             if (regex.test(normalizedText)) {
-                if (this.explicitTerms.includes(word)) explicitScore += 2;
-                else if (this.offensiveTerms.includes(word)) offensiveScore += 2;
-                else if (this.scamTerms.includes(word)) scamScore += 2;
-                else spamScore += 1;
+                if (this.explicitTerms.includes(word)) {
+                    explicitScore += 2;
+                    console.log('Palavra explícita detectada:', word);
+                }
+                else if (this.offensiveTerms.includes(word)) {
+                    offensiveScore += 2;
+                    console.log('Palavra ofensiva detectada:', word);
+                }
+                else if (this.scamTerms.includes(word)) {
+                    scamScore += 2;
+                    console.log('Termo de golpe detectado:', word);
+                }
+                else {
+                    spamScore += 1;
+                    console.log('Palavra bloqueada detectada:', word);
+                }
             }
         }
         
         // Verifica padrões de spam
-        if (/(.)\\1{4,}/.test(normalizedText)) spamScore += 2; // Caracteres repetidos
-        if (text.length > 500) spamScore += 1; // Mensagens muito longas
-        if ((text.match(/[A-Z]/g) || []).length > text.length * 0.7) spamScore += 2; // Muitas maiúsculas
+        if (/(.)\1{4,}/.test(normalizedText)) {
+            spamScore += 2;
+            console.log('Caracteres repetidos detectados');
+        }
+        if (text.length > 500) {
+            spamScore += 1;
+            console.log('Mensagem muito longa detectada');
+        }
+        if ((text.match(/[A-Z]/g) || []).length > text.length * 0.7) {
+            spamScore += 2;
+            console.log('Muitas maiúsculas detectadas');
+        }
         
         // Verifica URLs suspeitas
         const urlRegex = /https?:\/\/[^\s]+/g;
@@ -641,13 +665,23 @@ class ContentModeration {
         for (const url of urls) {
             if (this.isSuspiciousUrl(url)) {
                 scamScore += 3;
+                console.log('URL suspeita detectada:', url);
             }
         }
         
         // Verifica emojis impróprios
         if (this.hasInappropriateEmojis(text)) {
             explicitScore += 2;
+            console.log('Emojis impróprios detectados');
         }
+        
+        // Log dos scores
+        console.log('Scores finais:', {
+            spamScore,
+            offensiveScore,
+            explicitScore,
+            scamScore
+        });
         
         // Determina o tipo de conteúdo baseado nos scores
         let contentType = null;
