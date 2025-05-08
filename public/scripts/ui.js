@@ -2805,3 +2805,163 @@ class NoSleepUI {
         }
     }
 }
+
+class QRScannerDialog extends Dialog {
+    constructor() {
+        super('qr-scanner-dialog');
+        this.qrScanner = null;
+        
+        this.initializeScanner();
+        Events.on('show-qr-scanner', () => this.show());
+    }
+
+    initializeScanner() {
+        this.qrScanner = new Html5Qrcode("qr-reader");
+    }
+
+    show() {
+        super.show();
+        this.startScanner();
+    }
+
+    hide() {
+        this.stopScanner();
+        super.hide();
+    }
+
+    async startScanner() {
+        try {
+            const devices = await Html5Qrcode.getCameras();
+            if (devices.length === 0) throw new Error("Nenhuma câmera encontrada");
+            
+            await this.qrScanner.start(
+                devices[0].id,
+                { fps: 10, qrbox: 250 },
+                qrCode => this.handleScannedCode(qrCode),
+                error => console.error("Erro de leitura:", error)
+            );
+        } catch (error) {
+            Events.fire('notify-user', "Erro ao acessar a câmera: " + error.message);
+            this.hide();
+        }
+    }
+
+    stopScanner() {
+        if (this.qrScanner && this.qrScanner.isScanning) {
+            this.qrScanner.stop();
+        }
+    }
+
+    handleScannedCode(scannedText) {
+        try {
+            const url = new URL(scannedText);
+            
+            // Verificar se é do domínio PairDrop
+            if (url.hostname === 'drop.erikraft.com') {
+                if (url.searchParams.has('room_id')) {
+                    const roomId = url.searchParams.get('room_id');
+                    Events.fire('join-public-room', { roomId: roomId.toLowerCase(), createIfInvalid: false });
+                } else if (url.searchParams.has('pair_key')) {
+                    const pairKey = url.searchParams.get('pair_key').replace(/\D/g,'');
+                    Events.fire('pair-device-join', pairKey);
+                } else {
+                    window.location.href = url.href;
+                }
+                this.hide();
+            } else {
+                window.open(scannedText, '_blank');
+            }
+        } catch {
+            Events.fire('notify-user', "QR Code inválido");
+        }
+    }
+}
+
+// Adicionar inicialização do QR Scanner
+window.addEventListener('load', () => {
+    const qrScannerDialog = new QRScannerDialog();
+    document.getElementById('openQRScanner').addEventListener('click', () => Events.fire('show-qr-scanner'));
+});
+
+class BluetoothTransfer {
+    constructor() {
+        if (this.checkBluetoothSupport()) {
+            document.getElementById('bluetoothBtn').style.display = 'flex';
+            this.initBluetoothListeners();
+        }
+    }
+
+    checkBluetoothSupport() {
+        return navigator.bluetooth && navigator.bluetooth.requestDevice;
+    }
+
+    initBluetoothListeners() {
+        document.getElementById('bluetoothBtn').addEventListener('click', () => this.startBluetoothTransfer());
+    }
+
+    async startBluetoothTransfer() {
+        try {
+            const device = await navigator.bluetooth.requestDevice({
+                acceptAllDevices: true,
+                optionalServices: ['generic_access', 'file_transfer']
+            });
+
+            Events.fire('notify-user', 'Conectando ao dispositivo...');
+            const server = await device.gatt.connect();
+            
+            // Selecionar arquivo
+            const file = await this.selectFile();
+            if (!file) return;
+
+            Events.fire('notify-user', 'Preparando arquivo para transferência...');
+            const fileBuffer = await this.readFileAsBuffer(file);
+            
+            // Tentar serviço de transferência de arquivo
+            try {
+                const service = await server.getPrimaryService('file_transfer');
+                const characteristic = await service.getCharacteristic('file_data');
+                
+                // Dividir arquivo em chunks se necessário
+                const chunkSize = 512;
+                for (let i = 0; i < fileBuffer.byteLength; i += chunkSize) {
+                    const chunk = fileBuffer.slice(i, i + chunkSize);
+                    await characteristic.writeValue(chunk);
+                    
+                    // Atualizar progresso
+                    const progress = Math.min(100, Math.round((i + chunkSize) / fileBuffer.byteLength * 100));
+                    Events.fire('notify-user', `Enviando arquivo: ${progress}%`);
+                }
+                
+                Events.fire('notify-user', 'Arquivo enviado com sucesso!');
+            } catch (error) {
+                Events.fire('notify-user', 'Erro ao transferir arquivo. Verifique se o dispositivo suporta transferência de arquivos.');
+            }
+            
+        } catch (error) {
+            Events.fire('notify-user', `Erro Bluetooth: ${error.message}`);
+        }
+    }
+
+    selectFile() {
+        return new Promise((resolve) => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = (e) => resolve(e.target.files[0]);
+            input.click();
+        });
+    }
+
+    readFileAsBuffer(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsArrayBuffer(file);
+        });
+    }
+}
+
+// Inicializar Bluetooth na carga da página
+window.addEventListener('load', () => {
+    new BluetoothTransfer();
+});
