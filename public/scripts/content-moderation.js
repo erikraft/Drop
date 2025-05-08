@@ -8,7 +8,7 @@ class ContentModeration {
             'n9.cl', 'rb.gy', 'shorturl.at', 'shre.ink', 'surl.li', 't.ly', 't.me', 'tinyurl.com',
             'u.to', 'urlzs.com', 'zzb.bz', 'steamcommunity', 'steamgift', 'steamrconmmunity',
             'steamscommunuty', 'steamshort', 'steanmecomnmunity', 'store-steaempowered',
-            'share.blood-strike.com', 'casumonster.top', 'abre.ai', 'abrir.link', 'open.ai', 'open.link',
+            'share.blood-strike.com', 'casumonster.top', 'abre.ai', 'abrir.link', 'open.link',
             
             // Palavrões e termos ofensivos
             'arromb', 'asshole', 'babac', 'bastard', 'bct', 'boceta', 'bocetas', 'boquete', 'bosta',
@@ -212,370 +212,154 @@ class ContentModeration {
             // Verifica o nome do arquivo primeiro
             const fileName = file.name.toLowerCase();
             if (this.blockedWords.some(word => fileName.includes(word.toLowerCase()))) {
-                console.log('Nome do arquivo contém palavras bloqueadas');
-                return {
-                    isNSFW: true,
-                    confidence: 1.0,
-                    reason: 'Nome do arquivo bloqueado'
-                };
+                return this._handleExplicitContent(file, 'Nome do arquivo bloqueado', 'explicit');
             }
 
-            // Verifica metadados do arquivo
-            if (file.type.includes('image') || file.type.includes('video')) {
-                const metadata = await this.extractMetadata(file);
-                if (metadata.isNSFW) {
-                    return {
-                        isNSFW: true,
-                        confidence: metadata.confidence,
-                        reason: 'Metadados suspeitos'
-                    };
-                }
+            // Processa cada frame do conteúdo
+            const isExplicit = await this.processMediaFrames(file);
+            if (isExplicit) {
+                return this._handleExplicitContent(file, 'Conteúdo explícito detectado', 'explicit');
             }
 
-            // Garante que os modelos estão carregados
-            if (!this.nsfwModels.default) {
-                await this.loadAllModels();
-            }
-
-            let isNSFW = false;
-            let confidence = 0;
-            let modelResults = {};
-
-            if (file.type.startsWith('image/')) {
-                const results = await this.checkImageWithAllModels(file);
-                isNSFW = results.isNSFW;
-                confidence = results.confidence;
-                modelResults = results.modelResults;
-            } else if (file.type.startsWith('video/')) {
-                const results = await this.checkVideoWithAllModels(file);
-                isNSFW = results.isNSFW;
-                confidence = results.confidence;
-                modelResults = results.modelResults;
-            }
-
-            // Verifica APIs externas se necessário
-            if (confidence > 0.1) { // Se houver alguma suspeita
-                const externalResults = await this.checkExternalApis(file);
-                if (externalResults.isNSFW) {
-                    isNSFW = true;
-                    confidence = Math.max(confidence, externalResults.confidence);
-                }
-            }
-
-            // Se o conteúdo for NSFW, aplica blur automaticamente
-            if (isNSFW) {
-                const element = document.querySelector(`[data-file-id="${file.name}"]`);
-                if (element) {
-                    this.applyBlurAndOverlay(element, 'explicit');
-                }
-            }
-
-            return {
-                isNSFW,
-                confidence,
-                modelResults,
-                fileType: file.type.startsWith('image/') ? 'image' : 'video'
-            };
-
+            return { isNSFW: false };
         } catch (error) {
             console.error('Erro na verificação NSFW:', error);
-            return {
-                isNSFW: false,
-                confidence: 0,
-                modelResults: {},
-                error: error.message
-            };
+            return { isNSFW: false };
         }
     }
 
-    // Extrai metadados do arquivo
-    async extractMetadata(file) {
-        return new Promise((resolve) => {
-            if (file.type.startsWith('image/')) {
-                const img = new Image();
-                img.onload = () => {
-                    // Verifica dimensões suspeitas
-                    const isSuspiciousSize = img.width > 2000 || img.height > 2000;
-                    // Verifica proporção suspeita
-                    const ratio = img.width / img.height;
-                    const isSuspiciousRatio = ratio < 0.5 || ratio > 2;
-                    
-                    resolve({
-                        isNSFW: isSuspiciousSize || isSuspiciousRatio,
-                        confidence: (isSuspiciousSize || isSuspiciousRatio) ? 0.3 : 0,
-                        width: img.width,
-                        height: img.height,
-                        ratio: ratio
-                    });
-                };
-                img.src = URL.createObjectURL(file);
-            } else {
-                resolve({ isNSFW: false, confidence: 0 });
-            }
-        });
-    }
-
-    // Verifica APIs externas
-    async checkExternalApis(file) {
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            // Tenta cada API em sequência
-            for (const [name, url] of Object.entries(this.externalApis)) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.isNSFW || result.nsfw_score > 0.15) {
-                            return {
-                                isNSFW: true,
-                                confidence: result.nsfw_score || 0.5,
-                                api: name
-                            };
-                        }
-                    }
-                } catch (error) {
-                    console.error(`Erro na API ${name}:`, error);
-                }
-            }
-            
-            return { isNSFW: false, confidence: 0 };
-        } catch (error) {
-            console.error('Erro ao verificar APIs externas:', error);
-            return { isNSFW: false, confidence: 0 };
-        }
-    }
-
-    async checkImageWithAllModels(file) {
+    async processMediaFrames(file) {
         return new Promise(async (resolve) => {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
+            const mediaElement = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
+            mediaElement.src = URL.createObjectURL(file);
             
-            img.onload = async () => {
-                try {
-                    console.log('Analisando imagem com múltiplos modelos...');
-                    
-                    // Resultados de cada modelo
-                    const modelResults = {
-                        nsfwjs: null,
-                        mobilenet: null,
-                        inception: null,
-                        resnet: null
-                    };
-
-                    // NSFWJS
-                    const nsfwPredictions = await this.nsfwModels.default.classify(img);
-                    modelResults.nsfwjs = nsfwPredictions;
-                    
-                    // MobileNet
-                    const mobilenetPredictions = await this.nsfwModels.mobilenet.classify(img);
-                    modelResults.mobilenet = mobilenetPredictions;
-                    
-                    // Inception
-                    const inceptionPredictions = await this.nsfwModels.inception.classify(img);
-                    modelResults.inception = inceptionPredictions;
-                    
-                    // ResNet
-                    const resnetPredictions = await this.nsfwModels.resnet.classify(img);
-                    modelResults.resnet = resnetPredictions;
-
-                    // Análise ponderada dos resultados
-                    let nsfwScore = 0;
-                    let totalConfidence = 0;
-
-                    // NSFWJS (peso 2)
-                    const nsfwjsScore = nsfwPredictions.find(p => p.className === 'Porn' || p.className === 'Hentai');
-                    if (nsfwjsScore) {
-                        nsfwScore += nsfwjsScore.probability * 2;
-                        totalConfidence += 2;
-                    }
-
-                    // MobileNet (peso 1)
-                    const mobilenetScore = mobilenetPredictions.find(p => p.className.toLowerCase().includes('explicit'));
-                    if (mobilenetScore) {
-                        nsfwScore += mobilenetScore.probability;
-                        totalConfidence += 1;
-                    }
-
-                    // Inception (peso 1.5)
-                    const inceptionScore = inceptionPredictions.find(p => p.className.toLowerCase().includes('adult'));
-                    if (inceptionScore) {
-                        nsfwScore += inceptionScore.probability * 1.5;
-                        totalConfidence += 1.5;
-                    }
-
-                    // ResNet (peso 1.5)
-                    const resnetScore = resnetPredictions.find(p => p.className.toLowerCase().includes('nsfw'));
-                    if (resnetScore) {
-                        nsfwScore += resnetScore.probability * 1.5;
-                        totalConfidence += 1.5;
-                    }
-
-                    // Calcula a média ponderada
-                    const finalScore = nsfwScore / totalConfidence;
-                    const isNSFW = finalScore > 0.15; // Threshold reduzido para 15%
-
-                    console.log('Resultado final NSFW:', {
-                        isNSFW,
-                        confidence: finalScore,
-                        modelResults
-                    });
-
-                    resolve({
-                        isNSFW,
-                        confidence: finalScore,
-                        modelResults
-                    });
-                } catch (error) {
-                    console.error('Erro ao analisar imagem:', error);
-                    resolve({
-                        isNSFW: false,
-                        confidence: 0,
-                        modelResults: {},
-                        error: error.message
-                    });
-                }
+            mediaElement.onload = async () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = mediaElement.naturalWidth || mediaElement.videoWidth;
+                canvas.height = mediaElement.naturalHeight || mediaElement.videoHeight;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(mediaElement, 0, 0);
+                
+                // Verifica cada frame com os modelos NSFW
+                const result = await this.nsfwModels.default.classify(canvas);
+                resolve(result.some(p => p.className === 'Porn' && p.probability > 0.85));
             };
 
-            img.onerror = () => {
-                console.error('Erro ao carregar imagem para análise');
-                resolve({
-                    isNSFW: false,
-                    confidence: 0,
-                    modelResults: {},
-                    error: 'Erro ao carregar imagem'
+            if (file.type.startsWith('video/')) {
+                mediaElement.addEventListener('seeked', async () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = mediaElement.videoWidth;
+                    canvas.height = mediaElement.videoHeight;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(mediaElement, 0, 0);
+                    
+                    const result = await this.nsfwModels.default.classify(canvas);
+                    if (result.some(p => p.className === 'Porn' && p.probability > 0.85)) {
+                        resolve(true);
+                    }
                 });
-            };
 
-            img.src = URL.createObjectURL(file);
+                // Verifica frames a cada 1 segundo
+                mediaElement.currentTime = 0;
+                const checkFrames = setInterval(() => {
+                    if (mediaElement.currentTime >= mediaElement.duration) {
+                        clearInterval(checkFrames);
+                        resolve(false);
+                    }
+                    mediaElement.currentTime += 1;
+                }, 1000);
+            }
         });
     }
 
-    async checkVideoWithAllModels(file) {
+    _handleExplicitContent(file, reason, contentType) {
+        const blurredMedia = this.createBlurredPreview(file);
+        return {
+            isNSFW: true,
+            reason,
+            contentType,
+            blurredMedia
+        };
+    }
+
+    createBlurredPreview(file) {
+        const media = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
+        media.src = URL.createObjectURL(file);
+        media.style.filter = 'blur(20px)';
+        media.className = 'blurred-preview';
+        return media;
+    }
+
+    async showFrameWarningDialog(file, blurredPreview, contentType = 'explicit') {
         return new Promise((resolve) => {
-            const video = document.createElement('video');
-            video.preload = 'metadata';
-            video.muted = true;
-
-            video.onloadedmetadata = async () => {
-                try {
-                    console.log('Analisando vídeo com múltiplos modelos...');
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Configurações para análise de frames
-                    const frameInterval = 1000; // 1 frame por segundo
-                    const maxFrames = Math.min(10, Math.floor(video.duration)); // Máximo 10 frames
-                    let framesAnalyzed = 0;
-                    let totalNSFWScore = 0;
-                    
-                    // Array para armazenar resultados de cada frame
-                    const frameResults = [];
-                    
-                    // Função para analisar um frame específico
-                    const analyzeFrame = async (time) => {
-                        video.currentTime = time;
-                        await new Promise(resolve => video.onseeked = resolve);
-                        
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
-                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        
-                        // Análise com múltiplos modelos
-                        const [nsfwResults, mobilenetResults, inceptionResults] = await Promise.all([
-                            this.nsfwModels.default.classify(canvas),
-                            this.nsfwModels.mobilenet.classify(canvas),
-                            this.nsfwModels.inception.classify(canvas)
-                        ]);
-                        
-                        // Calcula score NSFW para o frame
-                        let frameScore = 0;
-                        let totalWeight = 0;
-                        
-                        // NSFWJS (peso 2)
-                        const nsfwScore = nsfwResults.find(p => p.className === 'Porn' || p.className === 'Hentai');
-                        if (nsfwScore) {
-                            frameScore += nsfwScore.probability * 2;
-                            totalWeight += 2;
-                        }
-                        
-                        // MobileNet (peso 1)
-                        const mobilenetScore = mobilenetResults.find(p => p.className.toLowerCase().includes('explicit'));
-                        if (mobilenetScore) {
-                            frameScore += mobilenetScore.probability;
-                            totalWeight += 1;
-                        }
-                        
-                        // Inception (peso 1.5)
-                        const inceptionScore = inceptionResults.find(p => p.className.toLowerCase().includes('adult'));
-                        if (inceptionScore) {
-                            frameScore += inceptionScore.probability * 1.5;
-                            totalWeight += 1.5;
-                        }
-                        
-                        return {
-                            time,
-                            score: frameScore / totalWeight,
-                            results: {
-                                nsfwjs: nsfwResults,
-                                mobilenet: mobilenetResults,
-                                inception: inceptionResults
-                            }
-                        };
-                    };
-                    
-                    // Analisa frames em intervalos regulares
-                    for (let i = 0; i < maxFrames; i++) {
-                        const time = i * (video.duration / maxFrames);
-                        const frameResult = await analyzeFrame(time);
-                        frameResults.push(frameResult);
-                        totalNSFWScore += frameResult.score;
-                        framesAnalyzed++;
-                    }
-                    
-                    // Calcula média final
-                    const averageScore = totalNSFWScore / framesAnalyzed;
-                    const isNSFW = averageScore > 0.15; // Threshold reduzido para 15%
-                    
-                    console.log('Resultado final vídeo:', {
-                        isNSFW,
-                        confidence: averageScore,
-                        frameResults
-                    });
-                    
-                    resolve({
-                        isNSFW,
-                        confidence: averageScore,
-                        modelResults: frameResults
-                    });
-                    
-                } catch (error) {
-                    console.error('Erro ao analisar vídeo:', error);
-                    resolve({
-                        isNSFW: false,
-                        confidence: 0,
-                        modelResults: {},
-                        error: error.message
-                    });
-                }
+            const dialog = document.createElement('div');
+            dialog.className = 'frame-warning-dialog';
+            
+            const warningIcons = {
+                explicit: `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                    <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/></svg>`,
+                offensive: `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                    <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/></svg>`,
+                spam: `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
+                    <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Zm371-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm0-120q17 0 28.5-11.5T520-400v-120q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v120q0 17 11.5 28.5T480-360Z"/></svg>`
             };
 
-            video.onerror = () => {
-                console.error('Erro ao carregar vídeo para análise');
-                resolve({
-                    isNSFW: false,
-                    confidence: 0,
-                    modelResults: {},
-                    error: 'Erro ao carregar vídeo'
-                });
+            const warningTitles = {
+                explicit: '🚫 Conteúdo Explícito Detectado',
+                offensive: '🚫 Conteúdo Ofensivo Detectado',
+                spam: '🚫 Possível Spam/Golpe Detectado'
             };
 
-            video.src = URL.createObjectURL(file);
+            dialog.innerHTML = `
+                <div class="warning-content">
+                    <div class="warning-icon">
+                        ${warningIcons[contentType]}
+                    </div>
+                    <h2>${warningTitles[contentType]}</h2>
+                    <p>Este conteúdo pode conter material impróprio.</p>
+                    
+                    <div class="media-container">
+                        ${blurredPreview.outerHTML}
+                        <div class="warning-overlay">
+                            <button class="unblur-btn">👁️ Mostrar Conteúdo</button>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="accept">Aceitar e Visualizar</button>
+                        <button class="block">Bloquear Permanentemente</button>
+                        <button class="cancel">Cancelar Envio</button>
+                    </div>
+                </div>
+            `;
+
+            const unblurBtn = dialog.querySelector('.unblur-btn');
+            const media = dialog.querySelector('.blurred-preview');
+            
+            unblurBtn.addEventListener('click', () => {
+                media.style.filter = 'none';
+                unblurBtn.style.display = 'none';
+            });
+
+            dialog.querySelector('.accept').addEventListener('click', () => {
+                document.body.removeChild(dialog);
+                resolve(true);
+            });
+
+            dialog.querySelector('.block').addEventListener('click', () => {
+                localStorage.setItem('blockExplicitContent', 'true');
+                document.body.removeChild(dialog);
+                resolve(false);
+            });
+
+            dialog.querySelector('.cancel').addEventListener('click', () => {
+                document.body.removeChild(dialog);
+                resolve(false);
+            });
+
+            document.body.appendChild(dialog);
         });
     }
 
