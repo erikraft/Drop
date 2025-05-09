@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url('/images/Gato-Comeu-Pagina-HTML.png');
+    background-image: url('/images/404.png');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -11,33 +11,22 @@ body {
 }
 
 body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.7),
-        rgba(0, 0, 0, 0.5)
-    );
-    z-index: -1;
+    display: none;
 }
 
 main {
     text-align: center;
-    padding: 40px 16px;
-    max-width: 600px;
-    margin: 0 auto;
-    min-height: 100vh;
+    padding: 40px 8px;
+    max-width: 98vw;
+    margin: 32px auto;
+    min-height: 60vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     position: relative;
     z-index: 1;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.65);
     border-radius: 18px;
     backdrop-filter: blur(4px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
@@ -45,53 +34,54 @@ main {
 
 .img-container {
     width: 100%;
-    max-width: 500px;
-    aspect-ratio: 16 / 9;
-    margin-bottom: 24px;
+    max-width: 350px;
+    aspect-ratio: 16 / 10;
+    margin-bottom: 32px;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #222;
 }
 
 .img-container img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     display: block;
     border-radius: 10px;
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.4));
 }
 
 h1 {
-    font-size: 7rem; /* Bem grande para o 404 */
-    margin-bottom: 8px;
+    font-size: 4rem;
+    margin-bottom: 12px;
     color: #fff;
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 h2 {
-    font-size: 2.5rem; /* Maior para dar destaque */
-    margin-bottom: 12px;
+    font-size: 2rem;
+    margin-bottom: 16px;
     color: #fff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 strong {
     display: block;
-    font-size: 1.1rem;
-    margin-bottom: 12px;
+    font-size: 1.3rem;
+    margin-bottom: 18px;
     color: #fff;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 p {
-    font-size: 1.1rem;
-    margin-bottom: 24px;
-    line-height: 1.5;
+    font-size: 1.25rem;
+    margin-bottom: 32px;
+    line-height: 1.6;
     color: #fff;
     max-width: 480px;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -101,18 +91,19 @@ p {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 26px;
+    padding: 14px 30px;
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
     color: #000;
     text-decoration: none;
     border-radius: 50px;
     transition: all 0.3s ease;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     border: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     font-weight: bold;
     position: relative;
     overflow: hidden;
+    margin-bottom: 24px;
 }
 
 .btn-voltar::before {
@@ -147,68 +138,51 @@ p {
 
 @media (max-width: 600px) {
     main {
-        padding: 16px 8px;
-        max-width: 95vw;
+        padding: 16px 2vw;
+        max-width: 100vw;
+        margin: 0;
         border-radius: 8px;
-        margin: 10px;
-        min-height: calc(100vh - 20px);
+        min-height: 100vh;
     }
-    
     .img-container {
         max-width: 95vw;
-        aspect-ratio: 16 / 9;
-        margin-bottom: 16px;
+        aspect-ratio: 16 / 10;
+        margin-bottom: 24px;
     }
-    
     h1 {
-        font-size: 4rem;
-        margin-bottom: 4px;
+        font-size: 2.5rem;
     }
-    
     h2 {
-        font-size: 1.5rem;
-        margin-bottom: 8px;
+        font-size: 1.3rem;
     }
-    
-    p, strong {
-        font-size: 0.9rem;
-        margin-bottom: 16px;
-        padding: 0 8px;
+    strong {
+        font-size: 1.1rem;
     }
-    
+    p {
+        font-size: 1.05rem;
+    }
     .btn-voltar {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-        margin-top: 8px;
+        padding: 10px 18px;
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 360px) {
-    main {
-        padding: 12px 6px;
-        margin: 8px;
-    }
-    
-    h1 {
-        font-size: 3rem;
-    }
-    
-    h2 {
-        font-size: 1.2rem;
-    }
-    
-    p, strong {
-        font-size: 0.85rem;
-        padding: 0 4px;
-    }
-    
-    .btn-voltar {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-    }
-    
     .img-container {
-        margin-bottom: 12px;
+        max-width: 98vw;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1rem;
+    }
+    strong, p {
+        font-size: 0.95rem;
+    }
+    .btn-voltar {
+        padding: 8px 12px;
+        font-size: 0.9rem;
     }
 }
 
