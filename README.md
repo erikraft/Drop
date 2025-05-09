@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/erikraft/Drop">
-    <img src="public/images/(2)ErikrafT Drop - Redondado.png" alt="Logo"  width="150" height="150">
+    <img src="https://biodrop.erikraft.com/images/Logo.png" alt="Logo"  width="150" height="150">
   </a>
  
   # _Send it_, with [ErikrafT Drop](https://drop.erikraft.com/)
