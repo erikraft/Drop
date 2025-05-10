@@ -179,41 +179,30 @@ class PeersUI {
         $peer.ui.setProgress(progress.progress, progress.status)
     }
 
-    async _onDrop(e) {
+    _onDrop(e) {
         if (this.shareMode.active || Dialog.anyDialogShown()) return;
 
         e.preventDefault();
-        e.stopPropagation();
 
         this._onDragEnd();
 
-        if (!$$('x-peer')) {
-            Events.fire('notify-user', Localization.getTranslation("notifications.no-peers-connected"));
-            return;
-        }
+        if ($$('x-peer') && $$('x-peer').contains(e.target)) return; // dropped on peer
 
-        if ($$('x-peer') && $$('x-peer').contains(e.target)) return;
+        let files = e.dataTransfer.files;
+        let text = e.dataTransfer.getData("text");
 
-        const files = [...e.dataTransfer.files];
-        const text = e.dataTransfer.getData("text/plain");
+        // convert FileList to Array
+        files = [...files];
 
         if (files.length > 0) {
-            try {
-                for (const file of files) {
-                    if (file.size > 1024 * 1024 * 1024) { // 1GB
-                        throw new Error(Localization.getTranslation("notifications.file-too-large"));
-                    }
-                }
-                Events.fire('activate-share-mode', { files });
-            } catch (error) {
-                Events.fire('notify-user', error.message);
-            }
-        } else if (text && text.trim()) {
-            if (ShareTextDialog.isApproveShareTextSet()) {
-                Events.fire('share-text-dialog', text.trim());
-            } else {
-                Events.fire('activate-share-mode', { text: text.trim() });
-            }
+            Events.fire('activate-share-mode', {
+                files: files
+            });
+        }
+        else if(text.length > 0) {
+            Events.fire('activate-share-mode', {
+                text: text
+            });
         }
     }
 
@@ -231,29 +220,24 @@ class PeersUI {
         this.$xNoPeers.removeAttribute('drop-bg');
     }
 
-    async _onPaste(e) {
+    _onPaste(e) {
+        // prevent send on paste when dialog is open
         if (this.shareMode.active || Dialog.anyDialogShown()) return;
 
-        e.preventDefault();
-        const files = [...e.clipboardData.files];
-        const text = e.clipboardData.getData("text/plain");
+        e.preventDefault()
+        let files = e.clipboardData.files;
+        let text = e.clipboardData.getData("Text");
+
+        // convert FileList to Array
+        files = [...files];
 
         if (files.length > 0) {
-            try {
-                for (const file of files) {
-                    if (file.size > 1024 * 1024 * 1024) { // 1GB
-                        throw new Error(Localization.getTranslation("notifications.file-too-large"));
-                    }
-                }
-                Events.fire('activate-share-mode', { files });
-            } catch (error) {
-                Events.fire('notify-user', error.message);
-            }
-        } else if (text && text.trim()) {
+            Events.fire('activate-share-mode', {files: files});
+        } else if (text.length > 0) {
             if (ShareTextDialog.isApproveShareTextSet()) {
-                Events.fire('share-text-dialog', text.trim());
+                Events.fire('share-text-dialog', text);
             } else {
-                Events.fire('activate-share-mode', { text: text.trim() });
+                Events.fire('activate-share-mode', {text: text});
             }
         }
     }
@@ -269,35 +253,50 @@ class PeersUI {
 
         Events.on('share-mode-pointerdown', this._activateCallback);
 
+        const sharedText = Localization.getTranslation("instructions.activate-share-mode-shared-text");
+        const andOtherFilesPlural = Localization.getTranslation("instructions.activate-share-mode-and-other-files-plural", null, {count: files.length-1});
+        const andOtherFiles = Localization.getTranslation("instructions.activate-share-mode-and-other-file");
+
         let descriptorComplete, descriptorItem, descriptorOther, descriptorInstructions;
 
-        if (files.length > 0) {
-            if (files.length > 2) {
-                descriptorItem = files[0].name;
-                descriptorOther = Localization.getTranslation("instructions.activate-share-mode-and-other-files-plural", null, {count: files.length-1});
-                descriptorComplete = `${descriptorItem} ${descriptorOther}`;
-            } else if (files.length === 2) {
-                descriptorItem = files[0].name;
-                descriptorOther = Localization.getTranslation("instructions.activate-share-mode-and-other-file");
-                descriptorComplete = `${descriptorItem} ${descriptorOther}`;
-            } else {
-                descriptorItem = files[0].name;
-                descriptorComplete = descriptorItem;
-            }
+        if (files.length > 2) {
+            // files shared
+            descriptorItem = files[0].name;
+            descriptorOther = andOtherFilesPlural;
+            descriptorComplete = `${descriptorItem} ${descriptorOther}`;
+        }
+        else if (files.length === 2) {
+            descriptorItem = files[0].name;
+            descriptorOther = andOtherFiles;
+            descriptorComplete = `${descriptorItem} ${descriptorOther}`;
+        } else if (files.length === 1) {
+            descriptorItem = files[0].name;
+            descriptorComplete = descriptorItem;
+        }
+        else {
+            // text shared
+            descriptorItem = text.replace(/\s/g," ");
+            descriptorComplete = sharedText;
+        }
 
+        if (files.length > 0) {
             if (descriptorOther) {
                 this.$shareModeDescriptorOther.innerText = descriptorOther;
                 this.$shareModeDescriptorOther.removeAttribute('hidden');
             }
-
-            descriptorInstructions = files.length > 1 
-                ? Localization.getTranslation("instructions.activate-share-mode-shared-files-plural", null, {count: files.length})
-                : Localization.getTranslation("instructions.activate-share-mode-shared-file");
+            if (files.length > 1) {
+                descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-files-plural", null, {count: files.length});
+            }
+            else {
+                descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-file");
+            }
 
             if (files[0].type.split('/')[0] === 'image') {
                 try {
-                    const imageUrl = await getThumbnailAsDataUrl(files[0], 80, null, 0.9);
+                    let imageUrl = await getThumbnailAsDataUrl(files[0], 80, null, 0.9);
+
                     this.$shareModeImageThumb.style.backgroundImage = `url(${imageUrl})`;
+
                     this.$shareModeImageThumb.removeAttribute('hidden');
                 } catch (e) {
                     console.error(e);
@@ -306,12 +305,13 @@ class PeersUI {
             } else {
                 this.$shareModeFileThumb.removeAttribute('hidden');
             }
-        } else {
+        }
+        else {
             this.$shareModeTextThumb.removeAttribute('hidden');
+
             this.$shareModeEditBtn.addEventListener('click', this._editShareTextCallback);
             this.$shareModeEditBtn.removeAttribute('hidden');
-            descriptorItem = text.replace(/\s/g," ");
-            descriptorComplete = Localization.getTranslation("instructions.activate-share-mode-shared-text");
+
             descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-text");
         }
 
@@ -322,6 +322,7 @@ class PeersUI {
         this.$xInstructions.setAttribute('mobile', mobile);
 
         this.$sharePanel.removeAttribute('hidden');
+
         this.$shareModeDescriptor.removeAttribute('hidden');
         this.$shareModeDescriptorItem.innerText = descriptorItem;
 
@@ -358,61 +359,47 @@ class PeersUI {
         this.shareMode.text = "";
 
         Events.off('share-mode-pointerdown', this._activateCallback);
-        if (this._editShareTextCallback) {
-            this.$shareModeEditBtn.removeEventListener('click', this._editShareTextCallback);
-            this._editShareTextCallback = null;
-        }
 
-        this.$sharePanel.setAttribute('hidden', '');
-        this.$shareModeDescriptor.setAttribute('hidden', '');
-        this.$shareModeDescriptorItem.innerText = "";
-        this.$shareModeDescriptorOther.setAttribute('hidden', '');
-        this.$shareModeImageThumb.setAttribute('hidden', '');
-        this.$shareModeFileThumb.setAttribute('hidden', '');
-        this.$shareModeTextThumb.setAttribute('hidden', '');
-        this.$shareModeEditBtn.setAttribute('hidden', '');
+        const desktop = Localization.getTranslation("instructions.x-instructions_desktop");
+        const mobile = Localization.getTranslation("instructions.x-instructions_mobile");
 
+        this.$xInstructions.setAttribute('desktop', desktop);
+        this.$xInstructions.setAttribute('mobile', mobile);
+
+        this.$sharePanel.setAttribute('hidden', true);
+
+        this.$shareModeImageThumb.setAttribute('hidden', true);
+        this.$shareModeFileThumb.setAttribute('hidden', true);
+        this.$shareModeTextThumb.setAttribute('hidden', true);
+
+        this.$shareModeDescriptorItem.innerHTML = "";
+        this.$shareModeDescriptorItem.classList.remove('cursive');
+        this.$shareModeDescriptorOther.innerHTML = "";
+        this.$shareModeDescriptorOther.setAttribute('hidden', true);
+        this.$shareModeEditBtn.removeEventListener('click', this._editShareTextCallback);
+        this.$shareModeEditBtn.setAttribute('hidden', true);
+
+        console.log('Share mode deactivated.')
         Events.fire('share-mode-changed', { active: false });
     }
 
     _sendShareData(e) {
+        // send the shared file/text content
         const peerId = e.detail.peerId;
-        const peer = this.peers[peerId];
+        const files = this.shareMode.files;
+        const text = this.shareMode.text;
 
-        if (!peer) return;
-
-        try {
-            if (this.shareMode.files.length > 0) {
-                Events.fire('files-selected', {
-                    files: this.shareMode.files,
-                    to: peerId
-                });
-            } else if (this.shareMode.text) {
-                const text = this.shareMode.text.trim();
-                if (text) {
-                    Events.fire('send-text', {
-                        text: text,
-                        to: peerId
-                    });
-                }
-            }
-        } catch (error) {
-            console.error('Erro ao enviar dados:', error);
-            Events.fire('notify-user', Localization.getTranslation("notifications.send-error"));
-        } finally {
-            this._deactivateShareMode();
+        if (files.length > 0) {
+            Events.fire('files-selected', {
+                files: files,
+                to: peerId
+            });
         }
-    }
-
-    _onShareModeChanged(active = false, descriptor = "") {
-        if (active) {
-            this.$sharePanel.removeAttribute('hidden');
-            this.$shareModeDescriptor.removeAttribute('hidden');
-            this.$shareModeDescriptor.textContent = descriptor;
-        } else {
-            this.$sharePanel.setAttribute('hidden', '');
-            this.$shareModeDescriptor.setAttribute('hidden', '');
-            this.$shareModeDescriptor.textContent = "";
+        else if (text.length > 0) {
+            Events.fire('send-text', {
+                text: text,
+                to: peerId
+            });
         }
     }
 }
@@ -760,7 +747,7 @@ class Dialog {
             document.activeElement.blur();
             window.blur();
         }
-        document.title = '📤｜ErikrafT Drop｜Transfer Files!!!';
+        document.title = 'PairDrop | Transfer Files Cross-Platform. No Setup, No Signup.';
         changeFavicon("images/favicon-96x96.png");
         this.correspondingPeerId = undefined;
     }
@@ -900,45 +887,42 @@ class ReceiveDialog extends Dialog {
 }
 
 class ReceiveFileDialog extends ReceiveDialog {
+
     constructor() {
         super('receive-file-dialog');
-        this.filesQueue = [];
-        this.currentFiles = null;
-        this.currentPeerId = null;
-        this.currentDisplayName = null;
-        this.currentConnectionHash = null;
-        this.currentBadgeClassName = null;
 
-        Events.on('files', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
+        this.$downloadBtn = this.$el.querySelector('#download-btn');
+        this.$shareBtn = this.$el.querySelector('#share-btn');
+
+        Events.on('files-received', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
+        this._filesQueue = [];
     }
 
     async _onFilesReceived(peerId, files, imagesOnly, totalSize) {
-        try {
-            // Verifica cada arquivo antes de mostrar o diálogo
-            for (const file of files) {
-                await window.pairdrop.contentModeration.processFile(file);
-            }
+        const displayName = $(peerId).ui._displayName();
+        const connectionHash = $(peerId).ui._connectionHash;
+        const badgeClassName = $(peerId).ui._badgeClassName();
 
-            this.filesQueue.push({
+        this._filesQueue.push({
             peerId: peerId,
+            displayName: displayName,
+            connectionHash: connectionHash,
             files: files,
             imagesOnly: imagesOnly,
-                totalSize: totalSize
+            totalSize: totalSize,
+            badgeClassName: badgeClassName
         });
 
-            if (!this.isShown()) {
+        window.blop.play();
+
         await this._nextFiles();
-            }
-        } catch (error) {
-            window.pairdrop.toast.show(error.message);
-        }
     }
 
     async _nextFiles() {
-        if (this._busy || !this.filesQueue.length) return;
+        if (this._busy || !this._filesQueue.length) return;
         this._busy = true;
-        const {peerId, files, imagesOnly, totalSize, badgeClassName} = this.filesQueue.shift();
-        await this._displayFiles(peerId, files, imagesOnly, totalSize, badgeClassName);
+        const {peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName} = this._filesQueue.shift();
+        await this._displayFiles(peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName);
     }
 
     createPreviewElement(file) {
@@ -976,8 +960,8 @@ class ReceiveFileDialog extends ReceiveDialog {
         });
     }
 
-    async _displayFiles(peerId, files, imagesOnly, totalSize, badgeClassName) {
-        this._parseFileData(peerId, files, imagesOnly, totalSize, badgeClassName);
+    async _displayFiles(peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName) {
+        this._parseFileData(displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName);
 
         let descriptor, url, filenameDownload;
         if (files.length === 1) {
@@ -1033,7 +1017,7 @@ class ReceiveFileDialog extends ReceiveDialog {
                 hours = hours.length < 2 ? "0" + hours : hours;
                 let minutes = now.getMinutes().toString();
                 minutes = minutes.length < 2 ? "0" + minutes : minutes;
-                filenameDownload = `ErikrafT-Drop_files_${year+month+date}_${hours+minutes}.zip`;
+                filenameDownload = `PairDrop_files_${year+month+date}_${hours+minutes}.zip`;
             } catch (e) {
                 console.error(e);
                 downloadZipped = false;
@@ -1963,30 +1947,23 @@ class SendTextDialog extends Dialog {
     }
 
     async _onPaste(e) {
-        if (this.shareMode.active || Dialog.anyDialogShown()) return;
+        e.preventDefault()
 
-        e.preventDefault();
-        const files = [...e.clipboardData.files];
-        const text = e.clipboardData.getData("text/plain");
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        const selection = window.getSelection();
 
-        if (files.length > 0) {
-            try {
-                for (const file of files) {
-                    if (file.size > 1024 * 1024 * 1024) { // 1GB
-                        throw new Error(Localization.getTranslation("notifications.file-too-large"));
-                    }
-                }
-                Events.fire('activate-share-mode', { files });
-            } catch (error) {
-                Events.fire('notify-user', error.message);
-            }
-        } else if (text && text.trim()) {
-            if (ShareTextDialog.isApproveShareTextSet()) {
-                Events.fire('share-text-dialog', text.trim());
-            } else {
-                Events.fire('activate-share-mode', { text: text.trim() });
-            }
+        if (selection.rangeCount) {
+            selection.deleteFromDocument();
+            const textNode = document.createTextNode(text);
+            const range = document.createRange();
+            range.setStart(textNode, textNode.length);
+            range.collapse(true);
+            selection.getRangeAt(0).insertNode(textNode);
+            selection.removeAllRanges();
+            selection.addRange(range);
         }
+
+        this._onInput();
     }
 
     _textEmpty() {
@@ -2039,78 +2016,166 @@ class SendTextDialog extends Dialog {
 class ReceiveTextDialog extends Dialog {
     constructor() {
         super('receive-text-dialog');
-        this.$text = $('receive-text-dialog-text');
-        this.$copyBtn = $('receive-text-dialog-copy');
-        this.$downloadBtn = $('receive-text-dialog-download');
+        Events.on('text-received', e => this._onText(e.detail.text, e.detail.peerId));
+        this.$text = this.$el.querySelector('#text');
+        this.$copy = this.$el.querySelector('#copy');
+        this.$close = this.$el.querySelector('#close');
 
-        this._onCopy = this._onCopy.bind(this);
-        this._onDownload = this._onDownload.bind(this);
+        this.$copy.addEventListener('click', _ => this._onCopy());
+        this.$close.addEventListener('click', _ => this.hide());
 
-        this.$copyBtn.addEventListener('click', this._onCopy);
-        this.$downloadBtn.addEventListener('click', this._onDownload);
+        Events.on('keydown', e => this._onKeyDown(e));
 
-        Events.on('text', e => this._onText(e.detail.text, e.detail.peerId));
+        this.$displayName = this.$el.querySelector('.display-name');
+        this._receiveTextQueue = [];
+        this._hideTimeout = null;
     }
 
-    async _onText(text, peerId) {
-        if (!text) return;
+    selectionEmpty() {
+        return !window.getSelection().toString()
+    }
 
-        try {
-            // Limpa o texto de caracteres inválidos
-            text = text.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
-            
-            // Verifica se o texto está vazio após a limpeza
-            if (!text.trim()) {
-                window.pairdrop.toast.show('Texto recebido está vazio ou contém apenas caracteres inválidos');
-                return;
-            }
+    async _onKeyDown(e) {
+        if (!this.isShown()) return
 
-            // Verifica se o texto foi bloqueado pela moderação
-            await window.pairdrop.contentModeration.processText(text);
-
-            // Mostra o diálogo com o texto
-            this._showReceiveTextDialog(text, peerId);
-
-            // Notifica o usuário
-            window.pairdrop.toast.show('Texto recebido com sucesso');
-        } catch (error) {
-            window.pairdrop.toast.show('Erro ao processar texto: ' + error.message);
+        if (e.code === "KeyC" && (e.ctrlKey || e.metaKey) && this.selectionEmpty()) {
+            await this._onCopy()
+        }
+        else if (e.code === "Escape") {
+            this.hide();
         }
     }
 
-    async _onCopy() {
-        try {
-            const text = this.$text.textContent;
-            await navigator.clipboard.writeText(text);
-            window.pairdrop.toast.show('Texto copiado para a área de transferência');
-        } catch (error) {
-            window.pairdrop.toast.show('Erro ao copiar texto: ' + error.message);
-        }
+    _onText(text, peerId) {
+        window.blop.play();
+        this._receiveTextQueue.push({text: text, peerId: peerId});
+        this._setDocumentTitleMessages();
+        changeFavicon("images/favicon-96x96-notification.png");
+
+        if (this.isShown() || this._hideTimeout) return;
+
+        this._dequeueRequests();
     }
 
-    async _onDownload() {
-        try {
-            const text = this.$text.textContent;
-            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'texto-recebido.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            window.pairdrop.toast.show('Texto baixado com sucesso');
-        } catch (error) {
-            window.pairdrop.toast.show('Erro ao baixar texto: ' + error.message);
-        }
+    _dequeueRequests() {
+        this._setDocumentTitleMessages();
+        changeFavicon("images/favicon-96x96-notification.png");
+
+        let {text, peerId} = this._receiveTextQueue.shift();
+        this._showReceiveTextDialog(text, peerId);
     }
 
     _showReceiveTextDialog(text, peerId) {
-        this.$text.textContent = text;
-        this.$copyBtn.removeAttribute('hidden');
-        this.$downloadBtn.removeAttribute('hidden');
+        this.$displayName.innerText = $(peerId).ui._displayName();
+        this.$displayName.classList.remove("badge-room-ip", "badge-room-secret", "badge-room-public-id");
+        this.$displayName.classList.add($(peerId).ui._badgeClassName());
+
+        this.$text.innerText = text;
+
+        // Beautify text if text is not too long
+        if (this.$text.innerText.length <= 300000) {
+            // Hacky workaround to replace URLs with link nodes in all cases
+            // 1. Use text variable, find all valid URLs via regex and replace URLs with placeholder
+            // 2. Use html variable, find placeholders with regex and replace them with link nodes
+
+            let $textShadow = document.createElement('div');
+            $textShadow.innerText = text;
+
+            let linkNodes = {};
+            let searchHTML = $textShadow.innerHTML;
+            const p = "@";
+            const pRgx = new RegExp(`${p}\\d+`, 'g');
+            let occP = searchHTML.match(pRgx) || [];
+
+            let m = 0;
+
+            const chrs = `a-zA-Z0-9áàäčçđéèêŋńñóòôöšŧüžæøåëìíîïðùúýþćěłřśţźǎǐǒǔǥǧǩǯəʒâûœÿãõāēīōūăąĉċďĕėęĝğġģĥħĩĭįıĵķĸĺļľņňŏőŕŗŝşťũŭůűųŵŷżאבגדהוזחטיךכלםמןנסעףפץצקרשתװױײ`; // allowed chars in domain names
+            const rgxWhitespace = `(^|\\n|\\s)`;
+            const rgxScheme = `(https?:\\/\\/)`
+            const rgxSchemeMail = `(mailto:)`
+            const rgxUserinfo = `(?:(?:[${chrs}.%]*(?::[${chrs}.%]*)?)@)`;
+            const rgxHost = `(?:(?:[${chrs}](?:[${chrs}-]{0,61}[${chrs}])?\\.)+[${chrs}][${chrs}-]{0,61}[${chrs}])`;
+            const rgxPort = `(:\\d*)`;
+            const rgxPath = `(?:(?:\\/[${chrs}\\-\\._~!$&'\\(\\)\\*\\+,;=:@%]*)*)`;
+            const rgxQueryAndFragment = `(\\?[${chrs}\\-_~:\\/#\\[\\]@!$&'\\(\\)*+,;=%.]*)`;
+            const rgxUrl = `(${rgxScheme}?${rgxHost}${rgxPort}?${rgxPath}${rgxQueryAndFragment}?)`;
+            const rgxMail = `(${rgxSchemeMail}${rgxUserinfo}${rgxHost})`;
+            const rgxUrlAll = new RegExp(`${rgxWhitespace}${rgxUrl}`, 'g');
+            const rgxMailAll = new RegExp(`${rgxWhitespace}${rgxMail}`, 'g');
+
+            const replaceMatchWithPlaceholder = function(match, whitespace, url, scheme) {
+                let link = url;
+
+                // prefix www.example.com with http scheme to prevent it from being a relative link
+                if (!scheme && link.startsWith('www')) {
+                    link = "http://" + link
+                }
+
+                if (!isUrlValid(link)) {
+                    // link is not valid -> do not replace
+                    return match;
+                }
+
+                // link is valid -> replace with link node placeholder
+                // find linkNodePlaceholder that is not yet present in text node
+                m++;
+                while (occP.includes(`${p}${m}`)) {
+                    m++;
+                }
+                let linkNodePlaceholder = `${p}${m}`;
+
+                // add linkNodePlaceholder to text node and save a reference to linkNodes object
+                linkNodes[linkNodePlaceholder] = `<a href="${link}" target="_blank" rel="noreferrer">${url}</a>`;
+                return `${whitespace}${linkNodePlaceholder}`;
+            }
+
+            text = text.replace(rgxUrlAll, replaceMatchWithPlaceholder);
+            $textShadow.innerText = text.replace(rgxMailAll, replaceMatchWithPlaceholder);
+
+
+            this.$text.innerHTML = $textShadow.innerHTML.replace(pRgx,
+                (m) => {
+                    let urlNode = linkNodes[m];
+                    return urlNode ? urlNode : m;
+                });
+        }
+
+        this._evaluateOverflowing(this.$text);
         this.show();
+    }
+
+    _setDocumentTitleMessages() {
+        document.title = this._receiveTextQueue.length <= 1
+            ? `${ Localization.getTranslation("document-titles.message-received") } - PairDrop`
+            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this._receiveTextQueue.length + 1}) } - PairDrop`;
+    }
+
+    async _onCopy() {
+        const sanitizedText = this.$text.innerText.replace(/\u00A0/gm, ' ');
+        navigator.clipboard
+            .writeText(sanitizedText)
+            .then(_ => {
+                Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard"));
+                this.hide();
+            })
+            .catch(_ => {
+                Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard-error"));
+            });
+    }
+
+    hide() {
+        super.hide();
+
+        // If queue is empty -> clear text field | else -> open next message
+        this._hideTimeout = setTimeout(() => {
+            if (!this._receiveTextQueue.length) {
+                this.$text.innerHTML = "";
+            }
+            else {
+                this._dequeueRequests();
+            }
+            this._hideTimeout = null;
+        }, 500);
     }
 }
 
@@ -2675,163 +2740,3 @@ class NoSleepUI {
         }
     }
 }
-
-class QRScannerDialog extends Dialog {
-    constructor() {
-        super('qr-scanner-dialog');
-        this.qrScanner = null;
-        
-        this.initializeScanner();
-        Events.on('show-qr-scanner', () => this.show());
-    }
-
-    initializeScanner() {
-        this.qrScanner = new Html5Qrcode("qr-reader");
-    }
-
-    show() {
-        super.show();
-        this.startScanner();
-    }
-
-    hide() {
-        this.stopScanner();
-        super.hide();
-    }
-
-    async startScanner() {
-        try {
-            const devices = await Html5Qrcode.getCameras();
-            if (devices.length === 0) throw new Error("Nenhuma câmera encontrada");
-            
-            await this.qrScanner.start(
-                devices[0].id,
-                { fps: 10, qrbox: 250 },
-                qrCode => this.handleScannedCode(qrCode),
-                error => console.error("Erro de leitura:", error)
-            );
-        } catch (error) {
-            Events.fire('notify-user', "Erro ao acessar a câmera: " + error.message);
-            this.hide();
-        }
-    }
-
-    stopScanner() {
-        if (this.qrScanner && this.qrScanner.isScanning) {
-            this.qrScanner.stop();
-        }
-    }
-
-    handleScannedCode(scannedText) {
-        try {
-            const url = new URL(scannedText);
-            
-            // Verificar se é do domínio PairDrop
-            if (url.hostname === 'drop.erikraft.com') {
-                if (url.searchParams.has('room_id')) {
-                    const roomId = url.searchParams.get('room_id');
-                    Events.fire('join-public-room', { roomId: roomId.toLowerCase(), createIfInvalid: false });
-                } else if (url.searchParams.has('pair_key')) {
-                    const pairKey = url.searchParams.get('pair_key').replace(/\D/g,'');
-                    Events.fire('pair-device-join', pairKey);
-                } else {
-                    window.location.href = url.href;
-                }
-                this.hide();
-            } else {
-                window.open(scannedText, '_blank');
-            }
-        } catch {
-            Events.fire('notify-user', "QR Code inválido");
-        }
-    }
-}
-
-// Adicionar inicialização do QR Scanner
-window.addEventListener('load', () => {
-    const qrScannerDialog = new QRScannerDialog();
-    document.getElementById('openQRScanner').addEventListener('click', () => Events.fire('show-qr-scanner'));
-});
-
-class BluetoothTransfer {
-    constructor() {
-        if (this.checkBluetoothSupport()) {
-            document.getElementById('bluetoothBtn').style.display = 'flex';
-            this.initBluetoothListeners();
-        }
-    }
-
-    checkBluetoothSupport() {
-        return navigator.bluetooth && navigator.bluetooth.requestDevice;
-    }
-
-    initBluetoothListeners() {
-        document.getElementById('bluetoothBtn').addEventListener('click', () => this.startBluetoothTransfer());
-    }
-
-    async startBluetoothTransfer() {
-        try {
-            const device = await navigator.bluetooth.requestDevice({
-                acceptAllDevices: true,
-                optionalServices: ['generic_access', 'file_transfer']
-            });
-
-            Events.fire('notify-user', 'Conectando ao dispositivo...');
-            const server = await device.gatt.connect();
-            
-            // Selecionar arquivo
-            const file = await this.selectFile();
-            if (!file) return;
-
-            Events.fire('notify-user', 'Preparando arquivo para transferência...');
-            const fileBuffer = await this.readFileAsBuffer(file);
-            
-            // Tentar serviço de transferência de arquivo
-            try {
-                const service = await server.getPrimaryService('file_transfer');
-                const characteristic = await service.getCharacteristic('file_data');
-                
-                // Dividir arquivo em chunks se necessário
-                const chunkSize = 512;
-                for (let i = 0; i < fileBuffer.byteLength; i += chunkSize) {
-                    const chunk = fileBuffer.slice(i, i + chunkSize);
-                    await characteristic.writeValue(chunk);
-                    
-                    // Atualizar progresso
-                    const progress = Math.min(100, Math.round((i + chunkSize) / fileBuffer.byteLength * 100));
-                    Events.fire('notify-user', `Enviando arquivo: ${progress}%`);
-                }
-                
-                Events.fire('notify-user', 'Arquivo enviado com sucesso!');
-            } catch (error) {
-                Events.fire('notify-user', 'Erro ao transferir arquivo. Verifique se o dispositivo suporta transferência de arquivos.');
-            }
-            
-        } catch (error) {
-            Events.fire('notify-user', `Erro Bluetooth: ${error.message}`);
-        }
-    }
-
-    selectFile() {
-        return new Promise((resolve) => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.onchange = (e) => resolve(e.target.files[0]);
-            input.click();
-        });
-    }
-
-    readFileAsBuffer(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsArrayBuffer(file);
-        });
-    }
-}
-
-// Inicializar Bluetooth na carga da página
-window.addEventListener('load', () => {
-    new BluetoothTransfer();
-});
