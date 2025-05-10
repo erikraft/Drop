@@ -21,13 +21,13 @@ On Firefox, PWAs are installable via [this browser extensions](https://addons.mo
 
 **Android** \
 PWAs are installable only by using Google Chrome or Samsung Browser:
-1. Visit [pairdrop.net](https://pairdrop.net)
+1. Visit [drop.erikraft.com](https://drop.erikraft.com/)
 2. Click _Install_ on the installation pop-up or use the three-dot-menu and click on _Add to Home screen_
 3. Click _Add_ on the pop-up
 
 **iOS** \
 PWAs are installable only by using Safari:
-1. Visit [pairdrop.net](https://pairdrop.net)
+1. Visit [drop.erikraft.com](https://drop.erikraft.com/)
 2. Click on the share icon
 3. Click _Add to Home Screen_
 4. Click _Add_ in the top right corner
@@ -248,9 +248,9 @@ and/or *Thinking, Fast and Slow* to learn more.
 
 <br>
 
-* [Buy me a coffee](https://www.buymeacoffee.com/pairdrop) to pay for the domain and the server, and support libre software.
+* [Donation](https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL) to pay for the domain and the server, and support libre software.
 * [File bugs, give feedback, submit suggestions](https://github.com/schlagmichdoch/pairdrop/issues)
-* Share PairDrop on social media.
+* Share ErikrafT Drop on social media.
 * Fix bugs and create a pull request.
 * Do some security analysis and make suggestions.
 * Participate in [active discussions](https://github.com/schlagmichdoch/PairDrop/discussions)
