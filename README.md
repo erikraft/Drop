@@ -146,6 +146,8 @@ Connect to others in complex network situations, or over the Internet.
 <br />
 [License](https://github.com/erikraft/Drop/blob/master/LICENSE)
 <br />
+[Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
+<br />
 
 ---
 
