@@ -38,7 +38,7 @@ If applicable, add screenshots to help explain your problem.
 No | Yes
 Version: v1.11.3
 
-**Bug occurs on self-hosted PairDrop instance**
+**Bug occurs on self-hosted ErikrafT Drop instance**
 No | Yes
 
 **Self-Hosted Setup**
