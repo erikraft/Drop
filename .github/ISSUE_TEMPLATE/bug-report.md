@@ -44,7 +44,7 @@ No | Yes
 **Self-Hosted Setup**
 Proxy: Nginx | Apache2
 Deployment: docker run | docker compose | npm run start:prod
-Version: v1.11.2
+Version: v1.11.3
 
 **Additional context**
 Add any other context about the problem here.
