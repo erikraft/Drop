@@ -183,42 +183,37 @@ class PeersUI {
         if (this.shareMode.active || Dialog.anyDialogShown()) return;
 
         e.preventDefault();
+        e.stopPropagation();
 
         this._onDragEnd();
 
-        // Verifica se há peers conectados
         if (!$$('x-peer')) {
-            window.pairdrop.toast.show('Nenhum dispositivo conectado para compartilhar');
+            Events.fire('notify-user', Localization.getTranslation("notifications.no-peers-connected"));
             return;
         }
 
-        if ($$('x-peer') && $$('x-peer').contains(e.target)) return; // dropped on peer
+        if ($$('x-peer') && $$('x-peer').contains(e.target)) return;
 
-        let files = e.dataTransfer.files;
-        let text = e.dataTransfer.getData("text");
-
-        // convert FileList to Array
-        files = [...files];
+        const files = [...e.dataTransfer.files];
+        const text = e.dataTransfer.getData("text/plain");
 
         if (files.length > 0) {
             try {
-                // Verifica cada arquivo antes de ativar o modo de compartilhamento
                 for (const file of files) {
-                    await window.pairdrop.contentModeration.processFile(file);
+                    if (file.size > 1024 * 1024 * 1024) { // 1GB
+                        throw new Error(Localization.getTranslation("notifications.file-too-large"));
+                    }
                 }
-                
-                Events.fire('activate-share-mode', {
-                    files: files
-                });
+                Events.fire('activate-share-mode', { files });
             } catch (error) {
-                window.pairdrop.toast.show(error.message);
+                Events.fire('notify-user', error.message);
             }
-        }
-        else if (text) {
-            // Remove verificação de spam para texto
-            Events.fire('activate-share-mode', {
-                text: text
-            });
+        } else if (text && text.trim()) {
+            if (ShareTextDialog.isApproveShareTextSet()) {
+                Events.fire('share-text-dialog', text.trim());
+            } else {
+                Events.fire('activate-share-mode', { text: text.trim() });
+            }
         }
     }
 
@@ -239,31 +234,27 @@ class PeersUI {
     async _onPaste(e) {
         if (this.shareMode.active || Dialog.anyDialogShown()) return;
 
-        let files = e.clipboardData.files;
-        let text = e.clipboardData.getData("text");
-
-        // convert FileList to Array
-        files = [...files];
+        e.preventDefault();
+        const files = [...e.clipboardData.files];
+        const text = e.clipboardData.getData("text/plain");
 
         if (files.length > 0) {
             try {
-                // Verifica cada arquivo antes de ativar o modo de compartilhamento
                 for (const file of files) {
-                    await window.pairdrop.contentModeration.processFile(file);
+                    if (file.size > 1024 * 1024 * 1024) { // 1GB
+                        throw new Error(Localization.getTranslation("notifications.file-too-large"));
+                    }
                 }
-                
-                Events.fire('activate-share-mode', {
-                    files: files
-                });
+                Events.fire('activate-share-mode', { files });
             } catch (error) {
-                window.pairdrop.toast.show(error.message);
+                Events.fire('notify-user', error.message);
             }
-        }
-        else if (text) {
-            // Remove verificação de spam para texto
-            Events.fire('activate-share-mode', {
-                text: text
-            });
+        } else if (text && text.trim()) {
+            if (ShareTextDialog.isApproveShareTextSet()) {
+                Events.fire('share-text-dialog', text.trim());
+            } else {
+                Events.fire('activate-share-mode', { text: text.trim() });
+            }
         }
     }
 
@@ -278,50 +269,35 @@ class PeersUI {
 
         Events.on('share-mode-pointerdown', this._activateCallback);
 
-        const sharedText = Localization.getTranslation("instructions.activate-share-mode-shared-text");
-        const andOtherFilesPlural = Localization.getTranslation("instructions.activate-share-mode-and-other-files-plural", null, {count: files.length-1});
-        const andOtherFiles = Localization.getTranslation("instructions.activate-share-mode-and-other-file");
-
         let descriptorComplete, descriptorItem, descriptorOther, descriptorInstructions;
 
-        if (files.length > 2) {
-            // files shared
-            descriptorItem = files[0].name;
-            descriptorOther = andOtherFilesPlural;
-            descriptorComplete = `${descriptorItem} ${descriptorOther}`;
-        }
-        else if (files.length === 2) {
-            descriptorItem = files[0].name;
-            descriptorOther = andOtherFiles;
-            descriptorComplete = `${descriptorItem} ${descriptorOther}`;
-        } else if (files.length === 1) {
-            descriptorItem = files[0].name;
-            descriptorComplete = descriptorItem;
-        }
-        else {
-            // text shared
-            descriptorItem = text.replace(/\s/g," ");
-            descriptorComplete = sharedText;
-        }
-
         if (files.length > 0) {
+            if (files.length > 2) {
+                descriptorItem = files[0].name;
+                descriptorOther = Localization.getTranslation("instructions.activate-share-mode-and-other-files-plural", null, {count: files.length-1});
+                descriptorComplete = `${descriptorItem} ${descriptorOther}`;
+            } else if (files.length === 2) {
+                descriptorItem = files[0].name;
+                descriptorOther = Localization.getTranslation("instructions.activate-share-mode-and-other-file");
+                descriptorComplete = `${descriptorItem} ${descriptorOther}`;
+            } else {
+                descriptorItem = files[0].name;
+                descriptorComplete = descriptorItem;
+            }
+
             if (descriptorOther) {
                 this.$shareModeDescriptorOther.innerText = descriptorOther;
                 this.$shareModeDescriptorOther.removeAttribute('hidden');
             }
-            if (files.length > 1) {
-                descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-files-plural", null, {count: files.length});
-            }
-            else {
-                descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-file");
-            }
+
+            descriptorInstructions = files.length > 1 
+                ? Localization.getTranslation("instructions.activate-share-mode-shared-files-plural", null, {count: files.length})
+                : Localization.getTranslation("instructions.activate-share-mode-shared-file");
 
             if (files[0].type.split('/')[0] === 'image') {
                 try {
-                    let imageUrl = await getThumbnailAsDataUrl(files[0], 80, null, 0.9);
-
+                    const imageUrl = await getThumbnailAsDataUrl(files[0], 80, null, 0.9);
                     this.$shareModeImageThumb.style.backgroundImage = `url(${imageUrl})`;
-
                     this.$shareModeImageThumb.removeAttribute('hidden');
                 } catch (e) {
                     console.error(e);
@@ -330,13 +306,12 @@ class PeersUI {
             } else {
                 this.$shareModeFileThumb.removeAttribute('hidden');
             }
-        }
-        else {
+        } else {
             this.$shareModeTextThumb.removeAttribute('hidden');
-
             this.$shareModeEditBtn.addEventListener('click', this._editShareTextCallback);
             this.$shareModeEditBtn.removeAttribute('hidden');
-
+            descriptorItem = text.replace(/\s/g," ");
+            descriptorComplete = Localization.getTranslation("instructions.activate-share-mode-shared-text");
             descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-text");
         }
 
@@ -347,7 +322,6 @@ class PeersUI {
         this.$xInstructions.setAttribute('mobile', mobile);
 
         this.$sharePanel.removeAttribute('hidden');
-
         this.$shareModeDescriptor.removeAttribute('hidden');
         this.$shareModeDescriptorItem.innerText = descriptorItem;
 
@@ -384,47 +358,61 @@ class PeersUI {
         this.shareMode.text = "";
 
         Events.off('share-mode-pointerdown', this._activateCallback);
+        if (this._editShareTextCallback) {
+            this.$shareModeEditBtn.removeEventListener('click', this._editShareTextCallback);
+            this._editShareTextCallback = null;
+        }
 
-        const desktop = Localization.getTranslation("instructions.x-instructions_desktop");
-        const mobile = Localization.getTranslation("instructions.x-instructions_mobile");
+        this.$sharePanel.setAttribute('hidden', '');
+        this.$shareModeDescriptor.setAttribute('hidden', '');
+        this.$shareModeDescriptorItem.innerText = "";
+        this.$shareModeDescriptorOther.setAttribute('hidden', '');
+        this.$shareModeImageThumb.setAttribute('hidden', '');
+        this.$shareModeFileThumb.setAttribute('hidden', '');
+        this.$shareModeTextThumb.setAttribute('hidden', '');
+        this.$shareModeEditBtn.setAttribute('hidden', '');
 
-        this.$xInstructions.setAttribute('desktop', desktop);
-        this.$xInstructions.setAttribute('mobile', mobile);
-
-        this.$sharePanel.setAttribute('hidden', true);
-
-        this.$shareModeImageThumb.setAttribute('hidden', true);
-        this.$shareModeFileThumb.setAttribute('hidden', true);
-        this.$shareModeTextThumb.setAttribute('hidden', true);
-
-        this.$shareModeDescriptorItem.innerHTML = "";
-        this.$shareModeDescriptorItem.classList.remove('cursive');
-        this.$shareModeDescriptorOther.innerHTML = "";
-        this.$shareModeDescriptorOther.setAttribute('hidden', true);
-        this.$shareModeEditBtn.removeEventListener('click', this._editShareTextCallback);
-        this.$shareModeEditBtn.setAttribute('hidden', true);
-
-        console.log('Share mode deactivated.')
         Events.fire('share-mode-changed', { active: false });
     }
 
     _sendShareData(e) {
-        // send the shared file/text content
         const peerId = e.detail.peerId;
-        const files = this.shareMode.files;
-        const text = this.shareMode.text;
+        const peer = this.peers[peerId];
 
-        if (files.length > 0) {
-            Events.fire('files-selected', {
-                files: files,
-                to: peerId
-            });
+        if (!peer) return;
+
+        try {
+            if (this.shareMode.files.length > 0) {
+                Events.fire('files-selected', {
+                    files: this.shareMode.files,
+                    to: peerId
+                });
+            } else if (this.shareMode.text) {
+                const text = this.shareMode.text.trim();
+                if (text) {
+                    Events.fire('send-text', {
+                        text: text,
+                        to: peerId
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao enviar dados:', error);
+            Events.fire('notify-user', Localization.getTranslation("notifications.send-error"));
+        } finally {
+            this._deactivateShareMode();
         }
-        else if (text.length > 0) {
-            Events.fire('send-text', {
-                text: text,
-                to: peerId
-            });
+    }
+
+    _onShareModeChanged(active = false, descriptor = "") {
+        if (active) {
+            this.$sharePanel.removeAttribute('hidden');
+            this.$shareModeDescriptor.removeAttribute('hidden');
+            this.$shareModeDescriptor.textContent = descriptor;
+        } else {
+            this.$sharePanel.setAttribute('hidden', '');
+            this.$shareModeDescriptor.setAttribute('hidden', '');
+            this.$shareModeDescriptor.textContent = "";
         }
     }
 }
@@ -1975,23 +1963,30 @@ class SendTextDialog extends Dialog {
     }
 
     async _onPaste(e) {
-        e.preventDefault()
+        if (this.shareMode.active || Dialog.anyDialogShown()) return;
 
-        const text = (e.clipboardData || window.clipboardData).getData('text');
-        const selection = window.getSelection();
+        e.preventDefault();
+        const files = [...e.clipboardData.files];
+        const text = e.clipboardData.getData("text/plain");
 
-        if (selection.rangeCount) {
-            selection.deleteFromDocument();
-            const textNode = document.createTextNode(text);
-            const range = document.createRange();
-            range.setStart(textNode, textNode.length);
-            range.collapse(true);
-            selection.getRangeAt(0).insertNode(textNode);
-            selection.removeAllRanges();
-            selection.addRange(range);
+        if (files.length > 0) {
+            try {
+                for (const file of files) {
+                    if (file.size > 1024 * 1024 * 1024) { // 1GB
+                        throw new Error(Localization.getTranslation("notifications.file-too-large"));
+                    }
+                }
+                Events.fire('activate-share-mode', { files });
+            } catch (error) {
+                Events.fire('notify-user', error.message);
+            }
+        } else if (text && text.trim()) {
+            if (ShareTextDialog.isApproveShareTextSet()) {
+                Events.fire('share-text-dialog', text.trim());
+            } else {
+                Events.fire('activate-share-mode', { text: text.trim() });
+            }
         }
-
-        this._onInput();
     }
 
     _textEmpty() {
@@ -2044,203 +2039,78 @@ class SendTextDialog extends Dialog {
 class ReceiveTextDialog extends Dialog {
     constructor() {
         super('receive-text-dialog');
-        this.textQueue = [];
+        this.$text = $('receive-text-dialog-text');
+        this.$copyBtn = $('receive-text-dialog-copy');
+        this.$downloadBtn = $('receive-text-dialog-download');
+
+        this._onCopy = this._onCopy.bind(this);
+        this._onDownload = this._onDownload.bind(this);
+
+        this.$copyBtn.addEventListener('click', this._onCopy);
+        this.$downloadBtn.addEventListener('click', this._onDownload);
 
         Events.on('text', e => this._onText(e.detail.text, e.detail.peerId));
     }
 
     async _onText(text, peerId) {
+        if (!text) return;
+
         try {
-            // Remove verificação de spam para texto recebido
-            this.textQueue.push({
-                text: text,
-                peerId: peerId
-            });
-
-            if (!this.isShown()) {
-                await this._dequeueRequests();
+            // Limpa o texto de caracteres inválidos
+            text = text.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+            
+            // Verifica se o texto está vazio após a limpeza
+            if (!text.trim()) {
+                window.pairdrop.toast.show('Texto recebido está vazio ou contém apenas caracteres inválidos');
+                return;
             }
+
+            // Verifica se o texto foi bloqueado pela moderação
+            await window.pairdrop.contentModeration.processText(text);
+
+            // Mostra o diálogo com o texto
+            this._showReceiveTextDialog(text, peerId);
+
+            // Notifica o usuário
+            window.pairdrop.toast.show('Texto recebido com sucesso');
         } catch (error) {
-            window.pairdrop.toast.show(error.message);
+            window.pairdrop.toast.show('Erro ao processar texto: ' + error.message);
         }
     }
 
-    async showBlockedMessageDialog(text, contentType) {
-        return new Promise((resolve) => {
-            const dialog = document.createElement('div');
-            dialog.className = 'dialog blocked-message-dialog';
-            
-            const title = this.getBlockedMessageReason(contentType);
-            const icon = this.getWarningIcon(contentType);
-            
-            dialog.innerHTML = `
-                <div class="dialog-content">
-                    <div class="warning-icon">${icon}</div>
-                    <div class="warning-title">${title}</div>
-                    <div class="warning-message">
-                        <p>Esta mensagem foi bloqueada pelo sistema de moderação.</p>
-                        <p>Deseja visualizar mesmo assim?</p>
-                    </div>
-                    <div class="warning-buttons">
-                        <button class="warning-button show">Visualizar</button>
-                        <button class="warning-button close">Fechar</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(dialog);
-            
-            const showButton = dialog.querySelector('.warning-button.show');
-            const closeButton = dialog.querySelector('.warning-button.close');
-            
-            showButton.onclick = () => {
-                document.body.removeChild(dialog);
-                resolve(true);
-            };
-            
-            closeButton.onclick = () => {
-                document.body.removeChild(dialog);
-                resolve(false);
-            };
-            
-            // Fecha o diálogo com ESC
-            document.addEventListener('keydown', function escHandler(e) {
-                if (e.key === 'Escape') {
-                    document.body.removeChild(dialog);
-                    document.removeEventListener('keydown', escHandler);
-                    resolve(false);
-                }
-            });
-        });
-    }
-
-    getWarningIcon(contentType) {
-        switch(contentType) {
-            case 'explicit':
-                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ffdd00">
-                    <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11Z"/>
-                </svg>`;
-            case 'spam':
-                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff0000">
-                    <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Z"/>
-                </svg>`;
-            case 'offensive':
-                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff4444">
-                    <path d="M363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
-                </svg>`;
-            default:
-                return `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff8800">
-                    <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440Z"/>
-                </svg>`;
+    async _onCopy() {
+        try {
+            const text = this.$text.textContent;
+            await navigator.clipboard.writeText(text);
+            window.pairdrop.toast.show('Texto copiado para a área de transferência');
+        } catch (error) {
+            window.pairdrop.toast.show('Erro ao copiar texto: ' + error.message);
         }
     }
 
-    _dequeueRequests() {
-        this._setDocumentTitleMessages();
-        changeFavicon("images/favicon-96x96-notification.png");
-
-        let {text, peerId} = this.textQueue.shift();
-        this._showReceiveTextDialog(text, peerId);
+    async _onDownload() {
+        try {
+            const text = this.$text.textContent;
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'texto-recebido.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            window.pairdrop.toast.show('Texto baixado com sucesso');
+        } catch (error) {
+            window.pairdrop.toast.show('Erro ao baixar texto: ' + error.message);
+        }
     }
 
     _showReceiveTextDialog(text, peerId) {
-        this.$displayName.innerText = $(peerId).ui._displayName();
-        this.$displayName.classList.remove("badge-room-ip", "badge-room-secret", "badge-room-public-id");
-        this.$displayName.classList.add($(peerId).ui._badgeClassName());
-
-        this.$text.innerText = text;
-
-        // Beautify text if text is not too long
-        if (this.$text.innerText.length <= 300000) {
-            // Hacky workaround to replace URLs with link nodes in all cases
-            // 1. Use text variable, find all valid URLs via regex and replace URLs with placeholder
-            // 2. Use html variable, find placeholders with regex and replace them with link nodes
-
-            let $textShadow = document.createElement('div');
-            $textShadow.innerText = text;
-
-            let linkNodes = {};
-            let searchHTML = $textShadow.innerHTML;
-            const p = "@";
-            const pRgx = new RegExp(`${p}\\d+`, 'g');
-            let occP = searchHTML.match(pRgx) || [];
-
-            let m = 0;
-
-            const chrs = `a-zA-Z0-9áàäčçđéèêŋńñóòôöšŧüžæøåëìíîïðùúýþćěłřśţźǎǐǒǔǥǧǩǯəʒâûœÿãõāēīōūăąĉċďĕėęĝğġģĥħĩĭįıĵķĸĺļľņňŏőŕŗŝşťũŭůűųŵŷżאבגדהוזחטיךכלםמןנסעףפץצקרשתװױײ`; // allowed chars in domain names
-            const rgxWhitespace = `(^|\\n|\\s)`;
-            const rgxScheme = `(https?:\\/\\/)`
-            const rgxSchemeMail = `(mailto:)`
-            const rgxUserinfo = `(?:(?:[${chrs}.%]*(?::[${chrs}.%]*)?)@)`;
-            const rgxHost = `(?:(?:[${chrs}](?:[${chrs}-]{0,61}[${chrs}])?\\.)+[${chrs}][${chrs}-]{0,61}[${chrs}])`;
-            const rgxPort = `(:\\d*)`;
-            const rgxPath = `(?:(?:\\/[${chrs}\\-\\._~!$&'\\(\\)\\*\\+,;=:@%]*)*)`;
-            const rgxQueryAndFragment = `(\\?[${chrs}\\-_~:\\/#\\[\\]@!$&'\\(\\)*+,;=%.]*)`;
-            const rgxUrl = `(${rgxScheme}?${rgxHost}${rgxPort}?${rgxPath}${rgxQueryAndFragment}?)`;
-            const rgxMail = `(${rgxSchemeMail}${rgxUserinfo}${rgxHost})`;
-            const rgxUrlAll = new RegExp(`${rgxWhitespace}${rgxUrl}`, 'g');
-            const rgxMailAll = new RegExp(`${rgxWhitespace}${rgxMail}`, 'g');
-
-            const replaceMatchWithPlaceholder = function(match, whitespace, url, scheme) {
-                let link = url;
-
-                // prefix www.example.com with http scheme to prevent it from being a relative link
-                if (!scheme && link.startsWith('www')) {
-                    link = "http://" + link
-                }
-
-                if (!isUrlValid(link)) {
-                    // link is not valid -> do not replace
-                    return match;
-                }
-
-                // link is valid -> replace with link node placeholder
-                // find linkNodePlaceholder that is not yet present in text node
-                m++;
-                while (occP.includes(`${p}${m}`)) {
-                    m++;
-                }
-                let linkNodePlaceholder = `${p}${m}`;
-
-                // add linkNodePlaceholder to text node and save a reference to linkNodes object
-                linkNodes[linkNodePlaceholder] = `<a href="${link}" target="_blank" rel="noreferrer">${url}</a>`;
-                return `${whitespace}${linkNodePlaceholder}`;
-            }
-
-            text = text.replace(rgxUrlAll, replaceMatchWithPlaceholder);
-            $textShadow.innerText = text.replace(rgxMailAll, replaceMatchWithPlaceholder);
-
-
-            this.$text.innerHTML = $textShadow.innerHTML.replace(pRgx,
-                (m) => {
-                    let urlNode = linkNodes[m];
-                    return urlNode ? urlNode : m;
-                });
-        }
-
-        this._evaluateOverflowing(this.$text);
+        this.$text.textContent = text;
+        this.$copyBtn.removeAttribute('hidden');
+        this.$downloadBtn.removeAttribute('hidden');
         this.show();
-    }
-
-    _setDocumentTitleMessages() {
-        document.title = this.textQueue.length <= 1
-            ? `${ Localization.getTranslation("document-titles.message-received") } - PairDrop`
-            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this.textQueue.length + 1}) } - PairDrop`;
-    }
-
-    hide() {
-        super.hide();
-
-        // If queue is empty -> clear text field | else -> open next message
-        this._hideTimeout = setTimeout(() => {
-            if (!this.textQueue.length) {
-                this.$text.innerHTML = "";
-            }
-            else {
-                this._dequeueRequests();
-            }
-            this._hideTimeout = null;
-        }, 500);
     }
 }
 
