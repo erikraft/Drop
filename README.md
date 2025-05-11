@@ -25,9 +25,6 @@
 	  &nbsp;
 </p>
 
-
-https://img.shields.io/discord/1121464803941171270?label=discord&style=flat-square&color=5a66f6
-
 ---
 
 ## Features
