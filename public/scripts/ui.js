@@ -1017,7 +1017,7 @@ class ReceiveFileDialog extends ReceiveDialog {
                 hours = hours.length < 2 ? "0" + hours : hours;
                 let minutes = now.getMinutes().toString();
                 minutes = minutes.length < 2 ? "0" + minutes : minutes;
-                filenameDownload = `PairDrop_files_${year+month+date}_${hours+minutes}.zip`;
+                filenameDownload = `ErikrafTdrop_files_${year+month+date}_${hours+minutes}.zip`;
             } catch (e) {
                 console.error(e);
                 downloadZipped = false;
