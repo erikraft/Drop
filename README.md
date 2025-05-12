@@ -27,7 +27,7 @@
 
 ---
 
-## Features
+## ⚙️ Features
 File sharing on your local network that works on all platforms.
 
 - A multi-platform AirDrop-like solution that works.
@@ -50,17 +50,17 @@ Send a file from your phone to your laptop?
 
 ---
 
-## Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
+## 🎨🔀 Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
 <details><summary>View all differences</summary>
 
-### Paired Devices and Public Rooms — Internet Transfer
+### 📶 Paired Devices and Public Rooms — Internet Transfer
 * Transfer files over the Internet between paired devices or by entering temporary public rooms.
 * Connect to devices in complex network environments (public Wi-Fi, company network, iCloud Private Relay, VPN, etc.).
 * Connect to devices on your mobile hotspot.
 * Devices outside of your local network that are behind a NAT are auto-connected via the ErikrafT Drop TURN server.
 * Devices from the local network, in the same public room, or previously paired are shown.
 
-#### Persistent Device Pairing
+#### 🔐 Persistent Device Pairing
 
 Always connect to known devices
 
@@ -69,7 +69,7 @@ Always connect to known devices
 * Pairing is persistent. You find your devices even after reopening ErikrafT Drop.
 * You can edit and unpair devices easily.
 
-#### Temporary Public Rooms
+#### 🌎 Temporary Public Rooms
 
 Connect to others in complex network situations, or over the Internet.
 
@@ -78,20 +78,20 @@ Connect to others in complex network situations, or over the Internet.
 * All devices in the same public room see each other.
 * Public rooms are temporary. Closing ErikrafT Drop  leaves all rooms.
 
-### [Improved UI for Sending/Receiving Files](https://github.com/RobinLinus/snapdrop/issues/560)
+### ✨ [Improved UI for Sending/Receiving Files](https://github.com/RobinLinus/snapdrop/issues/560)
 * Files are transferred after a request is accepted. Files are auto-downloaded upon completing a transfer, if possible.
 * Multiple files are downloaded as a ZIP file
 * Download, share or save to gallery via the "Share" menu on Android and iOS.
 * Multiple files are transferred at once with an overall progress indicator.
 
-### Send Files or Text Directly From Share Menu, Context Menu or CLI
+### 💬 Send Files or Text Directly From Share Menu, Context Menu or CLI
 * [Send files directly from context menu on Ubuntu (using Nautilus)](docs/how-to.md#send-multiple-files-and-directories-directly-from-context-menu-on-ubuntu-using-nautilus)
 * [Send files directly from the context menu on Windows](docs/how-to.md#send-files-directly-from-context-menu-on-windows)
 * [Send directly from the "Share" menu on iOS](docs/how-to.md#send-directly-from-share-menu-on-ios)
 * [Send directly from the "Share" menu on Android](docs/how-to.md#send-directly-from-share-menu-on-android)
 * [Send directly via the command-line interface](docs/how-to.md#send-directly-via-command-line-interface)
 
-### Other Changes
+### 🌱 Other Changes
 * Change your display name to easily differentiate your devices.
 * [Paste files/text and choose the recipient afterwards ](https://github.com/RobinLinus/snapdrop/pull/534)
 * [Prevent devices from sleeping on file transfer](https://github.com/RobinLinus/snapdrop/pull/413)
@@ -110,7 +110,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ---
 
-## Built with the following awesome technologies:
+## 🔨 Built with the following awesome technologies:
 * Vanilla HTML5 / JS ES6 / CSS 3 frontend
 * [WebRTC](http://webrtc.org/) / WebSockets
 * [Node.js](https://nodejs.org/en/) backend
@@ -123,40 +123,42 @@ Connect to others in complex network situations, or over the Internet.
 * [Weblate](https://weblate.org/) web-based localization tool
 * [BrowserStack](https://www.browserstack.com/) This project is tested with BrowserStack
 
-[FAQ](docs/faq.md)
+[❓｜FAQ](docs/faq.md)
 
-[Host your own instance with Docker or Node.js](docs/host-your-own.md).
+[📡｜Host your own instance with Docker or Node.js](docs/host-your-own.md).
 
 ---
 
-## Getting ErikrafT Drop
+## 📥 Getting ErikrafT Drop
 
 <a href="https://drop.erikraft.com/" target="_blank"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a><a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank"><img src="https://i.imgur.com/fBWr0lN.png" width="217" alt="VS Code Marketplace"/><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img src="https://i.imgur.com/2MubKYT.png" width="217" alt="Firefox Browser ADD-ONS"/>
 
 ---
 
-## Links
+## 🌐 Links
 
-[biodrop.erikraft.com](https://biodrop.erikraft.com/)
+[🔗｜biodrop.erikraft.com](https://biodrop.erikraft.com/)
 <br />
-[drop.erikraft.com](https://drop.erikraft.com/)
+[🔗｜drop.erikraft.com](https://drop.erikraft.com/)
 <br />
-[drop.erikraft.com/#about](https://drop.erikraft.com/#about)
+[🔗｜drop.erikraft.com/#about](https://drop.erikraft.com/#about)
 <br />
-[drop.erikraft.com/ads.html](https://drop.erikraft.com/ads.html)
+[🔗｜drop.erikraft.com/ads.html](https://drop.erikraft.com/ads.html)
 <br />
-[Terms of Use](https://drop.erikraft.com/terms-of-use.html)
+[🛡️｜Privacy Policy](https://drop.erikraft.com/privacy-policy.html)
 <br />
-[Privacy Policy](https://drop.erikraft.com/privacy-policy.html)
+[🛡️｜Terms of Use](https://drop.erikraft.com/terms-of-use.html)
 <br />
-[License](https://github.com/erikraft/Drop/blob/master/LICENSE)
+[🛡️｜License](https://github.com/erikraft/Drop/blob/master/LICENSE)
 <br />
-[Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
+[🛡️｜Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
+<br />
+[📲｜APK Github](https://github.com/erikraft/App-Drop-Apk)
 <br />
 
 ---
 
-## Support
+## 📞 Support
 <a href="https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL" target="_blank">
 <img src="https://i.imgur.com/51lm3n2.png" width="217" alt="Donate"/>
 </a>
