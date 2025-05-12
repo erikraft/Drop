@@ -153,7 +153,7 @@ Connect to others in complex network situations, or over the Internet.
 <br />
 [🛡️｜Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
 <br />
-[📲｜APK Github](https://github.com/erikraft/App-Drop-Apk)
+[📲｜APK Github Repository](https://github.com/erikraft/App-Drop-Apk)
 <br />
 
 ---
