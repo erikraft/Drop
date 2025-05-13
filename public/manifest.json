@@ -1,144 +1,65 @@
 {
-  "name": "ErikrafT Drop",
-  "short_name": "ErikrafT Drop",
-  "icons": [
-    {
-      "src": "images/PWA_icons/android-chrome-x48.png",
-      "sizes": "48x48",
-      "type": "image/png"
-    },
-    {
-      "src": "images/PWA_icons/android-chrome-x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "images/PWA_icons/android-chrome-x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "images/PWA_icons/android-chrome-x128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "images/android-chrome-x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "images/android-chrome-x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "images/android-chrome-x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "images/android-chrome.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "background_color": "#efefef",
-  "start_url": "./",
-  "display": "standalone",
-  "theme_color": "#3367d6",
-  "screenshots": [
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_1.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_2.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_3.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_4.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_5.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_6.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_7.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_8.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_9.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_10.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_11.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_12.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_13.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    },
-    {
-      "src": "images/ErikrafTdrop_screenshot_mobile_14.png",
-      "sizes": "1170x2532",
-      "type": "image/png"
-    }
-  ],
-  "share_target": {
-    "action": "/",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
+    "name": "ErikrafT Drop",
+    "short_name": "ErikrafT Drop",
+    "icons": [
         {
-          "name": "allfiles",
-          "accept": ["*/*"]
+            "src": "images/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "images/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "images/android-chrome-192x192-maskable.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "images/android-chrome-512x512-maskable.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
-      ]
+    ],
+    "background_color": "#efefef",
+    "start_url": "./",
+    "display": "standalone",
+    "theme_color": "#3367d6",
+    "screenshots": [
+        {"src": "images/ErikrafTdrop_screenshot_mobile_1.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_2.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_3.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_4.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_5.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_6.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_7.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_8.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_9.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_10.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_11.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_12.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_13.png", "sizes": "1170x2532", "type": "image/png"},
+        {"src": "images/ErikrafTdrop_screenshot_mobile_14.png", "sizes": "1170x2532", "type": "image/png"}
+    ],
+    "share_target": {
+        "action": "/",
+        "method":"POST",
+        "enctype": "multipart/form-data",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url",
+            "files": [{
+                "name": "allfiles",
+                "accept": ["*/*"]
+            }]
+        }
+    },
+    "launch_handler": {
+        "client_mode": "focus-existing"
     }
-  },
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  }
 }
