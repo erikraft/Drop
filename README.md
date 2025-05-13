@@ -51,7 +51,7 @@ Send a file from your phone to your laptop?
 ---
 
 ## 🎨🔀 Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
-<details><summary>View all differences</summary>
+<details><summary>👀｜View all differences</summary>
 
 ### 📶 Paired Devices and Public Rooms — Internet Transfer
 * Transfer files over the Internet between paired devices or by entering temporary public rooms.
