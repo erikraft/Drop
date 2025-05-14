@@ -30,7 +30,7 @@ jobs:
           directory: 'pairdrop-cli'
           exclusions: '*.git* /*node_modules/* .editorconfig'
       - name: Upload Release
-        uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5 # v1.13.0
+        uses: ncipollo/release-action@440c8c1cb0ed28b9f43e4d1d670870f059653174 # v1.16.0
         with:
           artifacts: "pairdrop-cli/pairdrop-cli.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
