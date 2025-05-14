@@ -37,7 +37,7 @@
     "package": "vsce package"
   },
   "devDependencies": {
-    "@vscode/vsce": "^2.21.0"
+    "@vscode/vsce": "^3.0.0"
   },
   "repository": {
     "type": "git",
