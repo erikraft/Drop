@@ -1,6 +1,6 @@
 {
   "name": "ErikrafT Drop",
-  "version": "1.11.3",
+  "version": "1.11.4",
   "type": "module",
   "description": "A maneira mais fácil de transferir arquivos entre dispositivos",
   "main": "server/index.js",
