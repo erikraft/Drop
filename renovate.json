@@ -6,5 +6,6 @@
       "updateTypes": ["major"],
       "enabled": false
     }
-  ]
+  ],
+  "ignoreDeps": ["thedoctor0/zip-release"]
 }
