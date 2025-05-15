@@ -35,6 +35,10 @@ ErikrafT Drop Community on Discord
 
 ---
 
+🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer [HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ) 
+
+---
+
 ## ⚙️ Features
 File sharing on your local network that works on all platforms.
 
