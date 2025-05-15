@@ -35,7 +35,7 @@ ErikrafT Drop Community on Discord
 
 ---
 
-🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer [HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ) 
+🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ) 
 
 ---
 
