@@ -22,7 +22,7 @@
 
 <p align="center">
  	  Minecraft Community<br>
- 	  <a href="https://discord.erikraft.com/"><img src="https://img.shields.io/discord/1121464803941171270?label=discord&style=flat-square&color=5a66f6"></a>
+ 	  <a href="https://discord.gg/8ErMwRy4aj"><img src="https://img.shields.io/discord/1121464803941171270?label=discord&style=flat-square&color=5a66f6"></a>
 	  &nbsp;
 <br>
 <br>
