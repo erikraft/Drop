@@ -26,10 +26,10 @@
 	  &nbsp;
 <br>
 <br>
-<br>
+<!-- <br>
 ErikrafT Drop Community on Discord
 <br>
-<img src="https://img.shields.io/badge/Coming%20Soon-5a66f6?style=flat-square&logoColor=white">
+<img src="https://img.shields.io/badge/Coming%20Soon-5a66f6?style=flat-square&logoColor=white"> -->
 
 </p>
 
@@ -181,3 +181,8 @@ ErikrafT Drop is libre, and always will be. \
 If you find it useful and want to support free and open-source software, please consider donating using the button above. \
 I footed the bill for the domain and the server, and you can help create and maintain great software by supporting me. \
 Thank you very much for your contribution!
+
+---
+
+## Thank you everyone's support :) 
+[![Star History Chart](https://api.star-history.com/svg?repos=erikraft/Drop&type=Date)](https://star-history.com/#erikraft/Drop&Date)
