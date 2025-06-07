@@ -3,7 +3,7 @@
     <img src="https://biodrop.erikraft.com/images/Logo.png" alt="Logo" width="150" height="150">
   </a>
 
-  <h1>_Send it_, with <a href="https://drop.erikraft.com/">ErikrafT Drop</a></h1>
+  <h1><em>Send it</em>, with <a href="https://drop.erikraft.com/">ErikrafT Drop</a></h1>
 
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"><strong>in your web browser</strong></a>.<br>
