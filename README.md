@@ -1,23 +1,26 @@
 <div align="center">
   <a href="https://github.com/erikraft/Drop">
-    <img src="https://biodrop.erikraft.com/images/Logo.png" alt="Logo"  width="150" height="150">
+    <img src="https://biodrop.erikraft.com/images/Logo.png" alt="Logo" width="150" height="150">
   </a>
- 
-  # _Send it_, with [ErikrafT Drop](https://drop.erikraft.com/)
+
+  <h1>_Send it_, with <a href="https://drop.erikraft.com/">ErikrafT Drop</a></h1>
 
   <p>
-    Local file sharing <a href="https://drop.erikraft.com/"><strong>in your web browser</strong></a>. 
-    <br>
-    Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.
-    <br> 
+    Local file sharing <a href="https://drop.erikraft.com/"><strong>in your web browser</strong></a>.<br>
+    Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.<br>
     Fork of PairDrop.
-    <br>
-    <br>
-    <a href="https://github.com/erikraft/Drop/issues">Report a bug</a>
-    <br />
+  </p>
+
+  <p>
+    <img src="https://img.shields.io/coderabbit/prs/github/erikraft/Drop?utm_source=oss&utm_medium=github&utm_campaign=erikraft%2FDrop&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews" alt="CodeRabbit Pull Request Reviews">
+  </p>
+
+  <p>
+    <a href="https://github.com/erikraft/Drop/issues">Report a bug</a><br />
     <a href="https://github.com/erikraft/Drop/issues">Request feature</a>
   </p>
 </div>
+
 <br>
 
 <p align="center">
