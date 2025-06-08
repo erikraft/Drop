@@ -174,8 +174,8 @@ Connect to others in complex network situations, or over the Internet.
 ---
 
 ## 📞 Support
-<a href="https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL" target="_blank">
-<img src="https://i.imgur.com/51lm3n2.png" width="217" alt="Donate"/>
+<a href="https://ko-fi.com/erikraft" target="_blank">
+<img src="./public/images/Donate With Ko-fi.png" width="217" alt="Donate"/>
 </a>
 <br />
 <br />
