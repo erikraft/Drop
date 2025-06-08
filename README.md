@@ -187,5 +187,5 @@ Thank you very much for your contribution!
 
 ---
 
-## Thank you everyone's support :) 
+## 🙏 Thank you everyone's support :) 
 [![Star History Chart](https://api.star-history.com/svg?repos=erikraft/Drop&type=Date)](https://star-history.com/#erikraft/Drop&Date)
