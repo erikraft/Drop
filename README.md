@@ -173,7 +173,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ---
 
-## 📞 Support
+## 💰 Support
 <a href="https://ko-fi.com/erikraft" target="_blank">
 <img src="./public/images/Donate With Ko-fi.png" width="150" alt="Donate"/>
 </a>
