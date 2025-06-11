@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import parser from "ua-parser-js";
-import {animals, colors, uniqueNamesGenerator} from "unique-names-generator";
-import {cyrb53, hasher} from "./helper.js";
+import { UAParser } from "ua-parser-js";
+import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { cyrb53, hasher } from "./helper.js";
 
 export default class Peer {
 
@@ -142,7 +142,7 @@ export default class Peer {
     }
 
     _setName(req) {
-        let ua = parser(req.headers['user-agent']);
+        const ua = new UAParser(req.headers['user-agent']).getResult();
 
         let deviceName = '';
 
