@@ -34,17 +34,17 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**Bug occurs on official PairDrop instance https://drop.erikraft.com/**
+**Bug occurs on official ErikrafT Drop instance https://drop.erikraft.com/**
 No | Yes
-Version: v1.11.2
+Version: v1.11.4
 
-**Bug occurs on self-hosted PairDrop instance**
+**Bug occurs on self-hosted ErikrafT Drop instance**
 No | Yes
 
 **Self-Hosted Setup**
 Proxy: Nginx | Apache2
 Deployment: docker run | docker compose | npm run start:prod
-Version: v1.11.2
+Version: v1.11.3
 
 **Additional context**
 Add any other context about the problem here.

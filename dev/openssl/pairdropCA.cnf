@@ -9,9 +9,9 @@ string_mask        = utf8only
 prompt             = no
 
 [ subject ]
-organizationName = PairDrop
+organizationName = ErikrafT Drop
 OU               = CA
-commonName       = pairdrop-CA
+commonName       = erikraftdrop-CA
 
 [ x509_ext ]
 subjectKeyIdentifier      = hash

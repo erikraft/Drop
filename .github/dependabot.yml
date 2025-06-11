@@ -6,6 +6,12 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/"           # Location of package manifests
     schedule:
       interval: "weekly"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    ignore:
+      - dependency-name: "*"             # Ignora todas as dependências...
+        update-types: ["version-update:semver-major"] # ...apenas para updates major
