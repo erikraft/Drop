@@ -199,18 +199,67 @@ class FooterUI {
         this.$footer = $$('footer');
         this.$displayName = $('display-name');
         this.$discoveryWrapper = $$('footer .discovery-wrapper');
+        this.$profilePhotoInput = $('profile-photo-upload');
+        this.$deviceAvatarsContainer = $('device-avatars-container');
 
         this.$displayName.addEventListener('keydown', e => this._onKeyDownDisplayName(e));
         this.$displayName.addEventListener('focus', e => this._onFocusDisplayName(e));
         this.$displayName.addEventListener('blur', e => this._onBlurDisplayName(e));
 
+        if (this.$profilePhotoInput) {
+            this.$profilePhotoInput.addEventListener('change', e => this._onProfilePhotoChange(e));
+        }
+
         Events.on('display-name', e => this._onDisplayName(e.detail.displayName));
         Events.on('self-display-name-changed', e => this._insertDisplayName(e.detail));
         Events.on('evaluate-footer-badges', _ => this._evaluateFooterBadges());
+
+        // Listen for profile photo updates from other devices
+        Events.on('profile-photo-updated', e => this._onProfilePhotoUpdated(e.detail));
     }
 
     async showLoading() {
         this.$displayName.setAttribute('placeholder', this.$displayName.dataset.placeholder);
+    }
+
+    _onProfilePhotoChange(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            const base64Image = reader.result;
+            // Emit the base64 image via socket or event
+            Events.fire('broadcast-send', { type: 'profile-photo-updated', detail: base64Image });
+            // Update local UI
+            this._updateLocalProfilePhoto(base64Image);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    _updateLocalProfilePhoto(base64Image) {
+        if (!this.$deviceAvatarsContainer) return;
+
+        let localAvatar = this.$deviceAvatarsContainer.querySelector('.device-avatar.local');
+        if (!localAvatar) {
+            localAvatar = document.createElement('div');
+            localAvatar.classList.add('device-avatar', 'local');
+            this.$deviceAvatarsContainer.appendChild(localAvatar);
+        }
+        localAvatar.style.backgroundImage = `url(${base64Image})`;
+    }
+
+    _onProfilePhotoUpdated(base64Image) {
+        if (!this.$deviceAvatarsContainer) return;
+
+        // For simplicity, update or add a generic avatar for other devices
+        let otherAvatar = this.$deviceAvatarsContainer.querySelector('.device-avatar.remote');
+        if (!otherAvatar) {
+            otherAvatar = document.createElement('div');
+            otherAvatar.classList.add('device-avatar', 'remote');
+            this.$deviceAvatarsContainer.appendChild(otherAvatar);
+        }
+        otherAvatar.style.backgroundImage = `url(${base64Image})`;
     }
 
     async fadeIn() {
