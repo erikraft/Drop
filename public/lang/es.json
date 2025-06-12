@@ -28,7 +28,8 @@
         "routed": "enrutado a través del servidor",
         "discovery": "Puedes ser descubierto:",
         "on-this-network_title": "Puedes ser descubierto por todos en esta red.",
-        "known-as": "Eres conocido como:"
+        "known-as": "Eres conocido como:",
+        "add-profile-photo": "Agregar foto de perfil"
     },
     "notifications": {
         "request-title": "{{name}} quiere transferir {{count}} {{descriptor}}",

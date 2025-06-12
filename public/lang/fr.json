@@ -47,7 +47,8 @@
         "traffic": "Le trafic est",
         "routed": "routé via le serveur",
         "webrtc": "si WebRTC n'est pas disponible.",
-        "display-name_placeholder": "Chargement…"
+        "display-name_placeholder": "Chargement…",
+        "add-profile-photo": "Ajouter une photo de profil"
     },
     "dialogs": {
         "pair-devices-title": "Associer les appareils de manière permanente",
