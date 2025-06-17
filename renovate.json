@@ -1,11 +1,17 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": [
+    "config:recommended"
+  ],
   "packageRules": [
     {
-      "updateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     }
   ],
-  "ignoreDeps": ["thedoctor0/zip-release"]
+  "ignoreDeps": [
+    "thedoctor0/zip-release"
+  ]
 }
