@@ -146,7 +146,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ## ⏬ Getting ErikrafT Drop
 
-<a href="https://drop.erikraft.com/" target="_blank"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a><a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank"><img src="https://i.imgur.com/fBWr0lN.png" width="217" alt="VS Code Marketplace"/><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img src="https://i.imgur.com/2MubKYT.png" width="217" alt="Firefox Browser ADD-ONS"/>
+<a href="https://drop.erikraft.com/" target="_blank"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a><a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank"><img src="https://i.imgur.com/fBWr0lN.png" width="217" alt="VS Code Marketplace"/><a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank"><img src="https://i.imgur.com/1OJsWQz.png" width="217" alt="Get it on Open VSX Registry"/><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img src="https://i.imgur.com/2MubKYT.png" width="217" alt="Firefox Browser ADD-ONS"/>
 
 ---
 
