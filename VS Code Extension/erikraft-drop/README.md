@@ -87,7 +87,7 @@ MIT © [ErikrafT](https://github.com/erikraft)
 
 If you find this project useful, consider donating:
 
-[![Donate via PayPal](https://i.imgur.com/51lm3n2.png)](https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL)
+[![Support me on Kofi](https://i.imgur.com/7cS1T3A.png)](https://ko-fi.com/erikraft)
 
 ---
 
