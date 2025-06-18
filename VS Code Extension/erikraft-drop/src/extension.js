@@ -63,8 +63,17 @@ class ErikrafTDropViewProvider {
           height="844" 
           style="border: none; border-radius: 16px;"
           allow="clipboard-write; camera; microphone; autoplay;"
-          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"
+          referrerpolicy="strict-origin-when-cross-origin"
         ></iframe>
+        <script>
+          // Handle external links from iframe
+          window.addEventListener('message', (event) => {
+            if (event.data.type === 'external-link') {
+              parent.postMessage({ type: 'open-link', url: event.data.url }, '*');
+            }
+          });
+        </script>
       </body>
       </html>
     `;
