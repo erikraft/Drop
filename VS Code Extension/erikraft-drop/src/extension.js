@@ -70,7 +70,7 @@ class ErikrafTDropViewProvider {
           // Handle external links from iframe
           window.addEventListener('message', (event) => {
             if (event.data.type === 'external-link') {
-              parent.postMessage({ type: 'open-link', url: event.data.url }, '*');
+              parent.postMessage({ type: 'external-link', url: event.data.url }, '*');
             }
           });
         </script>
