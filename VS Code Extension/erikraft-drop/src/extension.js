@@ -24,7 +24,26 @@ class ErikrafTDropViewProvider {
     };
 
     webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+    // Listen for messages from the webview
+    handleWebviewMessages(webviewView.webview);
   }
+}
+
+// Função para lidar com mensagens do webview
+function handleWebviewMessages(webview) {
+  webview.onDidReceiveMessage(async (message) => {
+    if (message && message.type && message.url) {
+      if (message.type === 'external-link' || message.type === 'download') {
+        try {
+          await vscode.env.openExternal(vscode.Uri.parse(message.url));
+        } catch (err) {
+          vscode.window.showErrorMessage('Não foi possível abrir o link externo: ' + message.url);
+        }
+      }
+    }
+  });
+}
+
 
   getWebviewContent(webview) {
     return `
@@ -67,10 +86,27 @@ class ErikrafTDropViewProvider {
           referrerpolicy="strict-origin-when-cross-origin"
         ></iframe>
         <script>
-          // Handle external links from iframe
+          const vscode = acquireVsCodeApi();
+
+          // Listen for messages coming from any embedded iframe (cross-origin)
           window.addEventListener('message', (event) => {
-            if (event.data.type === 'external-link') {
-              parent.postMessage({ type: 'external-link', url: event.data.url }, '*');
+            if (event.data && (event.data.type === 'external-link' || event.data.type === 'download')) {
+              vscode.postMessage(event.data);
+            }
+          });
+
+          // Intercept clicks inside the webview itself
+          document.addEventListener('click', (event) => {
+            const link = event.target.closest('a');
+            if (link && link.href.startsWith('http')) {
+              event.preventDefault();
+              vscode.postMessage({ type: 'external-link', url: link.href });
+              return;
+            }
+            const downloadLink = event.target.closest('a[download]');
+            if (downloadLink) {
+              event.preventDefault();
+              vscode.postMessage({ type: 'download', url: downloadLink.href });
             }
           });
         </script>
