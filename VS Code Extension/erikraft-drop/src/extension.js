@@ -14,7 +14,9 @@ class ErikrafTDropViewProvider {
     this.extensionPath = extensionPath;
   }
 
-  resolveWebviewView(webviewView) {
+  resolveWebviewView(webviewView, context, token) {
+    this.webviewView = webviewView;
+    
     webviewView.webview.options = {
       enableScripts: true,
       localResourceRoots: [
@@ -23,27 +25,19 @@ class ErikrafTDropViewProvider {
       ]
     };
 
-    webviewView.webview.html = this.getWebviewContent(webviewView.webview);
-    // Listen for messages from the webview
-    handleWebviewMessages(webviewView.webview);
-  }
-}
-
-// Função para lidar com mensagens do webview
-function handleWebviewMessages(webview) {
-  webview.onDidReceiveMessage(async (message) => {
-    if (message && message.type && message.url) {
-      if (message.type === 'external-link' || message.type === 'download') {
-        try {
-          await vscode.env.openExternal(vscode.Uri.parse(message.url));
-        } catch (err) {
-          vscode.window.showErrorMessage('Não foi possível abrir o link externo: ' + message.url);
+    // Adicionar listener para mensagens do webview
+    webviewView.webview.onDidReceiveMessage(
+      message => {
+        if (message.command === 'openExternal') {
+          vscode.env.openExternal(vscode.Uri.parse(message.url));
         }
-      }
-    }
-  });
-}
+      },
+      null,
+      context.subscriptions
+    );
 
+    webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+  }
 
   getWebviewContent(webview) {
     return `
@@ -51,7 +45,7 @@ function handleWebviewMessages(webview) {
       <html lang="pt-br">
       <head>
         <meta charset="UTF-8" />
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; style-src ${webview.cspSource}; script-src ${webview.cspSource}; frame-src https://drop.erikraft.com;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; style-src ${webview.cspSource} 'unsafe-inline'; script-src ${webview.cspSource} 'unsafe-inline'; frame-src https://drop.erikraft.com/">
         <title>ErikrafT Drop</title>
         <style>
           html, body {
@@ -82,33 +76,79 @@ function handleWebviewMessages(webview) {
           height="844" 
           style="border: none; border-radius: 16px;"
           allow="clipboard-write; camera; microphone; autoplay;"
-          sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"
-          referrerpolicy="strict-origin-when-cross-origin"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-popups-to-escape-sandbox"
         ></iframe>
         <script>
-          const vscode = acquireVsCodeApi();
+          (function() {
+            const vscode = acquireVsCodeApi();
+            const iframe = document.querySelector('iframe');
 
-          // Listen for messages coming from any embedded iframe (cross-origin)
-          window.addEventListener('message', (event) => {
-            if (event.data && (event.data.type === 'external-link' || event.data.type === 'download')) {
-              vscode.postMessage(event.data);
-            }
-          });
+            function setupLinkHandler() {
+              try {
+                const iframeWindow = iframe.contentWindow;
+                const iframeDocument = iframeWindow.document;
 
-          // Intercept clicks inside the webview itself
-          document.addEventListener('click', (event) => {
-            const link = event.target.closest('a');
-            if (link && link.href.startsWith('http')) {
-              event.preventDefault();
-              vscode.postMessage({ type: 'external-link', url: link.href });
-              return;
+                // Função para abrir link externo
+                function openExternalLink(url) {
+                  vscode.postMessage({
+                    command: 'openExternal',
+                    url: url
+                  });
+                }
+
+                // Sobrescrever o comportamento padrão de links
+                iframeWindow.addEventListener('click', function(e) {
+                  const link = e.target.closest('a');
+                  if (link && link.href && link.href.startsWith('http')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openExternalLink(link.href);
+                  }
+                }, true);
+
+                // Sobrescrever window.open
+                iframeWindow.open = function(url) {
+                  if (url && url.startsWith('http')) {
+                    openExternalLink(url);
+                    return null;
+                  }
+                  return window.open.apply(this, arguments);
+                };
+
+                // Sobrescrever location.href
+                Object.defineProperty(iframeWindow.location, 'href', {
+                  set: function(url) {
+                    if (url && url.startsWith('http')) {
+                      openExternalLink(url);
+                    } else {
+                      iframeWindow.location = url;
+                    }
+                  }
+                });
+
+              } catch (error) {
+                console.error('Erro ao configurar handler de links:', error);
+              }
             }
-            const downloadLink = event.target.closest('a[download]');
-            if (downloadLink) {
-              event.preventDefault();
-              vscode.postMessage({ type: 'download', url: downloadLink.href });
-            }
-          });
+
+            // Tentar configurar o handler quando o iframe carregar
+            iframe.addEventListener('load', function() {
+              setupLinkHandler();
+              // Tentar novamente após um delay para garantir que o conteúdo esteja carregado
+              setTimeout(setupLinkHandler, 1000);
+            });
+
+            // Backup: tentar configurar periodicamente
+            let attempts = 0;
+            const interval = setInterval(function() {
+              if (attempts < 5) {
+                setupLinkHandler();
+                attempts++;
+              } else {
+                clearInterval(interval);
+              }
+            }, 1000);
+          })();
         </script>
       </body>
       </html>
