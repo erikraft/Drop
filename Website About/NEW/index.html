@@ -625,9 +625,6 @@
                <p class="mb-6">&copy; 2025 ErikrafT Drop. Todos os direitos reservados.</p>
                <div class="flex flex-col items-center space-y-4">
                   <div class="flex flex-wrap justify-center gap-4">
-                     <a href="https://www.buymeacoffee.com/erikraft" class="inline-block">
-                        <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a pizza&emoji=🍕&slug=erikraft&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" alt="Buy Me A Pizza" style="height: 45px; width: auto;" />
-                     </a>
                      <a href="https://ko-fi.com/erikraft" target="_blank" rel="noopener noreferrer" class="inline-block">
                         <img 
                            src="https://raw.githubusercontent.com/erikraft/Bluetooth-Center/refs/heads/main/brand-assets/support_me_on_kofi_badge_blue.png" 
@@ -640,8 +637,45 @@
             </div>
          </div>
       </footer>
-      <!-- Buy Me a Coffee Widget -->
-      <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="erikraft" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+      <!-- Botão Flutuante Ko-fi -->
+      <a href="https://ko-fi.com/erikraft" target="_blank" id="kofi-float-btn" title="Apoie no Ko-fi">
+        <img src="https://storage.ko-fi.com/cdn/logomarkLogo.png" alt="Ko-fi" />
+      </a>
+
+      <style>
+        @keyframes shake {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          20% { transform: translate(-1px, 1px) rotate(-2deg); }
+          40% { transform: translate(-2px, -1px) rotate(2deg); }
+          60% { transform: translate(2px, 1px) rotate(0deg); }
+          80% { transform: translate(1px, -1px) rotate(1deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        #kofi-float-btn {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 9999;
+          width: 64px;
+          height: 64px;
+          animation: shake 1.5s infinite;
+          transition: transform 0.2s ease;
+        }
+
+        #kofi-float-btn:hover {
+          transform: scale(1.1);
+          animation: none; /* para parar o shake ao passar o mouse */
+        }
+
+
+        #kofi-float-btn img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: contain;
+        }
+      </style>
       <script>
          // Mobile menu toggle functionality
          const mobileMenuButton = document.getElementById('mobile-menu-button');
