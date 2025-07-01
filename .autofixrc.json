@@ -1,0 +1,7 @@
+{
+  "models": ["starcoder2", "deepseek-coder"],
+  "include": ["src", "app", "lib"],
+  "exclude": ["node_modules", ".git", "dist", "build"],
+  "write": true,
+  "explain": true
+}

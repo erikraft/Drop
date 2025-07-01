@@ -1,0 +1,42 @@
+name: Autofix Bot
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # todo dia às 6h UTC
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  autofix:
+    name: Run autofix and create PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install autofix CLI
+        run: npm install -g autofix-dev/autofix
+
+      - name: Run autofix
+        run: autofix --write
+
+      - name: Commit and create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "✨ autofix: correções automáticas de código"
+          branch: autofix/patch-${{ github.run_id }}
+          title: "✨ Autofix: correções automáticas de código"
+          body: |
+            Este Pull Request foi criado automaticamente pelo [autofix](https://github.com/autofix-dev/autofix).
+            Corrige problemas detectados nas pastas configuradas.
+
+            _Merge apenas se os testes estiverem passando._
