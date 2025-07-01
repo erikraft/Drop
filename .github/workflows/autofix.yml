@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -29,7 +29,22 @@ jobs:
       - name: Run autofix
         run: autofix --write
 
-      - name: Commit and create PR
+      - name: Configure Git
+        run: |
+          git config --global user.name "autofix-bot"
+          git config --global user.email "autofix@users.noreply.github.com"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "no_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "no_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create PR with changes
+        if: steps.changes.outputs.no_changes == 'false'
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "✨ autofix: correções automáticas de código"
