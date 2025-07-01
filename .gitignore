@@ -1,7 +1,36 @@
-node_modules
+# Node modules (dependências)
+node_modules/
+
+# MacOS system files
 .DS_Store
-/dev/certs
+
+# Certificados e arquivos de configuração sensíveis
+/dev/certs/
+/ssl/
+/turnserver.conf
+/rtc_config.json
+
+# Diretórios e arquivos gerados
 qrcode-svg/
-turnserver.conf
-rtc_config.json
-ssl/
+
+# Logs
+*.log
+
+# Editor e IDE
+.vscode/
+/.idea/
+/*.suo
+/*.ntvs*
+/*.njsproj
+/*.sln
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Outros arquivos que podem ser gerados
+dist/
+build/
+
+# Variáveis de ambiente (tokens, senhas, etc)
+.env
