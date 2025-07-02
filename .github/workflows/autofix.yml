@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # necessário para PRs
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -43,12 +43,13 @@ jobs:
             echo "no_changes=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Create PR with changes
+      - name: Create Pull Request
         if: steps.changes.outputs.no_changes == 'false'
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.PERSONAL_TOKEN }}
           commit-message: "✨ autofix: correções automáticas de código"
-          branch: autofix/patch-${{ github.run_id }}
+          branch: "autofix/patch-${{ github.run_id }}"
           title: "✨ Autofix: correções automáticas de código"
           body: |
             Este Pull Request foi criado automaticamente pelo [autofix](https://github.com/autofix-dev/autofix).
