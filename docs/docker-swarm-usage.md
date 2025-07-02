@@ -41,7 +41,7 @@ If this command returns a status code other than `0`, the health check fails.
 
 Overall, this \"HEALTHCHECK\" instruction is defining a health check process \
 that runs every 30 seconds, and waits up to 10 seconds for a response, \
-begins 5 seconds after the container is started, and retries up to 3 times. \ 
+begins 5 seconds after the container is started, and retries up to 3 times. \
 The health check attempts to connect to http://localhost:3000/ \
 and will considers the container unhealthy if unable to connect.
 

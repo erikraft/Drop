@@ -24,7 +24,7 @@ The following versions of **ErikrafT Drop** are currently receiving security upd
 
 If you discover a security vulnerability in **ErikrafT Drop**, please follow the instructions below to report it responsibly:
 
-* **Contact 1:** Send an email to: [erikraft43@gmail.com](mailto:erikraft43@gmail.com)  
+* **Contact 1:** Send an email to: [erikraft43@gmail.com](mailto:erikraft43@gmail.com)
 * **Contact 2:** Send a message in `#ticket` via: [discord.erikraft.com](https://discord.erikraft.com/)
 
 ### Information to include:
@@ -33,7 +33,7 @@ If you discover a security vulnerability in **ErikrafT Drop**, please follow the
 - The potential impact of the vulnerability.
 - Any proof-of-concept code (if available).
 
-**Response time:** You will receive an initial response within **5 business days**.  
+**Response time:** You will receive an initial response within **5 business days**.
 **Responsible disclosure:** We kindly ask that you do not publicly disclose any details of the vulnerability until a fix has been released.
 
 Thank you for helping keep **ErikrafT Drop** secure and reliable!

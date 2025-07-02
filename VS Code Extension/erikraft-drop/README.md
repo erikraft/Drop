@@ -2,7 +2,7 @@
   <a href="https://drop.erikraft.com">
     <img src="https://i.imgur.com/bLNnAlU.png" width="120" alt="ErikrafT Drop Logo">
   </a>
-</div>	
+</div>
 
 # ErikrafT Drop for VS Code
 
@@ -17,11 +17,11 @@ Seamless file sharing inside Visual Studio Code — powered by [ErikrafT Drop](h
 
 ## 🚀 Features
 
-✅ **One-click file sharing** between your devices without leaving VS Code  
-✅ **Peer-to-peer** or **internet-based** transfer  
-✅ Drag and drop files or folders  
-✅ Uses [WebRTC](https://webrtc.org/) and WebSockets under the hood  
-✅ Works on all platforms: Windows, macOS, Linux  
+✅ **One-click file sharing** between your devices without leaving VS Code
+✅ **Peer-to-peer** or **internet-based** transfer
+✅ Drag and drop files or folders
+✅ Uses [WebRTC](https://webrtc.org/) and WebSockets under the hood
+✅ Works on all platforms: Windows, macOS, Linux
 
 ---
 
@@ -43,8 +43,8 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in VS Code (`Ctrl+S
    - **Local network (P2P)**
    - **Temporary Public Room**
    - **Paired Devices**
-4. Drag your files into the drop zone  
-5. Scan the QR code or select a nearby device  
+4. Drag your files into the drop zone
+5. Scan the QR code or select a nearby device
 6. Done!
 
 > 💡 Perfect for sending screenshots, code snippets, config files, or images from your dev machine to your phone, tablet, or laptop — works seamlessly in both Visual Studio Code and Cursor editor.
@@ -72,7 +72,7 @@ This extension embeds the [ErikrafT Drop](https://github.com/erikraft/Drop) web 
 
 ## 🤝 Contributing
 
-Found a bug or want a feature?  
+Found a bug or want a feature?
 [Create an issue](https://github.com/erikraft/Drop/issues) or [submit a PR](https://github.com/erikraft/Drop/pulls) – your help is welcome!
 
 ---
