@@ -190,22 +190,22 @@ p {
     main {
         padding: 12px 8px;
     }
-    
+
     .img-container {
         max-height: 200px;
         margin-bottom: 12px;
     }
-    
+
     h1 {
         font-size: 3rem;
         margin-bottom: 4px;
     }
-    
+
     h2 {
         font-size: 1.2rem;
         margin-bottom: 6px;
     }
-    
+
     p, strong {
         margin-bottom: 12px;
     }

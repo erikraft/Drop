@@ -38,7 +38,7 @@ ErikrafT Drop Community on Discord
 
 ---
 
-🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ) 
+🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
 
 ---
 
@@ -49,9 +49,9 @@ File sharing on your local network that works on all platforms.
   - Send images, documents or text via peer-to-peer connection to devices on the same local network.
 - Internet transfers
   - Join temporary public rooms to transfer files easily over the Internet.
-- Web-app 
+- Web-app
   - Works on all devices with a modern web-browser.
- 
+
 Send a file from your phone to your laptop?
 <br>Share photos in original quality with friends using Android and iOS?
 <br>Share private files peer-to-peer between Linux systems?
@@ -80,7 +80,7 @@ Send a file from your phone to your laptop?
 Always connect to known devices
 
 * Pair devices via a 6-digit code or a QR-Code.
-* Paired devices always find each other via shared secrets independently of their local network. 
+* Paired devices always find each other via shared secrets independently of their local network.
 * Pairing is persistent. You find your devices even after reopening ErikrafT Drop.
 * You can edit and unpair devices easily.
 
@@ -187,5 +187,5 @@ Thank you very much for your contribution!
 
 ---
 
-## 🙏 Thank you everyone's support :) 
+## 🙏 Thank you everyone's support :)
 [![Star History Chart](https://api.star-history.com/svg?repos=erikraft/Drop&type=Date)](https://star-history.com/#erikraft/Drop&Date)

@@ -2,7 +2,7 @@
 
 ## Send directly from share menu on iOS
 I created an iOS shortcut to send images, files, folder, URLs \
-or text directly from the share-menu 
+or text directly from the share-menu
 https://routinehub.co/shortcut/13990/
 
 [//]: # (Todo: Add screenshots)
@@ -84,8 +84,8 @@ This pairdrop-cli version was released alongside v1.10.4
 
 As Windows cannot execute bash scripts natively, you need to install [Git Bash](https://gitforwindows.org/).
 
-Then, you can also use pairdrop-cli from the default Windows Command Prompt 
-by using the shell file instead of the bash file which then itself executes 
+Then, you can also use pairdrop-cli from the default Windows Command Prompt
+by using the shell file instead of the bash file which then itself executes
 _pairdrop-cli_ (the bash file) via the Git Bash.
 ```shell
 pairdrop.sh -h

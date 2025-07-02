@@ -85,7 +85,7 @@ async function checkNSFW(file) {
             const normalized = expanded.div(255.0);
 
             const predictions = await model.predict(normalized).data();
-            
+
             // Libera a memória
             image.dispose();
             resized.dispose();
@@ -94,7 +94,7 @@ async function checkNSFW(file) {
 
             // Calcula o score NSFW
             const nsfwScore = predictions[1]; // Índice 1 é geralmente a classe NSFW
-            
+
             // Verifica APIs externas se necessário
             if (nsfwScore > 0.1) {
                 const externalResults = await checkExternalApis(file);
@@ -156,19 +156,19 @@ async function extractMetadata(file) {
     try {
         if (file.mimetype.startsWith('image/')) {
             const image = await tf.node.decodeImage(file.buffer);
-            
+
             // Verifica dimensões suspeitas
             const isSuspiciousSize = image.shape[0] > 2000 || image.shape[1] > 2000;
-            
+
             // Verifica proporção suspeita
             const ratio = image.shape[1] / image.shape[0];
             const isSuspiciousRatio = ratio < 0.5 || ratio > 2;
-            
+
             // Verifica tamanho do arquivo
             const isSuspiciousFileSize = file.size > 10 * 1024 * 1024; // 10MB
-            
+
             image.dispose();
-            
+
             return {
                 isNSFW: isSuspiciousSize || isSuspiciousRatio || isSuspiciousFileSize,
                 confidence: (isSuspiciousSize || isSuspiciousRatio || isSuspiciousFileSize) ? 0.3 : 0,
@@ -178,7 +178,7 @@ async function extractMetadata(file) {
                 fileSize: file.size
             };
         }
-        
+
         return { isNSFW: false, confidence: 0 };
     } catch (error) {
         console.error('Erro ao extrair metadados:', error);
@@ -248,11 +248,11 @@ function isBlockedUrl(url) {
     try {
         const urlObj = new URL(url);
         const lowerUrl = url.toLowerCase();
-        
+
         if (BLOCKED_DOMAINS.some(domain => urlObj.hostname.includes(domain))) {
             return true;
         }
-        
+
         return BLOCKED_KEYWORDS.some(keyword => lowerUrl.includes(keyword));
     } catch {
         return false;
@@ -267,7 +267,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/upload', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 error: '🚫 CONTEÚDO BLOQUEADO',
                 message: 'Nenhum arquivo enviado'
             });
@@ -304,13 +304,13 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         }
 
         // Processa o arquivo normalmente
-        res.json({ 
+        res.json({
             message: 'Arquivo processado com sucesso',
             type: nsfwCheck.type
         });
     } catch (error) {
         console.error('Erro no upload:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             error: '🚫 CONTEÚDO BLOQUEADO',
             message: 'Erro ao processar arquivo'
         });
@@ -345,4 +345,4 @@ app.use('/api', proxy);
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Servidor proxy rodando na porta ${PORT}`);
-}); 
+});

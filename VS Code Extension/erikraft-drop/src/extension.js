@@ -16,7 +16,7 @@ class ErikrafTDropViewProvider {
 
   resolveWebviewView(webviewView, context, token) {
     this.webviewView = webviewView;
-    
+
     webviewView.webview.options = {
       enableScripts: true,
       localResourceRoots: [
@@ -70,10 +70,10 @@ class ErikrafTDropViewProvider {
         </style>
       </head>
       <body>
-        <iframe 
-          src="https://drop.erikraft.com/" 
-          width="390" 
-          height="844" 
+        <iframe
+          src="https://drop.erikraft.com/"
+          width="390"
+          height="844"
           style="border: none; border-radius: 16px;"
           allow="clipboard-write; camera; microphone; autoplay;"
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-popups-to-escape-sandbox"

@@ -9,7 +9,7 @@ class ContentModeration {
             'u.to', 'urlzs.com', 'zzb.bz', 'steamcommunity', 'steamgift', 'steamrconmmunity',
             'steamscommunuty', 'steamshort', 'steanmecomnmunity', 'store-steaempowered',
             'share.blood-strike.com', 'casumonster.top', 'abre.ai', 'abrir.link', 'open.link',
-            
+
             // Palavrões e termos ofensivos
             'arromb', 'asshole', 'babac', 'bastard', 'bct', 'boceta', 'bocetas', 'boquete', 'bosta',
             'bostinha', 'buceta', 'bucetas', 'burro', 'cacete', 'caralh', 'caralho', 'corno', 'corna',
@@ -17,25 +17,25 @@ class ContentModeration {
             'dick', 'escrot', 'fdp', 'foda', 'fuck', 'gay', 'idiota', 'imbecil', 'merda', 'otario',
             'otário', 'pau', 'pinto', 'porra', 'puta', 'putas', 'puto', 'quenga', 'quengo', 'retardado',
             'safado', 'shit', 'shitty', 'viad', 'viado', 'xereca', 'xoxota', 'xvideos', 'xxxvideos',
-            
+
             // Novos termos ofensivos
             'arrobado', 'vadia', 'vadio', 'vagabunda', 'vagabundo', 'piranha', 'prostituta', 'prostituto',
             'putinha', 'putinho', 'viadinho', 'viadinha', 'bocetinha', 'bucetinha', 'cuzinho', 'cuzinha',
             'caralhinho', 'caralhinha', 'pauzinho', 'pauzinha', 'pintinho', 'pintinha', 'merdinha',
             'merdinho', 'bostinha', 'bostinho', 'fodinha', 'fodinho', 'putinha', 'putinho',
-            
+
             // Termos NSFW e conteúdo adulto
             '🔞', '🍆', '🍑', '🥒', '🥵', 'PORN', 'Pornografia', 'pornografía', 'pornography',
             'nude', 'nudes', 'Onlyfans', 'OnlyFans', 'Leaks', 'Hentai', 'Teen Porn', 'E-Girls Porn',
             'Latina Nudes', 'xnudes', 'xvideos', 'pornhub', 'xhamster', 'redtube', 'sexy', 'sexy girl',
             'sexo', 'sex',
-            
+
             // Spam e golpes
             '$100', '$20 gift', '20$ gift', 'Bilhão de reais', 'Billion Dollars', 'Billion of reais',
             'Billion reais', 'buy now', 'cheap', 'click here', 'follow me', 'free gift', 'free nudes',
             'gift from steam', 'gifts', 'here', 'Hot', 'HOT', 'prize', 'vote for me',
             'withdrew $15647', 'Milhão de reais', 'Million Dollars', 'Million reais',
-            
+
             // Outros termos ofensivos
             'dirty black', 'negro sujo', 'worm', 'verme', 'trash', 'worthless', 'idiot', 'imbecile',
             'shut up', 'cala a boca'
@@ -122,10 +122,10 @@ class ContentModeration {
             inception: null,
             resnet: null
         };
-        
+
         // Status de carregamento dos modelos
         this.modelLoading = false;
-        
+
         // URLs dos modelos
         this.modelUrls = {
             default: 'https://cdn.jsdelivr.net/npm/nsfwjs@2.4.0/dist/model/',
@@ -150,44 +150,44 @@ class ContentModeration {
     async loadAllModels() {
         if (this.modelLoading) return;
         this.modelLoading = true;
-        
+
         try {
             console.log('Carregando múltiplos modelos NSFW...');
-            
+
             // Carrega modelo principal do NSFWJS
             this.nsfwModels.default = await nsfwjs.load(this.modelUrls.default);
             console.log('Modelo NSFWJS principal carregado');
-            
+
             // Carrega MobileNet para detecção adicional
             this.nsfwModels.mobilenet = await tf.loadLayersModel(this.modelUrls.mobilenet);
             console.log('Modelo MobileNet carregado');
-            
+
             // Carrega Inception para classificação avançada
             this.nsfwModels.inception = await tf.loadLayersModel(this.modelUrls.inception);
             console.log('Modelo Inception carregado');
-            
+
             // Carrega ResNet para detecção de características
             this.nsfwModels.resnet = await tf.loadLayersModel(this.modelUrls.resnet);
             console.log('Modelo ResNet carregado');
-            
+
         } catch (error) {
             console.error('Erro ao carregar modelos:', error);
         }
-        
+
         this.modelLoading = false;
     }
 
     // Normaliza o texto removendo substituições de caracteres
     normalizeText(text) {
         let normalized = text.toLowerCase();
-        
+
         // Substitui caracteres especiais de volta para suas formas normais
         for (const [normal, substitutes] of Object.entries(this.characterSubstitutions)) {
             for (const substitute of substitutes) {
                 normalized = normalized.replace(new RegExp(substitute, 'g'), normal);
             }
         }
-        
+
         return normalized;
     }
 
@@ -205,10 +205,10 @@ class ContentModeration {
     // Verifica se o conteúdo é NSFW
     async checkNSFW(file) {
         if (!this.isMediaFile(file)) return false;
-        
+
         try {
             console.log('Iniciando verificação NSFW completa para:', file.name);
-            
+
             // Verifica o nome do arquivo primeiro
             const fileName = file.name.toLowerCase();
             if (this.blockedWords.some(word => fileName.includes(word.toLowerCase()))) {
@@ -232,15 +232,15 @@ class ContentModeration {
         return new Promise(async (resolve) => {
             const mediaElement = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
             mediaElement.src = URL.createObjectURL(file);
-            
+
             mediaElement.onload = async () => {
                 const canvas = document.createElement('canvas');
                 canvas.width = mediaElement.naturalWidth || mediaElement.videoWidth;
                 canvas.height = mediaElement.naturalHeight || mediaElement.videoHeight;
-                
+
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(mediaElement, 0, 0);
-                
+
                 // Verifica cada frame com os modelos NSFW
                 const result = await this.nsfwModels.default.classify(canvas);
                 resolve(result.some(p => p.className === 'Porn' && p.probability > 0.85));
@@ -251,10 +251,10 @@ class ContentModeration {
                     const canvas = document.createElement('canvas');
                     canvas.width = mediaElement.videoWidth;
                     canvas.height = mediaElement.videoHeight;
-                    
+
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(mediaElement, 0, 0);
-                    
+
                     const result = await this.nsfwModels.default.classify(canvas);
                     if (result.some(p => p.className === 'Porn' && p.probability > 0.85)) {
                         resolve(true);
@@ -296,7 +296,7 @@ class ContentModeration {
         return new Promise((resolve) => {
             const dialog = document.createElement('div');
             dialog.className = 'frame-warning-dialog';
-            
+
             const warningIcons = {
                 explicit: `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
                     <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/></svg>`,
@@ -319,14 +319,14 @@ class ContentModeration {
                     </div>
                     <h2>${warningTitles[contentType]}</h2>
                     <p>Este conteúdo pode conter material impróprio.</p>
-                    
+
                     <div class="media-container">
                         ${blurredPreview.outerHTML}
                         <div class="warning-overlay">
                             <button class="unblur-btn">👁️ Mostrar Conteúdo</button>
                         </div>
                     </div>
-                    
+
                     <div class="button-group">
                         <button class="accept">Aceitar e Visualizar</button>
                         <button class="block">Bloquear Permanentemente</button>
@@ -337,7 +337,7 @@ class ContentModeration {
 
             const unblurBtn = dialog.querySelector('.unblur-btn');
             const media = dialog.querySelector('.blurred-preview');
-            
+
             unblurBtn.addEventListener('click', () => {
                 media.style.filter = 'none';
                 unblurBtn.style.display = 'none';
@@ -393,19 +393,19 @@ class ContentModeration {
     // Verifica se é spam ou contém palavras bloqueadas
     isSpam(text, file) {
         if (!text) return { isSpam: false, contentType: null };
-        
+
         // Normaliza o texto para comparação
         const normalizedText = this.normalizeText(text.toLowerCase());
-        
+
         // Sistema de pontuação para determinar o tipo de conteúdo
         let spamScore = 0;
         let offensiveScore = 0;
         let explicitScore = 0;
         let scamScore = 0;
-        
+
         // Log inicial
         console.log('Verificando mensagem:', text);
-        
+
         // Verifica palavras bloqueadas com sistema de pontuação
         for (const word of this.blockedWords) {
             const regex = new RegExp(`\\b${word}\\b`, 'i');
@@ -428,7 +428,7 @@ class ContentModeration {
                 }
             }
         }
-        
+
         // Verifica padrões de spam
         if (/(.)\1{4,}/.test(normalizedText)) {
             spamScore += 2;
@@ -442,7 +442,7 @@ class ContentModeration {
             spamScore += 2;
             console.log('Muitas maiúsculas detectadas');
         }
-        
+
         // Verifica URLs suspeitas
         const urlRegex = /https?:\/\/[^\s]+/g;
         const urls = text.match(urlRegex) || [];
@@ -452,13 +452,13 @@ class ContentModeration {
                 console.log('URL suspeita detectada:', url);
             }
         }
-        
+
         // Verifica emojis impróprios
         if (this.hasInappropriateEmojis(text)) {
             explicitScore += 2;
             console.log('Emojis impróprios detectados');
         }
-        
+
         // Log dos scores
         console.log('Scores finais:', {
             spamScore,
@@ -466,11 +466,11 @@ class ContentModeration {
             explicitScore,
             scamScore
         });
-        
+
         // Determina o tipo de conteúdo baseado nos scores
         let contentType = null;
         let isSpam = false;
-        
+
         if (explicitScore >= 2) {
             contentType = 'explicit';
             isSpam = true;
@@ -484,7 +484,7 @@ class ContentModeration {
             contentType = 'spam';
             isSpam = true;
         }
-        
+
         return {
             isSpam,
             contentType,
@@ -514,9 +514,9 @@ class ContentModeration {
         return new Promise((resolve) => {
             const dialog = document.createElement('div');
             dialog.className = 'content-moderation-warning';
-            
+
             let title, message, icon;
-            
+
             switch(contentType) {
                 case 'explicit':
                     title = '🚫 Conteúdo Explícito Detectado';
@@ -547,7 +547,7 @@ class ContentModeration {
                     <div class="warning-title" data-type="${contentType}">${title}</div>
                     <div class="warning-message">${message}</div>
                     <div class="warning-preview blurred">
-                        ${file.type.startsWith('image/') ? 
+                        ${file.type.startsWith('image/') ?
                             `<img src="${URL.createObjectURL(file)}" alt="Preview">` :
                             file.type.startsWith('video/') ?
                             `<video src="${URL.createObjectURL(file)}" controls></video>` :
@@ -602,10 +602,10 @@ class ContentModeration {
     // Aplica blur e overlay em conteúdo sensível
     applyBlurAndOverlay(element, contentType) {
         element.classList.add('blurred-content');
-        
+
         const overlay = document.createElement('div');
         overlay.className = 'warning-overlay';
-        
+
         let icon, text;
         switch(contentType) {
             case 'explicit':
@@ -627,12 +627,12 @@ class ContentModeration {
                 text = 'Conteúdo Ofensivo Detectado';
                 break;
         }
-        
+
         overlay.innerHTML = `
             <div class="warning-icon">${icon}</div>
             <div class="warning-text">${text}</div>
         `;
-        
+
         element.appendChild(overlay);
     }
 
@@ -641,11 +641,11 @@ class ContentModeration {
         try {
             const text = notification.body || '';
             const title = notification.title || '';
-            
+
             // Verifica título e corpo da notificação
             const titleCheck = this.isSpam(title);
             const bodyCheck = this.isSpam(text);
-            
+
             // Se qualquer parte da notificação for imprópria
             if (titleCheck.isSpam || bodyCheck.isSpam) {
                 const contentType = titleCheck.contentType || bodyCheck.contentType;
@@ -653,7 +653,7 @@ class ContentModeration {
                     title: titleCheck.scores,
                     body: bodyCheck.scores
                 };
-                
+
                 // Cria uma notificação segura
                 const safeNotification = {
                     title: this.getSafeNotificationTitle(contentType),
@@ -679,7 +679,7 @@ class ContentModeration {
                         }
                     ]
                 };
-                
+
                 // Registra a notificação bloqueada para análise
                 this.logBlockedNotification({
                     originalTitle: title,
@@ -688,10 +688,10 @@ class ContentModeration {
                     scores: scores,
                     timestamp: Date.now()
                 });
-                
+
                 return safeNotification;
             }
-            
+
             // Se a notificação for segura, adiciona metadados
             return {
                 ...notification,
@@ -706,7 +706,7 @@ class ContentModeration {
             return null;
         }
     }
-    
+
     // Obtém título seguro para notificação
     getSafeNotificationTitle(contentType) {
         switch(contentType) {
@@ -722,7 +722,7 @@ class ContentModeration {
                 return '🚫 Conteúdo Bloqueado';
         }
     }
-    
+
     // Obtém corpo seguro para notificação
     getSafeNotificationBody(contentType) {
         switch(contentType) {
@@ -738,7 +738,7 @@ class ContentModeration {
                 return 'Uma notificação imprópria foi bloqueada.';
         }
     }
-    
+
     // Obtém ícone de aviso apropriado
     getWarningIcon(contentType) {
         switch(contentType) {
@@ -754,18 +754,18 @@ class ContentModeration {
                 return '/images/warning-default.png';
         }
     }
-    
+
     // Registra notificação bloqueada para análise
     logBlockedNotification(data) {
         try {
             const blockedNotifications = JSON.parse(localStorage.getItem('blockedNotifications') || '[]');
             blockedNotifications.push(data);
-            
+
             // Mantém apenas as últimas 100 notificações
             if (blockedNotifications.length > 100) {
                 blockedNotifications.shift();
             }
-            
+
             localStorage.setItem('blockedNotifications', JSON.stringify(blockedNotifications));
         } catch (error) {
             console.error('Erro ao registrar notificação bloqueada:', error);

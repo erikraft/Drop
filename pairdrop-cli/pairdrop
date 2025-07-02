@@ -95,13 +95,13 @@ sendText()
 escapePSPath()
 {
   local path=$1
-  
+
   # escape '[' and ']' with grave accent (`) character
   pathPS=${path//[/\`[}
   pathPS=${pathPS//]/\`]}
   # escape single quote (') with another single quote (')
   pathPS=${pathPS//\'/\'\'}
-  
+
   # Convert GitHub bash path "/i/path" to Windows path "I:/path"
   if [[ $pathPS == /* ]]; then
     # Remove preceding slash
@@ -109,9 +109,9 @@ escapePSPath()
     # Convert drive letter to uppercase
     driveLetter=$(echo "${pathPS::1}" | tr '[:lower:]' '[:upper:]')
     # Put together absolute path as used in Windows
-    pathPS="${driveLetter}:${pathPS:1}"        
+    pathPS="${driveLetter}:${pathPS:1}"
   fi
-  
+
   echo "$pathPS"
 }
 
@@ -121,7 +121,7 @@ sendFiles()
   workingDir="$(pwd)"
   tmpDir="/tmp/pairdrop-cli-temp/"
   tmpDirPS="\$env:TEMP/pairdrop-cli-temp/"
-  
+
   index=0
   directoryBaseNamesUnix=()
   directoryPathsUnix=()
@@ -164,11 +164,11 @@ sendFiles()
     # Prepare paths for PowerShell on Windows
     if [[ $OS == "Windows" ]];then
       absolutePathPS=$(escapePSPath "$absolutePath")
-      
+
       # append new path and separate paths with commas
       pathsPS+="'${absolutePathPS}', "
     fi
-    
+
     # set fileNames on first loop
     if [[ $index == 0 ]]; then
       baseNameU=${baseName// /_}
@@ -180,10 +180,10 @@ sendFiles()
 
       # only use trunk of basename "document.txt" -> "document"
       baseNameTrunk=${baseNameU%.*}
-      
+
       # remove all special characters
       zipName=${baseNameTrunk//[^a-zA-Z0-9_]/}
-      
+
       zipToSendAbs="${tmpDir}ErikrafT-Drop.zip"
       wrapperZipAbs="${tmpDir}ErikrafT-Drop_wrapper.zip"
 
@@ -216,7 +216,7 @@ sendFiles()
   #                |-d8/
   #                |-f5
   # -> truncate (relative) paths but keep directories
-  
+
   [[ -e "$zipToSendAbs" ]] && echo "Cannot overwrite $zipToSendAbs. Please remove first." && exit
 
   if [[ $OS == "Windows" ]];then
@@ -257,9 +257,9 @@ sendFiles()
     zipToSendBaseName=$(basename "$zipToSendAbs")
 
     cd "$zipToSendDirectory"
-    
+
     [[ -e "$wrapperZipAbs" ]] && echo "Cannot overwrite $wrapperZipAbs. Please remove first." && exit
-    
+
     if [[ $OS == "Windows" ]];then
       powershell.exe -Command "Compress-Archive -Path ${zipToSendBaseName} -DestinationPath ${wrapperZipAbsPS} -CompressionLevel Optimal"
     else

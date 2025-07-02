@@ -249,24 +249,24 @@ const contentModeration = new ContentModeration();
 async function handleReceivedFile(file) {
     try {
         console.log('Processando arquivo:', file.name, file.type);
-        
+
         // Verifica se é uma imagem ou vídeo
         if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
             console.log('Verificando conteúdo NSFW...');
             const nsfwResult = await contentModeration.checkNSFW(file);
             console.log('Resultado NSFW:', nsfwResult);
-            
+
             if (nsfwResult.isNSFW) {
                 console.log('Conteúdo explícito detectado, mostrando aviso...');
-                
+
                 // Cria elemento borrado
                 const mediaElement = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
                 mediaElement.className = 'media-preview blurred-content';
                 mediaElement.src = URL.createObjectURL(file);
-                
+
                 // Aplica blur e overlay
                 contentModeration.applyBlurAndOverlay(mediaElement, 'explicit');
-                
+
                 // Mostra diálogo de aviso
                 const shouldView = await contentModeration.showWarningDialog(file, 'explicit');
                 if (!shouldView) {
@@ -279,7 +279,7 @@ async function handleReceivedFile(file) {
         // Verifica nome do arquivo por spam/ofensas
         const spamCheck = contentModeration.isSpam(file.name);
         const hasOffensiveWords = contentModeration.hasBlockedWordsWithSubstitutions(file.name);
-        
+
         if (spamCheck.isSpam || hasOffensiveWords) {
             console.log('Conteúdo potencialmente perigoso detectado');
             const shouldView = await contentModeration.showWarningDialog(file, spamCheck.contentType || 'spam');
@@ -294,7 +294,7 @@ async function handleReceivedFile(file) {
             const text = await file.text();
             const urlRegex = /https?:\/\/[^\s]+/g;
             const urls = text.match(urlRegex) || [];
-            
+
             for (const url of urls) {
                 const isSuspicious = await contentModeration.checkUrl(url);
                 if (isSuspicious) {
@@ -319,33 +319,33 @@ async function handleReceivedFile(file) {
 // Intercepta o WebRTC para verificar arquivos antes do compartilhamento
 function interceptWebRTC() {
     const originalPeerConnection = window.RTCPeerConnection;
-    
+
     window.RTCPeerConnection = function(...args) {
         const pc = new originalPeerConnection(...args);
-        
+
         const originalSend = pc.send;
         pc.send = async function(data) {
             if (data instanceof Blob || data instanceof File) {
                 try {
                     // Verifica conteúdo explícito
                     const result = await contentModeration.checkNSFW(data);
-                    
+
                     if (result.isNSFW) {
                         if (localStorage.getItem('blockExplicitContent') === 'true') {
                             throw new Error('Conteúdo bloqueado pelas configurações do usuário');
                         }
-                        
+
                         const userResponse = await contentModeration.showFrameWarningDialog(
-                            data, 
+                            data,
                             result.blurredMedia,
                             result.contentType
                         );
-                        
+
                         if (!userResponse) {
                             throw new Error('Envio cancelado pelo usuário');
                         }
                     }
-                    
+
                     return originalSend.call(this, data);
                 } catch (error) {
                     console.error('Erro ao processar arquivo:', error);
@@ -354,7 +354,7 @@ function interceptWebRTC() {
             }
             return originalSend.call(this, data);
         };
-        
+
         return pc;
     };
 }

@@ -4,11 +4,11 @@
 
 Beware that you have to host your own TURN server to enable transfers between different networks.
 
-Follow [this guide](https://gabrieltanner.org/blog/turn-server/) to either install coturn directly on your system (Step 1) 
+Follow [this guide](https://gabrieltanner.org/blog/turn-server/) to either install coturn directly on your system (Step 1)
 or deploy it via Docker (Step 5).
 
 You can use the `docker-compose-coturn.yml` in this repository. See [Coturn and PairDrop via Docker Compose](#coturn-and-pairdrop-via-docker-compose).
- 
+
 Alternatively, use a free, pre-configured TURN server like [OpenRelay](https://www.metered.ca/tools/openrelay/)
 
 <br>
@@ -68,10 +68,10 @@ docker build --pull . -f Dockerfile -t pairdrop
 docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 -it pairdrop
 ```
 
-> You must use a server proxy to set the `X-Forwarded-For` header 
+> You must use a server proxy to set the `X-Forwarded-For` header
 > to prevent all clients from discovering each other (See [#HTTP-Server](#http-server)).
 >
-> To prevent bypassing the proxy by reaching the docker container directly, 
+> To prevent bypassing the proxy by reaching the docker container directly,
 > `127.0.0.1` is specified in the run command.
 
 
@@ -113,7 +113,7 @@ docker run -d \
     -e RATE_LIMIT=false \
     -e DEBUG_MODE=false \
     -e TZ=Etc/UTC \
-    lscr.io/linuxserver/pairdrop 
+    lscr.io/linuxserver/pairdrop
 ```
 
 <br>
@@ -146,7 +146,7 @@ Run the compose file with `docker compose up -d`.
 > You must use a server proxy to set the `X-Forwarded-For` header
 > to prevent all clients from discovering each other (See [#HTTP-Server](#http-server)).
 >
-> To prevent bypassing the proxy by reaching the Docker container 
+> To prevent bypassing the proxy by reaching the Docker container
 > directly, `127.0.0.1` is specified in the `ports` argument.
 
 <br>
@@ -187,7 +187,7 @@ PORT=3000
 ```
 
 > Default: `3000`
-> 
+>
 > Environment variable to specify the port used by the Node.js server \
 > e.g. `PORT=3010 npm start`
 
@@ -199,10 +199,10 @@ npm start -- --localhost-only
 
 > Only allow connections from localhost.
 >
-> You must use a server proxy to set the `X-Forwarded-For` header 
+> You must use a server proxy to set the `X-Forwarded-For` header
 > to prevent all clients from discovering each other (See [#HTTP-Server](#http-server)).
 >
-> Use this when deploying PairDrop with node to prevent 
+> Use this when deploying PairDrop with node to prevent
 > bypassing the reverse proxy by reaching the Node.js server directly.
 
 #### Automatic restart on error
@@ -264,7 +264,7 @@ DEBUG_MODE="true"
 > Logs the used environment variables for debugging.
 >
 > Prints debugging information about the connecting peers IP addresses.
-> 
+>
 > This is quite useful to check whether the [#HTTP-Server](#http-server)
 > is configured correctly, so the auto-discovery feature works correctly.
 > Otherwise, all clients discover each other mutually, independently of their network status.
@@ -350,18 +350,18 @@ WS_FALLBACK=true
 > Provides PairDrop to clients with an included websocket fallback \
 > if the peer to peer WebRTC connection is not available to the client.
 >
-> This is not used on the official https://pairdrop.net website, 
+> This is not used on the official https://pairdrop.net website,
 > but you can activate it on your self-hosted instance.\
-> This is especially useful if you connect to your instance via a VPN (as most VPN services block WebRTC completely in 
+> This is especially useful if you connect to your instance via a VPN (as most VPN services block WebRTC completely in
 > order to hide your real IP address). ([Read more here](https://privacysavvy.com/security/safe-browsing/disable-webrtc-chrome-firefox-safari-opera-edge/)).
 >
 > **Warning:** \
 > All traffic sent between devices using this fallback
 > is routed through the server and therefor not peer to peer!
-> 
+>
 > Beware that the traffic routed via this fallback is readable by the server. \
 > Only ever use this on instances you can trust.
-> 
+>
 > Additionally, beware that all traffic using this fallback debits the servers data plan.
 
 
@@ -409,16 +409,16 @@ SIGNALING_SERVER="pairdrop.net"
 > Default: `false`
 >
 > By default, clients connecting to your instance use the signaling server of your instance to connect to other devices.
-> 
+>
 > By using `SIGNALING_SERVER`, you can host an instance that uses another signaling server.
-> 
+>
 > This can be useful if you want to ensure the integrity of the client files and don't want to trust the client files that are hosted on another PairDrop instance but still want to connect to devices that use the other instance.
 > E.g. host your own client files under *pairdrop.your-domain.com* but use the official signaling server under *pairdrop.net*
 > This way devices connecting to *pairdrop.your-domain.com* and *pairdrop.net* can discover each other.
-> 
+>
 > Beware that the version of your PairDrop server must be compatible with the version of the signaling server.
 >
-> `SIGNALING_SERVER` must be a valid url without the protocol prefix. 
+> `SIGNALING_SERVER` must be a valid url without the protocol prefix.
 > Examples of valid values: `pairdrop.net`, `pairdrop.your-domain.com:3000`, `your-domain.com/pairdrop`
 
 <br>
@@ -449,9 +449,9 @@ PRIVACYPOLICY_BUTTON_TITLE="Open our privacy policy"
 > Default: unset
 >
 > By default, clients will show the default button configuration: GitHub, BuyMeACoffee, Twitter, and FAQ on GitHub.
-> 
+>
 > The GitHub and FAQ on GitHub buttons are essential, so they are always shown.
-> 
+>
 > The other buttons can be customized:
 >
 > * `*_BUTTON_ACTIVE`: set this to `true` to show a natively hidden button or to `false` to hide a normally shown button
@@ -604,12 +604,12 @@ you need to follow these steps:
 
 1. Generate or retrieve certificates for your `<DOMAIN>` (e.g. letsencrypt / certbot)
 2. Create `./ssl` folder: `mkdir ssl`
-3. Copy your ssl-certificates and the privkey to `./ssl` 
+3. Copy your ssl-certificates and the privkey to `./ssl`
 4. Restrict access to `./ssl`: `chown -R nobody:nogroup ./ssl`
-5. Create a dh-params file: `openssl dhparam -out ./ssl/dhparams.pem 4096` 
+5. Create a dh-params file: `openssl dhparam -out ./ssl/dhparams.pem 4096`
 6. Copy `rtc_config_example.json` to `rtc_config.json`
 7. Copy `turnserver_example.conf` to `turnserver.conf`
-8. Change `<DOMAIN>` in both files to the domain where your PairDrop instance is running 
+8. Change `<DOMAIN>` in both files to the domain where your PairDrop instance is running
 9. Change `username` and `password` in `turnserver.conf` and `rtc-config.json`
 10. To start the container including coturn run: \
   `docker compose -f docker-compose-coturn.yml up -d`
@@ -667,8 +667,8 @@ Now point your web browser to `http://localhost:8080`.
 
 PWAs requires the app to be served under a correctly set up and trusted TLS endpoint.
 
-The NGINX container creates a CA certificate and a website certificate for you. 
-To correctly set the common name of the certificate, 
+The NGINX container creates a CA certificate and a website certificate for you.
+To correctly set the common name of the certificate,
 you need to change the FQDN environment variable in `docker-compose-dev.yml`
 to the fully qualified domain name of your workstation. (Default: localhost)
 
