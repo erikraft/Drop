@@ -44,7 +44,7 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in VS Code (`Ctrl+S
    - **Temporary Public Room**
    - **Paired Devices**
 4. Drag your files into the drop zone
-5. Scan the QR code or select a nearby device
+5. Select a nearby device
 6. Done!
 
 > 💡 Perfect for sending screenshots, code snippets, config files, or images from your dev machine to your phone, tablet, or laptop — works seamlessly in both Visual Studio Code and Cursor editor.
