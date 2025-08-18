@@ -29,10 +29,12 @@
 	  &nbsp;
 <br>
 <br>
-<!-- <br>
-ErikrafT Drop Community on Discord
 <br>
-<img src="https://img.shields.io/badge/Coming%20Soon-5a66f6?style=flat-square&logoColor=white"> -->
+ErikrafT Drop Community
+<br>
+ 	  <a href="https://discord.gg/KWvqwRxjnA"><img src="https://img.shields.io/discord/1372342747494613032?label=discord&style=flat-square&color=5a66f6"></a>
+	  &nbsp;
+<br>
 
 </p>
 
