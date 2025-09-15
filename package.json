@@ -17,7 +17,7 @@
     "express-rate-limit": "^7.5.1",
     "http-proxy-middleware": "^3.0.5",
     "multer": "^2.0.1",
-    "ua-parser-js": "^2.0.3",
+    "ua-parser-js": "^2.0.5",
     "unique-names-generator": "^4.7.1",
     "ws": "^8.18.2"
   },
