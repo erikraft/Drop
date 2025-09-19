@@ -6,7 +6,7 @@
   <h1><em>Send it</em>, with <a href="https://drop.erikraft.com/">ErikrafT Drop</a></h1>
 
   <p>
-    Local file sharing <a href="https://drop.erikraft.com/"><strong>in your web browser</strong></a>.<br>
+    Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
     Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.<br>
     Fork of PairDrop.
   </p>
@@ -16,8 +16,8 @@
   </p>
 
   <p>
-    <a href="https://github.com/erikraft/Drop/issues">Report a bug</a><br />
-    <a href="https://github.com/erikraft/Drop/issues">Request feature</a>
+    <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Report a bug</a><br />
+    <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Request feature</a>
   </p>
 </div>
 
@@ -40,7 +40,7 @@ ErikrafT Drop Community
 
 ---
 
-🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
+🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
 
 ---
 
