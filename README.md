@@ -36,7 +36,7 @@ ErikrafT Drop Community
 	  &nbsp;
 <br>
 
-</p
+</p>
 	
 ---
 
