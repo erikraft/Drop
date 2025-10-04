@@ -36,7 +36,11 @@ ErikrafT Drop Community
 	  &nbsp;
 <br>
 
-</p>
+</p
+	
+---
+
+📱｜ErikrafT Drop Available for Android: <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://github.com/erikraft/Drop-Android)
 
 ---
 
@@ -170,7 +174,9 @@ Connect to others in complex network situations, or over the Internet.
 <br />
 [🛡️｜Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
 <br />
-[📲｜APK Github Repository](https://github.com/erikraft/App-Drop-Apk)
+[📲｜ErikrafT Drop Android Github Repository](https://github.com/erikraft/Drop-Android)
+<br />
+[📲｜ErikrafT Drop APK Github Repository](https://github.com/erikraft/App-Drop-Apk)
 <br />
 
 ---
