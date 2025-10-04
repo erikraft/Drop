@@ -164,6 +164,13 @@ self.addEventListener('fetch', function(event) {
         // Do not handle requests from other origin
         event.respondWith(fetch(event.request));
     }
+    const swOrigin = new URL(self.location.href).origin;
+    const requestOrigin = new URL(event.request.url).origin;
+
+    if (swOrigin !== requestOrigin) {
+        // Do not handle requests from other origin
+        event.respondWith(fetch(event.request));
+    }
     else if (event.request.method === "POST") {
         // Requests related to Web Share Target.
         event.respondWith((async () => {
