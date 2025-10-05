@@ -37,7 +37,7 @@ ErikrafT Drop Community
 <br>
 
 </p>
-	
+
 ---
 
 📱｜ErikrafT Drop Available for Android: <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://github.com/erikraft/Drop-Android)
