@@ -215,7 +215,7 @@ class Localization {
     }
 
     static logHelpCall() {
-        console.log("Help translating PairDrop: https://hosted.weblate.org/engage/pairdrop/");
+        console.log("Help translating ErikrafTdrop: https://hosted.weblate.org/engage/pairdrop/");
     }
 
     static logHelpCallKey(key, attr) {

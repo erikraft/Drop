@@ -22,18 +22,18 @@
         "cancel": "Sefsex"
     },
     "about": {
-        "github_title": "ErikrafT Drop deg GitHub",
-        "close-about_aria-label": "Mdel Ɣef ErikrafT Drop"
+        "github_title": "ErikrafTdrop deg GitHub",
+        "close-about_aria-label": "Mdel Ɣef ErikrafTdrop"
     },
     "notifications": {
         "connecting": "Tuqqna…",
         "connected": "Yeqqen"
     },
     "header": {
-        "about_aria-label": "Ldi Ɣef ErikrafT Drop",
-        "about_title": "Ɣef ErikrafT Drop",
+        "about_aria-label": "Ldi Ɣef ErikrafTdrop",
+        "about_title": "Ɣef ErikrafTdrop",
         "language-selector_title": "Fren tutlayt",
-        "install_title": "Sbedd ErikrafT Drop",
+        "install_title": "Sbedd ErikrafTdrop",
         "edit-share-mode": "Ẓreg"
     }
 }

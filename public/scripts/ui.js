@@ -84,7 +84,7 @@ class PeersUI {
             await this._deactivateShareMode();
         }
 
-        // close About PairDrop page on Escape
+        // close About ErikrafTdrop page on Escape
         if (e.key === "Escape") {
             window.location.hash = '#';
         }
@@ -747,7 +747,7 @@ class Dialog {
             document.activeElement.blur();
             window.blur();
         }
-        document.title = 'PairDrop | Transfer Files Cross-Platform. No Setup, No Signup.';
+        document.title = 'ErikrafTdrop | Transfer Files Cross-Platform. No Setup, No Signup.';
         changeFavicon("images/favicon-96x96.png");
         this.correspondingPeerId = undefined;
     }
@@ -1048,8 +1048,8 @@ class ReceiveFileDialog extends ReceiveDialog {
         };
 
         document.title = files.length === 1
-            ? `${ Localization.getTranslation("document-titles.file-received") } - PairDrop`
-            : `${ Localization.getTranslation("document-titles.file-received-plural", null, {count: files.length}) } - PairDrop`;
+            ? `${ Localization.getTranslation("document-titles.file-received") } - ErikrafTdrop`
+            : `${ Localization.getTranslation("document-titles.file-received-plural", null, {count: files.length}) } - ErikrafTdrop`;
         changeFavicon("images/favicon-96x96-notification.png");
 
         Events.fire('set-progress', {peerId: peerId, progress: 1, status: 'process'})
@@ -1155,7 +1155,7 @@ class ReceiveRequestDialog extends ReceiveDialog {
 
         this.$receiveTitle.innerText = transferRequestTitle;
 
-        document.title =  `${transferRequestTitle} - PairDrop`;
+        document.title =  `${transferRequestTitle} - ErikrafTdrop`;
         changeFavicon("images/favicon-96x96-notification.png");
 
         this.$acceptRequestBtn.removeAttribute('disabled');
@@ -2146,8 +2146,8 @@ class ReceiveTextDialog extends Dialog {
 
     _setDocumentTitleMessages() {
         document.title = this._receiveTextQueue.length <= 1
-            ? `${ Localization.getTranslation("document-titles.message-received") } - PairDrop`
-            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this._receiveTextQueue.length + 1}) } - PairDrop`;
+            ? `${ Localization.getTranslation("document-titles.message-received") } - ErikrafTdrop`
+            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this._receiveTextQueue.length + 1}) } - ErikrafTdrop`;
     }
 
     async _onCopy() {

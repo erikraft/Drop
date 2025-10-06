@@ -66,7 +66,7 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in VS Code (`Ctrl+S
 
 This extension embeds the [ErikrafT Drop](https://github.com/erikraft/Drop) web app inside a VS Code WebView. All sharing features are available from within your code editor.
 
-> Inspired by AirDrop, Snapdrop and PairDrop and rebuilt for the modern cross-platform web.
+> Inspired by AirDrop, Snapdrop and ErikrafT Drop and rebuilt for the modern cross-platform web.
 
 ---
 

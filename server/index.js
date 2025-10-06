@@ -1,8 +1,8 @@
 import {spawn} from "child_process";
 import fs from "fs";
 
-import PairDropServer from "./server.js";
-import PairDropWsServer from "./ws-server.js";
+import ErikrafTdropServer from "./server.js";
+import ErikrafTdropWsServer from "./ws-server.js";
 
 // Handle SIGINT
 process.on('SIGINT', () => {
@@ -151,7 +151,7 @@ if (conf.debugMode) {
     console.debug("\n");
 }
 
-// Start a new PairDrop instance when an uncaught exception occurs
+// Start a new ErikrafTdrop instance when an uncaught exception occurs
 if (conf.autoStart) {
     process.on(
         'uncaughtException',
@@ -174,13 +174,13 @@ if (conf.autoStart) {
 }
 
 // Start server to serve client files
-const pairDropServer = new PairDropServer(conf);
+const erikrafTdropServer = new ErikrafTdropServer(conf);
 
 if (!conf.signalingServer) {
     // Start websocket server if SIGNALING_SERVER is not set
-    new PairDropWsServer(pairDropServer.server, conf);
+    new ErikrafTdropWsServer(erikrafTdropServer.server, conf);
 } else {
     console.log("This instance does not include a signaling server. Clients on this instance connect to the following signaling server:", conf.signalingServer);
 }
 
-console.log('\nErikrafT Drop is running on port', conf.port);
+console.log('\nErikrafTdrop is running on port', conf.port);

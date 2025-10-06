@@ -7,8 +7,8 @@
 
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
-    Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.<br>
-    Fork of PairDrop.
+    Inspired by Apple's AirDrop and Schlagmichdoch's ErikrafT Drop.<br>
+    Fork of ErikrafT Drop.
   </p>
 
   <p>
