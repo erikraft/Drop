@@ -13,13 +13,13 @@ as you only know your local ip address \
 if behind a NAT (router).
 
 The transfer of the signaling info is done by the \
-PairDrop / Snapdrop server using secure websockets. \
+ErikrafT Drop / Snapdrop server using secure websockets. \
 After that the channel itself is completely peer-to-peer \
 and all info can only be decrypted by the receiver. \
 When the two peers are on the same network \
 or when they are not behind any NAT system \
 (which they are always for classic \
-Snapdrop and for not paired users on PairDrop) \
+Snapdrop and for not paired users on ErikrafT Drop) \
 the files are send directly peer-to-peer.
 
 When a user is behind a NAT (behind a router) \
@@ -65,7 +65,7 @@ It goes one step further by making the data persistent \
 and available offline if implemented to a PWA.
 
 All secrets a client has saved to its database \
-are sent to the PairDrop server. \
+are sent to the ErikrafT Drop server. \
 Peers with a common secret are discoverable \
 to each other analog to peers with the same \
 IP address are discoverable by each other.
