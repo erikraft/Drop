@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# PairDrop version when this file was last changed
+# ErikrafTdrop version when this file was last changed
 version="v1.10.4"
 
 ############################################################
@@ -10,20 +10,20 @@ version="v1.10.4"
 help()
 {
    # Display Help
-   echo "Send files or text with PairDrop via command-line interface."
+   echo "Send files or text with ErikrafTdrop via command-line interface."
    echo "Current domain: ${DOMAIN}"
    echo
    echo "Usage:"
-   echo -e "Open PairDrop:\t\t$(basename "$0")"
+   echo -e "Open ErikrafTdrop:\t\t$(basename "$0")"
    echo -e "Send files:\t\t$(basename "$0") file1/directory1 (file2/directory2 file3/directory3 ...)"
    echo -e "Send text:\t\t$(basename "$0") -t \"text\""
    echo -e "Specify domain:\t\t$(basename "$0") -d \"https://drop.erikraft.com/\""
    echo -e "Show this help text:\t$(basename "$0") (-h|--help)"
    echo
-   echo "This pairdrop-cli version was released alongside ${version}"
+   echo "This erikraftdrop-cli version was released alongside ${version}"
 }
 
-openPairDrop()
+openErikrafTdrop()
 {
   url="$DOMAIN"
   if [[ -n $params ]];then
@@ -33,7 +33,7 @@ openPairDrop()
     url="${url}#${hash}"
   fi
 
-  echo "PairDrop is opening at $DOMAIN"
+  echo "ErikrafTdrop is opening at $DOMAIN"
   if [[ $OS == "Windows" ]];then
     start "$url"
   elif [[ $OS == "Mac" ]];then
@@ -66,7 +66,7 @@ setOs()
 
 specifyDomain()
 {
-  [[ ! $1 = http* ]] || [[ ! $1 = */ ]] && echo "Incorrect format. Specify domain like https://pairdrop.net/" && exit
+  [[ ! $1 = http* ]] || [[ ! $1 = */ ]] && echo "Incorrect format. Specify domain like https://erikraftdrop.net/" && exit
   echo "DOMAIN=${1}" > "$config_path"
   echo -e "Domain is now set to:\n$1\n"
 }
@@ -88,7 +88,7 @@ sendText()
       hash=
     fi
 
-    openPairDrop
+    openErikrafTdrop
     exit
 }
 
@@ -119,8 +119,8 @@ sendFiles()
 {
   params="base64zip=hash"
   workingDir="$(pwd)"
-  tmpDir="/tmp/pairdrop-cli-temp/"
-  tmpDirPS="\$env:TEMP/pairdrop-cli-temp/"
+  tmpDir="/tmp/erikraftdrop-cli-temp/"
+  tmpDirPS="\$env:TEMP/erikraftdrop-cli-temp/"
 
   index=0
   directoryBaseNamesUnix=()
@@ -208,8 +208,8 @@ sendFiles()
   # if arguments include directories -> wrap first zip in a second wrapper zip so that after unzip by sending browser a zip file is sent to receiver
   #
   # Preferred zip structure:
-  # pairdrop "d1/d2/d3/f1" "../../d4/d5/d6/f2" "d7/" "../d8/" "f5"
-  # zip structure: pairdrop.zip
+  # erikraftdrop "d1/d2/d3/f1" "../../d4/d5/d6/f2" "d7/" "../d8/" "f5"
+  # zip structure: erikraftdrop.zip
   #                |-f1
   #                |-f2
   #                |-d7/
@@ -299,9 +299,9 @@ sendFiles()
           exit 1
       fi
       # Workaround to prevent use of Pipe which has a max letter limit
-      echo -n "$hash" > /tmp/pairdrop-cli-temp/pairdrop_hash_temp
-      wl-copy < /tmp/pairdrop-cli-temp/pairdrop_hash_temp
-      rm /tmp/pairdrop-cli-temp/pairdrop_hash_temp
+      echo -n "$hash" > /tmp/erikraftdrop-cli-temp/erikraftdrop_hash_temp
+      wl-copy < /tmp/erikraftdrop-cli-temp/erikraftdrop_hash_temp
+      rm /tmp/erikraftdrop-cli-temp/erikraftdrop_hash_temp
     else
       # X11
       if ! command -v xclip &> /dev/null; then
@@ -314,7 +314,7 @@ sendFiles()
     hash=
   fi
 
-  openPairDrop
+  openErikrafTdrop
   exit
 }
 
@@ -338,13 +338,13 @@ cd "$( dirname -- "$script_path"; )" > '/dev/null';
 script_path="$( pwd; )";
 popd  > '/dev/null';
 
-config_path="${script_path}/.pairdrop-cli-config"
+config_path="${script_path}/.erikraftdrop-cli-config"
 
 # If config file does not exist, try to create it. If it fails log error message and exit
 [ ! -f "$config_path" ] &&
-  specifyDomain "https://pairdrop.net/" &&
+  specifyDomain "https://erikraftdrop.net/" &&
   [ ! -f "$config_path" ] &&
-  echo "Could not create config file. Add 'DOMAIN=https://pairdrop.net/' to a file called .pairdrop-cli-config in the same file as this 'pairdrop' bash file (${script_path})" &&
+  echo "Could not create config file. Add 'DOMAIN=https://erikraftdrop.net/' to a file called .erikraftdrop-cli-config in the same file as this 'erikraftdrop' bash file (${script_path})" &&
   exit
 
 # Read config variables
@@ -356,8 +356,8 @@ setOs
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-# open PairDrop if no options are given
-[[ $# -eq 0 ]] && openPairDrop && exit
+# open ErikrafTdrop if no options are given
+[[ $# -eq 0 ]] && openErikrafTdrop && exit
 
 #  display help and exit if first argument is "--help" or more than 2 arguments are given
 [ "$1" == "--help" ] && help && exit

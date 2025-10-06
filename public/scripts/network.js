@@ -225,7 +225,7 @@ class ServerConnection {
         sessionStorage.setItem('peer_id', msg.peerId);
         sessionStorage.setItem('peer_id_hash', msg.peerIdHash);
 
-        // Add peerId to localStorage to mark it for other PairDrop tabs on the same browser
+        // Add peerId to localStorage to mark it for other ErikrafTdrop tabs on the same browser
         BrowserTabsConnector
             .addPeerIdToLocalStorage()
             .then(peerId => {
@@ -650,7 +650,7 @@ class Peer {
             this._abortTransfer();
         }
 
-        // include for compatibility with 'Snapdrop & PairDrop for Android' app
+        // include for compatibility with 'Snapdrop & ErikrafTdrop for Android' app
         Events.fire('file-received', fileBlob);
 
         this._filesReceived.push(fileBlob);
@@ -668,7 +668,7 @@ class Peer {
         if (!this._filesQueue.length) {
             this._busy = false;
             Events.fire('notify-user', Localization.getTranslation("notifications.file-transfer-completed"));
-            Events.fire('files-sent'); // used by 'Snapdrop & PairDrop for Android' app
+            Events.fire('files-sent'); // used by 'Snapdrop & ErikrafTdrop for Android' app
         }
         else {
             this._dequeueFile();
@@ -1095,7 +1095,7 @@ class PeersManager {
             console.log('WSPeer left:', message.peerId);
         }
         if (message.disconnect === true) {
-            // if user actively disconnected from PairDrop server, disconnect all peer to peer connections immediately
+            // if user actively disconnected from ErikrafTdrop server, disconnect all peer to peer connections immediately
             this._disconnectOrRemoveRoomTypeByPeerId(message.peerId, message.roomType);
 
             // If no peers are connected anymore, we can safely assume that no other tab on the same browser is connected:
