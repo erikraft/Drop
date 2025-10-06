@@ -1,23 +1,23 @@
 {
   "header": {
     "language-selector_title": "மொழியை அமைக்கவும்",
-    "about_aria-label": "ErikrafT Drop பற்றி திறந்திருக்கும்",
+    "about_aria-label": "ErikrafTdrop பற்றி திறந்திருக்கும்",
     "theme-auto_title": "தானாகவே கருப்பொருள் கணினிக்கு மாற்றியமைக்கவும்",
     "theme-light_title": "எப்போதும் ஒளி கருப்பொருளைப் பயன்படுத்துங்கள்",
     "theme-dark_title": "எப்போதும் இருண்ட கருப்பொருளைப் பயன்படுத்துங்கள்",
     "notification_title": "அறிவிப்புகளை இயக்கவும்",
-    "install_title": "ErikrafT Drop ஐ நிறுவவும்",
+    "install_title": "ErikrafTdrop ஐ நிறுவவும்",
     "pair-device_title": "உங்கள் சாதனங்களை நிரந்தரமாக இணைக்கவும்",
     "edit-paired-devices_title": "இணை சாதனங்களைத் திருத்தவும்",
     "join-public-room_title": "தற்காலிகமாக பொது அறையில் சேரவும்",
     "cancel-share-mode": "ரத்துசெய்",
-    "about_title": "ErikrafT Drop பற்றி",
+    "about_title": "ErikrafTdrop பற்றி",
     "edit-share-mode": "தொகு",
     "expand_title": "தலைப்பு பொத்தான் வரிசையை விரிவாக்குங்கள்"
   },
   "instructions": {
     "no-peers_data-drop-bg": "பெறுநரைத் தேர்ந்தெடுக்க வெளியீடு",
-    "no-peers-title": "கோப்புகளை அனுப்ப பிற சாதனங்களில் ErikrafT Drop ஐத் திறக்கவும்",
+    "no-peers-title": "கோப்புகளை அனுப்ப பிற சாதனங்களில் ErikrafTdrop ஐத் திறக்கவும்",
     "no-peers-subtitle": "சாதனங்களை இணை செய்யுங்கள் அல்லது பிற நெட்வொர்க்குகளில் கண்டறிய ஒரு பொது அறையை உள்ளிடவும்",
     "x-instructions_desktop": "கோப்புகளை அனுப்ப சொடுக்கு செய்யவும் அல்லது செய்தியை அனுப்ப வலது சொடுக்கு செய்யவும்",
     "x-instructions_mobile": "கோப்புகளை அனுப்ப தட்டவும் அல்லது செய்தியை அனுப்ப நீண்ட தட்டவும்",
@@ -27,11 +27,11 @@
     "activate-share-mode-shared-files-plural": "{{count}} பகிரப்பட்ட கோப்புகள்",
     "x-instructions-share-mode_mobile": "{{descriptor}} அனுப்ப தட்டவும்",
     "activate-share-mode-shared-file": "பகிரப்பட்ட கோப்பு",
-    "activate-share-mode-base": "அனுப்ப மற்ற சாதனங்களில் ErikrafT Drop ஐ திறக்கவும்",
+    "activate-share-mode-base": "அனுப்ப மற்ற சாதனங்களில் ErikrafTdrop ஐ திறக்கவும்",
     "activate-share-mode-and-other-file": "மற்றும் 1 பிற கோப்பு",
     "activate-share-mode-and-other-files-plural": "மற்றும் {{count}} பிற கோப்புகள்",
     "activate-share-mode-shared-text": "பகிரப்பட்ட உரை",
-    "webrtc-requirement": "இந்த ErikrafT Drop நிகழ்வைப் பயன்படுத்த, WEBRTC இயக்கப்பட்டிருக்க வேண்டும்!"
+    "webrtc-requirement": "இந்த ErikrafTdrop நிகழ்வைப் பயன்படுத்த, WEBRTC இயக்கப்பட்டிருக்க வேண்டும்!"
   },
   "footer": {
     "display-name_data-placeholder": "ஏற்றுகிறது…",
@@ -110,12 +110,12 @@
     "close-toast_title": "அறிவிப்பை மூடு"
   },
   "about": {
-    "close-about_aria-label": "ErikrafT Drop பற்றி மூடு",
+    "close-about_aria-label": "ErikrafTdrop பற்றி மூடு",
     "claim": "சாதனங்களில் கோப்புகளை மாற்ற எளிதான வழி",
-    "github_title": "கிட்அப்பில் ErikrafT Drop",
+    "github_title": "கிட்அப்பில் ErikrafTdrop",
     "buy-me-a-coffee_title": "எனக்கு ஒரு காபி வாங்க!",
-    "tweet_title": "ErikrafT Drop பற்றி ட்வீட் செய்யுங்கள்",
-    "mastodon_title": "மாச்டோடனில் ErikrafT Drop பற்றி எழுதுங்கள்",
+    "tweet_title": "ErikrafTdrop பற்றி ட்வீட் செய்யுங்கள்",
+    "mastodon_title": "மாச்டோடனில் ErikrafTdrop பற்றி எழுதுங்கள்",
     "bluesky_title": "ப்ளூச்கியில் எங்களைப் பின்தொடரவும்",
     "custom_title": "எங்களைப் பின்தொடரவும்",
     "privacypolicy_title": "எங்கள் தனியுரிமைக் கொள்கையைத் திறக்கவும்",
