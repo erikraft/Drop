@@ -22,18 +22,18 @@ This opens ErikrafT Drop in the default browser where you can choose the receive
 
 ### Usage
 ```bash
-pairdrop -h
+erikraftdrop -h
 ```
 ```
 Send files or text with ErikrafT Drop via command-line interface.
-Current domain: https://pairdrop-dev.onrender.com/
+Current domain: https://drop.erikraft.com/
 
 Usage:
-Open ErikrafT Drop:		pairdrop
-Send files:		pairdrop file1/directory1 (file2/directory2 file3/directory3 ...)
-Send text:		pairdrop -t "text"
-Specify domain:		pairdrop -d "https://pairdrop.net/"
-Show this help text:	pairdrop (-h|--help)
+Open ErikrafT Drop:		erikraftdrop
+Send files:		erikraftdrop file1/directory1 (file2/directory2 file3/directory3 ...)
+Send text:		erikraftdrop -t "text"
+Specify domain:		erikraftdrop -d "https://drop.erikraft.com/"
+Show this help text:	erikraftdrop (-h|--help)
 
 This erikraftdrop-cli version was released alongside v1.10.4
 ```
@@ -43,13 +43,13 @@ This erikraftdrop-cli version was released alongside v1.10.4
 ### Setup
 
 #### Linux / Mac
-1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/schlagmichdoch/ErikrafTDrop/releases)
+1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/erikraft/Drop/releases/)
    ```shell
-   wget "https://github.com/schlagmichdoch/ErikrafTDrop/releases/download/v1.11.2/erikraftdrop-cli.zip"
+   wget "https://github.com/erikraft/Drop/releases/download/v1.11.5/erikraftdrop-cli.zip"
    ```
    or
    ```shell
-   curl -LO "https://github.com/schlagmichdoch/ErikrafTDrop/releases/download/v1.11.2/erikraftdrop-cli.zip"
+   curl -LO "https://github.com/erikraft/Drop/releases/download/v1.11.5/erikraftdrop-cli.zip"
    ```
 2. Unzip the archive to a folder of your choice e.g. `/usr/share/erikraftdrop-cli/`
    ```shell
@@ -59,13 +59,13 @@ This erikraftdrop-cli version was released alongside v1.10.4
    ```shell
    sudo cp /usr/share/erikraftdrop-cli/.erikraftdrop-cli-config.example /usr/share/erikraftdrop-cli/.erikraftdrop-cli-config
    ```
-4. Make the bash file _pairdrop_ executable
+4. Make the bash file _erikraftdrop_ executable
    ```shell
-   sudo chmod +x /usr/share/erikraftdrop-cli/pairdrop
+   sudo chmod +x /usr/share/erikraftdrop-cli/erikraftdrop
    ```
-5. Add a symlink to /usr/local/bin/ to include _pairdrop_ to _PATH_
+5. Add a symlink to /usr/local/bin/ to include _erikraftdrop_ to _PATH_
    ```shell
-   sudo ln -s /usr/share/erikraftdrop-cli/pairdrop /usr/local/bin/pairdrop
+   sudo ln -s /usr/share/erikraftdrop-cli/erikraftdrop /usr/local/bin/erikraftdrop
    ```
 
 <br>
@@ -88,7 +88,7 @@ Then, you can also use erikraftdrop-cli from the default Windows Command Prompt
 by using the shell file instead of the bash file which then itself executes
 _erikraftdrop-cli_ (the bash file) via the Git Bash.
 ```shell
-pairdrop.sh -h
+erikraftdrop.sh -h
 ```
 
 <br>
@@ -97,14 +97,14 @@ pairdrop.sh -h
 
 ### Registering to open files with ErikrafT Drop
 It is possible to send multiple files with ErikrafT Drop via the context menu by adding erikraftdrop-cli to Windows `Send to` menu:
-1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/schlagmichdoch/ErikrafTDrop/releases)
+1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/erikraft/Drop/releases/)
 2. Unzip the archive to a folder of your choice e.g. `C:\Program Files\erikraftdrop-cli\`
 3. Inside this folder, copy the file _.erikraftdrop-cli-config.example_ to _.erikraftdrop-cli-config_
 4. Copy the shortcut _send with ErikrafT Drop.lnk_
 5. Hit Windows Key+R, type: `shell:sendto` and hit Enter.
 6. Paste the copied shortcut into the directory
-7. Open the properties window of the shortcut and edit the link field to point to _send-with-pairdrop.ps1_ located in the folder you used in step 2: \
-   `"C:\Program Files\PowerShell\7\pwsh.exe" -File "C:\Program Files\erikraftdrop-cli\send-with-pairdrop.ps1"`
+7. Open the properties window of the shortcut and edit the link field to point to _send-with-erikraftdrop.ps1_ located in the folder you used in step 2: \
+   `"C:\Program Files\PowerShell\7\pwsh.exe" -File "C:\Program Files\erikraftdrop-cli\send-with-erikraftdrop.ps1"`
 8. You are done! You can now send multiple files and directories directly via ErikrafT Drop:
 
    _context menu_ > _Send to_ > _ErikrafT Drop_
@@ -118,25 +118,25 @@ As Windows cannot execute bash scripts natively, you need to install [Git Bash](
 
 ### Registering to open files with ErikrafT Drop
 It is possible to send multiple files with ErikrafT Drop via the context menu by adding erikraftdrop-cli to Nautilus `Scripts` menu:
-1. Register _pairdrop_ as executable via [guide above](#linux).
-2. Copy the shell file _send-with-pairdrop_ to `~/.local/share/nautilus/scripts/` to include it in the context menu
+1. Register _erikraftdrop_ as executable via [guide above](#linux).
+2. Copy the shell file _send-with-erikraftdrop_ to `~/.local/share/nautilus/scripts/` to include it in the context menu
    ```shell
-   cp /usr/share/erikraftdrop-cli/send-with-pairdrop ~/.local/share/nautilus/scripts/
+   cp /usr/share/erikraftdrop-cli/send-with-erikraftdrop ~/.local/share/nautilus/scripts/
    ```
-3. Make the shell file _send-with-pairdrop_ executable
+3. Make the shell file _send-with-erikraftdrop_ executable
    ```shell
-   chmod +x ~/.local/share/nautilus/scripts/send-with-pairdrop
+   chmod +x ~/.local/share/nautilus/scripts/send-with-erikraftdrop
    ```
 4. You are done! You can now send multiple files and directories directly via ErikrafT Drop:
 
-   _context menu_ > _Scripts_ > _send-with-pairdrop_
+   _context menu_ > _Scripts_ > _send-with-erikraftdrop_
 
 <br>
 
 ## File Handling API
 The [File Handling API](https://learn.microsoft.com/en-us/microsoft-edge/progressive-web-apps-chromium/how-to/handle-files)
-was implemented, but it was removed as default file associations were overwritten ([#17](https://github.com/schlagmichdoch/ErikrafTDrop/issues/17),
-[#116](https://github.com/schlagmichdoch/ErikrafTDrop/issues/116) [#190](https://github.com/schlagmichdoch/ErikrafTDrop/issues/190))
+was implemented, but it was removed as default file associations were overwritten ([#17](https://github.com/schlagmichdoch/PairDrop/issues/17),
+[#116](https://github.com/schlagmichdoch/PairDrop/issues/116) [#190](https://github.com/schlagmichdoch/PairDrop/issues/190))
 and it only worked with explicitly specified file types and couldn't handle directories at all.
 
 [< Back](/README.md)

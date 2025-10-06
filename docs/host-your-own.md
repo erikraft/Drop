@@ -44,7 +44,7 @@ docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ls
 ### Docker Image from GitHub Container Registry (ghcr.io)
 
 ```bash
-docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ghcr.io/schlagmichdoch/pairdrop
+docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ghcr.io/erikraft/Drop
 ```
 
 
@@ -650,7 +650,7 @@ First, [Install docker with docker compose.](https://docs.docker.com/compose/ins
 Then, clone the repository and run docker compose:
 
 ```bash
-git clone https://github.com/schlagmichdoch/ErikrafTDrop.git && cd ErikrafTDrop
+git clone https://github.com/erikraft/Drop.git && cd Drop
 ```
 ```bash
 docker compose -f docker-compose-dev.yml up --no-deps --build

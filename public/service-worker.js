@@ -1,5 +1,5 @@
-const cacheVersion = 'v1.11.3';
-const cacheTitle = `pairdrop-cache-${cacheVersion}`;
+const cacheVersion = 'v1.11.5';
+const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
     'index.html',
@@ -157,13 +157,6 @@ const updateCache = request => new Promise((resolve, reject) => {
 // 2. If cache is not available: Fetch from network and update cache.
 // This way, cached files are only updated if the cacheVersion is changed
 self.addEventListener('fetch', function(event) {
-    const swOrigin = new URL(self.location.href).origin;
-    const requestOrigin = new URL(event.request.url).origin;
-
-    if (swOrigin !== requestOrigin) {
-        // Do not handle requests from other origin
-        event.respondWith(fetch(event.request));
-    }
     const swOrigin = new URL(self.location.href).origin;
     const requestOrigin = new URL(event.request.url).origin;
 
