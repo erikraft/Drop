@@ -1,13 +1,13 @@
 {
     "header": {
-        "about_title": "Tietoja ErikrafT Drop",
+        "about_title": "Tietoja ErikrafTdrop",
         "language-selector_title": "Valitse kieli",
-        "about_aria-label": "Avaa tietoja ErikrafT Drop",
+        "about_aria-label": "Avaa tietoja ErikrafTdrop",
         "theme-auto_title": "Käytä samaa teemaa kuin järjestelmä",
         "theme-light_title": "Käytä aina vaaleaa teemaa",
         "theme-dark_title": "Käytä aina tummaa teemaa",
         "notification_title": "Laita ilmoitukset päälle",
-        "install_title": "Asenna PairDrop",
+        "install_title": "Asenna ErikrafTdrop",
         "pair-device_title": "Yhdistä laitteesi pysyvästi",
         "edit-paired-devices_title": "Muokkaa yhdistettyjä laitteita",
         "join-public-room_title": "Liity julkiseen huoneeseen väliaikaisesti",
@@ -15,7 +15,7 @@
         "edit-share-mode": "Muokkaa"
     },
     "instructions": {
-        "no-peers-title": "Avaa PairDrop muilla laitteilla lähettääksesi tiedostoja",
+        "no-peers-title": "Avaa ErikrafTdrop muilla laitteilla lähettääksesi tiedostoja",
         "no-peers-subtitle": "Yhdistä laite tai liity julkiseen huoneeseen, jotta olet löydettävissä muissa verkoissa",
         "x-instructions_desktop": "Paina lähettääksesi tiedoston tai klikkaa oikealla painikkeella lähettääksesi viestin"
     }
