@@ -152,7 +152,29 @@ Connect to others in complex network situations, or over the Internet.
 
 ## ⏬ Getting ErikrafT Drop
 
-<a href="https://drop.erikraft.com/" target="_blank"><img src="https://i.imgur.com/9uq39iu.png" width="217"/></a><a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank"><img src="https://i.imgur.com/nxlokSi.png" width="217"/></a><a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank"><img src="https://i.imgur.com/fBWr0lN.png" width="217" alt="Open VSX Registry"/><a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank"><img src="https://i.imgur.com/1OJsWQz.png" width="217" alt="Get it on Open VSX Registry"/><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img src="https://i.imgur.com/2MubKYT.png" width="217" alt="Firefox Browser ADD-ONS"/>
+<div align="center" style="display: inline_block; gap: 10px;"><br>
+  <a href="https://drop.erikraft.com/" target="_blank">
+    <img alt="Open the Web App" style="height: 80px;" src="https://i.imgur.com/9uq39iu.png">
+  </a>
+  <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
+    <img alt="Download the APK" style="height: 80px;" src="https://i.imgur.com/nxlokSi.png">
+  </a>
+  <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
+    <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
+  </a>
+  <a href="https://f-droid.org/en/packages/com.erikraft.drop/" target="_blank">
+    <img alt="Get it on F-Droid" height="80" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank">
+    <img alt="Get it on VS Code Marketplace" style="height: 80px;" src="https://i.imgur.com/fBWr0lN.png">
+  </a>
+  <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank">
+    <img alt="Get it on Open VSX Registry" style="height: 80px;" src="https://i.imgur.com/1OJsWQz.png">
+  </a>
+  <a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank">
+    <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="https://i.imgur.com/2MubKYT.png">
+  </a>
+</div>
 
 ---
 

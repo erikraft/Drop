@@ -26,13 +26,13 @@ erikraftdrop -h
 ```
 ```
 Send files or text with ErikrafT Drop via command-line interface.
-Current domain: https://erikraftdrop.net/
+Current domain: https://drop.erikraft.com/
 
 Usage:
 Open ErikrafT Drop:		erikraftdrop
 Send files:		erikraftdrop file1/directory1 (file2/directory2 file3/directory3 ...)
 Send text:		erikraftdrop -t "text"
-Specify domain:		erikraftdrop -d "https://erikraftdrop.net/"
+Specify domain:		erikraftdrop -d "https://drop.erikraft.com/"
 Show this help text:	erikraftdrop (-h|--help)
 
 This erikraftdrop-cli version was released alongside v1.10.4
@@ -43,13 +43,13 @@ This erikraftdrop-cli version was released alongside v1.10.4
 ### Setup
 
 #### Linux / Mac
-1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/schlagmichdoch/ErikrafTDrop/releases)
+1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/erikraft/Drop/releases/)
    ```shell
-   wget "https://github.com/schlagmichdoch/ErikrafTDrop/releases/download/v1.11.5/erikraftdrop-cli.zip"
+   wget "https://github.com/erikraft/Drop/releases/download/v1.11.5/erikraftdrop-cli.zip"
    ```
    or
    ```shell
-   curl -LO "https://github.com/schlagmichdoch/ErikrafTDrop/releases/download/v1.11.5/erikraftdrop-cli.zip"
+   curl -LO "https://github.com/erikraft/Drop/releases/download/v1.11.5/erikraftdrop-cli.zip"
    ```
 2. Unzip the archive to a folder of your choice e.g. `/usr/share/erikraftdrop-cli/`
    ```shell
@@ -97,7 +97,7 @@ erikraftdrop.sh -h
 
 ### Registering to open files with ErikrafT Drop
 It is possible to send multiple files with ErikrafT Drop via the context menu by adding erikraftdrop-cli to Windows `Send to` menu:
-1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/schlagmichdoch/ErikrafTDrop/releases)
+1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/erikraft/Drop/releases/)
 2. Unzip the archive to a folder of your choice e.g. `C:\Program Files\erikraftdrop-cli\`
 3. Inside this folder, copy the file _.erikraftdrop-cli-config.example_ to _.erikraftdrop-cli-config_
 4. Copy the shortcut _send with ErikrafT Drop.lnk_
@@ -135,8 +135,8 @@ It is possible to send multiple files with ErikrafT Drop via the context menu by
 
 ## File Handling API
 The [File Handling API](https://learn.microsoft.com/en-us/microsoft-edge/progressive-web-apps-chromium/how-to/handle-files)
-was implemented, but it was removed as default file associations were overwritten ([#17](https://github.com/schlagmichdoch/ErikrafTDrop/issues/17),
-[#116](https://github.com/schlagmichdoch/ErikrafTDrop/issues/116) [#190](https://github.com/schlagmichdoch/ErikrafTDrop/issues/190))
+was implemented, but it was removed as default file associations were overwritten ([#17](https://github.com/schlagmichdoch/PairDrop/issues/17),
+[#116](https://github.com/schlagmichdoch/PairDrop/issues/116) [#190](https://github.com/schlagmichdoch/PairDrop/issues/190))
 and it only worked with explicitly specified file types and couldn't handle directories at all.
 
 [< Back](/README.md)

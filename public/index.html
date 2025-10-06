@@ -927,8 +927,14 @@
             <a href="https://drop.erikraft.com/" target="_blank">
                 <img src="https://i.imgur.com/9uq39iu.png" alt="Get it on Web" style="height: 80px;">
             </a>
-            <a href="https://github.com/erikraft/App-Drop-Apk/raw/main/ErikrafT%20Drop.apk" target="_blank">
-                <img src="https://i.imgur.com/nxlokSi.png" alt="Get it on APK" style="height: 80px;">
+            <a id="githubDownloadAndroid" href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
+                <img src="https://i.imgur.com/nxlokSi.png" alt="Download the APK" style="height: 80px;">
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
+                <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height: 80px;">
+            </a>
+            <a href="https://f-droid.org/en/packages/com.erikraft.drop/" target="_blank">
+                <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" style="height: 80px;">
             </a>
             <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank">
                 <img src="https://i.imgur.com/fBWr0lN.png" alt="Get it on VS Code Marketplace" style="height: 80px;">
@@ -1190,33 +1196,12 @@
 
 <!-- Script de Download para Android -->
 <script>
-    document.getElementById('githubDownloadAndroid').addEventListener('click', async function(event) {
-        event.preventDefault();
-
-        const owner = 'erikraft';
-        const repo = 'App-Drop-Apk';
-        const path = 'ErikrafT%20Drop.apk';
-        const branch = 'main';
-
-        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`Erro: ${response.status}`);
-
-            const data = await response.json();
-            const downloadUrl = data.download_url;
-
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = decodeURIComponent(path);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error('Erro ao baixar o APK:', error);
+    (function() {
+        const androidLink = document.getElementById('githubDownloadAndroid');
+        if (androidLink) {
+            androidLink.href = 'https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk';
         }
-    });
+    })();
 </script>
 
 

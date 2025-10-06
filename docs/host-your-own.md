@@ -44,7 +44,7 @@ docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ls
 ### Docker Image from GitHub Container Registry (ghcr.io)
 
 ```bash
-docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ghcr.io/schlagmichdoch/pairdrop
+docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ghcr.io/erikraft/Drop
 ```
 
 

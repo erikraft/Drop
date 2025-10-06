@@ -11,10 +11,10 @@ Here is a good guide on how to install PWAs on different platforms: \
 https://www.cdc.gov/niosh/mining/content/hearingloss/installPWA.html
 
 
-**Chromium-based browser on Desktop (Chrome, Edge, Vivaldi, Brave, etc.)** \
+**Chromium-based browser on Desktop (Chrome, Comet, Edge, Vivaldi, Brave, etc.)** \
 Easily install ErikrafT Drop PWA on your desktop by clicking the install-button in the top-right corner while on [drop.erikraft.com](https://drop.erikraft.com).
 
-<img width="400" src="pwa-install.png" alt="Example on how to install a pwa with Edge">
+<img width="400" src="pwa-installe" alt="Example on how to install a pwa with Edge">
 
 **Desktop Firefox** \
 On Firefox, PWAs are installable via [this browser extensions](https://addons.mozilla.org/de/firefox/addon/pwas-for-firefox/)
@@ -114,16 +114,16 @@ Yes.
 
 <details>
 <summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Are there any third-party Apps?
+    OFFICIAL ErikrafT Drop Apps!
 </summary>
 
 <br>
 
-These third-party apps are compatible with ErikrafT Drop:
+OFFICIAL ErikrafT Drop Extension and App:
 
-1. [Snapdrop Android App](https://github.com/fm-sys/snapdrop-android)
-2. [Snapdrop for Firefox (Addon)](https://github.com/ueen/SnapdropFirefoxAddon)
-3. Feel free to make one :)
+1. [ErikrafT Drop Android App](https://github.com/erikraft/Drop-Android)
+2. [ErikrafT Drop Extension](https://github.com/erikraft/Drop/tree/master/Browser%20Extension)
+3. [ErikrafT Drop Extension VS Code](https://github.com/erikraft/Drop/tree/master/VS%20Code%20Extension)
 
 <br>
 
@@ -150,7 +150,7 @@ to learn more about STUN, TURN and WebRTC.
 
 If you host your own instance
 and want to support devices that do not support WebRTC,
-you can [start the ErikrafT Drop instance with an activated WebSocket fallback](https://github.com/schlagmichdoch/ErikrafTDrop/blob/master/docs/host-your-own.md#websocket-fallback-for-vpn).
+you can [start the ErikrafT Drop instance with an activated WebSocket fallback](https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md#websocket-fallback-for-vpn).
 
 <br>
 
@@ -165,7 +165,7 @@ you can [start the ErikrafT Drop instance with an activated WebSocket fallback](
 
 Files are sent directly between peers.
 ErikrafT Drop doesn't even use a database.
-If curious, study [the signaling server](https://github.com/schlagmichdoch/ErikrafTDrop/blob/master/server/ws-server.js).
+If curious, study [the signaling server](https://github.com/erikraft/Drop/blob/master/server/ws-server.js).
 WebRTC encrypts the files in transit.
 
 If the devices are on the same network,
@@ -189,7 +189,7 @@ to learn more about STUN, TURN and WebRTC.
 
 Yes. Your files are sent using WebRTC, encrypting them in transit.
 Still you have to trust the ErikrafT Drop server. To ensure the connection is secure and there is no [MITM](https://en.m.wikipedia.org/wiki/Man-in-the-middle_attack) there is a plan to make ErikrafT Drop
-zero trust by encrypting the signaling and implementing a verification process. See [issue #180](https://github.com/schlagmichdoch/ErikrafTDrop/issues/180) to keep updated.
+zero trust by encrypting the signaling and implementing a verification process. See [issue #180](https://github.com/schlagmichdoch/PairDrop/issues/180) to keep updated.
 
 <br>
 
@@ -249,11 +249,11 @@ and/or *Thinking, Fast and Slow* to learn more.
 <br>
 
 * [Donation](https://www.paypal.com/donate/?business=QKLABC97EXJSN&no_recurring=0&item_name=ErikrafT&currency_code=BRL) to pay for the domain and the server, and support libre software.
-* [File bugs, give feedback, submit suggestions](https://github.com/schlagmichdoch/pairdrop/issues)
+* [File bugs, give feedback, submit suggestions](https://github.com/erikraft/Drop/issues)
 * Share ErikrafT Drop on social media.
 * Fix bugs and create a pull request.
 * Do some security analysis and make suggestions.
-* Participate in [active discussions](https://github.com/schlagmichdoch/ErikrafTDrop/discussions)
+* Participate in [active discussions](https://github.com/erikraft/Drop/discussions)
 
 <br>
 
