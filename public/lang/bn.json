@@ -31,5 +31,8 @@
     "activate-share-mode-and-other-files-plural": "অন্য ফাইল যোগ করুন",
     "activate-share-mode-shared-text": "পাঠানো টেক্সট",
     "activate-share-mode-shared-files-plural": "পাঠানো ফাইল গুলো"
+  },
+  "about": {
+    "instance-info": "এই অ্যাপটি ErikrafT Drop এবং PairDrop-এর জন্য অনুকূলিত ক্লায়েন্ট। সংযোগ করতে নিম্নলিখিত যে কোনো একটি ইনস্ট্যান্স বেছে নিন অথবা কাস্টম URL নির্দিষ্ট করুন। সুপারিশকৃত ডিফল্ট: drop.erikraft.com। নোট: আপনাকে সব ডিভাইসে একই URL বেছে নিতে হবে।"
   }
 }

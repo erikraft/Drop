@@ -73,6 +73,9 @@
     "edit-share-mode": "عدل",
     "expand_title": "Expand header button row"
   },
+  "about": {
+    "instance-info": "هذا التطبيق هو عميل مُحسَّن لخدمتي ErikrafT Drop وPairDrop. اختر إحدى الحالات التالية أو حدِّد عنوان URL مخصصًا للاتصال. الإعداد الافتراضي الموصى به: drop.erikraft.com. ملاحظة: يجب عليك اختيار عنوان URL نفسه على جميع الأجهزة."
+  },
   "instructions": {
     "x-instructions_mobile": "انقر لإرسال الملفات أو انقر لفترة طويلة لإرسال رسالة",
     "x-instructions-share-mode_desktop": "انقر للإرسال {{descriptor}}",

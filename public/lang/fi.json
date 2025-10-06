@@ -18,5 +18,8 @@
         "no-peers-title": "Avaa ErikrafT Drop muilla laitteilla lähettääksesi tiedostoja",
         "no-peers-subtitle": "Yhdistä laite tai liity julkiseen huoneeseen, jotta olet löydettävissä muissa verkoissa",
         "x-instructions_desktop": "Paina lähettääksesi tiedoston tai klikkaa oikealla painikkeella lähettääksesi viestin"
+    },
+    "about": {
+        "instance-info": "Tämä sovellus on optimoitu asiakas ErikrafT Dropille ja PairDropille. Valitse jokin seuraavista instansseista tai määritä yhteyttä varten oma URL-osoite. Suositeltu oletus: drop.erikraft.com. Huomautus: sinun on valittava sama URL kaikilla laitteilla."
     }
 }
