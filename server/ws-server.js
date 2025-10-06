@@ -4,7 +4,7 @@ import crypto from "crypto"
 import Peer from "./peer.js";
 import {hasher, randomizer} from "./helper.js";
 
-export default class PairDropWsServer {
+export default class ErikrafTdropWsServer {
 
     constructor(server, conf) {
         this._conf = conf

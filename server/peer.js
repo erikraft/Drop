@@ -72,7 +72,7 @@ export default class Peer {
             if (ipv6_was_localized) {
                 console.debug("IPv6 client IP was localized to", this.conf.ipv6Localize, this.conf.ipv6Localize > 1 ? "segments" : "segment");
             }
-            console.debug("PairDrop uses:", this.ip);
+            console.debug("ErikrafTdrop uses:", this.ip);
             console.debug("IP is private:", this.ipIsPrivate(this.ip));
             console.debug("if IP is private, '127.0.0.1' is used instead");
             console.debug("----DEBUGGING-PEER-IP-END----");

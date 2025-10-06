@@ -1,5 +1,5 @@
-const cacheVersion = 'v1.11.3';
-const cacheTitle = `pairdrop-cache-${cacheVersion}`;
+const cacheVersion = 'v1.11.5';
+const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
     'index.html',
@@ -164,13 +164,6 @@ self.addEventListener('fetch', function(event) {
         // Do not handle requests from other origin
         event.respondWith(fetch(event.request));
     }
-    const swOrigin = new URL(self.location.href).origin;
-    const requestOrigin = new URL(event.request.url).origin;
-
-    if (swOrigin !== requestOrigin) {
-        // Do not handle requests from other origin
-        event.respondWith(fetch(event.request));
-    }
     else if (event.request.method === "POST") {
         // Requests related to Web Share Target.
         event.respondWith((async () => {
@@ -230,7 +223,7 @@ const evaluateRequestData = function (request) {
         const url = formData.get("url");
         const files = formData.getAll("allfiles");
 
-        const pairDropUrl = request.url;
+        const erikrafTdropUrl = request.url;
 
         if (files && files.length > 0) {
             let fileObjects = [];
@@ -241,7 +234,7 @@ const evaluateRequestData = function (request) {
                 });
             }
 
-            const DBOpenRequest = indexedDB.open('pairdrop_store');
+            const DBOpenRequest = indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = e => {
                 const db = e.target.result;
                 for (let i = 0; i < fileObjects.length; i++) {
@@ -250,12 +243,12 @@ const evaluateRequestData = function (request) {
 
                     const objectStoreRequest = objectStore.add(fileObjects[i]);
                     objectStoreRequest.onsuccess = _ => {
-                        if (i === fileObjects.length - 1) resolve(pairDropUrl + '?share_target=files');
+                        if (i === fileObjects.length - 1) resolve(erikrafTdropUrl + '?share_target=files');
                     }
                 }
             }
             DBOpenRequest.onerror = _ => {
-                resolve(pairDropUrl);
+                resolve(erikrafTdropUrl);
             }
         }
         else {
@@ -265,7 +258,7 @@ const evaluateRequestData = function (request) {
             if (text) urlArgument += `&text=${text}`;
             if (url) urlArgument += `&url=${url}`;
 
-            resolve(pairDropUrl + urlArgument);
+            resolve(erikrafTdropUrl + urlArgument);
         }
     });
 }
