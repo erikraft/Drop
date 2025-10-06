@@ -47,11 +47,11 @@
     },
     "header": {
         "theme-auto_title": "ปรับธีมให้เข้ากับระบบโดยอัตโนมัติ",
-        "about_title": "เกี่ยวกับ ErikrafT Drop",
+        "about_title": "เกี่ยวกับ ErikrafTdrop",
         "theme-light_title": "ใช้ธีมสว่างเสมอ",
         "theme-dark_title": "ใช้ธีมมืดเสมอ",
         "notification_title": "เปิดใช้งานการแจ้งเตือน",
-        "install_title": "ติดตั้ง ErikrafT Drop",
+        "install_title": "ติดตั้ง ErikrafTdrop",
         "edit-paired-devices_title": "แก้ไขอุปกรณ์ที่จับคู่",
         "cancel-share-mode": "ยกเลิก",
         "join-public-room_title": "เข้าร่วมห้องสาธารณะชั่วคราว",
@@ -72,10 +72,10 @@
     "about": {
         "bluesky_title": "ติดตามเราได้ที่ BlueSky",
         "claim": "วิธีที่ง่ายที่สุดในการถ่ายโอนไฟล์ระหว่างอุปกรณ์",
-        "github_title": "ErikrafT Drop บน GitHub",
+        "github_title": "ErikrafTdrop บน GitHub",
         "buy-me-a-coffee_title": "ซื้อกาแฟให้ฉันหน่อย! (บริจาค)",
-        "tweet_title": "ทวีตเกี่ยวกับ ErikrafT Drop",
-        "mastodon_title": "เขียนเกี่ยวกับ ErikrafT Drop บน Mastodon",
+        "tweet_title": "ทวีตเกี่ยวกับ ErikrafTdrop",
+        "mastodon_title": "เขียนเกี่ยวกับ ErikrafTdrop บน Mastodon",
         "custom_title": "ติดตามเรา",
         "privacypolicy_title": "เปิดนโยบายความเป็นส่วนตัวของเรา",
         "faq_title": "คำถามที่พบบ่อย (FAQ)"
@@ -89,7 +89,7 @@
         "activate-share-mode-and-other-file": "และอีก 1 ไฟล์",
         "activate-share-mode-shared-files-plural": "{{count}}ไฟล์ที่แชร์",
         "activate-share-mode-and-other-files-plural": "และ{{count}}ไฟล์ อื่นๆ",
-        "no-peers-title": "เปิด ErikrafT Drop บนอุปกรณ์อื่นเพื่อส่งไฟล์",
+        "no-peers-title": "เปิด ErikrafTdrop บนอุปกรณ์อื่นเพื่อส่งไฟล์",
         "x-instructions_desktop": "กดเพื่อส่งไฟล์ หรือ คลิ้กขวาเพื่อส่งไฟล์"
     }
 }

@@ -1,4 +1,4 @@
-class PairDrop {
+class ErikrafTdrop {
 
     constructor() {
         this.$headerNotificationBtn = $('notification');
@@ -240,7 +240,7 @@ class PairDrop {
     }
 }
 
-const pairDrop = new PairDrop();
+const erikrafTdrop = new ErikrafTdrop();
 
 // Inicializa o sistema de moderação
 const contentModeration = new ContentModeration();
