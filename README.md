@@ -162,7 +162,7 @@ Connect to others in complex network situations, or over the Internet.
   <a href="https://drop.erikraft.com/" target="_blank">
     <img alt="Open the Web App" style="height: 80px;" src="https://i.imgur.com/9uq39iu.png">
   </a>
-  <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
+  <a href="https://github.com/erikraft/Drop/releases/latest/download/Drop-Android.apk" target="_blank">
     <img alt="Download the APK" style="height: 80px;" src="https://i.imgur.com/nxlokSi.png">
   </a>
   <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
