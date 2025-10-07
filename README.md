@@ -38,6 +38,9 @@ ErikrafT Drop Community
 
 </p>
 
+<br>
+<br>
+
 ---
 
 <img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
@@ -47,6 +50,9 @@ ErikrafT Drop Community
 🔮｜See possible old or future files that have not yet been released in the source code on Github, which is on my computer in a 2nd public folder here on Mega <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
 
 ---
+
+<br>
+<br>
 
 ## ⚙️ Features
 File sharing on your local network that works on all platforms.
