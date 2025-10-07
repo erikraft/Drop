@@ -186,9 +186,9 @@ Connect to others in complex network situations, or over the Internet.
 
 ## 🌐 Links
 
-[<img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;">｜biodrop.erikraft.com](https://biodrop.erikraft.com/)
+[<img src="https://biodrop.erikraft.com/images/Logo.png" width="20px" style="display:inline;">｜biodrop.erikraft.com](https://biodrop.erikraft.com/)
 <br />
-[<img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;">｜drop.erikraft.com](https://drop.erikraft.com/)
+[<img src="https://biodrop.erikraft.com/images/Logo.png" width="20px" style="display:inline;">｜drop.erikraft.com](https://drop.erikraft.com/)
 <br />
 [🛡️｜Privacy Policy](https://drop.erikraft.com/privacy-policy.html)
 <br />
