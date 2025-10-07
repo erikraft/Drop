@@ -44,7 +44,7 @@ ErikrafT Drop Community
 
 ---
 
-🔮｜See possible future files that have not yet been released in the source code on Github, which is on my computer <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
+🔮｜See possible old or future files that have not yet been released in the source code on Github, which is on my computer in a 2nd public folder here on Mega <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
 
 ---
 
@@ -197,8 +197,6 @@ Connect to others in complex network situations, or over the Internet.
 [🛡️｜Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
 <br />
 [📲｜ErikrafT Drop Android Github Repository](https://github.com/erikraft/Drop-Android)
-<br />
-[📲｜ErikrafT Drop APK Github Repository](https://github.com/erikraft/App-Drop-Apk)
 <br />
 
 ---
