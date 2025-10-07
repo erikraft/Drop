@@ -709,13 +709,27 @@ button::-moz-focus-inner {
 #about {
     color: white;
     z-index: 32;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     pointer-events: none;
     text-align: center;
+    padding: 24px 16px 48px;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    align-items: center;
+    -webkit-overflow-scrolling: touch;
+}
+
+#about:target {
+    pointer-events: all;
 }
 
 #about header {
     z-index: 1;
+    width: min(960px, 100%);
+    margin: 0 auto 16px;
+    padding: 0 8px;
+    justify-content: flex-start;
 }
 
 #about:not(:target) header {
@@ -730,6 +744,10 @@ button::-moz-focus-inner {
     transition: opacity 300ms ease 300ms;
     will-change: opacity;
     pointer-events: all;
+}
+
+#about header .icon-button {
+    margin: 0;
 }
 
 #about:not(:target) > header,
@@ -791,12 +809,24 @@ html[dir="rtl"] #about x-background {
     margin: 8px 8px -16px;
 }
 
+#about .social-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin: 16px auto 32px;
+    width: min(100%, 720px);
+}
+
+#about .social-buttons a {
+    margin: 0;
+}
+
 #about .download-badge-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 16px;
-    margin: 16px 0 24px;
+    margin: 0 auto 32px;
 }
 
 #about .download-badge {
@@ -868,6 +898,19 @@ body.dark-theme #about .download-badge:focus-visible {
 }
 
 @media (max-width: 720px) {
+    #about {
+        padding: 20px 12px 40px;
+    }
+
+    #about .social-buttons {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    #about section {
+        gap: 20px;
+    }
+
     #about .download-badge-grid {
         gap: 12px;
     }
@@ -884,6 +927,18 @@ body.dark-theme #about .download-badge:focus-visible {
 }
 
 @media (max-width: 480px) {
+    #about {
+        padding: 18px 10px 36px;
+    }
+
+    #about header {
+        margin-bottom: 12px;
+    }
+
+    #about section {
+        gap: 18px;
+    }
+
     #about .download-badge {
         flex: 1 1 100%;
         max-width: 320px;
@@ -891,7 +946,12 @@ body.dark-theme #about .download-badge:focus-visible {
 }
 
 #about section {
-    flex-grow: 1;
+    width: min(960px, 100%);
+    margin: 0 auto;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+    padding-bottom: 16px;
 }
 
 canvas.circles {
