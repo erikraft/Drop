@@ -40,7 +40,7 @@ ErikrafT Drop Community
 
 ---
 
-📱｜ErikrafT Drop Available for Android: <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://github.com/erikraft/Drop-Android)
+<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
 
 ---
 
