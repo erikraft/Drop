@@ -786,6 +786,29 @@ button::-moz-focus-inner {
     -webkit-clip-path: circle(var(--crop-size));
 }
 
+#about::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background: radial-gradient(circle at calc(50% - 36px),
+            var(--primary-color) 0%,
+            rgba(5, 14, 32, 0.94) 78%,
+            rgba(0, 0, 0, 0.98) 100%);
+    opacity: 0;
+    transition: opacity 500ms ease;
+}
+
+#about:target::after {
+    opacity: 1;
+    transition-delay: 300ms;
+}
+
+#about:not(:target)::after {
+    transition-delay: 0s;
+}
+
 html:not([dir="rtl"]) #about x-background {
     right: calc(36px - var(--size-half));
 }
