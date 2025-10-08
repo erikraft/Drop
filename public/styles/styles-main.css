@@ -718,10 +718,18 @@ button::-moz-focus-inner {
     justify-content: flex-start;
     align-items: center;
     -webkit-overflow-scrolling: touch;
+    background: transparent;
 }
 
 #about:target {
     pointer-events: all;
+    background: radial-gradient(circle at calc(50% - 36px),
+            var(--primary-color) 0%,
+            rgba(5, 14, 32, 0.94) 78%,
+            rgba(0, 0, 0, 0.98) 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #about header {
