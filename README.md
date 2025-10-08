@@ -218,4 +218,11 @@ Thank you very much for your contribution!
 ---
 
 ## 🙏 Thank you everyone's support :)
-[![Star History Chart](https://api.star-history.com/svg?repos=erikraft/Drop&type=Date)](https://star-history.com/#erikraft/Drop&Date)
+
+<a href="https://www.star-history.com/#erikraft/Drop&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=erikraft/Drop&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=erikraft/Drop&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=erikraft/Drop&type=Date" />
+ </picture>
+</a>
