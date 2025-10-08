@@ -119,11 +119,12 @@ Yes.
 
 <br>
 
-OFFICIAL ErikrafT Drop Extension and App:
+Extension, App, and ErikrafT Drop OFFICIAL Website:
 
-1. [ErikrafT Drop Android App](https://github.com/erikraft/Drop-Android)
-2. [ErikrafT Drop Extension](https://github.com/erikraft/Drop/tree/master/Browser%20Extension)
-3. [ErikrafT Drop Extension VS Code](https://github.com/erikraft/Drop/tree/master/VS%20Code%20Extension)
+1. [ErikrafT Drop](https://github.com/erikraft/Drop)
+2. [ErikrafT Drop Android App](https://github.com/erikraft/Drop-Android)
+3. [ErikrafT Drop Extension](https://github.com/erikraft/Drop/tree/master/Browser%20Extension)
+4. [ErikrafT Drop Extension VS Code](https://github.com/erikraft/Drop/tree/master/VS%20Code%20Extension)
 
 <br>
 
