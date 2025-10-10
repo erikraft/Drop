@@ -15,6 +15,8 @@
     <img src="https://img.shields.io/coderabbit/prs/github/erikraft/Drop?utm_source=oss&utm_medium=github&utm_campaign=erikraft%2FDrop&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews" alt="CodeRabbit Pull Request Reviews">
   </p>
 
+- [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/erikraft/Drop)
+
   <p>
     <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Report a bug</a><br />
     <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Request feature</a>
