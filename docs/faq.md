@@ -70,7 +70,7 @@ Available shortcuts:
 
 ~~iOS Shortcuts saves the day:~~ \
 I created a simple iOS shortcut that takes your photos and saves them to your gallery:
-https://routinehub.co/shortcut/13988/
+[https://routinehub.co/shortcut/13990/](https://routinehub.co/shortcut/13990/)
 
 Update: \
 Apparently, this was only a bug that is fixed in recent iOS version (https://github.com/WebKit/WebKit/pull/13111). \
