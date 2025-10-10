@@ -2673,7 +2673,7 @@ class WebShareTargetUI {
             }
         }
         else if (shareTargetType === "files") {
-            let openRequest = window.indexedDB.open('pairdrop_store')
+            let openRequest = window.indexedDB.open('erikraftdrop_store')
             openRequest.onsuccess = e => {
                 const db = e.target.result;
                 const tx = db.transaction('share_target_files', 'readwrite');
