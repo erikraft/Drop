@@ -37,6 +37,7 @@ export default class ErikrafTdropWsServer {
             type: 'display-name',
             displayName: peer.name.displayName,
             deviceName: peer.name.deviceName,
+            clientType: peer.name.clientType,
             peerId: peer.id,
             peerIdHash: hasher.hashCodeSalted(peer.id)
         });

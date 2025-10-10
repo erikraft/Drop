@@ -71,7 +71,7 @@ class ErikrafTDropViewProvider {
       </head>
       <body>
         <iframe
-          src="https://drop.erikraft.com/"
+          src="https://drop.erikraft.com/?client_type=vs-code-extension"
           width="390"
           height="844"
           style="border: none; border-radius: 16px;"
