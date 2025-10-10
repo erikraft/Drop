@@ -707,28 +707,42 @@ button::-moz-focus-inner {
 
 /* Info Animation */
 #about {
+    --about-padding-top: 24px;
+    --about-padding-inline: 16px;
+    --about-padding-bottom: 48px;
     color: white;
     z-index: 32;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     pointer-events: none;
     text-align: center;
-    padding: 24px 16px 48px;
+    padding: var(--about-padding-top) var(--about-padding-inline) var(--about-padding-bottom);
     box-sizing: border-box;
     justify-content: flex-start;
     align-items: center;
-    -webkit-overflow-scrolling: touch;
+    background: transparent;
 }
 
 #about:target {
     pointer-events: all;
+    background: radial-gradient(circle at calc(50% - 36px),
+            var(--primary-color) 0%,
+            rgba(5, 14, 32, 0.94) 78%,
+            rgba(0, 0, 0, 0.98) 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #about header {
+    position: absolute;
+    top: var(--about-padding-top);
+    right: var(--about-padding-inline);
     z-index: 1;
-    width: min(960px, 100%);
-    margin: 0 auto 16px;
-    padding: 0 8px;
+    flex-direction: row;
+    width: auto;
+    margin: 0;
+    padding: 0;
     justify-content: flex-start;
 }
 
@@ -899,7 +913,9 @@ body.dark-theme #about .download-badge:focus-visible {
 
 @media (max-width: 720px) {
     #about {
-        padding: 20px 12px 40px;
+        --about-padding-top: 20px;
+        --about-padding-inline: 12px;
+        --about-padding-bottom: 40px;
     }
 
     #about .social-buttons {
@@ -928,11 +944,9 @@ body.dark-theme #about .download-badge:focus-visible {
 
 @media (max-width: 480px) {
     #about {
-        padding: 18px 10px 36px;
-    }
-
-    #about header {
-        margin-bottom: 12px;
+        --about-padding-top: 18px;
+        --about-padding-inline: 10px;
+        --about-padding-bottom: 36px;
     }
 
     #about section {
@@ -952,6 +966,9 @@ body.dark-theme #about .download-badge:focus-visible {
     justify-content: flex-start;
     gap: 24px;
     padding-bottom: 16px;
+    max-height: calc(100vh - var(--about-padding-top) - var(--about-padding-bottom));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 canvas.circles {

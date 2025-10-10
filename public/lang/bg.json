@@ -1,8 +1,8 @@
 {
     "header": {
-        "about_title": "Относно ErikrafTdrop",
+        "about_title": "Относно ErikrafT Drop",
         "language-selector_title": "Задай език",
-        "about_aria-label": "Отвори Относно ErikrafTdrop",
+        "about_aria-label": "Отвори Относно ErikrafT Drop",
         "theme-auto_title": "Адаптирай темата спрямо системните настройки",
         "theme-light_title": "Винаги използвай светла тема",
         "notification_title": "Включи известията",
@@ -11,18 +11,18 @@
         "cancel-share-mode": "Отказ",
         "expand_title": "Покажи меню",
         "theme-dark_title": "Винаги използвай тъмна тема",
-        "install_title": "Инсталирай ErikrafTdrop",
+        "install_title": "Инсталирай ErikrafT Drop",
         "edit-paired-devices_title": "Промени свързаните устройства",
         "edit-share-mode": "Промени"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Пусни, за да избереш получател",
-        "no-peers-title": "Отвори ErikrafTdrop на друго устройство, за да започнеш споделяне",
+        "no-peers-title": "Отвори ErikrafT Drop на друго устройство, за да започнеш споделяне",
         "no-peers-subtitle": "Свържи устройство или влез в публична стая, за да станеш откриваем за други мрежи",
         "x-instructions_desktop": "Ляв клик, за да изпратиш файл или десен клик, за да изпратиш съобщение",
         "x-instructions_data-drop-peer": "Пусни, за да изпратиш",
         "x-instructions-share-mode_desktop": "Натисни, за да изпратиш {{descriptor}}",
-        "activate-share-mode-base": "Отвори ErikrafTdrop на друго устройство, за да изпратиш",
+        "activate-share-mode-base": "Отвори ErikrafT Drop на друго устройство, за да изпратиш",
         "activate-share-mode-and-other-file": "и още 1 файл",
         "activate-share-mode-and-other-files-plural": "и още {{count}} файла",
         "activate-share-mode-shared-text": "споделен текст",
@@ -31,7 +31,7 @@
         "activate-share-mode-shared-file": "споделен файл",
         "x-instructions_mobile": "Докосни, за да изпратиш файл или задръж, за да изпратиш съобщение",
         "x-instructions-share-mode_mobile": "Докосни, за да изпратиш {{descriptor}}",
-        "webrtc-requirement": "За да използвате инстанция на ErikrafTdrop, WebRTC трябва да бъде включен!"
+        "webrtc-requirement": "За да използвате инстанция на ErikrafT Drop, WebRTC трябва да бъде включен!"
     },
     "footer": {
         "known-as": "Известни сте като:",
@@ -110,14 +110,14 @@
         "public-room-qr-code_title": "Кликнете, за да копирате линка към публичната стая"
     },
     "about": {
-        "close-about_aria-label": "Затвори информацията за ErikrafTdrop",
-        "tweet_title": "Споделете ErikrafTdrop в X (Twitter)",
-        "mastodon_title": "Напишете за ErikrafTdrop в Mastodon",
+        "close-about_aria-label": "Затвори информацията за ErikrafT Drop",
+        "tweet_title": "Споделете ErikrafT Drop в X (Twitter)",
+        "mastodon_title": "Напишете за ErikrafT Drop в Mastodon",
         "bluesky_title": "Последвайте ни в BlueSky",
         "custom_title": "Последвайте ни",
         "faq_title": "Често задавани въпроси",
         "claim": "Най-лесният начин за прехвърляне на файлове между устройства",
-        "github_title": "ErikrafTdrop в GitHub",
+        "github_title": "ErikrafT Drop в GitHub",
         "buy-me-a-coffee_title": "Купете ми кафе!",
         "privacypolicy_title": "Отворете нашата политика за поверителност"
     },
@@ -145,7 +145,7 @@
         "connected": "Свързан",
         "online-requirement-public-room": "Трябва да сте онлайн, за да създадете публична стая",
         "files-incorrect": "Файловете са неправилни",
-        "unfinished-transfers-warning": "Има незавършени прехвърляния. Сигурни ли сте, че искате да затворите ErikrafTdrop?",
+        "unfinished-transfers-warning": "Има незавършени прехвърляния. Сигурни ли сте, че искате да затворите ErikrafT Drop?",
         "selected-peer-left": "Избраният партньор напусна",
         "pairing-tabs-error": "Свързването на два раздела в браузъра е невъзможно",
         "pairing-success": "Устройства свързани",
