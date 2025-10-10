@@ -4,7 +4,7 @@ class PersistentStorage {
             PersistentStorage.logBrowserNotCapable();
             return;
         }
-        const DBOpenRequest = window.indexedDB.open('pairdrop_store', 5);
+        const DBOpenRequest = window.indexedDB.open('erikraftdrop_store', 5);
         DBOpenRequest.onerror = e => {
             PersistentStorage.logBrowserNotCapable();
             console.log('Error initializing database: ');
@@ -59,7 +59,7 @@ class PersistentStorage {
 
     static set(key, value) {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = e => {
                 const db = e.target.result;
                 const transaction = db.transaction('keyval', 'readwrite');
@@ -78,7 +78,7 @@ class PersistentStorage {
 
     static get(key) {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = e => {
                 const db = e.target.result;
                 const transaction = db.transaction('keyval', 'readonly');
@@ -97,7 +97,7 @@ class PersistentStorage {
 
     static delete(key) {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = e => {
                 const db = e.target.result;
                 const transaction = db.transaction('keyval', 'readwrite');
@@ -116,7 +116,7 @@ class PersistentStorage {
 
     static addRoomSecret(roomSecret, displayName, deviceName) {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = e => {
                 const db = e.target.result;
                 const transaction = db.transaction('room_secrets', 'readwrite');
@@ -155,7 +155,7 @@ class PersistentStorage {
 
     static getAllRoomSecretEntries() {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = (e) => {
                 const db = e.target.result;
                 const transaction = db.transaction('room_secrets', 'readonly');
@@ -173,7 +173,7 @@ class PersistentStorage {
 
     static getRoomSecretEntry(roomSecret) {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = e => {
                 const db = e.target.result;
                 const transaction = db.transaction('room_secrets', 'readonly');
@@ -207,7 +207,7 @@ class PersistentStorage {
 
     static deleteRoomSecret(roomSecret) {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = (e) => {
                 const db = e.target.result;
                 const transaction = db.transaction('room_secrets', 'readwrite');
@@ -238,7 +238,7 @@ class PersistentStorage {
 
     static clearRoomSecrets() {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = (e) => {
                 const db = e.target.result;
                 const transaction = db.transaction('room_secrets', 'readwrite');
@@ -265,7 +265,7 @@ class PersistentStorage {
 
     static updateRoomSecret(roomSecret, updatedRoomSecret = undefined, updatedDisplayName = undefined, updatedDeviceName = undefined, updatedAutoAccept = undefined) {
         return new Promise((resolve, reject) => {
-            const DBOpenRequest = window.indexedDB.open('pairdrop_store');
+            const DBOpenRequest = window.indexedDB.open('erikraftdrop_store');
             DBOpenRequest.onsuccess = e => {
                 const db = e.target.result;
                 this.getRoomSecretEntry(roomSecret)
