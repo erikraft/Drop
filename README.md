@@ -65,6 +65,9 @@ File sharing on your local network that works on all platforms.
   - Join temporary public rooms to transfer files easily over the Internet.
 - Web-app
   - Works on all devices with a modern web-browser.
+- Discord integrations
+  - Envie arquivos diretamente do Discord usando o bot de exemplo em [`Discord/Bot`](Discord/Bot/README.md). O dispositivo aparece com o ícone do Discord no site e a transferência ocorre em tempo real utilizando o fallback WebSocket oficial.
+  - Publique a atividade personalizada de [`Discord/Atividades`](Discord/Atividades/README.md) para incorporar o ErikrafT Drop dentro do Discord com identificação automática de dispositivo.
 
 Send a file from your phone to your laptop?
 <br>Share photos in original quality with friends using Android and iOS?

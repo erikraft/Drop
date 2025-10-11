@@ -114,6 +114,26 @@ Yes.
 
 <details>
 <summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
+    Posso enviar arquivos pelo Bot do Discord?
+</summary>
+
+<br>
+
+Sim! O repositório inclui um bot de exemplo em `Discord/Bot` que usa o fallback WebSocket do ErikrafT Drop.
+
+1. No site do ErikrafT Drop, abra o menu **Parear Dispositivo** e gere uma chave de 6 dígitos.
+2. No Discord, execute o comando `/drop`, informe a chave e anexe os arquivos desejados.
+3. O bot baixa os anexos, conecta-se ao servidor de sinalização como `client_type=discord-bot` e envia a solicitação de transferência.
+4. Assim que o destinatário aceitar no site, os arquivos são transmitidos em tempo real e aparecem na interface web com o ícone do Discord.
+
+> Observação: a instância do ErikrafT Drop precisa ter o fallback WebSocket habilitado (`wsFallback: true`). A instância pública oficial já vem preparada para isso.
+
+<br>
+
+</details>
+
+<details>
+<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
     OFFICIAL ErikrafT Drop Apps!
 </summary>
 
