@@ -589,6 +589,14 @@ class PeerUI {
     }
 
     _icon() {
+        const clientType = this._peer.name.clientType;
+        if (clientType === 'discord-bot' || clientType === 'discord-activity') {
+            return '#icon-discord';
+        }
+        if (clientType === 'vs-code-extension') {
+            return '#icon-vscode';
+        }
+
         const device = this._peer.name.device || this._peer.name;
         if (device.type === 'mobile') {
             return '#phone-iphone';

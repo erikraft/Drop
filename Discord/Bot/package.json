@@ -1,0 +1,15 @@
+{
+  "name": "erikraft-drop-discord-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Bot do Discord para compartilhar arquivos através do ErikrafT Drop.",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "register:commands": "node ./src/registerCommands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "ws": "^8.18.0"
+  }
+}

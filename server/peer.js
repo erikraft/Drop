@@ -142,22 +142,44 @@ export default class Peer {
     }
 
     _setName(req) {
+        const clientType = this._resolveClientType(req);
         const ua = new UAParser(req.headers['user-agent']).getResult();
+
+        const clientLabels = {
+            'discord-bot': {
+                deviceName: 'Discord Bot',
+                browser: 'Discord'
+            },
+            'discord-activity': {
+                deviceName: 'Discord Activity',
+                browser: 'Discord'
+            },
+            'vs-code-extension': {
+                deviceName: 'VS Code Extension',
+                browser: 'Visual Studio Code'
+            }
+        };
 
         let deviceName = '';
 
-        if (ua.os && ua.os.name) {
-            deviceName = ua.os.name.replace('Mac OS', 'Mac') + ' ';
+        if (clientLabels[clientType]) {
+            deviceName = clientLabels[clientType].deviceName;
         }
+        else {
+            if (ua.os && ua.os.name) {
+                deviceName = ua.os.name.replace('Mac OS', 'Mac') + ' ';
+            }
 
-        if (ua.device.model) {
-            deviceName += ua.device.model;
-        } else {
-            deviceName += ua.browser.name;
-        }
+            if (ua.device.model) {
+                deviceName += ua.device.model;
+            }
+            else {
+                deviceName += ua.browser.name;
+            }
 
-        if (!deviceName) {
-            deviceName = 'Unknown Device';
+            if (!deviceName) {
+                deviceName = 'Unknown Device';
+            }
         }
 
         const displayName = uniqueNamesGenerator({
@@ -171,11 +193,26 @@ export default class Peer {
         this.name = {
             model: ua.device.model,
             os: ua.os.name,
-            browser: ua.browser.name,
+            browser: clientLabels[clientType]?.browser || ua.browser.name,
             type: ua.device.type,
             deviceName,
-            displayName
+            displayName,
+            clientType
         };
+
+        if (!this.name.type) {
+            this.name.type = 'desktop';
+        }
+    }
+
+    _resolveClientType(req) {
+        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension']);
+        const searchParams = new URL(req.url, 'http://server').searchParams;
+        const rawClientType = (searchParams.get('client_type') || '').toLowerCase();
+
+        return allowedClientTypes.has(rawClientType)
+            ? rawClientType
+            : 'browser';
     }
 
     getInfo() {
