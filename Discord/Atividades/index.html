@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ErikrafT Drop — Atividade do Discord</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #0c1420;
+            color: #ffffff;
+            font-family: system-ui, sans-serif;
+        }
+
+        iframe {
+            border: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .fallback {
+            display: none;
+            padding: 24px;
+        }
+
+        .fallback a {
+            color: #7289da;
+        }
+
+        @supports not (display: grid) {
+            iframe {
+                display: none;
+            }
+
+            .fallback {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <iframe
+        src="https://drop.erikraft.com/?client_type=discord-activity"
+        allow="clipboard-write; camera; microphone; autoplay;"
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        title="ErikrafT Drop"
+    ></iframe>
+    <div class="fallback">
+        <h1>ErikrafT Drop</h1>
+        <p>Seu navegador não conseguiu carregar a atividade interativa. Abra o site diretamente em <a href="https://drop.erikraft.com/" target="_blank" rel="noopener noreferrer">drop.erikraft.com</a>.</p>
+    </div>
+</body>
+</html>

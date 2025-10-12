@@ -261,6 +261,10 @@ class ServerConnection {
             wsUrl.searchParams.append('peer_id_hash', peerIdHash);
         }
 
+        if (window.erikraftClientType) {
+            wsUrl.searchParams.append('client_type', window.erikraftClientType);
+        }
+
         return wsUrl.toString();
     }
 
