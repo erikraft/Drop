@@ -56,9 +56,21 @@ window.visibilityChangeEvent = 'visibilitychange' in document
             ? 'mozvisibilitychange'
             : null;
 
-window.iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-window.android = /android/i.test(navigator.userAgent);
-window.isMobile = window.iOS || window.android;
+const userAgent = navigator.userAgent;
+
+window.iOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+window.android = /android/i.test(userAgent);
+
+// Android TV devices advertise a variety of identifiers in their UA strings.
+// Catch the most common ones so we can avoid treating them as touch devices.
+window.androidTv = /(Android\s+TV|BRAVIA|SHIELD(?:\sTV)?|AFT[A-Z0-9]+|MiBOX|SMART-TV|SMARTTV)/i.test(userAgent);
+
+// Android-based XR headsets (Meta Quest family and future Android XR builds)
+// use distinctive identifiers as well.
+window.androidXr = /(Android\s+XR|OculusBrowser|\bQuest(?:\s+\d+|\s?Pro)?\b|Meta\s?Quest|Lenovo\sVRX)/i.test(userAgent);
+
+window.androidMobile = window.android && !window.androidTv && !window.androidXr;
+window.isMobile = window.iOS || window.androidMobile;
 
 
 // Helper functions
