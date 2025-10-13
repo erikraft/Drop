@@ -124,7 +124,7 @@
          border: 0;
          }
          /* Estilo para telas menores que 600px (mobile) */
-        @media (max-width: 600px) {
+         @media (max-width: 600px) {
         body {
         width: 100%;
         height: auto;
@@ -143,6 +143,27 @@
          }
          }
 
+         @media (max-width: 640px) {
+         .code-block {
+         max-width: min(100%, 22rem);
+         margin-left: auto;
+         margin-right: auto;
+         }
+         }
+
+         @media (max-width: 480px) {
+         .code-block {
+         padding: 0.75rem;
+         font-size: 0.75rem;
+         border-radius: 0.5rem;
+         max-width: calc(100vw - 3rem);
+         }
+
+         .code-block code span {
+         margin-bottom: 0.5rem;
+         }
+         }
+
          /* Caixa de código responsiva */
          .code-block {
          background-color: #1f2937;
@@ -150,26 +171,26 @@
          padding: 1rem;
          color: #e5e7eb;
          width: 100%;
+         max-width: 100%;
          box-sizing: border-box;
-         overflow: hidden;
+         overflow-x: auto;
+         overflow-y: hidden;
+         -webkit-overflow-scrolling: touch;
+         touch-action: pan-x;
          }
 
          .code-block pre {
          margin: 0;
-         overflow-x: auto;
-         white-space: pre;
-         -webkit-overflow-scrolling: touch;
-         touch-action: pan-x;
-         width: 100%;
-         max-width: 100%;
+         min-width: 100%;
          }
 
          .code-block code {
-         display: inline-block;
+         display: block;
          width: max-content;
          min-width: 100%;
          font-family: inherit;
          font-size: inherit;
+         white-space: pre;
          }
 
          .code-block code span {
