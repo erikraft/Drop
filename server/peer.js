@@ -143,7 +143,18 @@ export default class Peer {
 
     _setName(req) {
         const clientType = this._resolveClientType(req);
-        const ua = new UAParser(req.headers['user-agent']).getResult();
+        const userAgent = req.headers['user-agent'] || '';
+        const ua = new UAParser(userAgent).getResult();
+        const device = ua.device || (ua.device = {});
+
+        if (/(Android\s+TV|BRAVIA|SHIELD(?:\sTV)?|AFT[A-Z0-9]+|MiBOX|SMART-TV|SMARTTV)/i.test(userAgent)) {
+            device.type = 'smarttv';
+            device.model ||= 'Android TV';
+        }
+        else if (/(Android\s+XR|OculusBrowser|\bQuest(?:\s+\d+|\s?Pro)?\b|Meta\s?Quest|Lenovo\sVRX)/i.test(userAgent)) {
+            device.type = 'wearable';
+            device.model ||= 'Android XR';
+        }
 
         const clientLabels = {
             'discord-bot': {
