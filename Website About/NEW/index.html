@@ -145,9 +145,13 @@
 
          @media (max-width: 640px) {
          .code-block {
-         max-width: min(100%, 22rem);
+         width: min(100%, 20rem);
          margin-left: auto;
          margin-right: auto;
+         }
+
+         .self-host-benefits span {
+         overflow-wrap: anywhere;
          }
          }
 
@@ -156,11 +160,19 @@
          padding: 0.75rem;
          font-size: 0.75rem;
          border-radius: 0.5rem;
-         max-width: calc(100vw - 3rem);
+         width: calc(100vw - 3rem);
          }
 
          .code-block code span {
          margin-bottom: 0.5rem;
+         }
+         }
+
+         @media (max-width: 360px) {
+         .code-block {
+         font-size: 0.7rem;
+         padding: 0.65rem;
+         width: calc(100vw - 2.25rem);
          }
          }
 
@@ -170,13 +182,14 @@
          border-radius: 0.75rem;
          padding: 1rem;
          color: #e5e7eb;
-         width: 100%;
-         max-width: 100%;
+         width: min(100%, 24rem);
          box-sizing: border-box;
          overflow-x: auto;
          overflow-y: hidden;
          -webkit-overflow-scrolling: touch;
          touch-action: pan-x;
+         margin-left: auto;
+         margin-right: auto;
          }
 
          .code-block pre {
@@ -196,6 +209,21 @@
          .code-block code span {
          display: block;
          margin-bottom: 0.75rem;
+         }
+
+         .self-host-benefits {
+         list-style: none;
+         padding-left: 0;
+         }
+
+         .self-host-benefits span {
+         flex: 1;
+         min-width: 0;
+         overflow-wrap: break-word;
+         }
+
+         footer a {
+         overflow-wrap: anywhere;
          }
 
          .code-block code span:last-child {
@@ -530,7 +558,7 @@
                <div class="grid md:grid-cols-2 gap-8">
                   <div>
                      <h3 class="text-xl font-semibold text-gray-800 mb-4">Por que hospedar você mesmo?</h3>
-                     <ul class="space-y-3 text-gray-600">
+                     <ul class="space-y-3 text-gray-600 self-host-benefits">
                         <li class="flex items-start">
                            <i class="fas fa-server text-indigo-500 mt-1 mr-3"></i>
                            <span>Controle total sobre seus dados e privacidade</span>
