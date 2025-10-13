@@ -124,7 +124,7 @@
          border: 0;
          }
          /* Estilo para telas menores que 600px (mobile) */
-        @media (max-width: 600px) {
+         @media (max-width: 600px) {
         body {
         width: 100%;
         height: auto;
@@ -141,6 +141,97 @@
          width: 100%;
          height: 100%;
          }
+         }
+
+         @media (max-width: 640px) {
+         .code-block {
+         width: min(100%, 20rem);
+         margin-left: auto;
+         margin-right: auto;
+         }
+
+         .self-host-benefits span {
+         overflow-wrap: anywhere;
+         }
+         }
+
+         @media (max-width: 480px) {
+         .code-block {
+         padding: 0.75rem;
+         font-size: 0.75rem;
+         border-radius: 0.5rem;
+         width: calc(100vw - 3rem);
+         }
+
+         .code-block code span {
+         margin-bottom: 0.5rem;
+         }
+         }
+
+         @media (max-width: 360px) {
+         .code-block {
+         font-size: 0.7rem;
+         padding: 0.65rem;
+         width: calc(100vw - 2.25rem);
+         }
+         }
+
+         /* Caixa de código responsiva */
+         .code-block {
+         background-color: #1f2937;
+         border-radius: 0.75rem;
+         padding: 1rem;
+         color: #e5e7eb;
+         width: min(100%, 24rem);
+         box-sizing: border-box;
+         overflow-x: auto;
+         overflow-y: hidden;
+         -webkit-overflow-scrolling: touch;
+         touch-action: pan-x;
+         margin-left: auto;
+         margin-right: auto;
+         }
+
+         .code-block pre {
+         margin: 0;
+         min-width: 100%;
+         }
+
+         .code-block code {
+         display: block;
+         width: max-content;
+         min-width: 100%;
+         font-family: inherit;
+         font-size: inherit;
+         white-space: pre;
+         }
+
+         .code-block code span {
+         display: block;
+         margin-bottom: 0.75rem;
+         }
+
+         .self-host-benefits {
+         list-style: none;
+         padding-left: 0;
+         }
+
+         .self-host-benefits span {
+         flex: 1;
+         min-width: 0;
+         overflow-wrap: break-word;
+         }
+
+         footer a {
+         overflow-wrap: anywhere;
+         }
+
+         .code-block code span:last-child {
+         margin-bottom: 0;
+         }
+
+         .code-block .command {
+         color: #34d399;
          }
       </style>
    </head>
@@ -467,7 +558,7 @@
                <div class="grid md:grid-cols-2 gap-8">
                   <div>
                      <h3 class="text-xl font-semibold text-gray-800 mb-4">Por que hospedar você mesmo?</h3>
-                     <ul class="space-y-3 text-gray-600">
+                     <ul class="space-y-3 text-gray-600 self-host-benefits">
                         <li class="flex items-start">
                            <i class="fas fa-server text-indigo-500 mt-1 mr-3"></i>
                            <span>Controle total sobre seus dados e privacidade</span>
@@ -488,13 +579,13 @@
                   </div>
                   <div>
                      <h3 class="text-xl font-semibold text-gray-800 mb-4">Como implementar</h3>
-                     <div class="bg-gray-800 rounded-lg p-4 text-gray-100 font-mono text-sm overflow-x-auto">
-                        <p class="mb-2"># Clone o repositório</p>
-                        <p class="mb-2 text-green-400">git clone https://github.com/erikraft/Drop.git</p>
-                        <p class="mb-2"># Instale as dependências</p>
-                        <p class="mb-2 text-green-400">npm install</p>
-                        <p class="mb-2"># Inicie o servidor</p>
-                        <p class="text-green-400">npm start</p>
+                     <div class="code-block font-mono text-sm">
+<pre><code><span># Clone o repositório</span>
+<span class="command">git clone https://github.com/erikraft/Drop.git</span>
+<span># Instale as dependências</span>
+<span class="command">npm install</span>
+<span># Inicie o servidor</span>
+<span class="command">npm start</span></code></pre>
                      </div>
                      <a href="https://github.com/erikraft/drop" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
                      <i class="fab fa-github mr-2"></i> Ver no GitHub
