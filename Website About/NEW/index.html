@@ -26,6 +26,7 @@
          background-color: #f8fafc;
          margin: 0;
          padding: 0;
+         overflow-x: hidden;
          }
          .gradient-bg {
          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
@@ -145,7 +146,7 @@
 
          @media (max-width: 640px) {
          .code-block {
-         width: min(100%, 20rem);
+         max-width: 100%;
          margin-left: auto;
          margin-right: auto;
          }
@@ -160,7 +161,6 @@
          padding: 0.75rem;
          font-size: 0.75rem;
          border-radius: 0.5rem;
-         width: calc(100vw - 3rem);
          }
 
          .code-block code span {
@@ -172,7 +172,6 @@
          .code-block {
          font-size: 0.7rem;
          padding: 0.65rem;
-         width: calc(100vw - 2.25rem);
          }
          }
 
@@ -182,24 +181,24 @@
          border-radius: 0.75rem;
          padding: 1rem;
          color: #e5e7eb;
-         width: min(100%, 24rem);
+         width: 100%;
+         max-width: 24rem;
          box-sizing: border-box;
-         overflow-x: auto;
-         overflow-y: hidden;
-         -webkit-overflow-scrolling: touch;
-         touch-action: pan-x;
+         overflow: hidden;
          margin-left: auto;
          margin-right: auto;
          }
 
          .code-block pre {
          margin: 0;
-         min-width: 100%;
+         width: 100%;
+         overflow-x: auto;
+         -webkit-overflow-scrolling: touch;
+         touch-action: pan-x;
          }
 
          .code-block code {
-         display: block;
-         width: max-content;
+         display: inline-block;
          min-width: 100%;
          font-family: inherit;
          font-size: inherit;
