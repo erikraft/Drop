@@ -232,6 +232,65 @@
          .code-block .command {
          color: #34d399;
          }
+
+/* Correções para largura e rolagem no mobile */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+/* Força o container a respeitar o viewport em telas estreitas */
+.container, section, header, footer {
+  width: 100%;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box;
+}
+
+/* Garante que nenhum elemento estoure a largura */
+img, iframe, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Evita textos muito grandes e quebras no mobile */
+h1, h2, h3, h4, p, a, span {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Corrige o iframe no mobile (modo tela cheia sem scroll lateral) */
+@media (max-width: 1080px) {
+  .iframe-container {
+    padding-top: 0;
+    height: calc(100vh - 60px);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .iframe-container iframe {
+    width: 100vw;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  body {
+    zoom: 1 !important;
+    font-size: 16px;
+  }
+}
+
+/* Evita espaçamento extra lateral no menu mobile */
+.mobile-menu {
+  left: 0;
+  right: 0;
+  width: 100vw;
+  margin: 0;
+  padding: 1rem;
+  overflow-x: hidden;
+}
       </style>
    </head>
    <body>
