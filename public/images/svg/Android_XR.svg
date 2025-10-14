@@ -1,12 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
   <title>Android XR headset</title>
-  <g fill="none" fill-rule="evenodd">
-    <path d="M28 46c4.6-8.4 13.6-14 24-14h24c10.4 0 19.4 5.6 24 14" stroke="#3ddc84" stroke-width="8" stroke-linecap="round"/>
-    <rect x="12" y="50" width="104" height="40" rx="20" fill="#3ddc84"/>
-    <rect x="22" y="56" width="32" height="28" rx="12" fill="#202124"/>
-    <rect x="74" y="56" width="32" height="28" rx="12" fill="#202124"/>
-    <circle cx="38" cy="70" r="6" fill="#3ddc84"/>
-    <circle cx="90" cy="70" r="6" fill="#3ddc84"/>
-    <path d="M12 70H4m120 0h-8" stroke="#3ddc84" stroke-width="6" stroke-linecap="round"/>
+  <g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 52c4-10 13.2-18 28-18h32c14.8 0 24 8 28 18"/>
+    <rect x="12" y="56" width="104" height="40" rx="20"/>
+    <rect x="24" y="62" width="28" height="28" rx="12"/>
+    <rect x="76" y="62" width="28" height="28" rx="12"/>
+    <path d="M4 76h8m104 0h8"/>
+  </g>
+  <g fill="#fff">
+    <circle cx="38" cy="76" r="6"/>
+    <circle cx="90" cy="76" r="6"/>
   </g>
 </svg>
