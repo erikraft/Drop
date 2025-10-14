@@ -9,7 +9,7 @@
       <meta property="og:title" content="ErikrafT Drop - Compartilhamento de Arquivos Seguro e Direto">
       <meta property="og:description" content="Compartilhe arquivos com segurança e privacidade, sem instalação ou cadastro. Transferência P2P com criptografia de ponta a ponta.">
       <meta property="og:image" content="images/Logo.png">
-      <meta property="og:url" content="https://drop.erikraft.com">
+      <meta property="og:url" content="https://biodrop.erikraft.com">
       <meta name="twitter:card" content="summary_large_image">
       <meta name="trustpilot-one-time-domain-verification-id" content="4c03c6cf-9bae-4e91-a212-f34ef645ad56"/>
       <link rel="canonical" href="https://drop.erikraft.com">
@@ -233,63 +233,243 @@
          color: #34d399;
          }
 
-/* Correções para largura e rolagem no mobile */
+/* ========================================
+   CORREÇÕES MOBILE - OVERFLOW E RESPONSIVIDADE
+   ======================================== */
+
+/* 1. Previne overflow horizontal global */
 html, body {
   max-width: 100%;
-  overflow-x: hidden !important;
-}
-
-/* Força o container a respeitar o viewport em telas estreitas */
-.container, section, header, footer {
-  width: 100%;
-  max-width: 100vw !important;
   overflow-x: hidden !important;
   box-sizing: border-box;
 }
 
-/* Garante que nenhum elemento estoure a largura */
+/* 2. Aplica box-sizing em todos os elementos */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 3. Força containers a respeitarem o viewport */
+.container, section, header, footer {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* 4. Previne elementos de mídia estourarem */
 img, iframe, video {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-/* Evita textos muito grandes e quebras no mobile */
+/* 5. Quebra de palavras para textos longos */
 h1, h2, h3, h4, p, a, span {
   word-wrap: break-word;
   overflow-wrap: break-word;
+  hyphens: auto;
 }
 
-/* Corrige o iframe no mobile (modo tela cheia sem scroll lateral) */
+/* ========================================
+   CORREÇÕES ESPECÍFICAS MOBILE (≤1080px)
+   ======================================== */
+
 @media (max-width: 1080px) {
+  /* Ajusta padding lateral de todos os containers */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Corrige seções com padding excessivo */
+  section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Iframe em tela cheia no mobile */
   .iframe-container {
     padding-top: 0;
     height: calc(100vh - 60px);
     border-radius: 0;
     box-shadow: none;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
   }
 
   .iframe-container iframe {
-    width: 100vw;
+    width: 100%;
     height: 100%;
     border: none;
     display: block;
   }
 
+  /* Previne zoom indesejado */
   body {
-    zoom: 1 !important;
-    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Corrige grid de features para não estourar */
+  .grid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Ajusta cards de features */
+  .feature-card {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Menu mobile sem overflow */
+  .mobile-menu {
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 1rem;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Corrige seção self-host */
+  #self-host .max-w-4xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #self-host .grid {
+    gap: 2rem;
+  }
+
+  /* CORREÇÃO CRÍTICA: Code block centralizado e sem overflow */
+  .code-block {
+    max-width: calc(100vw - 2rem) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 1rem !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .code-block pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .code-block code {
+    font-size: 0.75rem;
+    white-space: pre;
+    display: block;
+  }
+
+  /* Ajusta lista de benefícios */
+  .self-host-benefits li {
+    padding-right: 0;
   }
 }
 
-/* Evita espaçamento extra lateral no menu mobile */
-.mobile-menu {
-  left: 0;
-  right: 0;
-  width: 100vw;
-  margin: 0;
-  padding: 1rem;
-  overflow-x: hidden;
+/* ========================================
+   CORREÇÕES MOBILE PEQUENO (≤640px)
+   ======================================== */
+
+@media (max-width: 640px) {
+  /* Reduz padding geral */
+  .container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  /* Code block ainda mais compacto */
+  .code-block {
+    max-width: calc(100vw - 1.5rem) !important;
+    padding: 0.75rem !important;
+    font-size: 0.7rem !important;
+    border-radius: 0.5rem;
+  }
+
+  .code-block code span {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Ajusta grid para coluna única */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reduz espaçamento em seções */
+  section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  /* Ajusta títulos para não quebrar layout */
+  h1 {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+
+  /* Footer links sem overflow */
+  footer a {
+    word-break: break-word;
+  }
+}
+
+/* ========================================
+   CORREÇÕES MOBILE EXTRA PEQUENO (≤480px)
+   ======================================== */
+
+@media (max-width: 480px) {
+  .code-block {
+    max-width: calc(100vw - 1rem) !important;
+    padding: 0.65rem !important;
+    font-size: 0.65rem !important;
+  }
+
+  .code-block code span {
+    margin-bottom: 0.4rem;
+  }
+
+  /* Ajusta botões para mobile */
+  .flex-col.sm\:flex-row {
+    flex-direction: column !important;
+  }
+
+  /* Reduz padding do header */
+  header .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* ========================================
+   CORREÇÕES MOBILE MÍNIMO (≤360px)
+   ======================================== */
+
+@media (max-width: 360px) {
+  .code-block {
+    max-width: calc(100vw - 0.75rem) !important;
+    padding: 0.5rem !important;
+    font-size: 0.6rem !important;
+  }
+
+  /* Ajusta logo e título */
+  header img {
+    width: 40px !important;
+  }
+
+  header .text-xl {
+    font-size: 1rem !important;
+  }
 }
       </style>
    </head>
