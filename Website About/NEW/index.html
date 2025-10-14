@@ -26,6 +26,7 @@
          background-color: #f8fafc;
          margin: 0;
          padding: 0;
+         overflow-x: hidden;
          }
          .gradient-bg {
          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
@@ -124,7 +125,7 @@
          border: 0;
          }
          /* Estilo para telas menores que 600px (mobile) */
-        @media (max-width: 600px) {
+         @media (max-width: 600px) {
         body {
         width: 100%;
         height: auto;
@@ -142,6 +143,154 @@
          height: 100%;
          }
          }
+
+         @media (max-width: 640px) {
+         .code-block {
+         max-width: 100%;
+         margin-left: auto;
+         margin-right: auto;
+         }
+
+         .self-host-benefits span {
+         overflow-wrap: anywhere;
+         }
+         }
+
+         @media (max-width: 480px) {
+         .code-block {
+         padding: 0.75rem;
+         font-size: 0.75rem;
+         border-radius: 0.5rem;
+         }
+
+         .code-block code span {
+         margin-bottom: 0.5rem;
+         }
+         }
+
+         @media (max-width: 360px) {
+         .code-block {
+         font-size: 0.7rem;
+         padding: 0.65rem;
+         }
+         }
+
+         /* Caixa de código responsiva */
+         .code-block {
+         background-color: #1f2937;
+         border-radius: 0.75rem;
+         padding: 1rem;
+         color: #e5e7eb;
+         width: 100%;
+         max-width: 24rem;
+         box-sizing: border-box;
+         overflow: hidden;
+         margin-left: auto;
+         margin-right: auto;
+         }
+
+         .code-block pre {
+         margin: 0;
+         width: 100%;
+         overflow-x: auto;
+         -webkit-overflow-scrolling: touch;
+         touch-action: pan-x;
+         }
+
+         .code-block code {
+         display: inline-block;
+         min-width: 100%;
+         font-family: inherit;
+         font-size: inherit;
+         white-space: pre;
+         }
+
+         .code-block code span {
+         display: block;
+         margin-bottom: 0.75rem;
+         }
+
+         .self-host-benefits {
+         list-style: none;
+         padding-left: 0;
+         }
+
+         .self-host-benefits span {
+         flex: 1;
+         min-width: 0;
+         overflow-wrap: break-word;
+         }
+
+         footer a {
+         overflow-wrap: anywhere;
+         }
+
+         .code-block code span:last-child {
+         margin-bottom: 0;
+         }
+
+         .code-block .command {
+         color: #34d399;
+         }
+
+/* Correções para largura e rolagem no mobile */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+/* Força o container a respeitar o viewport em telas estreitas */
+.container, section, header, footer {
+  width: 100%;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box;
+}
+
+/* Garante que nenhum elemento estoure a largura */
+img, iframe, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Evita textos muito grandes e quebras no mobile */
+h1, h2, h3, h4, p, a, span {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Corrige o iframe no mobile (modo tela cheia sem scroll lateral) */
+@media (max-width: 1080px) {
+  .iframe-container {
+    padding-top: 0;
+    height: calc(100vh - 60px);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .iframe-container iframe {
+    width: 100vw;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  body {
+    zoom: 1 !important;
+    font-size: 16px;
+  }
+}
+
+/* Evita espaçamento extra lateral no menu mobile */
+.mobile-menu {
+  left: 0;
+  right: 0;
+  width: 100vw;
+  margin: 0;
+  padding: 1rem;
+  overflow-x: hidden;
+}
       </style>
    </head>
    <body>
@@ -298,7 +447,7 @@
                <!-- Feature 10 -->
                <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                   <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
-                     <i class="fa-solid fa-book text-indigo-600 text-3xl"></i>
+                     <lord-icon src="https://cdn.lordicon.com/ftasfhkn.json" trigger="loop" delay="2000" state="morph-book" colors="primary:#5046e5" style="width:40px;height:40px"></lord-icon>
                   </div>
                   <h3 class="text-xl font-semibold text-gray-800 mb-3">Documentação completa</h3>
                   <p class="text-gray-600">Aprenda a tirar o máximo do ErikrafT Drop com a <a href="https://deepwiki.com/erikraft/Drop" target="_blank" rel="noopener noreferrer" style="color: #2563eb;">Documentação Oficial do ErikrafT Drop</a> e explore os detalhes do app Android na <a href="https://deepwiki.com/erikraft/Drop-Android" target="_blank" rel="noopener noreferrer" style="color: #2563eb;">Documentação Oficial do ErikrafT Drop para Android</a>, tudo sempre atualizado e fácil de consultar.</p>
@@ -467,7 +616,7 @@
                <div class="grid md:grid-cols-2 gap-8">
                   <div>
                      <h3 class="text-xl font-semibold text-gray-800 mb-4">Por que hospedar você mesmo?</h3>
-                     <ul class="space-y-3 text-gray-600">
+                     <ul class="space-y-3 text-gray-600 self-host-benefits">
                         <li class="flex items-start">
                            <i class="fas fa-server text-indigo-500 mt-1 mr-3"></i>
                            <span>Controle total sobre seus dados e privacidade</span>
@@ -488,13 +637,13 @@
                   </div>
                   <div>
                      <h3 class="text-xl font-semibold text-gray-800 mb-4">Como implementar</h3>
-                     <div class="bg-gray-800 rounded-lg p-4 text-gray-100 font-mono text-sm overflow-x-auto">
-                        <p class="mb-2"># Clone o repositório</p>
-                        <p class="mb-2 text-green-400">git clone https://github.com/erikraft/Drop.git</p>
-                        <p class="mb-2"># Instale as dependências</p>
-                        <p class="mb-2 text-green-400">npm install</p>
-                        <p class="mb-2"># Inicie o servidor</p>
-                        <p class="text-green-400">npm start</p>
+                     <div class="code-block font-mono text-sm">
+<pre><code><span># Clone o repositório</span>
+<span class="command">git clone https://github.com/erikraft/Drop.git</span>
+<span># Instale as dependências</span>
+<span class="command">npm install</span>
+<span># Inicie o servidor</span>
+<span class="command">npm start</span></code></pre>
                      </div>
                      <a href="https://github.com/erikraft/drop" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
                      <i class="fab fa-github mr-2"></i> Ver no GitHub

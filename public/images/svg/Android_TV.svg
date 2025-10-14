@@ -1,10 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <title>Android TV device</title>
-  <g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="16" y="32" width="96" height="60" rx="12"/>
-    <path d="M40 100l-12 20"/>
-    <path d="M88 100l12 20"/>
-    <path d="M48 24l16-12 16 12"/>
-    <path d="M64 32V12"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="#FFFFFF">
+  <path d="M18 108c-2.7 0-4.8-2.1-4.8-4.8V24.8c0-2.7 2.1-4.8 4.8-4.8h92c2.7 0 4.8 2.1 4.8 4.8v78.4c0 2.7-2.1 4.8-4.8 4.8H73v5.5c0 .7-.5 1.2-1.2 1.2H56.2c-.7 0-1.2-.5-1.2-1.2V108H18z"/>
 </svg>
