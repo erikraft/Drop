@@ -598,6 +598,12 @@ class PeerUI {
         }
 
         const device = this._peer.name.device || this._peer.name;
+        if (device.type === 'smarttv') {
+            return '#icon-android-tv';
+        }
+        if (device.type === 'wearable' || device.type === 'vr') {
+            return '#icon-android-xr';
+        }
         if (device.type === 'mobile') {
             return '#phone-iphone';
         }
@@ -984,7 +990,7 @@ class ReceiveFileDialog extends ReceiveDialog {
         }
         this.$receiveTitle.innerText = Localization.getTranslation("dialogs.receive-title", null, {descriptor: descriptor});
 
-        const canShare = (window.iOS || window.android) && !!navigator.share && navigator.canShare({files});
+        const canShare = (window.iOS || window.androidMobile) && !!navigator.share && navigator.canShare({files});
         if (canShare) {
             this.$shareBtn.removeAttribute('hidden');
             this.$shareBtn.onclick = _ => {
