@@ -665,6 +665,201 @@ x-dialog:not([show]) x-background {
     opacity: 0.4;
 }
 
+.webchat-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 24px;
+    background-color: rgba(var(--shadow-color-dialog-cover-rgb, 0, 0, 0), 0.6);
+    z-index: 1000;
+}
+
+.webchat-modal[hidden] {
+    display: none;
+}
+
+body.webchat-modal-open {
+    overflow: hidden;
+}
+
+.webchat-modal__dialog {
+    display: flex;
+    flex-direction: column;
+    width: min(480px, 100%);
+    max-height: 100%;
+    margin-left: auto;
+    background-color: var(--dialog-bg-color);
+    color: rgb(var(--text-color));
+    border-radius: 20px;
+    box-shadow: 0 24px 48px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.3);
+    overflow: hidden;
+}
+
+.webchat-modal__header,
+.webchat-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+.webchat-modal__header {
+    border-bottom: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.12);
+}
+
+.webchat-modal__footer {
+    border-top: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.12);
+    justify-content: center;
+}
+
+.webchat-modal__header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.webchat-modal__controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.webchat-modal__body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+
+.webchat-modal__body iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background-color: var(--dialog-bg-color);
+}
+
+.webchat-modal__icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(var(--text-color), 0.08);
+    color: rgb(var(--text-color));
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 200ms;
+    font-family: inherit;
+}
+
+.webchat-modal__icon-button:hover,
+.webchat-modal__icon-button:focus {
+    background-color: rgba(var(--text-color), 0.16);
+}
+
+.webchat-modal__icon-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(var(--accent-color), 0.35);
+}
+
+.webchat-modal__close {
+    font-size: 18px;
+}
+
+.webchat-modal__restore {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 16px;
+    background-color: var(--dialog-bg-color);
+    color: rgb(var(--text-color));
+    box-shadow: 0 16px 32px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.25);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.webchat-modal__restore[hidden] {
+    display: none !important;
+}
+
+.webchat-modal__restore:hover,
+.webchat-modal__restore:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 20px 36px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.3);
+}
+
+.webchat-modal__restore:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(var(--accent-color), 0.35), 0 20px 36px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.3);
+}
+
+.webchat-modal__restore-title {
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .webchat-modal__restore {
+        right: 16px;
+        bottom: 16px;
+        padding: 10px 16px;
+        border-radius: 14px;
+    }
+}
+
+.webchat-modal--minimized {
+    inset: auto;
+    bottom: 24px;
+    right: 24px;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    padding: 0;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+}
+
+.webchat-modal--minimized .webchat-modal__dialog {
+    display: none;
+}
+
+
+.webchat-modal__external {
+    width: 100%;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    padding: 10px 16px;
+}
+
+@media (max-width: 1024px) {
+    .webchat-modal {
+        padding: 16px;
+    }
+
+    .webchat-modal__dialog {
+        border-radius: 16px;
+        width: min(420px, 100%);
+    }
+}
+
 .btn-round {
     border-radius: 50%;
 }
