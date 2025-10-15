@@ -1247,9 +1247,7 @@
 
             const openModal = () => {
                 lastFocusedElement = document.activeElement;
-                if (!iframe.src) {
-                    iframe.src = WEBCHAT_URL;
-                }
+                iframe.src = WEBCHAT_URL;
 
                 setModalVisibility(true);
                 document.addEventListener('keydown', handleEscape);
@@ -1266,6 +1264,7 @@
                 }
 
                 setModalVisibility(false);
+                iframe.src = '';
                 document.removeEventListener('keydown', handleEscape);
 
                 if (lastFocusedElement && typeof lastFocusedElement.focus === 'function' &&
