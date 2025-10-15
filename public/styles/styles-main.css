@@ -788,6 +788,7 @@ body.webchat-modal-open {
     font-weight: 600;
     cursor: pointer;
     transition: transform 150ms ease, box-shadow 150ms ease;
+    z-index: 1001;
 }
 
 .webchat-modal__restore[hidden] {
@@ -832,6 +833,7 @@ body.webchat-modal-open {
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-end;
+    pointer-events: none;
 }
 
 .webchat-modal--minimized .webchat-modal__dialog {
