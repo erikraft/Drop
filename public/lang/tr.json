@@ -180,5 +180,8 @@
         "message-received": "Mesaj Alındı",
         "file-received": "Dosya Alındı",
         "file-received-plural": "{{count}} Dosya Alındı"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

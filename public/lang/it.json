@@ -180,5 +180,8 @@
         "message-received": "Messaggio ricevuto",
         "file-received": "File Ricevuto",
         "file-received-plural": "{{count}} Files Ricevuti"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

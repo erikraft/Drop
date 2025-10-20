@@ -189,5 +189,8 @@
         "waiting": "Aguardando…",
         "processing": "Processando…",
         "transferring": "Transferindo…"
+    },
+    "webchat-modal": {
+        "external": "Ir para o site"
     }
 }

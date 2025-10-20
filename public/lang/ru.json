@@ -182,5 +182,8 @@
         "file-transfer-requested": "Запрошена передача файлов",
         "message-received": "Сообщение получено",
         "image-transfer-requested": "Запрошена передача изображений"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

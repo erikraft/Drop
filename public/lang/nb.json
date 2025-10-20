@@ -181,5 +181,8 @@
         "click-to-send": "Klikk for å sende filer, eller høyreklikk for å sende en melding",
         "click-to-send-share-mode": "Klikk for å sende {{descriptor}}",
         "connection-hash": "Sammenlign dette sikkerhetsnummeret på begge enhetene for å bekrefte ende-til-ende -krypteringen"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

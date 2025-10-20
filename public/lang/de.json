@@ -182,5 +182,8 @@
         "transferring": "Übertragung läuft…",
         "processing": "Bearbeitung läuft…",
         "preparing": "Vorbereitung läuft…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

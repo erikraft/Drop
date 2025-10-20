@@ -181,5 +181,8 @@
         "waiting": "请等待…",
         "transferring": "传输中…",
         "processing": "处理中…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

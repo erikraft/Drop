@@ -180,5 +180,8 @@
         "connection-hash": "종단간 암호화의 보안을 검증하려면 양쪽의 장치에서 이 보안 번호를 비교하세요",
         "preparing": "준비 중…",
         "transferring": "전송 중…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

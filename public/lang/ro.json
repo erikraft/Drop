@@ -180,5 +180,8 @@
         "file-received": "Fișier Primit",
         "file-received-plural": "{{count}} Fișiere Primite",
         "image-transfer-requested": "Transfer de imagine solicitat"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

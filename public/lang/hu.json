@@ -180,5 +180,8 @@
         "transferring": "Átvitel…",
         "click-to-send": "Kattintson fájlok küldéséhez vagy kattintson jobb gombbal üzenet küldéséhez",
         "connection-hash": "A végpontok közötti titkosítás biztonságának ellenőrzéséhez hasonlítsa össze ezt a biztonsági számot mindkét eszközön"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

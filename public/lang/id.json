@@ -180,5 +180,8 @@
         "file-received": "Berkas Diterima",
         "file-received-plural": "Sebanyak {{count}} Berkas Diterima",
         "image-transfer-requested": "Permintaan Transfer Gambar"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

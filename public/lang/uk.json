@@ -180,5 +180,8 @@
         "preparing": "Підготовка…",
         "waiting": "Чекаю…",
         "transferring": "Переводимо…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

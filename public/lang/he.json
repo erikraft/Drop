@@ -180,5 +180,8 @@
         "image-transfer-requested": "העברת תמונות מתבקשת",
         "message-received": "התקבלה הודעה",
         "message-received-plural": "{{count}} הודעות התקבלו"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

@@ -180,5 +180,8 @@
         "message-received-plural": "Атрымана {{count}} паведамленняў",
         "file-received-plural": "Атрымана {{count}} файлаў",
         "file-transfer-requested": "Запытана перадача файла"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

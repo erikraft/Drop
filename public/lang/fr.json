@@ -182,5 +182,8 @@
         "waiting": "En attente…",
         "processing": "En cours…",
         "transferring": "Transfert en cours…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

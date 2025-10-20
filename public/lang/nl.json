@@ -180,5 +180,8 @@
         "message-received": "Bericht ontvangen",
         "file-received": "Bestand ontvangen",
         "file-received-plural": "{{count}} bestanden ontvangen"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }
