@@ -180,5 +180,8 @@
         "waiting": "Oczekiwanie…",
         "processing": "Przetwarzanie…",
         "transferring": "Przesyłanie…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

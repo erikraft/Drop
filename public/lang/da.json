@@ -180,5 +180,8 @@
         "waiting": "Venter…",
         "processing": "Behandler…",
         "transferring": "Overfører…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

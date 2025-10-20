@@ -187,5 +187,8 @@
         "message-received": "ಸಂದೇಶವನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
         "file-received": "ಫೈಲ್ ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
         "file-received-plural": "{{count}} ಫೈಲ್‌ಗಳನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

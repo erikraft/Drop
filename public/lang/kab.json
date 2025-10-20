@@ -35,5 +35,8 @@
         "language-selector_title": "Fren tutlayt",
         "install_title": "Sbedd ErikrafT Drop",
         "edit-share-mode": "Ẓreg"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

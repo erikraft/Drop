@@ -180,5 +180,8 @@
         "processing": "正在處理中…",
         "transferring": "正在傳輸中…",
         "connection-hash": "若要驗證端對端加密的安全性，請在兩台裝置上比較此安全編號"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

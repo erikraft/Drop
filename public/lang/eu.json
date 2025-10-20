@@ -180,5 +180,8 @@
         "transferring": "Trukatzen…",
         "connection-hash": "Zifratzearen segurtasuna muturretik muturrera egiaztatzeko, konparatu segurtasun-zenbaki hau bi gailuetan",
         "click-to-send": "Klikatu fitxategiak bidaltzeko edo klikatu eskumako botoiarekin mezu bat bidaltzeko"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

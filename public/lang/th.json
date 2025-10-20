@@ -91,5 +91,8 @@
         "activate-share-mode-and-other-files-plural": "และ{{count}}ไฟล์ อื่นๆ",
         "no-peers-title": "เปิด ErikrafT Drop บนอุปกรณ์อื่นเพื่อส่งไฟล์",
         "x-instructions_desktop": "กดเพื่อส่งไฟล์ หรือ คลิ้กขวาเพื่อส่งไฟล์"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

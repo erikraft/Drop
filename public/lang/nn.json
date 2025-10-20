@@ -180,5 +180,8 @@
         "click-to-send": "Klikk for å sende filer eller høgreklikk for å sende ei melding",
         "processing": "Prosesserar…",
         "waiting": "Ventar…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }

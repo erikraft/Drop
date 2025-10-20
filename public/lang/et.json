@@ -180,5 +180,8 @@
         "waiting": "Ootamine…",
         "processing": "Töötlemine…",
         "transferring": "Edastamine…"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
     }
 }
