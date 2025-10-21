@@ -38,6 +38,7 @@ export default class DropTransferClient extends EventEmitter {
         this.signalOverride = options.signalUrl;
         this.pairKey = options.pairKey;
         this.files = options.files || [];
+        this._displayName = (options.displayName || '').trim();
         this._statusCallback = () => {};
 
         this._ws = null;
@@ -47,15 +48,26 @@ export default class DropTransferClient extends EventEmitter {
         this._selfPeerId = null;
         this._wsFallbackEnabled = false;
 
+        this._mode = null;
+
         this._pendingPartitions = new Map();
         this._pendingFileComplete = null;
         this._completionPromise = null;
         this._resolveCompletion = null;
         this._rejectCompletion = null;
         this._completed = false;
+
+        this._expectedFiles = [];
+        this._receivedFiles = [];
+        this._currentIncomingFile = null;
+        this._totalBytesExpected = 0;
+        this._bytesReceived = 0;
+        this._lastProgressSent = 0;
+        this._incomingSenderInfo = null;
     }
 
     async send(onStatus) {
+        this._mode = 'send';
         if (onStatus) {
             this._statusCallback = onStatus;
         }
@@ -91,7 +103,9 @@ export default class DropTransferClient extends EventEmitter {
 
     _handleMessage(rawMessage) {
         if (rawMessage instanceof Buffer || rawMessage instanceof Uint8Array) {
-            // The bot only sends data; receiving binary data is unexpected.
+            if (this._mode === 'receive') {
+                this._handleBinaryChunk(rawMessage);
+            }
             return;
         }
 
@@ -114,6 +128,7 @@ export default class DropTransferClient extends EventEmitter {
             case 'display-name':
                 this._selfPeerId = message.peerId;
                 this._emitStatus({ stage: 'connected', deviceName: message.deviceName });
+                this._applyDisplayName();
                 this._sendRaw({ type: 'pair-device-join', pairKey: this.pairKey });
                 break;
             case 'ping':
@@ -130,25 +145,48 @@ export default class DropTransferClient extends EventEmitter {
                 this._roomType = 'secret';
                 this._remotePeerId = message.peerId;
                 this._emitStatus({ stage: 'paired', roomSecret: message.roomSecret });
-                this._sendTransferRequest();
+                if (this._mode === 'send') {
+                    this._sendTransferRequest();
+                }
                 break;
             case 'peers':
             case 'peer-joined':
                 // Informational for UI clients – already handled via pair-device-joined.
                 break;
             case 'files-transfer-response':
-                this._onTransferResponse(message);
+                if (this._mode === 'send') {
+                    this._onTransferResponse(message);
+                }
                 break;
             case 'partition-received':
-                this._onPartitionReceived(message);
+                if (this._mode === 'send') {
+                    this._onPartitionReceived(message);
+                }
+                break;
+            case 'partition':
+                if (this._mode === 'receive') {
+                    this._onPartitionRequest(message);
+                }
                 break;
             case 'progress':
                 if (typeof message.progress === 'number') {
-                    this._emitStatus({ stage: 'progress', value: message.progress });
+                    this._emitStatus({ stage: 'progress', value: message.progress, direction: 'send' });
                 }
                 break;
             case 'file-transfer-complete':
-                this._onFileTransferComplete();
+                if (this._mode === 'send') {
+                    this._onFileTransferComplete();
+                }
+                break;
+            case 'request':
+                if (this._mode === 'receive') {
+                    this._onIncomingRequest(message);
+                }
+                break;
+            case 'header':
+                if (this._mode === 'receive') {
+                    this._onIncomingFileHeader(message);
+                }
                 break;
             case 'peer-left':
                 if (message.peerId === this._remotePeerId) {
@@ -182,11 +220,11 @@ export default class DropTransferClient extends EventEmitter {
         try {
             for (let index = 0; index < this.files.length; index += 1) {
                 const file = this.files[index];
-                this._emitStatus({ stage: 'sending-file', file: file.name, index, total: this.files.length });
+                this._emitStatus({ stage: 'sending-file', direction: 'send', file: file.name, index, total: this.files.length });
                 await this._sendFile(file);
-                this._emitStatus({ stage: 'file-complete', file: file.name, index, total: this.files.length });
+                this._emitStatus({ stage: 'file-complete', direction: 'send', file: file.name, index, total: this.files.length });
             }
-            this._emitStatus({ stage: 'finished' });
+            this._emitStatus({ stage: 'finished', direction: 'send' });
             this._resolve();
         }
         catch (error) {
@@ -307,6 +345,191 @@ export default class DropTransferClient extends EventEmitter {
         });
     }
 
+    async receive(onStatus) {
+        this._mode = 'receive';
+        if (onStatus) {
+            this._statusCallback = onStatus;
+        }
+
+        this._resetReceiveState();
+        this._emitStatus({ stage: 'connecting' });
+
+        this._completionPromise = new Promise((resolve, reject) => {
+            this._resolveCompletion = resolve;
+            this._rejectCompletion = reject;
+        });
+
+        this._openWebSocket();
+
+        return this._completionPromise;
+    }
+
+    _resetReceiveState() {
+        this._expectedFiles = [];
+        this._receivedFiles = [];
+        this._currentIncomingFile = null;
+        this._totalBytesExpected = 0;
+        this._bytesReceived = 0;
+        this._lastProgressSent = 0;
+        this._incomingSenderInfo = null;
+    }
+
+    _onIncomingRequest(message) {
+        if (message.sender?.id) {
+            this._remotePeerId ||= message.sender.id;
+        }
+
+        const header = Array.isArray(message.header) ? message.header : [];
+        this._expectedFiles = header.map(item => ({
+            name: item?.name || 'arquivo',
+            size: Number(item?.size) || 0,
+            mime: sanitizeMime(item?.mime)
+        }));
+
+        this._totalBytesExpected = typeof message.totalSize === 'number'
+            ? message.totalSize
+            : this._expectedFiles.reduce((acc, item) => acc + item.size, 0);
+
+        this._incomingSenderInfo = message.sender || null;
+
+        if (!this._expectedFiles.length) {
+            this._sendToPeer({ type: 'files-transfer-response', accepted: false });
+            this._fail(new Error('Nenhum arquivo foi informado pelo remetente.'));
+            return;
+        }
+
+        this._emitStatus({
+            stage: 'request-received',
+            totalSize: this._totalBytesExpected,
+            files: this._expectedFiles.slice()
+        });
+
+        this._sendToPeer({ type: 'files-transfer-response', accepted: true });
+        this._emitStatus({ stage: 'request-accepted', totalSize: this._totalBytesExpected });
+    }
+
+    _onIncomingFileHeader(message) {
+        if (!this._expectedFiles.length) {
+            return;
+        }
+
+        const index = this._receivedFiles.length;
+        const expected = this._expectedFiles[index] || {};
+        const size = Number(message.size) || expected.size || 0;
+        const name = message.name || expected.name || `Arquivo ${index + 1}`;
+        const mime = sanitizeMime(message.mime || expected.mime);
+
+        this._currentIncomingFile = {
+            index,
+            expectedSize: size,
+            name,
+            mime,
+            received: 0,
+            chunks: []
+        };
+
+        this._emitStatus({
+            stage: 'receiving-file',
+            direction: 'receive',
+            file: name,
+            index,
+            total: this._expectedFiles.length
+        });
+
+        if (size === 0) {
+            this._finalizeIncomingFile();
+        }
+    }
+
+    _handleBinaryChunk(chunkData) {
+        if (!this._currentIncomingFile) {
+            return;
+        }
+
+        const chunk = chunkData instanceof Buffer
+            ? chunkData
+            : Buffer.from(chunkData);
+
+        if (!chunk.length) {
+            return;
+        }
+
+        this._currentIncomingFile.chunks.push(chunk);
+        this._currentIncomingFile.received += chunk.length;
+        this._bytesReceived += chunk.length;
+
+        const { expectedSize, received, name, index } = this._currentIncomingFile;
+
+        if (expectedSize && received > expectedSize) {
+            this._fail(new Error(`Quantidade de dados recebida para "${name}" excede o esperado.`));
+            return;
+        }
+
+        const progress = expectedSize ? received / expectedSize : 1;
+        this._emitStatus({
+            stage: 'progress',
+            direction: 'receive',
+            value: progress,
+            file: name,
+            index,
+            total: this._expectedFiles.length
+        });
+
+        if (this._totalBytesExpected > 0) {
+            const overallProgress = this._bytesReceived / this._totalBytesExpected;
+            if (overallProgress - this._lastProgressSent >= 0.05 || overallProgress >= 1) {
+                this._sendToPeer({ type: 'progress', progress: overallProgress });
+                this._lastProgressSent = overallProgress;
+            }
+        }
+
+        if (!expectedSize || received === expectedSize) {
+            this._finalizeIncomingFile();
+        }
+    }
+
+    _finalizeIncomingFile() {
+        if (!this._currentIncomingFile) return;
+
+        const { expectedSize, received, chunks, name, mime, index } = this._currentIncomingFile;
+
+        if (expectedSize && received !== expectedSize) {
+            this._fail(new Error(`Arquivo "${name}" chegou incompleto.`));
+            return;
+        }
+
+        const buffer = expectedSize
+            ? Buffer.concat(chunks, expectedSize)
+            : Buffer.concat(chunks);
+
+        this._sendToPeer({ type: 'file-transfer-complete' });
+
+        this._receivedFiles.push({ name, mime, data: buffer });
+        this._emitStatus({
+            stage: 'file-received',
+            direction: 'receive',
+            file: name,
+            index,
+            total: this._expectedFiles.length
+        });
+
+        this._currentIncomingFile = null;
+
+        if (this._receivedFiles.length === this._expectedFiles.length) {
+            this._emitStatus({ stage: 'finished', direction: 'receive' });
+            this._resolve({
+                files: this._receivedFiles.slice(),
+                totalSize: this._totalBytesExpected,
+                sender: this._incomingSenderInfo
+            });
+        }
+    }
+
+    _onPartitionRequest(message) {
+        if (typeof message.offset !== 'number') return;
+        this._sendToPeer({ type: 'partition-received', offset: message.offset });
+    }
+
     _sendToPeer(payload) {
         if (!this._ws || this._ws.readyState !== WebSocket.OPEN) return;
         payload.to = this._remotePeerId;
@@ -329,11 +552,11 @@ export default class DropTransferClient extends EventEmitter {
         }
     }
 
-    _resolve() {
+    _resolve(result) {
         if (this._completed) return;
         this._completed = true;
         this._cleanup();
-        this._resolveCompletion?.();
+        this._resolveCompletion?.(result);
     }
 
     _fail(error) {
@@ -352,6 +575,9 @@ export default class DropTransferClient extends EventEmitter {
         }
         this._pendingPartitions.clear();
         this._pendingFileComplete = null;
+        this._currentIncomingFile = null;
+        this._expectedFiles = [];
+        this._receivedFiles = [];
 
         if (this._ws && this._ws.readyState === WebSocket.OPEN) {
             try {
@@ -362,5 +588,10 @@ export default class DropTransferClient extends EventEmitter {
             }
             this._ws.close();
         }
+    }
+
+    _applyDisplayName() {
+        if (!this._displayName) return;
+        this._sendRaw({ type: 'display-name-changed', displayName: this._displayName });
     }
 }
