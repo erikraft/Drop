@@ -4,6 +4,8 @@ import DropTransferClient from '../client/dropClient.js';
 const DROP_BASE_URL = process.env.DROP_BASE_URL || 'https://drop.erikraft.com/';
 const DROP_SIGNALING_URL = process.env.DROP_SIGNALING_URL;
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+const INLINE_TEXT_THRESHOLD = 1_800;
+const MAX_DISCORD_ATTACHMENTS = 10;
 
 function formatBytes(bytes) {
     if (!bytes) return '0 B';
@@ -11,6 +13,11 @@ function formatBytes(bytes) {
     const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
     const value = bytes / Math.pow(1024, exponent);
     return `${value.toFixed(exponent === 0 ? 0 : 1)} ${units[exponent]}`;
+}
+
+function formatCodeBlock(text) {
+    const sanitized = text.replace(/```/g, '``\u200b`');
+    return '```\n' + sanitized + '\n```';
 }
 
 async function fetchAttachment(attachment) {
@@ -49,6 +56,12 @@ export const data = new SlashCommandBuilder()
             .setDescription('Nome exibido para o seu bot no ErikrafT Drop (opcional).')
             .setRequired(false)
             .setMaxLength(64))
+    .addStringOption(option =>
+        option
+            .setName('mensagem')
+            .setDescription('Mensagem de texto para enviar ao dispositivo pareado (opcional).')
+            .setRequired(false)
+            .setMaxLength(2000))
     .addAttachmentOption(option =>
         option.setName('arquivo1').setDescription('Primeiro arquivo para enviar.'))
     .addAttachmentOption(option =>
@@ -75,7 +88,26 @@ export async function execute(interaction) {
         .map(name => interaction.options.getAttachment(name))
         .filter(Boolean);
 
-    const transferMode = attachments.length > 0 ? 'send' : 'receive';
+    const rawTextOption = interaction.options.getString('mensagem');
+    const normalizedTextOption = typeof rawTextOption === 'string'
+        ? rawTextOption.replace(/\r\n/g, '\n')
+        : undefined;
+    const hasTextToSend = typeof normalizedTextOption === 'string'
+        && normalizedTextOption.trim().length > 0;
+    const textMessage = hasTextToSend ? normalizedTextOption : undefined;
+
+    if (attachments.length > 0 && hasTextToSend) {
+        await interaction.editReply({
+            content: '⚠️ Envie arquivos **ou** uma mensagem de texto por vez. Remova um dos campos e tente novamente.'
+        });
+        return;
+    }
+
+    const transferMode = attachments.length > 0
+        ? 'send'
+        : hasTextToSend
+            ? 'send-text'
+            : 'receive';
 
     let editQueue = Promise.resolve();
     let lastMessage = '';
@@ -102,6 +134,7 @@ export async function execute(interaction) {
         });
 
         let files = [];
+        let textSendResult = null;
 
         if (transferMode === 'send') {
             queueMessage('📥 Baixando anexos do Discord...');
@@ -127,7 +160,15 @@ export async function execute(interaction) {
                     queueMessage('🔑 Sessão estabelecida. Validando a chave de pareamento...');
                     break;
                 case 'paired':
-                    queueMessage('🔗 Dispositivo encontrado! Aguarde o destinatário aceitar a transferência no navegador.');
+                    if (transferMode === 'send') {
+                        queueMessage('🔗 Dispositivo encontrado! Aguarde o destinatário aceitar a transferência no navegador.');
+                    }
+                    else if (transferMode === 'send-text') {
+                        queueMessage('🔗 Dispositivo encontrado! Preparando o envio da mensagem de texto...');
+                    }
+                    else {
+                        queueMessage('🔗 Dispositivo encontrado! Aguardando o remetente iniciar a transferência...');
+                    }
                     break;
                 case 'request-sent': {
                     const totalLabel = formatBytes(status.totalSize || 0);
@@ -190,9 +231,27 @@ export async function execute(interaction) {
                     queueMessage(`✅ Arquivo "${status.file}" recebido com sucesso.`);
                     currentIncomingInfo = null;
                     break;
+                case 'sending-text':
+                    queueMessage('💬 Enviando mensagem de texto para o destinatário...');
+                    break;
+                case 'text-sent':
+                    queueMessage('📨 Mensagem enviada. Aguardando confirmação do destinatário...');
+                    break;
+                case 'text-complete':
+                    queueMessage('✅ O destinatário confirmou o recebimento da mensagem de texto.');
+                    break;
+                case 'text-received':
+                    queueMessage('💬 Mensagem de texto recebida! Processando conteúdo...');
+                    break;
                 case 'finished':
                     if (status.direction === 'receive') {
                         queueMessage('🎉 Transferência concluída! Processando arquivos recebidos...');
+                    }
+                    else if (status.direction === 'receive-text') {
+                        queueMessage('🎉 Mensagem de texto recebida! Processando entrega no Discord...');
+                    }
+                    else if (status.direction === 'text-send') {
+                        queueMessage('✅ Mensagem de texto confirmada pelo destinatário. Finalizando...');
                     }
                     break;
                 default:
@@ -204,6 +263,9 @@ export async function execute(interaction) {
 
         if (transferMode === 'send') {
             await transferClient.send(onStatus);
+        }
+        else if (transferMode === 'send-text') {
+            textSendResult = await transferClient.sendText(textMessage, onStatus);
         }
         else {
             receivedResult = await transferClient.receive(onStatus);
@@ -230,19 +292,51 @@ export async function execute(interaction) {
 
             await interaction.editReply({ content: finalMessage });
         }
+        else if (transferMode === 'send-text') {
+            const sentText = typeof textMessage === 'string'
+                ? textMessage
+                : textSendResult?.text || '';
+            const textBytes = Buffer.byteLength(sentText, 'utf8');
+            const inlineAllowed = sentText.length <= INLINE_TEXT_THRESHOLD;
+
+            const messageLines = [
+                '🎉 Mensagem enviada com sucesso!',
+                `O texto foi entregue ao dispositivo conectado com a chave **${formattedKey}**.`
+            ];
+
+            if (inlineAllowed) {
+                messageLines.push('', '💬 Conteúdo enviado:', formatCodeBlock(sentText));
+                messageLines.push('', 'Para copiar, selecione o texto acima diretamente no Discord.');
+                await interaction.editReply({ content: messageLines.join('\n') });
+            }
+            else {
+                const attachment = new AttachmentBuilder(Buffer.from(sentText, 'utf8'), { name: 'mensagem.txt' });
+                messageLines.push('', `💬 Conteúdo enviado (${formatBytes(textBytes)}): confira o arquivo \`mensagem.txt\` em anexo para copiar tudo.`);
+                await interaction.editReply({ content: messageLines.join('\n'), files: [attachment] });
+            }
+        }
         else {
             const receivedFiles = files || [];
-            if (!receivedFiles.length) {
+            const receivedText = typeof receivedResult?.text === 'string'
+                ? receivedResult.text
+                : undefined;
+            const hasReceivedText = typeof receivedText === 'string';
+
+            if (!receivedFiles.length && !hasReceivedText) {
                 await interaction.editReply({
-                    content: '⚠️ Não foram recebidos arquivos do par remoto. Tente novamente.'
+                    content: '⚠️ Não foram recebidos arquivos ou mensagens do par remoto. Tente novamente.'
                 });
                 return;
             }
 
             const MAX_DISCORD_ATTACHMENT_SIZE = 25 * 1024 * 1024;
-            const MAX_DISCORD_ATTACHMENTS = 10;
-            const attachmentsToSend = [];
+            const replyAttachments = [];
             const skipped = [];
+            const needsTextAttachment = hasReceivedText && receivedText.length > INLINE_TEXT_THRESHOLD;
+            let maxFileAttachments = MAX_DISCORD_ATTACHMENTS;
+            if (needsTextAttachment) {
+                maxFileAttachments = Math.max(MAX_DISCORD_ATTACHMENTS - 1, 0);
+            }
 
             for (const file of receivedFiles) {
                 const size = file.data?.length || 0;
@@ -250,33 +344,55 @@ export async function execute(interaction) {
                     skipped.push(`${file.name} (${formatBytes(size)}) — acima do limite de 25 MB do Discord.`);
                     continue;
                 }
-                if (attachmentsToSend.length >= MAX_DISCORD_ATTACHMENTS) {
-                    skipped.push(`${file.name} (${formatBytes(size)}) — limite de 10 anexos por mensagem atingido.`);
+                if (replyAttachments.length >= maxFileAttachments) {
+                    skipped.push(`${file.name} (${formatBytes(size)}) — limite de anexos atingido.`);
                     continue;
                 }
-                attachmentsToSend.push(new AttachmentBuilder(file.data, { name: file.name }));
+                replyAttachments.push(new AttachmentBuilder(file.data, { name: file.name }));
             }
 
-            const summary = receivedFiles
-                .map((file, index) => `${index + 1}. ${file.name} (${formatBytes(file.data.length)})`)
-                .join('\n');
-
             const messageLines = [
-                '📦 Arquivos recebidos com sucesso!',
-                `Os arquivos enviados para a chave **${formattedKey}** foram entregues aqui no Discord.`,
-                '',
-                '📂 Conteúdo recebido:',
-                summary
+                '🎉 Conteúdo recebido com sucesso!',
+                `O que foi enviado para a chave **${formattedKey}** foi entregue aqui no Discord.`
             ];
+
+            if (receivedFiles.length) {
+                const summary = receivedFiles
+                    .map((file, index) => `${index + 1}. ${file.name} (${formatBytes(file.data.length)})`)
+                    .join('\n');
+                messageLines.push('', '📂 Arquivos recebidos:', summary);
+            }
+
+            if (hasReceivedText) {
+                const textBytes = Buffer.byteLength(receivedText, 'utf8');
+                if (receivedText.length <= INLINE_TEXT_THRESHOLD) {
+                    messageLines.push('', '💬 Mensagem recebida:', formatCodeBlock(receivedText));
+                    messageLines.push('', 'Copie o texto diretamente acima sempre que precisar.');
+                }
+                else if (replyAttachments.length < MAX_DISCORD_ATTACHMENTS) {
+                    replyAttachments.push(new AttachmentBuilder(Buffer.from(receivedText, 'utf8'), { name: 'mensagem.txt' }));
+                    messageLines.push('', `💬 Mensagem recebida (${formatBytes(textBytes)}): o conteúdo completo está no arquivo \`mensagem.txt\` em anexo.`);
+                }
+                else {
+                    const preview = receivedText.slice(0, INLINE_TEXT_THRESHOLD);
+                    const previewBlock = formatCodeBlock(preview + (receivedText.length > INLINE_TEXT_THRESHOLD ? '…' : ''));
+                    messageLines.push('', `💬 Mensagem recebida (${formatBytes(textBytes)}): não foi possível anexar o texto completo por conta do limite de anexos. Trecho inicial:`, previewBlock);
+                }
+            }
 
             if (skipped.length) {
                 messageLines.push('', '⚠️ Os itens abaixo não puderam ser anexados automaticamente:', ...skipped);
             }
 
-            await interaction.editReply({
-                content: messageLines.join('\n'),
-                files: attachmentsToSend
-            });
+            const payload = {
+                content: messageLines.join('\n')
+            };
+
+            if (replyAttachments.length) {
+                payload.files = replyAttachments;
+            }
+
+            await interaction.editReply(payload);
         }
     }
     catch (error) {

@@ -30,6 +30,19 @@ function sanitizeMime(mime) {
     return mime || 'application/octet-stream';
 }
 
+function encodeTextPayload(text) {
+    return Buffer.from(text, 'utf8').toString('base64');
+}
+
+function decodeTextPayload(encoded) {
+    try {
+        return Buffer.from(encoded, 'base64').toString('utf8');
+    }
+    catch (error) {
+        throw new Error('Não foi possível decodificar o texto recebido.');
+    }
+}
+
 export default class DropTransferClient extends EventEmitter {
 
     constructor(options) {
@@ -49,6 +62,7 @@ export default class DropTransferClient extends EventEmitter {
         this._wsFallbackEnabled = false;
 
         this._mode = null;
+        this._pendingTextAckTimeout = null;
 
         this._pendingPartitions = new Map();
         this._pendingFileComplete = null;
@@ -64,6 +78,8 @@ export default class DropTransferClient extends EventEmitter {
         this._bytesReceived = 0;
         this._lastProgressSent = 0;
         this._incomingSenderInfo = null;
+        this._incomingText = null;
+        this._textToSend = null;
     }
 
     async send(onStatus) {
@@ -148,6 +164,9 @@ export default class DropTransferClient extends EventEmitter {
                 if (this._mode === 'send') {
                     this._sendTransferRequest();
                 }
+                else if (this._mode === 'text-send') {
+                    this._sendTextMessage();
+                }
                 break;
             case 'peers':
             case 'peer-joined':
@@ -194,9 +213,17 @@ export default class DropTransferClient extends EventEmitter {
                 }
                 break;
             case 'message-transfer-complete':
+                if (this._mode === 'text-send') {
+                    this._onTextTransferComplete();
+                }
+                break;
             case 'display-name-changed':
+                break;
             case 'text':
-                // Not used by the bot.
+                if (this._mode === 'receive') {
+                    this._onIncomingText(message);
+                }
+                // Not used by the bot otherwise.
                 break;
             default:
                 console.log('Mensagem ignorada:', message);
@@ -345,6 +372,25 @@ export default class DropTransferClient extends EventEmitter {
         });
     }
 
+    async sendText(text, onStatus) {
+        this._mode = 'text-send';
+        this._textToSend = text;
+        if (onStatus) {
+            this._statusCallback = onStatus;
+        }
+
+        this._emitStatus({ stage: 'connecting' });
+
+        this._completionPromise = new Promise((resolve, reject) => {
+            this._resolveCompletion = resolve;
+            this._rejectCompletion = reject;
+        });
+
+        this._openWebSocket();
+
+        return this._completionPromise;
+    }
+
     async receive(onStatus) {
         this._mode = 'receive';
         if (onStatus) {
@@ -372,6 +418,7 @@ export default class DropTransferClient extends EventEmitter {
         this._bytesReceived = 0;
         this._lastProgressSent = 0;
         this._incomingSenderInfo = null;
+        this._incomingText = null;
     }
 
     _onIncomingRequest(message) {
@@ -530,6 +577,78 @@ export default class DropTransferClient extends EventEmitter {
         this._sendToPeer({ type: 'partition-received', offset: message.offset });
     }
 
+    _sendTextMessage() {
+        if (!this._remotePeerId || !this._roomId) {
+            this._fail(new Error('Não foi possível identificar o par remoto para enviar o texto.'));
+            return;
+        }
+
+        if (!this._textToSend) {
+            this._fail(new Error('Nenhum texto foi informado para envio.'));
+            return;
+        }
+
+        if (this._pendingTextAckTimeout) {
+            clearTimeout(this._pendingTextAckTimeout);
+        }
+
+        const encoded = encodeTextPayload(this._textToSend);
+
+        this._emitStatus({ stage: 'sending-text' });
+        this._sendToPeer({ type: 'text', text: encoded });
+        this._emitStatus({ stage: 'text-sent' });
+
+        this._pendingTextAckTimeout = setTimeout(() => {
+            this._pendingTextAckTimeout = null;
+            this._fail(new Error('Tempo limite aguardando a confirmação da mensagem de texto.'));
+        }, ACK_TIMEOUT_MS);
+    }
+
+    _onTextTransferComplete() {
+        if (this._pendingTextAckTimeout) {
+            clearTimeout(this._pendingTextAckTimeout);
+            this._pendingTextAckTimeout = null;
+        }
+
+        this._emitStatus({ stage: 'text-complete' });
+        this._emitStatus({ stage: 'finished', direction: 'text-send' });
+        this._resolve({ text: this._textToSend });
+    }
+
+    _onIncomingText(message) {
+        if (typeof message.text !== 'string') {
+            return;
+        }
+
+        if (message.sender?.id) {
+            this._remotePeerId ||= message.sender.id;
+        }
+
+        let decoded;
+        try {
+            decoded = decodeTextPayload(message.text);
+        }
+        catch (error) {
+            this._fail(error);
+            return;
+        }
+
+        this._incomingSenderInfo = message.sender || null;
+        this._incomingText = decoded;
+
+        this._emitStatus({ stage: 'text-received', text: decoded });
+        this._sendToPeer({ type: 'message-transfer-complete' });
+        this._emitStatus({ stage: 'finished', direction: 'receive-text' });
+
+        const totalSize = Buffer.byteLength(decoded, 'utf8');
+        this._resolve({
+            files: this._receivedFiles.slice(),
+            totalSize,
+            sender: this._incomingSenderInfo,
+            text: decoded
+        });
+    }
+
     _sendToPeer(payload) {
         if (!this._ws || this._ws.readyState !== WebSocket.OPEN) return;
         payload.to = this._remotePeerId;
@@ -578,6 +697,13 @@ export default class DropTransferClient extends EventEmitter {
         this._currentIncomingFile = null;
         this._expectedFiles = [];
         this._receivedFiles = [];
+        this._incomingText = null;
+        this._textToSend = null;
+
+        if (this._pendingTextAckTimeout) {
+            clearTimeout(this._pendingTextAckTimeout);
+            this._pendingTextAckTimeout = null;
+        }
 
         if (this._ws && this._ws.readyState === WebSocket.OPEN) {
             try {
