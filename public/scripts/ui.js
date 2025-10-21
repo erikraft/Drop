@@ -84,7 +84,7 @@ class PeersUI {
             await this._deactivateShareMode();
         }
 
-        // close About ErikrafTdrop page on Escape
+        // close About ErikrafT Drop page on Escape
         if (e.key === "Escape") {
             window.location.hash = '#';
         }
@@ -1031,7 +1031,7 @@ class ReceiveFileDialog extends ReceiveDialog {
                 hours = hours.length < 2 ? "0" + hours : hours;
                 let minutes = now.getMinutes().toString();
                 minutes = minutes.length < 2 ? "0" + minutes : minutes;
-                filenameDownload = `ErikrafTdrop_files_${year+month+date}_${hours+minutes}.zip`;
+                filenameDownload = `ErikrafT-Drop_files_${year+month+date}_${hours+minutes}.zip`;
             } catch (e) {
                 console.error(e);
                 downloadZipped = false;
@@ -1062,8 +1062,8 @@ class ReceiveFileDialog extends ReceiveDialog {
         };
 
         document.title = files.length === 1
-            ? `${ Localization.getTranslation("document-titles.file-received") } - ErikrafTdrop`
-            : `${ Localization.getTranslation("document-titles.file-received-plural", null, {count: files.length}) } - ErikrafTdrop`;
+            ? `${ Localization.getTranslation("document-titles.file-received") } - ErikrafT Drop`
+            : `${ Localization.getTranslation("document-titles.file-received-plural", null, {count: files.length}) } - ErikrafT Drop`;
         changeFavicon("images/favicon-96x96-notification.png");
 
         Events.fire('set-progress', {peerId: peerId, progress: 1, status: 'process'})
@@ -1169,7 +1169,7 @@ class ReceiveRequestDialog extends ReceiveDialog {
 
         this.$receiveTitle.innerText = transferRequestTitle;
 
-        document.title =  `${transferRequestTitle} - ErikrafTdrop`;
+        document.title =  `${transferRequestTitle} - ErikrafT Drop`;
         changeFavicon("images/favicon-96x96-notification.png");
 
         this.$acceptRequestBtn.removeAttribute('disabled');
@@ -2160,8 +2160,8 @@ class ReceiveTextDialog extends Dialog {
 
     _setDocumentTitleMessages() {
         document.title = this._receiveTextQueue.length <= 1
-            ? `${ Localization.getTranslation("document-titles.message-received") } - ErikrafTdrop`
-            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this._receiveTextQueue.length + 1}) } - ErikrafTdrop`;
+            ? `${ Localization.getTranslation("document-titles.message-received") } - ErikrafT Drop`
+            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this._receiveTextQueue.length + 1}) } - ErikrafT Drop`;
     }
 
     async _onCopy() {
