@@ -623,7 +623,7 @@ class PeerUI {
             return '#icon-vscode';
         }
         if (clientType === 'open-vsx-registry-extension') {
-            return '#icon-open-vsx';
+            return '/images/svg/Open_VSX_Logo_White.svg';
         }
 
         const device = this._peer.name.device || this._peer.name;
