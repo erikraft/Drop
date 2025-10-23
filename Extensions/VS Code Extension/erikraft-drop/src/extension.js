@@ -27,9 +27,17 @@ class ErikrafTDropViewProvider {
 
     // Adicionar listener para mensagens do webview
     webviewView.webview.onDidReceiveMessage(
-      message => {
-        if (message.command === 'openExternal') {
+      async message => {
+        if (message.command === 'openExternal' && message.url) {
           vscode.env.openExternal(vscode.Uri.parse(message.url));
+        }
+
+        if (message.command === 'downloadFiles' && Array.isArray(message.items)) {
+          await this._handleDownload(message.items);
+        }
+
+        if (message.command === 'requestUpload') {
+          await this._handleUpload();
         }
       },
       null,
@@ -83,6 +91,37 @@ class ErikrafTDropViewProvider {
             const vscode = acquireVsCodeApi();
             const iframe = document.querySelector('iframe');
 
+            window.addEventListener('message', event => {
+              if (!event.data || typeof event.data !== 'object') {
+                return;
+              }
+
+              const { type, payload } = event.data;
+
+              if (type === 'download-files') {
+                vscode.postMessage({ command: 'downloadFiles', items: payload });
+              }
+
+              if (type === 'request-upload') {
+                vscode.postMessage({ command: 'requestUpload' });
+              }
+
+              if (type === 'link-open' && payload?.url) {
+                vscode.postMessage({ command: 'openExternal', url: payload.url });
+              }
+
+              if (type === 'upload-result') {
+                iframe.contentWindow.postMessage({ type: 'upload-result', payload }, '*');
+              }
+            });
+
+            function postToIframe(message) {
+              if (!iframe || !iframe.contentWindow) {
+                return;
+              }
+              iframe.contentWindow.postMessage(message, '*');
+            }
+
             function setupLinkHandler() {
               try {
                 const iframeWindow = iframe.contentWindow;
@@ -126,6 +165,15 @@ class ErikrafTDropViewProvider {
                   }
                 });
 
+                iframeWindow.addEventListener('drop-download', event => {
+                  if (!event.detail) return;
+                  vscode.postMessage({ command: 'downloadFiles', items: event.detail });
+                });
+
+                iframeWindow.addEventListener('request-upload', () => {
+                  vscode.postMessage({ command: 'requestUpload' });
+                });
+
               } catch (error) {
                 console.error('Erro ao configurar handler de links:', error);
               }
@@ -153,6 +201,48 @@ class ErikrafTDropViewProvider {
       </body>
       </html>
     `;
+  }
+
+  async _handleDownload(items) {
+    const uris = items
+      .filter(item => typeof item?.url === 'string')
+      .map(item => vscode.Uri.parse(item.url));
+
+    if (uris.length === 0) {
+      return;
+    }
+
+    for (const uri of uris) {
+      try {
+        await vscode.env.openExternal(uri);
+      } catch (error) {
+        console.error('Falha ao abrir download:', error);
+      }
+    }
+  }
+
+  async _handleUpload() {
+    try {
+      const files = await vscode.window.showOpenDialog({
+        canSelectMany: true,
+        openLabel: 'Enviar com ErikrafT Drop'
+      });
+
+      if (!files) {
+        return;
+      }
+
+      this.webviewView?.webview?.postMessage({
+        command: 'uploadResult',
+        items: files.map(file => ({
+          name: file.fsPath.split(/\\/).pop(),
+          uri: file.toString()
+        }))
+      });
+    } catch (error) {
+      console.error('Falha ao selecionar arquivos:', error);
+      this.webviewView?.webview?.postMessage({ command: 'uploadResult', items: [] });
+    }
   }
 }
 
