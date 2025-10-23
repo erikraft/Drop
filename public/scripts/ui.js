@@ -596,6 +596,9 @@ class PeerUI {
         if (clientType === 'vs-code-extension') {
             return '#icon-vscode';
         }
+        if (clientType === 'open-vsx-registry-extension') {
+            return '#icon-open-vsx';
+        }
 
         const device = this._peer.name.device || this._peer.name;
         if (device.type === 'smarttv') {

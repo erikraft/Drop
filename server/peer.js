@@ -168,6 +168,10 @@ export default class Peer {
             'vs-code-extension': {
                 deviceName: 'VS Code Extension',
                 browser: 'Visual Studio Code'
+            },
+            'open-vsx-registry-extension': {
+                deviceName: 'Open VSX Extension',
+                browser: 'Open VSX'
             }
         };
 
@@ -217,7 +221,7 @@ export default class Peer {
     }
 
     _resolveClientType(req) {
-        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension']);
+        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension']);
         const searchParams = new URL(req.url, 'http://server').searchParams;
         const rawClientType = (searchParams.get('client_type') || '').toLowerCase();
 
