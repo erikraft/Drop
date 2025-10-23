@@ -1,0 +1,19 @@
+NAME=
+# Nome do bot
+AVATAR=
+# Avatar do bot (Link)
+TYPE=bot
+# Tipo do bot
+MAIN=
+# Arquivo principal
+RAM=100
+# Memória do bot
+AUTORESTART=false
+# Auto restart
+VERSION=latest
+# Versão do bot
+APT=tools
+# Pacotes do bot
+START=
+# Comando de start
+BUILD=.
