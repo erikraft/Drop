@@ -5,14 +5,14 @@ class ContentModeration {
             explicit: ['porn', 'sex', 'xxx', 'nude', 'nudes', 'onlyfans', 'hentai', 'nsfw', '18+'],
             offensive: ['fuck', 'shit', 'caralh', 'puta', 'merda', 'asshole', 'buceta', 'crlh', 'viad'],
             scam: ['free', 'gift', 'bitcoin', 'crypto', 'prêmio', 'premio', 'ganhe', 'click here', 'win'],
-            suspiciousDomains: ['discord.gg', 'bit.ly', 'tinyurl.com', 't.me', 'rb.gy', 'shorturl.at']
+            suspiciousDomains: ['bit.ly', 'tinyurl.com', 't.me', 'rb.gy', 'shorturl.at']
         };
 
         this.blockedWordPatterns = [
             { type: 'explicit', pattern: /\b(porn|sex|xxx|nude|nudes|onlyfans|hentai|nsfw|18\+|🔞|🍆|🍑|🥵)\b/i },
             { type: 'offensive', pattern: /\b(fuck|shit|merda|bosta|puta|puto|caralh|crlh|arromb|cuckold|cunt)\b/i },
             { type: 'scam', pattern: /\b(free|gift|bitcoin|crypto|pix|premi[oó]|ganhe|win|click here|steam ?gift)\b/i },
-            { type: 'suspicious', pattern: /(discord\.gg\/[a-z0-9]+|bit\.ly|tinyurl\.com|t\.me\/[a-z0-9]+|rb\.gy|shorturl\.at|steamcommunity|store-steam)/i }
+            { type: 'suspicious', pattern: /(bit\.ly|tinyurl\.com|t\.me\/[a-z0-9]+|rb\.gy|shorturl\.at|steamcommunity|store-steam)/i }
         ];
 
         this.spamPatterns = [
