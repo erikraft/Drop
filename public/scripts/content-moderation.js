@@ -1,79 +1,29 @@
 // Sistema de Moderação de Conteúdo
 class ContentModeration {
     constructor() {
-        this.blockedWords = [
-            // URLs e Links suspeitos
-            '.gg/HpZzvY5W', '.gg/TZsbat4tw6', 'discord.gg/doncommunity', 'discord.gg/P93HBWRp',
-            'bit.ly', 'encurtador.com.br', 'is.gd', 'kurl.ru', 'l1nk.dev',
-            'n9.cl', 'rb.gy', 'shorturl.at', 'shre.ink', 'surl.li', 't.ly', 't.me', 'tinyurl.com',
-            'u.to', 'urlzs.com', 'zzb.bz', 'steamcommunity', 'steamgift', 'steamrconmmunity',
-            'steamscommunuty', 'steamshort', 'steanmecomnmunity', 'store-steaempowered',
-            'share.blood-strike.com', 'casumonster.top', 'abre.ai', 'abrir.link', 'open.link',
+        this.keywordGroups = {
+            explicit: ['porn', 'sex', 'xxx', 'nude', 'nudes', 'onlyfans', 'hentai', 'nsfw', '18+'],
+            offensive: ['fuck', 'shit', 'caralh', 'puta', 'merda', 'asshole', 'buceta', 'crlh', 'viad'],
+            scam: ['free', 'gift', 'bitcoin', 'crypto', 'prêmio', 'premio', 'ganhe', 'click here', 'win'],
+            suspiciousDomains: ['discord.gg', 'bit.ly', 'tinyurl.com', 't.me', 'rb.gy', 'shorturl.at']
+        };
 
-            // Palavrões e termos ofensivos
-            'arromb', 'asshole', 'babac', 'bastard', 'bct', 'boceta', 'bocetas', 'boquete', 'bosta',
-            'bostinha', 'buceta', 'bucetas', 'burro', 'cacete', 'caralh', 'caralho', 'corno', 'corna',
-            'crlh', 'cu', 'cuckold', 'cum', 'cumshot', 'cunt', 'cunts', 'cuz', 'desgraça', 'desgraçado',
-            'dick', 'escrot', 'fdp', 'foda', 'fuck', 'gay', 'idiota', 'imbecil', 'merda', 'otario',
-            'otário', 'pau', 'pinto', 'porra', 'puta', 'putas', 'puto', 'quenga', 'quengo', 'retardado',
-            'safado', 'shit', 'shitty', 'viad', 'viado', 'xereca', 'xoxota', 'xvideos', 'xxxvideos',
-
-            // Novos termos ofensivos
-            'arrobado', 'vadia', 'vadio', 'vagabunda', 'vagabundo', 'piranha', 'prostituta', 'prostituto',
-            'putinha', 'putinho', 'viadinho', 'viadinha', 'bocetinha', 'bucetinha', 'cuzinho', 'cuzinha',
-            'caralhinho', 'caralhinha', 'pauzinho', 'pauzinha', 'pintinho', 'pintinha', 'merdinha',
-            'merdinho', 'bostinha', 'bostinho', 'fodinha', 'fodinho', 'putinha', 'putinho',
-
-            // Termos NSFW e conteúdo adulto
-            '🔞', '🍆', '🍑', '🥒', '🥵', 'PORN', 'Pornografia', 'pornografía', 'pornography',
-            'nude', 'nudes', 'Onlyfans', 'OnlyFans', 'Leaks', 'Hentai', 'Teen Porn', 'E-Girls Porn',
-            'Latina Nudes', 'xnudes', 'xvideos', 'pornhub', 'xhamster', 'redtube', 'sexy', 'sexy girl',
-            'sexo', 'sex',
-
-            // Spam e golpes
-            '$100', '$20 gift', '20$ gift', 'Bilhão de reais', 'Billion Dollars', 'Billion of reais',
-            'Billion reais', 'buy now', 'cheap', 'click here', 'follow me', 'free gift', 'free nudes',
-            'gift from steam', 'gifts', 'here', 'Hot', 'HOT', 'prize', 'vote for me',
-            'withdrew $15647', 'Milhão de reais', 'Million Dollars', 'Million reais',
-
-            // Outros termos ofensivos
-            'dirty black', 'negro sujo', 'worm', 'verme', 'trash', 'worthless', 'idiot', 'imbecile',
-            'shut up', 'cala a boca'
-        ];
-
-        // Termos explícitos
-        this.explicitTerms = [
-            'porn', 'sex', 'xxx', 'adult', 'nude', 'naked', 'nsfw', '18+',
-            'pornografia', 'sexo', 'adulto', 'nu', 'nua', 'nudez', 'erótico',
-            'onlyfans', 'leaks', 'hentai', 'pussy', 'buceta', 'xereca', 'xereka',
-            'chereca', 'hentai', 'pornhub', 'xhamster', 'redtube', 'sexy', 'sexy girl',
-            'sexo', 'sex', 'porn', 'pornografia', 'erótico', 'erótica',
-        ];
-
-        // Termos ofensivos
-        this.offensiveTerms = [
-            'arromb', 'asshole', 'babac', 'bastard', 'bct', 'boceta', 'boquete',
-            'burro', 'cacete', 'caralh', 'corno', 'corna', 'crlh', 'cu', 'puta'
-        ];
-
-        // Termos de golpe
-        this.scamTerms = [
-            'hack', 'crack', 'pirata', 'gratis', 'free', 'win', 'premio', 'prêmio',
-            'ganhou', 'bitcoin', 'crypto', 'investment', 'investimento', 'money'
+        this.blockedWordPatterns = [
+            { type: 'explicit', pattern: /\b(porn|sex|xxx|nude|nudes|onlyfans|hentai|nsfw|18\+|🔞|🍆|🍑|🥵)\b/i },
+            { type: 'offensive', pattern: /\b(fuck|shit|merda|bosta|puta|puto|caralh|crlh|arromb|cuckold|cunt)\b/i },
+            { type: 'scam', pattern: /\b(free|gift|bitcoin|crypto|pix|premi[oó]|ganhe|win|click here|steam ?gift)\b/i },
+            { type: 'suspicious', pattern: /(discord\.gg\/[a-z0-9]+|bit\.ly|tinyurl\.com|t\.me\/[a-z0-9]+|rb\.gy|shorturl\.at|steamcommunity|store-steam)/i }
         ];
 
         this.spamPatterns = [
-            /(.)\1{10,}/, // Caracteres repetidos (aumentado para 10+ repetições)
-            /(.){1000,}/, // Textos muito longos (aumentado para 1000+ caracteres)
-            /(.){1,10}\1{5,}/, // Padrões repetitivos
-            /(.){1,5}\1{10,}/, // Caracteres repetidos em sequência
-            /(.){1,3}\1{15,}/  // Caracteres muito repetidos
+            /(.)\1{8,}/,
+            /.{1200,}/,
+            /(http(s)?:\/\/[^\s]+\s?){3,}/
         ];
 
-        // Mapeamento de substituições comuns
         this.characterSubstitutions = {
             'a': ['4', '@', 'α', 'а'],
-            'o': ['0', '@', 'о', 'ο'],
+            'o': ['0', 'ο', 'о'],
             'e': ['3', 'ε', 'е'],
             'i': ['1', '!', 'і', 'ι'],
             's': ['$', '5', 'ѕ'],
@@ -84,35 +34,34 @@ class ContentModeration {
             'z': ['2', 'з']
         };
 
-        // Caracteres cirílicos que podem ser usados para enganar
         this.cyrillicChars = {
-            'а': 'a', // cirílico 'а' vs latino 'a'
-            'е': 'e', // cirílico 'е' vs latino 'e'
-            'о': 'o', // cirílico 'о' vs latino 'o'
-            'с': 'c', // cirílico 'с' vs latino 'c'
-            'р': 'p', // cirílico 'р' vs latino 'p'
-            'у': 'y', // cirílico 'у' vs latino 'y'
-            'х': 'x', // cirílico 'х' vs latino 'x'
-            'і': 'i', // cirílico 'і' vs latino 'i'
-            'ѕ': 's', // cirílico 'ѕ' vs latino 's'
-            'т': 't', // cirílico 'т' vs latino 't'
-            'в': 'b', // cirílico 'в' vs latino 'b'
-            'ɡ': 'g', // cirílico 'ɡ' vs latino 'g'
-            'з': 'z', // cirílico 'з' vs latino 'z'
-            'м': 'm', // cirílico 'м' vs latino 'm'
-            'н': 'h', // cirílico 'н' vs latino 'h'
-            'к': 'k', // cirílico 'к' vs latino 'k'
-            'л': 'l', // cirílico 'л' vs latino 'l'
-            'д': 'd', // cirílico 'д' vs latino 'd'
-            'ф': 'f', // cirílico 'ф' vs latino 'f'
-            'ц': 'c', // cirílico 'ц' vs latino 'c'
-            'ч': 'ch', // cirílico 'ч' vs latino 'ch'
-            'ш': 'sh', // cirílico 'ш' vs latino 'sh'
-            'щ': 'sch', // cirílico 'щ' vs latino 'sch'
-            'ъ': '', // cirílico 'ъ' (não tem equivalente)
-            'ь': '', // cirílico 'ь' (não tem equivalente)
-            'ю': 'yu', // cirílico 'ю' vs latino 'yu'
-            'я': 'ya'  // cirílico 'я' vs latino 'ya'
+            'а': 'a',
+            'е': 'e',
+            'о': 'o',
+            'с': 'c',
+            'р': 'p',
+            'у': 'y',
+            'х': 'x',
+            'і': 'i',
+            'ѕ': 's',
+            'т': 't',
+            'в': 'b',
+            'ɡ': 'g',
+            'з': 'z',
+            'м': 'm',
+            'н': 'h',
+            'к': 'k',
+            'л': 'l',
+            'д': 'd',
+            'ф': 'f',
+            'ц': 'c',
+            'ч': 'ch',
+            'ш': 'sh',
+            'щ': 'sch',
+            'ъ': '',
+            'ь': '',
+            'ю': 'yu',
+            'я': 'ya'
         };
 
         // Múltiplos modelos NSFW
@@ -181,7 +130,6 @@ class ContentModeration {
     normalizeText(text) {
         let normalized = text.toLowerCase();
 
-        // Substitui caracteres especiais de volta para suas formas normais
         for (const [normal, substitutes] of Object.entries(this.characterSubstitutions)) {
             for (const substitute of substitutes) {
                 normalized = normalized.replace(new RegExp(substitute, 'g'), normal);
@@ -191,10 +139,22 @@ class ContentModeration {
         return normalized;
     }
 
-    // Verifica se o texto contém palavras bloqueadas mesmo com substituições
-    hasBlockedWordsWithSubstitutions(text) {
+    matchBlockedPatterns(text, filterTypes = null) {
         const normalized = this.normalizeText(text);
-        return this.blockedWords.some(word => normalized.includes(word.toLowerCase()));
+        const matches = [];
+
+        for (const entry of this.blockedWordPatterns) {
+            if (filterTypes && !filterTypes.includes(entry.type)) continue;
+            if (entry.pattern.test(normalized)) {
+                matches.push(entry.type);
+            }
+        }
+
+        return matches;
+    }
+
+    hasBlockedWordsWithSubstitutions(text) {
+        return this.matchBlockedPatterns(text).length > 0;
     }
 
     // Verifica se o arquivo é uma imagem ou vídeo
@@ -211,7 +171,8 @@ class ContentModeration {
 
             // Verifica o nome do arquivo primeiro
             const fileName = file.name.toLowerCase();
-            if (this.blockedWords.some(word => fileName.includes(word.toLowerCase()))) {
+            const explicitMatches = this.matchBlockedPatterns(fileName, ['explicit']);
+            if (explicitMatches.length) {
                 return this._handleExplicitContent(file, 'Nome do arquivo bloqueado', 'explicit');
             }
 
@@ -294,72 +255,86 @@ class ContentModeration {
 
     async showFrameWarningDialog(file, blurredPreview, contentType = 'explicit') {
         return new Promise((resolve) => {
+            let resolved = false;
+
             const dialog = document.createElement('div');
             dialog.className = 'frame-warning-dialog';
 
-            const warningIcons = {
-                explicit: `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                    <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/></svg>`,
-                offensive: `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                    <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/></svg>`,
-                spam: `<svg xmlns="http://www.w3.org/2000/svg" height="64" viewBox="0 -960 960 960" width="64" fill="#e3e3e3">
-                    <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Zm371-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm0-120q17 0 28.5-11.5T520-400v-120q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v120q0 17 11.5 28.5T480-360Z"/></svg>`
-            };
+            const content = document.createElement('div');
+            content.className = 'frame-warning-content';
 
-            const warningTitles = {
-                explicit: '🚫 Conteúdo Explícito Detectado',
-                offensive: '🚫 Conteúdo Ofensivo Detectado',
-                spam: '🚫 Possível Spam/Golpe Detectado'
-            };
+            const iconWrapper = document.createElement('div');
+            iconWrapper.className = 'frame-warning-icons';
 
-            dialog.innerHTML = `
-                <div class="warning-content">
-                    <div class="warning-icon">
-                        ${warningIcons[contentType]}
-                    </div>
-                    <h2>${warningTitles[contentType]}</h2>
-                    <p>Este conteúdo pode conter material impróprio.</p>
+            const visibilityIcon = document.createElement('img');
+            visibilityIcon.src = 'images/svg/svg_icons/visibility_off.svg';
+            visibilityIcon.alt = 'Conteúdo oculto';
 
-                    <div class="media-container">
-                        ${blurredPreview.outerHTML}
-                        <div class="warning-overlay">
-                            <button class="unblur-btn">👁️ Mostrar Conteúdo</button>
-                        </div>
-                    </div>
+            const blockIcon = document.createElement('img');
+            blockIcon.src = 'images/svg/svg_icons/block.svg';
+            blockIcon.alt = 'Conteúdo bloqueado';
 
-                    <div class="button-group">
-                        <button class="accept">Aceitar e Visualizar</button>
-                        <button class="block">Bloquear Permanentemente</button>
-                        <button class="cancel">Cancelar Envio</button>
-                    </div>
-                </div>
-            `;
+            iconWrapper.appendChild(visibilityIcon);
+            iconWrapper.appendChild(blockIcon);
 
-            const unblurBtn = dialog.querySelector('.unblur-btn');
-            const media = dialog.querySelector('.blurred-preview');
+            const title = document.createElement('h2');
+            title.className = 'frame-warning-title';
+            title.textContent = 'Tem certeza que deseja ver???';
 
-            unblurBtn.addEventListener('click', () => {
-                media.style.filter = 'none';
-                unblurBtn.style.display = 'none';
-            });
+            const message = document.createElement('p');
+            message.className = 'frame-warning-message';
+            message.textContent = 'Este conteúdo foi sinalizado como impróprio. Revele apenas se tiver certeza.';
 
-            dialog.querySelector('.accept').addEventListener('click', () => {
-                document.body.removeChild(dialog);
-                resolve(true);
-            });
+            const mediaContainer = document.createElement('div');
+            mediaContainer.className = 'frame-warning-media';
+            blurredPreview.classList.add('frame-warning-preview');
+            mediaContainer.appendChild(blurredPreview);
 
-            dialog.querySelector('.block').addEventListener('click', () => {
-                localStorage.setItem('blockExplicitContent', 'true');
-                document.body.removeChild(dialog);
-                resolve(false);
-            });
+            const actions = document.createElement('div');
+            actions.className = 'frame-warning-actions';
 
-            dialog.querySelector('.cancel').addEventListener('click', () => {
-                document.body.removeChild(dialog);
-                resolve(false);
-            });
+            const noButton = document.createElement('button');
+            noButton.type = 'button';
+            noButton.className = 'frame-warning-btn frame-warning-btn-no';
+            noButton.textContent = 'Não';
 
+            const yesButton = document.createElement('button');
+            yesButton.type = 'button';
+            yesButton.className = 'frame-warning-btn frame-warning-btn-yes';
+            yesButton.textContent = 'Sim';
+
+            actions.appendChild(noButton);
+            actions.appendChild(yesButton);
+
+            content.appendChild(iconWrapper);
+            content.appendChild(title);
+            content.appendChild(message);
+            content.appendChild(mediaContainer);
+            content.appendChild(actions);
+
+            dialog.appendChild(content);
             document.body.appendChild(dialog);
+
+            const removeDialog = (result) => {
+                if (resolved) return;
+                resolved = true;
+                document.removeEventListener('keydown', handleKeydown);
+                if (dialog.parentNode) {
+                    document.body.removeChild(dialog);
+                }
+                resolve(result);
+            };
+
+            const handleKeydown = (event) => {
+                if (event.key === 'Escape') {
+                    removeDialog(false);
+                }
+            };
+
+            document.addEventListener('keydown', handleKeydown);
+
+            noButton.addEventListener('click', () => removeDialog(false));
+            yesButton.addEventListener('click', () => removeDialog(true));
         });
     }
 
@@ -387,7 +362,9 @@ class ContentModeration {
 
         // Verifica se a URL normalizada contém palavras bloqueadas
         const normalizedUrl = this.normalizeUrl(url);
-        return this.blockedWords.some(word => normalizedUrl.includes(word.toLowerCase()));
+        return this.blockedWordPatterns
+            .filter(entry => entry.type === 'suspicious')
+            .some(entry => entry.pattern.test(normalizedUrl));
     }
 
     // Verifica se é spam ou contém palavras bloqueadas
@@ -406,27 +383,29 @@ class ContentModeration {
         // Log inicial
         console.log('Verificando mensagem:', text);
 
-        // Verifica palavras bloqueadas com sistema de pontuação
-        for (const word of this.blockedWords) {
-            const regex = new RegExp(`\\b${word}\\b`, 'i');
-            if (regex.test(normalizedText)) {
-                if (this.explicitTerms.includes(word)) {
-                    explicitScore += 2;
-                    console.log('Palavra explícita detectada:', word);
-                }
-                else if (this.offensiveTerms.includes(word)) {
-                    offensiveScore += 2;
-                    console.log('Palavra ofensiva detectada:', word);
-                }
-                else if (this.scamTerms.includes(word)) {
-                    scamScore += 2;
-                    console.log('Termo de golpe detectado:', word);
-                }
-                else {
-                    spamScore += 1;
-                    console.log('Palavra bloqueada detectada:', word);
-                }
-            }
+        const patternMatches = this.matchBlockedPatterns(normalizedText);
+        const countByType = patternMatches.reduce((acc, type) => {
+            acc[type] = (acc[type] || 0) + 1;
+            return acc;
+        }, {});
+
+        if (countByType.explicit) {
+            explicitScore += countByType.explicit * 2;
+            console.log('Padrões explícitos detectados:', countByType.explicit);
+        }
+
+        if (countByType.offensive) {
+            offensiveScore += countByType.offensive * 2;
+            console.log('Padrões ofensivos detectados:', countByType.offensive);
+        }
+
+        if (countByType.scam || countByType.suspicious) {
+            scamScore += ((countByType.scam || 0) + (countByType.suspicious || 0)) * 2;
+            console.log('Padrões de golpe detectados:', countByType.scam || 0, countByType.suspicious || 0);
+        }
+
+        if (patternMatches.length && !explicitScore && !offensiveScore && !scamScore) {
+            spamScore += patternMatches.length;
         }
 
         // Verifica padrões de spam
@@ -505,8 +484,7 @@ class ContentModeration {
 
     // Método para verificar conteúdo explícito
     isExplicitContent(text) {
-        const explicitTerms = ['porn', 'sex', 'nude', 'nudes', 'onlyfans', 'leaks', 'hentai'];
-        return explicitTerms.some(term => text.toLowerCase().includes(term));
+        return this.matchBlockedPatterns(text, ['explicit']).length > 0;
     }
 
     // Mostra o diálogo de aviso

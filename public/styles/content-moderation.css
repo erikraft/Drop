@@ -326,15 +326,15 @@
 }
 
 @media (max-width: 600px) {
-    .warning-content {
+    .frame-warning-content {
         padding: 1rem;
     }
 
-    .button-group {
+    .frame-warning-actions {
         flex-direction: column;
     }
 
-    .button-group button {
+    .frame-warning-btn {
         width: 100%;
     }
 }

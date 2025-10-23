@@ -458,7 +458,33 @@ class PeerUI {
                 </div>
             </label>`;
 
-        this.$el.querySelector('svg use').setAttribute('xlink:href', this._icon());
+        const iconReference = this._icon();
+        const useElement = this.$el.querySelector('svg use');
+
+        if (iconReference === '#icon-open-vsx') {
+            const iconWrapper = this.$el.querySelector('.icon-wrapper');
+            if (iconWrapper) {
+                const fallbackImg = document.createElement('img');
+                fallbackImg.src = 'images/svg/Open_VSX_Logo_White.svg';
+                fallbackImg.alt = 'Open VSX';
+                fallbackImg.width = 59;
+                fallbackImg.height = 44;
+                fallbackImg.className = 'icon open-vsx-icon';
+
+                const svgIcon = iconWrapper.querySelector('svg.icon');
+                if (svgIcon) {
+                    svgIcon.replaceWith(fallbackImg);
+                }
+                else {
+                    iconWrapper.prepend(fallbackImg);
+                }
+            }
+        }
+        else if (useElement) {
+            useElement.setAttribute('xlink:href', iconReference);
+            useElement.setAttribute('href', iconReference);
+        }
+
         this.$el.querySelector('.name').textContent = this._displayName();
         this.$el.querySelector('.device-name').textContent = this._deviceName();
 
@@ -760,10 +786,11 @@ class Dialog {
 
     hide() {
         this.$el.removeAttribute('show');
-        if (!window.isMobile) {
+        if (!window.isMobile && !window.isBrowserExtensionPopup) {
             document.activeElement.blur();
             window.blur();
         }
+
         document.title = 'ErikrafT Drop｜Transfer Files';
         changeFavicon("images/favicon-96x96.png");
         this.correspondingPeerId = undefined;
@@ -986,15 +1013,9 @@ class ReceiveFileDialog extends ReceiveDialog {
                 ? Localization.getTranslation("dialogs.title-image")
                 : Localization.getTranslation("dialogs.title-file");
         }
-        else {
-            descriptor = imagesOnly
-                ? Localization.getTranslation("dialogs.title-image-plural")
-                : Localization.getTranslation("dialogs.title-file-plural");
-        }
-        this.$receiveTitle.innerText = Localization.getTranslation("dialogs.receive-title", null, {descriptor: descriptor});
 
         const canShare = (window.iOS || window.androidMobile) && !!navigator.share && navigator.canShare({files});
-        if (canShare) {
+        if (canShare && !window.isBrowserExtensionPopup) {
             this.$shareBtn.removeAttribute('hidden');
             this.$shareBtn.onclick = _ => {
                 navigator.share({files: files})
@@ -1072,15 +1093,17 @@ class ReceiveFileDialog extends ReceiveDialog {
         Events.fire('set-progress', {peerId: peerId, progress: 1, status: 'process'})
         this.show();
 
-        setTimeout(() => {
-            // wait for the dialog to be shown
-            if (canShare) {
-                this.$shareBtn.click();
-            }
-            else {
-                this.$downloadBtn.click();
-            }
-        }, 500);
+        if (!window.isBrowserExtensionPopup) {
+            setTimeout(() => {
+                // wait for the dialog to be shown
+                if (canShare) {
+                    this.$shareBtn.click();
+                }
+                else {
+                    this.$downloadBtn.click();
+                }
+            }, 500);
+        }
 
         this.createPreviewElement(files[0])
             .then(canPreview => {
