@@ -1,19 +1,46 @@
-# Notas de Lançamento — Atualização de Rebranding
+==== 🇧🇷｜Português Brasil ====
+
+# Notas de Lançamento — v1.11.6
 
 ## Destaques
-- Renomeamos oficialmente o projeto de PairDrop para **ErikrafT Drop**, refletindo a nova identidade visual e missão da plataforma.
-- Atualizamos o utilitário de linha de comando para o novo pacote **erikraftdrop-cli**, garantindo compatibilidade com os scripts de automação existentes.
-- Padronizamos a nomenclatura interna para **ErikrafTdrop** em scripts, backend e configurações, evitando conflitos entre ambientes.
+- Atualizamos as extensões ErikrafT Drop para a versão **9.0.5**, trazendo suporte completo de upload e download diretamente pelos complementos.
+- Revisamos a presença no **Open VSX**, com novo cliente dedicado, ícones atualizados e metadados alinhados ao repositório oficial.
+- Ajustamos a moderação e a experiência de uso no site/app, com refinamentos visuais e melhorias de segurança.
+- Otimizamos integrações com Discord, incluindo links de OAuth2 e limpeza da lista de domínios suspeitos.
 
 ## O que mudou
-- Textos, documentação e interface agora apresentam o nome ErikrafT Drop, oferecendo uma experiência consistente para todos os usuários.
-- Serviços do backend e o service worker foram ajustados para responder ao novo identificador, assegurando estabilidade após a migração.
-- Empacotamentos e scripts de build foram revisitados para refletir o rebranding, incluindo manifestos, arquivos de idioma e assets da aplicação.
+- Pacotes VSIX 9.0.5 disponíveis em `Extensions/`, substituindo artefatos antigos e atualizando manifestos.
+- Service worker, UI e assets receberam ajustes de estilo e comportamento vindos do commit de moderação/UI.
+- Inclusão do exemplo de configuração `discloud` para facilitar deploys alternativos.
+- Corrigimos largura, altura e aspect ratio do ícone principal para evitar distorções em marketplaces.
 
 ## Como atualizar
-1. Atualize suas dependências ou reinstale o CLI usando o novo pacote `erikraftdrop-cli`.
-2. Limpe caches antigos do navegador (ou force um reload) para garantir que os novos assets e service worker sejam carregados.
-3. Verifique scripts automatizados e integrações para garantir que apontem para o nome ErikrafTdrop.
+1. Instale ou atualize as extensões para a versão `9.0.5` a partir dos novos VSIX (VS Code, Edge, Chrome, Firefox, Open VSX).
+2. Limpe caches do navegador ou reinicie o service worker para carregar os novos assets.
+3. Revise integrações automáticas (bots, scripts) para usar os links OAuth2 atualizados e a nova configuração `discloud`, se aplicável.
 
 ## Agradecimentos
-Obrigado por continuar acompanhando o projeto! Essa atualização marca o começo de uma nova fase para o ErikrafT Drop, e estamos ansiosos para receber seu feedback.
+Obrigado por acompanhar o desenvolvimento contínuo do ErikrafT Drop! Feedbacks sobre a nova versão e as extensões 9.0.5 são muito bem-vindos.
+
+==== 🇺🇸｜English ====
+
+# Release Notes — v1.11.6
+
+## Highlights
+- We've updated the ErikrafT Drop extensions to version **9.0.5**, bringing full support for uploading and downloading directly through add-ons.
+- We've overhauled the **Open VSX** presence, with a new dedicated client, updated icons, and metadata aligned with the official repository.
+- We've adjusted moderation and the user experience on the website/app, with visual refinements and security improvements.
+- We've optimized Discord integrations, including OAuth2 links and cleaning up the suspicious domain list.
+
+## What's Changed
+- VSIX 9.0.5 packages are available in `Extensions/`, replacing old artifacts and updating manifests.
+- Service worker, UI, and assets have received style and behavior adjustments from the moderation/UI commit.
+- Added the `discloud` configuration example to facilitate alternative deployments. - We've fixed the width, height, and aspect ratio of the main icon to prevent distortions in marketplaces.
+
+## How to update
+1. Install or update extensions to version 9.0.5 from the new VSIX (VS Code, Edge, Chrome, Firefox, Open VSX).
+2. Clear browser caches or restart the service worker to load the new assets.
+3. Review automatic integrations (bots, scripts) to use the updated OAuth2 links and the new 'discloud' setting, if applicable.
+
+## Thanks
+Thank you for following the continued development of ErikrafT Drop! Feedback on the new version and extensions 9.0.5 is very welcome.
