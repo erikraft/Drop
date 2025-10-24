@@ -1063,6 +1063,12 @@ html[dir="rtl"] #about x-background {
     margin: 0 auto 32px;
 }
 
+#about .download-badge-grid img {
+    width: min(180px, 100%);
+    height: auto;
+    display: block;
+}
+
 @media (max-width: 720px) {
     #about {
         --about-padding-top: 20px;
@@ -1078,6 +1084,10 @@ html[dir="rtl"] #about x-background {
     #about .download-badge-grid {
         gap: 12px;
     }
+
+    #about .download-badge-grid img {
+        width: min(140px, 100%);
+    }
 }
 
 @media (max-width: 480px) {
@@ -1089,6 +1099,10 @@ html[dir="rtl"] #about x-background {
 
     #about section {
         gap: 18px;
+    }
+
+    #about .download-badge-grid img {
+        width: min(120px, 100%);
     }
 
 }
