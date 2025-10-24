@@ -129,14 +129,11 @@
                 </div>
             </div>
         </div>
-<div id="notification" class="icon-button" data-i18n-key="header.notification" data-i18n-attrs="title" hidden>
-    <lord-icon
-        src="https://cdn.lordicon.com/lznlxwtc.json"
-        trigger="hover"
-        colors="primary:#e8b730"
-        style="width:24px;height:24px">
-    </lord-icon>
-</div>
+        <div id="notification" class="icon-button" data-i18n-key="header.notification" data-i18n-attrs="title" hidden>
+            <svg class="icon">
+                <use xlink:href="#notifications"></use>
+            </svg>
+        </div>
         <div id="install" class="icon-button" data-i18n-key="header.install" data-i18n-attrs="title" hidden>
             <svg class="icon">
                 <use xlink:href="#homescreen"></use>
@@ -903,15 +900,33 @@
 
         <!-- Botões com Imagens -->
         <div class="download-badge-grid">
-            <img src="./public/images/badges/Get it on WEB.png" alt="Get it on Web" href="https://drop.erikraft.com/" target="_blank">
-            <img src="./public/images/badges/Download the APK.png" alt="Download the APK" href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
-            <img src="./public/images/badges/Get it on Google Play.png" alt="Get it on Google Play" href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
-            <img src="./public/images/badges/Get it on F-Droid.png" alt="Get it on F-Droid" href="https://f-droid.org/packages/com.erikraft.drop" target="_blank">
-            <img src="./public/images/badges/Get it on Discord.png" alt="Get it on Discord" href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
-            <img src="./public/images/badges/Get it on VS Code Marketplace.png" alt="Get it on VS Code Marketplace" href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank">
-            <img src="./public/images/badges/Get it on Open VSX Registry.png" alt="Get it on Open VSX Registry" href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank">
-            <img src="./public/images/badges/Firefox Browser ADD-ONS.png" alt="Firefox Browser ADD-ONS" href="https://addons.mozilla.org/firefox/addon/erikraft-drop/" target="_blank">
-            <img src="./public/images/badges/Support_me_on_Ko-fi.png" alt="Support me on Ko-fi" href="https://ko-fi.com/erikraft" target="_blank">
+            <a href="https://drop.erikraft.com/" target="_blank" rel="noreferrer">
+                <img src="images/badges/Get it on WEB.png" alt="Get it on Web">
+            </a>
+            <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Download the APK.png" alt="Download the APK">
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Get it on Google Play.png" alt="Get it on Google Play">
+            </a>
+            <a href="https://f-droid.org/packages/com.erikraft.drop" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Get it on F-Droid.png" alt="Get it on F-Droid">
+            </a>
+            <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Get it on Discord.png" alt="Get it on Discord">
+            </a>
+            <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Get it on VS Code Marketplace.png" alt="Get it on VS Code Marketplace">
+            </a>
+            <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Get it on Open VSX Registry.png" alt="Get it on Open VSX Registry">
+            </a>
+            <a href="https://addons.mozilla.org/firefox/addon/erikraft-drop/" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Firefox Browser ADD-ONS.png" alt="Firefox Browser ADD-ONS">
+            </a>
+            <a href="https://ko-fi.com/erikraft" target="_blank" rel="noreferrer">
+                <img src="./images/badges/Support_me_on_Ko-fi.png" alt="Support me on Ko-fi">
+            </a>
         </div>
     </section>
     <x-background></x-background>
