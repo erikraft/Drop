@@ -82,24 +82,24 @@ function formatPairKey(pairKey) {
 
 export const data = new SlashCommandBuilder()
     .setName('drop')
-    .setDescription('Share files with ErikrafT Drop in real time. / Compartilha arquivos usando o ErikrafT Drop em tempo real.')
+    .setDescription('Transfer with ErikrafT Drop. / Transfira com o ErikrafT Drop.')
     .addStringOption(option =>
         option
             .setName('chave')
-            .setDescription('Pairing key (6 digits) generated on the ErikrafT Drop website. / Chave de pareamento (6 dígitos) gerada no site do ErikrafT Drop.')
+            .setDescription('Pairing key (6 digits). / Chave de pareamento (6 dígitos).')
             .setRequired(true)
             .setMinLength(6)
             .setMaxLength(6))
     .addStringOption(option =>
         option
             .setName('nome')
-            .setDescription('Display name shown for your bot on ErikrafT Drop (optional). / Nome exibido para o seu bot no ErikrafT Drop (opcional).')
+            .setDescription('Display name on ErikrafT Drop (optional). / Nome no ErikrafT Drop (opcional).')
             .setRequired(false)
             .setMaxLength(64))
     .addStringOption(option =>
         option
             .setName('mensagem')
-            .setDescription('Text message to send to the paired device (optional). / Mensagem de texto para enviar ao dispositivo pareado (opcional).')
+            .setDescription('Text to send to paired device (optional). / Texto para o dispositivo pareado (opcional).')
             .setRequired(false)
             .setMaxLength(2000))
     .addAttachmentOption(option =>
