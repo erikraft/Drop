@@ -75,4 +75,11 @@ Este diretório contém um exemplo de bot baseado em [discord.js](https://discor
 - Os dados trafegam diretamente para o destinatário através do WebSocket do ErikrafT Drop (ou pelo TURN configurado na instância), respeitando o mesmo fluxo de verificação e confirmação do cliente web.
 - Tokens e segredos **não** estão versionados; mantenha seu arquivo `.env` em segurança.
 
+## Hospedagem gratuita sugerida
+
+Para colocar o bot online 24/7 sem custos, recomendamos as seguintes plataformas de *hosting* gratuito:
+
+- [Shard Cloud](https://shardcloud.app/pt-br/dash)
+- [Discloud](https://discloud.com/dashboard)
+
 Aproveite como base para personalizar automações ou fluxos de upload no seu servidor Discord!
