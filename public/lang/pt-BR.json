@@ -128,7 +128,7 @@
         "cloud-upload-copy-success": "Link copiado para a área de transferência.",
         "cloud-upload-copy-error": "Não foi possível copiar o link. Copie manualmente.",
         "cloud-upload-error": "Erro inesperado ao enviar arquivo.",
-        "cloud-upload-capacity": "Armazenamento em nuvem temporariamente indisponível devido ao alto uso. Tente novamente mais tarde.",
+        "cloud-upload-capacity": "Armazenamento em nuvem temporariamente indisponível devido ao uso elevado. Tente novamente mais tarde.",
         "cloud-upload-unavailable": "Upload na nuvem indisponível no momento. Tente novamente mais tarde."
     },
     "about": {

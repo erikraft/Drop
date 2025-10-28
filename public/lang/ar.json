@@ -130,7 +130,27 @@
         "unpair": "إلغاء الإقتران",
         "title-image": "صورة",
         "file-other-description-file-plural": "و{{count}} ملفات أخرى",
-        "would-like-to-share": "ترغب..."
+        "would-like-to-share": "ترغب...",
+        "cloud-upload-title": "إرسال ملف إلى السحابة",
+        "cloud-upload-file-label": "ملف",
+        "cloud-upload-expiry-label": "المدة حتى الانتهاء",
+        "cloud-upload-expiry-1h": "ساعة واحدة",
+        "cloud-upload-expiry-3h": "3 ساعات",
+        "cloud-upload-expiry-5h": "5 ساعات",
+        "cloud-upload-expiry-1d": "يوم واحد",
+        "cloud-upload-link-label": "رابط التنزيل",
+        "cloud-upload-copy": "نسخ الرابط",
+        "cloud-upload-send": "إرسال",
+        "cloud-upload-expiry-prefix": "تنتهي في: {{value}}",
+        "cloud-upload-select-file-error": "حدد ملفًا لتحميله.",
+        "cloud-upload-file-too-large": "يتجاوز الملف الحد البالغ 100 ميجابايت.",
+        "cloud-upload-uploading": "جارٍ تحميل الملف…",
+        "cloud-upload-success": "اكتمل التحميل! انسخ الرابط أدناه.",
+        "cloud-upload-copy-success": "تم نسخ الرابط إلى الحافظة.",
+        "cloud-upload-copy-error": "تعذر نسخ الرابط. انسخ يدويًا.",
+        "cloud-upload-error": "حدث خطأ غير متوقع أثناء تحميل الملف.",
+        "cloud-upload-capacity": "التخزين السحابي غير متاح مؤقتًا بسبب الاستخدام الكثيف. حاول مرة أخرى لاحقًا.",
+        "cloud-upload-unavailable": "التحميل إلى السحابة غير متاح حاليًا. يرجى المحاولة لاحقًا."
     },
     "webchat-modal": {
         "external": "Go to website"

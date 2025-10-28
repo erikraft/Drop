@@ -62,5 +62,27 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "dialogs": {
+        "cloud-upload-title": "ارسال فایل به ابر",
+        "cloud-upload-file-label": "File",
+        "cloud-upload-expiry-label": "Time until expiration",
+        "cloud-upload-expiry-1h": "1 hour",
+        "cloud-upload-expiry-3h": "3 hours",
+        "cloud-upload-expiry-5h": "5 hours",
+        "cloud-upload-expiry-1d": "1 day",
+        "cloud-upload-link-label": "Download link",
+        "cloud-upload-copy": "Copy link",
+        "cloud-upload-send": "Send",
+        "cloud-upload-expiry-prefix": "Expires at: {{value}}",
+        "cloud-upload-select-file-error": "Select a file to upload.",
+        "cloud-upload-file-too-large": "حجم فایل از محدودیت ۱۰۰ مگابایت بیشتر است.",
+        "cloud-upload-uploading": "در حال بارگذاری فایل…",
+        "cloud-upload-success": "بارگذاری کامل شد! پیوند زیر را کپی کنید.",
+        "cloud-upload-copy-success": "پیوند در کلیپ‌بورد کپی شد.",
+        "cloud-upload-copy-error": "امکان کپی پیوند نبود. به صورت دستی کپی کنید.",
+        "cloud-upload-error": "خطای غیرمنتظره هنگام بارگذاری فایل رخ داد.",
+        "cloud-upload-capacity": "به دلیل استفاده زیاد، فضای ابری موقتاً در دسترس نیست. بعداً دوباره تلاش کنید.",
+        "cloud-upload-unavailable": "بارگذاری در فضای ابری در حال حاضر در دسترس نیست. لطفاً بعداً دوباره تلاش کنید."
     }
 }

@@ -34,5 +34,27 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "dialogs": {
+        "cloud-upload-title": "ক্লাউডে ফাইল পাঠান",
+        "cloud-upload-file-label": "ফাইল",
+        "cloud-upload-expiry-label": "মেয়াদ শেষ হওয়ার সময়",
+        "cloud-upload-expiry-1h": "১ ঘন্টা",
+        "cloud-upload-expiry-3h": "৩ ঘন্টা",
+        "cloud-upload-expiry-5h": "৫ ঘন্টা",
+        "cloud-upload-expiry-1d": "১ দিন",
+        "cloud-upload-link-label": "ডাউনলোড লিংক",
+        "cloud-upload-copy": "লিংক কপি করুন",
+        "cloud-upload-send": "পাঠান",
+        "cloud-upload-expiry-prefix": "মেয়াদ শেষ হবে: {{value}}",
+        "cloud-upload-select-file-error": "আপলোড করার জন্য একটি ফাইল নির্বাচন করুন।",
+        "cloud-upload-file-too-large": "ফাইলটি ১০০ এমবি সীমা অতিক্রম করেছে।",
+        "cloud-upload-uploading": "ফাইল আপলোড করা হচ্ছে…",
+        "cloud-upload-success": "আপলোড সম্পন্ন! নিচের লিংকটি কপি করুন।",
+        "cloud-upload-copy-success": "লিংকটি ক্লিপবোর্ডে কপি হয়েছে।",
+        "cloud-upload-copy-error": "লিংক কপি করা যায়নি। হাতে কপি করুন।",
+        "cloud-upload-error": "ফাইল আপলোড করার সময় অপ্রত্যাশিত ত্রুটি ঘটেছে।",
+        "cloud-upload-capacity": "অত্যধিক ব্যবহারের কারণে ক্লাউড স্টোরেজ সাময়িকভাবে অনুপলব্ধ। পরে আবার চেষ্টা করুন।",
+        "cloud-upload-unavailable": "ক্লাউড আপলোড বর্তমানে উপলব্ধ নয়। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
     }
 }
