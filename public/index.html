@@ -164,6 +164,10 @@
             </svg>
         </div>
 
+        <div id="cloud" class="icon-button" data-i18n-key="header.cloud" data-i18n-attrs="title">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+
         <div id="webchat" class="icon-button" data-i18n-key="header.webchat" data-i18n-attrs="title" title="WebChat">
             <a id="webchat-launcher" href="https://webchat.erikraft.com/" target="_blank" rel="noopener noreferrer"
                aria-label="WebChat">
@@ -180,7 +184,7 @@
             </a>
         </div> -->
 
-<a href="https://limewire.com/" target="_blank" class="icon-button" data-i18n-key="header.limewire" data-i18n-attrs="title" title="LimeWire" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 4px;">
+<!-- <a href="https://limewire.com/" target="_blank" class="icon-button" data-i18n-key="header.limewire" data-i18n-attrs="title" title="LimeWire" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 4px;">
   <svg viewBox="0 0 187.6 187.6" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; animation: spin 2s linear infinite;">
     <style>
       .st0 { fill: #00934B; }
@@ -243,7 +247,7 @@
 </g>
 </svg>
 
-</a>
+</a> -->
 
         <div id="expand" class="icon-button" data-i18n-key="header.expand" data-i18n-attrs="title" hidden>
             <svg class="icon">
@@ -772,6 +776,46 @@
                 </div>
             </x-paper>
         </x-background>
+    </x-dialog>
+    <!-- Cloud Upload Dialog -->
+    <x-dialog id="cloud-upload-dialog">
+        <form action="#" enctype="multipart/form-data">
+            <x-background class="full center">
+                <x-paper shadow="2">
+                    <div class="row center p-2">
+                        <h2 class="dialog-title" data-i18n-key="dialogs.cloud-upload-title">Enviar arquivo para a nuvem</h2>
+                    </div>
+                    <div class="row p-2">
+                        <div class="column fw">
+                            <label for="cloud-upload-file" class="font-body2" data-i18n-key="dialogs.cloud-upload-file-label">Arquivo</label>
+                            <input id="cloud-upload-file" name="file" type="file" required>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="column fw">
+                            <label for="cloud-upload-expiry" class="font-body2" data-i18n-key="dialogs.cloud-upload-expiry-label">Tempo até expirar</label>
+                            <select id="cloud-upload-expiry" name="expiry">
+                                <option value="1h" data-i18n-key="dialogs.cloud-upload-expiry-1h">1 hora</option>
+                                <option value="3h" data-i18n-key="dialogs.cloud-upload-expiry-3h">3 horas</option>
+                                <option value="5h" data-i18n-key="dialogs.cloud-upload-expiry-5h">5 horas</option>
+                                <option value="1d" data-i18n-key="dialogs.cloud-upload-expiry-1d">1 dia</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row p-2 status" hidden></div>
+                    <div class="column p-2 result" hidden>
+                        <span class="font-body2" data-i18n-key="dialogs.cloud-upload-link-label">Link para download</span>
+                        <input id="cloud-upload-link" type="text" readonly class="fw">
+                        <button type="button" class="btn btn-rounded btn-grey copy-btn" data-i18n-key="dialogs.cloud-upload-copy">Copiar link</button>
+                        <small class="font-caption expires-at"></small>
+                    </div>
+                    <div class="btn-row row-reverse wrap p-2">
+                        <button type="submit" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.cloud-upload-send">Enviar</button>
+                        <button type="button" class="btn btn-rounded btn-grey" close data-i18n-key="dialogs.close">Fechar</button>
+                    </div>
+                </x-paper>
+            </x-background>
+        </form>
     </x-dialog>
     <!-- base64 Paste Dialog -->
     <x-dialog id="base64-paste-dialog">

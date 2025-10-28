@@ -810,6 +810,37 @@ body.webchat-modal-open {
     line-height: 1;
 }
 
+.webchat-modal__textarea[contenteditable] {
+    min-height: 64px;
+}
+
+#cloud-upload-dialog .status {
+    color: var(--accent-color, #4fc3f7);
+    font-weight: 500;
+}
+
+#cloud-upload-dialog .status.error {
+    color: var(--error-color, #ff5252);
+}
+
+#cloud-upload-dialog .status[hidden] {
+    display: none;
+}
+
+#cloud-upload-dialog .result {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#cloud-upload-link {
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.1);
+    color: inherit;
+}
+
 @media (max-width: 768px) {
     .webchat-modal__restore {
         right: 16px;

@@ -3,11 +3,18 @@ import RateLimit from "express-rate-limit";
 import {fileURLToPath} from "url";
 import path, {dirname} from "path";
 import http from "http";
+import multer from "multer";
 
 export default class ErikrafTdropServer {
 
     constructor(conf) {
         const app = express();
+        const upload = multer({
+            storage: multer.memoryStorage(),
+            limits: {
+                fileSize: 100 * 1024 * 1024 // 100 MB
+            }
+        });
 
         if (conf.rateLimit) {
             const limiter = RateLimit({
@@ -47,6 +54,56 @@ export default class ErikrafTdropServer {
 
         // By default, clients connecting to your instance use the signaling server of your instance to connect to other devices.
         // By using `WS_SERVER`, you can host an instance that uses another signaling server.
+        app.post('/api/cloud-upload', upload.single('file'), async (req, res) => {
+            if (!req.file) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Nenhum arquivo enviado.'
+                });
+            }
+
+            const allowedExpiry = new Set(['1h', '3h', '5h', '1d']);
+            const requestedExpiry = req.body?.expiry;
+            const expiry = allowedExpiry.has(requestedExpiry) ? requestedExpiry : '1d';
+
+            try {
+                const upstreamForm = new FormData();
+                const uploadedFile = new File([req.file.buffer], req.file.originalname || 'upload', {
+                    type: req.file.mimetype || 'application/octet-stream'
+                });
+
+                upstreamForm.append('file', uploadedFile);
+                upstreamForm.append('expires', expiry);
+
+                const upstreamResponse = await fetch('https://file.io', {
+                    method: 'POST',
+                    body: upstreamForm
+                });
+
+                const upstreamData = await upstreamResponse.json().catch(() => null);
+
+                if (!upstreamResponse.ok || !upstreamData?.success) {
+                    console.error('Erro ao enviar arquivo para file.io', upstreamData);
+                    return res.status(502).json({
+                        success: false,
+                        message: 'Serviço de hospedagem indisponível. Tente novamente mais tarde.'
+                    });
+                }
+
+                return res.json({
+                    success: true,
+                    link: upstreamData.link,
+                    expiresAt: upstreamData.expiry || upstreamData.expire || null
+                });
+            } catch (error) {
+                console.error('Erro interno ao enviar arquivo para a nuvem:', error);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Erro interno ao enviar arquivo.'
+                });
+            }
+        });
+
         app.get('/config', (req, res) => {
             res.send({
                 signalingServer: conf.signalingServer,
