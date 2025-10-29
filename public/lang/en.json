@@ -13,7 +13,9 @@
         "join-public-room_title": "Join public room temporarily",
         "cancel-share-mode": "Cancel",
         "edit-share-mode": "Edit",
-        "expand_title": "Expand header button row"
+        "expand_title": "Expand header button row",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Release to select recipient",

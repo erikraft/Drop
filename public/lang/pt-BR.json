@@ -15,7 +15,9 @@
         "edit-share-mode": "Editar",
         "expand_title": "Expandir linha de botões de cabeçalho",
         "bluetooth": "Transferir via Bluetooth",
-        "scan-qr": "Escanear QR Code"
+        "scan-qr": "Escanear QR Code",
+        "cloud": "Nuvem",
+        "webchat": "Bate-papo"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Solte para selecionar o destinatário",
