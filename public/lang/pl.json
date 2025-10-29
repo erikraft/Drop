@@ -13,7 +13,9 @@
         "about_title": "O ErikrafT Drop",
         "theme-auto_title": "Dostosuj motyw do motywu systemowego",
         "notification_title": "Włącz powiadomienia",
-        "install_title": "Zainstaluj ErikrafT Drop"
+        "install_title": "Zainstaluj ErikrafT Drop",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Zwolnij, aby wybrać odbiorcę",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

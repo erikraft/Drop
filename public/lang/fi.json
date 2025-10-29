@@ -12,7 +12,9 @@
         "edit-paired-devices_title": "Muokkaa yhdistettyjä laitteita",
         "join-public-room_title": "Liity julkiseen huoneeseen väliaikaisesti",
         "cancel-share-mode": "Peruuta",
-        "edit-share-mode": "Muokkaa"
+        "edit-share-mode": "Muokkaa",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers-title": "Avaa ErikrafT Drop muilla laitteilla lähettääksesi tiedostoja",
@@ -43,5 +45,8 @@
         "cloud-upload-error": "Tiedoston latauksessa tapahtui odottamaton virhe.",
         "cloud-upload-capacity": "Pilvitallennus ei ole tilapäisesti käytettävissä suuren kuormituksen vuoksi. Yritä myöhemmin uudelleen.",
         "cloud-upload-unavailable": "Pilveen lataus ei ole juuri nyt käytettävissä. Yritä myöhemmin uudelleen."
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

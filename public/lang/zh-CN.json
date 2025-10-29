@@ -13,7 +13,9 @@
         "join-public-room_title": "暂时加入公共房间",
         "language-selector_title": "设置语言",
         "edit-share-mode": "编辑",
-        "expand_title": "展开标题按钮行"
+        "expand_title": "展开标题按钮行",
+        "cloud": "云",
+        "webchat": "聊天"
     },
     "instructions": {
         "x-instructions_data-drop-peer": "释放以发送到此设备",
@@ -204,5 +206,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "网站"
     }
 }

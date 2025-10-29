@@ -13,7 +13,9 @@
         "join-public-room_title": "Připojte se dočasně k veřejné místnosti",
         "cancel-share-mode": "Zrušit",
         "edit-share-mode": "Upravit",
-        "expand_title": "Rozbalit řádek tlačítka záhlaví"
+        "expand_title": "Rozbalit řádek tlačítka záhlaví",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "about": {
         "buy-me-a-coffee_title": "Kupte mi kávu!",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

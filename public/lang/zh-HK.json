@@ -13,7 +13,9 @@
         "edit-paired-devices_title": "管理已配對裝置",
         "join-public-room_title": "暫時加入公共房間",
         "cancel-share-mode": "完成",
-        "edit-share-mode": "編輯"
+        "edit-share-mode": "編輯",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "放開以選擇接收者",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

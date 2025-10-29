@@ -13,7 +13,9 @@
         "join-public-room_title": "Geçici olarak ortak odaya katıl",
         "language-selector_title": "Dili Ayarla",
         "edit-share-mode": "Düzenle",
-        "expand_title": "Başlık buton satırını genişlet"
+        "expand_title": "Başlık buton satırını genişlet",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Alıcıyı seçmek için bırakın",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

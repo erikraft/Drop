@@ -13,7 +13,9 @@
         "join-public-room_title": "Войти на время в публичную комнату",
         "language-selector_title": "Установить язык",
         "edit-share-mode": "Редактировать",
-        "expand_title": "Развернуть ряд кнопок заголовка"
+        "expand_title": "Развернуть ряд кнопок заголовка",
+        "cloud": "Облако",
+        "webchat": "Чат"
     },
     "instructions": {
         "x-instructions_desktop": "Нажмите, чтобы отправить файлы, или щелкните правой кнопкой мыши, чтобы отправить сообщение",
@@ -205,5 +207,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Сайт"
     }
 }

@@ -71,7 +71,9 @@
         "about_aria-label": "Buka Tentang ErikrafT Drop",
         "theme-light_title": "Selalu gunakan tema terang",
         "edit-share-mode": "Sunting",
-        "expand_title": "Perluas baris tombol header"
+        "expand_title": "Perluas baris tombol header",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "x-instructions_mobile": "Ketuk untuk mengirim berkas atau ketuk lama untuk mengirim pesan",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

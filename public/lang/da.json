@@ -149,7 +149,9 @@
         "cancel-share-mode": "Annuller",
         "edit-share-mode": "Redigere",
         "expand_title": "Udvid overskriftsknaprækken",
-        "about_title": "Om ErikrafT Drop"
+        "about_title": "Om ErikrafT Drop",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers-subtitle": "Par enheder, eller gå ind i et offentligt rum for at være synlig på andre netværk",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

@@ -13,7 +13,9 @@
         "edit-paired-devices_title": "Editar dispositivos emparejados",
         "theme-light_title": "Siempre usar tema claro",
         "expand_title": "Ampliar la fila de botones de la cabecera",
-        "edit-share-mode": "Editar"
+        "edit-share-mode": "Editar",
+        "cloud": "Nube",
+        "webchat": "Chat"
     },
     "footer": {
         "webrtc": "si WebRTC no está disponible.",
@@ -204,5 +206,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Sitio"
     }
 }

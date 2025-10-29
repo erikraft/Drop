@@ -13,7 +13,9 @@
         "pair-device_title": "Зв'язати ваші пристрої назавжди",
         "notification_title": "Увімкнути сповіщення",
         "edit-paired-devices_title": "Редагувати зв'язані пристрої",
-        "expand_title": "Розгорнути рядок кнопок заголовка"
+        "expand_title": "Розгорнути рядок кнопок заголовка",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Відпустіть, щоб вибрати одержувача",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

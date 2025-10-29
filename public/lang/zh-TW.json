@@ -13,7 +13,9 @@
         "pair-device_title": "永久配對你的裝置",
         "edit-paired-devices_title": "編輯已配對的裝置",
         "join-public-room_title": "暫時加入公共房間",
-        "theme-light_title": "總是使用淺色主題"
+        "theme-light_title": "總是使用淺色主題",
+        "cloud": "雲端",
+        "webchat": "聊天室"
     },
     "instructions": {
         "no-peers_data-drop-bg": "釋放以選擇接收者",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "網站"
     }
 }

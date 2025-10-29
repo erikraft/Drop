@@ -13,7 +13,9 @@
         "pair-device_title": "Par einingane dine permanent",
         "edit-paired-devices_title": "Rediger para einingar",
         "edit-share-mode": "Rediger",
-        "theme-auto_title": "Endre tema til systemet automatisk"
+        "theme-auto_title": "Endre tema til systemet automatisk",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Slepp for å velje mottakar",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

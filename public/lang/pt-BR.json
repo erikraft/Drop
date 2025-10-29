@@ -214,5 +214,8 @@
     },
     "webchat-modal": {
         "external": "Ir para o site"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

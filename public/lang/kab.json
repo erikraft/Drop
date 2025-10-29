@@ -54,9 +54,14 @@
         "about_title": "Ɣef ErikrafT Drop",
         "language-selector_title": "Fren tutlayt",
         "install_title": "Sbedd ErikrafT Drop",
-        "edit-share-mode": "Ẓreg"
+        "edit-share-mode": "Ẓreg",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

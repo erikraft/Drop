@@ -74,7 +74,9 @@
         "language-selector_title": "Määra keel",
         "about_aria-label": "Ava ErikrafT Dropi teave",
         "pair-device_title": "Paarita oma seadmed püsivalt",
-        "theme-dark_title": "Kasuta alati tumedat teemat"
+        "theme-dark_title": "Kasuta alati tumedat teemat",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "footer": {
         "known-as": "Sind tuntakse kui:",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

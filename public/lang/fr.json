@@ -13,7 +13,9 @@
         "join-public-room_title": "Rejoindre temporairement la salle publique",
         "cancel-share-mode": "Terminé",
         "edit-share-mode": "Modifier",
-        "expand_title": "Agrandir entête bouton ligne"
+        "expand_title": "Agrandir entête bouton ligne",
+        "cloud": "Nuage",
+        "webchat": "Chat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Déposer pour choisir le destinataire",
@@ -205,5 +207,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

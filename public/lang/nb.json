@@ -13,7 +13,9 @@
         "language-selector_title": "Velg språk",
         "edit-share-mode": "Rediger",
         "expand_title": "Utvid overskriftknapprad",
-        "join-public-room_title": "Bli med i et offentlig rom midlertidig"
+        "join-public-room_title": "Bli med i et offentlig rom midlertidig",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "footer": {
         "webrtc": "hvis WebRTC ikke er tilgjengelig.",
@@ -204,5 +206,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

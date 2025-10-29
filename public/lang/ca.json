@@ -31,7 +31,9 @@
         "about_title": "Sobre ErikrafT Drop",
         "about_aria-label": "Obre Sobre ErikrafT Drop",
         "theme-light_title": "Utilitza sempre el mode clar",
-        "expand_title": "Expandeix la fila de botons de la capçalera"
+        "expand_title": "Expandeix la fila de botons de la capçalera",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "dialogs": {
         "message_placeholder": "Text",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

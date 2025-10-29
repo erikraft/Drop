@@ -13,7 +13,9 @@
         "theme-dark_title": "Винаги използвай тъмна тема",
         "install_title": "Инсталирай ErikrafT Drop",
         "edit-paired-devices_title": "Промени свързаните устройства",
-        "edit-share-mode": "Промени"
+        "edit-share-mode": "Промени",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Пусни, за да избереш получател",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

@@ -71,7 +71,9 @@
         "about_aria-label": "افتح حول ErikrafT Drop",
         "theme-light_title": "إستخدم دائماً المظهر الفاتح",
         "edit-share-mode": "عدل",
-        "expand_title": "Expand header button row"
+        "expand_title": "Expand header button row",
+        "cloud": "سحابة",
+        "webchat": "دردشة"
     },
     "instructions": {
         "x-instructions_mobile": "انقر لإرسال الملفات أو انقر لفترة طويلة لإرسال رسالة",
@@ -154,5 +156,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "موقع"
     }
 }

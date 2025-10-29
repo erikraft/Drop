@@ -14,7 +14,9 @@
         "theme-light_title": "ಯಾವಾಗಲೂ ಲೈಟ್ ಥೀಮ್ ಅನ್ನು ಬಳಸಿ",
         "edit-share-mode": "ಎಡಿಟ್ ಮಾಡಿ",
         "cancel-share-mode": "ರದ್ದುಗೊಳಿಸಿ",
-        "expand_title": "ಹೆಡರ್ ಬಟನ್ ಸಾಲನ್ನು ವಿಸ್ತರಿಸಿ"
+        "expand_title": "ಹೆಡರ್ ಬಟನ್ ಸಾಲನ್ನು ವಿಸ್ತರಿಸಿ",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "dialogs": {
         "message_placeholder": "ಪಠ್ಯ",
@@ -210,5 +212,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

@@ -13,7 +13,9 @@
         "expand_title": "Hedatu goiburuko botoien errenkada",
         "language-selector_title": "Ezarri hizkuntza",
         "theme-auto_title": "Aldatu gaia sistemak darabilenera",
-        "join-public-room_title": "Batu gela publikoa behin-behinean"
+        "join-public-room_title": "Batu gela publikoa behin-behinean",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "activate-share-mode-and-other-files-plural": "eta beste {{count}} fitxategi",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

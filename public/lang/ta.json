@@ -13,7 +13,9 @@
         "cancel-share-mode": "ரத்துசெய்",
         "about_title": "ErikrafT Drop பற்றி",
         "edit-share-mode": "தொகு",
-        "expand_title": "தலைப்பு பொத்தான் வரிசையை விரிவாக்குங்கள்"
+        "expand_title": "தலைப்பு பொத்தான் வரிசையை விரிவாக்குங்கள்",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "பெறுநரைத் தேர்ந்தெடுக்க வெளியீடு",
@@ -143,5 +145,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

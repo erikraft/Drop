@@ -13,7 +13,9 @@
         "cancel-share-mode": "취소",
         "edit-share-mode": "편집",
         "pair-device_title": "영구적으로 기기 연결하기",
-        "expand_title": "헤더 버튼 펼치기"
+        "expand_title": "헤더 버튼 펼치기",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers-subtitle": "장치를 연결하거나 공개 방에 들어가 다른 네트워크에서 검색 가능하게 하세요",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

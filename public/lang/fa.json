@@ -13,7 +13,9 @@
         "pair-device_title": "جفت‌کردن دائمی دستگاه‌های‌تان",
         "join-public-room_title": "پیوستن موقتی به اتاق عمومی",
         "edit-paired-devices_title": "ویرایش دستگاه‌های جفت‌شده",
-        "about_aria-label": "باز کردن درباره ErikrafT Drop"
+        "about_aria-label": "باز کردن درباره ErikrafT Drop",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers-title": "برای فرستادن پرونده‌ها، ErikrafT Drop را روی دستگاه‌های دیگر باز کنید",
@@ -84,5 +86,8 @@
         "cloud-upload-error": "خطای غیرمنتظره هنگام بارگذاری فایل رخ داد.",
         "cloud-upload-capacity": "به دلیل استفاده زیاد، فضای ابری موقتاً در دسترس نیست. بعداً دوباره تلاش کنید.",
         "cloud-upload-unavailable": "بارگذاری در فضای ابری در حال حاضر در دسترس نیست. لطفاً بعداً دوباره تلاش کنید."
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

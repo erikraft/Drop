@@ -28,7 +28,9 @@
         "about_aria-label": "Apri informazioni su ErikrafT Drop",
         "theme-light_title": "Usa sempre il tema chiaro",
         "edit-share-mode": "Modifica",
-        "expand_title": "Espandi la riga dei pulsanti nell'intestazione"
+        "expand_title": "Espandi la riga dei pulsanti nell'intestazione",
+        "cloud": "Cloud",
+        "webchat": "Chat"
     },
     "instructions": {
         "x-instructions_mobile": "Tocca per inviare file o tocco prolungato per inviare un messaggio",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Sito"
     }
 }

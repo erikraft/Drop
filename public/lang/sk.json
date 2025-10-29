@@ -13,7 +13,9 @@
         "pair-device_title": "Spárovať zariadenia natrvalo",
         "edit-paired-devices_title": "Upraviť spárované zariadenia",
         "join-public-room_title": "Dočasne sa pripojiť k verejnej miestnosti",
-        "cancel-share-mode": "Zrušiť"
+        "cancel-share-mode": "Zrušiť",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Pustite pre vybratie príjemcu",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

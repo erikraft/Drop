@@ -71,7 +71,9 @@
         "about_aria-label": "Deschide Despre ErikrafT Drop",
         "theme-light_title": "Utilizați mereu tema luminoasă",
         "expand_title": "Extindeți rândul de butoane antet",
-        "edit-share-mode": "Editați"
+        "edit-share-mode": "Editați",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "x-instructions_mobile": "Atingeți pentru a trimite fișiere sau atingeți lung pentru a trimite un mesaj",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

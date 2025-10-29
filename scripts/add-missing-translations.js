@@ -1,7 +1,20 @@
-const fs = require('fs');
-const path = require('path');
+// --- Importações necessárias ---
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// Define the translations to add
+// --- Corrigir __dirname para ES Modules ---
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// --- Caminho da pasta de idiomas ---
+const langDir = path.join(__dirname, '..', 'public', 'lang');
+
+// --- Leitura dos arquivos de idioma ---
+const languageFiles = fs.readdirSync(langDir).filter(file => file.endsWith('.json'));
+
+console.log('Arquivos de idioma encontrados:', languageFiles);
+
+// --- Traduções a adicionar ---
 const translationsToAdd = {
     'header': {
         'cloud': {
@@ -54,50 +67,43 @@ const translationsToAdd = {
     }
 };
 
-// Path to language files
-const langDir = path.join(__dirname, '..', 'public', 'lang');
-
-// Get all language files
-const languageFiles = fs.readdirSync(langDir).filter(file => file.endsWith('.json'));
-
+// --- Atualizar arquivos de tradução ---
 languageFiles.forEach(file => {
     const filePath = path.join(langDir, file);
     const langCode = file.replace('.json', '');
     
     try {
-        // Read the existing translations
         const content = fs.readFileSync(filePath, 'utf8');
         const translations = JSON.parse(content);
         let updated = false;
 
-        // Add missing translations
         for (const [section, keys] of Object.entries(translationsToAdd)) {
-            if (!translations[section]) {
-                translations[section] = {};
-            }
+            if (!translations[section]) translations[section] = {};
             
             for (const [key, langValues] of Object.entries(keys)) {
                 if (translations[section][key] === undefined) {
-                    // Try to get the translation for this language, fallback to English, then to default
-                    const translation = langValues[langCode] || langValues[langCode.split('-')[0]] || langValues['en'] || langValues['default'] || key;
+                    const translation =
+                        langValues[langCode] ||
+                        langValues[langCode.split('-')[0]] ||
+                        langValues['en'] ||
+                        langValues['default'] ||
+                        key;
                     translations[section][key] = translation;
                     updated = true;
                 }
             }
         }
 
-        // Save the updated translations if there were any changes
         if (updated) {
-            // Format with 4-space indentation and ensure proper line endings
             const newContent = JSON.stringify(translations, null, 4) + '\n';
             fs.writeFileSync(filePath, newContent, 'utf8');
-            console.log(`Updated translations in ${file}`);
+            console.log(`✅ Atualizado: ${file}`);
         } else {
-            console.log(`No updates needed for ${file}`);
+            console.log(`ℹ️ Nenhuma atualização necessária: ${file}`);
         }
     } catch (error) {
-        console.error(`Error processing ${file}:`, error.message);
+        console.error(`❌ Erro ao processar ${file}:`, error.message);
     }
 });
 
-console.log('Translation update complete!');
+console.log('✨ Atualização de traduções concluída!');

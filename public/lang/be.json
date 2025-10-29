@@ -13,7 +13,9 @@
         "install_title": "Усталяваць ErikrafT Drop",
         "pair-device_title": "Злучыце свае прылады назаўжды",
         "edit-share-mode": "Рэдагаваць",
-        "expand_title": "Разгарнуць радок кнопак"
+        "expand_title": "Разгарнуць радок кнопак",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Адпусціце, каб выбраць атрымальніка",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

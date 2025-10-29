@@ -13,7 +13,9 @@
         "expand_title": "Fejléc gombsorának kibővítése",
         "about_title": "Az ErikrafT Drop-ról",
         "pair-device_title": "Eszközei végleges párosítása",
-        "join-public-room_title": "Ideiglenes csatlakozás a nyilvános szobához"
+        "join-public-room_title": "Ideiglenes csatlakozás a nyilvános szobához",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "no-peers-title": "Nyissa meg az ErikrafT Drop-ot más eszközökön a fájlok küldéséhez",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

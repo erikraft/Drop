@@ -77,7 +77,9 @@
         "join-public-room_title": "เข้าร่วมห้องสาธารณะชั่วคราว",
         "edit-share-mode": "แก้ไข",
         "pair-device_title": "การจับคู่อุปกรณ์",
-        "language-selector_title": "เลือกภาษา"
+        "language-selector_title": "เลือกภาษา",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "notifications": {
         "notifications-enabled": "เปิดใช้งานการแจ้งเตือนแล้ว",
@@ -114,5 +116,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

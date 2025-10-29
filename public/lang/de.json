@@ -13,7 +13,9 @@
         "language-selector_title": "Sprache Wählen",
         "join-public-room_title": "Öffentlichen Raum temporär betreten",
         "edit-share-mode": "Bearbeiten",
-        "expand_title": "Schaltflächenzeile ausklappen"
+        "expand_title": "Schaltflächenzeile ausklappen",
+        "cloud": "Cloud",
+        "webchat": "Chat"
     },
     "dialogs": {
         "share": "Teilen",
@@ -205,5 +207,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Webseite"
     }
 }

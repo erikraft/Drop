@@ -71,7 +71,9 @@
         "about_aria-label": "Open Over ErikrafT Drop",
         "theme-light_title": "Altijd lichte modus gebruiken",
         "expand_title": "Knoppenrij uitvouwen",
-        "edit-share-mode": "Bewerken"
+        "edit-share-mode": "Bewerken",
+        "cloud": "Cloud",
+        "webchat": "WebChat"
     },
     "instructions": {
         "x-instructions_mobile": "Tik om bestanden te versturen of houdt vast om een bericht te sturen",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
     }
 }

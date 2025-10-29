@@ -71,7 +71,9 @@
         "about_aria-label": "ErikrafT Dropについてを開く",
         "theme-light_title": "常にライトテーマを使用する",
         "edit-share-mode": "編集",
-        "expand_title": "ヘッダーボタン列を拡大する"
+        "expand_title": "ヘッダーボタン列を拡大する",
+        "cloud": "クラウド",
+        "webchat": "チャット"
     },
     "instructions": {
         "x-instructions_mobile": "タップでファイル送信、長押しでメッセージ送信",
@@ -203,5 +205,8 @@
     },
     "webchat-modal": {
         "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "サイト"
     }
 }
