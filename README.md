@@ -165,10 +165,10 @@ Connect to others in complex network situations, or over the Internet.
 
 <div align="center" style="display: inline_block; gap: 10px;"><br>
   <a href="https://drop.erikraft.com/" target="_blank">
-    <img alt="Open the Web App" style="height: 80px;" src="./public/images/badges/Get it on WEB.png">
+    <img alt="Open the Web App" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20WEB.png">
   </a>
   <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
-    <img alt="Download the APK" style="height: 80px;" src="./public/images/badges/Get it on APK.png">
+    <img alt="Download the APK" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20APK.png">
   </a>
   <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
     <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
@@ -177,13 +177,13 @@ Connect to others in complex network situations, or over the Internet.
     <img alt="Get it on F-Droid" height="80" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png">
   </a>
   <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank">
-    <img alt="Get it on VS Code Marketplace" style="height: 80px;" src="./public/images/badges/Get it on VS CODE.png">
+    <img alt="Get it on VS Code Marketplace" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20VS%20CODE.png">
   </a>
   <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank">
-    <img alt="Get it on Open VSX Registry" style="height: 80px;" src="./public/images/badges/Get it on Open VSX Registry.png">
+    <img alt="Get it on Open VSX Registry" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20Open%20VSX%20Registry.png">
   </a>
   <a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank">
-    <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="./public/images/badges/Firefox Browser ADD-ONS.png">
+    <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="./public/images/badges/Firefox%20Browser%20ADD-ONS.png">
   </a>
 </div>
 
