@@ -4,6 +4,8 @@ import {fileURLToPath} from "url";
 import path, {dirname} from "path";
 import http from "http";
 import multer from "multer";
+import ErikrafTdropWsServer from "./ws-server.js";
+import { FormData, File } from 'undici';
 
 export default class ErikrafTdropServer {
 
@@ -133,6 +135,14 @@ export default class ErikrafTdropServer {
             }
         });
 
-        this.server = server
+        // Initialize WebSocket server with proper defaults
+        this.wsServer = new ErikrafTdropWsServer(server, {
+            rtcConfig: conf.rtcConfig || { iceServers: [] },
+            wsFallback: conf.wsFallback || false,
+            debugMode: conf.debugMode || false,
+            rateLimit: conf.rateLimit || 1
+        });
+        
+        this.server = server;
     }
 }
