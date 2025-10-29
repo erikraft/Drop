@@ -122,7 +122,10 @@ class Localization {
 
     static async translateElement(element) {
         const key = element.getAttribute("data-i18n-key");
-        const attrs = element.getAttribute("data-i18n-attrs").split(" ");
+        const rawAttrs = element.getAttribute("data-i18n-attrs");
+        const attrs = rawAttrs
+            ? rawAttrs.split(" ").filter(Boolean)
+            : ["text"];
 
         attrs.forEach(attr => {
             if (attr === "text") {
@@ -131,7 +134,7 @@ class Localization {
             else {
                 element.setAttribute(attr, Localization.getTranslation(key, attr));
             }
-        })
+        });
     }
 
     static getTranslationFromTranslationsObj(translationObj, key, attr) {
