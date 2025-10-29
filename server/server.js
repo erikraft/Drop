@@ -5,7 +5,13 @@ import path, {dirname} from "path";
 import http from "http";
 import multer from "multer";
 import ErikrafTdropWsServer from "./ws-server.js";
-import { FormData, File } from 'undici';
+
+// Undici fallback for Node.js < 18
+if (typeof FormData === "undefined" || typeof File === "undefined") {
+    const { FormData, File } = await import('undici');
+    globalThis.FormData = FormData;
+    globalThis.File = File;
+}
 
 export default class ErikrafTdropServer {
 
@@ -123,26 +129,28 @@ export default class ErikrafTdropServer {
         });
 
         const hostname = conf.localhostOnly ? '127.0.0.1' : null;
-        const server = http.createServer(app);
+        // Create HTTP server
+        this.server = http.createServer(app);
 
-        server.listen(conf.port, hostname);
-
-        server.on('error', (err) => {
-            if (err.code === 'EADDRINUSE') {
-                console.error(err);
-                console.info("Error EADDRINUSE received, exiting process without restarting process...");
-                process.exit(1)
-            }
-        });
-
-        // Initialize WebSocket server with proper defaults
-        this.wsServer = new ErikrafTdropWsServer(server, {
+        // Initialize WebSocket server
+        this.wsServer = new ErikrafTdropWsServer(this.server, {
             rtcConfig: conf.rtcConfig || { iceServers: [] },
             wsFallback: conf.wsFallback || false,
             debugMode: conf.debugMode || false,
             rateLimit: conf.rateLimit || 1
         });
-        
-        this.server = server;
+
+        // Start listening
+        this.server.listen(conf.port, hostname, () => {
+            console.log(`Server running at http://${hostname}:${conf.port}/`);
+        });
+
+        this.server.on('error', (err) => {
+            if (err.code === 'EADDRINUSE') {
+                console.error(err);
+                console.info("Error EADDRINUSE received, exiting process without restarting process...");
+                process.exit(1);
+            }
+        });
     }
 }
