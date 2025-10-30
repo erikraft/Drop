@@ -6,11 +6,21 @@ import http from "http";
 import multer from "multer";
 import ErikrafTdropWsServer from "./ws-server.js";
 
-// Undici fallback for Node.js < 18
-if (typeof FormData === "undefined" || typeof File === "undefined") {
-    const { FormData, File } = await import('undici');
-    globalThis.FormData = FormData;
-    globalThis.File = File;
+// Ensure fetch/FormData/File exist for runtimes without native support (Node < 18)
+if (typeof fetch === "undefined" || typeof FormData === "undefined" || typeof File === "undefined") {
+    const undici = await import("undici");
+
+    if (typeof fetch === "undefined" && undici.fetch) {
+        globalThis.fetch = undici.fetch;
+    }
+
+    if (typeof FormData === "undefined" && undici.FormData) {
+        globalThis.FormData = undici.FormData;
+    }
+
+    if (typeof File === "undefined" && undici.File) {
+        globalThis.File = undici.File;
+    }
 }
 
 export default class ErikrafTdropServer {
