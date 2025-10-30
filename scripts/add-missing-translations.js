@@ -71,7 +71,7 @@ const translationsToAdd = {
 languageFiles.forEach(file => {
     const filePath = path.join(langDir, file);
     const langCode = file.replace('.json', '');
-    
+
     try {
         const content = fs.readFileSync(filePath, 'utf8');
         const translations = JSON.parse(content);
@@ -79,7 +79,7 @@ languageFiles.forEach(file => {
 
         for (const [section, keys] of Object.entries(translationsToAdd)) {
             if (!translations[section]) translations[section] = {};
-            
+
             for (const [key, langValues] of Object.entries(keys)) {
                 if (translations[section][key] === undefined) {
                     const translation =
