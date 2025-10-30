@@ -8,7 +8,6 @@
       "extensions": [
         "erikraft.erikraft-drop",              // Extensão própria ErikrafT Drop
         "ms-vsliveshare.vsliveshare",          // Live Share (colaboração)
-        "ms-vsliveshare.vsliveshare-audio",    // Live Share Áudio
         "ms-vscode.live-server",               // Live Server oficial Microsoft
         "ritwickdey.liveserver",               // Live Server alternativo (ritwickdey)
         "yutengjing.vscode-archive"            // Extensão para arquivos compactados
