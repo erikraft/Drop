@@ -774,6 +774,17 @@ class Dialog {
         });
     }
 
+    static anyDialogShown() {
+        // Return true if any dialog element is currently visible (not hidden)
+        try {
+            return document.querySelector('x-dialog:not([hidden])') !== null;
+        } catch (e) {
+            // In case DOM is not ready or selector fails, assume no dialog shown
+            console.warn('Dialog.anyDialogShown() failed:', e);
+            return false;
+        }
+    }
+
     show() {
         if (this.$el) {
             this.$el.removeAttribute('hidden');
