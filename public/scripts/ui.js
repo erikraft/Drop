@@ -756,16 +756,16 @@ class Dialog {
         this.$autoFocus = this.$el.querySelector('[autofocus]');
         this.$xBackground = this.$el.querySelector('x-background');
         this.$closeBtns = this.$el.querySelectorAll('[close]');
-        
+
         // Add event listeners for closing the dialog
         this.$closeBtns.forEach($btn => {
             $btn.addEventListener('click', _ => this.hide());
         });
-        
+
         if (this.$xBackground) {
             this.$xBackground.addEventListener('click', _ => this.hide());
         }
-        
+
         // Add keyboard event listener for Escape key
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape' && this.isShown()) {
@@ -773,7 +773,7 @@ class Dialog {
             }
         });
     }
-    
+
     show() {
         if (this.$el) {
             this.$el.removeAttribute('hidden');
@@ -783,14 +783,14 @@ class Dialog {
             document.body.style.overflow = 'hidden';
         }
     }
-    
+
     hide() {
         if (this.$el) {
             this.$el.setAttribute('hidden', '');
             document.body.style.overflow = '';
         }
     }
-    
+
     isShown() {
         return this.$el && !this.$el.hasAttribute('hidden');
     }
