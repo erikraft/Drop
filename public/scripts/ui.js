@@ -158,7 +158,7 @@ class PeersUI {
 
         // If no peer is shown -> start background animation again
         if ($$('x-peers:empty')) {
-            Events.fire('background-animation', {animate: true});
+            Events.fire('background-animation', { animate: true });
         }
 
     }
@@ -199,7 +199,7 @@ class PeersUI {
                 files: files
             });
         }
-        else if(text.length > 0) {
+        else if (text.length > 0) {
             Events.fire('activate-share-mode', {
                 text: text
             });
@@ -232,12 +232,12 @@ class PeersUI {
         files = [...files];
 
         if (files.length > 0) {
-            Events.fire('activate-share-mode', {files: files});
+            Events.fire('activate-share-mode', { files: files });
         } else if (text.length > 0) {
             if (ShareTextDialog.isApproveShareTextSet()) {
                 Events.fire('share-text-dialog', text);
             } else {
-                Events.fire('activate-share-mode', {text: text});
+                Events.fire('activate-share-mode', { text: text });
             }
         }
     }
@@ -254,7 +254,7 @@ class PeersUI {
         Events.on('share-mode-pointerdown', this._activateCallback);
 
         const sharedText = Localization.getTranslation("instructions.activate-share-mode-shared-text");
-        const andOtherFilesPlural = Localization.getTranslation("instructions.activate-share-mode-and-other-files-plural", null, {count: files.length-1});
+        const andOtherFilesPlural = Localization.getTranslation("instructions.activate-share-mode-and-other-files-plural", null, { count: files.length - 1 });
         const andOtherFiles = Localization.getTranslation("instructions.activate-share-mode-and-other-file");
 
         let descriptorComplete, descriptorItem, descriptorOther, descriptorInstructions;
@@ -275,7 +275,7 @@ class PeersUI {
         }
         else {
             // text shared
-            descriptorItem = text.replace(/\s/g," ");
+            descriptorItem = text.replace(/\s/g, " ");
             descriptorComplete = sharedText;
         }
 
@@ -285,7 +285,7 @@ class PeersUI {
                 this.$shareModeDescriptorOther.removeAttribute('hidden');
             }
             if (files.length > 1) {
-                descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-files-plural", null, {count: files.length});
+                descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-files-plural", null, { count: files.length });
             }
             else {
                 descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-file");
@@ -315,8 +315,8 @@ class PeersUI {
             descriptorInstructions = Localization.getTranslation("instructions.activate-share-mode-shared-text");
         }
 
-        const desktop = Localization.getTranslation("instructions.x-instructions-share-mode_desktop", null, {descriptor: descriptorInstructions});
-        const mobile = Localization.getTranslation("instructions.x-instructions-share-mode_mobile", null, {descriptor: descriptorInstructions});
+        const desktop = Localization.getTranslation("instructions.x-instructions-share-mode_desktop", null, { descriptor: descriptorInstructions });
+        const mobile = Localization.getTranslation("instructions.x-instructions-share-mode_mobile", null, { descriptor: descriptorInstructions });
 
         this.$xInstructions.setAttribute('desktop', desktop);
         this.$xInstructions.setAttribute('mobile', mobile);
@@ -426,12 +426,12 @@ class PeerUI {
         Events.on('share-mode-changed', e => this._onShareModeChanged(e.detail.active, e.detail.descriptor));
 
         // Stop background animation
-        Events.fire('background-animation', {animate: false});
+        Events.fire('background-animation', { animate: false });
     }
 
     html() {
-        let title= this._shareMode.active
-            ? Localization.getTranslation("peer-ui.click-to-send-share-mode", null, {descriptor: this._shareMode.descriptor})
+        let title = this._shareMode.active
+            ? Localization.getTranslation("peer-ui.click-to-send-share-mode", null, { descriptor: this._shareMode.descriptor })
             : Localization.getTranslation("peer-ui.click-to-send");
 
         this.$el.innerHTML = `
@@ -534,7 +534,7 @@ class PeerUI {
             this.$input.removeAttribute('disabled');
         }
         else {
-            title =  Localization.getTranslation("peer-ui.click-to-send-share-mode", null, {descriptor: this._shareMode.descriptor});
+            title = Localization.getTranslation("peer-ui.click-to-send-share-mode", null, { descriptor: this._shareMode.descriptor });
             this.$input.setAttribute('disabled', true);
         }
         this.$label.setAttribute('title', title);
@@ -555,7 +555,7 @@ class PeerUI {
     }
 
     _bindListeners() {
-        if(!this._shareMode.active) {
+        if (!this._shareMode.active) {
             // Remove Events Share mode
             this.$el.removeEventListener('pointerdown', this._callbackPointerDown);
 
@@ -775,9 +775,9 @@ class Dialog {
     }
 
     static anyDialogShown() {
-        // Return true if any dialog element is currently visible (not hidden)
+        // Return true if any dialog element is currently shown
         try {
-            return document.querySelector('x-dialog:not([hidden])') !== null;
+            return document.querySelector('x-dialog[show]') !== null;
         } catch (e) {
             // In case DOM is not ready or selector fails, assume no dialog shown
             console.warn('Dialog.anyDialogShown() failed:', e);
@@ -786,8 +786,10 @@ class Dialog {
     }
 
     show() {
+        // Set the legacy "show" attribute so CSS targeting [show] continues to
+        // work. Keep focusing and overflow behavior.
         if (this.$el) {
-            this.$el.removeAttribute('hidden');
+            this.$el.setAttribute('show', 'true');
             if (this.$autoFocus) {
                 this.$autoFocus.focus();
             }
@@ -797,13 +799,13 @@ class Dialog {
 
     hide() {
         if (this.$el) {
-            this.$el.setAttribute('hidden', '');
+            this.$el.removeAttribute('show');
             document.body.style.overflow = '';
         }
     }
 
     isShown() {
-        return this.$el && !this.$el.hasAttribute('hidden');
+        return this.$el && this.$el.hasAttribute('show');
     }
 }
 
@@ -1042,8 +1044,8 @@ class ReceiveDialog extends Dialog {
         }
         else if (files.length >= 2) {
             fileOther = imagesOnly
-                ? Localization.getTranslation("dialogs.file-other-description-image-plural", null, {count: files.length - 1})
-                : Localization.getTranslation("dialogs.file-other-description-file-plural", null, {count: files.length - 1});
+                ? Localization.getTranslation("dialogs.file-other-description-image-plural", null, { count: files.length - 1 })
+                : Localization.getTranslation("dialogs.file-other-description-file-plural", null, { count: files.length - 1 });
         }
 
         this.$fileOther.innerText = fileOther;
@@ -1098,7 +1100,7 @@ class ReceiveFileDialog extends ReceiveDialog {
     async _nextFiles() {
         if (this._busy || !this._filesQueue.length) return;
         this._busy = true;
-        const {peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName} = this._filesQueue.shift();
+        const { peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName } = this._filesQueue.shift();
         await this._displayFiles(peerId, displayName, connectionHash, files, imagesOnly, totalSize, badgeClassName);
     }
 
@@ -1147,11 +1149,11 @@ class ReceiveFileDialog extends ReceiveDialog {
                 : Localization.getTranslation("dialogs.title-file");
         }
 
-        const canShare = (window.iOS || window.androidMobile) && !!navigator.share && navigator.canShare({files});
+        const canShare = (window.iOS || window.androidMobile) && !!navigator.share && navigator.canShare({ files });
         if (canShare && !window.isBrowserExtensionPopup) {
             this.$shareBtn.removeAttribute('hidden');
             this.$shareBtn.onclick = _ => {
-                navigator.share({files: files})
+                navigator.share({ files: files })
                     .catch(err => {
                         console.error(err);
                     });
@@ -1164,7 +1166,7 @@ class ReceiveFileDialog extends ReceiveDialog {
             try {
                 let bytesCompleted = 0;
                 zipper.createNewZipWriter();
-                for (let i=0; i<files.length; i++) {
+                for (let i = 0; i < files.length; i++) {
                     await zipper.addFile(files[i], {
                         onprogress: (progress) => {
                             Events.fire('set-progress', {
@@ -1180,7 +1182,7 @@ class ReceiveFileDialog extends ReceiveDialog {
 
                 let now = new Date(Date.now());
                 let year = now.getFullYear().toString();
-                let month = (now.getMonth()+1).toString();
+                let month = (now.getMonth() + 1).toString();
                 month = month.length < 2 ? "0" + month : month;
                 let date = now.getDate().toString();
                 date = date.length < 2 ? "0" + date : date;
@@ -1188,7 +1190,7 @@ class ReceiveFileDialog extends ReceiveDialog {
                 hours = hours.length < 2 ? "0" + hours : hours;
                 let minutes = now.getMinutes().toString();
                 minutes = minutes.length < 2 ? "0" + minutes : minutes;
-                filenameDownload = `ErikrafT-Drop_files_${year+month+date}_${hours+minutes}.zip`;
+                filenameDownload = `ErikrafT-Drop_files_${year + month + date}_${hours + minutes}.zip`;
             } catch (e) {
                 console.error(e);
                 downloadZipped = false;
@@ -1211,7 +1213,7 @@ class ReceiveFileDialog extends ReceiveDialog {
             if (!canShare) {
                 this.$downloadBtn.innerText = Localization.getTranslation("dialogs.download-again");
             }
-            Events.fire('notify-user', Localization.getTranslation("notifications.download-successful", null, {descriptor: descriptor}));
+            Events.fire('notify-user', Localization.getTranslation("notifications.download-successful", null, { descriptor: descriptor }));
 
             // Prevent clicking the button multiple times
             this.$downloadBtn.style.pointerEvents = "none";
@@ -1219,11 +1221,11 @@ class ReceiveFileDialog extends ReceiveDialog {
         };
 
         document.title = files.length === 1
-            ? `${ Localization.getTranslation("document-titles.file-received") } - ErikrafT Drop`
-            : `${ Localization.getTranslation("document-titles.file-received-plural", null, {count: files.length}) } - ErikrafT Drop`;
+            ? `${Localization.getTranslation("document-titles.file-received")} - ErikrafT Drop`
+            : `${Localization.getTranslation("document-titles.file-received-plural", null, { count: files.length })} - ErikrafT Drop`;
         changeFavicon("images/favicon-96x96-notification.png");
 
-        Events.fire('set-progress', {peerId: peerId, progress: 1, status: 'process'})
+        Events.fire('set-progress', { peerId: peerId, progress: 1, status: 'process' })
         this.show();
 
         if (!window.isBrowserExtensionPopup) {
@@ -1252,7 +1254,7 @@ class ReceiveFileDialog extends ReceiveDialog {
 
     _downloadFilesIndividually(files) {
         let tmpBtn = document.createElement("a");
-        for (let i=0; i<files.length; i++) {
+        for (let i = 0; i < files.length; i++) {
             tmpBtn.download = files[i].name;
             tmpBtn.href = URL.createObjectURL(files[i]);
             tmpBtn.click();
@@ -1295,14 +1297,14 @@ class ReceiveRequestDialog extends ReceiveDialog {
     }
 
     _onRequestFileTransfer(request, peerId) {
-        this._filesTransferRequestQueue.push({request: request, peerId: peerId});
+        this._filesTransferRequestQueue.push({ request: request, peerId: peerId });
         if (this.isShown()) return;
         this._dequeueRequests();
     }
 
     _dequeueRequests() {
         if (!this._filesTransferRequestQueue.length) return;
-        let {request, peerId} = this._filesTransferRequestQueue.shift();
+        let { request, peerId } = this._filesTransferRequestQueue.shift();
         this._showRequestDialog(request, peerId)
     }
 
@@ -1322,13 +1324,13 @@ class ReceiveRequestDialog extends ReceiveDialog {
             this.$previewBox.appendChild(element)
         }
 
-        const transferRequestTitle= request.imagesOnly
+        const transferRequestTitle = request.imagesOnly
             ? Localization.getTranslation('document-titles.image-transfer-requested')
             : Localization.getTranslation('document-titles.file-transfer-requested');
 
         this.$receiveTitle.innerText = transferRequestTitle;
 
-        document.title =  `${transferRequestTitle} - ErikrafT Drop`;
+        document.title = `${transferRequestTitle} - ErikrafT Drop`;
         changeFavicon("images/favicon-96x96-notification.png");
 
         this.$acceptRequestBtn.removeAttribute('disabled');
@@ -1341,7 +1343,7 @@ class ReceiveRequestDialog extends ReceiveDialog {
             accepted: accepted
         })
         if (accepted) {
-            Events.fire('set-progress', {peerId: this.correspondingPeerId, progress: 0, status: 'wait'});
+            Events.fire('set-progress', { peerId: this.correspondingPeerId, progress: 0, status: 'wait' });
             NoSleepUI.enable();
         }
         this.hide();
@@ -1445,7 +1447,7 @@ class InputKeyContainer {
 
     _onPaste(pastedKey) {
         let rgx = new RegExp("(?!" + this.evalRgx.source + ").", "g");
-        pastedKey = pastedKey.replace(rgx,'').substring(0, this.$inputKeyChars.length)
+        pastedKey = pastedKey.replace(rgx, '').substring(0, this.$inputKeyChars.length)
         for (let i = 0; i < pastedKey.length; i++) {
             document.activeElement.value = pastedKey.charAt(i);
             let nextSibling = document.activeElement.nextElementSibling;
@@ -1470,7 +1472,7 @@ class InputKeyContainer {
     }
 
     focusLastChar() {
-        let lastChar = this.$inputKeyChars[this.$inputKeyChars.length-1];
+        let lastChar = this.$inputKeyChars[this.$inputKeyChars.length - 1];
         lastChar.focus();
     }
 }
@@ -1529,7 +1531,7 @@ class PairDeviceDialog extends Dialog {
         e.preventDefault();
         let pastedKey = e.clipboardData
             .getData("Text")
-            .replace(/\D/g,'')
+            .replace(/\D/g, '')
             .substring(0, 6);
         this.inputKeyContainer._onPaste(pastedKey);
     }
@@ -1547,7 +1549,7 @@ class PairDeviceDialog extends Dialog {
     }
 
     _setKeyAndQRCode() {
-        this.$key.innerText = `${this.pairKey.substring(0,3)} ${this.pairKey.substring(3,6)}`
+        this.$key.innerText = `${this.pairKey.substring(0, 3)} ${this.pairKey.substring(3, 6)}`
 
         // Display the QR code for the url
         const qr = new QRCode({
@@ -1680,7 +1682,7 @@ class PairDeviceDialog extends Dialog {
     }
 
     _onPairDeviceCanceled(pairKey) {
-        Events.fire('notify-user', Localization.getTranslation("notifications.pairing-key-invalidated", null, {key: pairKey}));
+        Events.fire('notify-user', Localization.getTranslation("notifications.pairing-key-invalidated", null, { key: pairKey }));
     }
 
     _cleanUp() {
@@ -2053,7 +2055,7 @@ class PublicRoomDialog extends Dialog {
         let publicRoomId = this.roomId.toUpperCase();
         this.hide();
         this._cleanUp();
-        Events.fire('notify-user', Localization.getTranslation("notifications.public-room-left", null, {publicRoomId: publicRoomId}));
+        Events.fire('notify-user', Localization.getTranslation("notifications.public-room-left", null, { publicRoomId: publicRoomId }));
     }
 
     show() {
@@ -2221,7 +2223,7 @@ class ReceiveTextDialog extends Dialog {
 
     _onText(text, peerId) {
         window.blop.play();
-        this._receiveTextQueue.push({text: text, peerId: peerId});
+        this._receiveTextQueue.push({ text: text, peerId: peerId });
         this._setDocumentTitleMessages();
         changeFavicon("images/favicon-96x96-notification.png");
 
@@ -2234,7 +2236,7 @@ class ReceiveTextDialog extends Dialog {
         this._setDocumentTitleMessages();
         changeFavicon("images/favicon-96x96-notification.png");
 
-        let {text, peerId} = this._receiveTextQueue.shift();
+        let { text, peerId } = this._receiveTextQueue.shift();
         this._showReceiveTextDialog(text, peerId);
     }
 
@@ -2276,7 +2278,7 @@ class ReceiveTextDialog extends Dialog {
             const rgxUrlAll = new RegExp(`${rgxWhitespace}${rgxUrl}`, 'g');
             const rgxMailAll = new RegExp(`${rgxWhitespace}${rgxMail}`, 'g');
 
-            const replaceMatchWithPlaceholder = function(match, whitespace, url, scheme) {
+            const replaceMatchWithPlaceholder = function (match, whitespace, url, scheme) {
                 let link = url;
 
                 // prefix www.example.com with http scheme to prevent it from being a relative link
@@ -2319,8 +2321,8 @@ class ReceiveTextDialog extends Dialog {
 
     _setDocumentTitleMessages() {
         document.title = this._receiveTextQueue.length <= 1
-            ? `${ Localization.getTranslation("document-titles.message-received") } - ErikrafT Drop`
-            : `${ Localization.getTranslation("document-titles.message-received-plural", null, {count: this._receiveTextQueue.length + 1}) } - ErikrafT Drop`;
+            ? `${Localization.getTranslation("document-titles.message-received")} - ErikrafT Drop`
+            : `${Localization.getTranslation("document-titles.message-received-plural", null, { count: this._receiveTextQueue.length + 1 })} - ErikrafT Drop`;
     }
 
     async _onCopy() {
@@ -2419,7 +2421,7 @@ class ShareTextDialog extends Dialog {
     }
 
     _approveShareText() {
-        Events.fire('activate-share-mode', {text: this.$text.innerText});
+        Events.fire('activate-share-mode', { text: this.$text.innerText });
         this.hide();
     }
 
@@ -2488,14 +2490,14 @@ class Base64Dialog extends Dialog {
             : Localization.getTranslation("dialogs.base64-files");
 
         if (navigator.clipboard.readText) {
-            this.$pasteBtn.innerText = Localization.getTranslation("dialogs.base64-tap-to-paste", null, {type: translateType});
+            this.$pasteBtn.innerText = Localization.getTranslation("dialogs.base64-tap-to-paste", null, { type: translateType });
             this._clickCallback = _ => this.processClipboard(type);
             this.$pasteBtn.addEventListener('click', _ => this._clickCallback());
         }
         else {
             console.log("`navigator.clipboard.readText()` is not available on your browser.\nOn Firefox you can set `dom.events.asyncClipboard.readText` to true under `about:config` for convenience.")
             this.$pasteBtn.setAttribute('hidden', true);
-            this.$fallbackTextarea.setAttribute('placeholder', Localization.getTranslation("dialogs.base64-paste-to-send", null, {type: translateType}));
+            this.$fallbackTextarea.setAttribute('placeholder', Localization.getTranslation("dialogs.base64-paste-to-send", null, { type: translateType }));
             this.$fallbackTextarea.removeAttribute('hidden');
             this._inputCallback = _ => this.processInput(type);
             this.$fallbackTextarea.addEventListener('input', _ => this._inputCallback());
@@ -2523,14 +2525,14 @@ class Base64Dialog extends Dialog {
                 await this.processBase64Zip(base64);
             }
         }
-        catch(e) {
+        catch (e) {
             Events.fire('notify-user', Localization.getTranslation("notifications.clipboard-content-incorrect"));
             console.log("Clipboard content is incorrect.")
         }
         this.hide();
     }
 
-    async processBase64Text(base64){
+    async processBase64Text(base64) {
         this._setPasteBtnToProcessing();
 
         try {
@@ -2539,7 +2541,7 @@ class Base64Dialog extends Dialog {
                 Events.fire('share-text-dialog', decodedText);
             }
             else {
-                Events.fire('activate-share-mode', {text: decodedText});
+                Events.fire('activate-share-mode', { text: decodedText });
             }
         }
         catch (e) {
@@ -2555,7 +2557,7 @@ class Base64Dialog extends Dialog {
 
         try {
             const decodedFiles = await decodeBase64Files(base64);
-            Events.fire('activate-share-mode', {files: decodedFiles});
+            Events.fire('activate-share-mode', { files: decodedFiles });
         }
         catch (e) {
             Events.fire('notify-user', Localization.getTranslation("notifications.file-content-incorrect"));
@@ -2707,11 +2709,11 @@ class Notifications {
         if (document.visibilityState !== 'visible') {
             const peerDisplayName = $(peerId).ui._displayName();
             if (/^((https?:\/\/|www)[abcdefghijklmnopqrstuvwxyz0123456789\-._~:\/?#\[\]@!$&'()*+,;=]+)$/.test(message.toLowerCase())) {
-                const notification = this._notify(Localization.getTranslation("notifications.link-received", null, {name: peerDisplayName}), message);
+                const notification = this._notify(Localization.getTranslation("notifications.link-received", null, { name: peerDisplayName }), message);
                 this._bind(notification, _ => window.open(message, '_blank', "noreferrer"));
             }
             else {
-                const notification = this._notify(Localization.getTranslation("notifications.message-received", null, {name: peerDisplayName}), message);
+                const notification = this._notify(Localization.getTranslation("notifications.message-received", null, { name: peerDisplayName }), message);
                 this._bind(notification, _ => this._copyText(message, notification));
             }
         }
@@ -2734,8 +2736,8 @@ class Notifications {
                 }
                 else {
                     fileOther = imagesOnly
-                        ? Localization.getTranslation("dialogs.file-other-description-image-plural", null, {count: files.length - 1})
-                        : Localization.getTranslation("dialogs.file-other-description-file-plural", null, {count: files.length - 1});
+                        ? Localization.getTranslation("dialogs.file-other-description-image-plural", null, { count: files.length - 1 })
+                        : Localization.getTranslation("dialogs.file-other-description-file-plural", null, { count: files.length - 1 });
                 }
                 title = `${files[0].name} ${fileOther}`
             }
@@ -2842,7 +2844,7 @@ class WebShareTargetUI {
                 Events.fire('share-text-dialog', shareTargetText);
             }
             else {
-                Events.fire('activate-share-mode', {text: shareTargetText});
+                Events.fire('activate-share-mode', { text: shareTargetText });
             }
         }
         else if (shareTargetType === "files") {
@@ -2863,7 +2865,7 @@ class WebShareTargetUI {
                     const clearRequest = store.clear()
                     clearRequest.onsuccess = _ => db.close();
 
-                    Events.fire('activate-share-mode', {files: filesReceived})
+                    Events.fire('activate-share-mode', { files: filesReceived })
                 }
             }
         }
@@ -2883,13 +2885,13 @@ class WebFileHandlersUI {
             let files = [];
 
             for (let i = 0; i < launchParams.files.length; i++) {
-                if (i !== 0 && await launchParams.files[i].isSameEntry(launchParams.files[i-1])) continue;
+                if (i !== 0 && await launchParams.files[i].isSameEntry(launchParams.files[i - 1])) continue;
 
                 const file = await launchParams.files[i].getFile();
                 files.push(file);
             }
 
-            Events.fire('activate-share-mode', {files: files})
+            Events.fire('activate-share-mode', { files: files })
         });
     }
 }
