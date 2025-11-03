@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.11.6';
+const cacheVersion = 'v1.11.7';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
@@ -74,12 +74,12 @@ const relativePathsNotToCache = [
     'config'
 ]
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
     // Perform install steps
     console.log("Cache files for sw:", cacheVersion);
     event.waitUntil(
         caches.open(cacheTitle)
-            .then(function(cache) {
+            .then(function (cache) {
                 return cache
                     .addAll(relativePathsToCache)
                     .then(_ => {
@@ -94,7 +94,7 @@ self.addEventListener('install', function(event) {
 const fromNetwork = (request, timeout) =>
     new Promise((resolve, reject) => {
         const timeoutId = setTimeout(reject, timeout);
-        fetch(request, {cache: "no-store"})
+        fetch(request, { cache: "no-store" })
             .then(response => {
                 if (response.redirected) {
                     throw new Error("Fetch is redirect. Abort usage and cache!");
@@ -138,7 +138,7 @@ const updateCache = request => new Promise((resolve, reject) => {
     caches
         .open(cacheTitle)
         .then(cache =>
-            fetch(request, {cache: "no-store"})
+            fetch(request, { cache: "no-store" })
                 .then(response => {
                     if (response.redirected) {
                         throw new Error("Fetch is redirect. Abort usage and cache!");
@@ -156,7 +156,7 @@ const updateCache = request => new Promise((resolve, reject) => {
 // 1. Try to retrieve file from cache
 // 2. If cache is not available: Fetch from network and update cache.
 // This way, cached files are only updated if the cacheVersion is changed
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
     const swOrigin = new URL(self.location.href).origin;
     const requestOrigin = new URL(event.request.url).origin;
 
@@ -227,7 +227,7 @@ const evaluateRequestData = function (request) {
 
         if (files && files.length > 0) {
             let fileObjects = [];
-            for (let i=0; i<files.length; i++) {
+            for (let i = 0; i < files.length; i++) {
                 fileObjects.push({
                     name: files[i].name,
                     buffer: await files[i].arrayBuffer()

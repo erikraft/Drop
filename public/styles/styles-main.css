@@ -150,25 +150,26 @@ header:not(.overflow-expanded) {
     height: 56px;
 }
 
-header > * {
+header>* {
     margin-left: 4px;
     margin-right: 4px;
 }
 
-header > * {
+header>* {
     display: flex;
     flex-direction: column;
     align-self: flex-start;
     touch-action: manipulation;
 }
 
-header > .icon-button {
+header>.icon-button {
     height: 40px;
 }
 
 .android-icon {
-  font-size: 24px;
-  color: inherit; /* Herdará a cor do texto pai, se adaptando ao tema */
+    font-size: 24px;
+    color: inherit;
+    /* Herdará a cor do texto pai, se adaptando ao tema */
 }
 
 
@@ -176,7 +177,7 @@ header * {
     transition: all 300ms;
 }
 
-#theme-wrapper > div {
+#theme-wrapper>div {
     display: flex;
     flex-direction: column;
 }
@@ -227,20 +228,20 @@ header * {
         pointer-events: none;
     }
 
-    #theme-wrapper > div {
+    #theme-wrapper>div {
         flex-direction: column-reverse;
     }
 }
 
-#expand > .icon {
+#expand>.icon {
     transition: transform 150ms ease-out
 }
 
-html:not([dir="rtl"]) #expand.flipped  > .icon {
+html:not([dir="rtl"]) #expand.flipped>.icon {
     transform: rotate(-90deg);
 }
 
-html[dir="rtl"] #expand.flipped  > .icon {
+html[dir="rtl"] #expand.flipped>.icon {
     transform: rotate(90deg);
 }
 
@@ -253,12 +254,12 @@ html[dir="rtl"] #expand.flipped  > .icon {
 
 /* Tema claro: SVG azul */
 body.light-theme .logo-drop {
-  color: #3c74c7;
+    color: #3c74c7;
 }
 
 /* Tema escuro: SVG branco */
 body.dark-theme .logo-drop {
-  color: #fff;
+    color: #fff;
 }
 
 @font-face {
@@ -289,7 +290,8 @@ h2 {
     font-weight: 400;
     letter-spacing: -.012em;
     line-height: 32px;
-    color: var(--primary-color);}
+    color: var(--primary-color);
+}
 
 h3 {
     font-size: 20px;
@@ -374,12 +376,11 @@ x-noscript {
 .overflowing {
     background:
         /* Shadow covers */
-            linear-gradient(rgb(var(--shadow-color-cover-rgb)) 30%, rgba(var(--shadow-color-cover-rgb), 0)),
-            linear-gradient(rgba(var(--shadow-color-cover-rgb), 0), rgb(var(--shadow-color-cover-rgb)) 70%) 0 100%,
-                /* Shadows */
-            radial-gradient(farthest-side at 50% 0, rgba(var(--shadow-color-rgb), .2), rgba(var(--shadow-color-rgb), 0)),
-            radial-gradient(farthest-side at 50% 100%, rgba(var(--shadow-color-rgb), .2), rgba(var(--shadow-color-rgb), 0))
-            0 100%;
+        linear-gradient(rgb(var(--shadow-color-cover-rgb)) 30%, rgba(var(--shadow-color-cover-rgb), 0)),
+        linear-gradient(rgba(var(--shadow-color-cover-rgb), 0), rgb(var(--shadow-color-cover-rgb)) 70%) 0 100%,
+        /* Shadows */
+        radial-gradient(farthest-side at 50% 0, rgba(var(--shadow-color-rgb), .2), rgba(var(--shadow-color-rgb), 0)),
+        radial-gradient(farthest-side at 50% 100%, rgba(var(--shadow-color-rgb), .2), rgba(var(--shadow-color-rgb), 0)) 0 100%;
     background-repeat: no-repeat;
     background-size: 100% 60px, 100% 60px, 100% 24px, 100% 24px;
     background-attachment: local, local, scroll, scroll;
@@ -422,7 +423,8 @@ x-peers {
     overscroll-behavior-x: none;
     scrollbar-width: none;
 
-    --peers-per-row: 6; /* default if browser does not support :has selector */
+    --peers-per-row: 6;
+    /* default if browser does not support :has selector */
     --x-peers-width: min(100vw, calc(var(--peers-per-row) * (var(--peer-width) + 25px) - 16px));
     width: var(--x-peers-width);
 }
@@ -501,7 +503,7 @@ footer .logo {
     border-radius: 12px;
 }
 
-.panel > div:first-of-type {
+.panel>div:first-of-type {
     padding-left: 4px;
     padding-right: 4px;
 }
@@ -538,7 +540,8 @@ footer .logo {
 }
 
 .known-as-wrapper {
-    font-size: 16px; /* prevents auto-zoom on edit */
+    font-size: 16px;
+    /* prevents auto-zoom on edit */
 }
 
 #display-name {
@@ -982,7 +985,7 @@ button::-moz-focus-inner {
     transition-delay: 100ms;
 }
 
-#about > * {
+#about>* {
     transition: opacity 300ms ease 300ms;
     will-change: opacity;
     pointer-events: all;
@@ -992,8 +995,8 @@ button::-moz-focus-inner {
     margin: 0;
 }
 
-#about:not(:target) > header,
-#about:not(:target) > section {
+#about:not(:target)>header,
+#about:not(:target)>section {
     opacity: 0;
     pointer-events: none;
     transition-delay: 0s;
@@ -1008,7 +1011,7 @@ button::-moz-focus-inner {
     align-items: baseline;
 }
 
-#about .title-wrapper > div {
+#about .title-wrapper>div {
     margin-left: 0.4em;
 }
 
@@ -1090,14 +1093,49 @@ html[dir="rtl"] #about x-background {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 16px;
+    align-items: center;
+    gap: 20px;
     margin: 0 auto 32px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+#about .download-badge-grid a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 1 auto;
+    max-width: 200px;
+    min-width: 160px;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+#about .download-badge-grid a:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
 #about .download-badge-grid img {
-    width: min(180px, 100%);
+    width: 100%;
     height: auto;
     display: block;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+    #about .download-badge-grid {
+        gap: 16px;
+    }
+
+    #about .download-badge-grid a {
+        max-width: 180px;
+        min-width: 140px;
+    }
 }
 
 @media (max-width: 720px) {
@@ -1114,10 +1152,12 @@ html[dir="rtl"] #about x-background {
 
     #about .download-badge-grid {
         gap: 12px;
+        padding: 0 12px;
     }
 
-    #about .download-badge-grid img {
-        width: min(140px, 100%);
+    #about .download-badge-grid a {
+        max-width: 160px;
+        min-width: 130px;
     }
 }
 
@@ -1132,10 +1172,15 @@ html[dir="rtl"] #about x-background {
         gap: 18px;
     }
 
-    #about .download-badge-grid img {
-        width: min(120px, 100%);
+    #about .download-badge-grid {
+        gap: 10px;
+        padding: 0 10px;
     }
 
+    #about .download-badge-grid a {
+        max-width: 140px;
+        min-width: 120px;
+    }
 }
 
 #about section {
@@ -1205,7 +1250,7 @@ x-toast span {
     margin: auto 4px auto 10px
 }
 
-x-dialog[show] ~ div x-toast {
+x-dialog[show]~div x-toast {
     background-color: var(--lt-dialog-bg-color);
     color: rgb(var(--lt-text-color));
 }
@@ -1312,32 +1357,32 @@ body {
     --shadow-color-cover-rgb: var(--bg-color);
 
     /* Light theme colors */
-    --lt-text-color: 51,51,51;
+    --lt-text-color: 51, 51, 51;
     --lt-dialog-bg-color: #fff;
-    --lt-bg-color: 255,255,255;
+    --lt-bg-color: 255, 255, 255;
     --lt-bg-color-secondary: #f2f2f2;
     --lt-border-color: #757575;
     --lt-badge-color: #757575;
     --lt-lang-hr-color: #DDD;
 
-    --lt-shadow-color-secondary-rgb: 0,0,0;
-    --lt-shadow-color-secondary-cover-rgb: 242,242,242;
-    --lt-shadow-color-dialog-rgb: 0,0,0;
-    --lt-shadow-color-dialog-cover-rgb: 242,242,242;
+    --lt-shadow-color-secondary-rgb: 0, 0, 0;
+    --lt-shadow-color-secondary-cover-rgb: 242, 242, 242;
+    --lt-shadow-color-dialog-rgb: 0, 0, 0;
+    --lt-shadow-color-dialog-cover-rgb: 242, 242, 242;
 
     /* Dark theme colors */
-    --dt-text-color: 238,238,238;
+    --dt-text-color: 238, 238, 238;
     --dt-dialog-bg-color: #141414;
-    --dt-bg-color: 0,0,0;
+    --dt-bg-color: 0, 0, 0;
     --dt-bg-color-secondary: #262628;
     --dt-border-color: #757575;
     --dt-badge-color: #757575;
     --dt-lang-hr-color: #404040;
 
-    --dt-shadow-color-secondary-rgb: 255,255,255;
-    --dt-shadow-color-secondary-cover-rgb: 38,38,38;
-    --dt-shadow-color-dialog-rgb: 255,255,255;
-    --dt-shadow-color-dialog-cover-rgb: 38,38,38;
+    --dt-shadow-color-secondary-rgb: 255, 255, 255;
+    --dt-shadow-color-secondary-cover-rgb: 38, 38, 38;
+    --dt-shadow-color-dialog-rgb: 255, 255, 255;
+    --dt-shadow-color-dialog-cover-rgb: 38, 38, 38;
 }
 
 /* Light theme colors */
@@ -1449,25 +1494,29 @@ body {
 
 body {
     /* mobile viewport bug fix */
-    min-height: -moz-available;          /* WebKit-based browsers will ignore this. */
-    min-height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    min-height: -moz-available;
+    /* WebKit-based browsers will ignore this. */
+    min-height: -webkit-fill-available;
+    /* Mozilla-based browsers will ignore this. */
     min-height: fill-available;
 }
 
 html {
-    min-height: -moz-available;          /* WebKit-based browsers will ignore this. */
-    min-height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    min-height: -moz-available;
+    /* WebKit-based browsers will ignore this. */
+    min-height: -webkit-fill-available;
+    /* Mozilla-based browsers will ignore this. */
     min-height: fill-available;
 }
 
 /* webkit scrollbar style*/
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
     background: #bfbfbf;
     border-radius: 4px;
 }
@@ -1487,77 +1536,81 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
 
 /* Styles for device avatars container */
 #device-avatars-container {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
 }
 
 /* Device avatar style */
 .device-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background-color: #ccc;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  border: 2px solid transparent;
-  box-sizing: border-box;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border: 2px solid transparent;
+    box-sizing: border-box;
 }
 
 /* Highlight local device avatar */
 .device-avatar.local {
-  border-color: #007bff; /* blue highlight */
-  box-shadow: 0 0 8px #007bff88;
+    border-color: #007bff;
+    /* blue highlight */
+    box-shadow: 0 0 8px #007bff88;
 }
 
 /* Overlay device icon on avatar */
 .device-avatar::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 24px;
-  height: 24px;
-  background-image: url('../images/icon-pc-blue.png'); /* example icon path */
-  background-size: contain;
-  background-repeat: no-repeat;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-sizing: border-box;
-  background-color: #007bff;
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    background-image: url('../images/icon-pc-blue.png');
+    /* example icon path */
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-sizing: border-box;
+    background-color: #007bff;
 }
 
 /* Different overlay for remote devices */
 .device-avatar.remote::after {
-  background-color: #6c757d; /* gray overlay for remote */
-  background-image: url('../images/icon-pc-gray.png'); /* example icon path */
+    background-color: #6c757d;
+    /* gray overlay for remote */
+    background-image: url('../images/icon-pc-gray.png');
+    /* example icon path */
 }
 
 /* Hide the default file input */
 #profile-photo-upload {
-  display: none;
+    display: none;
 }
 
 /* Style for the upload button */
 #profile-photo-upload-button {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 6px 12px;
-  background-color: #007bff;
-  color: white;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-  text-align: center;
-  width: fit-content;
-  border: none;
-  transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    text-align: center;
+    width: fit-content;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 
 #profile-photo-upload-button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
