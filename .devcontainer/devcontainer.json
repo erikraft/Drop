@@ -1,42 +1,41 @@
 {
-  "name": "ErikrafT Drop Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
-
-  // 🔧 Extensões do VS Code instaladas automaticamente:
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "erikraft.erikraft-drop",              // Extensão própria ErikrafT Drop
-        "ms-vsliveshare.vsliveshare",          // Live Share (colaboração)
-        "ms-vscode.live-server",               // Live Server oficial Microsoft
-        "ritwickdey.liveserver",               // Live Server alternativo (ritwickdey)
-        "yutengjing.vscode-archive"            // Extensão para arquivos compactados
-      ],
-      "settings": {
-        "editor.formatOnSave": true,
-        "files.trimTrailingWhitespace": true,
-        "files.autoSave": "onWindowChange",
-        "liveServer.settings.wait": 100,
-        "liveServer.settings.donotShowInfoMsg": true,
-        "liveServer.settings.port": 5500
-      }
-    }
-  },
-
-  // 🧰 Pós-criação: comandos executados após o container iniciar
-  "postCreateCommand": "npm install",
-
-  // 🖥️ Portas expostas no Codespaces (para app, servidor local, etc.)
-  "forwardPorts": [3000, 5173, 5500],
-
-  // 🧱 Configuração adicional (usuário padrão Node)
-  "remoteUser": "node",
-
-  // 🔩 Recursos opcionais do Dev Container
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
+    "name": "ErikrafT Drop Dev Environment",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+    // 🔧 VS Code extensions installed automatically:
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "erikraft.erikraft-drop", // ErikrafT Drop custom extension
+                "ms-vsliveshare.vsliveshare", // Live Share (collaboration)
+                "ms-vscode.live-server", // Official Live Server by Microsoft
+                "ritwickdey.liveserver", // Alternative Live Server (ritwickdey)
+                "yutengjing.vscode-archive" // Extension for archive file support
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                "files.trimTrailingWhitespace": true,
+                "files.autoSave": "onWindowChange",
+                "liveServer.settings.wait": 100,
+                "liveServer.settings.donotShowInfoMsg": true,
+                "liveServer.settings.port": 5500
+            }
+        }
     },
-    "ghcr.io/devcontainers/features/git:1": {}
-  }
+    // 🧰 Post-creation: commands executed after the container is built
+    "postCreateCommand": "npm install",
+    // 🖥️ Ports exposed in Codespaces (for app or local servers)
+    "forwardPorts": [
+        3000,
+        5173,
+        5500
+    ],
+    // 🧱 Additional configuration (default Node user)
+    "remoteUser": "node",
+    // 🔩 Optional Dev Container features
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20"
+        },
+        "ghcr.io/devcontainers/features/git:1": {}
+    }
 }
