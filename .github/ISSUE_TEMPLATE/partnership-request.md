@@ -9,7 +9,7 @@ assignees: ''
 
 ## Prerequisites
 - [ ] I have read and followed the [partnership guidelines](../../PARTNERSHIP.md).
-- [ ] I have a high-resolution logo (preferably SVG) ready to submit.
+- [ ] I have a high-resolution logo (preferably SVG) ready to submit, including a 40x40 white SVG version.
 
 ## Organization / Project Information
 - **Organization/project name:**

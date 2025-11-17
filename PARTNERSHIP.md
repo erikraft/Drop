@@ -22,3 +22,4 @@ Partner up by creating an [Issue](https://github.com/erikraft/Drop/issues) in th
 - If the logo is submitted in `.png`, `.jpg`, `.jpeg`, or similar formats, it will be converted to `.svg`.
 - Submit the logo in an all-white version.
 - We strongly recommend providing the `.svg` version.
+- Include a white `.svg` version sized at 40x40.
