@@ -1834,7 +1834,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var cometBtn = document.getElementById('comet');
-            var cometLink = cometBtn.querySelector('a');
+            var cometLink = cometBtn ? cometBtn.querySelector('a') : null;
             var popup = document.getElementById('comet-popup');
             var closeBtn = document.getElementById('comet-popup-close-btn');
             var downloadBtn = document.getElementById('comet-download-btn');
@@ -1842,6 +1842,7 @@
             var autoHideTimeout = null;
 
             function hidePopupWithAnimation() {
+                if (!popup) return;
                 popup.classList.add('fade-out');
                 setTimeout(function () {
                     popup.style.display = 'none';
@@ -1850,6 +1851,7 @@
             }
 
             function showPopup() {
+                if (!popup) return;
                 popup.style.display = 'block';
                 popup.classList.remove('fade-out');
 
@@ -1863,6 +1865,7 @@
             }
 
             function closePopup() {
+                if (!popup) return;
                 if (autoHideTimeout) {
                     clearTimeout(autoHideTimeout);
                 }
@@ -1870,8 +1873,35 @@
                 popup.classList.remove('fade-out');
             }
 
+            // Detect Android and Comet browser
+            var ua = navigator.userAgent || '';
+            var isAndroid = /android/i.test(ua) || (navigator.userAgentData && /android/i.test(navigator.userAgentData.platform || ''));
+            var isComet = /comet|perplexity/i.test(ua) || (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands) && navigator.userAgentData.brands.some(function (b) { return /comet|perplexity/i.test(b.brand || ''); }));
+
+            // If opened inside Comet browser, hide button and popup entirely
+            if (isComet) {
+                if (cometBtn) cometBtn.style.display = 'none';
+                if (popup) popup.style.display = 'none';
+                return;
+            }
+
+            // If Android: link to Play Store and do NOT show popup (mobile size)
+            if (isAndroid) {
+                if (cometLink) {
+                    cometLink.href = 'https://play.google.com/store/apps/details?id=ai.perplexity.comet';
+                    cometLink.setAttribute('target', '_blank');
+                    cometLink.setAttribute('rel', 'noopener noreferrer');
+                }
+
+                if (popup) popup.style.display = 'none';
+
+                // Do not intercept clicks on Android — let the anchor open the Play Store
+                return;
+            }
+
+            // For other devices/browsers: keep popup behavior
             if (cometBtn && popup && closeBtn && downloadBtn) {
-                // Mostrar popup automaticamente ao carregar a página
+                // Mostrar popup automaticamente ao carregar a página (desktop)
                 showPopup();
 
                 // Fechar ao clicar no botão X
@@ -1880,17 +1910,18 @@
                     closePopup();
                 });
 
-
-
-                // Abrir link ao clicar em Baixar
+                // Abrir link ao clicar em Baixar (abre em nova aba)
                 downloadBtn.addEventListener('click', function (e) {
                     e.preventDefault();
                     closePopup();
-                    window.open(cometLink.href, '_blank');
+                    if (cometLink && cometLink.href) {
+                        window.open(cometLink.href, '_blank');
+                    }
                 });
 
                 // Ao clicar no botão Comet, abrir popup (sem abrir link direto)
                 cometBtn.addEventListener('click', function (e) {
+                    // se o clique for no <a> (caso o usuário clique exatamente no link), evitar navegação e mostrar popup
                     e.preventDefault();
                     showPopup();
                 });
