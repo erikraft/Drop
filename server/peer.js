@@ -177,6 +177,11 @@ export default class Peer {
                 deviceName: 'Comet Browser',
                 browser: 'Comet'
             }
+            ,
+            'browseros-browser': {
+                deviceName: 'BrowserOS',
+                browser: 'BrowserOS'
+            }
         };
 
         let deviceName = '';
@@ -225,7 +230,7 @@ export default class Peer {
     }
 
     _resolveClientType(req) {
-        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser']);
+        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser']);
         const searchParams = new URL(req.url, 'http://server').searchParams;
         const rawClientType = (searchParams.get('client_type') || '').toLowerCase();
 
