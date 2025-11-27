@@ -1895,7 +1895,22 @@
 
                 if (popup) popup.style.display = 'none';
 
-                // Do not intercept clicks on Android — let the anchor open the Play Store
+                // The anchor is empty (SVG is outside it) and may not receive clicks on mobile.
+                // Attach a click handler to the whole button to ensure the Play Store opens.
+                if (cometBtn) {
+                    cometBtn.style.cursor = 'pointer';
+                    cometBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        var href = (cometLink && cometLink.href) ? cometLink.href : 'https://play.google.com/store/apps/details?id=ai.perplexity.comet';
+                        // Try to open in a new tab, fallback to changing location
+                        try {
+                            window.open(href, '_blank');
+                        } catch (err) {
+                            window.location.href = href;
+                        }
+                    });
+                }
+
                 return;
             }
 
