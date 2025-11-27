@@ -53,13 +53,13 @@ export default class Peer {
         }
 
         // remove the prefix used for IPv4-translated addresses
-        if (this.ip.substring(0,7) === "::ffff:") {
+        if (this.ip.substring(0, 7) === "::ffff:") {
             this.ip = this.ip.substring(7);
         }
 
         let ipv6_was_localized = false;
         if (this.conf.ipv6Localize && this.ip.includes(':')) {
-            this.ip = this.ip.split(':',this.conf.ipv6Localize).join(':');
+            this.ip = this.ip.split(':', this.conf.ipv6Localize).join(':');
             ipv6_was_localized = true;
         }
 
@@ -172,6 +172,10 @@ export default class Peer {
             'open-vsx-registry-extension': {
                 deviceName: 'Open VSX Extension',
                 browser: 'Open VSX'
+            },
+            'comet-browser': {
+                deviceName: 'Comet Browser',
+                browser: 'Comet'
             }
         };
 
@@ -221,7 +225,7 @@ export default class Peer {
     }
 
     _resolveClientType(req) {
-        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension']);
+        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser']);
         const searchParams = new URL(req.url, 'http://server').searchParams;
         const rawClientType = (searchParams.get('client_type') || '').toLowerCase();
 
