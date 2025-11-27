@@ -1887,28 +1887,34 @@
 
             // If Android: link to Play Store and do NOT show popup (mobile size)
             if (isAndroid) {
+                var playHref = 'https://play.google.com/store/apps/details?id=ai.perplexity.comet';
                 if (cometLink) {
-                    cometLink.href = 'https://play.google.com/store/apps/details?id=ai.perplexity.comet';
+                    cometLink.href = playHref;
                     cometLink.setAttribute('target', '_blank');
                     cometLink.setAttribute('rel', 'noopener noreferrer');
                 }
 
                 if (popup) popup.style.display = 'none';
 
-                // The anchor is empty (SVG is outside it) and may not receive clicks on mobile.
-                // Attach a click handler to the whole button to ensure the Play Store opens.
+                // Anchor may be empty or not receive clicks on mobile; attach multiple handlers
                 if (cometBtn) {
                     cometBtn.style.cursor = 'pointer';
-                    cometBtn.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        var href = (cometLink && cometLink.href) ? cometLink.href : 'https://play.google.com/store/apps/details?id=ai.perplexity.comet';
-                        // Try to open in a new tab, fallback to changing location
+
+                    var openPlay = function (e) {
+                        // Allow the gesture, but fallback to location change if popup blocked
                         try {
-                            window.open(href, '_blank');
+                            // Prefer navigation in same tab on mobile to avoid popup blockers
+                            window.location.href = (cometLink && cometLink.href) ? cometLink.href : playHref;
                         } catch (err) {
-                            window.location.href = href;
+                            // last resort
+                            setTimeout(function () { window.location.href = playHref; }, 0);
                         }
-                    });
+                    };
+
+                    // Use click, touchend and pointerup to improve reliability on Android devices
+                    cometBtn.addEventListener('click', function (e) { e.preventDefault(); openPlay(e); });
+                    cometBtn.addEventListener('touchend', function (e) { e.preventDefault(); openPlay(e); });
+                    cometBtn.addEventListener('pointerup', function (e) { e.preventDefault(); openPlay(e); });
                 }
 
                 return;
