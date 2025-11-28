@@ -77,6 +77,8 @@
         "message_placeholder": "Tekst",
         "receive-text-title": "Wiadomość Odebrana",
         "copy": "Kopiuj",
+        "edit-photopea": "Edytuj (Photopea)",
+        "edit-vectorpea": "Edytuj (Vectorpea)",
         "base64-title-files": "Udostępnij Pliki",
         "base64-title-text": "Udostępnij Tekst",
         "base64-processing": "Przetwarzanie…",

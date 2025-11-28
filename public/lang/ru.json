@@ -98,6 +98,8 @@
         "join": "Войти",
         "enter-room-id-from-another-device": "Введите ID комнаты с другого устройства, чтобы войти в нее.",
         "temporary-public-room-title": "Временная публичная комната",
+        "edit-photopea": "Редактировать (Photopea)",
+        "edit-vectorpea": "Редактировать (Vectorpea)",
         "message_title": "Вставьте сообщение для отправки",
         "pair-devices-qr-code_title": "Нажмите, чтобы скопировать ссылку для привязки этого устройства",
         "public-room-qr-code_title": "Нажмите, чтобы скопировать ссылку на публичную комнату",

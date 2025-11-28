@@ -52,6 +52,8 @@
     },
     "dialogs": {
         "pair-devices-title": "இணை சாதனங்கள் நிரந்தரமாக",
+        "edit-photopea": "தொகு (Photopea)",
+        "edit-vectorpea": "தொகு (Vectorpea)",
         "input-key-on-this-device": "இந்த விசையை மற்றொரு சாதனத்தில் உள்ளிடவும்",
         "scan-qr-code": "அல்லது QR-குறியீட்டை ச்கேன் செய்யுங்கள்.",
         "enter-key-from-another-device": "மற்றொரு சாதனத்திலிருந்து விசையை இங்கே உள்ளிடவும்.",

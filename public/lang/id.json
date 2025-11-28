@@ -181,7 +181,9 @@
         "cloud-upload-copy-error": "Tidak dapat menyalin tautan. Salin secara manual.",
         "cloud-upload-error": "Terjadi kesalahan tak terduga saat mengunggah file.",
         "cloud-upload-capacity": "Penyimpanan cloud sementara tidak tersedia karena penggunaan tinggi. Coba lagi nanti.",
-        "cloud-upload-unavailable": "Unggahan cloud tidak tersedia saat ini. Silakan coba lagi nanti."
+        "cloud-upload-unavailable": "Unggahan cloud tidak tersedia saat ini. Silakan coba lagi nanti.",
+        "edit-photopea": "Sunting (Photopea)",
+        "edit-vectorpea": "Sunting (Vectorpea)"
     },
     "about": {
         "claim": "Cara termudah untuk mentransfer berkas lintas perangkat",

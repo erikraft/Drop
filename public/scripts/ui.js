@@ -919,6 +919,8 @@ class ReceiveFileDialog extends ReceiveDialog {
 
         this.$downloadBtn = this.$el.querySelector('#download-btn');
         this.$shareBtn = this.$el.querySelector('#share-btn');
+        this.$editPhotopeaBtn = this.$el.querySelector('#edit-photopea-btn');
+        this.$editVectorpeaBtn = this.$el.querySelector('#edit-vectorpea-btn');
 
         Events.on('files-received', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
         this._filesQueue = [];
@@ -1101,6 +1103,48 @@ class ReceiveFileDialog extends ReceiveDialog {
                 }
             })
             .catch(r => console.error(r));
+
+        // Show edit buttons when appropriate
+        try {
+            const primary = files[0];
+            const mime = (primary.type || '').toLowerCase();
+            // Reset
+            if (this.$editPhotopeaBtn) {
+                this.$editPhotopeaBtn.setAttribute('hidden', true);
+                this.$editPhotopeaBtn.onclick = null;
+            }
+            if (this.$editVectorpeaBtn) {
+                this.$editVectorpeaBtn.setAttribute('hidden', true);
+                this.$editVectorpeaBtn.onclick = null;
+            }
+
+            if (mime.startsWith('image/')) {
+                // Photopea can edit raster images; enable Photopea
+                if (this.$editPhotopeaBtn) {
+                    this.$editPhotopeaBtn.removeAttribute('hidden');
+                    this.$editPhotopeaBtn.onclick = _ => {
+                        if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithPhotopea) {
+                            window.PhotopeaIntegration.editWithPhotopea(primary);
+                        }
+                    };
+                }
+            }
+
+            // SVGs are best edited in Vectorpea
+            if (mime === 'image/svg+xml' || (primary.name && primary.name.toLowerCase().endsWith('.svg'))) {
+                if (this.$editVectorpeaBtn) {
+                    this.$editVectorpeaBtn.removeAttribute('hidden');
+                    this.$editVectorpeaBtn.onclick = _ => {
+                        if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithVectorpea) {
+                            window.PhotopeaIntegration.editWithVectorpea(primary);
+                        }
+                    };
+                }
+            }
+        }
+        catch (e) {
+            console.warn('Could not set up editor buttons', e);
+        }
     }
 
     _downloadFilesIndividually(files) {
@@ -1117,6 +1161,14 @@ class ReceiveFileDialog extends ReceiveDialog {
         setTimeout(async () => {
             this.$shareBtn.setAttribute('hidden', true);
             this.$downloadBtn.setAttribute('disabled', true);
+            if (this.$editPhotopeaBtn) {
+                this.$editPhotopeaBtn.setAttribute('hidden', true);
+                this.$editPhotopeaBtn.onclick = null;
+            }
+            if (this.$editVectorpeaBtn) {
+                this.$editVectorpeaBtn.setAttribute('hidden', true);
+                this.$editVectorpeaBtn.onclick = null;
+            }
             this.$previewBox.innerHTML = '';
             this._busy = false;
             await this._nextFiles();

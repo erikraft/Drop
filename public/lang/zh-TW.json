@@ -52,6 +52,8 @@
     },
     "dialogs": {
         "pair-devices-title": "永久配對裝置",
+        "edit-photopea": "編輯 (Photopea)",
+        "edit-vectorpea": "編輯 (Vectorpea)",
         "scan-qr-code": "或掃描 QR 圖碼。",
         "input-key-on-this-device": "在另一台裝置上輸入此密鑰",
         "temporary-public-room-title": "臨時公共房間",

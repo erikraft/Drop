@@ -52,6 +52,8 @@
     },
     "dialogs": {
         "pair-devices-title": "配對新裝置（常駐）",
+        "edit-photopea": "編輯 (Photopea)",
+        "edit-vectorpea": "編輯 (Vectorpea)",
         "input-key-on-this-device": "喺另一部裝置輸入呢組數字",
         "scan-qr-code": "或者 掃描二維碼。",
         "temporary-public-room-title": "臨時公共房間",

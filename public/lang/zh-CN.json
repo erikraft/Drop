@@ -52,6 +52,8 @@
     },
     "dialogs": {
         "pair-devices-title": "配对新设备（常驻）",
+        "edit-photopea": "编辑 (Photopea)",
+        "edit-vectorpea": "编辑 (Vectorpea)",
         "input-key-on-this-device": "在另一个设备上输入这串数字",
         "base64-text": "信息",
         "enter-key-from-another-device": "在此处输入从另一个设备上获得的数字。",

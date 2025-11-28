@@ -106,6 +106,8 @@
         "base64-paste-to-send": "Inserați clipboard aici pentru a distribui {{type}}",
         "auto-accept-instructions-2": "pentru a accepta automat toate fișierele trimise de la dispozitivul respectiv.",
         "receive-text-title": "Mesaj primit",
+        "edit-photopea": "Editare (Photopea)",
+        "edit-vectorpea": "Editare (Vectorpea)",
         "edit-paired-devices-title": "Editați dispozitivele asociate",
         "cancel": "Anulează",
         "auto-accept-instructions-1": "Activează",

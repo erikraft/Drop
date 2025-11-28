@@ -90,6 +90,8 @@
         "auto-accept-instructions-2": "for å automatisk akseptere alle filer som er sendt til denne eininga.",
         "decline": "Avslå",
         "download": "Last ned",
+        "edit-photopea": "Rediger (Photopea)",
+        "edit-vectorpea": "Rediger (Vectorpea)",
         "receive-text-title": "Melding mottatt",
         "file-other-description-image-plural": "og {{count}} andre bilete",
         "copy": "Kopier",

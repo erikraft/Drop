@@ -181,7 +181,9 @@
         "cloud-upload-copy-error": "リンクをコピーできませんでした。手動でコピーしてください。",
         "cloud-upload-error": "ファイルのアップロード中に予期しないエラーが発生しました。",
         "cloud-upload-capacity": "高負荷のためクラウドストレージは一時的に利用できません。後でもう一度お試しください。",
-        "cloud-upload-unavailable": "クラウドアップロードは現在利用できません。後でもう一度お試しください。"
+        "cloud-upload-unavailable": "クラウドアップロードは現在利用できません。後でもう一度お試しください。",
+        "edit-photopea": "編集 (Photopea)",
+        "edit-vectorpea": "編集 (Vectorpea)"
     },
     "about": {
         "claim": "デバイス間でかんたんファイル共有",

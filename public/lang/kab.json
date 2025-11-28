@@ -39,7 +39,9 @@
         "cloud-upload-copy-error": "Yegguma ad yettwanɣel aseɣwen. Nɣel-it s ufus.",
         "cloud-upload-error": "Teḍra-d tuccḍa tarussint mi d-nsel afaylu.",
         "cloud-upload-capacity": "Takaṛḍit n usigna ur teddun ara akka tura acku lqem d ameqqran. Eɛreḍ tikelt-nniḍen.",
-        "cloud-upload-unavailable": "Trusi ar usigna ur tweddu ara akka tura. Eɛreḍ ticki."
+        "cloud-upload-unavailable": "Trusi ar usigna ur tweddu ara akka tura. Eɛreḍ ticki.",
+        "edit-photopea": "Edit (Photopea)",
+        "edit-vectorpea": "Edit (Vectorpea)"
     },
     "about": {
         "github_title": "ErikrafT Drop deg GitHub",

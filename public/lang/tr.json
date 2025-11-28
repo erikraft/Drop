@@ -52,6 +52,8 @@
     },
     "dialogs": {
         "cancel": "İptal",
+        "edit-photopea": "Düzenle (Photopea)",
+        "edit-vectorpea": "Düzenle (Vectorpea)",
         "edit-paired-devices-title": "Eşleşmiş Cihazları Düzenle",
         "base64-paste-to-send": "{{type}} paylaşmak için buraya yapıştırın",
         "auto-accept-instructions-2": "bu cihazdan gönderilen tüm dosyaları otomatik olarak kabul etmek için.",

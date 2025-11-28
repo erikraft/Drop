@@ -52,6 +52,8 @@
     },
     "dialogs": {
         "input-key-on-this-device": "Введіть цей ключ на іншому пристрої",
+        "edit-photopea": "Редагувати (Photopea)",
+        "edit-vectorpea": "Редагувати (Vectorpea)",
         "scan-qr-code": "або відскануйте QR-код.",
         "enter-key-from-another-device": "Введіть ключ з іншого пристрою тут.",
         "temporary-public-room-title": "Тимчасова публічна кімната",

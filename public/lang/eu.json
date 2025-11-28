@@ -125,6 +125,8 @@
         "accept": "Onartu",
         "share": "Partekatu",
         "download": "Deskargatu",
+        "edit-photopea": "Editatu (Photopea)",
+        "edit-vectorpea": "Editatu (Vectorpea)",
         "send-message-title": "Bidali mezua",
         "send-message-to": "Honi:",
         "message_placeholder": "Testua",

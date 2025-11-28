@@ -53,6 +53,8 @@
     "dialogs": {
         "base64-title-text": "Zdielať text",
         "base64-text": "text",
+        "edit-photopea": "Upraviť (Photopea)",
+        "edit-vectorpea": "Upraviť (Vectorpea)",
         "send": "Odoslať",
         "public-room-qr-code_title": "Kliknutím skopíruješ odkaz do verejnej miestnosti",
         "pair-devices-title": "Spáruj zariadenia natrvalo",

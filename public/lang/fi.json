@@ -44,7 +44,9 @@
         "cloud-upload-copy-error": "Linkkiä ei voitu kopioida. Kopioi se käsin.",
         "cloud-upload-error": "Tiedoston latauksessa tapahtui odottamaton virhe.",
         "cloud-upload-capacity": "Pilvitallennus ei ole tilapäisesti käytettävissä suuren kuormituksen vuoksi. Yritä myöhemmin uudelleen.",
-        "cloud-upload-unavailable": "Pilveen lataus ei ole juuri nyt käytettävissä. Yritä myöhemmin uudelleen."
+        "cloud-upload-unavailable": "Pilveen lataus ei ole juuri nyt käytettävissä. Yritä myöhemmin uudelleen.",
+        "edit-photopea": "Muokkaa (Photopea)",
+        "edit-vectorpea": "Muokkaa (Vectorpea)"
     },
     "site": {
         "biodrop": "Site"

@@ -107,6 +107,8 @@
         "would-like-to-share": "soovib jagada",
         "accept": "Võta vastu",
         "download": "Laadi alla",
+        "edit-photopea": "Muuda (Photopea)",
+        "edit-vectorpea": "Muuda (Vectorpea)",
         "send-message-title": "Saada sõnum",
         "send-message-to": "Seadmele:",
         "auto-accept-instructions-2": "et automaatselt kõik sellest seadmest saadetud failid vastu võtta.",

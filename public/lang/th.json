@@ -13,6 +13,8 @@
     },
     "dialogs": {
         "auto-accept-instructions-1": "เปิดใช้งาน",
+        "edit-photopea": "แก้ไข (Photopea)",
+        "edit-vectorpea": "แก้ไข (Vectorpea)",
         "system-language": "ภาษาของระบบ",
         "auto-accept-instructions-2": "เพื่อยอมรับไฟล์ทั้งหมดที่ส่งจากอุปกรณ์นั้นโดยอัตโนมัติ",
         "copy": "คัดลอก",

@@ -129,7 +129,9 @@
         "cloud-upload-copy-error": "לא ניתן היה להעתיק את הקישור. העתק ידנית.",
         "cloud-upload-error": "אירעה שגיאה בלתי צפויה במהלך העלאת הקובץ.",
         "cloud-upload-capacity": "אחסון הענן אינו זמין זמנית בשל עומס כבד. נסה שוב מאוחר יותר.",
-        "cloud-upload-unavailable": "העלאה לענן אינה זמינה כעת. נסה שוב מאוחר יותר."
+        "cloud-upload-unavailable": "העלאה לענן אינה זמינה כעת. נסה שוב מאוחר יותר.",
+        "edit-photopea": "ערוך (Photopea)",
+        "edit-vectorpea": "ערוך (Vectorpea)"
     },
     "about": {
         "mastodon_title": "כתוב על ErikrafT Drop בMastodon",

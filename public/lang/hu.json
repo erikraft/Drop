@@ -129,7 +129,9 @@
         "cloud-upload-copy-error": "A link másolása nem sikerült. Másolja manuálisan.",
         "cloud-upload-error": "Váratlan hiba történt a fájl feltöltése közben.",
         "cloud-upload-capacity": "A felhőtárhely átmenetileg nem érhető el a nagy terhelés miatt. Próbálja meg később.",
-        "cloud-upload-unavailable": "A felhőfeltöltés jelenleg nem érhető el. Próbálja meg később."
+        "cloud-upload-unavailable": "A felhőfeltöltés jelenleg nem érhető el. Próbáld újra később.",
+        "edit-photopea": "Szerkesztés (Photopea)",
+        "edit-vectorpea": "Szerkesztés (Vectorpea)"
     },
     "notifications": {
         "online-requirement-pairing": "Online kell lennie készülékek párosításához",

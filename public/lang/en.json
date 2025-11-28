@@ -78,6 +78,8 @@
         "has-sent": "has sent:",
         "share": "Share",
         "download": "Download",
+        "edit-photopea": "Edit (Photopea)",
+        "edit-vectorpea": "Edit (Vectorpea)",
         "send-message-title": "Send Message",
         "send-message-to": "To:",
         "message_title": "Insert message to send",

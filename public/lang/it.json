@@ -70,6 +70,8 @@
         "base64-paste-to-send": "Incolla qui per inviare {{type}}",
         "receive-text-title": "Messaggio Ricevuto",
         "download": "Scarica",
+        "edit-photopea": "Modifica (Photopea)",
+        "edit-vectorpea": "Modifica (Vectorpea)",
         "title-file": "File",
         "base64-processing": "Elaborazione…",
         "decline": "Rifiuta",
