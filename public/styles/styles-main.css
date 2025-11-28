@@ -249,6 +249,25 @@ html[dir="rtl"] #expand.flipped>.icon {
     display: none !important;
 }
 
+/* Hide BrowserOS button on mobile devices */
+.hidden-mobile {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .hidden-mobile {
+        display: none !important;
+    }
+
+    /* Hide header completely on mobile when it only has hidden elements */
+    header:has(> *:not([hidden]):not(.hidden-mobile)) {
+        display: flex;
+    }
+
+    header:not(:has(> *:not([hidden]):not(.hidden-mobile))) {
+        display: none;
+    }
+}
 
 /* Typography */
 

@@ -136,12 +136,12 @@ class HeaderUI {
         let icon;
         const $headerIconsShown = document.querySelectorAll('body > header:first-of-type > *:not([hidden])');
 
-        for (let i= 1; i < $headerIconsShown.length; i++) {
-            let isFurtherLeftThanLastIcon = $headerIconsShown[i].offsetLeft >= $headerIconsShown[i-1].offsetLeft;
-            let isFurtherRightThanLastIcon = $headerIconsShown[i].offsetLeft <= $headerIconsShown[i-1].offsetLeft;
+        for (let i = 1; i < $headerIconsShown.length; i++) {
+            let isFurtherLeftThanLastIcon = $headerIconsShown[i].offsetLeft >= $headerIconsShown[i - 1].offsetLeft;
+            let isFurtherRightThanLastIcon = $headerIconsShown[i].offsetLeft <= $headerIconsShown[i - 1].offsetLeft;
             if ((!rtlLocale && isFurtherLeftThanLastIcon) || (rtlLocale && isFurtherRightThanLastIcon)) {
                 // we have found the first icon on second row. Use previous icon.
-                icon = $headerIconsShown[i-1];
+                icon = $headerIconsShown[i - 1];
                 break;
             }
         }
@@ -287,7 +287,7 @@ class FooterUI {
         Events.fire('self-display-name-changed', displayNameSaved);
     }
 
-    async _onDisplayName(displayNameServer){
+    async _onDisplayName(displayNameServer) {
         // load saved displayname first to prevent flickering
         await this._loadSavedDisplayName();
 
@@ -347,7 +347,7 @@ class FooterUI {
                 })
                 .finally(() => {
                     Events.fire('self-display-name-changed', newDisplayName);
-                    Events.fire('broadcast-send', {type: 'self-display-name-changed', detail: newDisplayName});
+                    Events.fire('broadcast-send', { type: 'self-display-name-changed', detail: newDisplayName });
                 });
         }
         else {
@@ -359,7 +359,7 @@ class FooterUI {
                 .finally(() => {
                     Events.fire('notify-user', Localization.getTranslation("notifications.display-name-random-again"));
                     Events.fire('self-display-name-changed', '');
-                    Events.fire('broadcast-send', {type: 'self-display-name-changed', detail: ''});
+                    Events.fire('broadcast-send', { type: 'self-display-name-changed', detail: '' });
                 });
         }
     }
@@ -404,7 +404,7 @@ class BackgroundCanvas {
         //      -> put canvas drawing into serviceworker to unblock main thread
         // otherwise
         //      -> use main thread
-        let {init, startAnimation, switchAnimation, onShareModeChange} =
+        let { init, startAnimation, switchAnimation, onShareModeChange } =
             this.$canvas.transferControlToOffscreen
                 ? this.initAnimationOffscreen()
                 : this.initAnimationOnscreen();
@@ -556,7 +556,7 @@ class BackgroundCanvas {
 
         createCanvas();
 
-        return {init, startAnimation, switchAnimation, onShareModeChange};
+        return { init, startAnimation, switchAnimation, onShareModeChange };
     }
 
     initAnimationOffscreen() {
@@ -610,6 +610,6 @@ class BackgroundCanvas {
 
         createCanvas();
 
-        return {init, startAnimation, switchAnimation, onShareModeChange};
+        return { init, startAnimation, switchAnimation, onShareModeChange };
     }
 }
