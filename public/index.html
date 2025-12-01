@@ -533,7 +533,8 @@
 
 </a> -->
 
-        <div id="expand" class="icon-button" data-i18n-key="header.expand" data-i18n-attrs="title" hidden>
+        <div id="expand" class="icon-button" data-i18n-key="header.expand" data-i18n-attrs="title" hidden
+            style="display:none;">
             <svg class="icon">
                 <use xlink:href="#caret"></use>
             </svg>
@@ -1971,6 +1972,66 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Mostrar o botão "expand" somente se houver botões ocultos no header.
+            (function () {
+                var expandBtn = document.getElementById('expand');
+                if (!expandBtn) return;
+
+                function shouldShowExpand() {
+                    var header = expandBtn.closest('header');
+                    if (!header) return false;
+
+                    var buttons = header.querySelectorAll('.icon-button');
+                    for (var i = 0; i < buttons.length; i++) {
+                        var btn = buttons[i];
+                        if (btn === expandBtn) continue;
+
+                        // If element has explicit hidden attribute -> there's something to expand
+                        if (btn.hasAttribute('hidden')) return true;
+
+                        // If computed style hides it (display:none, visibility:hidden)
+                        var cs = window.getComputedStyle(btn);
+                        if (cs.display === 'none' || cs.visibility === 'hidden') return true;
+                    }
+
+                    return false;
+                }
+
+                function updateExpandVisibility() {
+                    try {
+                        if (shouldShowExpand()) {
+                            expandBtn.style.display = '';
+                            expandBtn.removeAttribute('hidden');
+                        } else {
+                            expandBtn.style.display = 'none';
+                            expandBtn.setAttribute('hidden', '');
+                        }
+                    } catch (e) {
+                        // fail silently
+                    }
+                }
+
+                // Initial check
+                updateExpandVisibility();
+
+                // Observe header for changes that could affect visibility (attributes, DOM changes)
+                var headerEl = expandBtn.closest('header');
+                if (headerEl) {
+                    var obs = new MutationObserver(function () { updateExpandVisibility(); });
+                    obs.observe(headerEl, { attributes: true, childList: true, subtree: true, attributeFilter: ['hidden', 'style', 'class'] });
+                }
+
+                // Re-evaluate on resize (layout may hide/show buttons)
+                window.addEventListener('resize', updateExpandVisibility);
+
+                // Also run a few delayed checks (i18n or other scripts may modify later)
+                var tries = 0;
+                var iv = setInterval(function () {
+                    updateExpandVisibility();
+                    tries++;
+                    if (tries > 12) clearInterval(iv);
+                }, 500);
+            })();
             var cometBtn = document.getElementById('comet');
             var cometLink = cometBtn ? cometBtn.querySelector('a') : null;
             var popup = document.getElementById('comet-popup');
@@ -2060,8 +2121,8 @@
 
             // For other devices/browsers: keep popup behavior
             if (cometBtn && popup && closeBtn && downloadBtn) {
-                // Mostrar popup automaticamente ao carregar a página (desktop)
-                showPopup();
+                // Não mostrar popup automaticamente ao carregar a página (desktop)
+                // O popup do Comet abrirá apenas quando o usuário clicar no botão
 
                 // Fechar ao clicar no botão X
                 closeBtn.addEventListener('click', function (e) {
@@ -2139,8 +2200,7 @@
                 } else {
                     // Desktop: ativar popup com o mesmo comportamento do Comet
                     if (bosPopup && bosClose && bosDownload) {
-                        // Não abrir automaticamente: apenas abrir quando o usuário clicar no botão BrowserOS
-
+                        // Mostrar popup BrowserOS automaticamente ao carregar a página (desktop)
                         bosClose.addEventListener('click', function (e) {
                             e.preventDefault();
                             closeBosPopup();
@@ -2159,6 +2219,9 @@
                             // Ao clicar, abrir popup (sem navegar direto)
                             showBosPopup();
                         });
+
+                        // Também abrir automaticamente no carregamento (desktop), fechará após 10s
+                        showBosPopup();
                     }
                 }
             }

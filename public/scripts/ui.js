@@ -1118,28 +1118,29 @@ class ReceiveFileDialog extends ReceiveDialog {
                 this.$editVectorpeaBtn.onclick = null;
             }
 
-            if (mime.startsWith('image/')) {
-                // Photopea can edit raster images; enable Photopea
-                if (this.$editPhotopeaBtn) {
-                    this.$editPhotopeaBtn.removeAttribute('hidden');
-                    this.$editPhotopeaBtn.onclick = _ => {
-                        if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithPhotopea) {
-                            window.PhotopeaIntegration.editWithPhotopea(primary);
-                        }
-                    };
-                }
+            // Photopea: aceita imagens e .psd
+            const photopeaExts = ['.psd', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff'];
+            const fileName = primary.name ? primary.name.toLowerCase() : '';
+            const isPhotopea = mime.startsWith('image/') || photopeaExts.some(ext => fileName.endsWith(ext));
+            if (isPhotopea && this.$editPhotopeaBtn) {
+                this.$editPhotopeaBtn.removeAttribute('hidden');
+                this.$editPhotopeaBtn.onclick = _ => {
+                    if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithPhotopea) {
+                        window.PhotopeaIntegration.editWithPhotopea(primary);
+                    }
+                };
             }
 
-            // SVGs are best edited in Vectorpea
-            if (mime === 'image/svg+xml' || (primary.name && primary.name.toLowerCase().endsWith('.svg'))) {
-                if (this.$editVectorpeaBtn) {
-                    this.$editVectorpeaBtn.removeAttribute('hidden');
-                    this.$editVectorpeaBtn.onclick = _ => {
-                        if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithVectorpea) {
-                            window.PhotopeaIntegration.editWithVectorpea(primary);
-                        }
-                    };
-                }
+            // Vectorpea: aceita imagens, .ai, .sketch, .fig
+            const vectorpeaExts = ['.ai', '.sketch', '.fig', '.svg', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+            const isVectorpea = vectorpeaExts.some(ext => fileName.endsWith(ext)) || mime === 'image/svg+xml';
+            if (isVectorpea && this.$editVectorpeaBtn) {
+                this.$editVectorpeaBtn.removeAttribute('hidden');
+                this.$editVectorpeaBtn.onclick = _ => {
+                    if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithVectorpea) {
+                        window.PhotopeaIntegration.editWithVectorpea(primary);
+                    }
+                };
             }
         }
         catch (e) {
