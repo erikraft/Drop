@@ -89,8 +89,8 @@
 
                 const onMessage = async (e) => {
                     if (e.source !== iframe.contentWindow) return;
-                    const msg = e.data || {};
-                    console.log('PhotopeaIntegration: received message from iframe', msg && msg.type);
+                    const msg = e.data;
+                    console.log('PhotopeaIntegration: received message from iframe (full):', msg);
                     // Photopea/Vectorpea may send readiness or export messages; handle export
                     if (msg.type === 'export' && msg.data) {
                         // msg.data expected to be dataURL
@@ -120,7 +120,41 @@
                         console.log('PhotopeaIntegration: file converted to DataURL, size approx', (dataUrl && dataUrl.length) || 0);
                         // Send an 'open' message. Photopea/Vectorpea accept different message formats,
                         // but they both understand a general {type: 'open', name, data} message when using postMessage.
-                        iframe.contentWindow.postMessage({ type: 'open', name: file.name, data: dataUrl }, '*');
+                        let acknowledged = false;
+                        let attempts = 0;
+                        const maxAttempts = 5;
+
+                        const sendOpen = () => {
+                            try {
+                                iframe.contentWindow.postMessage({ type: 'open', name: file.name, data: dataUrl }, '*');
+                                attempts++;
+                                console.log('PhotopeaIntegration: postMessage open sent, attempt', attempts);
+                            }
+                            catch (err) {
+                                console.error('PhotopeaIntegration: postMessage failed', err);
+                            }
+                        };
+
+                        // mark acknowledged when any message arrives from iframe
+                        const ackListener = (e) => {
+                            if (e.source !== iframe.contentWindow) return;
+                            if (e.data) {
+                                acknowledged = true;
+                            }
+                        };
+                        window.addEventListener('message', ackListener);
+
+                        // send immediately and then retry a few times if no ack
+                        sendOpen();
+                        const resendInterval = setInterval(() => {
+                            if (acknowledged || attempts >= maxAttempts) {
+                                clearInterval(resendInterval);
+                                window.removeEventListener('message', ackListener);
+                                if (!acknowledged) console.warn('PhotopeaIntegration: no acknowledgement from iframe after attempts');
+                                return;
+                            }
+                            sendOpen();
+                        }, 1200);
 
                         // Provide a helper message that parent can ask the editor to export later.
                         resolve({
