@@ -113,6 +113,7 @@
                 window.addEventListener('message', onMessage);
 
                 // After iframe loads, send the file as DataURL
+                let resendInterval = null;
                 iframe.addEventListener('load', async () => {
                     console.log('PhotopeaIntegration: iframe loaded, preparing to send file', file && file.name);
                     try {
@@ -126,12 +127,18 @@
 
                         const sendOpen = () => {
                             try {
+                                if (!iframe || !iframe.contentWindow) {
+                                    console.warn('PhotopeaIntegration: iframe or contentWindow not available; aborting sendOpen');
+                                    return false;
+                                }
                                 iframe.contentWindow.postMessage({ type: 'open', name: file.name, data: dataUrl }, '*');
                                 attempts++;
                                 console.log('PhotopeaIntegration: postMessage open sent, attempt', attempts);
+                                return true;
                             }
                             catch (err) {
                                 console.error('PhotopeaIntegration: postMessage failed', err);
+                                return false;
                             }
                         };
 
@@ -146,11 +153,25 @@
 
                         // send immediately and then retry a few times if no ack
                         sendOpen();
-                        const resendInterval = setInterval(() => {
+                        resendInterval = setInterval(() => {
+                            // If iframe has been removed from DOM, stop retrying
+                            if (!overlay.parentNode) {
+                                clearInterval(resendInterval);
+                                window.removeEventListener('message', ackListener);
+                                console.warn('PhotopeaIntegration: overlay removed, stopping retries');
+                                return;
+                            }
                             if (acknowledged || attempts >= maxAttempts) {
                                 clearInterval(resendInterval);
                                 window.removeEventListener('message', ackListener);
                                 if (!acknowledged) console.warn('PhotopeaIntegration: no acknowledgement from iframe after attempts');
+                                return;
+                            }
+                            // if contentWindow is missing, stop as well
+                            if (!iframe || !iframe.contentWindow) {
+                                clearInterval(resendInterval);
+                                window.removeEventListener('message', ackListener);
+                                console.warn('PhotopeaIntegration: iframe.contentWindow became null, stopping retries');
                                 return;
                             }
                             sendOpen();
@@ -176,6 +197,9 @@
                 // If user closes overlay via button
                 closeBtn.addEventListener('click', () => {
                     window.removeEventListener('message', onMessage);
+                    if (resendInterval) {
+                        clearInterval(resendInterval);
+                    }
                     if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
                 });
 
