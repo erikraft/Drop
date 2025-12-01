@@ -1650,63 +1650,82 @@ class EditPairedDevicesDialog extends Dialog {
         const autoAcceptString = Localization.getTranslation("dialogs.auto-accept").toLowerCase();
         const roomSecretsEntries = await PersistentStorage.getAllRoomSecretEntries();
 
-        roomSecretsEntries
-            .forEach(roomSecretsEntry => {
-                let $pairedDevice = document.createElement('div');
-                $pairedDevice.classList.add("paired-device");
-                $pairedDevice.setAttribute('placeholder', pairedDeviceRemovedString);
+        roomSecretsEntries.forEach(roomSecretsEntry => {
+            let $pairedDevice = document.createElement('div');
+            $pairedDevice.classList.add('paired-device');
+            $pairedDevice.setAttribute('placeholder', pairedDeviceRemovedString);
 
-                $pairedDevice.innerHTML = `
-                    <div class="display-name">
-                        <span class="fw">
-                            ${roomSecretsEntry.display_name}
-                        </span>
-                    </div>
-                    <div class="device-name">
-                        <span class="fw">
-                            ${roomSecretsEntry.device_name}
-                        </span>
-                    </div>
-                    <div class="button-wrapper row fw center wrap">
-                        <div class="center grow">
-                            <span class="center wrap">
-                                ${autoAcceptString}
-                            </span>
-                            <label class="auto-accept switch pointer m-1">
-                                <input type="checkbox" ${roomSecretsEntry.auto_accept ? "checked" : ""}>
-                                <div class="slider round"></div>
-                            </label>
-                        </div>
-                        <button class="btn grow" type="button">${unpairString}</button>
-                    </div>`
+            const displayDiv = document.createElement('div');
+            displayDiv.className = 'display-name';
+            const spanDisplay = document.createElement('span');
+            spanDisplay.className = 'fw';
+            spanDisplay.textContent = roomSecretsEntry.display_name || '';
+            displayDiv.appendChild(spanDisplay);
 
-                $pairedDevice
-                    .querySelector('input[type="checkbox"]')
-                    .addEventListener('click', e => {
-                        PersistentStorage
-                            .updateRoomSecretAutoAccept(roomSecretsEntry.secret, e.target.checked)
-                            .then(roomSecretsEntry => {
-                                Events.fire('auto-accept-updated', {
-                                    'roomSecret': roomSecretsEntry.entry.secret,
-                                    'autoAccept': e.target.checked
-                                });
-                            });
+            const deviceDiv = document.createElement('div');
+            deviceDiv.className = 'device-name';
+            const spanDevice = document.createElement('span');
+            spanDevice.className = 'fw';
+            spanDevice.textContent = roomSecretsEntry.device_name || '';
+            deviceDiv.appendChild(spanDevice);
+
+            const buttonWrapper = document.createElement('div');
+            buttonWrapper.className = 'button-wrapper row fw center wrap';
+
+            const centerDiv = document.createElement('div');
+            centerDiv.className = 'center grow';
+            const spanAuto = document.createElement('span');
+            spanAuto.className = 'center wrap';
+            spanAuto.textContent = autoAcceptString;
+
+            const label = document.createElement('label');
+            label.className = 'auto-accept switch pointer m-1';
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            if (roomSecretsEntry.auto_accept) input.checked = true;
+            const slider = document.createElement('div');
+            slider.className = 'slider round';
+
+            label.appendChild(input);
+            label.appendChild(slider);
+            centerDiv.appendChild(spanAuto);
+            centerDiv.appendChild(label);
+
+            const btn = document.createElement('button');
+            btn.className = 'btn grow';
+            btn.type = 'button';
+            btn.textContent = unpairString;
+
+            buttonWrapper.appendChild(centerDiv);
+            buttonWrapper.appendChild(btn);
+
+            $pairedDevice.appendChild(displayDiv);
+            $pairedDevice.appendChild(deviceDiv);
+            $pairedDevice.appendChild(buttonWrapper);
+
+            input.addEventListener('click', e => {
+                PersistentStorage
+                    .updateRoomSecretAutoAccept(roomSecretsEntry.secret, e.target.checked)
+                    .then(roomSecretsEntry => {
+                        Events.fire('auto-accept-updated', {
+                            'roomSecret': roomSecretsEntry.entry.secret,
+                            'autoAccept': e.target.checked
+                        });
                     });
+            });
 
-                $pairedDevice
-                    .querySelector('button')
-                    .addEventListener('click', e => {
-                        PersistentStorage
-                            .deleteRoomSecret(roomSecretsEntry.secret)
-                            .then(roomSecret => {
-                                Events.fire('room-secrets-deleted', [roomSecret]);
-                                Events.fire('evaluate-number-room-secrets');
-                                $pairedDevice.innerText = "";
-                            });
-                    })
+            btn.addEventListener('click', e => {
+                PersistentStorage
+                    .deleteRoomSecret(roomSecretsEntry.secret)
+                    .then(roomSecret => {
+                        Events.fire('room-secrets-deleted', [roomSecret]);
+                        Events.fire('evaluate-number-room-secrets');
+                        $pairedDevice.innerText = '';
+                    });
+            });
 
-                this.$pairedDevicesWrapper.appendChild($pairedDevice)
-            })
+            this.$pairedDevicesWrapper.appendChild($pairedDevice);
+        });
     }
 
     hide() {

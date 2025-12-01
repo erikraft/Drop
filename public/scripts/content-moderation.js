@@ -495,7 +495,7 @@ class ContentModeration {
 
             let title, message, icon;
 
-            switch(contentType) {
+            switch (contentType) {
                 case 'explicit':
                     title = '🚫 Conteúdo Explícito Detectado';
                     message = 'Este conteúdo pode conter material explícito ou inadequado.';
@@ -519,19 +519,13 @@ class ContentModeration {
                     break;
             }
 
+            // Constrói o HTML estático do diálogo sem inserir valores controlados pelo usuário diretamente
             dialog.innerHTML = `
                 <div class="warning-content">
                     <div class="warning-icon" data-type="${contentType}">${icon}</div>
                     <div class="warning-title" data-type="${contentType}">${title}</div>
                     <div class="warning-message">${message}</div>
-                    <div class="warning-preview blurred">
-                        ${file.type.startsWith('image/') ?
-                            `<img src="${URL.createObjectURL(file)}" alt="Preview">` :
-                            file.type.startsWith('video/') ?
-                            `<video src="${URL.createObjectURL(file)}" controls></video>` :
-                            `<div class="file-info">${file.name}</div>`
-                        }
-                    </div>
+                    <div class="warning-preview blurred"></div>
                     <div class="warning-notice" data-type="${contentType}">
                         <p>⚠️ Este conteúdo foi identificado como potencialmente perigoso.</p>
                     </div>
@@ -549,6 +543,31 @@ class ContentModeration {
             const closeButton = dialog.querySelector('.warning-button.close');
             const blockButton = dialog.querySelector('.warning-button.block');
             const preview = dialog.querySelector('.warning-preview');
+
+            // Insere preview de forma segura sem usar innerHTML para valores controlados
+            try {
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.alt = 'Preview';
+                    img.src = URL.createObjectURL(file);
+                    preview.appendChild(img);
+                }
+                else if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.setAttribute('controls', '');
+                    video.src = URL.createObjectURL(file);
+                    preview.appendChild(video);
+                }
+                else {
+                    const info = document.createElement('div');
+                    info.className = 'file-info';
+                    info.textContent = file.name || '';
+                    preview.appendChild(info);
+                }
+            }
+            catch (err) {
+                console.error('Erro ao inserir preview seguro:', err);
+            }
 
             showButton.onclick = () => {
                 preview.classList.remove('blurred');
@@ -585,7 +604,7 @@ class ContentModeration {
         overlay.className = 'warning-overlay';
 
         let icon, text;
-        switch(contentType) {
+        switch (contentType) {
             case 'explicit':
                 icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ffdd00">
                     <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
@@ -687,7 +706,7 @@ class ContentModeration {
 
     // Obtém título seguro para notificação
     getSafeNotificationTitle(contentType) {
-        switch(contentType) {
+        switch (contentType) {
             case 'explicit':
                 return '🚫 Conteúdo Explícito Bloqueado';
             case 'spam':
@@ -703,7 +722,7 @@ class ContentModeration {
 
     // Obtém corpo seguro para notificação
     getSafeNotificationBody(contentType) {
-        switch(contentType) {
+        switch (contentType) {
             case 'explicit':
                 return 'Uma notificação com conteúdo explícito foi bloqueada para sua segurança.';
             case 'spam':
@@ -719,7 +738,7 @@ class ContentModeration {
 
     // Obtém ícone de aviso apropriado
     getWarningIcon(contentType) {
-        switch(contentType) {
+        switch (contentType) {
             case 'explicit':
                 return '/images/warning-explicit.png';
             case 'spam':
