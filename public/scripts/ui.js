@@ -1125,6 +1125,7 @@ class ReceiveFileDialog extends ReceiveDialog {
             if (isPhotopea && this.$editPhotopeaBtn) {
                 this.$editPhotopeaBtn.removeAttribute('hidden');
                 this.$editPhotopeaBtn.onclick = _ => {
+                    console.log('UI: editPhotopea clicked', primary && primary.name, primary && primary.type);
                     if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithPhotopea) {
                         window.PhotopeaIntegration.editWithPhotopea(primary);
                     }
@@ -1137,6 +1138,7 @@ class ReceiveFileDialog extends ReceiveDialog {
             if (isVectorpea && this.$editVectorpeaBtn) {
                 this.$editVectorpeaBtn.removeAttribute('hidden');
                 this.$editVectorpeaBtn.onclick = _ => {
+                    console.log('UI: editVectorpea clicked', primary && primary.name, primary && primary.type);
                     if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithVectorpea) {
                         window.PhotopeaIntegration.editWithVectorpea(primary);
                     }

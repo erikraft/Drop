@@ -84,11 +84,13 @@
     function setupIntegration(urlBase, file) {
         return new Promise(async (resolve, reject) => {
             try {
+                console.log('PhotopeaIntegration: setupIntegration start', urlBase, file && file.name);
                 const { overlay, iframe, closeBtn } = createEditorOverlay(urlBase);
 
                 const onMessage = async (e) => {
                     if (e.source !== iframe.contentWindow) return;
                     const msg = e.data || {};
+                    console.log('PhotopeaIntegration: received message from iframe', msg && msg.type);
                     // Photopea/Vectorpea may send readiness or export messages; handle export
                     if (msg.type === 'export' && msg.data) {
                         // msg.data expected to be dataURL
@@ -112,8 +114,10 @@
 
                 // After iframe loads, send the file as DataURL
                 iframe.addEventListener('load', async () => {
+                    console.log('PhotopeaIntegration: iframe loaded, preparing to send file', file && file.name);
                     try {
                         const dataUrl = await readFileAsDataURL(file);
+                        console.log('PhotopeaIntegration: file converted to DataURL, size approx', (dataUrl && dataUrl.length) || 0);
                         // Send an 'open' message. Photopea/Vectorpea accept different message formats,
                         // but they both understand a general {type: 'open', name, data} message when using postMessage.
                         iframe.contentWindow.postMessage({ type: 'open', name: file.name, data: dataUrl }, '*');
@@ -128,6 +132,7 @@
                         });
                     }
                     catch (err) {
+                        console.error('PhotopeaIntegration: error preparing file for editor', err);
                         window.removeEventListener('message', onMessage);
                         if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
                         reject(err);
@@ -142,6 +147,7 @@
 
             }
             catch (err) {
+                console.error('PhotopeaIntegration: setupIntegration top-level error', err);
                 reject(err);
             }
         });
@@ -149,6 +155,7 @@
 
     window.PhotopeaIntegration = {
         editWithPhotopea: async function (file) {
+            console.log('PhotopeaIntegration.editWithPhotopea called', file && file.name);
             if (!file) return;
             const url = 'https://www.photopea.com';
             try {
@@ -160,6 +167,7 @@
             }
         },
         editWithVectorpea: async function (file) {
+            console.log('PhotopeaIntegration.editWithVectorpea called', file && file.name);
             if (!file) return;
             const url = 'https://www.vectorpea.com';
             try {
