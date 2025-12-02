@@ -133,7 +133,9 @@
         "cloud-upload-copy-error": "Não foi possível copiar o link. Copie manualmente.",
         "cloud-upload-error": "Erro inesperado ao enviar arquivo.",
         "cloud-upload-capacity": "Armazenamento em nuvem temporariamente indisponível devido ao uso elevado. Tente novamente mais tarde.",
-        "cloud-upload-unavailable": "Upload na nuvem indisponível no momento. Tente novamente mais tarde."
+        "cloud-upload-unavailable": "Upload na nuvem indisponível no momento. Tente novamente mais tarde.",
+        "metadata-exif": "Metadados (EXIF)",
+        "compress": "Comprimir"
     },
     "about": {
         "close-about_aria-label": "Fechar Sobre o ErikrafT Drop",
@@ -195,7 +197,10 @@
         "bluetooth-connecting": "Conectando ao dispositivo...",
         "bluetooth-preparing": "Preparando arquivo para transferência...",
         "bluetooth-sending": "Enviando arquivo: {progress}%",
-        "bluetooth-device-error": "Erro ao transferir arquivo. Verifique se o dispositivo suporta transferência de arquivos."
+        "bluetooth-device-error": "Erro ao transferir arquivo. Verifique se o dispositivo suporta transferência de arquivos.",
+        "metadata-removed": "Metadados removidos",
+        "compress-success": "Imagem comprimida",
+        "compress-error": "Erro ao comprimir imagem"
     },
     "document-titles": {
         "file-received": "Arquivo recebido",

@@ -131,7 +131,8 @@
         "cloud-upload-copy-error": "Не ўдалося скапіраваць спасылку. Скапіруйце ўручную.",
         "cloud-upload-error": "Нечаканая памылка падчас загрузкі файла.",
         "cloud-upload-capacity": "Воблачнае сховішча часова недаступнае з-за высокай нагрузкі. Паспрабуйце пазней.",
-        "cloud-upload-unavailable": "Воблачная загрузка цяпер недаступная. Паспрабуйце пазней."
+        "cloud-upload-unavailable": "Воблачная загрузка цяпер недаступная. Паспрабуйце пазней.""metadata-exif": "Metadata (EXIF)",
+        "compress": "Compress",
     },
     "about": {
         "buy-me-a-coffee_title": "Купіць мне кавы!",

@@ -921,6 +921,9 @@ class ReceiveFileDialog extends ReceiveDialog {
         this.$shareBtn = this.$el.querySelector('#share-btn');
         this.$editPhotopeaBtn = this.$el.querySelector('#edit-photopea-btn');
         this.$editVectorpeaBtn = this.$el.querySelector('#edit-vectorpea-btn');
+        this.$copyImageBtn = this.$el.querySelector('#copy-image-btn');
+        this.$metadataBtn = this.$el.querySelector('#metadata-btn');
+        this.$compressBtn = this.$el.querySelector('#compress-btn');
 
         Events.on('files-received', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
         this._filesQueue = [];
@@ -1117,6 +1120,30 @@ class ReceiveFileDialog extends ReceiveDialog {
                 this.$editVectorpeaBtn.setAttribute('hidden', true);
                 this.$editVectorpeaBtn.onclick = null;
             }
+            if (this.$copyImageBtn) {
+                this.$copyImageBtn.setAttribute('hidden', true);
+                this.$copyImageBtn.onclick = null;
+            }
+            if (this.$metadataBtn) {
+                this.$metadataBtn.setAttribute('hidden', true);
+                this.$metadataBtn.onclick = null;
+            }
+            if (this.$compressBtn) {
+                this.$compressBtn.setAttribute('hidden', true);
+                this.$compressBtn.onclick = null;
+            }
+            if (this.$copyImageBtn) {
+                this.$copyImageBtn.setAttribute('hidden', true);
+                this.$copyImageBtn.onclick = null;
+            }
+            if (this.$metadataBtn) {
+                this.$metadataBtn.setAttribute('hidden', true);
+                this.$metadataBtn.onclick = null;
+            }
+            if (this.$compressBtn) {
+                this.$compressBtn.setAttribute('hidden', true);
+                this.$compressBtn.onclick = null;
+            }
 
             // Photopea: aceita imagens e .psd
             const photopeaExts = ['.psd', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff'];
@@ -1143,6 +1170,161 @@ class ReceiveFileDialog extends ReceiveDialog {
                         window.PhotopeaIntegration.editWithVectorpea(primary);
                     }
                 };
+            }
+
+            // Copy image to clipboard (if supported)
+            if (this.$copyImageBtn) {
+                if ((mime || '').startsWith('image/')) {
+                    this.$copyImageBtn.removeAttribute('hidden');
+                    this.$copyImageBtn.onclick = async _ => {
+                        try {
+                            const blob = primary;
+                            if (navigator.clipboard && navigator.clipboard.write && window.ClipboardItem) {
+                                const item = new ClipboardItem({ [blob.type]: blob });
+                                await navigator.clipboard.write([item]);
+                                Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard"));
+                            }
+                            else {
+                                // Fallback: abrir em nova aba para permitir cópia manual
+                                const tmp = document.createElement('a');
+                                tmp.href = URL.createObjectURL(blob);
+                                tmp.target = '_blank';
+                                tmp.click();
+                                Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard-error"));
+                            }
+                        }
+                        catch (err) {
+                            console.error('Copy image failed', err);
+                            Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard-error"));
+                        }
+                    };
+                }
+                else {
+                    this.$copyImageBtn.setAttribute('hidden', true);
+                    this.$copyImageBtn.onclick = null;
+                }
+            }
+
+            // Metadata EXIF: view raw APP1 EXIF segment and offer remove (re-encode)
+            if (this.$metadataBtn) {
+                if ((mime || '').startsWith('image/')) {
+                    this.$metadataBtn.removeAttribute('hidden');
+                    this.$metadataBtn.onclick = async _ => {
+                        try {
+                            const ab = await primary.arrayBuffer();
+                            const view = new Uint8Array(ab);
+                            // search for APP1 marker 0xFF 0xE1
+                            let found = -1;
+                            for (let i = 0; i < view.length - 1; i++) {
+                                if (view[i] === 0xFF && view[i + 1] === 0xE1) { found = i; break; }
+                            }
+                            let info = '';
+                            if (found === -1) {
+                                info = 'No EXIF APP1 segment found.';
+                            }
+                            else {
+                                const len = (view[found + 2] << 8) + view[found + 3];
+                                const start = found + 4;
+                                const end = Math.min(start + len - 2, view.length);
+                                const segment = view.slice(start, end);
+                                // show a small hexdump
+                                const hex = Array.prototype.map.call(segment.slice(0, 512), b => ('0' + b.toString(16)).slice(-2)).join(' ');
+                                info = 'EXIF APP1 segment (first 512 bytes in hex):\n\n' + hex;
+                                if (end < view.length) info += '\n\n(Truncated)';
+                            }
+                            const w = window.open('', '_blank');
+                            w.document.title = 'EXIF Metadata';
+                            w.document.body.style.whiteSpace = 'pre-wrap';
+                            w.document.body.style.fontFamily = 'monospace';
+                            w.document.body.innerText = info;
+                            // Offer removal
+                            if (found !== -1) {
+                                if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remover metadados desta imagem?')) {
+                                    try {
+                                        const img = document.createElement('img');
+                                        img.src = URL.createObjectURL(primary);
+                                        img.onload = async () => {
+                                            const canvas = document.createElement('canvas');
+                                            canvas.width = img.naturalWidth;
+                                            canvas.height = img.naturalHeight;
+                                            const ctx = canvas.getContext('2d');
+                                            ctx.drawImage(img, 0, 0);
+                                            canvas.toBlob(blob => {
+                                                const a = document.createElement('a');
+                                                a.href = URL.createObjectURL(blob);
+                                                const name = primary.name || 'image';
+                                                a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-noexif.jpg';
+                                                a.click();
+                                                Events.fire('notify-user', Localization.getTranslation('notifications.metadata-removed'));
+                                            }, 'image/jpeg', 0.92);
+                                        };
+                                    } catch (err) {
+                                        console.error('Remove EXIF failed', err);
+                                        Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
+                                    }
+                                }
+                            }
+                        }
+                        catch (err) {
+                            console.error('Read EXIF failed', err);
+                            Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
+                        }
+                    };
+                }
+                else {
+                    this.$metadataBtn.setAttribute('hidden', true);
+                    this.$metadataBtn.onclick = null;
+                }
+            }
+
+            // Compress: re-encode image with lower quality / scaled down and offer download
+            if (this.$compressBtn) {
+                if ((mime || '').startsWith('image/')) {
+                    this.$compressBtn.removeAttribute('hidden');
+                    this.$compressBtn.onclick = async _ => {
+                        try {
+                            const img = document.createElement('img');
+                            img.src = URL.createObjectURL(primary);
+                            img.onload = () => {
+                                const maxDim = 1600;
+                                let w = img.naturalWidth;
+                                let h = img.naturalHeight;
+                                if (w > h && w > maxDim) {
+                                    h = Math.round(h * (maxDim / w));
+                                    w = maxDim;
+                                } else if (h > w && h > maxDim) {
+                                    w = Math.round(w * (maxDim / h));
+                                    h = maxDim;
+                                }
+                                const canvas = document.createElement('canvas');
+                                canvas.width = w;
+                                canvas.height = h;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0, w, h);
+                                canvas.toBlob(blob => {
+                                    if (!blob) {
+                                        Events.fire('notify-user', Localization.getTranslation('notifications.compress-error'));
+                                        return;
+                                    }
+                                    const a = document.createElement('a');
+                                    a.href = URL.createObjectURL(blob);
+                                    const name = primary.name || 'image';
+                                    a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-compressed.jpg';
+                                    a.click();
+                                    Events.fire('notify-user', Localization.getTranslation('notifications.compress-success'));
+                                }, 'image/jpeg', 0.7);
+                            };
+                        }
+                        catch (err) {
+                            console.error('Compress image failed', err);
+                            Events.fire('notify-user', Localization.getTranslation('notifications.compress-error'));
+                        }
+                    };
+                }
+                else {
+                    this.$compressBtn.setAttribute('hidden', true);
+                    this.$compressBtn.onclick = null;
+                }
             }
         }
         catch (e) {
