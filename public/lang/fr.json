@@ -133,7 +133,9 @@
         "cloud-upload-copy-error": "Impossible de copier le lien. Copiez-le manuellement.",
         "cloud-upload-error": "Erreur inattendue lors du téléversement du fichier.",
         "cloud-upload-capacity": "Le stockage cloud est temporairement indisponible en raison d'une forte utilisation. Réessayez plus tard.",
-        "cloud-upload-unavailable": "Le téléversement vers le cloud n'est pas disponible pour le moment. Réessayez plus tard."
+        "cloud-upload-unavailable": "Le téléversement vers le cloud n'est pas disponible pour le moment. Réessayez plus tard.",
+        "metadata-exif": "Métadonnées (EXIF)",
+        "compress": "Compresser"
     },
     "about": {
         "close-about_aria-label": "Fermer à propos de ErikrafT Drop",

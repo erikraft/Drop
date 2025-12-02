@@ -130,6 +130,8 @@
         "cloud-upload-error": "Uventet feil under opplasting av filen.",
         "cloud-upload-capacity": "Skylagringen er midlertidig utilgjengelig på grunn av høy belastning. Prøv igjen senere.",
         "cloud-upload-unavailable": "Skylasting er ikke tilgjengelig akkurat nå. Prøv igjen senere.",
+        "metadata-exif": "Metadata (EXIF)",
+        "compress": "Compress",
         "edit-photopea": "Rediger (Photopea)",
         "edit-vectorpea": "Rediger (Vectorpea)"
     },

@@ -116,7 +116,9 @@
         "cloud-upload-copy-error": "No s'ha pogut copiar l'enllaç. Copieu-lo manualment.",
         "cloud-upload-error": "Error imprevist en pujar el fitxer.",
         "cloud-upload-capacity": "L'emmagatzematge al núvol no està disponible temporalment per ús elevat. Torneu-ho a intentar més tard.",
-        "cloud-upload-unavailable": "La pujada al núvol no està disponible ara mateix. Torneu-ho a intentar més tard."
+        "cloud-upload-unavailable": "La pujada al núvol no està disponible ara mateix. Torneu-ho a intentar més tard.",
+        "metadata-exif": "Metadades (EXIF)",
+        "compress": "Comprimir"
     },
     "footer": {
         "webrtc": "si WebRTC no està disponible.",

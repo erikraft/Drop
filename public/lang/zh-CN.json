@@ -131,7 +131,9 @@
         "cloud-upload-copy-error": "无法复制链接，请手动复制。",
         "cloud-upload-error": "上传文件时发生意外错误。",
         "cloud-upload-capacity": "由于使用量过大，云存储暂时不可用。请稍后再试。",
-        "cloud-upload-unavailable": "云上传暂时不可用，请稍后再试。"
+        "cloud-upload-unavailable": "云端上传暂不可用。请稍后重试。",
+        "metadata-exif": "Metadata (EXIF)",
+        "compress": "Compress"
     },
     "about": {
         "faq_title": "常见问题",

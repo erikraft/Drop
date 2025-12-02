@@ -131,7 +131,9 @@
         "cloud-upload-copy-error": "Klarte ikkje å kopiere lenkja. Kopier manuelt.",
         "cloud-upload-error": "Uventa feil under opplasting av fila.",
         "cloud-upload-capacity": "Skylagringa er mellombels utilgjengeleg på grunn av høg belastning. Prøv igjen seinare.",
-        "cloud-upload-unavailable": "Cloud-opplasting er ikkje tilgjengeleg akkurat no. Prøv igjen seinare."
+        "cloud-upload-unavailable": "Cloud-opplasting er ikkje tilgjengeleg akkurat no. Prøv igjen seinare.",
+        "metadata-exif": "Metadata (EXIF)",
+        "compress": "Komprimera"
     },
     "about": {
         "claim": "Den enklaste måten å sende filer mellom einingar",

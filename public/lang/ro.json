@@ -183,7 +183,9 @@
         "cloud-upload-copy-error": "Nu s-a putut copia linkul. Copiază-l manual.",
         "cloud-upload-error": "A apărut o eroare neașteptată la încărcarea fișierului.",
         "cloud-upload-capacity": "Spațiul cloud este indisponibil temporar din cauza utilizării mari. Încearcă mai târziu.",
-        "cloud-upload-unavailable": "Încărcarea în cloud nu este disponibilă acum. Încearcă din nou mai târziu."
+        "cloud-upload-unavailable": "Încărcarea în cloud nu este disponibilă acum. Încercați din nou mai târziu.",
+        "metadata-exif": "Metadata (EXIF)",
+        "compress": "Comprima"
     },
     "about": {
         "claim": "Cel mai simplu mod de a transfera fișiere între dispozitive",

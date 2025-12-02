@@ -97,6 +97,8 @@
         "cloud-upload-error": "Unerwarteter Fehler beim Hochladen der Datei.",
         "cloud-upload-capacity": "Der Cloudspeicher ist aufgrund hoher Auslastung vorübergehend nicht verfügbar. Versuche es später erneut.",
         "cloud-upload-unavailable": "Cloud-Upload ist derzeit nicht verfügbar. Bitte versuche es später erneut.",
+        "metadata-exif": "Metadaten (EXIF)",
+        "compress": "Komprimieren",
         "download": "Herunterladen",
         "edit-photopea": "Mit Photopea bearbeiten",
         "edit-vectorpea": "Mit Vectorpea bearbeiten"

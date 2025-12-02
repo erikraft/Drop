@@ -159,7 +159,9 @@
         "cloud-upload-copy-error": "Ezin izan da esteka kopiatu. Kopiatu eskuz.",
         "cloud-upload-error": "Fitxategia igotzean ustekabeko errorea gertatu da.",
         "cloud-upload-capacity": "Hodeiko biltegia aldi baterako ez dago erabilgarri erabilera handia dela eta. Saiatu geroago berriro.",
-        "cloud-upload-unavailable": "Hodeiko igoera une honetan ez dago erabilgarri. Saiatu geroago berriro."
+        "cloud-upload-unavailable": "Hodeiko igoera une honetan ez dago erabilgarri. Saiatu geroago berriro.",
+        "metadata-exif": "Metadata (EXIF)",
+        "compress": "Komprimitu"
     },
     "about": {
         "custom_title": "Jarraitu iezaguzu",

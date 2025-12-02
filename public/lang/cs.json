@@ -125,7 +125,9 @@
         "cloud-upload-copy-error": "Odkaz se nepodařilo zkopírovat. Zkopírujte jej ručně.",
         "cloud-upload-error": "Při nahrávání souboru došlo k neočekávané chybě.",
         "cloud-upload-capacity": "Cloudové úložiště je dočasně nedostupné kvůli vysokému vytížení. Zkuste to později.",
-        "cloud-upload-unavailable": "Nahrávání do cloudu nyní není dostupné. Zkuste to znovu později."
+        "cloud-upload-unavailable": "Nahrávání do cloudu nyní není dostupné. Zkuste to znovu později.",
+        "metadata-exif": "Metadata (EXIF)",
+        "compress": "Komprimovat"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Uvolněním vyberte příjemce",

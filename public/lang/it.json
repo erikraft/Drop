@@ -131,7 +131,9 @@
         "cloud-upload-copy-error": "Impossibile copiare il link. Copialo manualmente.",
         "cloud-upload-error": "Errore imprevisto durante il caricamento del file.",
         "cloud-upload-capacity": "Lo spazio cloud è temporaneamente indisponibile a causa dell'elevato traffico. Riprova più tardi.",
-        "cloud-upload-unavailable": "Il caricamento sul cloud non è disponibile in questo momento. Riprova più tardi."
+        "cloud-upload-unavailable": "Il caricamento sul cloud non è disponibile in questo momento. Riprova più tardi.",
+        "metadata-exif": "Metadati (EXIF)",
+        "compress": "Comprimi"
     },
     "notifications": {
         "request-title": "{{name}} vorrebbe inviare {{count}} {{descriptor}}",

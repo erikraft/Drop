@@ -115,6 +115,8 @@
         "cloud-upload-error": "파일을 업로드하는 동안 예기치 않은 오류가 발생했습니다.",
         "cloud-upload-capacity": "높은 사용량으로 인해 클라우드 저장 공간을 일시적으로 사용할 수 없습니다. 나중에 다시 시도하세요.",
         "cloud-upload-unavailable": "현재 클라우드 업로드를 사용할 수 없습니다. 나중에 다시 시도하세요.",
+        "metadata-exif": "메타데이터 (EXIF)",
+        "compress": "Compress",
         "edit-photopea": "편집 (Photopea)",
         "edit-vectorpea": "편집 (Vectorpea)"
     },

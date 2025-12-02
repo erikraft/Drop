@@ -131,7 +131,9 @@
         "cloud-upload-copy-error": "Nie można skopiować linku. Skopiuj ręcznie.",
         "cloud-upload-error": "Wystąpił nieoczekiwany błąd podczas przesyłania pliku.",
         "cloud-upload-capacity": "Przestrzeń w chmurze jest tymczasowo niedostępna z powodu dużego obciążenia. Spróbuj ponownie później.",
-        "cloud-upload-unavailable": "Przesyłanie do chmury jest teraz niedostępne. Spróbuj ponownie później."
+        "cloud-upload-unavailable": "Przesyłanie do chmury jest teraz niedostępne. Spróbuj ponownie później.",
+        "metadata-exif": "Metadata (EXIF)",
+        "compress": "Kompresuj"
     },
     "about": {
         "close-about_aria-label": "Zamknij \"O ErikrafT Drop\"",

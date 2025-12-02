@@ -131,8 +131,9 @@
         "cloud-upload-copy-error": "Не ўдалося скапіраваць спасылку. Скапіруйце ўручную.",
         "cloud-upload-error": "Нечаканая памылка падчас загрузкі файла.",
         "cloud-upload-capacity": "Воблачнае сховішча часова недаступнае з-за высокай нагрузкі. Паспрабуйце пазней.",
-        "cloud-upload-unavailable": "Воблачная загрузка цяпер недаступная. Паспрабуйце пазней.""metadata-exif": "Metadata (EXIF)",
-        "compress": "Compress",
+        "cloud-upload-unavailable": "Воблачная загрузка цяпер недаступная. Паспрабуйце пазней.",
+        "metadata-exif": "Метаданыя (EXIF)",
+        "compress": "Сціснуць"
     },
     "about": {
         "buy-me-a-coffee_title": "Купіць мне кавы!",
@@ -187,7 +188,10 @@
         "ios-memory-limit": "Адначасовая адпраўка файлаў на iOS магчымая толькі да 200 МБ",
         "message-transfer-completed": "Перадача паведамлення завершана",
         "unfinished-transfers-warning": "Ёсць незавершаныя перадачы. Вы ўпэўнены, што хочаце закрыць ErikrafT Drop?",
-        "rate-limit-join-key": "Ліміт хуткасці дасягнуты. Пачакайце 10 секунд і паўтарыце спробу."
+        "rate-limit-join-key": "Ліміт хуткасці дасягнуты. Пачакайце 10 секунд і паўтарыце спробу.",
+        "metadata-removed": "Метаданыя выдаленыя",
+        "compress-success": "Выява сціснутая",
+        "compress-error": "Памылка пры сцісканні выявы"
     },
     "peer-ui": {
         "preparing": "Падрыхтоўка…",

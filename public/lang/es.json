@@ -184,7 +184,9 @@
         "cloud-upload-copy-error": "No se pudo copiar el enlace. Copie manualmente.",
         "cloud-upload-error": "Error inesperado al subir el archivo.",
         "cloud-upload-capacity": "El almacenamiento en la nube está temporalmente no disponible por uso elevado. Inténtelo más tarde.",
-        "cloud-upload-unavailable": "La carga en la nube no está disponible en este momento. Inténtelo nuevamente más tarde."
+        "cloud-upload-unavailable": "La carga en la nube no está disponible en este momento. Inténtelo nuevamente más tarde.",
+        "metadata-exif": "Metadatos (EXIF)",
+        "compress": "Comprimir"
     },
     "about": {
         "claim": "La forma más sencilla de transferir archivos entre dispositivos",
