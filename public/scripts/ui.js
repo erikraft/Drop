@@ -1213,48 +1213,68 @@ class ReceiveFileDialog extends ReceiveDialog {
                         try {
                             const ab = await primary.arrayBuffer();
                             const view = new Uint8Array(ab);
+
                             // search for APP1 marker 0xFF 0xE1
                             let found = -1;
                             for (let i = 0; i < view.length - 1; i++) {
-                                if (view[i] === 0xFF && view[i + 1] === 0xE1) { found = i; break; }
+                                if (view[i] === 0xFF && view[i + 1] === 0xE1) {
+                                    found = i;
+                                    break;
+                                }
                             }
+
                             let info = '';
+
                             if (found === -1) {
                                 info = 'No EXIF APP1 segment found.';
-                            }
-                            else {
+                            } else {
                                 const len = (view[found + 2] << 8) + view[found + 3];
                                 const start = found + 4;
                                 const end = Math.min(start + len - 2, view.length);
+
                                 const segment = view.slice(start, end);
-                                // show a small hexdump
-                                const hex = Array.prototype.map.call(segment.slice(0, 512), b => ('0' + b.toString(16)).slice(-2)).join(' ');
-                                info = 'EXIF APP1 segment (first 512 bytes in hex):\n\n' + hex;
-                                if (end < view.length) info += '\n\n(Truncated)';
+
+                                // === EXIF COMPLETO (SEM LIMITE) ===
+                                const hex = Array.prototype.map
+                                    .call(segment, b => ('0' + b.toString(16)).slice(-2))
+                                    .join(' ');
+
+                                info =
+                                    'EXIF APP1 segment (complete hexdump):\n\n' +
+                                    hex +
+                                    '\n\n(Tamanho total: ' + segment.length + ' bytes)';
                             }
+
                             const w = window.open('', '_blank');
                             w.document.title = 'EXIF Metadata';
                             w.document.body.style.whiteSpace = 'pre-wrap';
                             w.document.body.style.fontFamily = 'monospace';
                             w.document.body.innerText = info;
+
                             // Offer removal
                             if (found !== -1) {
                                 if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remover metadados desta imagem?')) {
                                     try {
                                         const img = document.createElement('img');
                                         img.src = URL.createObjectURL(primary);
+
                                         img.onload = async () => {
                                             const canvas = document.createElement('canvas');
                                             canvas.width = img.naturalWidth;
                                             canvas.height = img.naturalHeight;
+
                                             const ctx = canvas.getContext('2d');
                                             ctx.drawImage(img, 0, 0);
+
                                             canvas.toBlob(blob => {
                                                 const a = document.createElement('a');
                                                 a.href = URL.createObjectURL(blob);
+
                                                 const name = primary.name || 'image';
                                                 a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-noexif.jpg';
+
                                                 a.click();
+
                                                 Events.fire('notify-user', Localization.getTranslation('notifications.metadata-removed'));
                                             }, 'image/jpeg', 0.92);
                                         };
@@ -1264,14 +1284,12 @@ class ReceiveFileDialog extends ReceiveDialog {
                                     }
                                 }
                             }
-                        }
-                        catch (err) {
+                        } catch (err) {
                             console.error('Read EXIF failed', err);
                             Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
                         }
                     };
-                }
-                else {
+                } else {
                     this.$metadataBtn.setAttribute('hidden', true);
                     this.$metadataBtn.onclick = null;
                 }
