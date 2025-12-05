@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.11.7';
+const cacheVersion = 'v1.11.8';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
@@ -129,7 +129,9 @@ const rootUrl = location.href.substring(0, location.href.length - "service-worke
 const rootUrlLength = rootUrl.length;
 
 const doNotCacheRequest = request => {
+    const url = new URL(request.url);
     const requestRelativePath = request.url.substring(rootUrlLength);
+    if (url.pathname.startsWith('/api/')) return true;
     return relativePathsNotToCache.indexOf(requestRelativePath) !== -1
 };
 
@@ -159,12 +161,17 @@ const updateCache = request => new Promise((resolve, reject) => {
 self.addEventListener('fetch', function (event) {
     const swOrigin = new URL(self.location.href).origin;
     const requestOrigin = new URL(event.request.url).origin;
+    const requestUrl = new URL(event.request.url);
 
     if (swOrigin !== requestOrigin) {
         // Do not handle requests from other origin
         event.respondWith(fetch(event.request));
     }
     else if (event.request.method === "POST") {
+        if (requestUrl.pathname.startsWith('/api/')) {
+            event.respondWith(fetch(event.request));
+            return;
+        }
         // Requests related to Web Share Target.
         event.respondWith((async () => {
             const share_url = await evaluateRequestData(event.request);

@@ -1382,43 +1382,113 @@ class ReceiveFileDialog extends ReceiveDialog {
                 }
             }
 
-            // Compress: re-encode image with lower quality / scaled down and offer download
+            // Compress: re-encode image trying different sizes/qualities to keep result smaller than original
             if (this.$compressBtn) {
                 if ((mime || '').startsWith('image/')) {
                     this.$compressBtn.removeAttribute('hidden');
                     this.$compressBtn.onclick = async _ => {
                         try {
+                            const originalSize = primary.size;
                             const img = document.createElement('img');
-                            img.src = URL.createObjectURL(primary);
-                            img.onload = () => {
-                                const maxDim = 1600;
-                                let w = img.naturalWidth;
-                                let h = img.naturalHeight;
-                                if (w > h && w > maxDim) {
-                                    h = Math.round(h * (maxDim / w));
-                                    w = maxDim;
-                                } else if (h > w && h > maxDim) {
-                                    w = Math.round(w * (maxDim / h));
-                                    h = maxDim;
-                                }
-                                const canvas = document.createElement('canvas');
-                                canvas.width = w;
-                                canvas.height = h;
-                                const ctx = canvas.getContext('2d');
-                                ctx.drawImage(img, 0, 0, w, h);
-                                canvas.toBlob(blob => {
-                                    if (!blob) {
-                                        Events.fire('notify-user', Localization.getTranslation('notifications.compress-error'));
+                            const objectUrl = URL.createObjectURL(primary);
+                            const notifyError = () => Events.fire('notify-user', Localization.getTranslation('notifications.compress-error'));
+
+                            img.onerror = () => {
+                                URL.revokeObjectURL(objectUrl);
+                                notifyError();
+                            };
+
+                            img.onload = async () => {
+                                URL.revokeObjectURL(objectUrl);
+                                try {
+                                    const maxDim = 1600;
+                                    let w = img.naturalWidth;
+                                    let h = img.naturalHeight;
+                                    if (w > h && w > maxDim) {
+                                        h = Math.round(h * (maxDim / w));
+                                        w = maxDim;
+                                    } else if (h >= w && h > maxDim) {
+                                        w = Math.round(w * (maxDim / h));
+                                        h = maxDim;
+                                    }
+
+                                    const canvas = document.createElement('canvas');
+                                    const ctx = canvas.getContext('2d');
+                                    if (!ctx) {
+                                        throw new Error('Canvas 2D context unavailable');
+                                    }
+
+                                    const baseWidth = w;
+                                    const baseHeight = h;
+                                    const scaleOptions = [1, 0.85, 0.7, 0.55, 0.4];
+                                    const dimensionCandidates = [];
+                                    for (const scale of scaleOptions) {
+                                        const scaledWidth = Math.max(1, Math.round(baseWidth * scale));
+                                        const scaledHeight = Math.max(1, Math.round(baseHeight * scale));
+                                        if (scaledWidth > baseWidth || scaledHeight > baseHeight) continue;
+                                        if (scale < 1 && Math.max(scaledWidth, scaledHeight) < 300 && dimensionCandidates.length) {
+                                            break;
+                                        }
+                                        const duplicate = dimensionCandidates.some(dim => dim.width === scaledWidth && dim.height === scaledHeight);
+                                        if (!duplicate) {
+                                            dimensionCandidates.push({ width: scaledWidth, height: scaledHeight });
+                                        }
+                                    }
+                                    if (!dimensionCandidates.length) {
+                                        dimensionCandidates.push({ width: baseWidth, height: baseHeight });
+                                    }
+
+                                    const formatOptions = [
+                                        { type: 'image/webp', extension: 'webp', qualities: [0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.27, 0.2, 0.15, 0.1] },
+                                        { type: 'image/jpeg', extension: 'jpg', qualities: [0.8, 0.7, 0.6, 0.5, 0.4, 0.32, 0.25, 0.2, 0.15, 0.1] }
+                                    ];
+
+                                    const toBlobAsync = (type, quality) => new Promise(resolve => canvas.toBlob(resolve, type, quality));
+
+                                    let resultBlob = null;
+                                    let resultExt = 'jpg';
+
+                                    outer: for (const dims of dimensionCandidates) {
+                                        canvas.width = dims.width;
+                                        canvas.height = dims.height;
+                                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                                        for (const option of formatOptions) {
+                                            for (const quality of option.qualities) {
+                                                const blob = await toBlobAsync(option.type, quality);
+                                                if (!blob) {
+                                                    continue;
+                                                }
+                                                if (blob.size < originalSize) {
+                                                    resultBlob = blob;
+                                                    resultExt = option.extension;
+                                                    break outer;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (!resultBlob) {
+                                        notifyError();
                                         return;
                                     }
-                                    const a = document.createElement('a');
-                                    a.href = URL.createObjectURL(blob);
-                                    const name = primary.name || 'image';
-                                    a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-compressed.jpg';
-                                    a.click();
+
+                                    const downloadUrl = URL.createObjectURL(resultBlob);
+                                    const baseName = (primary.name || 'image').replace(/(\.[a-zA-Z0-9_-]+)?$/, '') || 'image';
+                                    const link = document.createElement('a');
+                                    link.href = downloadUrl;
+                                    link.download = `${baseName}-compressed.${resultExt}`;
+                                    link.click();
+                                    setTimeout(() => URL.revokeObjectURL(downloadUrl), 2000);
                                     Events.fire('notify-user', Localization.getTranslation('notifications.compress-success'));
-                                }, 'image/jpeg', 0.7);
+                                } catch (innerErr) {
+                                    console.error('Compress image failed', innerErr);
+                                    notifyError();
+                                }
                             };
+
+                            img.src = objectUrl;
                         }
                         catch (err) {
                             console.error('Compress image failed', err);
