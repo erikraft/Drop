@@ -13,6 +13,7 @@ class ErikrafTdrop {
             "scripts/browser-tabs-connector.js",
             "scripts/util.js",
             "scripts/network.js",
+            "scripts/ai-image-client.js",
             "scripts/ui.js",
             "scripts/libs/heic2any.min.js",
             "scripts/libs/no-sleep.min.js",

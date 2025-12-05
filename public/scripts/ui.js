@@ -15,6 +15,29 @@ class PeersUI {
         this.$shareModeDescriptorOther = $$('.shr-panel .descriptor-other');
         this.$shareModeCancelBtn = $$('.shr-panel .cancel-btn');
         this.$shareModeEditBtn = $$('.shr-panel .edit-btn');
+        this.$shareModeAiActions = $$('.shr-panel .ai-actions');
+        this.$shareModeAiVariationBtn = $$('.shr-panel .ai-variation-btn');
+        this.$shareModeAiNewImageBtn = $$('.shr-panel .ai-new-image-btn');
+
+        this._onAiVariation = async () => {
+            if (!this.shareMode.files.length) return;
+            await this._handleShareModeAiAction({
+                variation: true,
+                sourceFile: this.shareMode.files[0]
+            });
+        };
+        this._onAiGenerateNew = async () => {
+            await this._handleShareModeAiAction({
+                variation: false
+            });
+        };
+
+        if (this.$shareModeAiVariationBtn) {
+            this.$shareModeAiVariationBtn.addEventListener('click', this._onAiVariation);
+        }
+        if (this.$shareModeAiNewImageBtn) {
+            this.$shareModeAiNewImageBtn.addEventListener('click', this._onAiGenerateNew);
+        }
 
         this.peers = {};
 
@@ -326,6 +349,8 @@ class PeersUI {
         this.$shareModeDescriptor.removeAttribute('hidden');
         this.$shareModeDescriptorItem.innerText = descriptorItem;
 
+        this._toggleShareModeAiButtons(files.length > 0 && files.every(file => (file.type || '').split('/')[0] === 'image'));
+
         this.shareMode.active = true;
         this.shareMode.descriptor = descriptorComplete;
         this.shareMode.files = files;
@@ -378,9 +403,63 @@ class PeersUI {
         this.$shareModeDescriptorOther.setAttribute('hidden', true);
         this.$shareModeEditBtn.removeEventListener('click', this._editShareTextCallback);
         this.$shareModeEditBtn.setAttribute('hidden', true);
+        this._toggleShareModeAiButtons(false);
 
         console.log('Share mode deactivated.')
         Events.fire('share-mode-changed', { active: false });
+    }
+
+    async _handleShareModeAiAction({ variation = false, sourceFile = null } = {}) {
+        try {
+            Events.fire('notify-user', Localization.getTranslation('notifications.processing')); // generic feedback
+
+            let generated;
+
+            if (variation && sourceFile) {
+                generated = await AiImageClient.generateVariationFromFile(sourceFile);
+            }
+            else {
+                generated = await AiImageClient.generateFromPrompt();
+            }
+
+            if (!generated) {
+                Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
+                return;
+            }
+
+            // Convert base64 payload into a File for downstream flow
+            const file = await AiImageClient.toFile(generated, {
+                name: variation && sourceFile ? `${sourceFile.name || 'image'}-ai.png` : 'ai-image.png'
+            });
+
+            if (file) {
+                // Re-activate share mode with the new file
+                if (this.shareMode.active) {
+                    await this._deactivateShareMode();
+                }
+                await this._activateShareMode([file], "");
+                Events.fire('notify-user', Localization.getTranslation('notifications.file-transfer-completed'));
+            }
+        }
+        catch (error) {
+            console.error('AI action failed', error);
+            Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
+        }
+    }
+
+    _toggleShareModeAiButtons(show) {
+        if (!this.$shareModeAiActions) return;
+
+        if (!show) {
+            this.$shareModeAiActions.setAttribute('hidden', true);
+            if (this.$shareModeAiVariationBtn) this.$shareModeAiVariationBtn.setAttribute('hidden', true);
+            if (this.$shareModeAiNewImageBtn) this.$shareModeAiNewImageBtn.setAttribute('hidden', true);
+            return;
+        }
+
+        this.$shareModeAiActions.removeAttribute('hidden');
+        if (this.$shareModeAiVariationBtn) this.$shareModeAiVariationBtn.removeAttribute('hidden');
+        if (this.$shareModeAiNewImageBtn) this.$shareModeAiNewImageBtn.removeAttribute('hidden');
     }
 
     _sendShareData(e) {
@@ -862,6 +941,9 @@ class ReceiveDialog extends Dialog {
         this.$fileSize = this.$el.querySelector('.file-size');
         this.$previewBox = this.$el.querySelector('.file-preview');
         this.$receiveTitle = this.$el.querySelector('h2:first-of-type');
+        this.$aiEditBtn = this.$el.querySelector('#ai-edit-btn');
+
+        this._busyAiEdit = false;
     }
 
     _formatFileSize(bytes) {
@@ -1132,6 +1214,11 @@ class ReceiveFileDialog extends ReceiveDialog {
                 this.$compressBtn.setAttribute('hidden', true);
                 this.$compressBtn.onclick = null;
             }
+            if (this.$aiEditBtn) {
+                this.$aiEditBtn.setAttribute('hidden', true);
+                this.$aiEditBtn.removeAttribute('disabled');
+                this.$aiEditBtn.onclick = null;
+            }
             if (this.$copyImageBtn) {
                 this.$copyImageBtn.setAttribute('hidden', true);
                 this.$copyImageBtn.onclick = null;
@@ -1344,6 +1431,46 @@ class ReceiveFileDialog extends ReceiveDialog {
                     this.$compressBtn.onclick = null;
                 }
             }
+
+            if (this.$aiEditBtn) {
+                if ((mime || '').startsWith('image/') && files.length > 0) {
+                    this.$aiEditBtn.removeAttribute('hidden');
+                    this.$aiEditBtn.onclick = async _ => {
+                        if (this._busyAiEdit) return;
+                        this._busyAiEdit = true;
+                        this.$aiEditBtn.setAttribute('disabled', true);
+
+                        try {
+                            Events.fire('notify-user', Localization.getTranslation('notifications.processing'));
+
+                            const aiResult = await AiImageClient.generateVariationFromFile(primary);
+                            const aiFile = await AiImageClient.toFile(aiResult, {
+                                name: (primary.name || 'image') + '-ai.png'
+                            });
+
+                            if (!aiFile) {
+                                throw AiImageClient.normalizeError(Localization.getTranslation('notifications.files-incorrect'));
+                            }
+
+                            Events.fire('activate-share-mode', { files: [aiFile] });
+                            Events.fire('notify-user', Localization.getTranslation('notifications.file-transfer-completed'));
+                        }
+                        catch (error) {
+                            console.error('AI edit failed', error);
+                            const message = error?.message || Localization.getTranslation('notifications.files-incorrect');
+                            Events.fire('notify-user', message);
+                        }
+                        finally {
+                            this._busyAiEdit = false;
+                            this.$aiEditBtn.removeAttribute('disabled');
+                        }
+                    };
+                }
+                else {
+                    this.$aiEditBtn.setAttribute('hidden', true);
+                    this.$aiEditBtn.onclick = null;
+                }
+            }
         }
         catch (e) {
             console.warn('Could not set up editor buttons', e);
@@ -1375,6 +1502,11 @@ class ReceiveFileDialog extends ReceiveDialog {
             this.$previewBox.innerHTML = '';
             this._busy = false;
             await this._nextFiles();
+            if (this.$aiEditBtn) {
+                this.$aiEditBtn.setAttribute('hidden', true);
+                this.$aiEditBtn.onclick = null;
+                this.$aiEditBtn.removeAttribute('disabled');
+            }
         }, 300);
     }
 }
