@@ -1,24 +1,27 @@
-import {OpenAI} from "openai";
+const POE_BASE_URL = process.env.POE_API_BASE_URL || "https://api.poe.com/v1";
 
-let poeClient = null;
-
-function getPoeClient() {
-    if (poeClient) {
-        return poeClient;
-    }
-
+async function requestPoeChatCompletion(body) {
     const apiKey = process.env.POE_API_KEY;
 
     if (!apiKey) {
         throw new Error("POE_API_KEY is not configured.");
     }
 
-    poeClient = new OpenAI({
-        apiKey,
-        baseURL: "https://api.poe.com/v1"
+    const response = await fetch(`${POE_BASE_URL}/chat/completions`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
     });
 
-    return poeClient;
+    if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(`POE API request failed: ${response.status} ${response.statusText} - ${detail}`.trim());
+    }
+
+    return response.json();
 }
 
 function normalizeMessageContent(content) {
@@ -82,8 +85,6 @@ export async function generateAiImage({
     webSearch = false,
     model = process.env.POE_MODEL || "nano-banana-pro"
 }) {
-    const client = getPoeClient();
-
     const messages = [
         {
             role: "system",
@@ -121,7 +122,7 @@ export async function generateAiImage({
         }
     }
 
-    const response = await client.chat.completions.create({
+    const response = await requestPoeChatCompletion({
         model,
         messages,
         extra_body: extraBody
