@@ -280,14 +280,37 @@
                 storedType = null;
             }
 
-            // Detect BrowserOS and Comet via userAgent/brand and treat them like special clients
+            const normalizeClientType = value => typeof value === 'string' ? value.toLowerCase() : '';
+
             var uaString = navigator.userAgent || '';
-            var isBrowserOS = /browseros/i.test(uaString) || (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands) && navigator.userAgentData.brands.some(function (b) { return /browseros/i.test(b.brand || ''); }));
+            var brandEntries = (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands)) ? navigator.userAgentData.brands : [];
+            var brandMatches = function (pattern) {
+                for (var i = 0; i < brandEntries.length; i++) {
+                    if (pattern.test(brandEntries[i].brand || '')) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            var BROWSER_OS_PATTERN = /browser[\s_-]*os/i;
+            var COMET_PATTERN = /\bcomet\b|\bperplexity\b/i;
 
-            // Comet (Perplexity) may identify itself in the UA or via brands; detect it so the UI can show the Comet icon
-            var isComet = /comet|perplexity/i.test(uaString) || (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands) && navigator.userAgentData.brands.some(function (b) { return /comet|perplexity/i.test(b.brand || ''); }));
+            var isBrowserOS = BROWSER_OS_PATTERN.test(uaString) || brandMatches(BROWSER_OS_PATTERN);
+            var isComet = COMET_PATTERN.test(uaString) || brandMatches(COMET_PATTERN);
+            var detectedType = isBrowserOS ? 'browseros-browser' : (isComet ? 'comet-browser' : 'browser');
 
-            let clientType = (params.get('client_type') || storedType || (isBrowserOS ? 'browseros-browser' : (isComet ? 'comet-browser' : 'browser'))).toLowerCase();
+            var forcedType = normalizeClientType(params.get('client_type'));
+            var storedTypeNormalized = normalizeClientType(storedType);
+
+            var clientType = forcedType || storedTypeNormalized || detectedType;
+
+            if (clientType === 'browser' && detectedType !== 'browser') {
+                clientType = detectedType;
+            }
+
+            if (!allowedClientTypes.has(clientType)) {
+                clientType = detectedType;
+            }
 
             if (!allowedClientTypes.has(clientType)) {
                 clientType = 'browser';
