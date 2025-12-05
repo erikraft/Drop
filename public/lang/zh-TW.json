@@ -15,7 +15,9 @@
         "join-public-room_title": "暫時加入公共房間",
         "theme-light_title": "總是使用淺色主題",
         "cloud": "雲端",
-        "webchat": "聊天室"
+        "webchat": "聊天室",
+        "ai-variation": "生成 AI 變體",
+        "ai-generate": "建立新的 AI 圖像"
     },
     "instructions": {
         "no-peers_data-drop-bg": "釋放以選擇接收者",
@@ -131,7 +133,8 @@
         "cloud-upload-copy-error": "無法複製連結，請手動複製。",
         "cloud-upload-error": "上傳檔案時發生未預期的錯誤。",
         "cloud-upload-capacity": "因使用量過高，雲端儲存暫時無法使用。請稍後再試。",
-        "cloud-upload-unavailable": "雲端上傳目前無法使用。請稍後再試。"
+        "cloud-upload-unavailable": "雲端上傳目前無法使用。請稍後再試。",
+        "edit-ai": "使用 AI 編輯"
     },
     "about": {
         "claim": "跨裝置傳輸檔案的最簡單方法",

@@ -15,7 +15,9 @@
         "theme-auto_title": "Aldatu gaia sistemak darabilenera",
         "join-public-room_title": "Batu gela publikoa behin-behinean",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "activate-share-mode-and-other-files-plural": "eta beste {{count}} fitxategi",
@@ -161,7 +163,8 @@
         "cloud-upload-capacity": "Hodeiko biltegia aldi baterako ez dago erabilgarri erabilera handia dela eta. Saiatu geroago berriro.",
         "cloud-upload-unavailable": "Hodeiko igoera une honetan ez dago erabilgarri. Saiatu geroago berriro.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Komprimitu"
+        "compress": "Komprimitu",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "custom_title": "Jarraitu iezaguzu",

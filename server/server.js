@@ -4,6 +4,8 @@ import {fileURLToPath} from "url";
 import path, {dirname} from "path";
 import http from "http";
 import multer from "multer";
+import {handleAiImageRequest} from "./services/ai-image.js";
+
 import ErikrafTdropWsServer from "./ws-server.js";
 
 // Ensure fetch/FormData/File exist for runtimes without native support (Node < 18)
@@ -121,6 +123,8 @@ export default class ErikrafTdropServer {
                 });
             }
         });
+
+        app.post('/api/ai/image', upload.single('image'), handleAiImageRequest);
 
         app.get('/config', (req, res) => {
             res.send({

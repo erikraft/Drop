@@ -15,7 +15,9 @@
         "edit-share-mode": "Edit",
         "expand_title": "Expand header button row",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Release to select recipient",
@@ -134,7 +136,8 @@
         "cloud-upload-capacity": "Cloud storage is temporarily unavailable due to high usage. Try again later.",
         "cloud-upload-unavailable": "Cloud upload is not available right now. Please try again later.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Compress"
+        "compress": "Compress",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop",

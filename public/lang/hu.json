@@ -15,7 +15,9 @@
         "pair-device_title": "Eszközei végleges párosítása",
         "join-public-room_title": "Ideiglenes csatlakozás a nyilvános szobához",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers-title": "Nyissa meg az ErikrafT Drop-ot más eszközökön a fájlok küldéséhez",
@@ -133,7 +135,8 @@
         "metadata-exif": "Metaadatok (EXIF)",
         "compress": "Tömörítés",
         "edit-photopea": "Szerkesztés (Photopea)",
-        "edit-vectorpea": "Szerkesztés (Vectorpea)"
+        "edit-vectorpea": "Szerkesztés (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "notifications": {
         "online-requirement-pairing": "Online kell lennie készülékek párosításához",

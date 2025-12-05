@@ -73,7 +73,9 @@
         "edit-share-mode": "Sunting",
         "expand_title": "Perluas baris tombol header",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "x-instructions_mobile": "Ketuk untuk mengirim berkas atau ketuk lama untuk mengirim pesan",
@@ -183,7 +185,8 @@
         "cloud-upload-capacity": "Penyimpanan cloud sementara tidak tersedia karena penggunaan tinggi. Coba lagi nanti.",
         "cloud-upload-unavailable": "Unggahan cloud tidak tersedia saat ini. Silakan coba lagi nanti.",
         "edit-photopea": "Sunting (Photopea)",
-        "edit-vectorpea": "Sunting (Vectorpea)"
+        "edit-vectorpea": "Sunting (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "claim": "Cara termudah untuk mentransfer berkas lintas perangkat",

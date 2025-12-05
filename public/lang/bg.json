@@ -15,7 +15,9 @@
         "edit-paired-devices_title": "Промени свързаните устройства",
         "edit-share-mode": "Промени",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Пусни, за да избереш получател",
@@ -133,7 +135,8 @@
         "cloud-upload-capacity": "Облачният сторидж временно не е достъпен поради голямо натоварване. Опитайте по-късно.",
         "cloud-upload-unavailable": "Качването в облака в момента не е достъпно. Опитайте по-късно.",
         "metadata-exif": "Метаданни (EXIF)",
-        "compress": "Компресирай"
+        "compress": "Компресирай",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "close-about_aria-label": "Затвори информацията за ErikrafT Drop",

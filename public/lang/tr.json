@@ -15,7 +15,9 @@
         "edit-share-mode": "Düzenle",
         "expand_title": "Başlık buton satırını genişlet",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Alıcıyı seçmek için bırakın",
@@ -133,7 +135,8 @@
         "cloud-upload-capacity": "Yüksek kullanım nedeniyle bulut depolama geçici olarak kullanılamıyor. Daha sonra tekrar deneyin.",
         "cloud-upload-unavailable": "Bulut yüklemesi şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Sıkıştır"
+        "compress": "Sıkıştır",
+        "edit-ai": "Edit with AI"
     },
     "notifications": {
         "request-title": "{{name}} {{count}} {{descriptor}} transfer etmek istiyor",

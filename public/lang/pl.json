@@ -15,7 +15,9 @@
         "notification_title": "Włącz powiadomienia",
         "install_title": "Zainstaluj ErikrafT Drop",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Zwolnij, aby wybrać odbiorcę",
@@ -133,7 +135,8 @@
         "cloud-upload-capacity": "Przestrzeń w chmurze jest tymczasowo niedostępna z powodu dużego obciążenia. Spróbuj ponownie później.",
         "cloud-upload-unavailable": "Przesyłanie do chmury jest teraz niedostępne. Spróbuj ponownie później.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Kompresuj"
+        "compress": "Kompresuj",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "close-about_aria-label": "Zamknij \"O ErikrafT Drop\"",

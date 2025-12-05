@@ -33,7 +33,9 @@
         "theme-light_title": "Utilitza sempre el mode clar",
         "expand_title": "Expandeix la fila de botons de la capçalera",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "dialogs": {
         "message_placeholder": "Text",
@@ -118,7 +120,8 @@
         "cloud-upload-capacity": "L'emmagatzematge al núvol no està disponible temporalment per ús elevat. Torneu-ho a intentar més tard.",
         "cloud-upload-unavailable": "La pujada al núvol no està disponible ara mateix. Torneu-ho a intentar més tard.",
         "metadata-exif": "Metadades (EXIF)",
-        "compress": "Comprimir"
+        "compress": "Comprimir",
+        "edit-ai": "Edit with AI"
     },
     "footer": {
         "webrtc": "si WebRTC no està disponible.",

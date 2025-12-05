@@ -76,7 +76,9 @@
         "edit-share-mode": "عدل",
         "expand_title": "Expand header button row",
         "cloud": "سحابة",
-        "webchat": "دردشة"
+        "webchat": "دردشة",
+        "ai-variation": "توليد تصميم AI",
+        "ai-generate": "إنشاء صورة AI جديدة"
     },
     "instructions": {
         "x-instructions_mobile": "انقر لإرسال الملفات أو انقر لفترة طويلة لإرسال رسالة",
@@ -157,9 +159,10 @@
         "cloud-upload-copy-error": "تعذر نسخ الرابط. انسخ يدويًا.",
         "cloud-upload-error": "حدث خطأ غير متوقع أثناء تحميل الملف.",
         "cloud-upload-capacity": "التخزين السحابي غير متاح مؤقتًا بسبب الاستخدام الكثيف. حاول مرة أخرى لاحقًا.",
-        "cloud-upload-unavailable": "التحميل إلى السحابة غير متاح حاليًا. يرجى المحاولة لاحقًا."
-        "metadata-exif": "Metadata (EXIF)",
-        "compress": "Compress",
+        "cloud-upload-unavailable": "التحميل إلى السحابة غير متاح حاليًا. يرجى المحاولة لاحقًا.",
+        "metadata-exif": "البيانات الوصفية (EXIF)",
+        "compress": "ضغط",
+        "edit-ai": "تحرير باستخدام الذكاء الاصطناعي"
     },
     "webchat-modal": {
         "external": "Go to website"

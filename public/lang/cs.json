@@ -15,7 +15,9 @@
         "edit-share-mode": "Upravit",
         "expand_title": "Rozbalit řádek tlačítka záhlaví",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "about": {
         "buy-me-a-coffee_title": "Kupte mi kávu!",
@@ -127,7 +129,8 @@
         "cloud-upload-capacity": "Cloudové úložiště je dočasně nedostupné kvůli vysokému vytížení. Zkuste to později.",
         "cloud-upload-unavailable": "Nahrávání do cloudu nyní není dostupné. Zkuste to znovu později.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Komprimovat"
+        "compress": "Komprimovat",
+        "edit-ai": "Edit with AI"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Uvolněním vyberte příjemce",

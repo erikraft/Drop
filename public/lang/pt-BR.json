@@ -17,7 +17,9 @@
         "bluetooth": "Transferir via Bluetooth",
         "scan-qr": "Escanear QR Code",
         "cloud": "Nuvem",
-        "webchat": "Bate-papo"
+        "webchat": "Bate-papo",
+        "ai-variation": "Gerar variação com IA",
+        "ai-generate": "Criar nova imagem com IA"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Solte para selecionar o destinatário",
@@ -135,7 +137,8 @@
         "cloud-upload-capacity": "Armazenamento em nuvem temporariamente indisponível devido ao uso elevado. Tente novamente mais tarde.",
         "cloud-upload-unavailable": "Upload na nuvem indisponível no momento. Tente novamente mais tarde.",
         "metadata-exif": "Metadados (EXIF)",
-        "compress": "Comprimir"
+        "compress": "Comprimir",
+        "edit-ai": "Editar com IA"
     },
     "about": {
         "close-about_aria-label": "Fechar Sobre o ErikrafT Drop",

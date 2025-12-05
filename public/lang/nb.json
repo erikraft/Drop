@@ -15,7 +15,9 @@
         "expand_title": "Utvid overskriftknapprad",
         "join-public-room_title": "Bli med i et offentlig rom midlertidig",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "footer": {
         "webrtc": "hvis WebRTC ikke er tilgjengelig.",
@@ -133,7 +135,8 @@
         "metadata-exif": "Metadata (EXIF)",
         "compress": "Compress",
         "edit-photopea": "Rediger (Photopea)",
-        "edit-vectorpea": "Rediger (Vectorpea)"
+        "edit-vectorpea": "Rediger (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "close-about_aria-label": "Lukk «Om ErikrafT Drop»",

@@ -14,7 +14,9 @@
         "cancel-share-mode": "Peruuta",
         "edit-share-mode": "Muokkaa",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers-title": "Avaa ErikrafT Drop muilla laitteilla lähettääksesi tiedostoja",
@@ -46,7 +48,8 @@
         "cloud-upload-capacity": "Pilvitallennus ei ole tilapäisesti käytettävissä suuren kuormituksen vuoksi. Yritä myöhemmin uudelleen.",
         "cloud-upload-unavailable": "Pilveen lataus ei ole juuri nyt käytettävissä. Yritä myöhemmin uudelleen.",
         "edit-photopea": "Muokkaa (Photopea)",
-        "edit-vectorpea": "Muokkaa (Vectorpea)"
+        "edit-vectorpea": "Muokkaa (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "site": {
         "biodrop": "Site"

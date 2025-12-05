@@ -65,7 +65,8 @@
         "cloud-upload-copy-error": "ไม่สามารถคัดลอกลิงก์ได้ โปรดคัดลอกด้วยตนเอง",
         "cloud-upload-error": "เกิดข้อผิดพลาดที่ไม่คาดคิดระหว่างอัปโหลดไฟล์",
         "cloud-upload-capacity": "ที่เก็บข้อมูลบนคลาวด์ไม่พร้อมใช้งานชั่วคราวเนื่องจากมีการใช้งานสูง โปรดลองอีกครั้งในภายหลัง",
-        "cloud-upload-unavailable": "ขณะนี้ไม่สามารถอัปโหลดไปยังคลาวด์ได้ โปรดลองใหม่อีกครั้งภายหลัง"
+        "cloud-upload-unavailable": "ขณะนี้ไม่สามารถอัปโหลดไปยังคลาวด์ได้ โปรดลองใหม่อีกครั้งภายหลัง",
+        "edit-ai": "Edit with AI"
     },
     "header": {
         "theme-auto_title": "ปรับธีมให้เข้ากับระบบโดยอัตโนมัติ",
@@ -81,7 +82,9 @@
         "pair-device_title": "การจับคู่อุปกรณ์",
         "language-selector_title": "เลือกภาษา",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "notifications": {
         "notifications-enabled": "เปิดใช้งานการแจ้งเตือนแล้ว",

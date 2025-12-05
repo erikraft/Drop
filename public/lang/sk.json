@@ -15,7 +15,9 @@
         "join-public-room_title": "Dočasne sa pripojiť k verejnej miestnosti",
         "cancel-share-mode": "Zrušiť",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Pustite pre vybratie príjemcu",
@@ -131,7 +133,8 @@
         "cloud-upload-copy-error": "Nepodarilo sa skopírovať odkaz. Skopírujte ho ručne.",
         "cloud-upload-error": "Pri nahrávaní súboru došlo k neočakávanej chybe.",
         "cloud-upload-capacity": "Cloudové úložisko je dočasne nedostupné z dôvodu vysokej záťaže. Skúste to neskôr.",
-        "cloud-upload-unavailable": "Nahrávanie do cloudu momentálne nie je dostupné. Skúste to neskôr."
+        "cloud-upload-unavailable": "Nahrávanie do cloudu momentálne nie je dostupné. Skúste to neskôr.",
+        "edit-ai": "Edit with AI"
     },
     "notifications": {
         "text-content-incorrect": "Obsah textu je chybný",

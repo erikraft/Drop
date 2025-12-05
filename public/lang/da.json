@@ -125,7 +125,8 @@
         "cloud-upload-capacity": "Cloudlageret er midlertidigt utilgængeligt på grund af høj belastning. Prøv igen senere.",
         "cloud-upload-unavailable": "Cloud-upload er ikke tilgængelig lige nu. Prøv igen senere.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Komprimer"
+        "compress": "Komprimer",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "claim": "Den nemmeste måde at overføre filer på tværs af enheder",
@@ -155,7 +156,9 @@
         "expand_title": "Udvid overskriftsknaprækken",
         "about_title": "Om ErikrafT Drop",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers-subtitle": "Par enheder, eller gå ind i et offentligt rum for at være synlig på andre netværk",

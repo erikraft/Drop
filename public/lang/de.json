@@ -15,11 +15,13 @@
         "edit-share-mode": "Bearbeiten",
         "expand_title": "Schaltflächenzeile ausklappen",
         "cloud": "Cloud",
-        "webchat": "Chat"
+        "webchat": "Chat",
+        "ai-variation": "Generiere AI-Variante",
+        "ai-generate": "Erstelle neue AI-Bild"
     },
     "dialogs": {
         "share": "Teilen",
-        "download": "Download",
+        "download": "Herunterladen",
         "pair-devices-title": "Geräte Dauerhaft Koppeln",
         "input-key-on-this-device": "Gib diesen Schlüssel auf einem anderen Gerät ein",
         "enter-key-from-another-device": "Gib den Schlüssel von einem anderen Gerät hier ein.",
@@ -99,9 +101,9 @@
         "cloud-upload-unavailable": "Cloud-Upload ist derzeit nicht verfügbar. Bitte versuche es später erneut.",
         "metadata-exif": "Metadaten (EXIF)",
         "compress": "Komprimieren",
-        "download": "Herunterladen",
         "edit-photopea": "Mit Photopea bearbeiten",
-        "edit-vectorpea": "Mit Vectorpea bearbeiten"
+        "edit-vectorpea": "Mit Vectorpea bearbeiten",
+        "edit-ai": "Mit AI bearbeiten"
     },
     "about": {
         "tweet_title": "Über ErikrafT Drop twittern",

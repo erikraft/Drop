@@ -73,7 +73,9 @@
         "expand_title": "Extindeți rândul de butoane antet",
         "edit-share-mode": "Editați",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "x-instructions_mobile": "Atingeți pentru a trimite fișiere sau atingeți lung pentru a trimite un mesaj",
@@ -185,7 +187,8 @@
         "cloud-upload-capacity": "Spațiul cloud este indisponibil temporar din cauza utilizării mari. Încearcă mai târziu.",
         "cloud-upload-unavailable": "Încărcarea în cloud nu este disponibilă acum. Încercați din nou mai târziu.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Comprima"
+        "compress": "Comprima",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "claim": "Cel mai simplu mod de a transfera fișiere între dispozitive",

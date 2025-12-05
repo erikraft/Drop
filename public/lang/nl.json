@@ -73,7 +73,9 @@
         "expand_title": "Knoppenrij uitvouwen",
         "edit-share-mode": "Bewerken",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "AI-variant genereren",
+        "ai-generate": "Nieuwe AI-afbeelding maken"
     },
     "instructions": {
         "x-instructions_mobile": "Tik om bestanden te versturen of houdt vast om een bericht te sturen",
@@ -185,35 +187,33 @@
         "cloud-upload-capacity": "Cloudopslag is tijdelijk niet beschikbaar vanwege hoge belasting. Probeer het later opnieuw.",
         "cloud-upload-unavailable": "Cloudupload is momenteel niet beschikbaar. Probeer het later opnieuw.",
         "metadata-exif": "Metadata (EXIF)",
-        "compress": "Comprimeren"
+        "compress": "Comprimeren",
+        "edit-ai": "Bewerken met AI"
     },
-    "metadata-exif": "Metadata (EXIF)",
-    "compress": "Comprimeren"
-},
-"about": {
-    "claim": "De makkelijkste manier om bestanden tussen apparaten te versturen",
-    "tweet_title": "Tweet over ErikrafT Drop",
-    "close-about_aria-label": "Sluit Over ErikrafT Drop",
-    "buy-me-a-coffee_title": "Koop een kopje koffie voor mij!",
-    "github_title": "ErikrafT Drop op GitHub",
-    "faq_title": "Veel gestelde vragen",
-    "mastodon_title": "Schrijf over ErikrafT Drop op Mastodon",
-    "bluesky_title": "Volg ons op BlueSky",
-    "custom_title": "Volg ons",
-    "privacypolicy_title": "Open ons privacybeleid"
-},
-"document-titles": {
-    "file-transfer-requested": "Bestandsoverdracht verzocht",
-    "image-transfer-requested": "Afbeeldingsoverdracht verzocht",
-    "message-received-plural": "{{count}} berichten ontvangen",
-    "message-received": "Bericht ontvangen",
-    "file-received": "Bestand ontvangen",
-    "file-received-plural": "{{count}} bestanden ontvangen"
-},
-"webchat-modal": {
-    "external": "Go to website"
-},
-"site": {
-    "biodrop": "Site"
-}
+    "about": {
+        "claim": "De makkelijkste manier om bestanden tussen apparaten te versturen",
+        "tweet_title": "Tweet over ErikrafT Drop",
+        "close-about_aria-label": "Sluit Over ErikrafT Drop",
+        "buy-me-a-coffee_title": "Koop een kopje koffie voor mij!",
+        "github_title": "ErikrafT Drop op GitHub",
+        "faq_title": "Veel gestelde vragen",
+        "mastodon_title": "Schrijf over ErikrafT Drop op Mastodon",
+        "bluesky_title": "Volg ons op BlueSky",
+        "custom_title": "Volg ons",
+        "privacypolicy_title": "Open ons privacybeleid"
+    },
+    "document-titles": {
+        "file-transfer-requested": "Bestandsoverdracht verzocht",
+        "image-transfer-requested": "Afbeeldingsoverdracht verzocht",
+        "message-received-plural": "{{count}} berichten ontvangen",
+        "message-received": "Bericht ontvangen",
+        "file-received": "Bestand ontvangen",
+        "file-received-plural": "{{count}} bestanden ontvangen"
+    },
+    "webchat-modal": {
+        "external": "Go to website"
+    },
+    "site": {
+        "biodrop": "Site"
+    }
 }

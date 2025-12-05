@@ -15,7 +15,9 @@
         "edit-paired-devices_title": "Редагувати зв'язані пристрої",
         "expand_title": "Розгорнути рядок кнопок заголовка",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Відпустіть, щоб вибрати одержувача",
@@ -131,7 +133,8 @@
         "cloud-upload-copy-error": "Не вдалося скопіювати посилання. Скопіюйте вручну.",
         "cloud-upload-error": "Сталася неочікувана помилка під час завантаження файлу.",
         "cloud-upload-capacity": "Хмарне сховище тимчасово недоступне через високе навантаження. Спробуйте пізніше.",
-        "cloud-upload-unavailable": "Хмарне завантаження зараз недоступне. Спробуйте знову пізніше."
+        "cloud-upload-unavailable": "Хмарне завантаження зараз недоступне. Спробуйте знову пізніше.",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "close-about_aria-label": "Закрити \"Про ErikrafT Drop\"",

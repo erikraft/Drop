@@ -15,7 +15,9 @@
         "pair-device_title": "영구적으로 기기 연결하기",
         "expand_title": "헤더 버튼 펼치기",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers-subtitle": "장치를 연결하거나 공개 방에 들어가 다른 네트워크에서 검색 가능하게 하세요",
@@ -118,7 +120,8 @@
         "metadata-exif": "메타데이터 (EXIF)",
         "compress": "Compress",
         "edit-photopea": "편집 (Photopea)",
-        "edit-vectorpea": "편집 (Vectorpea)"
+        "edit-vectorpea": "편집 (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "notifications": {
         "pairing-tabs-error": "브라우저 탭 2개를 페어링할 수 없습니다",

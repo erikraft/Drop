@@ -15,7 +15,9 @@
         "edit-share-mode": "Рэдагаваць",
         "expand_title": "Разгарнуць радок кнопак",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Адпусціце, каб выбраць атрымальніка",
@@ -133,7 +135,8 @@
         "cloud-upload-capacity": "Воблачнае сховішча часова недаступнае з-за высокай нагрузкі. Паспрабуйце пазней.",
         "cloud-upload-unavailable": "Воблачная загрузка цяпер недаступная. Паспрабуйце пазней.",
         "metadata-exif": "Метаданыя (EXIF)",
-        "compress": "Сціснуць"
+        "compress": "Сціснуць",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "buy-me-a-coffee_title": "Купіць мне кавы!",

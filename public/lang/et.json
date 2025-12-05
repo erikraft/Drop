@@ -76,7 +76,9 @@
         "pair-device_title": "Paarita oma seadmed püsivalt",
         "theme-dark_title": "Kasuta alati tumedat teemat",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "footer": {
         "known-as": "Sind tuntakse kui:",
@@ -174,7 +176,8 @@
         "cloud-upload-copy-error": "Linki ei õnnestunud kopeerida. Kopeeri käsitsi.",
         "cloud-upload-error": "Faili üleslaadimisel tekkis ootamatu viga.",
         "cloud-upload-capacity": "Pilvesalvestus ei ole suure koormuse tõttu ajutiselt kättesaadav. Proovi hiljem uuesti.",
-        "cloud-upload-unavailable": "Pilve üleslaadimine pole praegu saadaval. Proovi hiljem uuesti."
+        "cloud-upload-unavailable": "Pilve üleslaadimine pole praegu saadaval. Proovi hiljem uuesti.",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "claim": "Lihtsaim viis jagada faile üle seadmete",

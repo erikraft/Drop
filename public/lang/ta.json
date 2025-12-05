@@ -15,7 +15,9 @@
         "edit-share-mode": "தொகு",
         "expand_title": "தலைப்பு பொத்தான் வரிசையை விரிவாக்குங்கள்",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "பெறுநரைத் தேர்ந்தெடுக்க வெளியீடு",
@@ -131,7 +133,8 @@
         "cloud-upload-copy-error": "இணைப்பை நகலெடுக்க முடியவில்லை. கையால் நகலெடுக்கவும்.",
         "cloud-upload-error": "கோப்பை பதிவேற்றும்போது எதிர்பாராத பிழை ஏற்பட்டது.",
         "cloud-upload-capacity": "அதிக பயன்பாட்டினால் மேக சேமிப்பு தற்காலிகமாக கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.",
-        "cloud-upload-unavailable": "மேக பதிவேற்றம் இப்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்."
+        "cloud-upload-unavailable": "மேக பதிவேற்றம் இப்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop பற்றி மூடு",

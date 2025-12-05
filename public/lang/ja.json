@@ -73,7 +73,9 @@
         "edit-share-mode": "編集",
         "expand_title": "ヘッダーボタン列を拡大する",
         "cloud": "クラウド",
-        "webchat": "チャット"
+        "webchat": "チャット",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "x-instructions_mobile": "タップでファイル送信、長押しでメッセージ送信",
@@ -185,7 +187,8 @@
         "metadata-exif": "Metadata (EXIF)",
         "compress": "Compress",
         "edit-photopea": "編集 (Photopea)",
-        "edit-vectorpea": "編集 (Vectorpea)"
+        "edit-vectorpea": "編集 (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "claim": "デバイス間でかんたんファイル共有",

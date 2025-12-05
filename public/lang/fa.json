@@ -15,7 +15,9 @@
         "edit-paired-devices_title": "ویرایش دستگاه‌های جفت‌شده",
         "about_aria-label": "باز کردن درباره ErikrafT Drop",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers-title": "برای فرستادن پرونده‌ها، ErikrafT Drop را روی دستگاه‌های دیگر باز کنید",
@@ -87,7 +89,8 @@
         "cloud-upload-capacity": "به دلیل استفاده زیاد، فضای ابری موقتاً در دسترس نیست. بعداً دوباره تلاش کنید.",
         "cloud-upload-unavailable": "بارگذاری در فضای ابری در حال حاضر در دسترس نیست. لطفاً بعداً دوباره تلاش کنید.",
         "edit-photopea": "ویرایش (Photopea)",
-        "edit-vectorpea": "ویرایش (Vectorpea)"
+        "edit-vectorpea": "ویرایش (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "site": {
         "biodrop": "Site"

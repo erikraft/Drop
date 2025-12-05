@@ -41,7 +41,8 @@
         "cloud-upload-capacity": "Takaṛḍit n usigna ur teddun ara akka tura acku lqem d ameqqran. Eɛreḍ tikelt-nniḍen.",
         "cloud-upload-unavailable": "Trusi ar usigna ur tweddu ara akka tura. Eɛreḍ ticki.",
         "edit-photopea": "Edit (Photopea)",
-        "edit-vectorpea": "Edit (Vectorpea)"
+        "edit-vectorpea": "Edit (Vectorpea)",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "github_title": "ErikrafT Drop deg GitHub",
@@ -58,7 +59,9 @@
         "install_title": "Sbedd ErikrafT Drop",
         "edit-share-mode": "Ẓreg",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "webchat-modal": {
         "external": "Go to website"

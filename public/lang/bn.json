@@ -15,7 +15,9 @@
         "edit-share-mode": "সম্পাদনা",
         "expand_title": "হেডার বোতামের সারিটি বড় করুন",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "এই AI ভার্সন তৈরি করুন",
+        "ai-generate": "AI এবং তৈরি করুন"
     },
     "instructions": {
         "activate-share-mode-and-other-file": "আর একটি ফাইল যোগ করুন",
@@ -59,7 +61,8 @@
         "cloud-upload-capacity": "অত্যধিক ব্যবহারের কারণে ক্লাউড স্টোরেজ সাময়িকভাবে অনুপলব্ধ। পরে আবার চেষ্টা করুন।",
         "cloud-upload-unavailable": "ক্লাউড আপলোড বর্তমানে উপলব্ধ নয়। অনুগ্রহ করে পরে আবার চেষ্টা করুন।",
         "edit-photopea": "সম্পাদনা (Photopea)",
-        "edit-vectorpea": "সম্পাদনা (Vectorpea)"
+        "edit-vectorpea": "সম্পাদনা (Vectorpea)",
+        "edit-ai": "AI দিয়ে সম্পাদনা করুন"
     },
     "site": {
         "biodrop": "Site"

@@ -15,7 +15,9 @@
         "cancel-share-mode": "完成",
         "edit-share-mode": "編輯",
         "cloud": "Cloud",
-        "webchat": "WebChat"
+        "webchat": "WebChat",
+        "ai-variation": "Generate AI variation",
+        "ai-generate": "Create new AI image"
     },
     "instructions": {
         "no-peers_data-drop-bg": "放開以選擇接收者",
@@ -131,7 +133,8 @@
         "cloud-upload-copy-error": "無法複製連結，請手動複製。",
         "cloud-upload-error": "上載檔案時發生意外錯誤。",
         "cloud-upload-capacity": "雲端儲存因使用量高而暫時不可用，請稍後再試。",
-        "cloud-upload-unavailable": "目前無法進行雲端上載，請稍後再試。"
+        "cloud-upload-unavailable": "目前無法進行雲端上載，請稍後再試。",
+        "edit-ai": "Edit with AI"
     },
     "about": {
         "close-about_aria-label": "關閉 關於 ErikrafT Drop",
