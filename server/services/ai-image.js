@@ -81,9 +81,9 @@ export async function generateAiImage({
     prompt,
     imageBase64,
     imageMime,
-    imageSize = "4K",
+    imageSize = "4K", // Example: "1:1", "16:9", "4K" can be mapped to an aspect ratio
     webSearch = false,
-    model = process.env.POE_MODEL || "nano-banana-pro"
+    model = process.env.POE_MODEL || "GPT-Image-1" // Updated model
 }) {
     const messages = [
         {
@@ -92,40 +92,52 @@ export async function generateAiImage({
         }
     ];
 
-    if (prompt) {
-        messages.push({
-            role: "user",
-            content: prompt
-        });
-    } else if (imageBase64) {
-        messages.push({
-            role: "user",
-            content: "Crie uma variação artística da imagem enviada mantendo a mesma orientação. Retorne apenas a nova imagem em base64."
-        });
-    } else {
-        messages.push({
-            role: "user",
-            content: "Gere uma imagem criativa em base64."
+    const userContent = [];
+    let userPrompt = prompt;
+
+    if (!userPrompt) {
+        if (imageBase64) {
+            userPrompt = "Crie uma variação artística da imagem enviada mantendo a mesma orientação. Retorne apenas a nova imagem em base64.";
+        } else {
+            userPrompt = "Gere uma imagem criativa em base64.";
+        }
+    }
+
+    userContent.push({ type: "text", text: userPrompt });
+
+    if (imageBase64) {
+        userContent.push({
+            type: "image_url",
+            image_url: {
+                url: `data:${imageMime || 'image/png'};base64,${imageBase64}`
+            }
         });
     }
 
+    messages.push({
+        role: "user",
+        content: userContent
+    });
+
     const extraBody = {
-        image_size: imageSize,
-        image_only: Boolean(imageBase64),
         web_search: webSearch === true || webSearch === "true"
     };
 
-    if (imageBase64) {
-        extraBody.image_base64 = imageBase64;
-        if (imageMime) {
-            extraBody.image_mime_type = imageMime;
+    if (imageSize) {
+        const validAspectRatios = ["1:1", "3:2", "2:3", "16:9", "9:16"];
+        if (validAspectRatios.includes(imageSize)) {
+            extraBody.aspect = imageSize;
+        } else if (imageSize === "4K") {
+            extraBody.aspect = "16:9";
+            extraBody.quality = "high";
         }
     }
 
     const response = await requestPoeChatCompletion({
         model,
         messages,
-        extra_body: extraBody
+        extra_body: extraBody,
+        stream: false // Recommended for image generation
     });
 
     const choice = response?.choices?.[0];
