@@ -83,7 +83,7 @@ export async function generateAiImage({
     imageMime,
     imageSize = "4K", // Example: "1:1", "16:9", "4K" can be mapped to an aspect ratio
     webSearch = false,
-    model = process.env.POE_MODEL || "GPT-Image-1" // Updated model
+    model = process.env.POE_MODEL || "nano-banana-pro"
 }) {
     const messages = [
         {
