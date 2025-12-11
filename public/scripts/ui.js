@@ -1338,8 +1338,8 @@ class ReceiveFileDialog extends ReceiveDialog {
                             w.document.body.style.fontFamily = 'monospace';
                             w.document.body.innerText = info;
 
-                            // Offer removal
-                            if (found !== -1) {
+                            // Offer removal only for images
+                            if (found !== -1 && (mime || '').startsWith('image/')) {
                                 if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remover metadados desta imagem?')) {
                                     try {
                                         const img = document.createElement('img');
