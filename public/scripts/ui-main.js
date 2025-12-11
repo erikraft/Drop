@@ -151,6 +151,7 @@ class HeaderUI {
             this.$header.classList.add('overflow-hidden');
             // add expand btn 2 before icon
             this.$expandBtn.removeAttribute('hidden');
+            this.$expandBtn.style.display = '';
             icon.before(this.$expandBtn);
         }
         else {
