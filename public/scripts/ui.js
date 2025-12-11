@@ -1294,85 +1294,132 @@ class ReceiveFileDialog extends ReceiveDialog {
 
             // Metadata EXIF: view raw APP1 EXIF segment and offer remove (re-encode)
             if (this.$metadataBtn) {
-                if ((mime || '').startsWith('image/')) {
+                if ((mime || '').startsWith('image/') || (mime || '').startsWith('video/')) {
                     this.$metadataBtn.removeAttribute('hidden');
                     this.$metadataBtn.onclick = async _ => {
                         try {
-                            const ab = await primary.arrayBuffer();
-                            const view = new Uint8Array(ab);
+                            let info = '';
+                            let title = 'Metadata';
 
-                            // search for APP1 marker 0xFF 0xE1
-                            let found = -1;
-                            for (let i = 0; i < view.length - 1; i++) {
-                                if (view[i] === 0xFF && view[i + 1] === 0xE1) {
-                                    found = i;
-                                    break;
+                            if ((mime || '').startsWith('image/')) {
+                                const ab = await primary.arrayBuffer();
+                                const view = new Uint8Array(ab);
+
+                                // search for APP1 marker 0xFF 0xE1
+                                let found = -1;
+                                for (let i = 0; i < view.length - 1; i++) {
+                                    if (view[i] === 0xFF && view[i + 1] === 0xE1) {
+                                        found = i;
+                                        break;
+                                    }
+                                }
+
+                                if (found === -1) {
+                                    info = 'No EXIF APP1 segment found.';
+                                } else {
+                                    const len = (view[found + 2] << 8) + view[found + 3];
+                                    const start = found + 4;
+                                    const end = Math.min(start + len - 2, view.length);
+
+                                    const segment = view.slice(start, end);
+
+                                    // Complete EXIF (no limit)
+                                    const hex = Array.prototype.map
+                                        .call(segment, b => ('0' + b.toString(16)).slice(-2))
+                                        .join(' ');
+
+                                    info =
+                                        'EXIF APP1 segment (complete hexdump):\n\n' +
+                                        hex +
+                                        '\n\nTotal size: ' + segment.length + ' bytes';
+                                }
+                                title = 'EXIF Metadata';
+                            } else if ((mime || '').startsWith('video/')) {
+                                const ab = await primary.arrayBuffer();
+                                const view = new Uint8Array(ab);
+
+                                // For MP4, search for 'moov' box (metadata container)
+                                let found = -1;
+                                const moov = [0x6D, 0x6F, 0x6F, 0x76]; // 'moov'
+                                for (let i = 0; i < view.length - 7; i++) {
+                                    if (view[i + 4] === moov[0] && view[i + 5] === moov[1] && view[i + 6] === moov[2] && view[i + 7] === moov[3]) {
+                                        found = i;
+                                        break;
+                                    }
+                                }
+
+                                if (found === -1) {
+                                    info = 'No MP4 moov box found. This may not be an MP4 file or metadata is embedded differently.';
+                                } else {
+                                    const size = (view[found] << 24) + (view[found + 1] << 16) + (view[found + 2] << 8) + view[found + 3];
+                                    const start = found;
+                                    const end = Math.min(start + size, view.length);
+
+                                    const segment = view.slice(start, end);
+
+                                    const hex = Array.prototype.map
+                                        .call(segment, b => ('0' + b.toString(16)).slice(-2))
+                                        .join(' ');
+
+                                    info =
+                                        'MP4 moov box (metadata container, complete hexdump):\n\n' +
+                                        hex +
+                                        '\n\nTotal size: ' + segment.length + ' bytes';
                                 }
                             }
 
-                            let info = '';
-
-                            if (found === -1) {
-                                info = 'No EXIF APP1 segment found.';
-                            } else {
-                                const len = (view[found + 2] << 8) + view[found + 3];
-                                const start = found + 4;
-                                const end = Math.min(start + len - 2, view.length);
-
-                                const segment = view.slice(start, end);
-
-                                // === EXIF COMPLETO (SEM LIMITE) ===
-                                const hex = Array.prototype.map
-                                    .call(segment, b => ('0' + b.toString(16)).slice(-2))
-                                    .join(' ');
-
-                                info =
-                                    'EXIF APP1 segment (complete hexdump):\n\n' +
-                                    hex +
-                                    '\n\n(Tamanho total: ' + segment.length + ' bytes)';
-                            }
-
                             const w = window.open('', '_blank');
-                            w.document.title = 'EXIF Metadata';
+                            w.document.title = title;
                             w.document.body.style.whiteSpace = 'pre-wrap';
                             w.document.body.style.fontFamily = 'monospace';
                             w.document.body.innerText = info;
 
                             // Offer removal only for images
-                            if (found !== -1 && (mime || '').startsWith('image/')) {
-                                if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remover metadados desta imagem?')) {
-                                    try {
-                                        const img = document.createElement('img');
-                                        img.src = URL.createObjectURL(primary);
+                            if ((mime || '').startsWith('image/')) {
+                                const ab = await primary.arrayBuffer();
+                                const view = new Uint8Array(ab);
+                                let found = -1;
+                                for (let i = 0; i < view.length - 1; i++) {
+                                    if (view[i] === 0xFF && view[i + 1] === 0xE1) {
+                                        found = i;
+                                        break;
+                                    }
+                                }
+                                if (found !== -1) {
+                                    if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remove metadata from this image?')) {
+                                        try {
+                                            const img = document.createElement('img');
+                                            img.src = URL.createObjectURL(primary);
 
-                                        img.onload = async () => {
-                                            const canvas = document.createElement('canvas');
-                                            canvas.width = img.naturalWidth;
-                                            canvas.height = img.naturalHeight;
+                                            img.onload = async () => {
+                                                const canvas = document.createElement('canvas');
+                                                canvas.width = img.naturalWidth;
+                                                canvas.height = img.naturalHeight;
 
-                                            const ctx = canvas.getContext('2d');
-                                            ctx.drawImage(img, 0, 0);
+                                                const ctx = canvas.getContext('2d');
+                                                ctx.drawImage(img, 0, 0);
 
-                                            canvas.toBlob(blob => {
-                                                const a = document.createElement('a');
-                                                a.href = URL.createObjectURL(blob);
+                                                canvas.toBlob(blob => {
+                                                    const a = document.createElement('a');
+                                                    a.href = URL.createObjectURL(blob);
 
-                                                const name = primary.name || 'image';
-                                                a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-noexif.jpg';
+                                                    const name = primary.name || 'image';
+                                                    a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-noexif.jpg';
 
-                                                a.click();
+                                                    a.click();
 
-                                                Events.fire('notify-user', Localization.getTranslation('notifications.metadata-removed'));
-                                            }, 'image/jpeg', 0.92);
-                                        };
-                                    } catch (err) {
-                                        console.error('Remove EXIF failed', err);
-                                        Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
+                                                    Events.fire('notify-user', Localization.getTranslation('notifications.metadata-removed'));
+                                                }, 'image/jpeg', 0.92);
+                                            };
+                                        } catch (err) {
+                                            console.error('Remove EXIF failed', err);
+                                            Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
+                                        }
                                     }
                                 }
                             }
                         } catch (err) {
-                            console.error('Read EXIF failed', err);
+                            console.error('Read metadata failed', err);
                             Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
                         }
                     };
