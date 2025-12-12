@@ -129,6 +129,8 @@
         "cloud-upload-capacity": "Cloudové úložiště je dočasně nedostupné kvůli vysokému vytížení. Zkuste to později.",
         "cloud-upload-unavailable": "Nahrávání do cloudu nyní není dostupné. Zkuste to znovu později.",
         "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Komprimovat",
         "edit-ai": "Edit with AI"
     },

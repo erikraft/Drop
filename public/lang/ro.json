@@ -187,6 +187,8 @@
         "cloud-upload-capacity": "Spațiul cloud este indisponibil temporar din cauza utilizării mari. Încearcă mai târziu.",
         "cloud-upload-unavailable": "Încărcarea în cloud nu este disponibilă acum. Încercați din nou mai târziu.",
         "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Comprima",
         "edit-ai": "Edit with AI"
     },

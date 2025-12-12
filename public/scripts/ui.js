@@ -1006,6 +1006,8 @@ class ReceiveFileDialog extends ReceiveDialog {
         this.$copyImageBtn = this.$el.querySelector('#copy-image-btn');
         this.$metadataBtn = this.$el.querySelector('#metadata-btn');
         this.$compressBtn = this.$el.querySelector('#compress-btn');
+        this.$publishYoutubeBtn = this.$el.querySelector('#publish-youtube-btn');
+        this.$publishInstagramBtn = this.$el.querySelector('#publish-instagram-btn');
 
         Events.on('files-received', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
         this._filesQueue = [];
@@ -1213,6 +1215,14 @@ class ReceiveFileDialog extends ReceiveDialog {
             if (this.$compressBtn) {
                 this.$compressBtn.setAttribute('hidden', true);
                 this.$compressBtn.onclick = null;
+            }
+            if (this.$publishYoutubeBtn) {
+                this.$publishYoutubeBtn.setAttribute('hidden', true);
+                this.$publishYoutubeBtn.onclick = null;
+            }
+            if (this.$publishInstagramBtn) {
+                this.$publishInstagramBtn.setAttribute('hidden', true);
+                this.$publishInstagramBtn.onclick = null;
             }
             if (this.$aiEditBtn) {
                 this.$aiEditBtn.setAttribute('hidden', true);
@@ -1426,6 +1436,32 @@ class ReceiveFileDialog extends ReceiveDialog {
                 } else {
                     this.$metadataBtn.setAttribute('hidden', true);
                     this.$metadataBtn.onclick = null;
+                }
+            }
+
+            // Publish on YouTube: for videos
+            if (this.$publishYoutubeBtn) {
+                if ((mime || '').startsWith('video/')) {
+                    this.$publishYoutubeBtn.removeAttribute('hidden');
+                    this.$publishYoutubeBtn.onclick = _ => {
+                        window.open('https://www.youtube.com/upload', '_blank');
+                    };
+                } else {
+                    this.$publishYoutubeBtn.setAttribute('hidden', true);
+                    this.$publishYoutubeBtn.onclick = null;
+                }
+            }
+
+            // Publish on Instagram: for images and videos
+            if (this.$publishInstagramBtn) {
+                if ((mime || '').startsWith('image/') || (mime || '').startsWith('video/')) {
+                    this.$publishInstagramBtn.removeAttribute('hidden');
+                    this.$publishInstagramBtn.onclick = _ => {
+                        window.open('https://www.instagram.com/create/post/', '_blank');
+                    };
+                } else {
+                    this.$publishInstagramBtn.setAttribute('hidden', true);
+                    this.$publishInstagramBtn.onclick = null;
                 }
             }
 

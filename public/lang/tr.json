@@ -135,6 +135,8 @@
         "cloud-upload-capacity": "Yüksek kullanım nedeniyle bulut depolama geçici olarak kullanılamıyor. Daha sonra tekrar deneyin.",
         "cloud-upload-unavailable": "Bulut yüklemesi şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
         "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Sıkıştır",
         "edit-ai": "Edit with AI"
     },

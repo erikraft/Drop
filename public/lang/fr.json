@@ -136,7 +136,9 @@
         "cloud-upload-error": "Erreur inattendue lors du téléversement du fichier.",
         "cloud-upload-capacity": "Le stockage cloud est temporairement indisponible en raison d'une forte utilisation. Réessayez plus tard.",
         "cloud-upload-unavailable": "Le téléversement vers le cloud n'est pas disponible pour le moment. Réessayez plus tard.",
-        "metadata-exif": "Métadonnées (EXIF)",
+        "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Compresser",
         "edit-ai": "Modifier avec IA"
     },

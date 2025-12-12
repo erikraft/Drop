@@ -136,7 +136,9 @@
         "cloud-upload-error": "Erro inesperado ao enviar arquivo.",
         "cloud-upload-capacity": "Armazenamento em nuvem temporariamente indisponível devido ao uso elevado. Tente novamente mais tarde.",
         "cloud-upload-unavailable": "Upload na nuvem indisponível no momento. Tente novamente mais tarde.",
-        "metadata-exif": "Metadados (EXIF)",
+        "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Comprimir",
         "edit-ai": "Editar com IA"
     },

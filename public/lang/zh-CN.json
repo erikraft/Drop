@@ -135,6 +135,8 @@
         "cloud-upload-capacity": "由于使用量过大，云存储暂时不可用。请稍后再试。",
         "cloud-upload-unavailable": "云端上传暂不可用。请稍后重试。",
         "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Compress",
         "edit-ai": "使用 AI 编辑"
     },

@@ -185,6 +185,8 @@
         "cloud-upload-capacity": "高負荷のためクラウドストレージは一時的に利用できません。後でもう一度お試しください。",
         "cloud-upload-unavailable": "クラウドアップロードは現在利用できません。後でもう一度お試しください。",
         "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Compress",
         "edit-photopea": "編集 (Photopea)",
         "edit-vectorpea": "編集 (Vectorpea)",

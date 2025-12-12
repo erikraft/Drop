@@ -163,6 +163,8 @@
         "cloud-upload-capacity": "Hodeiko biltegia aldi baterako ez dago erabilgarri erabilera handia dela eta. Saiatu geroago berriro.",
         "cloud-upload-unavailable": "Hodeiko igoera une honetan ez dago erabilgarri. Saiatu geroago berriro.",
         "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publish on YouTube",
+        "publish-instagram": "Publish on Instagram",
         "compress": "Komprimitu",
         "edit-ai": "Edit with AI"
     },
