@@ -73,6 +73,7 @@
         "send": "전송",
         "receive-text-title": "메시지 받음",
         "copy": "복사",
+        "download-txt": "Download TXT",
         "base64-title-files": "파일 공유",
         "base64-title-text": "텍스트 공유",
         "base64-tap-to-paste": "여기를 눌러 {{type}}을(를) 공유하세요",

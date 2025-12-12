@@ -90,6 +90,7 @@
         "message_placeholder": "Text",
         "message_title": "Sem vlož správu",
         "copy": "Kopírovať",
+        "download-txt": "Download TXT",
         "base64-title-files": "Zdielať súbory",
         "base64-processing": "Pracujem…",
         "base64-tap-to-paste": "Ťuknutím sem zdieľaj {{type}}",

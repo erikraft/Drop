@@ -85,6 +85,7 @@
         "message_title": "Írja be a küldeni kívánt üzenetet",
         "message_placeholder": "Szöveg",
         "copy": "Másolás",
+        "download-txt": "Download TXT",
         "base64-title-files": "Fájlok megosztása",
         "base64-title-text": "Szöveg megosztása",
         "enter-key-from-another-device": "Ide írja be a kódot egy másik eszközről.",

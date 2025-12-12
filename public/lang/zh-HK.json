@@ -114,6 +114,7 @@
         "message_placeholder": "文字",
         "send": "傳送",
         "copy": "複製",
+        "download-txt": "Download TXT",
         "cloud-upload-title": "將檔案傳送至雲端",
         "cloud-upload-file-label": "檔案",
         "cloud-upload-expiry-label": "距離到期時間",

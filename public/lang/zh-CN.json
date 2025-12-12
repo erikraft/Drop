@@ -79,6 +79,7 @@
         "send": "发送",
         "receive-text-title": "收到信息",
         "copy": "复制",
+        "download-txt": "下载 TXT",
         "send-message-title": "发送信息",
         "send-message-to": "发给：",
         "has-sent": "发送了：",

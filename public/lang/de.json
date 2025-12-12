@@ -40,6 +40,7 @@
         "would-like-to-share": "möchte Folgendes teilen",
         "send": "Senden",
         "copy": "Kopieren",
+        "download-txt": "TXT herunterladen",
         "receive-text-title": "Nachricht Erhalten",
         "file-other-description-image-plural": "und {{count}} andere Bilder",
         "file-other-description-file-plural": "und {{count}} andere Dateien",

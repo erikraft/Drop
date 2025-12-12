@@ -2604,9 +2604,11 @@ class ReceiveTextDialog extends Dialog {
         Events.on('text-received', e => this._onText(e.detail.text, e.detail.peerId));
         this.$text = this.$el.querySelector('#text');
         this.$copy = this.$el.querySelector('#copy');
+        this.$downloadTxt = this.$el.querySelector('#download-txt');
         this.$close = this.$el.querySelector('#close');
 
         this.$copy.addEventListener('click', _ => this._onCopy());
+        this.$downloadTxt.addEventListener('click', _ => this._onDownloadTxt());
         this.$close.addEventListener('click', _ => this.hide());
 
         Events.on('keydown', e => this._onKeyDown(e));
@@ -2746,6 +2748,20 @@ class ReceiveTextDialog extends Dialog {
             .catch(_ => {
                 Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard-error"));
             });
+    }
+
+    async _onDownloadTxt() {
+        const sanitizedText = this.$text.innerText.replace(/\u00A0/gm, ' ');
+        const blob = new Blob([sanitizedText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'received-text.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        this.hide();
     }
 
     hide() {

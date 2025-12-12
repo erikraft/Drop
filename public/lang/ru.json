@@ -67,6 +67,7 @@
         "send-message-to": "Кому:",
         "send-message-title": "Отправить сообщение",
         "copy": "Копировать",
+        "download-txt": "Скачать TXT",
         "base64-files": "файлы",
         "base64-paste-to-send": "Вставьте, чтобы поделиться {{type}}",
         "base64-processing": "Обработка…",

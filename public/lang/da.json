@@ -84,6 +84,7 @@
         "send": "Send",
         "receive-text-title": "Besked modtaget",
         "copy": "Kopier",
+        "download-txt": "Download TXT",
         "base64-title-files": "Del filer",
         "base64-title-text": "Del tekst",
         "base64-processing": "Behandler…",

@@ -124,6 +124,7 @@
         "base64-tap-to-paste": "ここをタップして{{type}}を共有",
         "base64-text": "テキスト",
         "copy": "コピー",
+        "download-txt": "TXTをダウンロード",
         "file-other-description-image": "とその他1個の画像",
         "temporary-public-room-title": "公開ルーム",
         "base64-files": "ファイル",

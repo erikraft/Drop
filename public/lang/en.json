@@ -89,6 +89,7 @@
         "send": "Send",
         "receive-text-title": "Message Received",
         "copy": "Copy",
+        "download-txt": "Download TXT",
         "base64-title-files": "Share Files",
         "base64-title-text": "Share Text",
         "base64-processing": "Processing…",

@@ -88,6 +88,7 @@
         "send": "Enviar",
         "receive-text-title": "Mensagem Recebida",
         "copy": "Copiar",
+        "download-txt": "Baixar TXT",
         "base64-processing": "Processando…",
         "base64-tap-to-paste": "Toque aqui para compartilhar {{type}}",
         "base64-paste-to-send": "Cole da área de transferência aqui para compartilhar {{type}}",

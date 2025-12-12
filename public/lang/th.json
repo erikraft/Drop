@@ -18,6 +18,7 @@
         "system-language": "ภาษาของระบบ",
         "auto-accept-instructions-2": "เพื่อยอมรับไฟล์ทั้งหมดที่ส่งจากอุปกรณ์นั้นโดยอัตโนมัติ",
         "copy": "คัดลอก",
+        "download-txt": "Download TXT",
         "paired-device-removed": "อุปกรณ์ที่เคยจับคู่ถูกลบออกไปแล้ว",
         "scan-qr-code": "หรือสแกน QR-code",
         "cancel": "ยกเลิก",

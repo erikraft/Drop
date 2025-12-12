@@ -87,6 +87,7 @@
         "send": "Envoyer",
         "receive-text-title": "Message reçu",
         "copy": "Copier",
+        "download-txt": "Télécharger TXT",
         "base64-processing": "Traitement…",
         "base64-tap-to-paste": "Appuyez ici pour partager {{type}}",
         "base64-paste-to-send": "Coller le presse-papiers ici pour partager {{type}}",
