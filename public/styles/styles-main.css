@@ -234,7 +234,7 @@ header * {
 }
 
 #expand>.icon {
-    transition: transform 150ms ease-out
+    transition: transform 150ms ease-out;
 }
 
 html:not([dir="rtl"]) #expand.flipped>.icon {
