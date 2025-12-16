@@ -178,6 +178,10 @@
         "cloud-upload-error": "Faili üleslaadimisel tekkis ootamatu viga.",
         "cloud-upload-capacity": "Pilvesalvestus ei ole suure koormuse tõttu ajutiselt kättesaadav. Proovi hiljem uuesti.",
         "cloud-upload-unavailable": "Pilve üleslaadimine pole praegu saadaval. Proovi hiljem uuesti.",
+        "metadata-exif": "Metaandmed (EXIF)",
+        "publish-youtube": "Avalda YouTube'is",
+        "publish-instagram": "Avalda Instagramis",
+        "compress": "Tihenda",
         "edit-ai": "Edit with AI"
     },
     "about": {

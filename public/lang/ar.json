@@ -161,9 +161,9 @@
         "cloud-upload-error": "حدث خطأ غير متوقع أثناء تحميل الملف.",
         "cloud-upload-capacity": "التخزين السحابي غير متاح مؤقتًا بسبب الاستخدام الكثيف. حاول مرة أخرى لاحقًا.",
         "cloud-upload-unavailable": "التحميل إلى السحابة غير متاح حاليًا. يرجى المحاولة لاحقًا.",
-        "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "metadata-exif": "البيانات الوصفية (EXIF)",
+        "publish-youtube": "نشر على يوتيوب",
+        "publish-instagram": "نشر على إنستغرام",
         "compress": "ضغط",
         "edit-ai": "تحرير باستخدام الذكاء الاصطناعي"
     },

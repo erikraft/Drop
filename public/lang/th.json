@@ -67,6 +67,10 @@
         "cloud-upload-error": "เกิดข้อผิดพลาดที่ไม่คาดคิดระหว่างอัปโหลดไฟล์",
         "cloud-upload-capacity": "ที่เก็บข้อมูลบนคลาวด์ไม่พร้อมใช้งานชั่วคราวเนื่องจากมีการใช้งานสูง โปรดลองอีกครั้งในภายหลัง",
         "cloud-upload-unavailable": "ขณะนี้ไม่สามารถอัปโหลดไปยังคลาวด์ได้ โปรดลองใหม่อีกครั้งภายหลัง",
+        "metadata-exif": "ข้อมูลเมตา (EXIF)",
+        "publish-youtube": "เผยแพร่บน YouTube",
+        "publish-instagram": "เผยแพร่บน Instagram",
+        "compress": "บีบอัด",
         "edit-ai": "Edit with AI"
     },
     "header": {

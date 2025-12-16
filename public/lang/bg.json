@@ -135,9 +135,9 @@
         "cloud-upload-error": "Неочаквана грешка при качване на файла.",
         "cloud-upload-capacity": "Облачният сторидж временно не е достъпен поради голямо натоварване. Опитайте по-късно.",
         "cloud-upload-unavailable": "Качването в облака в момента не е достъпно. Опитайте по-късно.",
-        "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "metadata-exif": "Метаданни (EXIF)",
+        "publish-youtube": "Публикувай в YouTube",
+        "publish-instagram": "Публикувай в Instagram",
         "compress": "Компресирай",
         "edit-ai": "Edit with AI"
     },

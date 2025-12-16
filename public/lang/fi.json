@@ -47,6 +47,10 @@
         "cloud-upload-error": "Tiedoston latauksessa tapahtui odottamaton virhe.",
         "cloud-upload-capacity": "Pilvitallennus ei ole tilapäisesti käytettävissä suuren kuormituksen vuoksi. Yritä myöhemmin uudelleen.",
         "cloud-upload-unavailable": "Pilveen lataus ei ole juuri nyt käytettävissä. Yritä myöhemmin uudelleen.",
+        "metadata-exif": "Metatiedot (EXIF)",
+        "publish-youtube": "Julkaise YouTubessa",
+        "publish-instagram": "Julkaise Instagramissa",
+        "compress": "Pakkaa",
         "edit-photopea": "Muokkaa (Photopea)",
         "edit-vectorpea": "Muokkaa (Vectorpea)",
         "edit-ai": "Edit with AI"

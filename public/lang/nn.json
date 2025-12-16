@@ -135,9 +135,9 @@
         "cloud-upload-error": "Uventa feil under opplasting av fila.",
         "cloud-upload-capacity": "Skylagringa er mellombels utilgjengeleg på grunn av høg belastning. Prøv igjen seinare.",
         "cloud-upload-unavailable": "Cloud-opplasting er ikkje tilgjengeleg akkurat no. Prøv igjen seinare.",
-        "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "metadata-exif": "Metadat (EXIF)",
+        "publish-youtube": "Publiser på YouTube",
+        "publish-instagram": "Publiser på Instagram",
         "compress": "Komprimera",
         "edit-ai": "Edit with AI"
     },

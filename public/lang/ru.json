@@ -135,6 +135,10 @@
         "cloud-upload-error": "Произошла непредвиденная ошибка при загрузке файла.",
         "cloud-upload-capacity": "Облачное хранилище временно недоступно из-за высокой нагрузки. Попробуйте позже.",
         "cloud-upload-unavailable": "Загрузка в облако сейчас недоступна. Попробуйте позже.",
+        "metadata-exif": "Метаданные (EXIF)",
+        "publish-youtube": "Опубликовать на YouTube",
+        "publish-instagram": "Опубликовать в Instagram",
+        "compress": "Сжать",
         "edit-ai": "Редактировать с помощью AI"
     },
     "about": {

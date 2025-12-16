@@ -135,6 +135,10 @@
         "cloud-upload-error": "Pri nahrávaní súboru došlo k neočakávanej chybe.",
         "cloud-upload-capacity": "Cloudové úložisko je dočasne nedostupné z dôvodu vysokej záťaže. Skúste to neskôr.",
         "cloud-upload-unavailable": "Nahrávanie do cloudu momentálne nie je dostupné. Skúste to neskôr.",
+        "metadata-exif": "Metadáta (EXIF)",
+        "publish-youtube": "Publikovať na YouTube",
+        "publish-instagram": "Publikovať na Instagrame",
+        "compress": "Komprimovať",
         "edit-ai": "Edit with AI"
     },
     "notifications": {

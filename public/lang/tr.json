@@ -135,9 +135,9 @@
         "cloud-upload-error": "Dosya yüklenirken beklenmeyen bir hata oluştu.",
         "cloud-upload-capacity": "Yüksek kullanım nedeniyle bulut depolama geçici olarak kullanılamıyor. Daha sonra tekrar deneyin.",
         "cloud-upload-unavailable": "Bulut yüklemesi şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
-        "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "metadata-exif": "Meta veriler (EXIF)",
+        "publish-youtube": "YouTube'da Yayınla",
+        "publish-instagram": "Instagram'da Yayınla",
         "compress": "Sıkıştır",
         "edit-ai": "Edit with AI"
     },

@@ -60,6 +60,10 @@
         "cloud-upload-error": "ফাইল আপলোড করার সময় অপ্রত্যাশিত ত্রুটি ঘটেছে।",
         "cloud-upload-capacity": "অত্যধিক ব্যবহারের কারণে ক্লাউড স্টোরেজ সাময়িকভাবে অনুপলব্ধ। পরে আবার চেষ্টা করুন।",
         "cloud-upload-unavailable": "ক্লাউড আপলোড বর্তমানে উপলব্ধ নয়। অনুগ্রহ করে পরে আবার চেষ্টা করুন।",
+        "metadata-exif": "মেটাডেটা (EXIF)",
+        "publish-youtube": "YouTube-এ প্রকাশ করুন",
+        "publish-instagram": "Instagram-এ প্রকাশ করুন",
+        "compress": "সংকুচিত করুন",
         "edit-photopea": "সম্পাদনা (Photopea)",
         "edit-vectorpea": "সম্পাদনা (Vectorpea)",
         "edit-ai": "AI দিয়ে সম্পাদনা করুন"

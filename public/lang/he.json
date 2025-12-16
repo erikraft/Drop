@@ -133,6 +133,10 @@
         "cloud-upload-error": "אירעה שגיאה בלתי צפויה במהלך העלאת הקובץ.",
         "cloud-upload-capacity": "אחסון הענן אינו זמין זמנית בשל עומס כבד. נסה שוב מאוחר יותר.",
         "cloud-upload-unavailable": "העלאה לענן אינה זמינה כעת. נסה שוב מאוחר יותר.",
+        "metadata-exif": "מטא-נתונים (EXIF)",
+        "publish-youtube": "פרסם ב-YouTube",
+        "publish-instagram": "פרסם באינסטגרם",
+        "compress": "דחוס",
         "edit-photopea": "ערוך (Photopea)",
         "edit-vectorpea": "ערוך (Vectorpea)",
         "edit-ai": "Edit with AI"

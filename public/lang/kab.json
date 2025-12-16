@@ -41,6 +41,10 @@
         "cloud-upload-error": "Teḍra-d tuccḍa tarussint mi d-nsel afaylu.",
         "cloud-upload-capacity": "Takaṛḍit n usigna ur teddun ara akka tura acku lqem d ameqqran. Eɛreḍ tikelt-nniḍen.",
         "cloud-upload-unavailable": "Trusi ar usigna ur tweddu ara akka tura. Eɛreḍ ticki.",
+        "metadata-exif": "Inɣmis (EXIF)",
+        "publish-youtube": "Suffeɣ deg YouTube",
+        "publish-instagram": "Suffeɣ deg Instagram",
+        "compress": "Kemmed",
         "edit-photopea": "Edit (Photopea)",
         "edit-vectorpea": "Edit (Vectorpea)",
         "edit-ai": "Edit with AI"

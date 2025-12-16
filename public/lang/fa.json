@@ -88,6 +88,10 @@
         "cloud-upload-error": "خطای غیرمنتظره هنگام بارگذاری فایل رخ داد.",
         "cloud-upload-capacity": "به دلیل استفاده زیاد، فضای ابری موقتاً در دسترس نیست. بعداً دوباره تلاش کنید.",
         "cloud-upload-unavailable": "بارگذاری در فضای ابری در حال حاضر در دسترس نیست. لطفاً بعداً دوباره تلاش کنید.",
+        "metadata-exif": "فراداده (EXIF)",
+        "publish-youtube": "انتشار در یوتیوب",
+        "publish-instagram": "انتشار در اینستاگرام",
+        "compress": "فشرده‌سازی",
         "edit-photopea": "ویرایش (Photopea)",
         "edit-vectorpea": "ویرایش (Vectorpea)",
         "edit-ai": "Edit with AI"

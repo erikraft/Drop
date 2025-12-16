@@ -135,6 +135,10 @@
         "cloud-upload-error": "上傳檔案時發生未預期的錯誤。",
         "cloud-upload-capacity": "因使用量過高，雲端儲存暫時無法使用。請稍後再試。",
         "cloud-upload-unavailable": "雲端上傳目前無法使用。請稍後再試。",
+        "metadata-exif": "元數據 (EXIF)",
+        "publish-youtube": "發佈到 YouTube",
+        "publish-instagram": "發佈到 Instagram",
+        "compress": "壓縮",
         "edit-ai": "使用 AI 編輯"
     },
     "about": {

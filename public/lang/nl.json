@@ -187,9 +187,9 @@
         "cloud-upload-error": "Onverwachte fout tijdens het uploaden van het bestand.",
         "cloud-upload-capacity": "Cloudopslag is tijdelijk niet beschikbaar vanwege hoge belasting. Probeer het later opnieuw.",
         "cloud-upload-unavailable": "Cloudupload is momenteel niet beschikbaar. Probeer het later opnieuw.",
-        "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "metadata-exif": "Metagegevens (EXIF)",
+        "publish-youtube": "Publiceren op YouTube",
+        "publish-instagram": "Publiceren op Instagram",
         "compress": "Comprimeren",
         "edit-ai": "Bewerken met AI"
     },

@@ -185,6 +185,10 @@
         "cloud-upload-error": "Terjadi kesalahan tak terduga saat mengunggah file.",
         "cloud-upload-capacity": "Penyimpanan cloud sementara tidak tersedia karena penggunaan tinggi. Coba lagi nanti.",
         "cloud-upload-unavailable": "Unggahan cloud tidak tersedia saat ini. Silakan coba lagi nanti.",
+        "metadata-exif": "Metadata (EXIF)",
+        "publish-youtube": "Publikasikan di YouTube",
+        "publish-instagram": "Publikasikan di Instagram",
+        "compress": "Kompres",
         "edit-photopea": "Sunting (Photopea)",
         "edit-vectorpea": "Sunting (Vectorpea)",
         "edit-ai": "Edit with AI"

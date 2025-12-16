@@ -101,6 +101,10 @@
         "cloud-upload-error": "ಕಡತವನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡುವಾಗ ನಿರೀಕ್ಷಿತೇತರ ದೋಷ ಉಂಟಾಯಿತು.",
         "cloud-upload-capacity": "ಅಧಿಕ ಬಳಕೆಗಾಗಿ ಕ್ಲೌಡ್ ಸಂಗ್ರಹಣೆಯನ್ನು ತಾತ್ಕಾಲಿಕವಾಗಿ ಬಳಸಲಾಗುವುದಿಲ್ಲ. ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
         "cloud-upload-unavailable": "ಕ್ಲೌಡ್ ಅಪ್ಲೋಡ್ ಸದ್ಯ ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+        "metadata-exif": "ಮೆಟಾಡೇಟಾ (EXIF)",
+        "publish-youtube": "YouTube ನಲ್ಲಿ ಪ್ರಕಟಿಸಿ",
+        "publish-instagram": "Instagram ನಲ್ಲಿ ಪ್ರಕಟಿಸಿ",
+        "compress": "ಸಂಕುಚಿಸಿ",
         "edit-photopea": "ಸಂಪಾದಿಸಿ (Photopea)",
         "edit-vectorpea": "ಸಂಪಾದಿಸಿ (Vectorpea)",
         "edit-ai": "Edit with AI"

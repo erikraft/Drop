@@ -126,8 +126,8 @@
         "cloud-upload-capacity": "Cloudlageret er midlertidigt utilgængeligt på grund af høj belastning. Prøv igen senere.",
         "cloud-upload-unavailable": "Cloud-upload er ikke tilgængelig lige nu. Prøv igen senere.",
         "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "publish-youtube": "Udgiv på YouTube",
+        "publish-instagram": "Udgiv på Instagram",
         "compress": "Komprimer",
         "edit-ai": "Edit with AI"
     },

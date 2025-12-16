@@ -135,9 +135,9 @@
         "cloud-upload-error": "Errore imprevisto durante il caricamento del file.",
         "cloud-upload-capacity": "Lo spazio cloud è temporaneamente indisponibile a causa dell'elevato traffico. Riprova più tardi.",
         "cloud-upload-unavailable": "Il caricamento sul cloud non è disponibile in questo momento. Riprova più tardi.",
-        "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "metadata-exif": "Metadati (EXIF)",
+        "publish-youtube": "Pubblica su YouTube",
+        "publish-instagram": "Pubblica su Instagram",
         "compress": "Comprimi",
         "edit-ai": "Edit with AI"
     },

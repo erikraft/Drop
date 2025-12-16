@@ -135,6 +135,10 @@
         "cloud-upload-error": "கோப்பை பதிவேற்றும்போது எதிர்பாராத பிழை ஏற்பட்டது.",
         "cloud-upload-capacity": "அதிக பயன்பாட்டினால் மேக சேமிப்பு தற்காலிகமாக கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.",
         "cloud-upload-unavailable": "மேக பதிவேற்றம் இப்போது கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.",
+        "metadata-exif": "மெட்டாடேட்டா (EXIF)",
+        "publish-youtube": "YouTube-ல் வெளியிடு",
+        "publish-instagram": "Instagram-ல் வெளியிடு",
+        "compress": "அமுக்கம்",
         "edit-ai": "Edit with AI"
     },
     "about": {

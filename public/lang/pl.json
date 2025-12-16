@@ -135,9 +135,9 @@
         "cloud-upload-error": "Wystąpił nieoczekiwany błąd podczas przesyłania pliku.",
         "cloud-upload-capacity": "Przestrzeń w chmurze jest tymczasowo niedostępna z powodu dużego obciążenia. Spróbuj ponownie później.",
         "cloud-upload-unavailable": "Przesyłanie do chmury jest teraz niedostępne. Spróbuj ponownie później.",
-        "metadata-exif": "Metadata (EXIF)",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
+        "metadata-exif": "Metadane (EXIF)",
+        "publish-youtube": "Opublikuj na YouTube",
+        "publish-instagram": "Opublikuj na Instagram",
         "compress": "Kompresuj",
         "edit-ai": "Edit with AI"
     },

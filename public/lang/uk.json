@@ -135,6 +135,10 @@
         "cloud-upload-error": "Сталася неочікувана помилка під час завантаження файлу.",
         "cloud-upload-capacity": "Хмарне сховище тимчасово недоступне через високе навантаження. Спробуйте пізніше.",
         "cloud-upload-unavailable": "Хмарне завантаження зараз недоступне. Спробуйте знову пізніше.",
+        "metadata-exif": "Метадані (EXIF)",
+        "publish-youtube": "Опублікувати на YouTube",
+        "publish-instagram": "Опублікувати в Instagram",
+        "compress": "Стиснути",
         "edit-ai": "Edit with AI"
     },
     "about": {
