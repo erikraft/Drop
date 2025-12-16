@@ -1444,7 +1444,15 @@ class ReceiveFileDialog extends ReceiveDialog {
                 if ((mime || '').startsWith('video/')) {
                     this.$publishYoutubeBtn.removeAttribute('hidden');
                     this.$publishYoutubeBtn.onclick = _ => {
-                        window.open('https://www.youtube.com/upload', '_blank');
+                        if (navigator.share && navigator.canShare && navigator.canShare({ files: [primary] })) {
+                            navigator.share({ files: [primary] })
+                                .catch(err => {
+                                    console.error('Share failed', err);
+                                    window.open('https://www.youtube.com/upload', '_blank');
+                                });
+                        } else {
+                            window.open('https://www.youtube.com/upload', '_blank');
+                        }
                     };
                 } else {
                     this.$publishYoutubeBtn.setAttribute('hidden', true);
@@ -1457,7 +1465,15 @@ class ReceiveFileDialog extends ReceiveDialog {
                 if ((mime || '').startsWith('image/') || (mime || '').startsWith('video/')) {
                     this.$publishInstagramBtn.removeAttribute('hidden');
                     this.$publishInstagramBtn.onclick = _ => {
-                        window.open('https://www.instagram.com/create/post/', '_blank');
+                        if (navigator.share && navigator.canShare && navigator.canShare({ files: [primary] })) {
+                            navigator.share({ files: [primary] })
+                                .catch(err => {
+                                    console.error('Share failed', err);
+                                    window.open('instagram://upload', '_blank');
+                                });
+                        } else {
+                            window.open('instagram://upload', '_blank');
+                        }
                     };
                 } else {
                     this.$publishInstagramBtn.setAttribute('hidden', true);
