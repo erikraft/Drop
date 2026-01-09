@@ -1439,7 +1439,8 @@ class ReceiveFileDialog extends ReceiveDialog {
                 }
             }
 
-            // Publish on YouTube: for videos
+            // Removido: Publish on YouTube
+            /*
             if (this.$publishYoutubeBtn) {
                 if ((mime || '').startsWith('video/')) {
                     this.$publishYoutubeBtn.removeAttribute('hidden');
@@ -1459,8 +1460,10 @@ class ReceiveFileDialog extends ReceiveDialog {
                     this.$publishYoutubeBtn.onclick = null;
                 }
             }
+            */
 
-            // Publish on Instagram: for images and videos
+            // Removido: Publish on Instagram
+            /*
             if (this.$publishInstagramBtn) {
                 if ((mime || '').startsWith('image/') || (mime || '').startsWith('video/')) {
                     this.$publishInstagramBtn.removeAttribute('hidden');
@@ -1480,6 +1483,7 @@ class ReceiveFileDialog extends ReceiveDialog {
                     this.$publishInstagramBtn.onclick = null;
                 }
             }
+            */
 
             // Compress: re-encode image trying different sizes/qualities to keep result smaller than original
             if (this.$compressBtn) {
@@ -1601,6 +1605,8 @@ class ReceiveFileDialog extends ReceiveDialog {
                 }
             }
 
+            // Removido: Botão Editar com IA (desabilitado)
+            /*
             if (this.$aiEditBtn) {
                 if ((mime || '').startsWith('image/') && files.length > 0) {
                     this.$aiEditBtn.removeAttribute('hidden');
@@ -1640,6 +1646,7 @@ class ReceiveFileDialog extends ReceiveDialog {
                     this.$aiEditBtn.onclick = null;
                 }
             }
+            */
         }
         catch (e) {
             console.warn('Could not set up editor buttons', e);

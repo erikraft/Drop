@@ -429,23 +429,25 @@
             </a>
         </div>
 
-        <div id="comet" class="icon-button" data-i18n-key="header.comet" data-i18n-attrs="title" title="Comet Browser">
+        <!-- Removido: botão Comet Browser -->
+        <!-- <div id="comet" class="icon-button" data-i18n-key="header.comet" data-i18n-attrs="title" title="Comet Browser">
             <a href="https://www.perplexity.ai/download-comet" target="_blank" rel="noopener noreferrer"
                 aria-label="Comet Browser"></a>
             <svg width="24" height="24">
                 <use xlink:href="#icon-comet"></use>
             </svg>
-        </div>
+        </div> -->
 
-        <div id="browseros" class="icon-button hidden-mobile" data-i18n-key="header.browseros" data-i18n-attrs="title"
+        <!-- Removido: botão BrowserOS -->
+        <!-- <div id="browseros" class="icon-button hidden-mobile" data-i18n-key="header.browseros" data-i18n-attrs="title"
             title="BrowserOS">
             <a href="https://www.browseros.com/" target="_blank" rel="noopener noreferrer" aria-label="BrowserOS"></a>
             <svg class="icon" width="24" height="24">
                 <use xlink:href="#icon-browseros"></use>
             </svg>
-        </div>
-        <!-- Popup Comet Browser -->
-        <div id="comet-popup"
+        </div> -->
+        <!-- Removido: Popup Comet Browser -->
+        <!-- <div id="comet-popup"
             style="display:none; position:fixed; top:80px; right:16px; background:#222; color:#fff; padding:24px 32px; border-radius:12px; box-shadow:0 2px 16px #0008; z-index:9999; max-width:420px; width:100%;">
             <button id="comet-popup-close-btn" aria-label="Fechar">✕</button>
             <div id="comet-popup-content">
@@ -461,10 +463,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <!-- Popup BrowserOS (apenas para computadores) -->
-        <div id="browseros-popup"
+        <!-- Removido: Popup BrowserOS (apenas para computadores) -->
+        <!-- <div id="browseros-popup"
             style="display:none; position:fixed; top:80px; right:16px; background:#222; color:#fff; padding:24px 32px; border-radius:12px; box-shadow:0 2px 16px #0008; z-index:9999; max-width:420px; width:100%;">
             <button id="browseros-popup-close-btn" aria-label="Fechar">✕</button>
             <div id="browseros-popup-content">
@@ -481,7 +483,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!--        <div id="discord" class="icon-button" data-i18n-key="header.discord" data-i18n-attrs="title" title="Discord">
             <a id="discord-launcher" href="https://discord.com/channels/@me" target="_blank" rel="noopener noreferrer"
@@ -1063,14 +1065,17 @@
                         data-i18n-key="dialogs.edit-vectorpea" data-i18n-attrs="text" hidden></button>
                     <button id="copy-image-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.copy"
                         data-i18n-attrs="text" hidden></button>
-                    <button id="ai-edit-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.edit-ai"
-                        data-i18n-attrs="text" hidden></button>
+                    <!-- Removido: botão Editar com IA (desabilitado) -->
+                    <!-- <button id="ai-edit-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.edit-ai"
+                        data-i18n-attrs="text" hidden></button> -->
                     <button id="metadata-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.metadata-exif"
                         data-i18n-attrs="text" hidden></button>
-                    <button id="publish-youtube-btn" class="btn btn-rounded btn-grey"
-                        data-i18n-key="dialogs.publish-youtube" data-i18n-attrs="text" hidden></button>
-                    <button id="publish-instagram-btn" class="btn btn-rounded btn-grey"
-                        data-i18n-key="dialogs.publish-instagram" data-i18n-attrs="text" hidden></button>
+                    <!-- Removido: botão Publicar no YouTube -->
+                    <!-- <button id="publish-youtube-btn" class="btn btn-rounded btn-grey"
+                        data-i18n-key="dialogs.publish-youtube" data-i18n-attrs="text" hidden></button> -->
+                    <!-- Removido: botão Publicar no Instagram -->
+                    <!-- <button id="publish-instagram-btn" class="btn btn-rounded btn-grey"
+                        data-i18n-key="dialogs.publish-instagram" data-i18n-attrs="text" hidden></button> -->
                     <button id="compress-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.compress"
                         data-i18n-attrs="text" hidden></button>
                     <button id="download-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.download"
@@ -2075,6 +2080,8 @@
                     if (tries > 12) clearInterval(iv);
                 }, 500);
             })();
+            // Removido: Lógica do popup Comet Browser
+            /*
             var cometBtn = document.getElementById('comet');
             var cometLink = cometBtn ? cometBtn.querySelector('a') : null;
             var popup = document.getElementById('comet-popup');
@@ -2189,7 +2196,10 @@
                     showPopup();
                 });
             }
+            */
 
+            // Removido: Lógica do popup BrowserOS
+            /*
             // === BrowserOS popup (aparece apenas em computadores) ===
             var browserosBtn = document.getElementById('browseros');
             var browserosLink = browserosBtn ? browserosBtn.querySelector('a') : null;
@@ -2268,6 +2278,7 @@
                     }
                 }
             }
+            */
         });
     </script>
 
