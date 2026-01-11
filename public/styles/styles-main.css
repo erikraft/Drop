@@ -233,6 +233,11 @@ header * {
     }
 }
 
+#expand[hidden],
+#expand[hidden]>.icon {
+    display: none !important;
+}
+
 #expand>.icon {
     transition: transform 150ms ease-out;
 }
