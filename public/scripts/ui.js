@@ -2775,14 +2775,27 @@ class ReceiveTextDialog extends Dialog {
 
     async _onDownloadTxt() {
         const sanitizedText = this.$text.innerText.replace(/\u00A0/gm, ' ');
+
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const date = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        const filenameDownload = `ErikrafTDrop_text_${year}${month}${date}_${hours}${minutes}.txt`;
+
         const blob = new Blob([sanitizedText], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
+
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'received-text.txt';
+        a.download = filenameDownload;
+
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+
         URL.revokeObjectURL(url);
         this.hide();
     }
