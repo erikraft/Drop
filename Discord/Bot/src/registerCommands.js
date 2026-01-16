@@ -37,17 +37,37 @@ async function registerCommands() {
     const rest = new REST({ version: '10' }).setToken(token);
 
     try {
+        // ✅ GUILD (seguro, instantâneo)
         if (guildId) {
-            await rest.put(Routes.applicationGuildCommands(applicationId, guildId), { body: commands });
-            console.log(`Comandos registrados para o servidor ${guildId}.`);
+            await rest.put(
+                Routes.applicationGuildCommands(applicationId, guildId),
+                { body: commands }
+            );
+            console.log(`✅ Comandos registrados para o servidor ${guildId}.`);
+            return;
         }
-        else {
-            await rest.put(Routes.applicationCommands(applicationId), { body: commands });
-            console.log('Comandos registrados globalmente.');
-        }
+
+        // ✅ GLOBAL (sync correto)
+        const existing = await rest.get(
+            Routes.applicationCommands(applicationId)
+        );
+
+        // Mantém comandos que não são seus (ex: Entry Point)
+        const preserved = existing.filter(
+            cmd => !commands.some(c => c.name === cmd.name)
+        );
+
+        const merged = [...preserved, ...commands];
+
+        await rest.put(
+            Routes.applicationCommands(applicationId),
+            { body: merged }
+        );
+
+        console.log('✅ Comandos registrados globalmente (sync seguro).');
     }
     catch (error) {
-        console.error('Falha ao registrar comandos:', error);
+        console.error('❌ Falha ao registrar comandos:', error);
     }
 }
 
