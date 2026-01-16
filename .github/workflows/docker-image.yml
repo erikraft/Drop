@@ -11,6 +11,9 @@
 
 name: Docker Image CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ "master" ]
