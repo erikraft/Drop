@@ -95,19 +95,19 @@ export default class Peer {
         // else: ip is IPv6
         const firstWord = ip.split(":").find(el => !!el); //get first not empty word
 
-        if (/^fe[c-f][0-f]$/.test(firstWord)) {
+        if (/^fe[c-f][0-9a-f]$/.test(firstWord)) {
             // The original IPv6 Site Local addresses (fec0::/10) are deprecated. Range: fec0 - feff
             return true;
         }
 
         // These days Unique Local Addresses (ULA) are used in place of Site Local.
         // Range: fc00 - fcff
-        else if (/^fc[0-f]{2}$/.test(firstWord)) {
+        else if (/^fc[0-9a-f]{2}$/.test(firstWord)) {
             return true;
         }
 
         // Range: fd00 - fcff
-        else if (/^fd[0-f]{2}$/.test(firstWord)) {
+        else if (/^fd[0-9a-f]{2}$/.test(firstWord)) {
             return true;
         }
 
