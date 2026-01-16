@@ -6,7 +6,7 @@
 <br>
 <br>
 
-Partner up by creating an [Issue](https://github.com/erikraft/Drop/issues) in this repository so I can review and decide whether to accept the partnership to have a PARTNER ("client"). In the Issue description, clearly outline:
+Partner up by creating an [Issue](https://github.com/erikraft/Drop/issues/new?template=partnership-request.md) in this repository so I can review and decide whether to accept the partnership to have a PARTNER ("client"). In the Issue description, clearly outline:
 
 - A concise summary of your organization or project.
 - How this partnership will help Drop and why it is valuable for both sides.
