@@ -1,5 +1,8 @@
 name: Autofix Bot
 
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: '0 6 * * *' # todo dia às 6h UTC
@@ -48,7 +51,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
-          commit-message: "✨ autofix: correções automáticas de código"
+          commit-message: "✨ Autofix: correções automáticas de código"
           branch: "autofix/patch-${{ github.run_id }}"
           title: "✨ Autofix: correções automáticas de código"
           body: |
