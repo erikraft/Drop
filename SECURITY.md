@@ -24,7 +24,7 @@ The following versions of **ErikrafT Drop** are currently receiving security upd
 
 If you discover a security vulnerability in **ErikrafT Drop**, please follow the instructions below to report it responsibly:
 
-* **Contact 1:** Send an email to: [contact@erikraft.com](mailto:contact@erikraft.com)
+* **Contact 1:** Send an email to: [contact+security@erikraft.com](mailto:contact+security@erikraft.com)
 * **Contact 2:** Send a message in `#ticket` via: [discord.erikraft.com](https://discord.erikraft.com/)
 
 ### Information to include:
