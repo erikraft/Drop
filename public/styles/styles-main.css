@@ -276,16 +276,6 @@ html[dir="rtl"] #expand.flipped>.icon {
 
 /* Typography */
 
-/* Tema claro: SVG azul */
-body.light-theme .logo-drop {
-    color: #3c74c7;
-}
-
-/* Tema escuro: SVG branco */
-body.dark-theme .logo-drop {
-    color: #fff;
-}
-
 @font-face {
     font-family: "Open Sans";
     src: url('../fonts/OpenSans/static/OpenSans-Medium.ttf') format('truetype');
