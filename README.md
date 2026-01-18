@@ -180,6 +180,9 @@ Connect to others in complex network situations, or over the Internet.
   <a href="https://f-droid.org/en/packages/com.erikraft.drop/" target="_blank">
     <img alt="Get it on F-Droid" height="80" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png">
   </a>
+  <a href="https://apkpure.com/p/com.erikraft.drop" target="_blank">
+    <img alt="Get it on APKPure" style="height: 80px;" src="./public/images/badges/Get_it_on_APKPure_English.png">
+  </a>
   <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank">
     <img alt="Get it on VS Code Marketplace" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20VS%20CODE.png">
   </a>
