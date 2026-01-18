@@ -2026,29 +2026,11 @@
                 var expandBtn = document.getElementById('expand');
                 if (!expandBtn) return;
 
-                function shouldShowExpand() {
-                    var header = expandBtn.closest('header');
-                    if (!header) return false;
-
-                    var buttons = header.querySelectorAll('.icon-button');
-                    for (var i = 0; i < buttons.length; i++) {
-                        var btn = buttons[i];
-                        if (btn === expandBtn) continue;
-
-                        // If element has explicit hidden attribute -> there's something to expand
-                        if (btn.hasAttribute('hidden')) return true;
-
-                        // If computed style hides it (display:none, visibility:hidden)
-                        var cs = window.getComputedStyle(btn);
-                        if (cs.display === 'none' || cs.visibility === 'hidden') return true;
-                    }
-
-                    return false;
-                }
-
                 function updateExpandVisibility() {
                     try {
-                        if (shouldShowExpand()) {
+                        var headerEl = expandBtn.closest('header');
+                        var shouldShow = !!(headerEl && (headerEl.classList.contains('overflow-hidden') || headerEl.classList.contains('overflow-expanded')));
+                        if (shouldShow) {
                             expandBtn.style.display = '';
                             expandBtn.removeAttribute('hidden');
                         } else {
@@ -2067,7 +2049,7 @@
                 var headerEl = expandBtn.closest('header');
                 if (headerEl) {
                     var obs = new MutationObserver(function () { updateExpandVisibility(); });
-                    obs.observe(headerEl, { attributes: true, childList: true, subtree: true, attributeFilter: ['hidden', 'style', 'class'] });
+                    obs.observe(headerEl, { attributes: true, attributeFilter: ['class'] });
                 }
 
                 // Re-evaluate on resize (layout may hide/show buttons)
