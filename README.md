@@ -77,12 +77,8 @@ Send a file from your phone to your laptop?
 <br>Share photos in original quality with friends using Android and iOS?
 <br>Share private files peer-to-peer between Linux systems?
 
-<table>
-  <tr>
-    <td><img src="docs/erikraft-drop_screenshot_mobile1.gif" alt="Screenshot GIF 1" width="300"/></td>
-    <td><img src="docs/erikraft-drop_screenshot_mobile2.gif" alt="Screenshot GIF 2" width="300"/></td>
-  </tr>
-</table>
+<br>
+<img src="docs/erikraftdrop_screenshot_mobile.gif" alt="Screenshot GIF showing PairDrop in use" style="width: 300px">
 
 ---
 
