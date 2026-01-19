@@ -522,6 +522,63 @@
          height: 80px;
          object-fit: contain;
       }
+
+      .screenshot-frame {
+         width: 100%;
+         border-radius: 0.5rem;
+         overflow: hidden;
+         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+            0 10px 10px -5px rgba(0, 0, 0, 0.04);
+         background: linear-gradient(to bottom, #000000, #062894, #000000);
+      }
+
+      .screenshot-frame img {
+         width: 100%;
+         height: auto;
+         display: block;
+      }
+
+      .screenshot-carousel-track {
+         display: flex;
+         transition: transform 300ms ease;
+         will-change: transform;
+      }
+
+      .screenshot-carousel-slide {
+         width: 300px;
+         flex: 0 0 auto;
+      }
+
+      .screenshot-carousel-viewport {
+         overflow-x: auto;
+         overflow-y: hidden;
+         scroll-behavior: smooth;
+         -webkit-overflow-scrolling: touch;
+      }
+
+      .screenshot-carousel-viewport::-webkit-scrollbar {
+         height: 8px;
+      }
+
+      .screenshot-carousel-viewport::-webkit-scrollbar-thumb {
+         background: rgba(15, 23, 42, 0.25);
+         border-radius: 999px;
+      }
+
+      .screenshot-carousel-track {
+         flex-wrap: nowrap;
+         gap: 1rem;
+         padding: 0.5rem;
+      }
+
+      .screenshot-frame {
+         width: auto;
+      }
+
+      .screenshot-frame img {
+         width: 300px;
+         max-width: 300px;
+      }
    </style>
 </head>
 
@@ -593,8 +650,37 @@
       <div class="container mx-auto px-4">
          <h2 class="text-2xl font-bold text-center text-gray-800 mb-12">Experimente agora mesmo</h2>
          <div class="max-w-4xl mx-auto">
-            <div class="iframe-container">
-               <iframe src="https://drop.erikraft.com/"></iframe>
+            <div class="relative">
+               <button type="button" id="screenshot-prev" aria-label="Anterior"
+                  class="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-800 w-10 h-10 rounded-full shadow flex items-center justify-center">
+                  <i class="fa-solid fa-chevron-left"></i>
+               </button>
+               <button type="button" id="screenshot-next" aria-label="Próximo"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-800 w-10 h-10 rounded-full shadow flex items-center justify-center">
+                  <i class="fa-solid fa-chevron-right"></i>
+               </button>
+
+               <div class="screenshot-frame">
+                  <div id="screenshot-carousel" class="screenshot-carousel-viewport">
+                     <div id="screenshot-carousel-track" class="screenshot-carousel-track">
+                        <div class="screenshot-carousel-slide">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_1.png" alt="Screenshot 1" loading="lazy">
+                        </div>
+                        <div class="screenshot-carousel-slide">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_2.png" alt="Screenshot 2" loading="lazy">
+                        </div>
+                        <div class="screenshot-carousel-slide">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_3.png" alt="Screenshot 3" loading="lazy">
+                        </div>
+                        <div class="screenshot-carousel-slide">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_4.png" alt="Screenshot 4" loading="lazy">
+                        </div>
+                        <div class="screenshot-carousel-slide">
+                           <img style="width: 259px" src="images/screenshot/erikraftdrop_screenshot_mobile.gif" alt="Screenshot 5 (GIF)" loading="lazy">
+                        </div>
+                     </div>
+                  </div>
+               </div>
             </div>
          </div>
       </div>
@@ -680,7 +766,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"
                      fill="#5046e5">
                      <path
-                        d="M354.67-120h-168q-27 0-46.84-19.83Q120-159.67 120-186.67v-168q45.33-3.33 78.33-33.16 33-29.84 33-74.17t-33-74.17q-33-29.83-78.33-33.16v-168q0-27 19.83-46.84Q159.67-804 186.67-804H358q7.33-40.67 36-68.33Q422.67-900 463.33-900q40.67 0 69.34 27.67 28.66 27.66 36 68.33h168.66q27 0 46.84 19.83Q804-764.33 804-737.33v168.66q40.67 7.34 67.33 37.34 26.67 30 26.67 70.66 0 40.67-26.67 68.34-26.66 27.66-67.33 35v170.66q0 27-19.83 46.84Q764.33-120 737.33-120h-168q-3.33-48.67-34.16-80-30.84-31.33-73.17-31.33T388.83-200q-30.83 31.33-34.16 80Z" />
+                        d="M479.83-102.33q-11.83 0-23.5-4-11.66-4-20.66-12.67-49.67-45.33-99-97.33-49.34-52-88.5-107.84Q209-380 184.5-437.83 160-495.67 160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 56.33-24.5 114.17Q751-380 711.83-324.17q-39.16 55.84-88.5 107.84-49.33 52-99 97.33-9 8.67-20.83 12.67-11.83 4-23.67 4Zm.23-384.34q30.27 0 51.77-21.56 21.5-21.55 21.5-51.83 0-30.27-21.56-51.77-21.55-21.5-51.83-21.5-30.27 0-51.77 21.56-21.5 21.55-21.5 51.83 0 30.27 21.56 51.77 21.55 21.5 51.83 21.5Z" />
                   </svg>
                </div>
                <h3 class="text-xl font-semibold text-gray-800 mb-3">Compartilhe com qualquer pessoa, em qualquer lugar
@@ -690,21 +776,13 @@
                   <strong>Salas públicas temporárias</strong> para grupos.
                </p>
             </div>
-            <!-- Feature Inactive -->
-            <!-- <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
-                  <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
-                     <i class="fa-solid fa-cloud-arrow-up text-indigo-600 text-3xl"></i>
-                  </div>
-                  <h3 class="text-xl font-semibold text-gray-800 mb-3">Compartilhamento com links que expiram</h3>
-                  <p class="text-gray-600">Gere um link temporário para seus arquivos e defina em quanto tempo ele expira. Ideal para enviar arquivos para aquela pessoa que enrola com a certeza de que o acesso será automaticamente desativado após o período escolhido.</p>
-               </div> -->
             <!-- Feature 8 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"
                      fill="#5046e5">
                      <path
-                        d="M479.83-102.33q-11.83 0-23.5-4-11.66-4-20.66-12.67-49.67-45.33-99-97.33-49.34-52-88.5-107.84Q209-380 184.5-437.83 160-495.67 160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 56.33-24.5 114.17Q751-380 711.83-324.17q-39.16 55.84-88.5 107.84-49.33 52-99 97.33-9 8.67-20.83 12.67-11.83 4-23.67 4Zm.23-384.34q30.27 0 51.77-21.56 21.5-21.55 21.5-51.83 0-30.27-21.56-51.77-21.55-21.5-51.83-21.5-30.27 0-51.77 21.56-21.5 21.55-21.5 51.83 0 30.27 21.56 51.77 21.55 21.5 51.83 21.5Z" />
+                        d="M354.67-120h-168q-27 0-46.84-19.83Q120-159.67 120-186.67v-168q45.33-3.33 78.33-33.16 33-29.84 33-74.17t-33-74.17q-33-29.83-78.33-33.16v-168q0-27 19.83-46.84Q159.67-804 186.67-804H358q7.33-40.67 36-68.33Q422.67-900 463.33-900q40.67 0 69.34 27.67 28.66 27.66 36 68.33h168.66q27 0 46.84 19.83Q804-764.33 804-737.33v168.66q40.67 7.34 67.33 37.34 26.67 30 26.67 70.66 0 40.67-26.67 68.34-26.66 27.66-67.33 35v170.66q0 27-19.83 46.84Q764.33-120 737.33-120h-168q-3.33-48.67-34.16-80-30.84-31.33-73.17-31.33T388.83-200q-30.83 31.33-34.16 80Z" />
                   </svg>
                </div>
                <h3 class="text-xl font-semibold text-gray-800 mb-3">Extensão Disponível</h3>
@@ -1441,6 +1519,52 @@
             }
          });
       });
+
+      const screenshotCarousel = document.getElementById('screenshot-carousel');
+      const screenshotPrev = document.getElementById('screenshot-prev');
+      const screenshotNext = document.getElementById('screenshot-next');
+
+      if (screenshotCarousel && screenshotPrev && screenshotNext) {
+         function getStep() {
+            const slide = screenshotCarousel.querySelector('.screenshot-carousel-slide');
+            if (!slide) return 300;
+            const style = window.getComputedStyle(screenshotCarousel.querySelector('.screenshot-carousel-track'));
+            const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+            return slide.getBoundingClientRect().width + gap;
+         }
+
+         function updateButtons() {
+            const maxScrollLeft = screenshotCarousel.scrollWidth - screenshotCarousel.clientWidth;
+            const atStart = screenshotCarousel.scrollLeft <= 0;
+            const atEnd = screenshotCarousel.scrollLeft >= (maxScrollLeft - 1);
+
+            screenshotPrev.disabled = atStart;
+            screenshotNext.disabled = atEnd;
+
+            screenshotPrev.classList.toggle('opacity-50', screenshotPrev.disabled);
+            screenshotPrev.classList.toggle('cursor-not-allowed', screenshotPrev.disabled);
+            screenshotNext.classList.toggle('opacity-50', screenshotNext.disabled);
+            screenshotNext.classList.toggle('cursor-not-allowed', screenshotNext.disabled);
+         }
+
+         screenshotPrev.addEventListener('click', () => {
+            screenshotCarousel.scrollBy({ left: -getStep(), behavior: 'smooth' });
+         });
+
+         screenshotNext.addEventListener('click', () => {
+            screenshotCarousel.scrollBy({ left: getStep(), behavior: 'smooth' });
+         });
+
+         screenshotCarousel.addEventListener('scroll', () => {
+            updateButtons();
+         }, { passive: true });
+
+         window.addEventListener('resize', () => {
+            updateButtons();
+         });
+
+         updateButtons();
+      }
    </script>
 </body>
 
