@@ -39,19 +39,87 @@
       }
 
       .feature-card:hover {
-         transform: translateY(-5px);
-         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      }
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+     }
 
-      .dropzone {
-         border: 2px dashed #cbd5e1;
-         transition: all 0.3s ease;
-      }
+     .feature-card {
+        position: relative;
+        overflow: hidden;
+     }
 
-      .dropzone.active {
-         border-color: #6366f1;
-         background-color: #eef2ff;
-      }
+     .feature-card > :not(.glitch-text-layer) {
+        position: relative;
+        z-index: 2;
+     }
+
+     .feature-card:is(.glitch-active, .glitch-mobile-active) {
+        background-color: #050505;
+     }
+
+     .feature-card:is(.glitch-active, .glitch-mobile-active) h3,
+     .feature-card:is(.glitch-active, .glitch-mobile-active) p,
+     .feature-card:is(.glitch-active, .glitch-mobile-active) span,
+     .feature-card:is(.glitch-active, .glitch-mobile-active) strong,
+     .feature-card:is(.glitch-active, .glitch-mobile-active) i:not([class*="fa-"]) {
+        color: #f8fafc !important;
+     }
+
+     .feature-card:is(.glitch-active, .glitch-mobile-active) a,
+     .feature-card:is(.glitch-active, .glitch-mobile-active) .text-indigo-600,
+     .feature-card:is(.glitch-active, .glitch-mobile-active) i[class*="fa-"] {
+        color: #60a5fa !important;
+     }
+
+     .feature-card:is(.glitch-active, .glitch-mobile-active) .bg-indigo-100 {
+        background-color: rgba(79, 70, 229, 0.2) !important;
+     }
+
+     .feature-card:is(.glitch-active, .glitch-mobile-active) svg,
+     .feature-card:is(.glitch-active, .glitch-mobile-active) svg path {
+        fill: #60a5fa !important;
+     }
+
+     .glitch-text-layer {
+        position: absolute;
+        inset: 0;
+        padding: 0;
+
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12px;
+        line-height: 1.2;
+        word-break: break-all;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        color: transparent;
+        background-image: radial-gradient(
+           circle farthest-corner at var(--x, 50%) var(--y, 50%),
+           rgba(11, 108, 47, 0.98) 0%,
+           rgba(11, 108, 47, 0.8) 45%,
+           rgba(11, 108, 47, 0.6) 70%,
+           rgba(11, 108, 47, 0.45) 100%
+        );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        pointer-events: none;
+        z-index: 1;
+        border-radius: 0.75rem;
+     }
+
+     .feature-card:is(.glitch-active, .glitch-mobile-active) .glitch-text-layer {
+        opacity: 1;
+     }
+
+     .dropzone {
+        border: 2px dashed #cbd5e1;
+        transition: all 0.3s ease;
+     }
+
+     .dropzone.active {
+        border-color: #6366f1;
+        background-color: #eef2ff;
+     }
 
       /* Header responsivo */
       .header-container {
@@ -648,7 +716,7 @@
    <!-- Demo Section -->
    <section class="py-16 bg-white">
       <div class="container mx-auto px-4">
-         <h2 class="text-2xl font-bold text-center text-gray-800 mb-12">Experimente agora mesmo</h2>
+         <h2 class="text-2xl font-bold text-center text-gray-800 mb-12">Capturas de tela!</h2>
          <div class="max-w-4xl mx-auto">
             <div class="relative">
                <button type="button" id="screenshot-prev" aria-label="Anterior"
@@ -1565,7 +1633,99 @@
 
          updateButtons();
       }
+
+      const featureCards = document.querySelectorAll('.feature-card');
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\*+-';
+      const density = 1400;
+      const supportsHover = window.matchMedia('(any-hover: hover)').matches;
+      const finePointer = window.matchMedia('(any-pointer: fine)').matches;
+      const mobileGlitchInitialDelay = 500;
+      const mobileGlitchStagger = 120;
+      const mobileGlitchInterval = 2400;
+      const mobileGlitchDuration = 1100;
+      const mobileGlitchJitterInterval = 120;
+
+      const generateRandomText = () => {
+         let str = '';
+         for (let i = 0; i < density; i++) {
+            str += characters.charAt(Math.floor(Math.random() * characters.length)) + ' ';
+         }
+         return str;
+      };
+
+      featureCards.forEach((card, index) => {
+         const morphIcon = card.querySelector('lord-icon[trigger="morph"]');
+         let textLayer = card.querySelector('.glitch-text-layer');
+
+         if (!textLayer) {
+            textLayer = document.createElement('div');
+            textLayer.className = 'glitch-text-layer';
+            textLayer.setAttribute('aria-hidden', 'true');
+            card.appendChild(textLayer);
+         }
+
+         textLayer.textContent = generateRandomText();
+
+         if (supportsHover && finePointer) {
+            card.addEventListener('mouseenter', () => {
+               card.classList.add('glitch-active');
+               card.classList.remove('glitch-mobile-active');
+               if (morphIcon) {
+                  morphIcon.dispatchEvent(new Event('mouseenter'));
+               }
+            });
+
+            card.addEventListener('mousemove', (event) => {
+               if (!card.classList.contains('glitch-active')) return;
+               const rect = card.getBoundingClientRect();
+               const x = event.clientX - rect.left;
+               const y = event.clientY - rect.top;
+               textLayer.style.setProperty('--x', `${x}px`);
+               textLayer.style.setProperty('--y', `${y}px`);
+               textLayer.textContent = generateRandomText();
+            });
+
+            card.addEventListener('mouseleave', () => {
+               card.classList.remove('glitch-active');
+               if (morphIcon) {
+                  morphIcon.dispatchEvent(new Event('mouseleave'));
+               }
+            });
+
+         } else {
+            let mobileJitterId = null;
+            const animateMobileGlitch = () => {
+               card.classList.add('glitch-mobile-active');
+               const updateGlitch = () => {
+                  const x = Math.random() * card.clientWidth;
+                  const y = Math.random() * card.clientHeight;
+                  textLayer.style.setProperty('--x', `${x}px`);
+                  textLayer.style.setProperty('--y', `${y}px`);
+                  textLayer.textContent = generateRandomText();
+               };
+
+               updateGlitch();
+               if (mobileJitterId) {
+                  window.clearInterval(mobileJitterId);
+               }
+               mobileJitterId = window.setInterval(updateGlitch, mobileGlitchJitterInterval);
+
+               window.setTimeout(() => {
+                  window.clearInterval(mobileJitterId);
+                  mobileJitterId = null;
+                  card.classList.remove('glitch-mobile-active');
+               }, mobileGlitchDuration);
+            };
+
+            const delay = mobileGlitchInitialDelay + index * mobileGlitchStagger;
+            window.setTimeout(() => {
+               animateMobileGlitch();
+               window.setInterval(animateMobileGlitch, mobileGlitchInterval);
+            }, delay);
+         }
+      });
    </script>
+
 </body>
 
 </html>
