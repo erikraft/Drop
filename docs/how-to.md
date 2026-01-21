@@ -3,7 +3,9 @@
 ## Send directly from share menu on iOS
 I created an iOS shortcut to send images, files, folder, URLs \
 or text directly from the share-menu
+<br>
 https://routinehub.co/shortcut/24753/
+<br>
 https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7
 
 [//]: # (Todo: Add screenshots)
