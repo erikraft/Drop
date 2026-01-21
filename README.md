@@ -172,9 +172,6 @@ Connect to others in complex network situations, or over the Internet.
   <a href="https://drop.erikraft.com/" target="_blank">
     <img alt="Open the Web App" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20WEB.png">
   </a>
-  <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
-    <img alt="Download the APK" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20APK.png">
-  </a>
   <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
     <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
   </a>
@@ -182,7 +179,16 @@ Connect to others in complex network situations, or over the Internet.
     <img alt="Get it on F-Droid" height="80" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png">
   </a>
   <a href="https://apkpure.com/p/com.erikraft.drop" target="_blank">
-    <img alt="Get it on APKPure" style="height: 80px;" src="./public/images/badges/Get_it_on_APKPure_English.png">
+    <img alt="Get it on APKPure" style="height: 60px;" src="./public/images/badges/Get_it_on_APKPure_English.png">
+  </a>
+  <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
+    <img alt="Download the APK" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20APK.png">
+  </a>
+  <a href="https://routinehub.co/shortcut/24753/" target="_blank">
+    <img alt="Get it on Shortcut" style="height: 60px;" src="./public/images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut">
+  </a>
+  <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
+    <img alt="Get it on Discord" style="height: 80px;" src="./public/images/badges/Get it on Discord.png" alt="Get it on Discord">
   </a>
   <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank">
     <img alt="Get it on VS Code Marketplace" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20VS%20CODE.png">
