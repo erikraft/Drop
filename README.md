@@ -77,6 +77,7 @@ File sharing on your local network that works on all platforms.
   **Download the shortcut:**
   - https://routinehub.co/shortcut/24753/
   - https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7
+  - https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut
 
 Send a file from your phone to your laptop?
 <br>Share photos in original quality with friends using Android and iOS?
