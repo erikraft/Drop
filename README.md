@@ -45,11 +45,6 @@ ErikrafT Drop Community
 </p>
 
 <br>
-<br>
-
----
-
-<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
 
 ---
 
@@ -58,20 +53,30 @@ ErikrafT Drop Community
 ---
 
 <br>
+
+<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
+
 <br>
 
 ## ⚙️ Features
 File sharing on your local network that works on all platforms.
 
-- A multi-platform AirDrop-like solution that works.
+- **A multi-platform AirDrop-like solution that works.**
   - Send images, documents or text via peer-to-peer connection to devices on the same local network.
-- Internet transfers
+- **Internet transfers**
   - Join temporary public rooms to transfer files easily over the Internet.
-- Web-app
+- **Web-app**
   - Works on all devices with a modern web-browser.
-- Discord integrations
-  - Envie arquivos diretamente do Discord usando o bot de exemplo em [`Discord/Bot`](Discord/Bot/README.md). O dispositivo aparece com o ícone do Discord no site e a transferência ocorre em tempo real utilizando o fallback WebSocket oficial.
-  - Publique a atividade personalizada de [`Discord/Atividades`](Discord/Atividades/README.md) para incorporar o ErikrafT Drop dentro do Discord com identificação automática de dispositivo.
+- **Discord integrations**
+  - Send files directly from Discord using the example bot located at [`Discord/Bot`](Discord/Bot/README.md). The device appears on the website with a Discord icon, and transfers occur in real time using the official WebSocket fallback.
+  - Publish a custom activity from [`Discord/Activities`](Discord/Atividades/README.md) to embed ErikrafT Drop directly inside Discord with automatic device identification.
+
+- **iOS Share Menu integration**
+  - Send images, files, folders, URLs, or text directly from the iOS share menu using a custom Shortcut.
+
+  **Download the shortcut:**
+  - https://routinehub.co/shortcut/24753/
+  - https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7
 
 Send a file from your phone to your laptop?
 <br>Share photos in original quality with friends using Android and iOS?
