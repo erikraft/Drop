@@ -68,9 +68,10 @@ Available shortcuts:
 ~~Apparently, iOS does not allow images shared from a website to be saved to the gallery directly.~~
 ~~It simply does not offer that option for images shared from a website.~~
 
-~~iOS Shortcuts saves the day:~~ \
-I created a simple iOS shortcut that takes your photos and saves them to your gallery:
-[https://routinehub.co/shortcut/13990/](https://routinehub.co/shortcut/13990/) (Third-Party Alternative to ErikrafT Drop)
+iOS Shortcuts saves the day:
+I created the official iOS shortcut for ErikrafT Drop, designed to let you easily share photos, files, and text directly from the iOS share menu using ErikrafT Drop:
+<br> https://routinehub.co/shortcut/24753/ <br> (Official ErikrafT Drop Shortcut)
+
 
 Update: \
 Apparently, this was only a bug that is fixed in recent iOS version (https://github.com/WebKit/WebKit/pull/13111). \
