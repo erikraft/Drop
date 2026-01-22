@@ -294,4 +294,16 @@ and/or *Thinking, Fast and Slow* to learn more.
 
 </details>
 
+---
+
+## 🌍 Help with Translation
+
+Want to help make ErikrafT Drop available in more languages? You can contribute to the translation efforts at:
+
+**https://crowdin.com/project/erikraft-drop**
+
+Join our community of translators and help bring ErikrafT Drop to users around the world!
+
+---
+
 [< Back](/README.md)

@@ -88,6 +88,16 @@ Send a file from your phone to your laptop?
 
 ---
 
+## 🌍 Help with Translation
+
+Want to help make ErikrafT Drop available in more languages? You can contribute to the translation efforts at:
+
+**https://crowdin.com/project/erikraft-drop**
+
+Join our community of translators and help bring ErikrafT Drop to users around the world!
+
+---
+
 ## 🎨🔀 Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
 <details><summary>👀｜View all differences</summary>
 
@@ -158,7 +168,7 @@ Connect to others in complex network situations, or over the Internet.
 * [cyrb53](https://github.com/bryc/code/blob/master/jshash/experimental/cyrb53.js) super-fast hash function
 * [NoSleep](https://github.com/richtr/NoSleep.js) display sleep, add wake lock ([MIT](licenses/MIT-NoSleep))
 * [heic2any](https://github.com/alexcorvi/heic2any) HEIC/HEIF to PNG/GIF/JPEG ([MIT](licenses/MIT-heic2any))
-* [Weblate](https://weblate.org/) web-based localization tool
+* [Crowdin](https://crowdin.com/) web-based localization tool
 * [BrowserStack](https://www.browserstack.com/) This project is tested with BrowserStack
 
 [❓｜FAQ](docs/faq.md)
