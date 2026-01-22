@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.11.8';
+const cacheVersion = 'v1.11.9';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',

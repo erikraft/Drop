@@ -1,6 +1,6 @@
 ==== 🇧🇷｜Português Brasil ====
 
-# Notas de Lançamento — v1.11.8
+# Notas de Lançamento — v1.11.9
 
 ## Destaques
 - Novo fluxo de edição com IA: botões "Editar com IA", "Gerar variação" e "Criar nova imagem" disponíveis para imagens recebidas e compartilhadas.
@@ -17,7 +17,7 @@
 - Traduções atualizadas em múltiplos idiomas para os novos textos de IA e para mensagens relacionadas à cópia/metadata.
 
 ## Como atualizar
-1. Limpe caches do navegador ou force a atualização do service worker (Ctrl+Shift+R) para carregar os novos assets (`cacheVersion` v1.11.8).
+1. Limpe caches do navegador ou force a atualização do service worker (Ctrl+Shift+R) para carregar os novos assets (`cacheVersion` v1.11.9).
 2. Verifique a presença da variável de ambiente `POE_API_KEY` no backend para habilitar a geração de imagens via IA.
 3. Revise integrações que dependem do botão "Copiar imagem" ou de compressão de arquivos para garantir compatibilidade com a nova política de metadados.
 
@@ -26,7 +26,7 @@ Obrigado por acompanhar o desenvolvimento contínuo do ErikrafT Drop! Feedbacks 
 
 ==== 🇺🇸｜English ====
 
-# Release Notes — v1.11.8
+# Release Notes — v1.11.9
 
 ## Highlights
 - Brand-new AI editing flow: "Edit with AI", "Generate variation", and "Create new image" buttons are now available for shared and received images.
@@ -43,7 +43,7 @@ Obrigado por acompanhar o desenvolvimento contínuo do ErikrafT Drop! Feedbacks 
 - Localization files refreshed across multiple languages for the new AI and copy/metadata strings.
 
 ## How to update
-1. Clear browser caches or hard-refresh the service worker (Ctrl+Shift+R) to load the new assets (`cacheVersion` v1.11.8).
+1. Clear browser caches or hard-refresh the service worker (Ctrl+Shift+R) to load the new assets (`cacheVersion` v1.11.9).
 2. Ensure the `POE_API_KEY` environment variable is present on the backend to enable AI image generation.
 3. Validate any automations that rely on "Copy image" or metadata-heavy workflows to align with the refined EXIF compression defaults.
 

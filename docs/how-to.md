@@ -46,11 +46,11 @@ This erikraftdrop-cli version was released alongside v1.10.4
 #### Linux / Mac
 1. Download the latest _erikraftdrop-cli.zip_ from the [releases page](https://github.com/erikraft/Drop/releases/)
    ```shell
-   wget "https://github.com/erikraft/Drop/releases/download/v1.11.8/erikraftdrop-cli.zip"
+   wget "https://github.com/erikraft/Drop/releases/download/v1.11.9/erikraftdrop-cli.zip"
    ```
    or
    ```shell
-   curl -LO "https://github.com/erikraft/Drop/releases/download/v1.11.8/erikraftdrop-cli.zip"
+   curl -LO "https://github.com/erikraft/Drop/releases/download/v1.11.9/erikraftdrop-cli.zip"
    ```
 2. Unzip the archive to a folder of your choice e.g. `/usr/share/erikraftdrop-cli/`
    ```shell
