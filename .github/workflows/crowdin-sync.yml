@@ -1,5 +1,8 @@
 name: Crowdin Translations Sync
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:    # permite rodar manualmente
   schedule:
