@@ -51,7 +51,7 @@
         "traffic": "O tráfego é",
         "routed": "roteado pelo servidor",
         "webrtc": "se o WebRTC não estiver disponível.",
-        "add-profile-photo": "Add Profile Photo"
+        "add-profile-photo": "Adicionar foto de perfil"
     },
     "dialogs": {
         "pair-devices-title": "Emparelhar Dispositivos Permanentemente",
