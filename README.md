@@ -11,11 +11,9 @@
     Fork of ErikrafT Drop.
   </p>
 
-  <p>
-    <img src="https://img.shields.io/coderabbit/prs/github/erikraft/Drop?utm_source=oss&utm_medium=github&utm_campaign=erikraft%2FDrop&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews" alt="CodeRabbit Pull Request Reviews">
-  </p>
-
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/erikraft/Drop)
+[![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)
+![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)
 
 [🤝🏻 Form a Partnership](PARTNERSHIP.md)
 
