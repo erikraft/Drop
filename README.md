@@ -96,7 +96,7 @@ Join our community of translators and help bring ErikrafT Drop to users around t
 
 ---
 
-## 🎨🔀 Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
+## 🔀 Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
 <details><summary>👀｜View all differences</summary>
 
 ### 📶 Paired Devices and Public Rooms — Internet Transfer
