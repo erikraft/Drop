@@ -205,6 +205,9 @@ Connect to others in complex network situations, or over the Internet.
   <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank">
     <img alt="Get it on Open VSX Registry" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20Open%20VSX%20Registry.png">
   </a>
+  <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank">
+    <img alt="Opera Add-ons" style="height: 80px;" src="./public/images/badges/Get-it-from-Opera-Addons.png">
+  </a>
   <a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank">
     <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="./public/images/badges/Firefox%20Browser%20ADD-ONS.png">
   </a>
