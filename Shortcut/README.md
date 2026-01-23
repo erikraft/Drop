@@ -10,6 +10,10 @@ Choose one of the following download links:
 - **iCloud**: [https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7](https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7)
 - **GitHub (Direct)**: [https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut](https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut)
 
+<a href="https://routinehub.co/shortcut/24753/" target="_blank">
+  <img alt="Get it on Shortcut" style="height: 60px;" src="./public/images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut">
+</a>
+
 ## How to Use
 
 1. **Download**: Tap one of the links above on your iOS device. This will open the shortcut in the Shortcuts app.
