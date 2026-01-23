@@ -27,8 +27,9 @@ jobs:
         uses: crowdin/github-action@v2
         with:
           command: download
-          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
 
       - name: Commit translations
         run: |
@@ -37,4 +38,3 @@ jobs:
 
       - name: Push changes
         run: git push
-        
