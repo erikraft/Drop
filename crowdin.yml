@@ -1,3 +1,8 @@
+project_id: ${CROWDIN_PROJECT_ID}
+api_token: ${CROWDIN_PERSONAL_TOKEN}
+
+base_path: .
+
 files:
   - source: /public/lang/en.json
     translation: /public/lang/%locale%.json
