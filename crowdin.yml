@@ -1,4 +1,4 @@
-project_id: ${CROWDIN_PROJECT_ID}
+project_id: 864684
 api_token: ${CROWDIN_PERSONAL_TOKEN}
 
 base_path: .
