@@ -1,85 +1,85 @@
-# Bot do Discord – ErikrafT Drop
+# Discord Bot – ErikrafT Drop
 
-Este diretório contém um exemplo de bot baseado em [discord.js](https://discord.js.org/) que realiza transferências reais de arquivos através do ErikrafT Drop. O bot se conecta ao mesmo servidor de sinalização utilizado pelo site, participa das salas secretas por meio de uma chave de pareamento e envia os arquivos utilizando o fallback WebSocket oficial. O dispositivo correspondente aparece instantaneamente em `public/index.html` com o ícone do Discord.
+This directory contains an example bot built on [discord.js](https://discord.js.org/) that performs real file transfers through ErikrafT Drop. The bot connects to the same signaling server used by the website, joins secret rooms via a pairing key, and sends files using the official WebSocket fallback. The corresponding device appears instantly in `public/index.html` with the Discord icon.
 
-## Funcionalidades
+## Features
 
-- Registro automático do *slash command* `/drop`.
-- Download dos anexos enviados no comando diretamente da API do Discord.
-- Conexão ao ErikrafT Drop via WebSocket utilizando o `client_type=discord-bot`, garantindo que o dispositivo seja exibido na interface web em tempo real.
-- Envio dos arquivos pela mesma fila de mensagens utilizada pelos navegadores: o destinatário recebe a solicitação, aceita e os arquivos são transmitidos por blocos até a confirmação final.
-- Respostas efêmeras (apenas para quem executa o comando), evitando vazamento de conteúdo em canais públicos.
+- Automatic registration of the slash command `/drop`.
+- Downloads attachments sent with the command directly from the Discord API.
+- Connects to ErikrafT Drop via WebSocket using `client_type=discord-bot`, ensuring the device is displayed on the web interface in real time.
+- Sends files through the same message queue used by browsers: the recipient receives the request, accepts it, and files are transmitted in chunks until final confirmation.
+- Ephemeral responses (visible only to the command user), preventing content leaks in public channels.
 
-> **Requisito importante:** o servidor ErikrafT Drop precisa estar com o fallback via WebSocket habilitado (`wsFallback: true`). A instância pública `https://drop.erikraft.com/` já possui este recurso ativado.
+> **Important requirement:** The ErikrafT Drop server must have the WebSocket fallback enabled (`wsFallback: true`). The public instance `https://drop.erikraft.com/` already has this feature enabled.
 
-## Pré‑requisitos
+## Prerequisites
 
-- Node.js 20 ou superior.
-- Um aplicativo de bot registrado no [Portal do Discord para Desenvolvedores](https://discord.com/developers/applications).
-- Permissões para registrar *slash commands* no servidor desejado.
-- Uma instância do ErikrafT Drop (pública ou auto-hospedada) com fallback WebSocket habilitado.
+- Node.js 20 or higher.
+- A registered bot application on the [Discord Developer Portal](https://discord.com/developers/applications).
+- Permissions to register slash commands in the desired server.
+- An ErikrafT Drop instance (public or self-hosted) with WebSocket fallback enabled.
 
-## Configuração
+## Configuration
 
-1. Copie `.env.example` para `.env` e preencha as variáveis:
+1. Copy `.env.example` to `.env` and fill in the variables:
 
    ```bash
    cp .env.example .env
    ```
 
-   | Variável                      | Descrição                                                                 |
-   |-------------------------------|----------------------------------------------------------------------------|
-   | `DISCORD_TOKEN`               | Token do bot gerado no portal do Discord.                                 |
-   | `DISCORD_APPLICATION_ID`      | ID do aplicativo (Client ID).                                             |
-   | `DISCORD_GUILD_ID` (opcional) | Informe para registrar comandos apenas em um servidor durante os testes. |
-   | `DROP_BASE_URL` (opcional)    | URL base do ErikrafT Drop (usada para identificar o cliente).             |
-   | `DROP_SIGNALING_URL` (opcional)| URL completa do servidor de sinalização (`wss://.../server`).           |
+   | Variable                      | Description                                                                 |
+   |-------------------------------|-----------------------------------------------------------------------------|
+   | `DISCORD_TOKEN`               | Bot token generated on the Discord portal.                                  |
+   | `DISCORD_APPLICATION_ID`      | Application ID (Client ID).                                                 |
+   | `DISCORD_GUILD_ID` (optional) | Provide to register commands only on one server for testing.                |
+   | `DROP_BASE_URL` (optional)    | Base URL of the ErikrafT Drop (used to identify the client).                |
+   | `DROP_SIGNALING_URL` (optional)| Full URL of the signaling server (`wss://.../server`).                      |
 
-   > Quando `DROP_SIGNALING_URL` não é informado, o bot utiliza `server` relativo a `DROP_BASE_URL`.
+   > When `DROP_SIGNALING_URL` is not provided, the bot uses `server` relative to `DROP_BASE_URL`.
 
-2. Instale as dependências:
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-3. Registre os comandos (execute novamente sempre que modificar `src/commands`):
+3. Register commands (run again whenever you modify `src/commands`):
 
    ```bash
    npm run register:commands
    ```
 
-4. Inicie o bot:
+4. Start the bot:
 
    ```bash
    npm start
    ```
 
-## Estrutura
+## Structure
 
-- `src/index.js` – Inicializa o cliente do Discord, carrega os comandos e responde às interações.
-- `src/registerCommands.js` – Utilitário para registrar os *slash commands* via REST.
-- `src/commands/drop.js` – Implementação do comando `/drop` com controle de fluxo e feedback ao usuário.
-- `src/client/dropClient.js` – Cliente ErikrafT Drop headless responsável por conectar-se via WebSocket e enviar os arquivos.
+- `src/index.js` – Initializes the Discord client, loads commands, and handles interactions.
+- `src/registerCommands.js` – Utility for registering slash commands via REST.
+- `src/commands/drop.js` – Implementation of the `/drop` command with flow control and user feedback.
+- `src/client/dropClient.js` – Headless ErikrafT Drop client responsible for connecting via WebSocket and sending files.
 
-## Fluxo de uso
+## Usage Flow
 
-1. No ErikrafT Drop, abra o menu **Parear Dispositivo** e gere uma chave de 6 dígitos.
-2. Execute o comando `/drop`, informe a chave e envie até três anexos.
-3. O bot baixa os anexos, conecta-se ao servidor de sinalização, entra na sala secreta e solicita a transferência ao destinatário.
-4. Assim que o destinatário aceitar no site, os arquivos são transmitidos em blocos e aparecem automaticamente na interface web.
+1. In ErikrafT Drop, open the **Pair Device** menu and generate a 6-digit key.
+2. Run the `/drop` command, enter the key, and send up to three attachments.
+3. The bot downloads the attachments, connects to the signaling server, enters the secret room, and requests the transfer from the recipient.
+4. As soon as the recipient accepts on the website, files are transmitted in chunks and automatically appear on the web interface.
 
-## Segurança
+## Security
 
-- Os arquivos não são gravados em disco; tudo permanece na memória enquanto o comando é processado.
-- Os dados trafegam diretamente para o destinatário através do WebSocket do ErikrafT Drop (ou pelo TURN configurado na instância), respeitando o mesmo fluxo de verificação e confirmação do cliente web.
-- Tokens e segredos **não** estão versionados; mantenha seu arquivo `.env` em segurança.
+- Files are not written to disk; everything remains in memory while the command is being processed.
+- Data is transmitted directly to the recipient through the ErikrafT Drop WebSocket (or via the TURN server configured for the instance), following the same verification and confirmation flow as the web client.
+- Tokens and secrets are **not** versioned; keep your `.env` file secure.
 
-## Hospedagem gratuita sugerida
+## Suggested Free Hosting
 
-Para colocar o bot online 24/7 sem custos, recomendamos as seguintes plataformas de *hosting* gratuito:
+To keep the bot online 24/7 for free, we recommend the following free hosting platforms:
 
 - [Shard Cloud](https://shardcloud.app/pt-br/dash)
 - [Discloud](https://discloud.com/dashboard)
 
-Aproveite como base para personalizar automações ou fluxos de upload no seu servidor Discord!
+Use this as a base to customize automations or upload flows for your Discord server!
