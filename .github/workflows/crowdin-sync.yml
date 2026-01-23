@@ -23,14 +23,12 @@ jobs:
           git config user.name "erikraft-drop-bot"
           git config user.email "erikraft-drop-bot@users.noreply.github.com"
 
-
       - name: Download translations from Crowdin
         uses: crowdin/github-action@v2
         with:
           command: download
-        env:
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
       - name: Commit translations
         run: |
