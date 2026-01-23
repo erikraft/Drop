@@ -4,9 +4,9 @@ permissions:
   contents: write
 
 on:
-  workflow_dispatch:    # permite rodar manualmente
+  workflow_dispatch:
   schedule:
-    - cron: "0 */6 * * *"   # opcional: roda a cada 6h
+    - cron: "0 */6 * * *"
 
 jobs:
   sync:
@@ -27,8 +27,8 @@ jobs:
         uses: crowdin/github-action@v2
         with:
           command: download
-          crowdin_project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-          crowdin_personal_token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
       - name: Commit translations
         run: |
@@ -37,3 +37,4 @@ jobs:
 
       - name: Push changes
         run: git push
+        
