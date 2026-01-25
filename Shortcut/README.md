@@ -11,7 +11,7 @@ Choose one of the following download links:
 - **GitHub (Direct)**: [https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut](https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut)
 
 <a href="https://routinehub.co/shortcut/24753/" target="_blank">
-  <img alt="Get it on Shortcut" style="height: 60px;" src="./public/images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut">
+  <img alt="Get it on Shortcut" style="height: 60px;" src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut">
 </a>
 
 ## How to Use
