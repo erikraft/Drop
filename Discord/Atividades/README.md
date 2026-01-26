@@ -1,5 +1,17 @@
 # Discord Activity – ErikrafT Drop
 
+<div align="center" style="display: inline_block; gap: 10px;"><br>
+  <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
+    <img alt="Get it on Discord" style="height: 80px;" src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/badges/Get%20it%20on%20Discord.png" alt="Get it on Discord">
+  </a>
+</div>
+
+<p align="center">
+  <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
+    Adicionar o "ErikrafT Drop" ao Discord
+  </a>
+</p>
+
 This directory contains a minimal HTML page example that can be used as a basis for publishing a custom Activity on Discord. The page simply embeds the ErikrafT Drop website inside an `iframe` and adds the `client_type=discord-activity` parameter so the device is identified with the Discord icon on the web interface.
 
 ## How to Use

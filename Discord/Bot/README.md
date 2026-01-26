@@ -1,5 +1,17 @@
 # Discord Bot – ErikrafT Drop
 
+<div align="center" style="display: inline_block; gap: 10px;"><br>
+  <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
+    <img alt="Get it on Discord" style="height: 80px;" src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/badges/Get%20it%20on%20Discord.png" alt="Get it on Discord">
+  </a>
+</div>
+
+<p align="center">
+  <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
+    Adicionar o "ErikrafT Drop" ao Discord
+  </a>
+</p>
+
 This directory contains an example bot built on [discord.js](https://discord.js.org/) that performs real file transfers through ErikrafT Drop. The bot connects to the same signaling server used by the website, joins secret rooms via a pairing key, and sends files using the official WebSocket fallback. The corresponding device appears instantly in `public/index.html` with the Discord icon.
 
 ## Features
