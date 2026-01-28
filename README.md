@@ -61,12 +61,12 @@ File sharing on your local network that works on all platforms.
 
 <br>
 
-**Extensions**
-- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
-- [Open VSX Registry](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
-- [Opera Add-ons](https://addons.opera.com/en/extensions/details/erikraft-drop/)
-- [Thunderbird Add-ons](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
-- [Firefox Browser Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
+- **Extensions**
+  - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
+  - [Open VSX Registry](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
+  - [Opera Add-ons](https://addons.opera.com/en/extensions/details/erikraft-drop/)
+  - [Thunderbird Add-ons](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
+  - [Firefox Browser Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
 
 - **A multi-platform AirDrop-like solution that works.**
   - Send images, documents or text via peer-to-peer connection to devices on the same local network.
