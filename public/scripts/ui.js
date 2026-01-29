@@ -1103,6 +1103,7 @@ class ReceiveFileDialog extends ReceiveDialog {
         }
 
         let downloadZipped = false;
+        let zipFileObject = null;
         if (files.length > 1) {
             downloadZipped = true;
             try {
@@ -1120,7 +1121,8 @@ class ReceiveFileDialog extends ReceiveDialog {
                     });
                     bytesCompleted += files[i].size;
                 }
-                url = await zipper.getBlobURL();
+                // Refactored to get File object for VS Code compatibility
+                // url = await zipper.getBlobURL(); // OLD
 
                 let now = new Date(Date.now());
                 let year = now.getFullYear().toString();
@@ -1133,6 +1135,8 @@ class ReceiveFileDialog extends ReceiveDialog {
                 let minutes = now.getMinutes().toString();
                 minutes = minutes.length < 2 ? "0" + minutes : minutes;
                 filenameDownload = `ErikrafTDrop_files_${year + month + date}_${hours + minutes}.zip`;
+
+                zipFileObject = await zipper.getZipFile(filenameDownload);
             } catch (e) {
                 console.error(e);
                 downloadZipped = false;
@@ -1143,10 +1147,7 @@ class ReceiveFileDialog extends ReceiveDialog {
         this.$downloadBtn.innerText = Localization.getTranslation("dialogs.download");
         this.$downloadBtn.onclick = _ => {
             if (downloadZipped) {
-                let tmpZipBtn = document.createElement("a");
-                tmpZipBtn.download = filenameDownload;
-                tmpZipBtn.href = url;
-                tmpZipBtn.click();
+                this.downloadFile(zipFileObject);
             }
             else {
                 this._downloadFilesIndividually(files);
@@ -1577,13 +1578,12 @@ class ReceiveFileDialog extends ReceiveDialog {
                                         return;
                                     }
 
-                                    const downloadUrl = URL.createObjectURL(resultBlob);
                                     const baseName = (primary.name || 'image').replace(/(\.[a-zA-Z0-9_-]+)?$/, '') || 'image';
-                                    const link = document.createElement('a');
-                                    link.href = downloadUrl;
-                                    link.download = `${baseName}-compressed.${resultExt}`;
-                                    link.click();
-                                    setTimeout(() => URL.revokeObjectURL(downloadUrl), 2000);
+                                    const filename = `${baseName}-compressed.${resultExt}`;
+                                    const compressedFile = new File([resultBlob], filename, { type: resultBlob.type });
+
+                                    this.downloadFile(compressedFile);
+
                                     Events.fire('notify-user', Localization.getTranslation('notifications.compress-success'));
                                 } catch (innerErr) {
                                     console.error('Compress image failed', innerErr);
@@ -1653,12 +1653,42 @@ class ReceiveFileDialog extends ReceiveDialog {
         }
     }
 
-    _downloadFilesIndividually(files) {
-        let tmpBtn = document.createElement("a");
-        for (let i = 0; i < files.length; i++) {
-            tmpBtn.download = files[i].name;
-            tmpBtn.href = URL.createObjectURL(files[i]);
+    async downloadFile(file) {
+        if (window.erikraftClientType === 'vs-code-extension') {
+            const MAX_VSCODE_DOWNLOAD_SIZE = 50 * 1024 * 1024; // 50MB
+            if (file.size > MAX_VSCODE_DOWNLOAD_SIZE) {
+                Events.fire('notify-user', "File too large for VS Code extension (Max 50MB). Please use the web version.");
+                return;
+            }
+
+            try {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const event = new CustomEvent('drop-download', {
+                        detail: [{
+                            name: file.name,
+                            data: reader.result // Base64
+                        }]
+                    });
+                    window.dispatchEvent(event);
+                };
+                reader.readAsDataURL(file);
+            } catch (e) {
+                console.error("Download failed in VS Code extension", e);
+            }
+        } else {
+            // Browser behavior
+            const tmpBtn = document.createElement("a");
+            tmpBtn.download = file.name;
+            tmpBtn.href = URL.createObjectURL(file);
             tmpBtn.click();
+            setTimeout(() => URL.revokeObjectURL(tmpBtn.href), 2000);
+        }
+    }
+
+    _downloadFilesIndividually(files) {
+        for (let i = 0; i < files.length; i++) {
+            this.downloadFile(files[i]);
         }
     }
 

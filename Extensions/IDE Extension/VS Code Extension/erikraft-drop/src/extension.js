@@ -1,5 +1,7 @@
 const vscode = require('vscode');
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
 
 function activate(context) {
   // Registrar o provedor de visualização
@@ -135,8 +137,11 @@ class ErikrafTDropViewProvider {
                   });
                 }
 
-                // Sobrescrever o comportamento padrão de links
-                iframeWindow.addEventListener('click', function(e) {
+              // Injetar tipo de cliente para detecção na UI
+              window.erikraftClientType = 'vs-code-extension';
+
+              // Sobrescrever o comportamento padrão de links
+              iframeWindow.addEventListener('click', function(e) {
                   const link = e.target.closest('a');
                   if (link && link.href && link.href.startsWith('http')) {
                     e.preventDefault();
@@ -204,21 +209,87 @@ class ErikrafTDropViewProvider {
   }
 
   async _handleDownload(items) {
-    const uris = items
-      .filter(item => typeof item?.url === 'string')
-      .map(item => vscode.Uri.parse(item.url));
-
-    if (uris.length === 0) {
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return;
     }
 
-    for (const uri of uris) {
+    for (const item of items) {
+      // Suporte a download via Base64 (buffer) ou URL direta
+      if (!item.url && !item.data) continue;
+
       try {
-        await vscode.env.openExternal(uri);
+        const defaultName = item.name || 'download';
+        const defaultUri = vscode.Uri.file(path.join(vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || '', defaultName));
+
+        const saveUri = await vscode.window.showSaveDialog({
+          defaultUri,
+          saveLabel: 'Salvar Download'
+        });
+
+        if (saveUri) {
+          await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: `Baixando ${defaultName}...`,
+            cancellable: false
+          }, async () => {
+            if (item.data) {
+              // Download via Base64 data injection
+              await this.saveFileFromBase64(item.data, saveUri.fsPath);
+            } else if (item.url) {
+              // Legacy / URL download
+              await this.downloadFile(item.url, saveUri.fsPath);
+            }
+          });
+          vscode.window.showInformationMessage(`Arquivo salvo com sucesso: ${path.basename(saveUri.fsPath)}`);
+        }
       } catch (error) {
-        console.error('Falha ao abrir download:', error);
+        console.error('Erro no download:', error);
+        vscode.window.showErrorMessage(`Falha ao baixar arquivo: ${error.message}`);
       }
     }
+  }
+
+  saveFileFromBase64(base64Data, destPath) {
+    return new Promise((resolve, reject) => {
+      try {
+        const MAX_VSCODE_DOWNLOAD_SIZE = 50 * 1024 * 1024; // 50MB
+        // Estimate size from Base64 length
+        const estimatedSize = (base64Data.length * 3) / 4;
+        if (estimatedSize > MAX_VSCODE_DOWNLOAD_SIZE) {
+          reject(new Error("File too large for VS Code extension (Max 50MB)."));
+          return;
+        }
+
+        // Remove header se existir (e.g. "data:application/zip;base64,")
+        const base64Content = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data;
+        const buffer = Buffer.from(base64Content, 'base64');
+        fs.writeFile(destPath, buffer, (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  downloadFile(url, destPath) {
+    return new Promise((resolve, reject) => {
+      const file = fs.createWriteStream(destPath);
+      https.get(url, (response) => {
+        if (response.statusCode !== 200) {
+          reject(new Error(`Falha na requisição. Status Code: ${response.statusCode}`));
+          return;
+        }
+        response.pipe(file);
+        file.on('finish', () => {
+          file.close(() => resolve());
+        });
+      }).on('error', (err) => {
+        fs.unlink(destPath, () => { });
+        reject(err);
+      });
+    });
   }
 
   async _handleUpload() {
@@ -248,6 +319,6 @@ class ErikrafTDropViewProvider {
 
 exports.activate = activate;
 
-function deactivate() {}
+function deactivate() { }
 
 exports.deactivate = deactivate;
