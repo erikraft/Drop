@@ -15,6 +15,9 @@ This directory contains information and resources for various extensions includi
 <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank">
   <img alt="Opera Add-ons" style="height: 80px;" src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/badges/Get-it-from-Opera-Addons.png">
 </a>
+<a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank">
+  <img alt="Thunderbird Add-ons" style="height: 60px;" src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/badges/Get_the_add-on_Thunderbird.png">
+</a>
 <a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank">
   <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/badges/Firefox%20Browser%20ADD-ONS.png">
 </a>
@@ -23,6 +26,7 @@ This directory contains information and resources for various extensions includi
 - **VS Code Marketplace**: [ErikrafT.erikraft-drop](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
 - **Open VSX Registry**: [ErikrafT/erikraft-drop](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
 - **Opera Add-ons**: [ErikrafT Drop](https://addons.opera.com/en/extensions/details/erikraft-drop/)
+- **Thunderbird Add-ons**: [ErikrafT Drop](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
 - **Firefox Browser ADD-ONS**: [ErikrafT Drop](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
 
 ## Browser Extensions
