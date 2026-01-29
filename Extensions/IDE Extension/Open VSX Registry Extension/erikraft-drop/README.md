@@ -51,8 +51,7 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in Open VSX Registr
 
 <table>
   <tr>
-    <td><img src="https://i.imgur.com/74c1uYW.gif" width="300" alt="Demo 1"></td>
-    <td><img src="https://i.imgur.com/Sss2QaL.gif" width="300" alt="Demo 2"></td>
+    <td><img src="https://raw.githubusercontent.com/erikraft/Drop/master/docs/erikraftdrop_screenshot_mobile.gif" width="300" alt="Demo 1"></td>
   </tr>
 </table>
 
@@ -83,7 +82,9 @@ MIT © [ErikrafT](https://github.com/erikraft)
 
 If you find this project useful, consider donating:
 
-[![Support me on Kofi](https://i.imgur.com/7cS1T3A.png)](https://ko-fi.com/erikraft)
+<a href="https://ko-fi.com/erikraft">
+  <img src="https://i.imgur.com/7cS1T3A.png" width="150" alt="Support me on Kofi">
+</a>
 
 ---
 
