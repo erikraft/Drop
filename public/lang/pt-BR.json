@@ -224,17 +224,17 @@
         "biodrop": "Site"
     },
     "metadata": {
-        "title": "Metadata (EXIF)",
-        "close": "Close",
-        "download": "Download Metadata",
-        "translate": "Translate what is possible",
-        "remove": "Delete Metadata (EXIF)",
-        "noData": "No metadata found"
+        "title": "Metadados (EXIF)",
+        "close": "Fechar",
+        "download": "Baixar Metadados",
+        "translate": "Traduzir o que for possível",
+        "remove": "Apagar Metadados (EXIF)",
+        "noData": "Nenhum metadado encontrado"
     },
     "exif": {
-        "Make": "Manufacturer",
-        "Model": "Model",
-        "DateTimeOriginal": "Original Date",
+        "Make": "Fabricante",
+        "Model": "Modelo",
+        "DateTimeOriginal": "Data Original",
         "Software": "Software"
     }
 }

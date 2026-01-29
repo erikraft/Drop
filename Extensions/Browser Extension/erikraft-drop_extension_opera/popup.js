@@ -1,0 +1,1 @@
+// vazio por enquanto — mas pode usar para futuras melhorias

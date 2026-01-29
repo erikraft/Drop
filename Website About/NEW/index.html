@@ -39,87 +39,85 @@
       }
 
       .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-     }
+         transform: translateY(-5px);
+         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
 
-     .feature-card {
-        position: relative;
-        overflow: hidden;
-     }
+      .feature-card {
+         position: relative;
+         overflow: hidden;
+      }
 
-     .feature-card > :not(.glitch-text-layer) {
-        position: relative;
-        z-index: 2;
-     }
+      .feature-card> :not(.glitch-text-layer) {
+         position: relative;
+         z-index: 2;
+      }
 
-     .feature-card:is(.glitch-active, .glitch-mobile-active) {
-        background-color: #050505;
-     }
+      .feature-card:is(.glitch-active, .glitch-mobile-active) {
+         background-color: #050505;
+      }
 
-     .feature-card:is(.glitch-active, .glitch-mobile-active) h3,
-     .feature-card:is(.glitch-active, .glitch-mobile-active) p,
-     .feature-card:is(.glitch-active, .glitch-mobile-active) span,
-     .feature-card:is(.glitch-active, .glitch-mobile-active) strong,
-     .feature-card:is(.glitch-active, .glitch-mobile-active) i:not([class*="fa-"]) {
-        color: #f8fafc !important;
-     }
+      .feature-card:is(.glitch-active, .glitch-mobile-active) h3,
+      .feature-card:is(.glitch-active, .glitch-mobile-active) p,
+      .feature-card:is(.glitch-active, .glitch-mobile-active) span,
+      .feature-card:is(.glitch-active, .glitch-mobile-active) strong,
+      .feature-card:is(.glitch-active, .glitch-mobile-active) i:not([class*="fa-"]) {
+         color: #f8fafc !important;
+      }
 
-     .feature-card:is(.glitch-active, .glitch-mobile-active) a,
-     .feature-card:is(.glitch-active, .glitch-mobile-active) .text-indigo-600,
-     .feature-card:is(.glitch-active, .glitch-mobile-active) i[class*="fa-"] {
-        color: #60a5fa !important;
-     }
+      .feature-card:is(.glitch-active, .glitch-mobile-active) a,
+      .feature-card:is(.glitch-active, .glitch-mobile-active) .text-indigo-600,
+      .feature-card:is(.glitch-active, .glitch-mobile-active) i[class*="fa-"] {
+         color: #60a5fa !important;
+      }
 
-     .feature-card:is(.glitch-active, .glitch-mobile-active) .bg-indigo-100 {
-        background-color: rgba(79, 70, 229, 0.2) !important;
-     }
+      .feature-card:is(.glitch-active, .glitch-mobile-active) .bg-indigo-100 {
+         background-color: rgba(79, 70, 229, 0.2) !important;
+      }
 
-     .feature-card:is(.glitch-active, .glitch-mobile-active) svg,
-     .feature-card:is(.glitch-active, .glitch-mobile-active) svg path {
-        fill: #60a5fa !important;
-     }
+      .feature-card:is(.glitch-active, .glitch-mobile-active) svg,
+      .feature-card:is(.glitch-active, .glitch-mobile-active) svg path {
+         fill: #60a5fa !important;
+      }
 
-     .glitch-text-layer {
-        position: absolute;
-        inset: 0;
-        padding: 0;
+      .glitch-text-layer {
+         position: absolute;
+         inset: 0;
+         padding: 0;
 
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 12px;
-        line-height: 1.2;
-        word-break: break-all;
-        opacity: 0;
-        transition: opacity 0.25s ease;
-        color: transparent;
-        background-image: radial-gradient(
-           circle farthest-corner at var(--x, 50%) var(--y, 50%),
-           rgba(11, 108, 47, 0.98) 0%,
-           rgba(11, 108, 47, 0.8) 45%,
-           rgba(11, 108, 47, 0.6) 70%,
-           rgba(11, 108, 47, 0.45) 100%
-        );
+         font-family: 'Courier New', Courier, monospace;
+         font-size: 12px;
+         line-height: 1.2;
+         word-break: break-all;
+         opacity: 0;
+         transition: opacity 0.25s ease;
+         color: transparent;
+         background-image: radial-gradient(circle farthest-corner at var(--x, 50%) var(--y, 50%),
+               rgba(11, 108, 47, 0.98) 0%,
+               rgba(11, 108, 47, 0.8) 45%,
+               rgba(11, 108, 47, 0.6) 70%,
+               rgba(11, 108, 47, 0.45) 100%);
 
-        -webkit-background-clip: text;
-        background-clip: text;
-        pointer-events: none;
-        z-index: 1;
-        border-radius: 0.75rem;
-     }
+         -webkit-background-clip: text;
+         background-clip: text;
+         pointer-events: none;
+         z-index: 1;
+         border-radius: 0.75rem;
+      }
 
-     .feature-card:is(.glitch-active, .glitch-mobile-active) .glitch-text-layer {
-        opacity: 1;
-     }
+      .feature-card:is(.glitch-active, .glitch-mobile-active) .glitch-text-layer {
+         opacity: 1;
+      }
 
-     .dropzone {
-        border: 2px dashed #cbd5e1;
-        transition: all 0.3s ease;
-     }
+      .dropzone {
+         border: 2px dashed #cbd5e1;
+         transition: all 0.3s ease;
+      }
 
-     .dropzone.active {
-        border-color: #6366f1;
-        background-color: #eef2ff;
-     }
+      .dropzone.active {
+         border-color: #6366f1;
+         background-color: #eef2ff;
+      }
 
       /* Header responsivo */
       .header-container {
@@ -732,19 +730,24 @@
                   <div id="screenshot-carousel" class="screenshot-carousel-viewport">
                      <div id="screenshot-carousel-track" class="screenshot-carousel-track">
                         <div class="screenshot-carousel-slide">
-                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_1.png" alt="Screenshot 1" loading="lazy">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_1.png"
+                              alt="Screenshot 1" loading="lazy">
                         </div>
                         <div class="screenshot-carousel-slide">
-                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_2.png" alt="Screenshot 2" loading="lazy">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_2.png"
+                              alt="Screenshot 2" loading="lazy">
                         </div>
                         <div class="screenshot-carousel-slide">
-                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_3.png" alt="Screenshot 3" loading="lazy">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_3.png"
+                              alt="Screenshot 3" loading="lazy">
                         </div>
                         <div class="screenshot-carousel-slide">
-                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_4.png" alt="Screenshot 4" loading="lazy">
+                           <img style="width: 300px" src="images/screenshot/ErikrafT-Drop_Screenshots_4.png"
+                              alt="Screenshot 4" loading="lazy">
                         </div>
                         <div class="screenshot-carousel-slide">
-                           <img style="width: 259px" src="images/screenshot/erikraftdrop_screenshot_mobile.gif" alt="Screenshot 5 (GIF)" loading="lazy">
+                           <img style="width: 259px" src="images/screenshot/erikraftdrop_screenshot_mobile.gif"
+                              alt="Screenshot 5 (GIF)" loading="lazy">
                         </div>
                      </div>
                   </div>
@@ -786,6 +789,27 @@
             <!-- Feature 3 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                  <i class="fa-brands fa-github text-indigo-600 text-3xl"></i>
+               </div>
+               <h3 class="text-xl font-semibold text-gray-800 mb-3">Código Aberto e Seguro</h3>
+               <p class="text-gray-600">
+                  Projeto totalmente <strong>open source</strong>, permitindo auditoria pública do código, maior
+                  transparência e
+                  segurança reforçada pela comunidade. Disponível no
+                  <a href="https://github.com/erikraft/Drop" target="_blank" rel="noopener noreferrer"
+                     style="color: #2563eb;">
+                     erikraft/Drop
+                  </a>
+                  e no
+                  <a href="https://github.com/erikraft/Drop-Android" target="_blank" rel="noopener noreferrer"
+                     style="color: #2563eb;">
+                     erikraft/Drop-Android
+                  </a>.
+               </p>
+            </div>
+            <!-- Feature 4 -->
+            <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+               <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"
                      fill="#5046e5">
                      <path
@@ -799,7 +823,7 @@
                      style="color: #2563eb;">drop.erikraft.com</a> em qualquer navegador moderno e começar a
                   compartilhar.</p>
             </div>
-            <!-- Feature 4 -->
+            <!-- Feature 5 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <lord-icon src="https://cdn.lordicon.com/xpgofwru.json" trigger="loop" delay="2000"
@@ -809,7 +833,7 @@
                <p class="text-gray-600">Envie fotos, vídeos, documentos, arquivos compactados e qualquer outro tipo de
                   arquivo sem restrições.</p>
             </div>
-            <!-- Feature 5 -->
+            <!-- Feature 6 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <i class="fas fa-mobile-alt text-indigo-600 text-3xl"></i>
@@ -818,7 +842,7 @@
                <p class="text-gray-600">Funciona em Windows, Linux, macOS, ChromeOS, Android e iOS. Qualquer dispositivo
                   com um navegador moderno.</p>
             </div>
-            <!-- Feature 6 -->
+            <!-- Feature 7 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <lord-icon src="https://cdn.lordicon.com/fowixcuo.json" trigger="loop" delay="2000"
@@ -828,7 +852,7 @@
                <p class="text-gray-600">Interface intuitiva que permite enviar arquivos simplesmente arrastando e
                   soltando na janela do navegador.</p>
             </div>
-            <!-- Feature 7 -->
+            <!-- Feature 8 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"
@@ -844,7 +868,7 @@
                   <strong>Salas públicas temporárias</strong> para grupos.
                </p>
             </div>
-            <!-- Feature 8 -->
+            <!-- Feature 9 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"
@@ -857,13 +881,17 @@
                <p class="text-gray-600"> Extensão Disponível no <a
                      href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"
                      rel="noopener noreferrer" style="color: #2563eb;">Firefox Browser Add-ons</a>, <a
+                     href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank"
+                     rel="noopener noreferrer" style="color: #2563eb;">Opera Add-ons</a>, <a
+                     href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank"
+                     rel="noopener noreferrer" style="color: #2563eb;">Thunderbird Add-ons</a>, <a
                      href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank"
-                     rel="noopener noreferrer" style="color: #2563eb;">VS Code Marketplace</a> e no <a
+                     rel="noopener noreferrer" style="color: #2563eb;">VS Code Marketplace</a>, e no <a
                      href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank"
                      rel="noopener noreferrer" style="color: #2563eb;">Open VSX Registry</a> para acessar o site de
                   forma fácil e rápida.</p>
             </div>
-            <!-- Feature 9 -->
+            <!-- Feature 10 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <i class="fa-solid fa-mobile-screen-button text-indigo-600 text-3xl"></i>
@@ -878,7 +906,7 @@
                      target="_blank" rel="noopener noreferrer" style="color: #2563eb;">APK oficial</a> para acessar o
                   ErikrafT Drop de forma fácil e rápida.</p>
             </div>
-            <!-- Feature 10 -->
+            <!-- Feature 11 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <i class="fa-brands fa-discord text-indigo-600 text-3xl"></i>
@@ -892,12 +920,11 @@
                      rel="noopener noreferrer" style="color: #2563eb;">Deste Link</a>.
                </p>
             </div>
-            <!-- Feature 11 -->
+            <!-- Feature 12 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <img src="images/Shortcuts_iOS.png" alt="ErikrafT Drop" width="35"
-                           style="user-select: none; pointer-events: none;" oncontextmenu="return false"
-                           draggable="false">
+                     style="user-select: none; pointer-events: none;" oncontextmenu="return false" draggable="false">
                </div>
                <h3 class="text-xl font-semibold text-gray-800 mb-3">Atalho (Shortcut)</h3>
                <p class="text-gray-600">Baixe o atalho do ErikrafT Drop para iOS/macOS e tenha acesso rápido às ações
@@ -905,13 +932,18 @@
                <div class="mt-4">
                   <p class="text-sm font-medium text-gray-700 mb-2"><strong>Download do atalho:</strong></p>
                   <ul class="text-sm text-gray-600 space-y-1">
-                     <li>・ <a href="https://routinehub.co/shortcut/24753/" target="_blank" rel="noopener noreferrer" style="color: #2563eb;">Download do atalho no Routinehub</a></li>
-                     <li>・ <a href="https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7" target="_blank" rel="noopener noreferrer" style="color: #2563eb;">Download do atalho no iCloud</a></li>
-                     <li>・ <a href="https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut" target="_blank" rel="noopener noreferrer" style="color: #2563eb;">Download do arquivo do atalho "ErikrafT Drop.shortcut"</a></li>
+                     <li>・ <a href="https://routinehub.co/shortcut/24753/" target="_blank" rel="noopener noreferrer"
+                           style="color: #2563eb;">Download do atalho no Routinehub</a></li>
+                     <li>・ <a href="https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7" target="_blank"
+                           rel="noopener noreferrer" style="color: #2563eb;">Download do atalho no iCloud</a></li>
+                     <li>・ <a
+                           href="https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut"
+                           target="_blank" rel="noopener noreferrer" style="color: #2563eb;">Download do arquivo do
+                           atalho "ErikrafT Drop.shortcut"</a></li>
                   </ul>
                </div>
             </div>
-            <!-- Feature 12 -->
+            <!-- Feature 13 -->
             <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
                <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                   <lord-icon src="https://cdn.lordicon.com/ftasfhkn.json" trigger="morph" state="morph-book"
@@ -1326,14 +1358,16 @@
                      <img src="./images/badges/F-Droid-get-it-on.png" alt="Get it on F-Droid" width="200" height="80">
                   </a>
                   <a href="https://apkpure.com/p/com.erikraft.drop" target="_blank" rel="noreferrer">
-                     <img src="./images/badges/Get_it_on_APKPure_English.png" alt="Get it on APKPure" width="200" height="80">
+                     <img src="./images/badges/Get_it_on_APKPure_English.png" alt="Get it on APKPure" width="200"
+                        height="80">
                   </a>
                   <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk"
                      target="_blank" rel="noreferrer">
                      <img src="./images/badges/Get it on APK.png" alt="Download the APK" width="200" height="80">
                   </a>
                   <a href="https://routinehub.co/shortcut/24753/" target="_blank" rel="noopener noreferrer">
-                     <img src="./images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut" width="200" height="80">
+                     <img src="./images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut" width="200"
+                        height="80">
                   </a>
                   <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank"
                      rel="noreferrer">
@@ -1341,16 +1375,30 @@
                   </a>
                   <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank"
                      rel="noreferrer">
-                     <img src="./images/badges/Get it on VS CODE.png" alt="Get it on VS Code Marketplace" width="200" height="80">
+                     <img src="./images/badges/Get it on VS CODE.png" alt="Get it on VS Code Marketplace" width="200"
+                        height="80">
                   </a>
                   <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank" rel="noreferrer">
-                     <img src="./images/badges/Get it on Open VSX Registry.png" alt="Get it on Open VSX Registry" width="200" height="80">
+                     <img src="./images/badges/Get it on Open VSX Registry.png" alt="Get it on Open VSX Registry"
+                        width="200" height="80">
+                  </a>
+                  <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank"
+                     rel="noreferrer">
+                     <img src="./images/badges/Get-it-from-Opera-Addons.png" alt="Opera Add-ons" width="200"
+                        height="80">
+                  </a>
+                  <a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank"
+                     rel="noreferrer">
+                     <img src="./images/badges/Get_the_add-on_Thunderbird.png" alt="Thunderbird Add-ons" width="200"
+                        height="80">
                   </a>
                   <a href="https://addons.mozilla.org/firefox/addon/erikraft-drop/" target="_blank" rel="noreferrer">
-                     <img src="./images/badges/Firefox Browser ADD-ONS.png" alt="Firefox Browser ADD-ONS" width="200" height="80">
+                     <img src="./images/badges/Firefox Browser ADD-ONS.png" alt="Firefox Browser ADD-ONS" width="200"
+                        height="80">
                   </a>
                   <a href="https://ko-fi.com/erikraft" target="_blank" rel="noreferrer">
-                     <img src="./images/badges/Support_me_on_Ko-fi.png" alt="Support me on Ko-fi" width="200" height="80">
+                     <img src="./images/badges/Support_me_on_Ko-fi.png" alt="Support me on Ko-fi" width="200"
+                        height="80">
                   </a>
                </div>
             </div>
@@ -1369,16 +1417,22 @@
                   <li><a href="https://f-droid.org/en/packages/com.erikraft.drop/" target="_blank"
                         rel="noopener noreferrer" class="hover:text-white"><i class="fa-brands fa-android"></i>
                         F-Droid</a></li>
-                  <li><a href="https://apkpure.com/p/com.erikraft.drop" target="_blank"
-                        rel="noopener noreferrer" class="hover:text-white"><i class="fa-brands fa-android"></i>
+                  <li><a href="https://apkpure.com/p/com.erikraft.drop" target="_blank" rel="noopener noreferrer"
+                        class="hover:text-white"><i class="fa-brands fa-android"></i>
                         APKPure</a></li>
                   <li><a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank"
                         rel="noopener noreferrer" class="hover:text-white"><i class="fa-brands fa-discord"></i>
                         Discord
                         Bot/Atividade</a></li>
-                  <li><a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"
+                  <li><a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank"
                         rel="noopener noreferrer" class="hover:text-white"><i class="fa-solid fa-puzzle-piece"></i>
-                        Firefox Extension</a></li>
+                        Opera Add-ons</a></li>
+                  <li><a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank"
+                        rel="noopener noreferrer" class="hover:text-white"><i class="fa-solid fa-puzzle-piece"></i>
+                        Thunderbird Add-ons</a></li>
+                  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/erikraft-drop/" target="_blank"
+                        rel="noopener noreferrer" class="hover:text-white"><i class="fa-solid fa-puzzle-piece"></i>
+                        Firefox Browser Add-ons</a></li>
                   <li><a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop"
                         target="_blank" rel="noopener noreferrer" class="hover:text-white"><i
                            class="fa-solid fa-puzzle-piece"></i> VS Code Extension</a></li>
@@ -1411,7 +1465,8 @@
                         rel="noopener noreferrer" class="hover:text-white"><i class="fa-solid fa-star"></i> Avaliação
                         Firefox Extension</a></li>
                   <li><a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop&ssr=false#review-details"
-                        target="_blank" rel="noopener noreferrer" class="hover:text-white"><i class="fa-solid fa-star"></i>
+                        target="_blank" rel="noopener noreferrer" class="hover:text-white"><i
+                           class="fa-solid fa-star"></i>
                         Avaliação VS Code Extension</a></li>
                   <li><a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop/reviews" target="_blank"
                         rel="noopener noreferrer" class="hover:text-white"><i class="fa-solid fa-star"></i> Avaliação
@@ -1426,8 +1481,8 @@
                         class="hover:text-white"><i class="fa-solid fa-shield-halved"></i> Política de
                         privacidade</a>
                   </li>
-                  <li><a href="terms-of-use.html" target="_blank" rel="noopener noreferrer"
-                        class="hover:text-white"><i class="fa-solid fa-shield-halved"></i> Termos de uso</a></li>
+                  <li><a href="terms-of-use.html" target="_blank" rel="noopener noreferrer" class="hover:text-white"><i
+                           class="fa-solid fa-shield-halved"></i> Termos de uso</a></li>
                   <li><a href="https://github.com/erikraft/Drop/blob/master/LICENSE" target="_blank"
                         rel="noopener noreferrer" class="hover:text-white"><i class="fa-solid fa-shield-halved"></i>
                         Licença</a></li>
@@ -1661,9 +1716,9 @@
       const density = 1400;
       const supportsHover = window.matchMedia('(any-hover: hover)').matches;
       const finePointer = window.matchMedia('(any-pointer: fine)').matches;
-      const mobileGlitchInitialDelay = 500;
+      const mobileGlitchInitialDelay = 20000;
       const mobileGlitchStagger = 120;
-      const mobileGlitchInterval = 2400;
+      const mobileGlitchInterval = 20000;
       const mobileGlitchDuration = 1100;
       const mobileGlitchJitterInterval = 120;
 
@@ -1751,4 +1806,3 @@
 </body>
 
 </html>
-

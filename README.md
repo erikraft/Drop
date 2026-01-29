@@ -59,6 +59,15 @@ ErikrafT Drop Community
 ## ⚙️ Features
 File sharing on your local network that works on all platforms.
 
+<br>
+
+- **Extensions**
+  - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
+  - [Open VSX Registry](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
+  - [Opera Add-ons](https://addons.opera.com/en/extensions/details/erikraft-drop/)
+  - [Thunderbird Add-ons](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
+  - [Firefox Browser Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
+
 - **A multi-platform AirDrop-like solution that works.**
   - Send images, documents or text via peer-to-peer connection to devices on the same local network.
 - **Internet transfers**
@@ -82,7 +91,7 @@ Send a file from your phone to your laptop?
 <br>Share private files peer-to-peer between Linux systems?
 
 <br>
-<img src="docs/erikraftdrop_screenshot_mobile.gif" alt="Screenshot GIF showing PairDrop in use" style="width: 300px">
+<img src="docs/erikraftdrop_screenshot_mobile.gif" alt="Screenshot GIF showing ErikrafT Drop in use" style="width: 300px">
 
 ---
 
@@ -204,6 +213,12 @@ Connect to others in complex network situations, or over the Internet.
   </a>
   <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank">
     <img alt="Get it on Open VSX Registry" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20Open%20VSX%20Registry.png">
+  </a>
+  <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank">
+    <img alt="Opera Add-ons" style="height: 80px;" src="./public/images/badges/Get-it-from-Opera-Addons.png">
+  </a>
+  <a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank">
+    <img alt="Thunderbird Add-ons" style="height: 60px;" src="./public/images/badges/Get_the_add-on_Thunderbird.png">
   </a>
   <a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank">
     <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="./public/images/badges/Firefox%20Browser%20ADD-ONS.png">

@@ -1,0 +1,46 @@
+{
+  "name": "erikraft-drop",
+  "displayName": "ErikrafT Drop",
+  "description": "The easiest way to transfer files across devices.",
+  "version": "9.0.6",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "icon": "images/icon.png",
+  "main": "./src/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "erikraftDrop",
+          "title": "ErikrafT Drop",
+          "icon": "images/ui-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "erikraftDrop": [
+        {
+          "id": "erikraftDrop.view",
+          "name": "ErikrafT Drop",
+          "type": "webview",
+          "icon": "images/ui-icon.svg"
+        }
+      ]
+    }
+  },
+  "categories": [
+    "Other"
+  ],
+  "publisher": "ErikrafT",
+  "scripts": {
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^2.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikraft/Drop"
+  }
+}

@@ -1009,6 +1009,8 @@ class ReceiveFileDialog extends ReceiveDialog {
         this.$publishYoutubeBtn = this.$el.querySelector('#publish-youtube-btn');
         this.$publishInstagramBtn = this.$el.querySelector('#publish-instagram-btn');
 
+        this.metadataDialog = new MetadataDialog();
+
         Events.on('files-received', e => this._onFilesReceived(e.detail.peerId, e.detail.files, e.detail.imagesOnly, e.detail.totalSize));
         this._filesQueue = [];
     }
@@ -1103,6 +1105,7 @@ class ReceiveFileDialog extends ReceiveDialog {
         }
 
         let downloadZipped = false;
+        let zipFileObject = null;
         if (files.length > 1) {
             downloadZipped = true;
             try {
@@ -1120,7 +1123,8 @@ class ReceiveFileDialog extends ReceiveDialog {
                     });
                     bytesCompleted += files[i].size;
                 }
-                url = await zipper.getBlobURL();
+                // Refactored to get File object for VS Code compatibility
+                // url = await zipper.getBlobURL(); // OLD
 
                 let now = new Date(Date.now());
                 let year = now.getFullYear().toString();
@@ -1133,6 +1137,8 @@ class ReceiveFileDialog extends ReceiveDialog {
                 let minutes = now.getMinutes().toString();
                 minutes = minutes.length < 2 ? "0" + minutes : minutes;
                 filenameDownload = `ErikrafTDrop_files_${year + month + date}_${hours + minutes}.zip`;
+
+                zipFileObject = await zipper.getZipFile(filenameDownload);
             } catch (e) {
                 console.error(e);
                 downloadZipped = false;
@@ -1143,10 +1149,7 @@ class ReceiveFileDialog extends ReceiveDialog {
         this.$downloadBtn.innerText = Localization.getTranslation("dialogs.download");
         this.$downloadBtn.onclick = _ => {
             if (downloadZipped) {
-                let tmpZipBtn = document.createElement("a");
-                tmpZipBtn.download = filenameDownload;
-                tmpZipBtn.href = url;
-                tmpZipBtn.click();
+                this.downloadFile(zipFileObject);
             }
             else {
                 this._downloadFilesIndividually(files);
@@ -1302,136 +1305,12 @@ class ReceiveFileDialog extends ReceiveDialog {
                 }
             }
 
-            // Metadata EXIF: view raw APP1 EXIF segment and offer remove (re-encode)
+            // Metadata EXIF: view parsed EXIF data in popup
             if (this.$metadataBtn) {
                 if ((mime || '').startsWith('image/') || (mime || '').startsWith('video/')) {
                     this.$metadataBtn.removeAttribute('hidden');
-                    this.$metadataBtn.onclick = async _ => {
-                        try {
-                            let info = '';
-                            let title = 'Metadata';
-
-                            if ((mime || '').startsWith('image/')) {
-                                const ab = await primary.arrayBuffer();
-                                const view = new Uint8Array(ab);
-
-                                // search for APP1 marker 0xFF 0xE1
-                                let found = -1;
-                                for (let i = 0; i < view.length - 1; i++) {
-                                    if (view[i] === 0xFF && view[i + 1] === 0xE1) {
-                                        found = i;
-                                        break;
-                                    }
-                                }
-
-                                if (found === -1) {
-                                    info = 'No EXIF APP1 segment found.';
-                                } else {
-                                    const len = (view[found + 2] << 8) + view[found + 3];
-                                    const start = found + 4;
-                                    const end = Math.min(start + len - 2, view.length);
-
-                                    const segment = view.slice(start, end);
-
-                                    // Complete EXIF (no limit)
-                                    const hex = Array.prototype.map
-                                        .call(segment, b => ('0' + b.toString(16)).slice(-2))
-                                        .join(' ');
-
-                                    info =
-                                        'EXIF APP1 segment (complete hexdump):\n\n' +
-                                        hex +
-                                        '\n\nTotal size: ' + segment.length + ' bytes';
-                                }
-                                title = 'EXIF Metadata';
-                            } else if ((mime || '').startsWith('video/')) {
-                                const ab = await primary.arrayBuffer();
-                                const view = new Uint8Array(ab);
-
-                                // For MP4, search for 'moov' box (metadata container)
-                                let found = -1;
-                                const moov = [0x6D, 0x6F, 0x6F, 0x76]; // 'moov'
-                                for (let i = 0; i < view.length - 7; i++) {
-                                    if (view[i + 4] === moov[0] && view[i + 5] === moov[1] && view[i + 6] === moov[2] && view[i + 7] === moov[3]) {
-                                        found = i;
-                                        break;
-                                    }
-                                }
-
-                                if (found === -1) {
-                                    info = 'No MP4 moov box found. This may not be an MP4 file or metadata is embedded differently.';
-                                } else {
-                                    const size = (view[found] << 24) + (view[found + 1] << 16) + (view[found + 2] << 8) + view[found + 3];
-                                    const start = found;
-                                    const end = Math.min(start + size, view.length);
-
-                                    const segment = view.slice(start, end);
-
-                                    const hex = Array.prototype.map
-                                        .call(segment, b => ('0' + b.toString(16)).slice(-2))
-                                        .join(' ');
-
-                                    info =
-                                        'MP4 moov box (metadata container, complete hexdump):\n\n' +
-                                        hex +
-                                        '\n\nTotal size: ' + segment.length + ' bytes';
-                                }
-                            }
-
-                            const w = window.open('', '_blank');
-                            w.document.title = title;
-                            w.document.body.style.whiteSpace = 'pre-wrap';
-                            w.document.body.style.fontFamily = 'monospace';
-                            w.document.body.innerText = info;
-
-                            // Offer removal only for images
-                            if ((mime || '').startsWith('image/')) {
-                                const ab = await primary.arrayBuffer();
-                                const view = new Uint8Array(ab);
-                                let found = -1;
-                                for (let i = 0; i < view.length - 1; i++) {
-                                    if (view[i] === 0xFF && view[i + 1] === 0xE1) {
-                                        found = i;
-                                        break;
-                                    }
-                                }
-                                if (found !== -1) {
-                                    if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remove metadata from this image?')) {
-                                        try {
-                                            const img = document.createElement('img');
-                                            img.src = URL.createObjectURL(primary);
-
-                                            img.onload = async () => {
-                                                const canvas = document.createElement('canvas');
-                                                canvas.width = img.naturalWidth;
-                                                canvas.height = img.naturalHeight;
-
-                                                const ctx = canvas.getContext('2d');
-                                                ctx.drawImage(img, 0, 0);
-
-                                                canvas.toBlob(blob => {
-                                                    const a = document.createElement('a');
-                                                    a.href = URL.createObjectURL(blob);
-
-                                                    const name = primary.name || 'image';
-                                                    a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-noexif.jpg';
-
-                                                    a.click();
-
-                                                    Events.fire('notify-user', Localization.getTranslation('notifications.metadata-removed'));
-                                                }, 'image/jpeg', 0.92);
-                                            };
-                                        } catch (err) {
-                                            console.error('Remove EXIF failed', err);
-                                            Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (err) {
-                            console.error('Read metadata failed', err);
-                            Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
-                        }
+                    this.$metadataBtn.onclick = _ => {
+                        this.metadataDialog.show(primary);
                     };
                 } else {
                     this.$metadataBtn.setAttribute('hidden', true);
@@ -1577,13 +1456,12 @@ class ReceiveFileDialog extends ReceiveDialog {
                                         return;
                                     }
 
-                                    const downloadUrl = URL.createObjectURL(resultBlob);
                                     const baseName = (primary.name || 'image').replace(/(\.[a-zA-Z0-9_-]+)?$/, '') || 'image';
-                                    const link = document.createElement('a');
-                                    link.href = downloadUrl;
-                                    link.download = `${baseName}-compressed.${resultExt}`;
-                                    link.click();
-                                    setTimeout(() => URL.revokeObjectURL(downloadUrl), 2000);
+                                    const filename = `${baseName}-compressed.${resultExt}`;
+                                    const compressedFile = new File([resultBlob], filename, { type: resultBlob.type });
+
+                                    this.downloadFile(compressedFile);
+
                                     Events.fire('notify-user', Localization.getTranslation('notifications.compress-success'));
                                 } catch (innerErr) {
                                     console.error('Compress image failed', innerErr);
@@ -1653,12 +1531,42 @@ class ReceiveFileDialog extends ReceiveDialog {
         }
     }
 
-    _downloadFilesIndividually(files) {
-        let tmpBtn = document.createElement("a");
-        for (let i = 0; i < files.length; i++) {
-            tmpBtn.download = files[i].name;
-            tmpBtn.href = URL.createObjectURL(files[i]);
+    async downloadFile(file) {
+        if (window.erikraftClientType === 'vs-code-extension') {
+            const MAX_VSCODE_DOWNLOAD_SIZE = 50 * 1024 * 1024; // 50MB
+            if (file.size > MAX_VSCODE_DOWNLOAD_SIZE) {
+                Events.fire('notify-user', "File too large for VS Code extension (Max 50MB). Please use the web version.");
+                return;
+            }
+
+            try {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const event = new CustomEvent('drop-download', {
+                        detail: [{
+                            name: file.name,
+                            data: reader.result // Base64
+                        }]
+                    });
+                    window.dispatchEvent(event);
+                };
+                reader.readAsDataURL(file);
+            } catch (e) {
+                console.error("Download failed in VS Code extension", e);
+            }
+        } else {
+            // Browser behavior
+            const tmpBtn = document.createElement("a");
+            tmpBtn.download = file.name;
+            tmpBtn.href = URL.createObjectURL(file);
             tmpBtn.click();
+            setTimeout(() => URL.revokeObjectURL(tmpBtn.href), 2000);
+        }
+    }
+
+    _downloadFilesIndividually(files) {
+        for (let i = 0; i < files.length; i++) {
+            this.downloadFile(files[i]);
         }
     }
 
@@ -3374,6 +3282,149 @@ class NoSleepUI {
         if ($$('x-peer[status]') === null) {
             clearInterval(NoSleepUI._interval);
             NoSleepUI._nosleep.disable();
+        }
+    }
+}
+
+class MetadataDialog extends Dialog {
+    constructor() {
+        super('metadata-dialog');
+        this.$content = this.$el.querySelector('.metadata-content');
+        this.$translateBtn = this.$el.querySelector('#metadata-translate-btn');
+        this.$downloadBtn = this.$el.querySelector('#metadata-download-btn');
+        this.$removeBtn = this.$el.querySelector('#metadata-remove-btn');
+
+        this.$translateBtn.addEventListener('click', () => this.toggleTranslate());
+        this.$downloadBtn.addEventListener('click', () => this.downloadMetadata());
+        this.$removeBtn.addEventListener('click', () => this.removeMetadata());
+
+        this.exifData = {};
+        this.translateEnabled = false;
+        this.currentFile = null;
+    }
+
+    show(file) {
+        this.currentFile = file;
+        this.exifData = {};
+        this.translateEnabled = false;
+        this.$content.innerHTML = '<div class="loader"></div>'; // Placeholder or spinner
+
+        super.show();
+
+        EXIF.getData(file, () => {
+            const allTags = EXIF.getAllTags(file);
+            // Filter out thumbnail blob which is large and useless for display
+            if (allTags.thumbnail) delete allTags.thumbnail;
+
+            this.exifData = allTags;
+            this.render();
+        });
+    }
+
+    render() {
+        this.$content.innerHTML = '';
+
+        if (Object.keys(this.exifData).length === 0) {
+            this.$content.innerHTML = `<p>${Localization.getTranslation('metadata.noData')}</p>`;
+            return;
+        }
+
+        const table = document.createElement('table');
+        table.style.width = '100%';
+        table.style.borderCollapse = 'collapse';
+        table.style.fontSize = '14px';
+
+        for (const [key, value] of Object.entries(this.exifData)) {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid var(--border-color)'; // Assuming var exists or use generic color
+
+            const keyCell = document.createElement('td');
+            keyCell.style.padding = '8px';
+            keyCell.style.fontWeight = 'bold';
+            keyCell.style.wordBreak = 'break-word';
+
+            // Translate key if enabled and translation exists
+            let displayKey = key;
+            if (this.translateEnabled) {
+                const translated = Localization.getTranslation(`exif.${key}`, null, {}, true); // useDefault=true to avoid warnings/fallbacks if missing? Actually strict check better.
+                // Logic: if translation returns key or empty, stick to original key? 
+                // Localization.getTranslation returns key if missing? No, it logs warning and returns fallback.
+                // Check if translation exists:
+                const t = Localization.getTranslation(`exif.${key}`);
+                if (t && t !== `exif.${key}`) displayKey = t;
+            }
+            keyCell.innerText = displayKey;
+
+            const valueCell = document.createElement('td');
+            valueCell.style.padding = '8px';
+            valueCell.style.wordBreak = 'break-word';
+
+            let displayValue = value;
+            // Format if it's an object or too format specific? 
+            if (typeof value === 'object') {
+                displayValue = JSON.stringify(value);
+            } else {
+                displayValue = String(value);
+            }
+            valueCell.innerText = displayValue;
+
+            row.appendChild(keyCell);
+            row.appendChild(valueCell);
+            table.appendChild(row);
+        }
+        this.$content.appendChild(table);
+    }
+
+    toggleTranslate() {
+        this.translateEnabled = !this.translateEnabled;
+        this.render();
+    }
+
+    downloadMetadata() {
+        const text = Object.entries(this.exifData)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join('\n');
+
+        const blob = new Blob([text], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = (this.currentFile.name || 'metadata') + '-exif.txt';
+        a.click();
+    }
+
+    removeMetadata() {
+        if (!this.currentFile) return;
+
+        if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remove metadata from this image?')) {
+            try {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(this.currentFile);
+
+                img.onload = async () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    canvas.toBlob(blob => {
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+
+                        const name = this.currentFile.name || 'image';
+                        a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-noexif.jpg';
+
+                        a.click();
+
+                        Events.fire('notify-user', Localization.getTranslation('notifications.metadata-removed'));
+                        this.hide();
+                    }, 'image/jpeg', 0.92);
+                };
+            } catch (err) {
+                console.error('Remove EXIF failed', err);
+                Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
+            }
         }
     }
 }

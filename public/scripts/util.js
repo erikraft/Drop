@@ -79,7 +79,7 @@ const zipper = (() => {
     let zipWriter;
     return {
         createNewZipWriter() {
-            zipWriter = new zip.ZipWriter(new zip.BlobWriter("application/zip"), { bufferedWrite: true, level: 0 });
+            zipWriter = new zip.ZipWriter(new zip.BlobWriter("application/zip"), { bufferedWrite: true, level: 6 /* Level 6 = Deflate (Standard Compression) */ });
         },
         addFile(file, options) {
             return zipWriter.add(file.name, new zip.BlobReader(file), options);
@@ -96,7 +96,7 @@ const zipper = (() => {
         },
         async getZipFile(filename = "archive.zip") {
             if (zipWriter) {
-                const file = new File([await zipWriter.close()], filename, {type: "application/zip"});
+                const file = new File([await zipWriter.close()], filename, { type: "application/zip" });
                 zipWriter = null;
                 return file;
             }
@@ -422,7 +422,7 @@ const mime = (() => {
             // if filetype is empty guess via suffix otherwise leave unchanged
             for (let i = 0; i < files.length; i++) {
                 if (!files[i].type) {
-                    files[i] = new File([files[i]], files[i].name, {type: mime.guessMimeByFilename(files[i].name) || "application/octet-stream"});
+                    files[i] = new File([files[i]], files[i].name, { type: mime.guessMimeByFilename(files[i].name) || "application/octet-stream" });
                 }
             }
             return files;
@@ -437,19 +437,19 @@ const mime = (() => {
     Largely inspired by MurmurHash2/3, but with a focus on speed/simplicity.
     Public domain. Attribution appreciated.
 */
-const cyrb53 = function(str, seed = 0) {
+const cyrb53 = function (str, seed = 0) {
     let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
     for (let i = 0, ch; i < str.length; i++) {
         ch = str.charCodeAt(i);
         h1 = Math.imul(h1 ^ ch, 2654435761);
         h2 = Math.imul(h2 ^ ch, 1597334677);
     }
-    h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
-    h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
-    return 4294967296 * (2097151 & h2) + (h1>>>0);
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };
 
-function onlyUnique (value, index, array) {
+function onlyUnique(value, index, array) {
     return array.indexOf(value) === index;
 }
 
@@ -469,7 +469,7 @@ function arrayBufferToBase64(buffer) {
     for (let i = 0; i < len; i++) {
         binary += String.fromCharCode(bytes[i]);
     }
-    return window.btoa( binary );
+    return window.btoa(binary);
 }
 
 function base64ToArrayBuffer(base64) {
@@ -482,8 +482,8 @@ function base64ToArrayBuffer(base64) {
     return bytes.buffer;
 }
 
-async function fileToBlob (file) {
-    return new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type});
+async function fileToBlob(file) {
+    return new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type });
 }
 
 function getThumbnailAsDataUrl(file, width = undefined, height = undefined, quality = 0.7) {
