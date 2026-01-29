@@ -263,6 +263,7 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.0/dist/nsfwjs.min.js"></script>
     <script>
@@ -1391,10 +1392,12 @@
                 <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank" rel="noreferrer">
                     <img src="./images/badges/Get it on Open VSX Registry.png" alt="Get it on Open VSX Registry">
                 </a>
-                <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank" rel="noreferrer">
+                <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank"
+                    rel="noreferrer">
                     <img src="./images/badges/Get-it-from-Opera-Addons.png" alt="Opera Add-ons">
                 </a>
-                <a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank" rel="noreferrer">
+                <a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank"
+                    rel="noreferrer">
                     <img src="./images/badges/Get_the_add-on_Thunderbird.png" alt="Thunderbird Add-ons">
                 </a>
                 <a href="https://addons.mozilla.org/firefox/addon/erikraft-drop/" target="_blank" rel="noreferrer">
@@ -2274,6 +2277,29 @@
         });
     </script>
 
+    <x-dialog id="metadata-dialog">
+        <x-background class="full-bleed"></x-background>
+        <div class="box-shadow p-2 column center">
+            <h2 class="text-center" data-i18n-key="metadata.title" data-i18n-attrs="text"></h2>
+
+            <div class="metadata-content row-reverse wrap justify-center"
+                style="max-height: 50vh; overflow-y: auto; width: 100%; margin: 16px 0; user-select: text;">
+                <!-- Metadata items will be injected here -->
+            </div>
+
+            <div class="column center gap-2">
+                <div class="row wrap gap-2 justify-center">
+                    <button id="metadata-translate-btn" class="btn btn-rounded" data-i18n-key="metadata.translate"
+                        data-i18n-attrs="text"></button>
+                    <button id="metadata-download-btn" class="btn btn-rounded" data-i18n-key="metadata.download"
+                        data-i18n-attrs="text"></button>
+                    <button id="metadata-remove-btn" class="btn btn-rounded" data-i18n-key="metadata.remove"
+                        data-i18n-attrs="text"></button>
+                </div>
+                <button class="btn btn-rounded" close data-i18n-key="metadata.close" data-i18n-attrs="text"></button>
+            </div>
+        </div>
+    </x-dialog>
 </body>
 
 </html>

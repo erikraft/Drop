@@ -222,5 +222,19 @@
     },
     "site": {
         "biodrop": "Site"
+    },
+    "metadata": {
+        "title": "Metadados (EXIF)",
+        "close": "Fechar",
+        "download": "Baixar Metadados",
+        "translate": "Traduzir o que for possível",
+        "remove": "Apagar Metadados (EXIF)",
+        "noData": "Nenhum metadado encontrado"
+    },
+    "exif": {
+        "Make": "Fabricante",
+        "Model": "Modelo",
+        "DateTimeOriginal": "Data Original",
+        "Software": "Software"
     }
 }
