@@ -222,5 +222,19 @@
     },
     "site": {
         "biodrop": "网站"
+    },
+    "metadata": {
+        "title": "Metadata (EXIF)",
+        "close": "Close",
+        "download": "Download Metadata",
+        "translate": "Translate what is possible",
+        "remove": "Delete Metadata (EXIF)",
+        "noData": "No metadata found"
+    },
+    "exif": {
+        "Make": "Manufacturer",
+        "Model": "Model",
+        "DateTimeOriginal": "Original Date",
+        "Software": "Software"
     }
 }
