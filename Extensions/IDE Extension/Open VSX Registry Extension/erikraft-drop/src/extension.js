@@ -249,6 +249,6 @@ class ErikrafTDropViewProvider {
 
 exports.activate = activate;
 
-function deactivate() {}
+function deactivate() { }
 
 exports.deactivate = deactivate;
