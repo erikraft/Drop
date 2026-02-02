@@ -181,6 +181,7 @@ class ErikrafTdrop {
         this.pairDeviceDialog = new PairDeviceDialog();
         this.clearDevicesDialog = new EditPairedDevicesDialog();
         this.publicRoomDialog = new PublicRoomDialog();
+        this.lanModeDialog = new LanModeDialog();
         this.base64Dialog = new Base64Dialog();
         this.shareTextDialog = new ShareTextDialog();
         this.toast = new Toast();

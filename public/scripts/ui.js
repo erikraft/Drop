@@ -2527,6 +2527,245 @@ class PublicRoomDialog extends Dialog {
     }
 }
 
+class LanModeDialog extends Dialog {
+    constructor() {
+        super('lan-mode-dialog');
+
+        this.$headerBtn = $('lan-mode');
+        this.$toggle = $('lan-mode-toggle');
+        this.$serverInput = $('lan-server-input');
+        this.$scanBtn = $('lan-scan-btn');
+        this.$applyBtn = $('lan-apply-btn');
+        this.$connectionStatus = $('lan-connection-status');
+        this.$peerStatus = $('lan-peer-status');
+
+        this._ipPeers = new Set();
+        this._wsConnected = false;
+
+        this.$headerBtn.addEventListener('click', _ => this.show());
+        this.$toggle.addEventListener('change', _ => this._applySettings());
+        this.$applyBtn.addEventListener('click', _ => this._applySettings());
+        this.$scanBtn.addEventListener('click', _ => this._scanCommonHosts());
+
+        Events.on('ws-connected', _ => this._onWsConnected());
+        Events.on('ws-disconnected', _ => this._onWsDisconnected());
+        Events.on('peers', e => this._onPeers(e.detail));
+        Events.on('peer-joined', e => this._onPeerJoined(e.detail));
+        Events.on('peer-left', e => this._onPeerLeft(e.detail));
+        Events.on('translation-loaded', _ => this._updateStatus());
+
+        this._loadSettings();
+        this._updateStatus();
+    }
+
+    show() {
+        this._updateStatus();
+        super.show();
+    }
+
+    _loadSettings() {
+        let enabled = false;
+        let server = '';
+        try {
+            enabled = localStorage.getItem('lan_mode_enabled') === 'true';
+            server = localStorage.getItem('lan_signaling_server') || '';
+        }
+        catch (e) {
+            enabled = false;
+            server = '';
+        }
+        this.$toggle.checked = enabled;
+        this.$serverInput.value = server;
+    }
+
+    _applySettings() {
+        const enabled = this.$toggle.checked;
+        const server = (this.$serverInput.value || '').trim();
+
+        if (enabled && !server) {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-missing-server"));
+            this.$toggle.checked = false;
+            return;
+        }
+
+        if (enabled && !this._isLocalHost(this._extractHost(server))) {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-invalid-server"));
+            this.$toggle.checked = false;
+            return;
+        }
+
+        try {
+            localStorage.setItem('lan_mode_enabled', enabled ? 'true' : 'false');
+            localStorage.setItem('lan_signaling_server', server);
+        }
+        catch (e) {
+            console.warn("Unable to persist LAN mode settings.", e);
+        }
+
+        Events.fire('lan-mode-changed', {
+            enabled: enabled,
+            server: server
+        });
+
+        this._updateStatus();
+    }
+
+    _extractHost(raw) {
+        if (!raw) return '';
+        const trimmed = raw.trim();
+        if (!trimmed) return '';
+        let host = trimmed;
+        host = host.replace(/^wss?:\/\//i, '');
+        host = host.replace(/^https?:\/\//i, '');
+        host = host.replace(/^\/+/, '');
+        host = host.split('/')[0];
+        return host.split(':')[0];
+    }
+
+    _isLocalHost(host) {
+        if (!host) return false;
+        if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return true;
+        if (host.endsWith('.local')) return true;
+        if (!host.includes(':')) {
+            return /^(10)\.(.*)\.(.*)\.(.*)$/.test(host)
+                || /^(172)\.(1[6-9]|2[0-9]|3[0-1])\.(.*)\.(.*)$/.test(host)
+                || /^(192)\.(168)\.(.*)\.(.*)$/.test(host);
+        }
+        const firstWord = host.split(":").find(el => !!el);
+        if (!firstWord) return false;
+        if (/^fe[c-f][0-9a-f]$/.test(firstWord)) return true;
+        if (/^fc[0-9a-f]{2}$/.test(firstWord)) return true;
+        if (/^fd[0-9a-f]{2}$/.test(firstWord)) return true;
+        if (firstWord === "fe80") return true;
+        if (firstWord === "100") return true;
+        return false;
+    }
+
+    _onWsConnected() {
+        this._wsConnected = true;
+        this._updateStatus();
+    }
+
+    _onWsDisconnected() {
+        this._wsConnected = false;
+        this._updateStatus();
+    }
+
+    _onPeers(message) {
+        if (message.roomType !== 'ip') return;
+        this._ipPeers = new Set(message.peers.map(peer => peer.id));
+        this._updateStatus();
+    }
+
+    _onPeerJoined(message) {
+        if (message.roomType !== 'ip') return;
+        this._ipPeers.add(message.peer.id);
+        this._updateStatus();
+    }
+
+    _onPeerLeft(message) {
+        if (message.roomType !== 'ip') return;
+        this._ipPeers.delete(message.peerId);
+        this._updateStatus();
+    }
+
+    _updateStatus() {
+        const enabled = this.$toggle.checked;
+        if (!enabled) {
+            this.$connectionStatus.textContent = '';
+            this.$peerStatus.textContent = '';
+            return;
+        }
+
+        const connectionStatus = this._wsConnected
+            ? Localization.getTranslation("dialogs.lan-mode-status-connected")
+            : Localization.getTranslation("dialogs.lan-mode-status-connecting");
+
+        const peerStatus = this._ipPeers.size > 0
+            ? Localization.getTranslation("dialogs.lan-mode-status-found")
+            : Localization.getTranslation("dialogs.lan-mode-status-waiting");
+
+        this.$connectionStatus.textContent = connectionStatus;
+        this.$peerStatus.textContent = peerStatus;
+    }
+
+    async _scanCommonHosts() {
+        if (location.protocol === 'https:') {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-https-blocked"));
+            return;
+        }
+
+        const port = 3000;
+        const suffixes = [1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+        const bases = ['192.168.0', '192.168.1', '10.0.0', '10.0.1', '172.16.0'];
+        const candidates = [];
+
+        bases.forEach(base => {
+            suffixes.forEach(suffix => {
+                candidates.push(`${base}.${suffix}`);
+            });
+        });
+
+        this.$scanBtn.setAttribute('disabled', true);
+        this.$scanBtn.textContent = Localization.getTranslation("dialogs.lan-mode-scanning");
+
+        for (let i = 0; i < candidates.length; i++) {
+            const host = candidates[i];
+            const found = await this._probeLanHost(host, port);
+            if (found) {
+                this.$serverInput.value = `${host}:${port}`;
+                this.$toggle.checked = true;
+                this._applySettings();
+                break;
+            }
+        }
+
+        this.$scanBtn.removeAttribute('disabled');
+        this.$scanBtn.textContent = Localization.getTranslation("dialogs.lan-mode-scan");
+    }
+
+    _probeLanHost(host, port) {
+        return new Promise(resolve => {
+            let done = false;
+            let ws;
+            const timeout = setTimeout(() => {
+                if (done) return;
+                done = true;
+                try {
+                    if (ws) ws.close();
+                } catch (e) {}
+                resolve(false);
+            }, 600);
+
+            try {
+                ws = new WebSocket(`ws://${host}:${port}/server?webrtc_supported=true`);
+            }
+            catch (e) {
+                clearTimeout(timeout);
+                resolve(false);
+                return;
+            }
+
+            ws.onopen = () => {
+                if (done) return;
+                done = true;
+                clearTimeout(timeout);
+                try {
+                    ws.close();
+                } catch (e) {}
+                resolve(true);
+            };
+
+            ws.onerror = () => {
+                if (done) return;
+                done = true;
+                clearTimeout(timeout);
+                resolve(false);
+            };
+        });
+    }
+}
+
 class SendTextDialog extends Dialog {
     constructor() {
         super('send-text-dialog');
