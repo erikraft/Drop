@@ -4,6 +4,7 @@ class ErikrafTdrop {
         this.$headerNotificationBtn = $('notification');
         this.$headerEditPairedDevicesBtn = $('edit-paired-devices');
         this.$footerPairedDevicesBadge = $$('.discovery-wrapper .badge-room-secret');
+        this.$chatFooterPairedDevicesBadge = $$('#chat-panel .badge-room-secret');
         this.$headerInstallBtn = $('install');
 
         this.deferredStyles = [
@@ -104,6 +105,9 @@ class ErikrafTdrop {
         if (roomSecrets.length > 0) {
             this.$headerEditPairedDevicesBtn.removeAttribute('hidden');
             this.$footerPairedDevicesBadge.removeAttribute('hidden');
+            if (this.$chatFooterPairedDevicesBadge) {
+                this.$chatFooterPairedDevicesBadge.removeAttribute('hidden');
+            }
         }
     }
 

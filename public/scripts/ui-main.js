@@ -199,13 +199,16 @@ class FooterUI {
     constructor() {
         this.$footer = $$('footer');
         this.$displayName = $('display-name');
+        this.$chatDisplayName = $('chat-display-name');
         this.$discoveryWrapper = $$('footer .discovery-wrapper');
         this.$profilePhotoInput = $('profile-photo-upload');
         this.$deviceAvatarsContainer = $('device-avatars-container');
 
-        this.$displayName.addEventListener('keydown', e => this._onKeyDownDisplayName(e));
-        this.$displayName.addEventListener('focus', e => this._onFocusDisplayName(e));
-        this.$displayName.addEventListener('blur', e => this._onBlurDisplayName(e));
+        [this.$displayName, this.$chatDisplayName].filter(Boolean).forEach(displayNameEl => {
+            displayNameEl.addEventListener('keydown', e => this._onKeyDownDisplayName(e));
+            displayNameEl.addEventListener('focus', e => this._onFocusDisplayName(e));
+            displayNameEl.addEventListener('blur', e => this._onBlurDisplayName(e));
+        });
 
         if (this.$profilePhotoInput) {
             this.$profilePhotoInput.addEventListener('change', e => this._onProfilePhotoChange(e));
@@ -220,7 +223,9 @@ class FooterUI {
     }
 
     async showLoading() {
-        this.$displayName.setAttribute('placeholder', this.$displayName.dataset.placeholder);
+        [this.$displayName, this.$chatDisplayName].filter(Boolean).forEach(displayNameEl => {
+            displayNameEl.setAttribute('placeholder', displayNameEl.dataset.placeholder);
+        });
     }
 
     _onProfilePhotoChange(event) {
@@ -293,12 +298,16 @@ class FooterUI {
         await this._loadSavedDisplayName();
 
         // set original display name as placeholder
-        this.$displayName.setAttribute('placeholder', displayNameServer);
+        [this.$displayName, this.$chatDisplayName].filter(Boolean).forEach(displayNameEl => {
+            displayNameEl.setAttribute('placeholder', displayNameServer);
+        });
     }
 
 
     _insertDisplayName(displayName) {
-        this.$displayName.textContent = displayName;
+        [this.$displayName, this.$chatDisplayName].filter(Boolean).forEach(displayNameEl => {
+            displayNameEl.textContent = displayName;
+        });
     }
 
     _onKeyDownDisplayName(e) {

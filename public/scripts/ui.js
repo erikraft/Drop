@@ -1897,6 +1897,7 @@ class PairDeviceDialog extends Dialog {
         this.$pairDeviceHeaderBtn = $('pair-device');
         this.$editPairedDevicesHeaderBtn = $('edit-paired-devices');
         this.$footerInstructionsPairedDevices = $$('.discovery-wrapper .badge-room-secret');
+        this.$chatFooterPairedDevices = $$('#chat-panel .badge-room-secret');
 
         this.$key = this.$el.querySelector('.key');
         this.$qrCode = this.$el.querySelector('.key-qr-code');
@@ -2121,10 +2122,16 @@ class PairDeviceDialog extends Dialog {
                 if (roomSecrets.length > 0) {
                     this.$editPairedDevicesHeaderBtn.removeAttribute('hidden');
                     this.$footerInstructionsPairedDevices.removeAttribute('hidden');
+                    if (this.$chatFooterPairedDevices) {
+                        this.$chatFooterPairedDevices.removeAttribute('hidden');
+                    }
                 }
                 else {
                     this.$editPairedDevicesHeaderBtn.setAttribute('hidden', true);
                     this.$footerInstructionsPairedDevices.setAttribute('hidden', true);
+                    if (this.$chatFooterPairedDevices) {
+                        this.$chatFooterPairedDevices.setAttribute('hidden', true);
+                    }
                 }
                 Events.fire('evaluate-footer-badges');
             });
@@ -2296,6 +2303,7 @@ class PublicRoomDialog extends Dialog {
         this.$joinSubmitBtn = this.$el.querySelector('button[type="submit"]');
         this.$headerBtnJoinPublicRoom = $('join-public-room');
         this.$footerBadgePublicRoomDevices = $$('.discovery-wrapper .badge-room-public-id');
+        this.$chatFooterBadgePublicRoomDevices = $$('#chat-panel .badge-room-public-id');
 
 
         this.$form.addEventListener('submit', e => this._onSubmit(e));
@@ -2391,6 +2399,12 @@ class PublicRoomDialog extends Dialog {
             roomId: this.roomId.toUpperCase()
         });
         this.$footerBadgePublicRoomDevices.removeAttribute('hidden');
+        if (this.$chatFooterBadgePublicRoomDevices) {
+            this.$chatFooterBadgePublicRoomDevices.innerText = Localization.getTranslation("footer.public-room-devices", null, {
+                roomId: this.roomId.toUpperCase()
+            });
+            this.$chatFooterBadgePublicRoomDevices.removeAttribute('hidden');
+        }
 
         Events.fire('evaluate-footer-badges');
     }
@@ -2506,6 +2520,9 @@ class PublicRoomDialog extends Dialog {
         this.inputKeyContainer._cleanUp();
         sessionStorage.removeItem('public_room_id');
         this.$footerBadgePublicRoomDevices.setAttribute('hidden', true);
+        if (this.$chatFooterBadgePublicRoomDevices) {
+            this.$chatFooterBadgePublicRoomDevices.setAttribute('hidden', true);
+        }
         Events.fire('evaluate-footer-badges');
     }
 }
@@ -3388,6 +3405,11 @@ class ChatUI {
         this.$form = $('chat-form');
         this.$input = $('chat-input');
         this.$status = $('chat-room-status');
+        this.$footer = this.$panel.querySelector('.chat-footer');
+        this.$footerBadgeLocal = this.$panel.querySelector('.chat-footer .badge-room-ip');
+        this.$footerBadgePaired = this.$panel.querySelector('.chat-footer .badge-room-secret');
+        this.$footerBadgePublic = this.$panel.querySelector('.chat-footer .badge-room-public-id');
+        this.$footerDiscovery = this.$panel.querySelector('.chat-footer .chat-discovery');
 
         if (!this.$panel || !this.$toggle || !this.$roomSelect || !this.$messages || !this.$form || !this.$input) {
             return;
@@ -3407,6 +3429,16 @@ class ChatUI {
         this.$roomSelect.addEventListener('change', _ => this._onRoomSelected());
         this.$form.addEventListener('submit', e => this._onSubmit(e));
 
+        if (window.ResizeObserver) {
+            this._resizeObserver = new ResizeObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.target.hidden) return;
+                    this._setSidebarWidth(entry.contentRect.width);
+                });
+            });
+            this._resizeObserver.observe(this.$panel);
+        }
+
         Events.on('peer-joined', e => this._onPeerJoined(e.detail));
         Events.on('peers', e => this._onPeers(e.detail));
         Events.on('peer-left', e => this._onPeerLeft(e.detail));
@@ -3417,6 +3449,7 @@ class ChatUI {
         Events.on('chat-message-received', e => this._onChatReceived(e.detail.message));
         Events.on('chat-ack-received', e => this._onChatAck(e.detail));
         Events.on('chat-send-failed', e => this._onChatSendFailed(e.detail));
+        Events.on('evaluate-footer-badges', _ => this._evaluateChatFooter());
     }
 
     show() {
@@ -3424,6 +3457,7 @@ class ChatUI {
         document.body.classList.add('chat-open');
         this.$toggle.classList.remove('has-unread');
         this._clearUnread(this._currentRoomKey);
+        this._setSidebarWidth(this.$panel.getBoundingClientRect().width);
         this._scrollToBottom();
     }
 
@@ -3551,6 +3585,25 @@ class ChatUI {
 
     _scrollToBottom() {
         this.$messages.scrollTop = this.$messages.scrollHeight;
+    }
+
+    _setSidebarWidth(width) {
+        if (!width) return;
+        const maxWidth = window.innerWidth || width;
+        const clampedWidth = Math.min(width, maxWidth);
+        document.documentElement.style.setProperty('--chat-sidebar-width', `${clampedWidth}px`);
+    }
+
+    _evaluateChatFooter() {
+        if (!this.$footerDiscovery) return;
+        const badges = [this.$footerBadgeLocal, this.$footerBadgePaired, this.$footerBadgePublic].filter(Boolean);
+        const hasVisibleBadge = badges.some(badge => !badge.hasAttribute('hidden'));
+        if (hasVisibleBadge) {
+            this.$footerDiscovery.removeAttribute('hidden');
+        }
+        else {
+            this.$footerDiscovery.setAttribute('hidden', true);
+        }
     }
 
     _onRoomSelected() {
