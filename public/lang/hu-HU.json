@@ -1,6 +1,5 @@
 {
     "header": {
-        "lan-mode_title": "",
         "about_title": "About ErikrafT Drop",
         "language-selector_title": "Set Language",
         "about_aria-label": "Open About ErikrafT Drop",
@@ -12,6 +11,7 @@
         "pair-device_title": "Pair your devices permanently",
         "edit-paired-devices_title": "Edit paired devices",
         "join-public-room_title": "Join public room temporarily",
+        "lan-mode_title": "LAN Mode (offline)",
         "cancel-share-mode": "Cancel",
         "edit-share-mode": "Edit",
         "expand_title": "Expand header button row",
@@ -39,7 +39,6 @@
         "webrtc-requirement": "To use this ErikrafT Drop instance, WebRTC must be enabled!"
     },
     "footer": {
-        "lan": "",
         "known-as": "You are known as:",
         "display-name_data-placeholder": "Loading…",
         "display-name_title": "Edit your device name permanently",
@@ -53,22 +52,10 @@
         "traffic": "Traffic is",
         "routed": "routed through the server",
         "webrtc": "if WebRTC is not available.",
-        "add-profile-photo": "Add Profile Photo"
+        "add-profile-photo": "Add Profile Photo",
+        "lan": "LAN"
     },
     "dialogs": {
-        "lan-mode-warning": "",
-        "lan-mode-status-found": "",
-        "lan-mode-status-waiting": "",
-        "lan-mode-status-connected": "",
-        "lan-mode-status-connecting": "",
-        "lan-mode-scanning": "",
-        "lan-mode-scan": "",
-        "lan-mode-apply": "",
-        "lan-mode-server-help": "",
-        "lan-mode-server_placeholder": "",
-        "lan-mode-server-label": "",
-        "lan-mode-toggle": "",
-        "lan-mode-title": "",
         "pair-devices-title": "Pair Devices Permanently",
         "input-key-on-this-device": "Input this key on another device",
         "scan-qr-code": "or scan the QR-code.",
@@ -76,6 +63,18 @@
         "temporary-public-room-title": "Temporary Public Room",
         "input-room-id-on-another-device": "Input this room ID on another device",
         "enter-room-id-from-another-device": "Enter room ID from another device to join room.",
+        "lan-mode-title": "LAN Mode (offline)",
+        "lan-mode-toggle": "Enable LAN mode (no internet)",
+        "lan-mode-server-label": "LAN signaling server",
+        "lan-mode-server-help": "Use a local IP (private network only).",
+        "lan-mode-apply": "Apply",
+        "lan-mode-scan": "Find common servers",
+        "lan-mode-scanning": "Scanning...",
+        "lan-mode-status-connecting": "Connecting to LAN",
+        "lan-mode-status-connected": "Connected to LAN",
+        "lan-mode-status-waiting": "Waiting for peers",
+        "lan-mode-status-found": "Peers found",
+        "lan-mode-warning": "LAN mode is visible to devices on the same network.",
         "hr-or": "OR",
         "pair": "Pair",
         "cancel": "Cancel",
@@ -155,7 +154,8 @@
         "publish-youtube": "Publish on YouTube",
         "publish-instagram": "Publish on Instagram",
         "compress": "Compress",
-        "edit-ai": "Edit with AI"
+        "edit-ai": "Edit with AI",
+        "lan-mode-server_placeholder": "192.168.0.10:3000"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop",
@@ -170,11 +170,6 @@
         "faq_title": "Frequently asked questions"
     },
     "notifications": {
-        "lan-disabled": "",
-        "lan-enabled": "",
-        "lan-https-blocked": "",
-        "lan-invalid-server": "",
-        "lan-missing-server": "",
         "display-name-changed-permanently": "Display name is changed permanently",
         "display-name-changed-temporarily": "Display name is changed for this session only",
         "display-name-random-again": "Display name is randomly generated again",
@@ -211,6 +206,11 @@
         "connected": "Connected",
         "online-requirement-pairing": "You need to be online to pair devices",
         "online-requirement-public-room": "You need to be online to create a public room",
+        "lan-missing-server": "Enter a LAN server IP to enable LAN mode.",
+        "lan-invalid-server": "LAN server must be a local/private IP address.",
+        "lan-https-blocked": "This page is HTTPS. Use HTTP or WSS for LAN mode.",
+        "lan-enabled": "LAN mode enabled.",
+        "lan-disabled": "LAN mode disabled.",
         "connecting": "Connecting…",
         "files-incorrect": "Files are incorrect",
         "file-transfer-completed": "File transfer completed",
@@ -244,18 +244,16 @@
         "biodrop": "Site"
     },
     "chat": {
-        "room_local": "",
-        "room_paired": "",
-        "room_public": "",
-        "peers_status": "",
-        "status_sent": "",
-        "status_delivered": "",
-        "status_failed": "",
-        "close_title": "",
-        "room_select_title": ""
-        ,
-        "discover_paired": "",
-        "discovery": ""
+        "room_local": "Local network",
+        "room_paired": "Paired devices",
+        "room_public": "Room {{roomId}}",
+        "peers_status": "Peers: {{count}}",
+        "status_sent": "Sent",
+        "status_delivered": "Delivered",
+        "status_failed": "Failed",
+        "close_title": "Close chat",
+        "room_select_title": "Chat room",
+        "discover_paired": "Between paired devices",
+        "discovery": "You can be discovered:"
     }
 }
-
