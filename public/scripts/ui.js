@@ -2648,6 +2648,7 @@ class LanModeDialog extends Dialog {
 
     _onWsDisconnected() {
         this._wsConnected = false;
+        this._ipPeers.clear();
         this._updateStatus();
     }
 
