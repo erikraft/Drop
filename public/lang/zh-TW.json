@@ -222,15 +222,17 @@
     },
     "site": {
         "biodrop": "網站"
-    },\n    "chat": {
-        "room_local": "",
-        "room_paired": "",
-        "room_public": "",
-        "peers_status": "",
-        "status_sent": "",
-        "status_delivered": "",
-        "status_failed": "",
-        "close_title": "",
-        "room_select_title": ""
-    ,\n        "discover_paired": ""}}
-
+    },
+    "chat": {
+        "room_local": "Local network",
+        "room_paired": "Paired devices",
+        "room_public": "Room {{roomId}}",
+        "peers_status": "Peers: {{count}}",
+        "status_sent": "Sent",
+        "status_delivered": "Delivered",
+        "status_failed": "Failed",
+        "close_title": "Close chat",
+        "room_select_title": "Chat room",
+        "discover_paired": "Between paired devices"
+    }
+}
