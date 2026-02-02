@@ -185,6 +185,7 @@ class ErikrafTdrop {
         this.webShareTargetUI = new WebShareTargetUI();
         this.webFileHandlersUI = new WebFileHandlersUI();
         this.noSleepUI = new NoSleepUI();
+        this.chatUI = new ChatUI();
         this.broadCast = new BrowserTabsConnector();
         this.server = new ServerConnection();
         this.peers = new PeersManager(this.server);

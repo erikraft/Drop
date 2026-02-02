@@ -420,13 +420,11 @@
             </svg>
         </div> -->
 
-        <div id="webchat" class="icon-button" data-i18n-key="header.webchat" data-i18n-attrs="title" title="WebChat">
-            <a id="webchat-launcher" href="https://webchat.erikraft.com/" target="_blank" rel="noopener noreferrer"
-                aria-label="WebChat">
-                <svg width="24" height="24">
-                    <use xlink:href="#webchat-icon"></use>
-                </svg>
-            </a>
+        <div id="chat-toggle" class="icon-button" data-i18n-key="header.webchat"
+            data-i18n-attrs="title aria-label">
+            <svg width="24" height="24" aria-hidden="true">
+                <use xlink:href="#webchat-icon"></use>
+            </svg>
         </div>
 
         <!-- Removido: botão Comet Browser -->
@@ -624,6 +622,39 @@
             <span data-i18n-key="footer.traffic" data-i18n-attrs="text"></span>
             <span data-i18n-key="footer.routed" data-i18n-attrs="text"></span>
             <span data-i18n-key="footer.webrtc" data-i18n-attrs="text"></span>
+        </div>
+        <div id="realtime-panels" class="realtime-panels">
+            <section id="chat-panel" class="chat-panel panel column" hidden aria-live="polite">
+                <div class="chat-header">
+                    <div class="chat-header__left">
+                        <span class="chat-title" data-i18n-key="header.webchat" data-i18n-attrs="text">Chat</span>
+                        <select id="chat-room-select" class="chat-room-select" data-i18n-key="chat.room_select_title"
+                            data-i18n-attrs="aria-label"></select>
+                    </div>
+                    <div class="chat-header__right">
+                        <span id="chat-room-status" class="chat-room-status"></span>
+                        <button id="chat-close" type="button" class="icon-button chat-close"
+                            data-i18n-key="chat.close_title" data-i18n-attrs="aria-label title">
+                            <span aria-hidden="true">✕</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="chat-messages" class="chat-messages"></div>
+                <form id="chat-form" class="chat-input">
+                    <input id="chat-input" type="text" autocomplete="off" spellcheck="true"
+                        data-i18n-key="dialogs.message" data-i18n-attrs="title placeholder"
+                        title="Insira a mensagem a ser enviada" placeholder="Texto">
+                    <button id="chat-send" type="submit" class="btn btn-rounded"
+                        data-i18n-key="dialogs.send" data-i18n-attrs="text">Enviar</button>
+                </form>
+                <div class="chat-footer">
+                    <span data-i18n-key="footer.discovery" data-i18n-attrs="text">Você pode ser descoberto:</span>
+                    <span class="badge badge-room-ip" data-i18n-key="footer.on-this-network"
+                        data-i18n-attrs="text title">Rede local</span>
+                    <span class="badge badge-room-secret" data-i18n-key="chat.discover_paired"
+                        data-i18n-attrs="text title">Entre dispositivos emparelhados</span>
+                </div>
+            </section>
         </div>
     </div>
     <!-- Footer -->
@@ -1704,222 +1735,7 @@
             </path>
         </symbol>
     </svg>
-    <div id="webchat-modal" class="webchat-modal" hidden aria-hidden="true" role="dialog" aria-modal="true"
-        aria-labelledby="webchat-modal-title">
-        <div class="webchat-modal__dialog" role="document">
-            <div class="webchat-modal__header">
-                <h2 id="webchat-modal-title">WebChat</h2>
-                <div class="webchat-modal__controls">
-                    <button type="button" class="webchat-modal__icon-button" data-webchat-minimize
-                        aria-label="Minimizar">
-                        ▬
-                    </button>
-                    <button type="button" class="webchat-modal__icon-button webchat-modal__close" data-webchat-close
-                        aria-label="Fechar">
-                        ✕
-                    </button>
-                </div>
-            </div>
-            <div class="webchat-modal__body">
-                <iframe id="webchat-frame" title="WebChat" loading="lazy" allow="camera; microphone"
-                    referrerpolicy="no-referrer"></iframe>
-            </div>
-            <div class="webchat-modal__footer">
-                <a class="btn btn-rounded webchat-modal__external" href="https://webchat.erikraft.com/" target="_blank"
-                    rel="noopener noreferrer" data-i18n-key="webchat-modal.external" data-i18n-attrs="text">Ir para o
-                    site</a>
-            </div>
-        </div>
-    </div>
-    <button type="button" class="webchat-modal__restore" data-webchat-restore aria-label="Reabrir WebChat" hidden>
-        <span class="webchat-modal__restore-title">WebChat</span>
-    </button>
-
-    <!-- Scripts -->
-
-    <script>
-        (function () {
-            const WEBCHAT_URL = 'https://webchat.erikraft.com/';
-            const launcher = document.getElementById('webchat-launcher');
-            const modal = document.getElementById('webchat-modal');
-            const iframe = document.getElementById('webchat-frame');
-            const closeButtons = modal ? modal.querySelectorAll('[data-webchat-close]') : [];
-            const minimizeButton = modal ? modal.querySelector('[data-webchat-minimize]') : null;
-            const restoreButton = document.querySelector('[data-webchat-restore]');
-            const dialog = modal ? modal.querySelector('.webchat-modal__dialog') : null;
-            const mobileMatcher = window.matchMedia('(max-width: 767px)');
-            let lastFocusedElement = null;
-
-            if (!launcher || !modal || !iframe || !dialog) {
-                return;
-            }
-
-            const setModalVisibility = (visible) => {
-                if (visible) {
-                    modal.hidden = false;
-                    modal.setAttribute('aria-hidden', 'false');
-                    modal.setAttribute('aria-modal', 'true');
-                    document.body.classList.add('webchat-modal-open');
-                    if (restoreButton) {
-                        restoreButton.hidden = true;
-                    }
-                    modal.classList.remove('webchat-modal--minimized');
-                    if (dialog) {
-                        dialog.removeAttribute('aria-hidden');
-                    }
-                }
-                else {
-                    modal.hidden = true;
-                    modal.setAttribute('aria-hidden', 'true');
-                    modal.setAttribute('aria-modal', 'false');
-                    document.body.classList.remove('webchat-modal-open');
-                    if (restoreButton) {
-                        restoreButton.hidden = true;
-                    }
-                    modal.classList.remove('webchat-modal--minimized');
-                    if (dialog) {
-                        dialog.removeAttribute('aria-hidden');
-                    }
-                }
-            };
-
-            const handleEscape = (event) => {
-                if (event.key === 'Escape') {
-                    event.preventDefault();
-                    closeModal();
-                }
-            };
-
-            const openModal = () => {
-                lastFocusedElement = document.activeElement;
-                iframe.src = WEBCHAT_URL;
-
-                setModalVisibility(true);
-                document.addEventListener('keydown', handleEscape);
-
-                const closeButton = modal.querySelector('.webchat-modal__close');
-                if (closeButton) {
-                    closeButton.focus({ preventScroll: true });
-                }
-            };
-
-            const closeModal = () => {
-                if (modal.hidden) {
-                    return;
-                }
-
-                setModalVisibility(false);
-                iframe.src = '';
-                document.removeEventListener('keydown', handleEscape);
-
-                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function' &&
-                    !(lastFocusedElement instanceof Element && lastFocusedElement.hasAttribute('hidden'))) {
-                    lastFocusedElement.focus({ preventScroll: true });
-                }
-            };
-
-            const minimizeModal = () => {
-                if (modal.hidden || modal.classList.contains('webchat-modal--minimized')) {
-                    return;
-                }
-
-                modal.classList.add('webchat-modal--minimized');
-                modal.hidden = false;
-                modal.setAttribute('aria-hidden', 'true');
-                modal.setAttribute('aria-modal', 'false');
-                document.body.classList.remove('webchat-modal-open');
-                if (dialog) {
-                    dialog.setAttribute('aria-hidden', 'true');
-                }
-
-                document.removeEventListener('keydown', handleEscape);
-
-                if (restoreButton) {
-                    restoreButton.hidden = false;
-                    restoreButton.focus({ preventScroll: true });
-                }
-            };
-
-            const restoreModal = () => {
-                if (!modal.classList.contains('webchat-modal--minimized')) {
-                    return;
-                }
-
-                modal.classList.remove('webchat-modal--minimized');
-                modal.hidden = false;
-                modal.setAttribute('aria-hidden', 'false');
-                modal.setAttribute('aria-modal', 'true');
-                if (restoreButton) {
-                    restoreButton.hidden = true;
-                }
-                if (dialog) {
-                    dialog.removeAttribute('aria-hidden');
-                }
-
-                document.body.classList.add('webchat-modal-open');
-                document.addEventListener('keydown', handleEscape);
-
-                const closeButton = modal.querySelector('.webchat-modal__close');
-                if (closeButton) {
-                    closeButton.focus({ preventScroll: true });
-                }
-            };
-
-            launcher.addEventListener('click', (event) => {
-                if (mobileMatcher.matches) {
-                    return;
-                }
-
-                event.preventDefault();
-                openModal();
-            });
-
-            closeButtons.forEach((button) => {
-                button.addEventListener('click', closeModal);
-            });
-
-            if (minimizeButton) {
-                minimizeButton.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    minimizeModal();
-                });
-            }
-
-            if (restoreButton) {
-                restoreButton.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    restoreModal();
-                });
-            }
-
-            modal.addEventListener('click', (event) => {
-                if (modal.classList.contains('webchat-modal--minimized')) {
-                    return;
-                }
-
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
-
-            dialog.addEventListener('click', (event) => {
-                event.stopPropagation();
-            });
-
-            const handleMobileChange = (event) => {
-                if (event.matches) {
-                    closeModal();
-                }
-            };
-
-            if (typeof mobileMatcher.addEventListener === 'function') {
-                mobileMatcher.addEventListener('change', handleMobileChange);
-            }
-            else if (typeof mobileMatcher.addListener === 'function') {
-                mobileMatcher.addListener(handleMobileChange);
-            }
-        })();
-    </script>
+    
 
     <!-- Script de Instalação PWA -->
     <script>
@@ -2277,3 +2093,4 @@
 </body>
 
 </html>
+

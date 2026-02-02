@@ -682,153 +682,196 @@ x-dialog:not([show]) x-background {
     opacity: 0.4;
 }
 
-.webchat-modal {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-end;
-    padding: 24px;
-    background-color: rgba(var(--shadow-color-dialog-cover-rgb, 0, 0, 0), 0.6);
-    z-index: 1000;
+.realtime-panels {
+    position: relative;
 }
 
-.webchat-modal[hidden] {
-    display: none;
-}
-
-body.webchat-modal-open {
-    overflow: hidden;
-}
-
-.webchat-modal__dialog {
-    display: flex;
-    flex-direction: column;
-    width: min(480px, 100%);
-    max-height: 100%;
-    margin-left: auto;
+.realtime-panels .panel {
     background-color: var(--dialog-bg-color);
     color: rgb(var(--text-color));
-    border-radius: 20px;
-    box-shadow: 0 24px 48px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.3);
-    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 12px 24px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.15);
 }
 
-.webchat-modal__header,
-.webchat-modal__footer {
+body.chat-open {
+    padding-right: var(--chat-sidebar-width);
+    box-sizing: border-box;
+}
+
+.chat-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--chat-sidebar-width);
+    height: 100vh;
+    border-left: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.18);
+    border-radius: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg,
+            rgba(var(--shadow-color-dialog-cover-rgb, 255, 255, 255), 0.18) 0%,
+            rgba(var(--shadow-color-dialog-cover-rgb, 255, 255, 255), 0.06) 100%);
+}
+
+.chat-panel[hidden] {
+    display: none !important;
+}
+
+.chat-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 16px 20px;
-}
-
-.webchat-modal__header {
+    padding: 16px 16px 12px;
     border-bottom: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.12);
 }
 
-.webchat-modal__footer {
-    border-top: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.12);
-    justify-content: center;
+.chat-header__left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
 }
 
-.webchat-modal__header h2 {
-    margin: 0;
-    font-size: 18px;
+.chat-title {
     font-weight: 600;
+    font-size: 16px;
+    white-space: nowrap;
 }
 
-.webchat-modal__controls {
+.chat-room-select {
+    max-width: 180px;
+    border-radius: 10px;
+    border: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.2);
+    background: rgba(var(--shadow-color-dialog-cover-rgb, 255, 255, 255), 0.08);
+    color: inherit;
+    padding: 4px 8px;
+}
+
+.chat-header__right {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.webchat-modal__body {
+.chat-room-status {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.chat-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+    background: rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.08);
+}
+
+.chat-messages {
     flex: 1;
     display: flex;
-    min-height: 0;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    overflow-y: auto;
 }
 
-.webchat-modal__body iframe {
+.chat-message {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.chat-message--out {
+    align-self: flex-end;
+    background: rgba(var(--accent-color), 0.2);
+    border: 1px solid rgba(var(--accent-color), 0.4);
+}
+
+.chat-message--in {
+    align-self: flex-start;
+    background: rgba(var(--shadow-color-dialog-cover-rgb, 255, 255, 255), 0.08);
+    border: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.1);
+}
+
+.chat-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.chat-status {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.chat-input {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px 16px;
+    border-top: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.12);
+}
+
+.chat-input input {
     flex: 1;
-    width: 100%;
-    border: none;
-    background-color: var(--dialog-bg-color);
+    border-radius: 10px;
+    border: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.2);
+    padding: 8px 10px;
+    background: rgba(var(--shadow-color-dialog-cover-rgb, 255, 255, 255), 0.08);
+    color: inherit;
 }
 
-.webchat-modal__icon-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: none;
-    background-color: rgba(var(--text-color), 0.08);
+#chat-send {
+    background: rgba(66, 133, 244, 0.18);
     color: rgb(var(--text-color));
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-    transition: background-color 200ms;
-    font-family: inherit;
-}
-
-.webchat-modal__icon-button:hover,
-.webchat-modal__icon-button:focus {
-    background-color: rgba(var(--text-color), 0.16);
-}
-
-.webchat-modal__icon-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(var(--accent-color), 0.35);
-}
-
-.webchat-modal__close {
-    font-size: 18px;
-}
-
-.webchat-modal__restore {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 16px;
-    background-color: var(--dialog-bg-color);
-    color: rgb(var(--text-color));
-    box-shadow: 0 16px 32px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.25);
-    font-size: 15px;
+    border-radius: 14px;
     font-weight: 600;
-    cursor: pointer;
-    transition: transform 150ms ease, box-shadow 150ms ease;
-    z-index: 1001;
 }
 
-.webchat-modal__restore[hidden] {
-    display: none !important;
+#chat-send:hover {
+    background: rgba(66, 133, 244, 0.28);
 }
 
-.webchat-modal__restore:hover,
-.webchat-modal__restore:focus {
-    transform: translateY(-1px);
-    box-shadow: 0 20px 36px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.3);
+.chat-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 16px 16px;
+    font-size: 12px;
+    opacity: 0.9;
+    border-top: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.08);
 }
 
-.webchat-modal__restore:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(var(--accent-color), 0.35), 0 20px 36px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.3);
+.chat-footer .badge {
+    font-size: 11px;
 }
 
-.webchat-modal__restore-title {
-    line-height: 1;
+#chat-toggle.has-unread::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(var(--bg-color), 0.9);
 }
 
-.webchat-modal__textarea[contenteditable] {
-    min-height: 64px;
+@media (max-width: 768px) {
+    body.chat-open {
+        padding-right: 0;
+    }
+
+    .chat-panel {
+        width: 100vw;
+    }
 }
 
 #cloud-upload-dialog .status {
@@ -856,58 +899,6 @@ body.webchat-modal-open {
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: rgba(0, 0, 0, 0.1);
     color: inherit;
-}
-
-@media (max-width: 768px) {
-    .webchat-modal__restore {
-        right: 16px;
-        bottom: 16px;
-        padding: 10px 16px;
-        border-radius: 14px;
-    }
-}
-
-.webchat-modal--minimized {
-    inset: auto;
-    bottom: 24px;
-    right: 24px;
-    left: auto;
-    top: auto;
-    width: auto;
-    height: auto;
-    padding: 0;
-    background-color: transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-end;
-    pointer-events: none;
-}
-
-.webchat-modal--minimized .webchat-modal__dialog {
-    display: none;
-}
-
-
-.webchat-modal__external {
-    width: 100%;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: none;
-    letter-spacing: normal;
-    padding: 10px 16px;
-}
-
-@media (max-width: 1024px) {
-    .webchat-modal {
-        padding: 16px;
-    }
-
-    .webchat-modal__dialog {
-        border-radius: 16px;
-        width: min(420px, 100%);
-    }
 }
 
 .btn-round {
@@ -1349,6 +1340,7 @@ x-peers:empty~x-instructions {
 :root {
     --icon-size: 24px;
     --peer-width: 120px;
+    --chat-sidebar-width: 320px;
     color-scheme: light dark;
 }
 

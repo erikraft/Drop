@@ -197,6 +197,8 @@ class ServerConnection {
             case 'text':
             case 'display-name-changed':
             case 'ws-chunk':
+            case 'chat-message':
+            case 'chat-ack':
                 // ws-fallback
                 if (this._wsConfig.wsFallback) {
                     Events.fire('ws-relay', JSON.stringify(msg));
@@ -315,6 +317,7 @@ class ServerConnection {
 
     _onError(e) {
         console.error(e);
+        Events.fire('ws-error', { error: e });
     }
 
     _reconnect() {
@@ -335,6 +338,11 @@ class Peer {
 
         this._filesQueue = [];
         this._busy = false;
+        this._wsFallback = false;
+        this._transferState = {
+            send: null,
+            receive: null
+        };
 
         // evaluate auto accept
         this._evaluateAutoAccept();
@@ -349,6 +357,96 @@ class Peer {
 
     sendDisplayName(displayName) {
         this.sendJSON({type: 'display-name-changed', displayName: displayName});
+    }
+
+    _sendViaServer(message, roomType, roomId) {
+        if (!this._server || !this._server._isConnected || !this._server._isConnected()) {
+            return false;
+        }
+        if (!roomType) {
+            const defaultRoomType = this._getRoomTypes()[0];
+            roomType = defaultRoomType;
+            roomId = this._roomIds[defaultRoomType];
+        }
+        message.to = this._peerId;
+        message.roomType = roomType;
+        message.roomId = roomId;
+        this._server.send(message);
+        return true;
+    }
+
+    _isRtcChannelOpen() {
+        return !!this._channel && this._channel.readyState === 'open';
+    }
+
+    _startTransfer(direction, fileMeta) {
+        const transferId = `${direction}-${this._peerId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const state = {
+            id: transferId,
+            name: fileMeta.name,
+            size: fileMeta.size,
+            bytes: 0,
+            speed: 0,
+            lastBytes: 0,
+            lastTime: performance.now(),
+            lastEventTime: 0
+        };
+        this._transferState[direction] = state;
+        Events.fire('transfer-start', {
+            peerId: this._peerId,
+            direction: direction,
+            fileId: transferId,
+            name: fileMeta.name,
+            size: fileMeta.size
+        });
+        return state;
+    }
+
+    _updateTransfer(direction, bytesTransferred, totalBytes) {
+        const state = this._transferState[direction];
+        if (!state) return;
+        const now = performance.now();
+        const elapsed = (now - state.lastTime) / 1000;
+        const delta = bytesTransferred - state.lastBytes;
+        if (elapsed > 0 && delta >= 0) {
+            const instant = delta / elapsed;
+            state.speed = state.speed ? (state.speed * 0.7 + instant * 0.3) : instant;
+        }
+        state.bytes = bytesTransferred;
+        state.lastBytes = bytesTransferred;
+        state.lastTime = now;
+        const remaining = totalBytes - bytesTransferred;
+        const eta = state.speed > 0 ? remaining / state.speed : null;
+        const progress = totalBytes ? bytesTransferred / totalBytes : 0;
+        if (now - state.lastEventTime > 200 || progress >= 1) {
+            state.lastEventTime = now;
+            Events.fire('transfer-progress', {
+                peerId: this._peerId,
+                direction: direction,
+                fileId: state.id,
+                name: state.name,
+                size: totalBytes,
+                bytes: bytesTransferred,
+                speed: state.speed,
+                eta: eta,
+                progress: progress
+            });
+        }
+    }
+
+    _completeTransfer(direction, success = true, error = null) {
+        const state = this._transferState[direction];
+        if (!state) return;
+        Events.fire('transfer-complete', {
+            peerId: this._peerId,
+            direction: direction,
+            fileId: state.id,
+            name: state.name,
+            size: state.size,
+            success: success,
+            error: error
+        });
+        this._transferState[direction] = null;
     }
 
     _isSameBrowser() {
@@ -498,8 +596,16 @@ class Peer {
             name: file.name,
             mime: file.type
         });
+        this._activeSendFile = file;
+        this._sendBytes = 0;
+        this._startTransfer('send', { name: file.name, size: file.size });
+        this._updateTransfer('send', 0, file.size);
         this._chunker = new FileChunker(file,
-            chunk => this._send(chunk),
+            chunk => {
+                this._sendBytes += chunk.byteLength || chunk.size || 0;
+                this._updateTransfer('send', this._sendBytes, file.size);
+                this._send(chunk);
+            },
             offset => this._onPartitionEnd(offset));
         this._chunker.nextPartition();
     }
@@ -555,6 +661,12 @@ class Peer {
             case 'text':
                 this._onTextReceived(messageJSON);
                 break;
+            case 'chat-message':
+                this._onChatMessage(messageJSON);
+                break;
+            case 'chat-ack':
+                this._onChatAck(messageJSON);
+                break;
             case 'display-name-changed':
                 this._onDisplayNameChanged(messageJSON);
                 break;
@@ -603,6 +715,9 @@ class Peer {
     _onFileHeader(header) {
         if (this._requestAccepted && this._requestAccepted.header.length) {
             this._lastProgress = 0;
+            this._receiveBytes = 0;
+            this._startTransfer('receive', { name: header.name, size: header.size });
+            this._updateTransfer('receive', 0, header.size);
             this._digester = new FileDigester({size: header.size, name: header.name, mime: header.mime},
                 this._requestAccepted.totalSize,
                 this._totalBytesReceived,
@@ -614,6 +729,7 @@ class Peer {
     _abortTransfer() {
         Events.fire('set-progress', {peerId: this._peerId, progress: 1, status: 'wait'});
         Events.fire('notify-user', Localization.getTranslation("notifications.files-incorrect"));
+        this._completeTransfer('receive', false, 'mismatch');
         this._filesReceived = [];
         this._requestAccepted = null;
         this._digester = null;
@@ -625,6 +741,10 @@ class Peer {
 
         this._digester.unchunk(chunk);
         const progress = this._digester.progress;
+        this._receiveBytes += chunk.byteLength || chunk.size || 0;
+        if (this._transferState.receive) {
+            this._updateTransfer('receive', this._receiveBytes, this._transferState.receive.size);
+        }
 
         if (progress > 1) {
             this._abortTransfer();
@@ -645,6 +765,7 @@ class Peer {
     async _onFileReceived(fileBlob) {
         const acceptedHeader = this._requestAccepted.header.shift();
         this._totalBytesReceived += fileBlob.size;
+        this._completeTransfer('receive', true);
 
         this.sendJSON({type: 'file-transfer-complete'});
 
@@ -669,6 +790,7 @@ class Peer {
 
     _onFileTransferCompleted() {
         this._chunker = null;
+        this._completeTransfer('send', true);
         if (!this._filesQueue.length) {
             this._busy = false;
             Events.fire('notify-user', Localization.getTranslation("notifications.file-transfer-completed"));
@@ -702,11 +824,117 @@ class Peer {
         this.sendJSON({ type: 'text', text: unescaped });
     }
 
+    sendChatMessage(payload, options = {}) {
+        const {
+            roomType = this._getRoomTypes()[0],
+            roomId = this._roomIds[roomType],
+            timestamp = Date.now(),
+            senderId = sessionStorage.getItem('peer_id'),
+            senderName = null
+        } = options;
+
+        const message = {
+            type: 'chat-message',
+            payload: {
+                ...payload,
+                roomType: payload.roomType || roomType,
+                roomId: payload.roomId || roomId,
+                senderName: payload.senderName || senderName
+            },
+            timestamp: payload.timestamp || timestamp,
+            senderId: payload.senderId || senderId
+        };
+
+        if (this.rtcSupported && this._isRtcChannelOpen()) {
+            this.sendJSON(message);
+            return { transport: 'rtc' };
+        }
+
+        if (this._wsFallback) {
+            const sent = this._sendViaServer(message, roomType, roomId);
+            if (!sent) return { transport: 'none', error: 'ws-disconnected' };
+            return { transport: 'ws' };
+        }
+
+        return { transport: 'none', error: 'no-transport' };
+    }
+
+    sendChatAck(messageId, options = {}) {
+        const {
+            roomType = this._getRoomTypes()[0],
+            roomId = this._roomIds[roomType],
+            timestamp = Date.now(),
+            senderId = sessionStorage.getItem('peer_id')
+        } = options;
+
+        const message = {
+            type: 'chat-ack',
+            payload: {
+                messageId: messageId,
+                roomType: roomType,
+                roomId: roomId
+            },
+            timestamp: timestamp,
+            senderId: senderId
+        };
+
+        if (this.rtcSupported && this._isRtcChannelOpen()) {
+            this.sendJSON(message);
+            return { transport: 'rtc' };
+        }
+
+        if (this._wsFallback) {
+            const sent = this._sendViaServer(message, roomType, roomId);
+            if (!sent) return { transport: 'none', error: 'ws-disconnected' };
+            return { transport: 'ws' };
+        }
+
+        return { transport: 'none', error: 'no-transport' };
+    }
+
     _onTextReceived(message) {
         if (!message.text) return;
         const escaped = decodeURIComponent(escape(atob(message.text)));
         Events.fire('text-received', { text: escaped, peerId: this._peerId });
         this.sendJSON({ type: 'message-transfer-complete' });
+    }
+
+    _onChatMessage(message) {
+        const payload = message.payload || {};
+        const roomType = payload.roomType || this._getRoomTypes()[0];
+        const roomId = payload.roomId || this._roomIds[roomType];
+        const timestamp = message.timestamp || Date.now();
+        const senderId = message.senderId || this._peerId;
+        const senderName = payload.senderName || this._displayName || senderId;
+
+        Events.fire('chat-message-received', {
+            message: {
+                id: payload.id,
+                text: payload.text || '',
+                roomType: roomType,
+                roomId: roomId,
+                timestamp: timestamp,
+                senderId: senderId,
+                senderName: senderName,
+                peerId: this._peerId
+            }
+        });
+
+        if (payload.id) {
+            this.sendChatAck(payload.id, { roomType, roomId });
+        }
+    }
+
+    _onChatAck(message) {
+        const payload = message.payload || {};
+        if (!payload.messageId) return;
+        Events.fire('chat-ack-received', {
+            messageId: payload.messageId,
+            peerId: this._peerId,
+            roomType: payload.roomType,
+            roomId: payload.roomId,
+            timestamp: message.timestamp || Date.now()
+        });
     }
 
     _onDisplayNameChanged(message) {
@@ -902,6 +1130,7 @@ class RTCPeer extends Peer {
 
     _onError(error) {
         console.error(error);
+        Events.fire('rtc-error', { peerId: this._peerId, error: error });
     }
 
     _send(message) {
@@ -993,6 +1222,7 @@ class PeersManager {
         Events.on('files-selected', e => this._onFilesSelected(e.detail));
         Events.on('respond-to-files-transfer-request', e => this._onRespondToFileTransferRequest(e.detail))
         Events.on('send-text', e => this._onSendText(e.detail));
+        Events.on('chat-send', e => this._onChatSend(e.detail));
         Events.on('peer-left', e => this._onPeerLeft(e.detail));
         Events.on('peer-joined', e => this._onPeerJoined(e.detail));
         Events.on('peer-connected', e => this._onPeerConnected(e.detail.peerId));
@@ -1017,6 +1247,9 @@ class PeersManager {
 
     _onWsConfig(wsConfig) {
         this._wsConfig = wsConfig;
+        for (const peerId in this.peers) {
+            this.peers[peerId]._wsFallback = wsConfig.wsFallback;
+        }
     }
 
     _onMessage(message) {
@@ -1061,6 +1294,10 @@ class PeersManager {
             console.warn("Websocket fallback is not activated on this instance.\n" +
                 "Activate WebRTC in this browser or ask the admin of this instance to activate the websocket fallback.")
         }
+
+        if (this.peers[peerId]) {
+            this.peers[peerId]._wsFallback = this._wsConfig.wsFallback;
+        }
     }
 
     _onPeerJoined(message) {
@@ -1092,6 +1329,46 @@ class PeersManager {
 
     _onSendText(message) {
         this.peers[message.to].sendText(message.text);
+    }
+
+    _onChatSend(detail) {
+        const roomType = detail.roomType;
+        const roomId = detail.roomId;
+        const messageId = detail.messageId;
+        const text = detail.text;
+        const timestamp = detail.timestamp || Date.now();
+        const senderId = detail.senderId || sessionStorage.getItem('peer_id');
+        const senderName = detail.senderName || this._displayName;
+
+        const peersInRoom = this._getPeerIdsFromRoom(roomType, roomId);
+        if (!peersInRoom.length) {
+            Events.fire('chat-send-failed', { messageId, reason: 'no-peers' });
+            return;
+        }
+
+        const failedPeers = [];
+        peersInRoom.forEach(peerId => {
+            const peer = this.peers[peerId];
+            if (!peer) return;
+            const result = peer.sendChatMessage({
+                id: messageId,
+                text: text,
+                roomType: roomType,
+                roomId: roomId,
+                senderName: senderName,
+                senderId: senderId,
+                timestamp: timestamp
+            }, { roomType, roomId, timestamp, senderId, senderName });
+            if (result.error) {
+                failedPeers.push(peerId);
+            }
+        });
+
+        Events.fire('chat-message-sent', { messageId, peerIds: peersInRoom });
+
+        if (failedPeers.length) {
+            Events.fire('chat-send-failed', { messageId, peerIds: failedPeers, reason: 'no-transport' });
+        }
     }
 
     _onPeerLeft(message) {
@@ -1229,6 +1506,18 @@ class PeersManager {
 
             // peer must have same roomId.
             if (Object.values(peer._roomIds).includes(roomId)) {
+                peerIds.push(peer._peerId);
+            }
+        }
+        return peerIds;
+    }
+
+    _getPeerIdsFromRoom(roomType, roomId) {
+        if (!roomType || !roomId) return [];
+        let peerIds = [];
+        for (const peerId in this.peers) {
+            const peer = this.peers[peerId];
+            if (peer._roomIds[roomType] === roomId) {
                 peerIds.push(peer._peerId);
             }
         }

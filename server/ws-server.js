@@ -103,6 +103,8 @@ export default class ErikrafTdropWsServer {
             case 'text':
             case 'display-name-changed':
             case 'ws-chunk':
+            case 'chat-message':
+            case 'chat-ack':
                 // relay ws-fallback
                 if (this._conf.wsFallback) {
                     this._signalAndRelay(sender, message);

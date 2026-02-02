@@ -3377,3 +3377,355 @@ class NoSleepUI {
         }
     }
 }
+
+class ChatUI {
+    constructor() {
+        this.$panel = $('chat-panel');
+        this.$toggle = $('chat-toggle');
+        this.$close = $('chat-close');
+        this.$roomSelect = $('chat-room-select');
+        this.$messages = $('chat-messages');
+        this.$form = $('chat-form');
+        this.$input = $('chat-input');
+        this.$status = $('chat-room-status');
+
+        if (!this.$panel || !this.$toggle || !this.$roomSelect || !this.$messages || !this.$form || !this.$input) {
+            return;
+        }
+
+        this._rooms = new Map();
+        this._peerNames = new Map();
+        this._peerRooms = new Map();
+        this._messageIndex = new Map();
+        this._currentRoomKey = null;
+        this._selfDisplayName = '';
+
+        this.$toggle.addEventListener('click', _ => this.toggle());
+        if (this.$close) {
+            this.$close.addEventListener('click', _ => this.hide());
+        }
+        this.$roomSelect.addEventListener('change', _ => this._onRoomSelected());
+        this.$form.addEventListener('submit', e => this._onSubmit(e));
+
+        Events.on('peer-joined', e => this._onPeerJoined(e.detail));
+        Events.on('peers', e => this._onPeers(e.detail));
+        Events.on('peer-left', e => this._onPeerLeft(e.detail));
+        Events.on('room-type-removed', e => this._onRoomTypeRemoved(e.detail));
+        Events.on('peer-display-name-changed', e => this._onPeerDisplayNameChanged(e.detail));
+        Events.on('self-display-name-changed', e => this._onSelfDisplayNameChanged(e.detail));
+        Events.on('display-name', e => this._onSelfDisplayNameChanged(e.detail.displayName));
+        Events.on('chat-message-received', e => this._onChatReceived(e.detail.message));
+        Events.on('chat-ack-received', e => this._onChatAck(e.detail));
+        Events.on('chat-send-failed', e => this._onChatSendFailed(e.detail));
+    }
+
+    show() {
+        this.$panel.hidden = false;
+        document.body.classList.add('chat-open');
+        this.$toggle.classList.remove('has-unread');
+        this._clearUnread(this._currentRoomKey);
+        this._scrollToBottom();
+    }
+
+    hide() {
+        this.$panel.hidden = true;
+        document.body.classList.remove('chat-open');
+    }
+
+    toggle() {
+        if (this.$panel.hidden) {
+            this.show();
+        }
+        else {
+            this.hide();
+        }
+    }
+
+    _roomKey(roomType, roomId) {
+        return `${roomType}:${roomId}`;
+    }
+
+    _roomLabel(roomType, roomId) {
+        if (roomType === 'secret') return Localization.getTranslation('chat.room_paired');
+        if (roomType === 'public-id') {
+            return Localization.getTranslation('chat.room_public', null, { roomId: roomId || '' });
+        }
+        if (roomType === 'ip') return Localization.getTranslation('chat.room_local');
+        return roomId || roomType || Localization.getTranslation('chat.room_local');
+    }
+
+    _ensureRoom(roomType, roomId) {
+        const key = this._roomKey(roomType, roomId);
+        if (!this._rooms.has(key)) {
+            this._rooms.set(key, {
+                key,
+                roomType,
+                roomId,
+                peers: new Set(),
+                messages: [],
+                unread: 0
+            });
+        }
+        return this._rooms.get(key);
+    }
+
+    _registerPeerRoom(peerId, roomType, roomId) {
+        const key = this._roomKey(roomType, roomId);
+        const room = this._ensureRoom(roomType, roomId);
+        room.peers.add(peerId);
+
+        if (!this._peerRooms.has(peerId)) {
+            this._peerRooms.set(peerId, new Set());
+        }
+        this._peerRooms.get(peerId).add(key);
+
+        this._refreshRoomSelect();
+    }
+
+    _removePeerRoom(peerId, roomType, roomId) {
+        const key = this._roomKey(roomType, roomId);
+        const room = this._rooms.get(key);
+        if (room) {
+            room.peers.delete(peerId);
+            if (room.peers.size === 0 && room.messages.length === 0) {
+                this._rooms.delete(key);
+            }
+        }
+        const peerRooms = this._peerRooms.get(peerId);
+        if (peerRooms) {
+            peerRooms.delete(key);
+            if (peerRooms.size === 0) {
+                this._peerRooms.delete(peerId);
+            }
+        }
+        this._refreshRoomSelect();
+    }
+
+    _refreshRoomSelect() {
+        const rooms = Array.from(this._rooms.values());
+        if (!rooms.length) {
+            this.$roomSelect.innerHTML = '';
+            this.$roomSelect.setAttribute('disabled', true);
+            this._currentRoomKey = null;
+            this.$status.textContent = '';
+            return;
+        }
+
+        this.$roomSelect.removeAttribute('disabled');
+        this.$roomSelect.innerHTML = rooms.map(room => {
+            const label = `${this._roomLabel(room.roomType, room.roomId)} (${room.peers.size})`;
+            return `<option value="${room.key}">${label}</option>`;
+        }).join('');
+
+        if (!this._currentRoomKey || !this._rooms.has(this._currentRoomKey)) {
+            this._currentRoomKey = rooms[0].key;
+        }
+
+        this.$roomSelect.value = this._currentRoomKey;
+        this._renderRoom(this._currentRoomKey);
+    }
+
+    _renderRoom(roomKey) {
+        const room = this._rooms.get(roomKey);
+        if (!room) return;
+        this.$messages.innerHTML = '';
+        room.messages.forEach(message => this._appendMessageNode(message));
+        this._updateRoomStatus(room);
+        this._clearUnread(roomKey);
+        this._scrollToBottom();
+    }
+
+    _updateRoomStatus(room) {
+        if (!this.$status) return;
+        this.$status.textContent = Localization.getTranslation('chat.peers_status', null, { count: room.peers.size });
+    }
+
+    _clearUnread(roomKey) {
+        const room = this._rooms.get(roomKey);
+        if (!room) return;
+        room.unread = 0;
+        if (this._rooms.size > 0 && Array.from(this._rooms.values()).every(r => r.unread === 0)) {
+            this.$toggle.classList.remove('has-unread');
+        }
+    }
+
+    _scrollToBottom() {
+        this.$messages.scrollTop = this.$messages.scrollHeight;
+    }
+
+    _onRoomSelected() {
+        this._currentRoomKey = this.$roomSelect.value;
+        this._renderRoom(this._currentRoomKey);
+    }
+
+    _onSubmit(e) {
+        e.preventDefault();
+        const text = this.$input.value.trim();
+        if (!text || !this._currentRoomKey) return;
+        const room = this._rooms.get(this._currentRoomKey);
+        if (!room) return;
+
+        const messageId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const timestamp = Date.now();
+        const senderId = sessionStorage.getItem('peer_id') || 'self';
+        const senderName = this._selfDisplayName || senderId;
+
+        const message = {
+            id: messageId,
+            text,
+            roomType: room.roomType,
+            roomId: room.roomId,
+            timestamp,
+            senderId,
+            senderName,
+            direction: 'out',
+            status: room.peers.size ? 'sent' : 'failed',
+            pending: new Set(room.peers)
+        };
+
+        room.messages.push(message);
+        this._messageIndex.set(messageId, message);
+        this._appendMessageNode(message);
+        this._scrollToBottom();
+
+        Events.fire('chat-send', {
+            roomType: room.roomType,
+            roomId: room.roomId,
+            text: text,
+            messageId: messageId,
+            timestamp: timestamp,
+            senderId: senderId,
+            senderName: senderName
+        });
+
+        this.$input.value = '';
+    }
+
+    _onChatReceived(message) {
+        const room = this._ensureRoom(message.roomType, message.roomId);
+        this._refreshRoomSelect();
+        const senderName = message.senderName || this._peerNames.get(message.senderId) || message.senderId;
+        const entry = {
+            id: message.id || `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            text: message.text,
+            roomType: message.roomType,
+            roomId: message.roomId,
+            timestamp: message.timestamp,
+            senderId: message.senderId,
+            senderName: senderName,
+            direction: 'in'
+        };
+        room.messages.push(entry);
+        if (this._currentRoomKey === room.key && !this.$panel.hidden) {
+            this._appendMessageNode(entry);
+            this._scrollToBottom();
+        }
+        else {
+            room.unread += 1;
+            this.$toggle.classList.add('has-unread');
+        }
+    }
+
+    _onChatAck(detail) {
+        const message = this._messageIndex.get(detail.messageId);
+        if (!message) return;
+        if (message.pending) {
+            message.pending.delete(detail.peerId);
+        }
+        if (message.pending && message.pending.size === 0) {
+            message.status = message.status === 'failed' ? 'failed' : 'delivered';
+        }
+        this._updateMessageStatus(message.id, message.status);
+    }
+
+    _onChatSendFailed(detail) {
+        const message = this._messageIndex.get(detail.messageId);
+        if (!message) return;
+        message.status = 'failed';
+        if (message.pending && detail.peerIds) {
+            detail.peerIds.forEach(peerId => message.pending.delete(peerId));
+        }
+        this._updateMessageStatus(message.id, message.status);
+    }
+
+    _appendMessageNode(message) {
+        const node = document.createElement('div');
+        node.className = `chat-message ${message.direction === 'out' ? 'chat-message--out' : 'chat-message--in'}`;
+        node.dataset.messageId = message.id;
+
+        const meta = document.createElement('div');
+        meta.className = 'chat-meta';
+        const time = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        meta.innerHTML = `<span>${message.senderName || message.senderId}</span><span>${time}</span>`;
+
+        const body = document.createElement('div');
+        body.className = 'chat-body';
+        body.innerText = message.text;
+
+        node.appendChild(meta);
+        node.appendChild(body);
+
+        if (message.direction === 'out') {
+            const status = document.createElement('div');
+            status.className = 'chat-status';
+            status.innerText = this._statusLabel(message.status);
+            node.appendChild(status);
+        }
+
+        this.$messages.appendChild(node);
+    }
+
+    _updateMessageStatus(messageId, status) {
+        const node = this.$messages.querySelector(`[data-message-id="${messageId}"] .chat-status`);
+        if (node) {
+            node.innerText = this._statusLabel(status);
+        }
+    }
+
+    _statusLabel(status) {
+        if (status === 'delivered') return Localization.getTranslation('chat.status_delivered');
+        if (status === 'failed') return Localization.getTranslation('chat.status_failed');
+        return Localization.getTranslation('chat.status_sent');
+    }
+
+    _onPeerJoined(detail) {
+        if (detail.peer && detail.peer.name) {
+            this._peerNames.set(detail.peer.id, detail.peer.name.displayName || detail.peer.id);
+        }
+        this._registerPeerRoom(detail.peer.id, detail.roomType, detail.roomId);
+    }
+
+    _onPeers(detail) {
+        detail.peers.forEach(peer => {
+            this._peerNames.set(peer.id, peer.name.displayName || peer.id);
+            this._registerPeerRoom(peer.id, detail.roomType, detail.roomId);
+        });
+    }
+
+    _onPeerLeft(detail) {
+        if (detail.peerId && detail.roomType && detail.roomId) {
+            this._removePeerRoom(detail.peerId, detail.roomType, detail.roomId);
+        }
+    }
+
+    _onRoomTypeRemoved(detail) {
+        const peerRooms = this._peerRooms.get(detail.peerId);
+        if (!peerRooms) return;
+        Array.from(peerRooms).forEach(key => {
+            const [roomType, roomId] = key.split(':');
+            if (roomType === detail.roomType) {
+                this._removePeerRoom(detail.peerId, roomType, roomId);
+            }
+        });
+    }
+
+    _onPeerDisplayNameChanged(detail) {
+        if (detail.displayName) {
+            this._peerNames.set(detail.peerId, detail.displayName);
+        }
+    }
+
+    _onSelfDisplayNameChanged(displayName) {
+        this._selfDisplayName = displayName || '';
+    }
+}

@@ -221,5 +221,15 @@
     },
     "site": {
         "biodrop": "Site"
-    }
-}
+    },\n    "chat": {
+        "room_local": "",
+        "room_paired": "",
+        "room_public": "",
+        "peers_status": "",
+        "status_sent": "",
+        "status_delivered": "",
+        "status_failed": "",
+        "close_title": "",
+        "room_select_title": ""
+    ,\n        "discover_paired": ""}}
+
