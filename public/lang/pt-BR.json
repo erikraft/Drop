@@ -224,15 +224,15 @@
         "biodrop": "Site"
     },
     "chat": {
-        "room_local": "Rede local",
-        "room_paired": "Entre dispositivos emparelhados",
-        "room_public": "Sala {{roomId}}",
-        "peers_status": "Conectados: {{count}}",
-        "status_sent": "Enviado",
-        "status_delivered": "Entregue",
-        "status_failed": "Falha",
-        "close_title": "Fechar bate-papo",
-        "room_select_title": "Sala do bate-papo",
-        "discover_paired": "Entre dispositivos emparelhados"
+        "room_local": "Local network",
+        "room_paired": "Paired devices",
+        "room_public": "Room {{roomId}}",
+        "peers_status": "Peers: {{count}}",
+        "status_sent": "Sent",
+        "status_delivered": "Delivered",
+        "status_failed": "Failed",
+        "close_title": "Close chat",
+        "room_select_title": "Chat room",
+        "discover_paired": "Between paired devices"
     }
 }
