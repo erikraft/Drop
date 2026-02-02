@@ -3456,6 +3456,9 @@ class ChatUI {
         this.$panel.hidden = false;
         document.body.classList.add('chat-open');
         this.$toggle.classList.remove('has-unread');
+        if (this._currentRoomKey) {
+            this._renderRoom(this._currentRoomKey);
+        }
         this._clearUnread(this._currentRoomKey);
         this._setSidebarWidth(this.$panel.getBoundingClientRect().width);
         this._scrollToBottom();

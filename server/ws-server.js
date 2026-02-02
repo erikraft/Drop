@@ -4,6 +4,31 @@ import crypto from "crypto"
 import Peer from "./peer.js";
 import {hasher, randomizer} from "./helper.js";
 
+const LOCAL_IPV4_PATTERNS = [
+    /^10\./,
+    /^192\.168\./,
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\./
+];
+
+function isLocalIp(ip) {
+    if (!ip) return false;
+    if (ip === '127.0.0.1' || ip === '::1') return true;
+    if (!ip.includes(":")) {
+        return LOCAL_IPV4_PATTERNS.some(pattern => pattern.test(ip));
+    }
+
+    const firstWord = ip.split(":").find(el => !!el);
+    if (!firstWord) return false;
+
+    if (/^fe[c-f][0-9a-f]$/.test(firstWord)) return true;
+    if (/^fc[0-9a-f]{2}$/.test(firstWord)) return true;
+    if (/^fd[0-9a-f]{2}$/.test(firstWord)) return true;
+    if (firstWord === "fe80") return true;
+    if (firstWord === "100") return true;
+
+    return false;
+}
+
 export default class ErikrafTdropWsServer {
 
     constructor(server, conf) {
@@ -19,6 +44,15 @@ export default class ErikrafTdropWsServer {
     }
 
     _onConnection(peer) {
+        if (this._conf.allowLocalOnly && !isLocalIp(peer.ip)) {
+            try {
+                peer.socket.close(1008, 'LAN only');
+            } catch (e) {
+                peer.socket.terminate();
+            }
+            return;
+        }
+
         peer.socket.on('message', message => this._onMessage(peer, message));
         peer.socket.onerror = e => console.error(e);
 
