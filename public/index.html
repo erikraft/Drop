@@ -413,6 +413,11 @@
                 <use xlink:href="#public-room-icon"></use>
             </svg>
         </div>
+        <div id="lan-mode" class="icon-button" data-i18n-key="header.lan-mode" data-i18n-attrs="title">
+            <svg class="icon">
+                <use xlink:href="#wifi-tethering"></use>
+            </svg>
+        </div>
 
         <!-- <div id="cloud" class="icon-button" data-i18n-key="header.cloud" data-i18n-attrs="title">
             <svg class="icon">
@@ -1040,6 +1045,53 @@
                             <button class="btn btn-rounded btn-grey leave-room" type="button"
                                 data-i18n-key="dialogs.leave" data-i18n-attrs="text"></button>
                         </div>
+                        <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close"
+                            data-i18n-attrs="text" close></button>
+                    </div>
+                </x-paper>
+            </x-background>
+        </form>
+    </x-dialog>
+    <!-- LAN Mode Dialog -->
+    <x-dialog id="lan-mode-dialog">
+        <form action="#">
+            <x-background class="full center text-center">
+                <x-paper shadow="2">
+                    <div class="row center p-2">
+                        <h2 class="dialog-title" data-i18n-key="dialogs.lan-mode-title" data-i18n-attrs="text"></h2>
+                    </div>
+                    <div class="row center p-2">
+                        <span class="font-subheading" data-i18n-key="dialogs.lan-mode-toggle" data-i18n-attrs="text"></span>
+                        <label class="pointer switch mx-1">
+                            <input id="lan-mode-toggle" type="checkbox">
+                            <div class="slider round"></div>
+                        </label>
+                    </div>
+                    <div class="row center p-2">
+                        <div class="column fw">
+                            <label for="lan-server-input" class="font-body2" data-i18n-key="dialogs.lan-mode-server-label" data-i18n-attrs="text"></label>
+                            <input id="lan-server-input" type="text" class="fw" spellcheck="false" autocorrect="off"
+                                autocomplete="off" autocapitalize="none"
+                                data-i18n-key="dialogs.lan-mode-server-placeholder" data-i18n-attrs="placeholder">
+                            <small class="font-caption" data-i18n-key="dialogs.lan-mode-server-help" data-i18n-attrs="text"></small>
+                        </div>
+                    </div>
+                    <div class="row center p-2 wrap">
+                        <button id="lan-scan-btn" class="btn btn-rounded btn-grey" type="button"
+                            data-i18n-key="dialogs.lan-mode-scan" data-i18n-attrs="text"></button>
+                        <button id="lan-apply-btn" class="btn btn-rounded btn-grey" type="button"
+                            data-i18n-key="dialogs.lan-mode-apply" data-i18n-attrs="text"></button>
+                    </div>
+                    <div class="row center p-1">
+                        <span id="lan-connection-status" class="font-body2"></span>
+                    </div>
+                    <div class="row center p-1">
+                        <span id="lan-peer-status" class="font-body2"></span>
+                    </div>
+                    <div class="row center p-2">
+                        <span class="font-caption" data-i18n-key="dialogs.lan-mode-warning" data-i18n-attrs="text"></span>
+                    </div>
+                    <div class="center row-reverse btn-row wrap">
                         <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close"
                             data-i18n-attrs="text" close></button>
                     </div>

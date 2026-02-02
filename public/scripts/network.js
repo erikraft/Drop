@@ -1,3 +1,8 @@
+const LAN_STORAGE_KEYS = {
+    enabled: 'lan_mode_enabled',
+    server: 'lan_signaling_server'
+};
+
 class ServerConnection {
 
     constructor() {
@@ -22,6 +27,9 @@ class ServerConnection {
 
         Events.on('offline', _ => clearTimeout(this._reconnectTimer));
         Events.on('online', _ => this._connect());
+
+        this._lanMode = this._loadLanMode();
+        Events.on('lan-mode-changed', e => this._onLanModeChanged(e.detail));
 
         this._getConfig().then(() => this._connect());
     }
@@ -70,13 +78,19 @@ class ServerConnection {
     _connect() {
         clearTimeout(this._reconnectTimer);
         if (this._isConnected() || this._isConnecting() || this._isOffline()) return;
+        if (this._lanMode.enabled && !this._lanMode.server) {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-missing-server"));
+            return;
+        }
         if (this._isReconnect) {
             Events.fire('notify-user', {
                 message: Localization.getTranslation("notifications.connecting"),
                 persistent: true
             });
         }
-        const ws = new WebSocket(this._endpoint());
+        const endpoint = this._endpoint();
+        if (!endpoint) return;
+        const ws = new WebSocket(endpoint);
         ws.binaryType = 'arraybuffer';
         ws.onopen = _ => this._onOpen();
         ws.onmessage = e => this._onMessage(e.data);
@@ -136,6 +150,9 @@ class ServerConnection {
         if (msg.type !== 'ping') console.log('WS receive:', msg);
         switch (msg.type) {
             case 'ws-config':
+                if (this._lanMode.enabled && msg.wsConfig) {
+                    msg.wsConfig.rtcConfig = { iceServers: [] };
+                }
                 this._setWsConfig(msg.wsConfig);
                 break;
             case 'peers':
@@ -246,6 +263,14 @@ class ServerConnection {
     }
 
     _endpoint() {
+        if (this._lanMode.enabled) {
+            const lanEndpoint = this._lanEndpoint();
+            if (!lanEndpoint) {
+                return null;
+            }
+            return lanEndpoint;
+        }
+
         const protocol = location.protocol.startsWith('https') ? 'wss' : 'ws';
         // Check whether the instance specifies another signaling server otherwise use the current instance for signaling
         let wsServerDomain = this._config.signalingServer
@@ -312,6 +337,7 @@ class ServerConnection {
     }
 
     _isOffline() {
+        if (this._lanMode.enabled) return false;
         return !navigator.onLine;
     }
 
@@ -323,6 +349,117 @@ class ServerConnection {
     _reconnect() {
         this._disconnect();
         this._connect();
+    }
+
+    _loadLanMode() {
+        let enabled = false;
+        let server = '';
+        try {
+            enabled = localStorage.getItem(LAN_STORAGE_KEYS.enabled) === 'true';
+            server = localStorage.getItem(LAN_STORAGE_KEYS.server) || '';
+        }
+        catch (e) {
+            enabled = false;
+            server = '';
+        }
+        return { enabled, server };
+    }
+
+    _onLanModeChanged(detail = {}) {
+        this._lanMode = {
+            enabled: !!detail.enabled,
+            server: (detail.server || '').trim()
+        };
+        if (this._lanMode.enabled) {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-enabled"));
+        }
+        else {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-disabled"));
+        }
+        this._reconnect();
+    }
+
+    _lanEndpoint() {
+        const parsed = this._parseLanServer(this._lanMode.server);
+        if (!parsed) {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-invalid-server"));
+            return null;
+        }
+
+        if (!this._isLocalHost(parsed.host)) {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-invalid-server"));
+            return null;
+        }
+
+        if (location.protocol === 'https:' && parsed.protocol === 'ws') {
+            Events.fire('notify-user', Localization.getTranslation("notifications.lan-https-blocked"));
+            return null;
+        }
+
+        const wsUrl = new URL(`${parsed.protocol}://${parsed.hostPortPath.replace(/\/+$/, '')}/server`);
+        wsUrl.searchParams.append('webrtc_supported', window.isRtcSupported ? 'true' : 'false');
+
+        const peerId = sessionStorage.getItem('peer_id');
+        const peerIdHash = sessionStorage.getItem('peer_id_hash');
+        if (peerId && peerIdHash) {
+            wsUrl.searchParams.append('peer_id', peerId);
+            wsUrl.searchParams.append('peer_id_hash', peerIdHash);
+        }
+
+        if (window.erikraftClientType) {
+            wsUrl.searchParams.append('client_type', window.erikraftClientType);
+        }
+
+        return wsUrl.toString();
+    }
+
+    _parseLanServer(raw) {
+        if (!raw) return null;
+        const trimmed = raw.trim();
+        if (!trimmed) return null;
+
+        let protocol = null;
+        let hostPortPath = trimmed;
+
+        if (/^wss?:\/\//i.test(trimmed)) {
+            protocol = trimmed.startsWith('wss://') ? 'wss' : 'ws';
+            hostPortPath = trimmed.replace(/^wss?:\/\//i, '');
+        }
+        else if (/^https?:\/\//i.test(trimmed)) {
+            protocol = trimmed.startsWith('https://') ? 'wss' : 'ws';
+            hostPortPath = trimmed.replace(/^https?:\/\//i, '');
+        }
+        else {
+            protocol = location.protocol.startsWith('https') ? 'wss' : 'ws';
+        }
+
+        hostPortPath = hostPortPath.replace(/^\/+/, '');
+        const host = hostPortPath.split('/')[0].split(':')[0];
+
+        if (!host) return null;
+
+        return { protocol, hostPortPath, host };
+    }
+
+    _isLocalHost(host) {
+        if (!host) return false;
+        if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return true;
+        if (host.endsWith('.local')) return true;
+        if (!host.includes(':')) {
+            return /^(10)\.(.*)\.(.*)\.(.*)$/.test(host)
+                || /^(172)\.(1[6-9]|2[0-9]|3[0-1])\.(.*)\.(.*)$/.test(host)
+                || /^(192)\.(168)\.(.*)\.(.*)$/.test(host);
+        }
+
+        const firstWord = host.split(":").find(el => !!el);
+        if (!firstWord) return false;
+        if (/^fe[c-f][0-9a-f]$/.test(firstWord)) return true;
+        if (/^fc[0-9a-f]{2}$/.test(firstWord)) return true;
+        if (/^fd[0-9a-f]{2}$/.test(firstWord)) return true;
+        if (firstWord === "fe80") return true;
+        if (firstWord === "100") return true;
+
+        return false;
     }
 }
 
