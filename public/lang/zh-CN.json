@@ -1,6 +1,5 @@
 {
     "header": {
-        "lan-mode_title": "",
         "about_title": "关于 ErikrafT Drop",
         "language-selector_title": "设置语言",
         "about_aria-label": "打开 关于 ErikrafT Drop",
@@ -12,6 +11,7 @@
         "pair-device_title": "永久配对您的设备",
         "edit-paired-devices_title": "管理已配对设备",
         "join-public-room_title": "暂时加入公共房间",
+        "lan-mode_title": "LAN Mode (offline)",
         "cancel-share-mode": "完成",
         "edit-share-mode": "编辑",
         "expand_title": "展开标题按钮行",
@@ -39,7 +39,6 @@
         "webrtc-requirement": "要使用此 ErikrafT Drop 示例。必须开启 WebRTC！"
     },
     "footer": {
-        "lan": "",
         "known-as": "你的名字是:",
         "display-name_data-placeholder": "加载中…",
         "display-name_title": "修改你的默认设备名",
@@ -53,22 +52,10 @@
         "traffic": "流量将",
         "routed": "途径服务器",
         "webrtc": "如果 WebRTC 不可用。",
-        "add-profile-photo": "Add Profile Photo"
+        "add-profile-photo": "Add Profile Photo",
+        "lan": "LAN"
     },
     "dialogs": {
-        "lan-mode-warning": "",
-        "lan-mode-status-found": "",
-        "lan-mode-status-waiting": "",
-        "lan-mode-status-connected": "",
-        "lan-mode-status-connecting": "",
-        "lan-mode-scanning": "",
-        "lan-mode-scan": "",
-        "lan-mode-apply": "",
-        "lan-mode-server-help": "",
-        "lan-mode-server_placeholder": "",
-        "lan-mode-server-label": "",
-        "lan-mode-toggle": "",
-        "lan-mode-title": "",
         "pair-devices-title": "配对新设备（常驻）",
         "input-key-on-this-device": "在另一个设备上输入这串数字",
         "scan-qr-code": "或者 扫描二维码。",
@@ -76,6 +63,18 @@
         "temporary-public-room-title": "临时公共房间",
         "input-room-id-on-another-device": "在另一个设备上输入这串房间号",
         "enter-room-id-from-another-device": "在另一个设备上输入这串房间号来加入房间。",
+        "lan-mode-title": "LAN Mode (offline)",
+        "lan-mode-toggle": "Enable LAN mode (no internet)",
+        "lan-mode-server-label": "LAN signaling server",
+        "lan-mode-server-help": "Use a local IP (private network only).",
+        "lan-mode-apply": "Apply",
+        "lan-mode-scan": "Find common servers",
+        "lan-mode-scanning": "Scanning...",
+        "lan-mode-status-connecting": "Connecting to LAN",
+        "lan-mode-status-connected": "Connected to LAN",
+        "lan-mode-status-waiting": "Waiting for peers",
+        "lan-mode-status-found": "Peers found",
+        "lan-mode-warning": "LAN mode is visible to devices on the same network.",
         "hr-or": "或者",
         "pair": "配对",
         "cancel": "取消",
@@ -155,7 +154,8 @@
         "publish-youtube": "发布到 YouTube",
         "publish-instagram": "发布到 Instagram",
         "compress": "压缩",
-        "edit-ai": "使用 AI 编辑"
+        "edit-ai": "使用 AI 编辑",
+        "lan-mode-server_placeholder": "192.168.0.10:3000"
     },
     "about": {
         "close-about_aria-label": "关闭 关于 ErikrafT Drop",
@@ -170,11 +170,6 @@
         "faq_title": "常见问题"
     },
     "notifications": {
-        "lan-disabled": "",
-        "lan-enabled": "",
-        "lan-https-blocked": "",
-        "lan-invalid-server": "",
-        "lan-missing-server": "",
         "display-name-changed-permanently": "展示的名字已经永久变更",
         "display-name-changed-temporarily": "展示名字仅在此会话中变更",
         "display-name-random-again": "展示的名字已再次随机生成",
@@ -211,6 +206,11 @@
         "connected": "已连接",
         "online-requirement-pairing": "您需要连接到互联网才能配对设备",
         "online-requirement-public-room": "您需要连接到互联网来创建公共房间",
+        "lan-missing-server": "Enter a LAN server IP to enable LAN mode.",
+        "lan-invalid-server": "LAN server must be a local/private IP address.",
+        "lan-https-blocked": "This page is HTTPS. Use HTTP or WSS for LAN mode.",
+        "lan-enabled": "LAN mode enabled.",
+        "lan-disabled": "LAN mode disabled.",
         "connecting": "连接中…",
         "files-incorrect": "文件不正确",
         "file-transfer-completed": "文件传输已完成",
@@ -253,6 +253,7 @@
         "status_failed": "Failed",
         "close_title": "Close chat",
         "room_select_title": "Chat room",
-        "discover_paired": "Between paired devices"
+        "discover_paired": "Between paired devices",
+        "discovery": "You can be discovered:"
     }
 }
