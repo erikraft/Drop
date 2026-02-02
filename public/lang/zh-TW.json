@@ -1,6 +1,5 @@
 {
     "header": {
-        "lan-mode_title": "",
         "about_title": "關於 ErikrafT Drop",
         "language-selector_title": "設定語言",
         "about_aria-label": "開啟關於 ErikrafT Drop",
@@ -12,6 +11,7 @@
         "pair-device_title": "永久配對你的裝置",
         "edit-paired-devices_title": "編輯已配對的裝置",
         "join-public-room_title": "暫時加入公共房間",
+        "lan-mode_title": "LAN Mode (offline)",
         "cancel-share-mode": "取消",
         "edit-share-mode": "編輯",
         "expand_title": "展開標題按鈕列",
@@ -39,7 +39,6 @@
         "webrtc-requirement": "要使用此 ErikrafT Drop 實例，必須啟用 WebRTC！"
     },
     "footer": {
-        "lan": "",
         "known-as": "此裝置名稱為：",
         "display-name_data-placeholder": "正在載入中…",
         "display-name_title": "編輯此裝置名稱並儲存",
@@ -53,22 +52,10 @@
         "traffic": "流量將會",
         "routed": "途經伺服器",
         "webrtc": "如果無法使用 WebRTC。",
-        "add-profile-photo": "Add Profile Photo"
+        "add-profile-photo": "Add Profile Photo",
+        "lan": "LAN"
     },
     "dialogs": {
-        "lan-mode-warning": "",
-        "lan-mode-status-found": "",
-        "lan-mode-status-waiting": "",
-        "lan-mode-status-connected": "",
-        "lan-mode-status-connecting": "",
-        "lan-mode-scanning": "",
-        "lan-mode-scan": "",
-        "lan-mode-apply": "",
-        "lan-mode-server-help": "",
-        "lan-mode-server_placeholder": "",
-        "lan-mode-server-label": "",
-        "lan-mode-toggle": "",
-        "lan-mode-title": "",
         "pair-devices-title": "永久配對裝置",
         "input-key-on-this-device": "在另一台裝置上輸入此密鑰",
         "scan-qr-code": "或掃描 QR 圖碼。",
@@ -76,6 +63,18 @@
         "temporary-public-room-title": "臨時公共房間",
         "input-room-id-on-another-device": "在另一台裝置上輸入此房間編號",
         "enter-room-id-from-another-device": "在此輸入房間編號以加入房間。",
+        "lan-mode-title": "LAN Mode (offline)",
+        "lan-mode-toggle": "Enable LAN mode (no internet)",
+        "lan-mode-server-label": "LAN signaling server",
+        "lan-mode-server-help": "Use a local IP (private network only).",
+        "lan-mode-apply": "Apply",
+        "lan-mode-scan": "Find common servers",
+        "lan-mode-scanning": "Scanning...",
+        "lan-mode-status-connecting": "Connecting to LAN",
+        "lan-mode-status-connected": "Connected to LAN",
+        "lan-mode-status-waiting": "Waiting for peers",
+        "lan-mode-status-found": "Peers found",
+        "lan-mode-warning": "LAN mode is visible to devices on the same network.",
         "hr-or": "或者",
         "pair": "配對",
         "cancel": "取消",
@@ -155,7 +154,8 @@
         "publish-youtube": "發佈到 YouTube",
         "publish-instagram": "發佈到 Instagram",
         "compress": "壓縮",
-        "edit-ai": "使用 AI 編輯"
+        "edit-ai": "使用 AI 編輯",
+        "lan-mode-server_placeholder": "192.168.0.10:3000"
     },
     "about": {
         "close-about_aria-label": "關閉關於 ErikrafT Drop",
@@ -170,11 +170,6 @@
         "faq_title": "常見問題"
     },
     "notifications": {
-        "lan-disabled": "",
-        "lan-enabled": "",
-        "lan-https-blocked": "",
-        "lan-invalid-server": "",
-        "lan-missing-server": "",
         "display-name-changed-permanently": "裝置名稱已更改並儲存",
         "display-name-changed-temporarily": "裝置名稱已更改並只限於此會話",
         "display-name-random-again": "裝置名稱已再次隨機生成",
@@ -211,6 +206,11 @@
         "connected": "已連接",
         "online-requirement-pairing": "你需要在線才能配對裝置",
         "online-requirement-public-room": "你需要在線才能創建公共房間",
+        "lan-missing-server": "Enter a LAN server IP to enable LAN mode.",
+        "lan-invalid-server": "LAN server must be a local/private IP address.",
+        "lan-https-blocked": "This page is HTTPS. Use HTTP or WSS for LAN mode.",
+        "lan-enabled": "LAN mode enabled.",
+        "lan-disabled": "LAN mode disabled.",
         "connecting": "正在連接中…",
         "files-incorrect": "檔案不正確",
         "file-transfer-completed": "檔案傳輸已完成",
@@ -244,18 +244,16 @@
         "biodrop": "網站"
     },
     "chat": {
-        "room_local": "",
-        "room_paired": "",
-        "room_public": "",
-        "peers_status": "",
-        "status_sent": "",
-        "status_delivered": "",
-        "status_failed": "",
-        "close_title": "",
-        "room_select_title": ""
-        ,
-        "discover_paired": "",
-        "discovery": ""
+        "room_local": "Local network",
+        "room_paired": "Paired devices",
+        "room_public": "Room {{roomId}}",
+        "peers_status": "Peers: {{count}}",
+        "status_sent": "Sent",
+        "status_delivered": "Delivered",
+        "status_failed": "Failed",
+        "close_title": "Close chat",
+        "room_select_title": "Chat room",
+        "discover_paired": "Between paired devices",
+        "discovery": "You can be discovered:"
     }
 }
-
