@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "language-selector_title": "மொழியை அமைக்கவும்",
         "about_aria-label": "ErikrafT Drop பற்றி திறந்திருக்கும்",
         "theme-auto_title": "தானாகவே கருப்பொருள் கணினிக்கு மாற்றியமைக்கவும்",
@@ -38,6 +39,7 @@
         "webrtc-requirement": "இந்த ErikrafT Drop நிகழ்வைப் பயன்படுத்த, WEBRTC இயக்கப்பட்டிருக்க வேண்டும்!"
     },
     "footer": {
+        "lan": "",
         "display-name_data-placeholder": "ஏற்றுகிறது…",
         "display-name_title": "உங்கள் சாதனத்தின் பெயரை நிரந்தரமாக திருத்தவும்",
         "discovery": "நீங்கள் கண்டுபிடிக்கலாம்:",
@@ -53,6 +55,19 @@
         "known-as": "நீங்கள் அறியப்படுகிறீர்கள்:"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "pair-devices-title": "இணை சாதனங்கள் நிரந்தரமாக",
         "edit-photopea": "தொகு (Photopea)",
         "edit-vectorpea": "தொகு (Vectorpea)",
@@ -158,7 +173,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -168,6 +184,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

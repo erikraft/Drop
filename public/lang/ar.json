@@ -1,5 +1,6 @@
 {
     "footer": {
+        "lan": "",
         "webrtc": "إذا لم يكن WebRTC متاحًا.",
         "public-room-devices_title": "يمكن اكتشافك بواسطة الأجهزة الموجودة في هذه الغرفة العامة المستقلة عن الشبكة.",
         "display-name_data-placeholder": "تحميل …",
@@ -15,6 +16,11 @@
         "known-as": "‌أنت معروف بأنك:"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "request-title": "يرغب {{name}} في نقل {{count}} {{descriptor}}",
         "unfinished-transfers-warning": "هناك تحويلات غير مكتملة. هل أنت متأكد أنك تريد إغلاق ErikrafT Drop؟",
         "message-received": "تم استلام الرسالة بواسطة {{name}} - انقر للفتح",
@@ -61,6 +67,7 @@
         "compress-error": "خطأ في ضغط الصورة"
     },
     "header": {
+        "lan-mode_title": "",
         "cancel-share-mode": "تمّ",
         "theme-auto_title": "تغيير المظهر تلقائيا من النظام",
         "install_title": "تثبيت ErikrafT Drop",
@@ -108,6 +115,19 @@
         "transferring": "جارٍ النقل…"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "base64-paste-to-send": "الصق هنا للمشاركة {{type}}",
         "auto-accept-instructions-2": "لقبول جميع الملفات المرسلة من هذا الجهاز تلقائيًا.",
         "receive-text-title": "تلقيت رسالة",
@@ -172,7 +192,8 @@
     },
     "site": {
         "biodrop": "موقع"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -182,6 +203,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

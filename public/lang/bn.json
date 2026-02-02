@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "ErikrafT Drop সম্পর্কে",
         "install_title": "ErikrafT Drop ইন্সটল করুন",
         "pair-device_title": "ডিভাইস স্থায়ী ভাবে যুক্ত করুন",
@@ -40,6 +41,19 @@
         "external": "Go to website"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "cloud-upload-title": "ক্লাউডে ফাইল পাঠান",
         "cloud-upload-file-label": "ফাইল",
         "cloud-upload-expiry-label": "মেয়াদ শেষ হওয়ার সময়",
@@ -70,7 +84,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -80,7 +95,10 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
+        ,
+        "discover_paired": "",
         "discovery": "",
-        "discovery": ""}}
+        "discovery": ""
+    }
+}
 

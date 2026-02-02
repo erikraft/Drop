@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "ErikrafT Drop ಕುರಿತು",
         "cancel-paste-mode": "ಮಾಡಿದ",
         "theme-auto_title": "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸಿಸ್ಟಮ್‌ಗೆ ಥೀಮ್ ಅನ್ನು ಹೊಂದಿಸಿ",
@@ -21,6 +22,19 @@
         "ai-generate": "Create new AI image"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "message_placeholder": "ಪಠ್ಯ",
         "base64-paste-to-send": "{{type}} ಅನ್ನು ಹಂಚಿಕೊಳ್ಳಲು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ ಅನ್ನು ಇಲ್ಲಿ ಅಂಟಿಸಿ",
         "auto-accept-instructions-2": "ಆ ಸಾಧನದಿಂದ ಕಳುಹಿಸಲಾದ ಎಲ್ಲಾ ಫೈಲ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸ್ವೀಕರಿಸಲು.",
@@ -110,6 +124,7 @@
         "edit-ai": "Edit with AI"
     },
     "footer": {
+        "lan": "",
         "webrtc": "WebRTC ಲಭ್ಯವಿಲ್ಲದಿದ್ದರೆ.",
         "public-room-devices_title": "ನೆಟ್‌ವರ್ಕ್‌ನಿಂದ ಸ್ವತಂತ್ರವಾದ ಈ ಸಾರ್ವಜನಿಕ ಕೊಠಡಿಯಲ್ಲಿನ ಸಾಧನಗಳ ಮೂಲಕ ನಿಮ್ಮನ್ನು ಕಂಡುಹಿಡಿಯಬಹುದು.",
         "display-name_data-placeholder": "ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ…",
@@ -125,6 +140,11 @@
         "known-as": "ನಿಮ್ಮನ್ನು ಹೀಗೆ ಕರೆಯಲಾಗುತ್ತದೆ:"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "request-title": "{{name}} ಅವರು {{count}} {{descriptor}} ಅನ್ನು ವರ್ಗಾಯಿಸಲು ಬಯಸುತ್ತಾರೆ",
         "unfinished-transfers-warning": "ಅಪೂರ್ಣ ವರ್ಗಾವಣೆಗಳಿವೆ. ErikrafT Drop ಅನ್ನು ಮುಚ್ಚಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?",
         "message-received": "{{name}} ಅವರಿಂದ ಸಂದೇಶವನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ - ನಕಲಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ",
@@ -225,7 +245,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -235,6 +256,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

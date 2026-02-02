@@ -545,6 +545,10 @@ footer .logo {
     --badge-color: var(--primary-color);
 }
 
+.badge-room-lan {
+    --badge-color: var(--accent-color);
+}
+
 .badge-room-secret {
     --badge-color: var(--paired-device-color);
 }

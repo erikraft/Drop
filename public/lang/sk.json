@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "install_title": "Nainštalovať ErikrafT Drop",
         "about_title": "O službe ErikrafT Drop",
         "language-selector_title": "Nastaviť jazyk",
@@ -38,6 +39,7 @@
         "activate-share-mode-base": "Pre odoslanie otvorte ErikrafT Drop na iných zariadeniach"
     },
     "footer": {
+        "lan": "",
         "known-as": "Si pomenovaný ako:",
         "display-name_data-placeholder": "Načítava sa…",
         "display-name_title": "Trvalo upraviť názov zariadenia",
@@ -53,6 +55,19 @@
         "webrtc": "ak WebRTC nie je k dispozícii."
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "base64-title-text": "Zdielať text",
         "base64-text": "text",
         "edit-photopea": "Upraviť (Photopea)",
@@ -142,6 +157,11 @@
         "edit-ai": "Edit with AI"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "text-content-incorrect": "Obsah textu je chybný",
         "clipboard-content-incorrect": "Obsah schránky je chybný",
         "display-name-random-again": "Zobrazované meno je opäť generované náhodne",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

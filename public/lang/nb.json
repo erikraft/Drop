@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "edit-paired-devices_title": "Rediger sammenkoblede enheter",
         "about_title": "Om ErikrafT Drop",
         "about_aria-label": "Åpne «Om ErikrafT Drop»",
@@ -20,6 +21,7 @@
         "ai-generate": "Create new AI image"
     },
     "footer": {
+        "lan": "",
         "webrtc": "hvis WebRTC ikke er tilgjengelig.",
         "display-name_data-placeholder": "Laster inn…",
         "display-name_title": "Rediger ditt enhetsnavn permanent",
@@ -53,6 +55,19 @@
         "webrtc-requirement": "For å bruke denne ErikrafT Drop-økten, må WebRTC være aktivert!"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "input-key-on-this-device": "Skriv inn denne nøkkelen på en annen enhet",
         "pair-devices-title": "Sammenkoble Enheter Permanent",
         "would-like-to-share": "ønsker å dele",
@@ -154,6 +169,11 @@
         "privacypolicy_title": "Åpne vår personvernerklæring"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "copied-to-clipboard": "Kopiert til utklippstavlen",
         "pairing-tabs-error": "Sammenkobling av to nettleserfaner er ikke mulig",
         "notifications-enabled": "Merknader påskrudd",
@@ -219,7 +239,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -229,6 +250,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "theme-light_title": "همیشه از پوسته روشن استفاده شود",
         "theme-dark_title": "همیشه از پوسته تیره استفاده شود",
         "install_title": "نصب ErikrafT Drop",
@@ -38,6 +39,7 @@
         "no-peers_data-drop-bg": "با رهاکردن، دریافت‌کننده را انتخاب کنید"
     },
     "footer": {
+        "lan": "",
         "known-as": "شما به این عنوان شناخته می‌شوید:",
         "display-name_data-placeholder": "در حال بار شدن…",
         "display-name_title": "ویرایش دائمی نام دستگاه شما",
@@ -68,6 +70,19 @@
         "external": "Go to website"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "cloud-upload-title": "ارسال فایل به ابر",
         "cloud-upload-file-label": "File",
         "cloud-upload-expiry-label": "Time until expiration",
@@ -98,7 +113,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -108,6 +124,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

@@ -17,7 +17,8 @@
         "cloud": "Nuvem",
         "webchat": "Bate-papo",
         "ai-variation": "Gerar variação com IA",
-        "ai-generate": "Criar nova imagem com IA"
+        "ai-generate": "Criar nova imagem com IA",
+        "lan-mode_title": "Modo LAN (sem internet)"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Solte para selecionar o destinatário",
@@ -41,7 +42,7 @@
         "known-as": "Você é conhecido como:",
         "display-name_data-placeholder": "Carregando…",
         "display-name_title": "Edite o nome do seu dispositivo permanentemente",
-        "discovery": "Você pode ser descoberto:",
+        "discovery": "Voc? pode ser descoberto:",
         "on-this-network": "nesta rede",
         "on-this-network_title": "Você pode ser descoberto por todos nesta rede.",
         "paired-devices": "por dispositivos emparelhados",
@@ -51,7 +52,8 @@
         "traffic": "O tráfego é",
         "routed": "roteado pelo servidor",
         "webrtc": "se o WebRTC não estiver disponível.",
-        "add-profile-photo": "Adicionar foto de perfil"
+        "add-profile-photo": "Adicionar foto de perfil",
+        "lan": "LAN"
     },
     "dialogs": {
         "pair-devices-title": "Emparelhar Dispositivos Permanentemente",
@@ -140,7 +142,20 @@
         "publish-youtube": "Publicar no YouTube",
         "publish-instagram": "Publicar no Instagram",
         "compress": "Comprimir",
-        "edit-ai": "Editar com IA"
+        "edit-ai": "Editar com IA",
+        "lan-mode-title": "Modo LAN (sem internet)",
+        "lan-mode-toggle": "Ativar modo LAN (sem internet)",
+        "lan-mode-server-label": "Servidor de sinaliza??o LAN",
+        "lan-mode-server_placeholder": "192.168.0.10:3000",
+        "lan-mode-server-help": "Use um IP local (somente rede privada).",
+        "lan-mode-apply": "Aplicar",
+        "lan-mode-scan": "Encontrar servidores comuns",
+        "lan-mode-scanning": "Procurando...",
+        "lan-mode-status-connecting": "Conectando ? LAN",
+        "lan-mode-status-connected": "Conectado ? LAN",
+        "lan-mode-status-waiting": "Aguardando peers",
+        "lan-mode-status-found": "Peers encontrados",
+        "lan-mode-warning": "O modo LAN ? vis?vel para dispositivos na mesma rede."
     },
     "about": {
         "close-about_aria-label": "Fechar Sobre o ErikrafT Drop",
@@ -198,7 +213,12 @@
         "message-transfer-completed": "Transferência de mensagem concluída",
         "unfinished-transfers-warning": "Há transferências inacabadas. Tem certeza de que deseja fechar o ErikrafT Drop?",
         "rate-limit-join-key": "Limite de taxa atingido. Aguarde 10 segundos e tente novamente.",
-        "selected-peer-left": "Par selecionado saiu"
+        "selected-peer-left": "Par selecionado saiu",
+        "lan-missing-server": "Informe o IP do servidor LAN para ativar o modo LAN.",
+        "lan-invalid-server": "O servidor LAN deve ser um IP local/privado.",
+        "lan-https-blocked": "Esta p?gina est? em HTTPS. Use HTTP ou WSS no modo LAN.",
+        "lan-enabled": "Modo LAN ativado.",
+        "lan-disabled": "Modo LAN desativado."
     },
     "document-titles": {
         "file-received": "Arquivo recebido",
@@ -234,6 +254,6 @@
         "close_title": "Fechar bate-papo",
         "room_select_title": "Sala do bate-papo",
         "discover_paired": "Entre dispositivos emparelhados",
-        "discovery": "Você pode ser descoberto:"
+        "discovery": "Voc? pode ser descoberto:"
     }
 }

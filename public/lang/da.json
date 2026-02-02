@@ -1,5 +1,10 @@
 {
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "public-room-left": "Forlod det offentlige rum {{publicRoomId}}",
         "room-url-copied-to-clipboard": "Link til offentligt rum kopieret til udklipsholder",
         "notifications-enabled": "Notifikationer aktiveret",
@@ -43,6 +48,19 @@
         "selected-peer-left": "Valgt peer forlod"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "message_placeholder": "Tekst",
         "base64-files": "filer",
         "file-other-description-image": "og 1 andet billede",
@@ -144,6 +162,7 @@
         "privacypolicy_title": "Åbn vores privatlivspolitik"
     },
     "header": {
+        "lan-mode_title": "",
         "language-selector_title": "Indstil sprog",
         "about_aria-label": "Åbn Om ErikrafT Drop",
         "theme-auto_title": "Tilpas temaet til systemet automatisk",
@@ -182,6 +201,7 @@
         "webrtc-requirement": "For at bruge denne ErikrafT Drop-instans skal WebRTC være aktiveret!"
     },
     "footer": {
+        "lan": "",
         "on-this-network_title": "Du kan blive opdaget af alle på dette netværk.",
         "public-room-devices_title": "Du kan blive opdaget af enheder i dette offentlige rum uafhængigt af netværket.",
         "known-as": "Du er kendt som:",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

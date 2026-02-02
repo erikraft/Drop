@@ -52,7 +52,8 @@
         "traffic": "Traffic is",
         "routed": "routed through the server",
         "webrtc": "if WebRTC is not available.",
-        "add-profile-photo": "Add Profile Photo"
+        "add-profile-photo": "Add Profile Photo",
+        "lan": "LAN"
     },
     "dialogs": {
         "pair-devices-title": "Pair Devices Permanently",
@@ -65,7 +66,6 @@
         "lan-mode-title": "LAN Mode (offline)",
         "lan-mode-toggle": "Enable LAN mode (no internet)",
         "lan-mode-server-label": "LAN signaling server",
-        "lan-mode-server-placeholder": "192.168.0.10:3000",
         "lan-mode-server-help": "Use a local IP (private network only).",
         "lan-mode-apply": "Apply",
         "lan-mode-scan": "Find common servers",
@@ -153,10 +153,9 @@
         "metadata-exif": "Metadata (EXIF)",
         "publish-youtube": "Publish on YouTube",
         "publish-instagram": "Publish on Instagram",
-        "publish-youtube": "Publish on YouTube",
-        "publish-instagram": "Publish on Instagram",
         "compress": "Compress",
-        "edit-ai": "Edit with AI"
+        "edit-ai": "Edit with AI",
+        "lan-mode-server_placeholder": "192.168.0.10:3000"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop",

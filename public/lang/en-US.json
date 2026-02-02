@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "About ErikrafT Drop",
         "language-selector_title": "Set Language",
         "about_aria-label": "Open About ErikrafT Drop",
@@ -38,6 +39,7 @@
         "webrtc-requirement": "To use this ErikrafT Drop instance, WebRTC must be enabled!"
     },
     "footer": {
+        "lan": "",
         "known-as": "You are known as:",
         "display-name_data-placeholder": "Loading…",
         "display-name_title": "Edit your device name permanently",
@@ -54,6 +56,19 @@
         "add-profile-photo": "Add Profile Photo"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "pair-devices-title": "Pair Devices Permanently",
         "input-key-on-this-device": "Input this key on another device",
         "scan-qr-code": "or scan the QR-code.",
@@ -155,6 +170,11 @@
         "faq_title": "Frequently asked questions"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "Display name is changed permanently",
         "display-name-changed-temporarily": "Display name is changed for this session only",
         "display-name-random-again": "Display name is randomly generated again",
@@ -222,7 +242,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -232,6 +253,7 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
+        ,
+        "discover_paired": "",
         "discovery": "You can be discovered:"}}
 

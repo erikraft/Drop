@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "关于 ErikrafT Drop",
         "language-selector_title": "设置语言",
         "about_aria-label": "打开 关于 ErikrafT Drop",
@@ -38,6 +39,7 @@
         "webrtc-requirement": "要使用此 ErikrafT Drop 示例。必须开启 WebRTC！"
     },
     "footer": {
+        "lan": "",
         "known-as": "你的名字是:",
         "display-name_data-placeholder": "加载中…",
         "display-name_title": "修改你的默认设备名",
@@ -54,6 +56,19 @@
         "add-profile-photo": "Add Profile Photo"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "pair-devices-title": "配对新设备（常驻）",
         "input-key-on-this-device": "在另一个设备上输入这串数字",
         "scan-qr-code": "或者 扫描二维码。",
@@ -155,6 +170,11 @@
         "faq_title": "常见问题"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "展示的名字已经永久变更",
         "display-name-changed-temporarily": "展示名字仅在此会话中变更",
         "display-name-random-again": "展示的名字已再次随机生成",

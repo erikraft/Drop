@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "ErikrafT Drop buruz",
         "about_aria-label": "Ireki ErikrafT Drop buruz",
         "cancel-share-mode": "Utzi",
@@ -38,6 +39,11 @@
         "x-instructions_data-drop-bg": "Jaregin hartzailea hautatzeko"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "online-requirement-pairing": "Linean egon behar zara gailuak lotzeko",
         "copied-text-error": "Arbelean idazteak huts egin du. Egizu eskuz!",
         "connecting": "Konektatzen…",
@@ -81,6 +87,19 @@
         "pairing-key-invalidated": "{{key}} gakoa baliogabetu da"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "send": "Bidali",
         "title-file": "Fitxategia",
         "input-key-on-this-device": "Sartu gakoa beste gailu batean",
@@ -182,6 +201,7 @@
         "close-about_aria-label": "Itxi ErikrafT Drop buruz"
     },
     "footer": {
+        "lan": "",
         "known-as": "Zure izena honakoa da:",
         "display-name_data-placeholder": "Kargatzen…",
         "display-name_title": "Editatu zure gailuaren izena betiko",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

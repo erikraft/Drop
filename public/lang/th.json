@@ -1,5 +1,6 @@
 {
     "footer": {
+        "lan": "",
         "display-name_title": "แก้ไขชื่ออุปกรณ์ของคุณอย่างถาวร",
         "on-this-network_title": "ทุกคนในเครือข่ายนี้สามารถค้นพบคุณได้",
         "paired-devices_title": "คุณสามารถค้นพบอุปกรณ์ที่จับคู่ได้ตลอดเวลาโดยไม่ขึ้นอยู่กับเครือข่าย",
@@ -12,6 +13,19 @@
         "display-name_data-placeholder": "โปรดรอสักครู่…"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "auto-accept-instructions-1": "เปิดใช้งาน",
         "edit-photopea": "แก้ไข (Photopea)",
         "edit-vectorpea": "แก้ไข (Vectorpea)",
@@ -74,6 +88,7 @@
         "edit-ai": "Edit with AI"
     },
     "header": {
+        "lan-mode_title": "",
         "theme-auto_title": "ปรับธีมให้เข้ากับระบบโดยอัตโนมัติ",
         "about_title": "เกี่ยวกับ ErikrafT Drop",
         "theme-light_title": "ใช้ธีมสว่างเสมอ",
@@ -92,6 +107,11 @@
         "ai-generate": "Create new AI image"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "notifications-enabled": "เปิดใช้งานการแจ้งเตือนแล้ว",
         "pairing-key-invalid": "Key ไม่ถูกต้อง",
         "online": "คุณกลับมาออนไลน์แล้ว",
@@ -129,7 +149,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -139,6 +160,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

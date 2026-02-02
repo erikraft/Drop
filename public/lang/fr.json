@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "À propos de ErikrafT Drop",
         "language-selector_title": "Choix de la langue",
         "about_aria-label": "Ouvrir à propos de ErikrafT Drop",
@@ -38,6 +39,7 @@
         "activate-share-mode-and-other-file": "et un autre fichier"
     },
     "footer": {
+        "lan": "",
         "known-as": "Vous êtes connu comme :",
         "display-name_data-placeholder": "Chargement…",
         "display-name_title": "Modifiez le nom de votre appareil de manière permanente",
@@ -55,6 +57,19 @@
         "add-profile-photo": "Ajouter une photo de profil"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "pair-devices-title": "Associer les appareils de manière permanente",
         "input-key-on-this-device": "Saisissez cette clé sur un autre appareil",
         "scan-qr-code": "ou scannez le QR-code.",
@@ -156,6 +171,11 @@
         "mastodon_title": "Écrire à propos de ErikrafT Drop sur Mastodon"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "Le nom d'affichage est modifié de manière permanente",
         "display-name-changed-temporarily": "Le nom d'affichage est modifié uniquement pour cette session",
         "display-name-random-again": "Le nom d'affichage est à nouveau généré aléatoirement",
@@ -220,7 +240,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -230,6 +251,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

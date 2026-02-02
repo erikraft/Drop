@@ -18,6 +18,7 @@
         "webrtc-requirement": "Per utilitzar aquesta instància de ErikrafT Drop cal habilitar WebRTC!"
     },
     "header": {
+        "lan-mode_title": "",
         "theme-auto_title": "Adapta el tema al del sistema automàticament",
         "install_title": "Instal·la ErikrafT Drop",
         "theme-dark_title": "Utilitza sempre el mode fosc",
@@ -38,6 +39,19 @@
         "ai-generate": "Create new AI image"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "message_placeholder": "Text",
         "base64-paste-to-send": "Enganxa el contingut del porta-retalls aquí per compartir {{type}}",
         "auto-accept-instructions-2": "per acceptar automàticament tots els fitxers enviats des d'aquell dispositiu.",
@@ -127,6 +141,7 @@
         "edit-ai": "Edit with AI"
     },
     "footer": {
+        "lan": "",
         "webrtc": "si WebRTC no està disponible.",
         "public-room-devices_title": "Pots ser descobert per dispositius en aquesta sala pública independentment de la xarxa.",
         "display-name_data-placeholder": "Carregant…",
@@ -142,6 +157,11 @@
         "known-as": "Ets conegut com a:"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "request-title": "{{name}} voldria transferir {{count}} {{descriptor}}",
         "unfinished-transfers-warning": "Hi ha transferències pendents. Estàs segur que vols tancar ErikrafT Drop?",
         "message-received": "Missatge rebut per {{name}} - Fes clic per copiar",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

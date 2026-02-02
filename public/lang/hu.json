@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "language-selector_title": "Nyelv beállítása",
         "theme-auto_title": "Téma automatikusan rendszerhez igazítása",
         "about_aria-label": "\"Az ErikrafT Drop-ról\" megnyitása",
@@ -38,6 +39,7 @@
         "no-peers-subtitle": "Párosítsa eszközeit vagy lépjen be egy nyilvános szobába, hogy más hálózatokon is felfedezhető legyen"
     },
     "footer": {
+        "lan": "",
         "known-as": "Ön így látható:",
         "display-name_data-placeholder": "Betöltés…",
         "display-name_title": "Az eszköze nevének végleges megváltoztatása",
@@ -53,6 +55,19 @@
         "public-room-devices_title": "Mindenki által felfedezhető ebben a nyilvános szobában, a hálózattól függetlenül."
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "input-key-on-this-device": "Írja be ezt a kódot egy másik eszközön",
         "pair-devices-title": "Eszközök végleges párosítása",
         "temporary-public-room-title": "Ideiglenes nyilvános szoba",
@@ -142,6 +157,11 @@
         "edit-ai": "Edit with AI"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "online-requirement-pairing": "Online kell lennie készülékek párosításához",
         "link-received": "Link érkezett tőle: {{name}} - Kattintson a megnyitáshoz",
         "selected-peer-left": "A kiválasztott partner kilépett",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

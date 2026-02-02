@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_aria-label": "Otevřít o ErikrafT Drop",
         "about_title": "O službě ErikrafT Drop",
         "language-selector_title": "Nastavit jazyk",
@@ -32,6 +33,7 @@
         "faq_title": "Často kladené otázky"
     },
     "footer": {
+        "lan": "",
         "webrtc": "pokud WebRTC není k dispozici.",
         "known-as": "Jste známí jako:",
         "display-name_data-placeholder": "Načítání…",
@@ -47,6 +49,19 @@
         "routed": "směrován přes server"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "auto-accept": "auto-accept",
         "pair-devices-title": "Spárujte zařízení trvale",
         "input-key-on-this-device": "Zadejte tento klíč na jiném zařízení",
@@ -154,6 +169,11 @@
         "webrtc-requirement": "Chcete-li použít ErikrafT Drop, musí být povoleno WebRTC!"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "Zobrazované jméno je trvale změněno",
         "display-name-changed-temporarily": "Zobrazované jméno je změněno pouze pro tuto relaci",
         "display-name-random-again": "Zobrazované jméno je opět náhodně generováno",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

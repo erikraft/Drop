@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_aria-label": "Відкрити \"Про ErikrafT Drop\"",
         "theme-auto_title": "Автоматично адаптувати тему до системної",
         "theme-light_title": "Завжди використовувати світлу тему",
@@ -38,6 +39,7 @@
         "activate-share-mode-shared-files-plural": "{{count}} спільних файлів"
     },
     "footer": {
+        "lan": "",
         "known-as": "Ви відомі як:",
         "discovery": "Вас можна знайти:",
         "public-room-devices": "у кімнаті {{roomId}}",
@@ -53,6 +55,19 @@
         "paired-devices_title": "Вас можуть знайти зв'язані пристрої в будь-який час, незалежно від мережі."
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "input-key-on-this-device": "Введіть цей ключ на іншому пристрої",
         "edit-photopea": "Редагувати (Photopea)",
         "edit-vectorpea": "Редагувати (Vectorpea)",
@@ -154,6 +169,11 @@
         "claim": "Найпростіший спосіб передачі файлів між пристроями"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-temporarily": "Відображуване ім'я було змінено тільки для цієї сесії",
         "display-name-random-again": "Відображуване ім'я згенерувалося випадковим чином знову",
         "download-successful": "{{descriptor}} завантажено",

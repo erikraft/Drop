@@ -1,5 +1,10 @@
 {
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "rate-limit-join-key": "Jõudsid tegevuspiiranguni. Oota 10 sekundit ja proovi uuesti.",
         "notifications-permissions-error": "Teavituste luba on keelatud, kuna oled mitu korda loataotluse sulgenud. Selle saad lähtestada lehe teabe menüüs, millele pääsed ligi aadressiribal oleva lukuikooni kaudu.",
         "display-name-changed-permanently": "Kuvatav nimi on püsivalt muudetud",
@@ -61,6 +66,7 @@
         "x-instructions_data-drop-bg": "Vabasta seadme valimiseks"
     },
     "header": {
+        "lan-mode_title": "",
         "theme-auto_title": "Kasuta automaatselt süsteemiteemat",
         "theme-light_title": "Kasuta alati heledat teemat",
         "cancel-share-mode": "Tühista",
@@ -81,6 +87,7 @@
         "ai-generate": "Create new AI image"
     },
     "footer": {
+        "lan": "",
         "known-as": "Sind tuntakse kui:",
         "discovery": "Sind saab avastada:",
         "on-this-network": "selles võrgus",
@@ -96,6 +103,19 @@
         "traffic": "Liiklus on"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "auto-accept-instructions-1": "Aktiveeri",
         "pair-devices-title": "Paarita seadmed püsivalt",
         "scan-qr-code": "või skanni QR-kood.",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

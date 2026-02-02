@@ -1,5 +1,6 @@
 {
     "footer": {
+        "lan": "",
         "webrtc": "als WebRTC niet beschikbaar is.",
         "public-room-devices_title": "U kan door apparaten gevonden worden in deze openbare ruimte, ongeacht van het netwerk.",
         "display-name_data-placeholder": "Laden…",
@@ -15,6 +16,11 @@
         "known-as": "U staat bekend als:"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "request-title": "{{name}} zou graag {{count}}{{descriptor}} overdragen",
         "unfinished-transfers-warning": "Nog niet alle overdrachten zijn compleet. Weet u zeker dat u ErikrafT Drop sluiten?",
         "message-received": "Bericht ontvangen van {{name}} - Klik om te kopiëren",
@@ -58,6 +64,7 @@
         "notifications-permissions-error": "Meldingsmachtiging is geblokkeerd, omdat de gebruiker het machtigingsverzoek meerdere keren heeft afgewezen. Dit kan worden gereset in instellingen van de website, welke toegangelijk is door te klikken op het sloticoon naast de URL-balk."
     },
     "header": {
+        "lan-mode_title": "",
         "cancel-share-mode": "Klaar",
         "theme-auto_title": "Gebruik systeemstijl",
         "install_title": "ErikrafT Drop installeren",
@@ -105,6 +112,19 @@
         "transferring": "Overdragen…"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "base64-paste-to-send": "Plak klembord hier om {{type}} te versturen",
         "auto-accept-instructions-2": "om automatisch alle bestanden van dat apparaat te accepteren.",
         "receive-text-title": "Bericht Ontvangen",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

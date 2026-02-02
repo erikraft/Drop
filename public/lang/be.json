@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_aria-label": "Адкрыйце Аб ErikrafT Drop",
         "about_title": "Аб ErikrafT Drop",
         "theme-auto_title": "Аўтаматычная адаптацыя тэмы да сістэмы",
@@ -38,6 +39,7 @@
         "activate-share-mode-shared-file": "агульны файл"
     },
     "footer": {
+        "lan": "",
         "known-as": "Вы вядомыя як:",
         "display-name_data-placeholder": "Загрузка…",
         "discovery": "Вас могуць выявіць:",
@@ -53,6 +55,19 @@
         "routed": "накіроўваецца праз сервер"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "hr-or": "АБО",
         "cancel": "Адмяніць",
         "pair": "Злучыць",
@@ -154,6 +169,11 @@
         "privacypolicy_title": "Адкрыйце нашу палітыку прыватнасці"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "link-received": "Спасылка атрымана {{name}} - Націсніце, каб адкрыць",
         "message-received": "Паведамленне атрымана {{name}} - Націсніце, каб скапіяваць",
         "click-to-download": "Націсніце, каб спампаваць",
@@ -221,7 +241,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -231,6 +252,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

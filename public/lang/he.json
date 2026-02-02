@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "אודות ErikrafT Drop",
         "theme-light_title": "השתמש תמיד במצב בהיר",
         "install_title": "התקן את ErikrafT Drop",
@@ -38,6 +39,7 @@
         "activate-share-mode-shared-text": "טקסט משותף"
     },
     "footer": {
+        "lan": "",
         "paired-devices_title": "הנך ניתן לגילוי על ידי מכשירים מתואמים בכל עת ללא תלות ברשת.",
         "on-this-network": "ברשת הזו",
         "on-this-network_title": "אתה ניתן לגילוי על ידי כולם ברשת הזו.",
@@ -53,6 +55,19 @@
         "webrtc": "אם WebRTC אינו זמין."
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "input-room-id-on-another-device": "הזן את מזהה החדר הזה במכשיר אחר",
         "edit-paired-devices-title": "ערוך מכשירים מתואמים",
         "paired-device-removed": "המכשיר המתואם הוסר.",
@@ -154,6 +169,11 @@
         "close-about_aria-label": "סגירת אודות ErikrafT Drop"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "שם התצוגה משתנה לתמיד",
         "download-successful": "{{descriptor}} הורד",
         "notifications-permissions-error": "ההרשאה להתראות נחסמה עקב סגירת חלונית בקשת ההרשאה מספר פעמים. אתה יכול לאפס זאת במידע על דף זה שניתן לגישה באמצעות לחיצה על אייקון המנעול ליד שורת הכתובת.",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "ErikrafT Drop Hakkında",
         "about_aria-label": "ErikrafT Drop Hakkında'yı Aç",
         "theme-auto_title": "Temayı sisteme otomatik olarak adapte et",
@@ -38,6 +39,7 @@
         "activate-share-mode-and-other-file": "ve 1 diğer dosya"
     },
     "footer": {
+        "lan": "",
         "display-name_data-placeholder": "Yükleniyor…",
         "display-name_title": "Cihaz adınızı kalıcı olarak düzenleyin",
         "webrtc": "WebRTC mevcut değilse.",
@@ -53,6 +55,19 @@
         "known-as": "Şu adla biliniyorsunuz:"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "cancel": "İptal",
         "edit-photopea": "Düzenle (Photopea)",
         "edit-vectorpea": "Düzenle (Vectorpea)",
@@ -142,6 +157,11 @@
         "edit-ai": "Edit with AI"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "request-title": "{{name}} {{count}} {{descriptor}} transfer etmek istiyor",
         "unfinished-transfers-warning": "Tamamlanmamış transferler var. ErikrafT Drop'u kapatmak istediğinizden emin misiniz?",
         "message-received": "{{name}} tarafından mesaj alındı - Kopyalamak için tıklayın",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

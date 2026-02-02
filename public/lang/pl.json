@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "language-selector_title": "Ustaw język",
         "about_aria-label": "Otwórz \"O ErikrafT Drop\"",
         "theme-light_title": "Zawsze używaj jasnego motywu",
@@ -38,6 +39,7 @@
         "webrtc-requirement": "Aby móc korzystać z tej instancji ErikrafT Drop, należy włączyć WebRTC!"
     },
     "footer": {
+        "lan": "",
         "known-as": "Jesteś widoczny jako:",
         "display-name_data-placeholder": "Ładowanie…",
         "display-name_title": "Edytuj nazwę swojego urządzenia na stałe",
@@ -53,6 +55,19 @@
         "traffic": "Transmisja jest"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "pair-devices-title": "Sparuj Urządzenia Na Stałe",
         "enter-key-from-another-device": "Wpisz tu klucz z innego urządzenia.",
         "temporary-public-room-title": "Tymczasowy Pokój Publiczny",
@@ -154,6 +169,11 @@
         "tweet_title": "Tweetnij o ErikrafT Drop"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "Wyświetlana nazwa została zmieniona na stałe",
         "display-name-random-again": "Wyświetlana nazwa została ponownie wygenerowana",
         "download-successful": "{{descriptor}} pobrano",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

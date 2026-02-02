@@ -1,5 +1,6 @@
 {
     "footer": {
+        "lan": "",
         "webrtc": "se WebRTC non è disponibile.",
         "public-room-devices_title": "Puoi essere rilevato dai dispositivi presenti in questa stanza pubblica indipendentemente dalla rete.",
         "display-name_data-placeholder": "Caricamento…",
@@ -15,6 +16,7 @@
         "known-as": "Sei visibile come:"
     },
     "header": {
+        "lan-mode_title": "",
         "cancel-share-mode": "Annulla",
         "theme-auto_title": "Adatta il tema al sistema automaticamente",
         "install_title": "Installa ErikrafT Drop",
@@ -53,6 +55,19 @@
         "activate-share-mode-and-other-file": "ed 1 altro file"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "auto-accept-instructions-2": "per accettare automaticamente tutti i files inviati da quel dispositivo.",
         "edit-paired-devices-title": "Modifica Dispositivi Associati",
         "cancel": "Annulla",
@@ -142,6 +157,11 @@
         "edit-ai": "Edit with AI"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "request-title": "{{name}} vorrebbe inviare {{count}} {{descriptor}}",
         "unfinished-transfers-warning": "Ci sono dei trasferimenti in corso. Sei sicuro di voler chiudere ErikrafT Drop?",
         "message-received": "Messaggio ricevuto da {{name}} - Clicca per copiare",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Sito"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "Über ErikrafT Drop",
         "notification_title": "Benachrichtigungen aktivieren",
         "about_aria-label": "Über ErikrafT Drop öffnen",
@@ -20,6 +21,19 @@
         "ai-generate": "Erstelle neue AI-Bild"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "share": "Teilen",
         "download": "Herunterladen",
         "pair-devices-title": "Geräte Dauerhaft Koppeln",
@@ -121,6 +135,7 @@
         "custom_title": "Folge uns"
     },
     "footer": {
+        "lan": "",
         "known-as": "Du wirst angezeigt als:",
         "display-name_title": "Ändere deinen Gerätenamen dauerhaft",
         "on-this-network": "in diesem Netzwerk",
@@ -137,6 +152,11 @@
         "on-this-network_title": "Du kannst von jedem in diesem Netzwerk gefunden werden."
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "link-received": "Link von {{name}} empfangen - Klicke um ihn zu öffnen",
         "message-received": "Nachricht von {{name}} empfangen - Klicke um sie zu kopieren",
         "click-to-download": "Klicken zum Download",
@@ -220,7 +240,8 @@
     },
     "site": {
         "biodrop": "Webseite"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -230,6 +251,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

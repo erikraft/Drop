@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "notification_title": "알림 켜기",
         "edit-paired-devices_title": "연결된 기기 편집하기",
         "install_title": "ErikrafT Drop 설치",
@@ -38,6 +39,19 @@
         "webrtc-requirement": "ErikrafT Drop 인스턴스를 사용하려면 WebRTC가 활성화되어야 합니다!"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "base64-processing": "처리 중…",
         "file-other-description-file": "그리고 파일 1개",
         "pair-devices-title": "영구적으로 기기 페어링하기",
@@ -127,6 +141,11 @@
         "edit-ai": "Edit with AI"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "pairing-tabs-error": "브라우저 탭 2개를 페어링할 수 없습니다",
         "display-name-changed-permanently": "표시 이름이 영구적으로 변경되었습니다",
         "display-name-changed-temporarily": "표시 이름이 이 세션에 대하여 변경되었습니다",
@@ -170,6 +189,7 @@
         "selected-peer-left": "선택한 장치가 퇴장하였습니다"
     },
     "footer": {
+        "lan": "",
         "known-as": "당신의 이름:",
         "display-name_data-placeholder": "불러오는 중…",
         "display-name_title": "기기 이름 영구적으로 설정하기",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

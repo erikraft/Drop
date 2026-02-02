@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "language-selector_title": "Språk",
         "theme-light_title": "Bruk alltid lyst tema",
         "join-public-room_title": "Bli med i offentlege rom midlertidig",
@@ -38,6 +39,7 @@
         "webrtc-requirement": "For å bruke denne ErikrafT Drop-økta, må WebRTC vere aktivt!"
     },
     "footer": {
+        "lan": "",
         "on-this-network": "på dette nettverket",
         "paired-devices": "med para einingar",
         "paired-devices_title": "Du kan bli funnen av para einingar til ei kvar tid uavhengig av nettverket.",
@@ -53,6 +55,19 @@
         "routed": "ruta gjennom denne tenaren"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "pair-devices-title": "Par einingar permanent",
         "scan-qr-code": "eller skann QR-koden.",
         "auto-accept-instructions-1": "Aktiver",
@@ -154,6 +169,11 @@
         "custom_title": "Følg oss"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "Profilnamnet er endra permanent",
         "pairing-not-persistent": "Para einingar er ikkje vedvarande",
         "pairing-success": "Einingane er para",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

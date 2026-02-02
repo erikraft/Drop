@@ -1,5 +1,6 @@
 {
     "header": {
+        "lan-mode_title": "",
         "about_title": "關於 ErikrafT Drop",
         "language-selector_title": "設定語言",
         "about_aria-label": "開啟關於 ErikrafT Drop",
@@ -38,6 +39,7 @@
         "webrtc-requirement": "要使用此 ErikrafT Drop 實例，必須啟用 WebRTC！"
     },
     "footer": {
+        "lan": "",
         "known-as": "此裝置名稱為：",
         "display-name_data-placeholder": "正在載入中…",
         "display-name_title": "編輯此裝置名稱並儲存",
@@ -54,6 +56,19 @@
         "add-profile-photo": "Add Profile Photo"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "pair-devices-title": "永久配對裝置",
         "input-key-on-this-device": "在另一台裝置上輸入此密鑰",
         "scan-qr-code": "或掃描 QR 圖碼。",
@@ -155,6 +170,11 @@
         "faq_title": "常見問題"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "display-name-changed-permanently": "裝置名稱已更改並儲存",
         "display-name-changed-temporarily": "裝置名稱已更改並只限於此會話",
         "display-name-random-again": "裝置名稱已再次隨機生成",
@@ -222,7 +242,8 @@
     },
     "site": {
         "biodrop": "網站"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -232,6 +253,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 

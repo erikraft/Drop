@@ -1,5 +1,6 @@
 {
     "footer": {
+        "lan": "",
         "webrtc": "dacă WebRTC nu este disponibil.",
         "public-room-devices_title": "Poți fi descoperit de dispozitivele din această cameră publică, independent de rețea.",
         "display-name_data-placeholder": "Se încarcă…",
@@ -15,6 +16,11 @@
         "known-as": "Ești cunoscut ca:"
     },
     "notifications": {
+        "lan-disabled": "",
+        "lan-enabled": "",
+        "lan-https-blocked": "",
+        "lan-invalid-server": "",
+        "lan-missing-server": "",
         "request-title": "{{name}} ar dori să transfere {{count}} {{descriptor}}",
         "unfinished-transfers-warning": "Există transferuri neterminate. Sigur vrei să închizi ErikrafT Drop?",
         "message-received": "Mesaj primit de {{name}} - Apasă pentru a copia",
@@ -58,6 +64,7 @@
         "room-url-copied-to-clipboard": "Link către sala publică copiat în clipboard"
     },
     "header": {
+        "lan-mode_title": "",
         "cancel-share-mode": "Anulare",
         "theme-auto_title": "Adaptează tema la sistem",
         "install_title": "Instalează ErikrafT Drop",
@@ -105,6 +112,19 @@
         "transferring": "Transferul…"
     },
     "dialogs": {
+        "lan-mode-warning": "",
+        "lan-mode-status-found": "",
+        "lan-mode-status-waiting": "",
+        "lan-mode-status-connected": "",
+        "lan-mode-status-connecting": "",
+        "lan-mode-scanning": "",
+        "lan-mode-scan": "",
+        "lan-mode-apply": "",
+        "lan-mode-server-help": "",
+        "lan-mode-server_placeholder": "",
+        "lan-mode-server-label": "",
+        "lan-mode-toggle": "",
+        "lan-mode-title": "",
         "base64-paste-to-send": "Inserați clipboard aici pentru a distribui {{type}}",
         "auto-accept-instructions-2": "pentru a accepta automat toate fișierele trimise de la dispozitivul respectiv.",
         "receive-text-title": "Mesaj primit",
@@ -218,7 +238,8 @@
     },
     "site": {
         "biodrop": "Site"
-    },\n    "chat": {
+    },
+    "chat": {
         "room_local": "",
         "room_paired": "",
         "room_public": "",
@@ -228,6 +249,9 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": "",
-        "discovery": ""}}
+        ,
+        "discover_paired": "",
+        "discovery": ""
+    }
+}
 
