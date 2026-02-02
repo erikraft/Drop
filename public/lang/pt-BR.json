@@ -233,6 +233,7 @@
         "status_failed": "Falha",
         "close_title": "Fechar bate-papo",
         "room_select_title": "Sala do bate-papo",
-        "discover_paired": "Entre dispositivos emparelhados"
+        "discover_paired": "Entre dispositivos emparelhados",
+        "discovery": "Você pode ser descoberto:"
     }
 }

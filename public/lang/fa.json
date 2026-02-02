@@ -108,5 +108,6 @@
         "status_failed": "",
         "close_title": "",
         "room_select_title": ""
-    ,\n        "discover_paired": ""}}
+    ,\n        "discover_paired": "",
+        "discovery": ""}}
 

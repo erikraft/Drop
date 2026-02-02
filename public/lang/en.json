@@ -235,6 +235,7 @@
         "status_failed": "Failed",
         "close_title": "Close chat",
         "room_select_title": "Chat room",
-        "discover_paired": "Between paired devices"
+        "discover_paired": "Between paired devices",
+        "discovery": "You can be discovered:"
     }
 }
