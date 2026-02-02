@@ -222,5 +222,17 @@
     },
     "site": {
         "biodrop": "网站"
+    },
+    "chat": {
+        "room_local": "Local network",
+        "room_paired": "Paired devices",
+        "room_public": "Room {{roomId}}",
+        "peers_status": "Peers: {{count}}",
+        "status_sent": "Sent",
+        "status_delivered": "Delivered",
+        "status_failed": "Failed",
+        "close_title": "Close chat",
+        "room_select_title": "Chat room",
+        "discover_paired": "Between paired devices"
     }
 }
