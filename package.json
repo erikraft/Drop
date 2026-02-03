@@ -1,6 +1,6 @@
 {
   "name": "erikraft-drop",
-  "version": "1.12.3",
+  "version": "1.12.4",
   "type": "module",
   "description": "A maneira mais fácil de transferir arquivos entre dispositivos",
   "main": "server/index.js",

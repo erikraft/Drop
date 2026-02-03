@@ -3690,7 +3690,7 @@ class ChatUI {
         this.$footerBadgeLocal = this.$panel.querySelector('.chat-footer .badge-room-ip');
         this.$footerBadgePaired = this.$panel.querySelector('.chat-footer .badge-room-secret');
         this.$footerBadgePublic = this.$panel.querySelector('.chat-footer .badge-room-public-id');
-        this.$footerDiscovery = this.$panel.querySelector('.chat-footer .chat-discovery');
+        this.$footerDiscovery = this.$panel.querySelector('.chat-footer .discovery-wrapper');
 
         if (!this.$panel || !this.$toggle || !this.$roomSelect || !this.$messages || !this.$form || !this.$input) {
             return;

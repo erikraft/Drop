@@ -527,6 +527,25 @@ footer .logo {
     margin: 15px auto auto;
 }
 
+.chat-footer .discovery-wrapper {
+    border: 2px solid var(--border-color);
+    background-color: rgb(var(--bg-color));
+    box-shadow: none;
+    font-size: 12px;
+    padding: 2px 6px;
+    gap: 6px;
+}
+
+.chat-footer .discovery-wrapper .row.center {
+    white-space: nowrap;
+    justify-content: flex-start;
+}
+
+.chat-footer .discovery-wrapper .row.center.wrap {
+    justify-content: flex-start;
+    gap: 4px;
+}
+
 .discovery-wrapper .badge {
     word-break: keep-all;
     margin: 2px;

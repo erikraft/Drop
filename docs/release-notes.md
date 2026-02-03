@@ -1,6 +1,6 @@
 ## 🚀 Release Notes — Chat Notifications & Media Upload Improvements
 
-**Version:** v1.12.3
+**Version:** v1.12.4
 **Date:** 2026-02-03
 
 ### ✨ New
@@ -10,6 +10,7 @@
 * Browser **title and favicon indicators** now update when there are unread chat messages.
 * Web notifications are triggered for **new chat messages when the tab is in background**.
 * Chat footer now uses the **full discovery panel layout** (same as the main HTML).
+* Chat discovery panel is now **compact and aligned** to match the original UI (no wrapping on the title).
 
 ### 🛠 Improvements
 
@@ -18,6 +19,7 @@
 * Improved visual feedback for **unread messages received while the chat popup is closed** (pinned highlight until reload).
 * Better UX consistency with existing notification patterns in the app.
 * Download button in chat attachments now uses the **download icon** instead of text.
+* Chat discovery footer styling now matches the original spacing and alignment.
 
 ### 🐛 Fixes
 
