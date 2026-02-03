@@ -1,38 +1,44 @@
----
+
+
+## 🚀 Release Notes — Chat Notifications & Media Upload Improvements
+
+**Version:** v1.12.1
+**Date:** 2026-02-03
 
 ### ✨ New
 
-* Added **LAN room label** in the discovery footer and chat popup, making it clearer when users are discoverable on local networks.
-* Introduced **LAN room badge** for better visual identification of local network rooms.
-* Prepared new **i18n keys for Crowdin**, allowing missing translations to be completed by the community.
+* Chat now supports **image and video attachments** with in-line preview and a download button.
+* Added a **media upload button** (clip icon) next to the message input for faster sharing.
+* Browser **title and favicon indicators** now update when there are unread chat messages.
+* Web notifications are triggered for **new chat messages when the tab is in background**.
 
-### 🌍 Internationalization (i18n)
+### 🛠 Improvements
 
-* Fixed **PT-BR translations** to proper Portuguese.
-* Fixed **EN translations** to proper English.
-* Normalized translation keys to avoid mixed-language strings.
-* Added empty placeholders for other languages to be completed via Crowdin.
+* Chat notifications are now properly handled by the `Notifications` service instead of being bound to the wrong UI class.
+* Notification triggering logic was standardized using `document.hidden` and `document.visibilityState`.
+* Improved visual feedback for **unread messages received while the chat popup is closed** (pinned highlight until reload).
+* Better UX consistency with existing notification patterns in the app.
 
-### 🎨 UI Improvements
+### 🐛 Fixes
 
-* Updated room badges to include **LAN mode styling**.
-* Improved consistency of badge colors across IP, LAN, and paired/secret rooms.
+* Fixed an issue where chat notifications **did not fire** due to the handler being registered in the wrong class (`ChatUI` instead of `Notifications`).
+* Fixed cases where messages received while the chat popup was closed **were not rendered when reopening**.
 
-### 🛠️ Developer Experience
+### 📁 Files Changed
 
-* Improved translation structure to simplify future localization updates.
-* Minor cleanup in styles related to room badges.
+* `public/scripts/ui.js`
+* `public/scripts/network.js`
+* `public/index.html`
+* `public/styles/styles-main.css`
 
-### 🐞 Fixes
+### 🧪 Testing
 
-* Fixed mixed-language labels appearing in some UI sections.
-* Resolved missing translation keys that caused fallback text to appear incorrectly.
+* Not executed (manual testing recommended):
 
----
+  * Reload the page (Ctrl + F5).
+  * Send a message from another device/tab.
+  * Keep the chat tab in background to verify browser notifications.
+  * Test image/video upload and rendering in chat.
 
-### ⚠️ Known Limitations
-
-* LAN mode uses local signaling for WebRTC (no native device discovery due to browser limitations).
-* Full offline peer discovery is only available in native desktop builds (e.g., Electron).
-
----
+* uma versão **curta** de Release Notes (pra descrição do GitHub Release), e
+* uma versão **super resumida** pra mensagem de update dentro do app.
