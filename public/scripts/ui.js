@@ -3431,8 +3431,13 @@ class Notifications {
         return notification;
     }
 
+    _shouldNotify() {
+        return (document.hidden || document.visibilityState !== 'visible')
+            && Notification.permission === 'granted';
+    }
+
     _messageNotification(message, peerId) {
-        if (document.visibilityState !== 'visible') {
+        if (this._shouldNotify()) {
             const peerDisplayName = $(peerId).ui._displayName();
             if (/^((https?:\/\/|www)[abcdefghijklmnopqrstuvwxyz0123456789\-._~:\/?#\[\]@!$&'()*+,;=]+)$/.test(message.toLowerCase())) {
                 const notification = this._notify(Localization.getTranslation("notifications.link-received", null, { name: peerDisplayName }), message);
@@ -3445,8 +3450,35 @@ class Notifications {
         }
     }
 
+    _chatMessageNotification(message) {
+        if (!this._shouldNotify()) return;
+        if (!message) return;
+
+        const peerDisplayName = message.senderName || this._fallbackPeerName(message.senderId || '');
+        const title = Localization.getTranslation("notifications.message-received", null, { name: peerDisplayName });
+
+        let body = message.text || '';
+        if (!body && message.attachment) {
+            body = message.attachment.name
+                || (message.attachment.kind === 'video'
+                    ? Localization.getTranslation("dialogs.title-file")
+                    : Localization.getTranslation("dialogs.title-image"));
+        }
+
+        const notification = this._notify(title, body);
+        this._bind(notification, _ => window.focus());
+    }
+
+    _fallbackPeerName(peerId) {
+        const peer = $(peerId);
+        if (peer && peer.ui && peer.ui._displayName) {
+            return peer.ui._displayName();
+        }
+        return peerId;
+    }
+
     _downloadNotification(files) {
-        if (document.visibilityState !== 'visible') {
+        if (this._shouldNotify()) {
             let imagesOnly = files.every(file => file.type.split('/')[0] === 'image');
             let title;
 
@@ -3473,7 +3505,7 @@ class Notifications {
     }
 
     _requestNotification(request, peerId) {
-        if (document.visibilityState !== 'visible') {
+        if (this._shouldNotify()) {
             let imagesOnly = request.header.every(header => header.mime.split('/')[0] === 'image');
             let displayName = $(peerId).querySelector('.name').textContent;
 
@@ -4027,33 +4059,6 @@ class ChatUI {
             this.$toggle.classList.add('has-unread');
             this._setChatDocumentIndicators();
         }
-    }
-
-    _chatMessageNotification(message) {
-        if (document.visibilityState === 'visible') return;
-        if (!message || !message.senderId) return;
-
-        const peerDisplayName = message.senderName || this._fallbackPeerName(message.senderId);
-        const title = Localization.getTranslation("notifications.message-received", null, { name: peerDisplayName });
-
-        let body = message.text || '';
-        if (!body && message.attachment) {
-            body = message.attachment.name
-                || (message.attachment.kind === 'video'
-                    ? Localization.getTranslation("dialogs.title-file")
-                    : Localization.getTranslation("dialogs.title-image"));
-        }
-
-        const notification = this._notify(title, body);
-        this._bind(notification, _ => window.focus());
-    }
-
-    _fallbackPeerName(peerId) {
-        const peer = $(peerId);
-        if (peer && peer.ui && peer.ui._displayName) {
-            return peer.ui._displayName();
-        }
-        return peerId;
     }
 
     _onChatAck(detail) {
