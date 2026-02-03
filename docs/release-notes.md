@@ -1,6 +1,6 @@
 ## 🚀 Release Notes — Chat Notifications & Media Upload Improvements
 
-**Version:** v1.12.2
+**Version:** v1.12.3
 **Date:** 2026-02-03
 
 ### ✨ New
@@ -9,7 +9,7 @@
 * Added a **media upload button** (clip icon) next to the message input for faster sharing.
 * Browser **title and favicon indicators** now update when there are unread chat messages.
 * Web notifications are triggered for **new chat messages when the tab is in background**.
-* Added a **duplicate discovery panel** in the chat popup to mirror the main UI layout.
+* Chat footer now uses the **full discovery panel layout** (same as the main HTML).
 
 ### 🛠 Improvements
 
@@ -39,7 +39,7 @@
   * Reload the page (Ctrl + F5).
   * Send a message from another device/tab.
   * Keep the chat tab in background to verify browser notifications.
-  * Test image/video upload and rendering in chat.
+  * Test image upload and rendering in chat.
 
 * uma versão **curta** de Release Notes (pra descrição do GitHub Release), e
 * uma versão **super resumida** pra mensagem de update dentro do app.
