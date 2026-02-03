@@ -796,6 +796,7 @@ body.chat-open {
     border-radius: 12px;
     max-width: 80%;
     word-wrap: break-word;
+    position: relative;
 }
 
 .chat-message--out {
@@ -830,6 +831,21 @@ body.chat-open {
     border-top: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.12);
 }
 
+.chat-input .chat-upload {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.08);
+}
+
+.chat-input .chat-upload:hover {
+    background: rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.16);
+}
+
 .chat-input input {
     flex: 1;
     border-radius: 10px;
@@ -840,13 +856,79 @@ body.chat-open {
 }
 
 #chat-send {
+    width: 36px;
+    height: 36px;
+    padding: 0;
     background: rgba(66, 133, 244, 0.18);
     color: rgb(var(--text-color));
-    border-radius: 14px;
-    font-weight: 600;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #chat-send:hover {
+    background: rgba(66, 133, 244, 0.28);
+}
+
+.chat-message--unread {
+    border-color: rgba(var(--accent-color), 0.65);
+    box-shadow: 0 0 0 1px rgba(var(--accent-color), 0.2);
+}
+
+.chat-message--unread::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-color);
+}
+
+.chat-attachment {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-attachment img,
+.chat-attachment video {
+    max-width: min(320px, 100%);
+    width: 100%;
+    border-radius: 10px;
+    background: rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.08);
+}
+
+.chat-attachment-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 11px;
+}
+
+.chat-caption {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.chat-attachment-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat-download {
+    background: rgba(66, 133, 244, 0.18);
+    color: inherit;
+    border-radius: 10px;
+    padding: 4px 8px;
+    font-size: 11px;
+}
+
+.chat-download:hover {
     background: rgba(66, 133, 244, 0.28);
 }
 

@@ -1048,6 +1048,7 @@ class Peer {
             message: {
                 id: payload.id,
                 text: payload.text || '',
+                attachment: payload.attachment || null,
                 roomType: roomType,
                 roomId: roomId,
                 timestamp: timestamp,
@@ -1473,6 +1474,7 @@ class PeersManager {
         const roomId = detail.roomId;
         const messageId = detail.messageId;
         const text = detail.text;
+        const attachment = detail.attachment || null;
         const timestamp = detail.timestamp || Date.now();
         const senderId = detail.senderId || sessionStorage.getItem('peer_id');
         const senderName = detail.senderName || this._displayName;
@@ -1490,6 +1492,7 @@ class PeersManager {
             const result = peer.sendChatMessage({
                 id: messageId,
                 text: text,
+                attachment: attachment,
                 roomType: roomType,
                 roomId: roomId,
                 senderName: senderName,

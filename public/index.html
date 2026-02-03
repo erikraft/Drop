@@ -646,11 +646,22 @@
                 </div>
                 <div id="chat-messages" class="chat-messages"></div>
                 <form id="chat-form" class="chat-input">
+                    <button id="chat-upload" type="button" class="icon-button chat-upload" data-i18n-key="share"
+                        data-i18n-attrs="title aria-label">
+                        <svg width="20" height="20" aria-hidden="true">
+                            <use xlink:href="#clip"></use>
+                        </svg>
+                    </button>
+                    <input id="chat-upload-input" type="file" accept="image/*,video/*" multiple hidden>
                     <input id="chat-input" type="text" autocomplete="off" spellcheck="true"
                         data-i18n-key="dialogs.message" data-i18n-attrs="title placeholder"
                         title="Insira a mensagem a ser enviada" placeholder="Texto">
                     <button id="chat-send" type="submit" class="btn btn-rounded"
-                        data-i18n-key="dialogs.send" data-i18n-attrs="text">Enviar</button>
+                        data-i18n-key="dialogs.send" data-i18n-attrs="title aria-label">
+                        <svg width="20" height="20" aria-hidden="true">
+                            <use xlink:href="#send"></use>
+                        </svg>
+                    </button>
                 </form>
                 <div class="chat-footer">
                     <svg class="icon logo" xmlns="http://www.w3.org/2000/svg" viewBox="1.4198 0.9793 13.76 14.24">
@@ -1570,6 +1581,19 @@
             <path d="M0 224L0 416c0 17.7 14.3 32 32 32l64 0 0-112c0-8.8 7.2-16 16-16s16 7.2 16 16l0 112 64 0 0-112c0-8.8 7.2-16 16-16s16 7.2 16 16l0 112 64 0 0-112c0-8.8 7.2-16 16-16s16 7.2 16 16l0 112 64 0 0-112c0-8.8 7.2-16 16-16s16 7.2 16 16l0 112 64 0c17.7 0 32-14.3 32-32l0-192c0-17.7-14.3-32-32-32l-32 0 0-32c0-17.7-14.3-32-32-32l-32 0 0-32c0-17.7-14.3-32-32-32L160 64c-17.7 0-32 14.3-32 32l0 32-32 0c-17.7 0-32 14.3-32 32l0 32-32 0c-17.7 0-32 14.3-32 32z"
             fill="currentColor" />
         </symbol>
+
+        <symbol id="clip" viewBox="0 0 448 512">
+            <!--!Font Awesome Free v6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+            <path d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"
+            fill="currentColor" />
+        </symbol>
+
+        <symbol id="send" viewBox="0 0 512 512">
+            <!--! Font Awesome Pro 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc. -->
+            <path d="M57.6 35.8C23.1 20.6-11.3 57.4 6.1 90.9l63 121.2c4.4 8.4 12.6 14.1 22 15.3c0 0 0 0 0 0L266 249.3c3.4 .4 6 3.3 6 6.7s-2.6 6.3-6 6.7L91.1 284.6s0 0 0 0c-9.4 1.2-17.6 6.9-22 15.3L6.1 421.1c-17.4 33.5 17 70.2 51.6 55.1L492.9 285.3c25.5-11.2 25.5-47.4 0-58.6L57.6 35.8z"
+            fill="currentColor" />
+       </symbol>
+
         <symbol id="desktop-mac" viewBox="0 0 24 24">
             <path
                 d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z">

@@ -3388,6 +3388,7 @@ class Notifications {
 
 
         Events.on('text-received', e => this._messageNotification(e.detail.text, e.detail.peerId));
+        Events.on('chat-message-received', e => this._chatMessageNotification(e.detail.message));
         Events.on('files-received', e => this._downloadNotification(e.detail.files));
         Events.on('files-transfer-request', e => this._requestNotification(e.detail.request, e.detail.peerId));
     }
@@ -3650,6 +3651,8 @@ class ChatUI {
         this.$messages = $('chat-messages');
         this.$form = $('chat-form');
         this.$input = $('chat-input');
+        this.$uploadBtn = $('chat-upload');
+        this.$uploadInput = $('chat-upload-input');
         this.$status = $('chat-room-status');
         this.$footer = this.$panel.querySelector('.chat-footer');
         this.$footerBadgeLocal = this.$panel.querySelector('.chat-footer .badge-room-ip');
@@ -3667,6 +3670,7 @@ class ChatUI {
         this._messageIndex = new Map();
         this._currentRoomKey = null;
         this._selfDisplayName = '';
+        this._defaultTitle = 'ErikrafT Drop | Transfer Files Cross-Platform. No Setup, No Signup.';
 
         this.$toggle.addEventListener('click', _ => this.toggle());
         if (this.$close) {
@@ -3674,6 +3678,10 @@ class ChatUI {
         }
         this.$roomSelect.addEventListener('change', _ => this._onRoomSelected());
         this.$form.addEventListener('submit', e => this._onSubmit(e));
+        if (this.$uploadBtn && this.$uploadInput) {
+            this.$uploadBtn.addEventListener('click', _ => this.$uploadInput.click());
+            this.$uploadInput.addEventListener('change', e => this._onUploadSelected(e));
+        }
 
         if (window.ResizeObserver) {
             this._resizeObserver = new ResizeObserver(entries => {
@@ -3706,6 +3714,7 @@ class ChatUI {
             this._renderRoom(this._currentRoomKey);
         }
         this._clearUnread(this._currentRoomKey);
+        this._updateChatDocumentIndicators();
         this._setSidebarWidth(this.$panel.getBoundingClientRect().width);
         this._scrollToBottom();
     }
@@ -3830,6 +3839,7 @@ class ChatUI {
         if (this._rooms.size > 0 && Array.from(this._rooms.values()).every(r => r.unread === 0)) {
             this.$toggle.classList.remove('has-unread');
         }
+        this._updateChatDocumentIndicators();
     }
 
     _scrollToBottom() {
@@ -3903,19 +3913,109 @@ class ChatUI {
         this.$input.value = '';
     }
 
+    async _onUploadSelected(e) {
+        const files = Array.from(e.target.files || []);
+        if (!files.length || !this._currentRoomKey) {
+            if (this.$uploadInput) this.$uploadInput.value = '';
+            return;
+        }
+
+        const room = this._rooms.get(this._currentRoomKey);
+        if (!room) {
+            if (this.$uploadInput) this.$uploadInput.value = '';
+            return;
+        }
+
+        const validFiles = files.filter(file => file.type.startsWith('image/') || file.type.startsWith('video/'));
+        if (!validFiles.length) {
+            Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
+            if (this.$uploadInput) this.$uploadInput.value = '';
+            return;
+        }
+
+        for (const file of validFiles) {
+            await this._sendAttachment(file, room);
+        }
+
+        if (this.$uploadInput) this.$uploadInput.value = '';
+    }
+
+    async _sendAttachment(file, room) {
+        const dataUrl = await this._readFileAsDataUrl(file);
+        if (!dataUrl) return;
+
+        const messageId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const timestamp = Date.now();
+        const senderId = sessionStorage.getItem('peer_id') || 'self';
+        const senderName = this._selfDisplayName || senderId;
+        const kind = file.type.startsWith('video/') ? 'video' : 'image';
+
+        const attachment = {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            kind: kind,
+            dataUrl: dataUrl
+        };
+
+        const message = {
+            id: messageId,
+            text: '',
+            attachment: attachment,
+            roomType: room.roomType,
+            roomId: room.roomId,
+            timestamp,
+            senderId,
+            senderName,
+            direction: 'out',
+            status: room.peers.size ? 'sent' : 'failed',
+            pending: new Set(room.peers)
+        };
+
+        room.messages.push(message);
+        this._messageIndex.set(messageId, message);
+        if (this._currentRoomKey === room.key) {
+            this._appendMessageNode(message);
+            this._scrollToBottom();
+        }
+
+        Events.fire('chat-send', {
+            roomType: room.roomType,
+            roomId: room.roomId,
+            text: '',
+            attachment: attachment,
+            messageId: messageId,
+            timestamp: timestamp,
+            senderId: senderId,
+            senderName: senderName
+        });
+    }
+
+    _readFileAsDataUrl(file) {
+        return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(file);
+        });
+    }
+
     _onChatReceived(message) {
         const room = this._ensureRoom(message.roomType, message.roomId);
         this._refreshRoomSelect();
         const senderName = message.senderName || this._peerNames.get(message.senderId) || message.senderId;
+        const isUnread = this._currentRoomKey !== room.key || this.$panel.hidden;
         const entry = {
             id: message.id || `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
             text: message.text,
+            attachment: message.attachment || null,
             roomType: message.roomType,
             roomId: message.roomId,
             timestamp: message.timestamp,
             senderId: message.senderId,
             senderName: senderName,
-            direction: 'in'
+            direction: 'in',
+            unread: isUnread
         };
         room.messages.push(entry);
         if (this._currentRoomKey === room.key && !this.$panel.hidden) {
@@ -3925,7 +4025,35 @@ class ChatUI {
         else {
             room.unread += 1;
             this.$toggle.classList.add('has-unread');
+            this._setChatDocumentIndicators();
         }
+    }
+
+    _chatMessageNotification(message) {
+        if (document.visibilityState === 'visible') return;
+        if (!message || !message.senderId) return;
+
+        const peerDisplayName = message.senderName || this._fallbackPeerName(message.senderId);
+        const title = Localization.getTranslation("notifications.message-received", null, { name: peerDisplayName });
+
+        let body = message.text || '';
+        if (!body && message.attachment) {
+            body = message.attachment.name
+                || (message.attachment.kind === 'video'
+                    ? Localization.getTranslation("dialogs.title-file")
+                    : Localization.getTranslation("dialogs.title-image"));
+        }
+
+        const notification = this._notify(title, body);
+        this._bind(notification, _ => window.focus());
+    }
+
+    _fallbackPeerName(peerId) {
+        const peer = $(peerId);
+        if (peer && peer.ui && peer.ui._displayName) {
+            return peer.ui._displayName();
+        }
+        return peerId;
     }
 
     _onChatAck(detail) {
@@ -3954,6 +4082,9 @@ class ChatUI {
         const node = document.createElement('div');
         node.className = `chat-message ${message.direction === 'out' ? 'chat-message--out' : 'chat-message--in'}`;
         node.dataset.messageId = message.id;
+        if (message.unread) {
+            node.classList.add('chat-message--unread');
+        }
 
         const meta = document.createElement('div');
         meta.className = 'chat-meta';
@@ -3970,7 +4101,18 @@ class ChatUI {
 
         const body = document.createElement('div');
         body.className = 'chat-body';
-        body.innerText = message.text;
+        if (message.attachment && message.attachment.dataUrl) {
+            body.appendChild(this._renderAttachment(message.attachment));
+            if (message.text) {
+                const caption = document.createElement('div');
+                caption.className = 'chat-caption';
+                caption.innerText = message.text;
+                body.appendChild(caption);
+            }
+        }
+        else {
+            body.innerText = message.text;
+        }
 
         node.appendChild(meta);
         node.appendChild(body);
@@ -3985,11 +4127,77 @@ class ChatUI {
         this.$messages.appendChild(node);
     }
 
+    _renderAttachment(attachment) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'chat-attachment';
+
+        const type = attachment.type || '';
+        const kind = attachment.kind || (type.startsWith('video/') ? 'video' : 'image');
+
+        let media;
+        if (kind === 'video') {
+            media = document.createElement('video');
+            media.controls = true;
+            media.playsInline = true;
+            media.src = attachment.dataUrl;
+        }
+        else {
+            media = document.createElement('img');
+            media.src = attachment.dataUrl;
+            media.alt = attachment.name || Localization.getTranslation('title-file');
+        }
+
+        wrapper.appendChild(media);
+
+        const meta = document.createElement('div');
+        meta.className = 'chat-attachment-meta';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'chat-attachment-name';
+        nameSpan.innerText = attachment.name || Localization.getTranslation('title-file');
+
+        const download = document.createElement('a');
+        download.className = 'chat-download btn btn-small btn-rounded';
+        download.href = attachment.dataUrl;
+        download.download = attachment.name || 'attachment';
+        download.innerText = Localization.getTranslation('download');
+
+        meta.appendChild(nameSpan);
+        meta.appendChild(download);
+        wrapper.appendChild(meta);
+
+        return wrapper;
+    }
+
     _updateMessageStatus(messageId, status) {
         const node = this.$messages.querySelector(`[data-message-id="${messageId}"] .chat-status`);
         if (node) {
             node.innerText = this._statusLabel(status);
         }
+    }
+
+    _setChatDocumentIndicators() {
+        const unreadCount = this._getUnreadCount();
+        document.title = unreadCount <= 1
+            ? `${Localization.getTranslation("document-titles.message-received")} - ErikrafT Drop`
+            : `${Localization.getTranslation("document-titles.message-received-plural", null, { count: unreadCount })} - ErikrafT Drop`;
+        changeFavicon("images/favicon-96x96-notification.png");
+    }
+
+    _updateChatDocumentIndicators() {
+        const hasUnread = this._getUnreadCount() > 0;
+        if (!hasUnread && document.visibilityState === 'visible') {
+            document.title = this._defaultTitle;
+            changeFavicon("images/favicon-96x96.png");
+        }
+    }
+
+    _getUnreadCount() {
+        let total = 0;
+        this._rooms.forEach(room => {
+            total += room.unread || 0;
+        });
+        return total;
     }
 
     _statusLabel(status) {
