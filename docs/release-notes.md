@@ -1,5 +1,3 @@
-
-
 ## 🚀 Release Notes — Chat Notifications & Media Upload Improvements
 
 **Version:** v1.12.1
