@@ -3958,7 +3958,15 @@ class ChatUI {
         const meta = document.createElement('div');
         meta.className = 'chat-meta';
         const time = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        meta.innerHTML = `<span>${message.senderName || message.senderId}</span><span>${time}</span>`;
+
+        const nameSpan = document.createElement('span');
+        nameSpan.innerText = message.senderName || message.senderId;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.innerText = time;
+
+        meta.appendChild(nameSpan);
+        meta.appendChild(timeSpan);
 
         const body = document.createElement('div');
         body.className = 'chat-body';
