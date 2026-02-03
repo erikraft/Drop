@@ -1,14 +1,15 @@
 ## 🚀 Release Notes — Chat Notifications & Media Upload Improvements
 
-**Version:** v1.12.1
+**Version:** v1.12.2
 **Date:** 2026-02-03
 
 ### ✨ New
 
-* Chat now supports **image and video attachments** with in-line preview and a download button.
+* Chat now supports **image attachments** with in-line preview and a download button.
 * Added a **media upload button** (clip icon) next to the message input for faster sharing.
 * Browser **title and favicon indicators** now update when there are unread chat messages.
 * Web notifications are triggered for **new chat messages when the tab is in background**.
+* Added a **duplicate discovery panel** in the chat popup to mirror the main UI layout.
 
 ### 🛠 Improvements
 
@@ -16,11 +17,13 @@
 * Notification triggering logic was standardized using `document.hidden` and `document.visibilityState`.
 * Improved visual feedback for **unread messages received while the chat popup is closed** (pinned highlight until reload).
 * Better UX consistency with existing notification patterns in the app.
+* Download button in chat attachments now uses the **download icon** instead of text.
 
 ### 🐛 Fixes
 
 * Fixed an issue where chat notifications **did not fire** due to the handler being registered in the wrong class (`ChatUI` instead of `Notifications`).
 * Fixed cases where messages received while the chat popup was closed **were not rendered when reopening**.
+* Disabled **video attachments** in chat upload since delivery was unreliable.
 
 ### 📁 Files Changed
 
