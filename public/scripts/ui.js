@@ -3958,7 +3958,7 @@ class ChatUI {
             return;
         }
 
-        const validFiles = files.filter(file => file.type.startsWith('image/') || file.type.startsWith('video/'));
+        const validFiles = files.filter(file => file.type.startsWith('image/'));
         if (!validFiles.length) {
             Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
             if (this.$uploadInput) this.$uploadInput.value = '';
@@ -3980,7 +3980,7 @@ class ChatUI {
         const timestamp = Date.now();
         const senderId = sessionStorage.getItem('peer_id') || 'self';
         const senderName = this._selfDisplayName || senderId;
-        const kind = file.type.startsWith('video/') ? 'video' : 'image';
+        const kind = 'image';
 
         const attachment = {
             name: file.name,
@@ -4165,7 +4165,18 @@ class ChatUI {
         download.className = 'chat-download btn btn-small btn-rounded';
         download.href = attachment.dataUrl;
         download.download = attachment.name || 'attachment';
-        download.innerText = Localization.getTranslation('download');
+        const downloadLabel = Localization.getTranslation('download');
+        download.setAttribute('title', downloadLabel);
+        download.setAttribute('aria-label', downloadLabel);
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '16');
+        svg.setAttribute('height', '16');
+        svg.setAttribute('aria-hidden', 'true');
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#download');
+        svg.appendChild(use);
+        download.appendChild(svg);
 
         meta.appendChild(nameSpan);
         meta.appendChild(download);
