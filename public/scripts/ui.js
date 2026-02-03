@@ -2536,6 +2536,7 @@ class LanModeDialog extends Dialog {
         this.$serverInput = $('lan-server-input');
         this.$scanBtn = $('lan-scan-btn');
         this.$applyBtn = $('lan-apply-btn');
+        this.$lanBadges = document.querySelectorAll('.lan-badge');
         this.$connectionStatus = $('lan-connection-status');
         this.$peerStatus = $('lan-peer-status');
 
@@ -2576,6 +2577,7 @@ class LanModeDialog extends Dialog {
         }
         this.$toggle.checked = enabled;
         this.$serverInput.value = server;
+        this._updateLanBadges(enabled);
     }
 
     _applySettings() {
@@ -2607,6 +2609,7 @@ class LanModeDialog extends Dialog {
             server: server
         });
 
+        this._updateLanBadges(enabled);
         this._updateStatus();
     }
 
@@ -2673,21 +2676,24 @@ class LanModeDialog extends Dialog {
     _updateStatus() {
         const enabled = this.$toggle.checked;
         if (!enabled) {
-            this.$connectionStatus.textContent = '';
-            this.$peerStatus.textContent = '';
+            if (this.$connectionStatus) this.$connectionStatus.textContent = '';
+            if (this.$peerStatus) this.$peerStatus.textContent = '';
             return;
         }
 
-        const connectionStatus = this._wsConnected
-            ? Localization.getTranslation("dialogs.lan-mode-status-connected")
-            : Localization.getTranslation("dialogs.lan-mode-status-connecting");
+        if (this.$connectionStatus) this.$connectionStatus.textContent = '';
+        if (this.$peerStatus) this.$peerStatus.textContent = '';
+    }
 
-        const peerStatus = this._ipPeers.size > 0
-            ? Localization.getTranslation("dialogs.lan-mode-status-found")
-            : Localization.getTranslation("dialogs.lan-mode-status-waiting");
-
-        this.$connectionStatus.textContent = connectionStatus;
-        this.$peerStatus.textContent = peerStatus;
+    _updateLanBadges(enabled) {
+        this.$lanBadges.forEach(badge => {
+            if (enabled) {
+                badge.removeAttribute('hidden');
+            }
+            else {
+                badge.setAttribute('hidden', true);
+            }
+        });
     }
 
     async _scanCommonHosts() {

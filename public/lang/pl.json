@@ -56,10 +56,6 @@
     },
     "dialogs": {
         "lan-mode-warning": "",
-        "lan-mode-status-found": "",
-        "lan-mode-status-waiting": "",
-        "lan-mode-status-connected": "",
-        "lan-mode-status-connecting": "",
         "lan-mode-scanning": "",
         "lan-mode-scan": "",
         "lan-mode-apply": "",
@@ -248,10 +244,8 @@
         "status_delivered": "",
         "status_failed": "",
         "close_title": "",
-        "room_select_title": ""
-        ,
+        "room_select_title": "",
         "discover_paired": "",
         "discovery": ""
     }
 }
-
