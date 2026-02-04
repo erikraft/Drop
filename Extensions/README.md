@@ -47,6 +47,10 @@ Browser extensions enhance your web browsing experience by adding new features a
 - **Download**: [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons)
 - **Development**: [Edge Extension Documentation](https://learn.microsoft.com/en-us/microsoft-edge/extensions-chromium/)
 
+#### Opera Extensions
+- **Download**: [Opera Add-ons](https://addons.opera.com/)
+- **Development**: [Opera Extension Documentation](https://dev.opera.com/extensions/)
+
 ## Open VSX Registry Extensions
 
 The Open VSX Registry is an open-source alternative to the Visual Studio Code Marketplace, providing a platform for publishing and discovering VS Code extensions.
