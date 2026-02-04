@@ -18,6 +18,8 @@ This directory contains an example bot built on [discord.js](https://discord.js.
 
 - Automatic registration of the slash command `/drop`.
 - Downloads attachments sent with the command directly from the Discord API.
+- Supports sending up to 3 files or text messages per command.
+- Supports receiving files and text messages from paired devices.
 - Connects to ErikrafT Drop via WebSocket using `client_type=discord-bot`, ensuring the device is displayed on the web interface in real time.
 - Sends files through the same message queue used by browsers: the recipient receives the request, accepts it, and files are transmitted in chunks until final confirmation.
 - Ephemeral responses (visible only to the command user), preventing content leaks in public channels.
@@ -26,7 +28,7 @@ This directory contains an example bot built on [discord.js](https://discord.js.
 
 ## Prerequisites
 
-- Node.js 20 or higher.
+- Node.js 18 or higher.
 - A registered bot application on the [Discord Developer Portal](https://discord.com/developers/applications).
 - Permissions to register slash commands in the desired server.
 - An ErikrafT Drop instance (public or self-hosted) with WebSocket fallback enabled.
@@ -74,12 +76,27 @@ This directory contains an example bot built on [discord.js](https://discord.js.
 - `src/commands/drop.js` – Implementation of the `/drop` command with flow control and user feedback.
 - `src/client/dropClient.js` – Headless ErikrafT Drop client responsible for connecting via WebSocket and sending files.
 
+## Command Options
+
+The `/drop` command supports the following options:
+
+- `key` (required): 6-digit pairing key from ErikrafT Drop
+- `name` (optional): Custom display name shown to the recipient
+- `message` (optional): Text message to send (up to 2000 characters)
+- `file1`, `file2`, `file3` (optional): Files to attach and send
+
+**Note:** You can send either files OR a text message, not both simultaneously.
+
 ## Usage Flow
 
 1. In ErikrafT Drop, open the **Pair Device** menu and generate a 6-digit key.
-2. Run the `/drop` command, enter the key, and send up to three attachments.
-3. The bot downloads the attachments, connects to the signaling server, enters the secret room, and requests the transfer from the recipient.
+2. Run the `/drop` command with the key and optionally:
+   - Attach up to 3 files to send them
+   - Add a text message to send it
+   - Set a custom display name
+3. The bot connects to the signaling server, enters the secret room, and requests the transfer from the recipient.
 4. As soon as the recipient accepts on the website, files are transmitted in chunks and automatically appear on the web interface.
+5. To receive files, run `/drop` with just the pairing key and wait for the sender to initiate the transfer.
 
 ## Security
 
