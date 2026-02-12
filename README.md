@@ -11,12 +11,13 @@
     Fork of ErikrafT Drop.
   </p>
 
-![Stars](https://img.shields.io/github/stars/erikraft/Drop?style=social)
-![Forks](https://custom-icon-badges.demolab.com/github/forks/erikraft/Drop?logo=fork&style=social&logoColor=000000)
-![Watchers](https://custom-icon-badges.demolab.com/github/watchers/erikraft/Drop?logo=eye&style=social&logoColor=000000)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/erikraft/Drop)
 [![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)
 ![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)
+
+![Stars](https://img.shields.io/github/stars/erikraft/Drop?style=social)
+![Forks](https://img.shields.io/github/forks/erikraft/Drop?style=social)
+![Watchers](https://img.shields.io/github/watchers/erikraft/Drop?style=social)
 
 [🤝🏻 Form a Partnership](PARTNERSHIP.md)
 
