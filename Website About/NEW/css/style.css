@@ -288,6 +288,181 @@
          overflow-wrap: break-word;
       }
 
+      .self-host-card {
+         background: linear-gradient(150deg, rgba(15, 23, 42, 0.88) 0%, rgba(10, 15, 30, 0.88) 100%);
+      }
+
+      .self-host-benefit-item {
+         align-items: flex-start;
+      }
+
+      .self-host-benefit-icon {
+         width: 1.2rem;
+         text-align: center;
+         flex-shrink: 0;
+      }
+
+      .self-host-terminal-shell {
+         border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      .self-host-terminal-content {
+         line-height: 1.5;
+      }
+
+      .terminal-path {
+         letter-spacing: 0.02em;
+      }
+
+      .terminal-command-row {
+         align-items: flex-start;
+      }
+
+      .tech-grid-layer {
+         position: relative;
+         isolation: isolate;
+         overflow: hidden;
+         --tech-grid-cell: 48px;
+         --tech-grid-opacity: 0.08;
+         --tech-grid-opacity-safe: clamp(0.05, var(--tech-grid-opacity, 0.08), 0.15);
+         --tech-grid-offset-x: 0px;
+         --tech-grid-offset-y: 0px;
+         --tech-grid-shift-x: 0px;
+         --tech-grid-shift-y: 0px;
+         --tech-grid-parallax-speed: 0.3;
+      }
+
+      .tech-grid-layer > * {
+         position: relative;
+         z-index: 1;
+      }
+
+      .tech-grid-layer::before {
+         content: "";
+         position: absolute;
+         inset: -2px;
+         pointer-events: none;
+         opacity: 0;
+         opacity: var(--tech-grid-opacity-safe, 0.08);
+         z-index: 0;
+         background-image:
+            linear-gradient(to right, rgba(148, 163, 184, 0.04) 0.5px, transparent 0.5px),
+            linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 0.5px, transparent 0.5px),
+            linear-gradient(to right, rgba(56, 189, 248, 0.02) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(56, 189, 248, 0.02) 1px, transparent 1px),
+            radial-gradient(ellipse at 25% 15%, rgba(56, 189, 248, 0.03), transparent 45%),
+            radial-gradient(ellipse at 75% 85%, rgba(56, 189, 248, 0.02), transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(2, 6, 23, 0) 35%, rgba(2, 6, 23, 0.4) 100%);
+         background-size:
+            48px 48px,
+            48px 48px,
+            144px 144px,
+            144px 144px,
+            100% 100%,
+            100% 100%,
+            100% 100%;
+         background-size:
+            var(--tech-grid-cell) var(--tech-grid-cell),
+            var(--tech-grid-cell) var(--tech-grid-cell),
+            calc(var(--tech-grid-cell) * 3) calc(var(--tech-grid-cell) * 3),
+            calc(var(--tech-grid-cell) * 3) calc(var(--tech-grid-cell) * 3),
+            100% 100%,
+            100% 100%,
+            100% 100%;
+         background-position:
+            0 0,
+            0 0,
+            0 0,
+            0 0,
+            center,
+            center,
+            center;
+         background-position:
+            var(--tech-grid-offset-x, 0px) var(--tech-grid-offset-y, 0px),
+            var(--tech-grid-offset-x, 0px) var(--tech-grid-offset-y, 0px),
+            var(--tech-grid-offset-x, 0px) var(--tech-grid-offset-y, 0px),
+            var(--tech-grid-offset-x, 0px) var(--tech-grid-offset-y, 0px),
+            center,
+            center,
+            center;
+         transform: translate3d(0, 0, 0);
+         transform: translate3d(var(--tech-grid-shift-x, 0px), var(--tech-grid-shift-y, 0px), 0);
+         transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.1s linear;
+         will-change: transform, opacity;
+         animation: techGridFadeIn 2s ease-out;
+      }
+
+      @supports ((-webkit-mask-image: radial-gradient(circle at center, black, transparent)) or (mask-image: radial-gradient(circle at center, black, transparent))) {
+         .tech-grid-layer::before {
+            -webkit-mask-image: radial-gradient(ellipse at 50% 50%,
+                  rgba(0, 0, 0, 0.92) 0%,
+                  rgba(0, 0, 0, 0.75) 45%,
+                  rgba(0, 0, 0, 0.35) 72%,
+                  rgba(0, 0, 0, 0.15) 85%,
+                  transparent 100%);
+            mask-image: radial-gradient(ellipse at 50% 50%,
+                  rgba(0, 0, 0, 0.92) 0%,
+                  rgba(0, 0, 0, 0.75) 45%,
+                  rgba(0, 0, 0, 0.35) 72%,
+                  rgba(0, 0, 0, 0.15) 85%,
+                  transparent 100%);
+         }
+      }
+
+      @keyframes techGridFadeIn {
+         0% {
+            opacity: 0;
+            transform: translate3d(var(--tech-grid-shift-x, 0px), calc(var(--tech-grid-shift-y, 0px) + 20px), 0);
+         }
+         100% {
+            opacity: var(--tech-grid-opacity-safe, 0.08);
+            transform: translate3d(var(--tech-grid-shift-x, 0px), var(--tech-grid-shift-y, 0px), 0);
+         }
+      }
+
+      .tech-grid-layer.tech-grid-hidden::before {
+         opacity: 0 !important;
+         transition: opacity 0.4s ease-out;
+      }
+
+      .tech-grid-layer.tech-grid-visible::before {
+         opacity: var(--tech-grid-opacity-safe, 0.08) !important;
+      }
+
+      .tech-grid-layer.tech-grid-out::before {
+         opacity: clamp(0.03, calc(var(--tech-grid-opacity-safe, 0.08) * 0.4), 0.08);
+      }
+
+      .tech-grid-debug .tech-grid-layer {
+         outline: 1px dashed rgba(56, 189, 248, 0.55);
+         outline-offset: -1px;
+      }
+
+      .tech-grid-debug .tech-grid-layer::before {
+         opacity: 0.34 !important;
+      }
+
+      @media (max-width: 767px), (prefers-reduced-motion: reduce) {
+         .tech-grid-layer::before {
+            display: none;
+         }
+      }
+
+      .terminal-command-row > span:last-child {
+         min-width: 0;
+         overflow-wrap: anywhere;
+         word-break: break-word;
+      }
+
+      .self-host-terminal-input::placeholder {
+         color: #94a3b8;
+      }
+
+      .self-host-link {
+         border-radius: 0.85rem;
+         padding: 0.45rem 0.2rem;
+      }
+
       footer a {
          overflow-wrap: anywhere;
       }
@@ -428,6 +603,20 @@
             gap: 2rem;
          }
 
+         .self-host-card {
+            padding: 1.5rem !important;
+         }
+
+         .self-host-terminal-content {
+            height: 24rem !important;
+            padding: 1.1rem !important;
+            font-size: 0.82rem;
+         }
+
+         .self-host-benefits {
+            gap: 0.9rem;
+         }
+
          /* CORREÇÃO CRÍTICA: Code block centralizado e sem overflow */
          .code-block {
             max-width: calc(100vw - 2rem) !important;
@@ -484,6 +673,62 @@
             grid-template-columns: 1fr !important;
          }
 
+         .self-host-grid {
+            gap: 1.5rem !important;
+         }
+
+         .self-host-card {
+            border-radius: 1rem;
+            padding: 1.1rem !important;
+         }
+
+         .self-host-benefits-wrap h3,
+         .self-host-terminal-wrap h3 {
+            font-size: 1.25rem !important;
+            margin-bottom: 0.9rem !important;
+         }
+
+         .self-host-benefits li {
+            font-size: 0.95rem;
+            gap: 0.7rem !important;
+         }
+
+         .self-host-terminal-header {
+            padding: 0.7rem 0.8rem !important;
+            flex-wrap: wrap;
+            row-gap: 0.5rem;
+         }
+
+         .terminal-path {
+            width: 100%;
+            margin-left: 0 !important;
+            font-size: 0.68rem !important;
+            text-align: left;
+         }
+
+         .self-host-terminal-content {
+            height: 20.5rem !important;
+            padding: 0.85rem !important;
+            font-size: 0.75rem !important;
+         }
+
+         .self-host-terminal-input {
+            font-size: 0.72rem;
+         }
+
+         .self-host-links {
+            margin-top: 1rem !important;
+            gap: 0.65rem !important;
+         }
+
+         .self-host-link {
+            width: 100%;
+            justify-content: center;
+            border: 1px solid rgba(56, 189, 248, 0.22);
+            background: rgba(14, 116, 144, 0.1);
+            padding: 0.75rem 0.9rem;
+         }
+
          /* Reduz espaçamento em seções */
          section {
             padding-top: 2rem !important;
@@ -525,6 +770,16 @@
          /* Ajusta botões para mobile */
          .flex-col.sm\:flex-row {
             flex-direction: column !important;
+         }
+
+         .self-host-terminal-content {
+            height: 19rem !important;
+            font-size: 0.7rem !important;
+         }
+
+         .self-host-link {
+            font-size: 0.95rem;
+            gap: 0.55rem !important;
          }
 
          /* Reduz padding do header */

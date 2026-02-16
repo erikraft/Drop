@@ -25,6 +25,7 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <script src="js/tech-grid.js"></script>
    <style>
 
    </style>
@@ -363,44 +364,44 @@
       <div class="container mx-auto px-4">
          <h2 class="text-4xl font-bold text-center text-white mb-6">Host your own ErikrafT Drop</h2>
          <p class="text-xl text-center text-gray-400 mb-16 max-w-3xl mx-auto">Open source and easy to deploy on your own infrastructure.</p>
-         <div class="max-w-5xl mx-auto glass-card p-10 rounded-3xl">
-            <div class="grid md:grid-cols-2 gap-12">
-               <div>
+         <div class="max-w-5xl mx-auto glass-card p-10 rounded-3xl self-host-card">
+            <div class="grid md:grid-cols-2 gap-12 self-host-grid">
+               <div class="self-host-benefits-wrap">
                   <h3 class="text-2xl font-bold text-white mb-6">Why host it yourself?</h3>
-                  <ul class="space-y-5 text-gray-400">
-                     <li class="flex items-start gap-4">
-                        <i class="fas fa-shield-alt text-sky-400 mt-1 text-xl"></i>
+                  <ul class="space-y-5 text-gray-400 self-host-benefits">
+                     <li class="flex items-start gap-4 self-host-benefit-item">
+                        <i class="fas fa-shield-alt text-sky-400 mt-1 text-xl self-host-benefit-icon"></i>
                         <span>Full control over your data and privacy.</span>
                      </li>
-                     <li class="flex items-start gap-4">
-                        <i class="fas fa-users text-sky-400 mt-1 text-xl"></i>
+                     <li class="flex items-start gap-4 self-host-benefit-item">
+                        <i class="fas fa-users text-sky-400 mt-1 text-xl self-host-benefit-icon"></i>
                         <span>Internal implementation for teams or organizations.</span>
                      </li>
-                     <li class="flex items-start gap-4">
-                        <i class="fas fa-bolt text-sky-400 mt-1 text-xl"></i>
+                     <li class="flex items-start gap-4 self-host-benefit-item">
+                        <i class="fas fa-bolt text-sky-400 mt-1 text-xl self-host-benefit-icon"></i>
                         <span>Increased speed on local networks.</span>
                      </li>
-                     <li class="flex items-start gap-4">
-                        <i class="fas fa-code text-sky-400 mt-1 text-xl"></i>
+                     <li class="flex items-start gap-4 self-host-benefit-item">
+                        <i class="fas fa-code text-sky-400 mt-1 text-xl self-host-benefit-icon"></i>
                         <span>Customization and source code extension.</span>
                      </li>
                   </ul>
                </div>
-               <div>
+               <div class="self-host-terminal-wrap">
                   <h3 class="text-2xl font-bold text-white mb-6">How to deploy</h3>
                   <div class="flex-1 w-full max-w-lg">
-                     <div class="bg-[#0c0c0c] border border-white/10 shadow-2xl shadow-emerald-900/10 rounded-xl overflow-hidden">
-                        <div class="bg-[#1a1a1a] border-b border-white/5 flex items-center px-4 py-2">
+                     <div class="bg-[#0c0c0c] border border-white/10 shadow-2xl shadow-emerald-900/10 rounded-xl overflow-hidden self-host-terminal-shell">
+                        <div class="bg-[#1a1a1a] border-b border-white/5 flex items-center px-4 py-2 self-host-terminal-header">
                            <div class="flex gap-2">
                               <div class="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500"></div>
                               <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                               <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                            </div>
-                           <span class="text-xs text-gray-500 font-mono ml-auto">erikraft-drop@workspace:~</span>
+                           <span class="text-xs text-gray-500 font-mono ml-auto terminal-path">erikraft-drop@workspace:~</span>
                         </div>
-                        <div class="p-6 font-mono text-sm h-[26rem] overflow-y-auto custom-scrollbar">
+                        <div class="p-6 font-mono text-sm h-[26rem] overflow-y-auto custom-scrollbar self-host-terminal-content">
                            <div class="mb-2 block" style="opacity: 1; transform: none;">
-                              <span class="flex gap-2">
+                              <span class="flex gap-2 terminal-command-row">
                                  <span class="text-pink-500 font-bold">&gt;</span>
                                  <span class="text-blue-400 font-bold">~</span>
                                  <span class="text-emerald-400">&gt; git clone https://github.com/erikraft/Drop.git</span>
@@ -413,14 +414,14 @@
                               <span class="text-gray-500">remote: Enumerating objects: 123, done.</span>
                            </div>
                            <div class="mb-2 block" style="opacity: 1; transform: none;">
-                              <span class="flex gap-2">
+                              <span class="flex gap-2 terminal-command-row">
                                  <span class="text-pink-500 font-bold">&gt;</span>
                                  <span class="text-blue-400 font-bold">~</span>
                                  <span class="text-emerald-400">&gt; cd Drop</span>
                               </span>
                            </div>
                            <div class="mb-2 block" style="opacity: 1; transform: none;">
-                              <span class="flex gap-2">
+                              <span class="flex gap-2 terminal-command-row">
                                  <span class="text-pink-500 font-bold">&gt;</span>
                                  <span class="text-blue-400 font-bold">Drop</span>
                                  <span class="text-emerald-400">&gt; npm install</span>
@@ -433,7 +434,7 @@
                               <span class="text-gray-500">✓ Dependencies installed successfully</span>
                            </div>
                            <div class="mb-2 block" style="opacity: 1; transform: none;">
-                              <span class="flex gap-2">
+                              <span class="flex gap-2 terminal-command-row">
                                  <span class="text-pink-500 font-bold">&gt;</span>
                                  <span class="text-blue-400 font-bold">Drop</span>
                                  <span class="text-emerald-400">&gt; npm start</span>
@@ -448,7 +449,7 @@
                            <div class="flex gap-2 mt-3">
                               <span class="text-pink-500 font-bold">&gt;</span>
                               <span class="text-blue-400 font-bold">Drop</span>
-                              <input type="text" id="terminal-input" class="flex-1 bg-transparent outline-none text-gray-300 caret-emerald-400" placeholder="Ready for next command..." value="">
+                              <input type="text" id="terminal-input" class="flex-1 bg-transparent outline-none text-gray-300 caret-emerald-400 self-host-terminal-input" placeholder="Ready for next command..." value="">
                            </div>
                            <div id="error-output" class="hidden mt-2 block">
                               <span class="text-red-500 font-mono text-sm">bash: command not found</span>
@@ -456,11 +457,11 @@
                         </div>
                      </div>
                   </div>
-                  <div class="mt-8 flex flex-col gap-4">
-                     <a href="https://github.com/erikraft/drop" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-sky-400 hover:text-sky-300 font-bold transition-colors">
+                  <div class="mt-8 flex flex-col gap-4 self-host-links">
+                     <a href="https://github.com/erikraft/drop" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-sky-400 hover:text-sky-300 font-bold transition-colors self-host-link">
                         <i class="fab fa-github text-xl"></i> View on GitHub
                      </a>
-                     <a href="https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-sky-400 hover:text-sky-300 font-bold transition-colors">
+                     <a href="https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-sky-400 hover:text-sky-300 font-bold transition-colors self-host-link">
                         <i class="fas fa-book text-xl"></i> View Tutorial
                      </a>
                   </div>
@@ -862,6 +863,142 @@
 
 
    <script>
+      (() => {
+         if (document.documentElement.dataset.techGridInit === 'true') {
+            return;
+         }
+         document.documentElement.dataset.techGridInit = 'true';
+
+         const root = document.documentElement;
+         const debugFromQuery = new URLSearchParams(window.location.search).has('techGridDebug');
+         const debugFromStorage = window.localStorage.getItem('techGridDebug') === '1';
+         const debugEnabled = debugFromQuery || debugFromStorage || window.__TECH_GRID_DEBUG__ === true;
+         if (debugEnabled) {
+            root.classList.add('tech-grid-debug');
+         }
+         window.toggleTechGridDebug = (force) => {
+            const next = typeof force === 'boolean' ? force : !root.classList.contains('tech-grid-debug');
+            root.classList.toggle('tech-grid-debug', next);
+            window.localStorage.setItem('techGridDebug', next ? '1' : '0');
+         };
+
+         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+         const smallScreen = window.matchMedia('(max-width: 767px)').matches;
+         const lowDeviceMemory = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory <= 4;
+         const lowCpuCores = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4;
+         const disableTechGrid = prefersReducedMotion || smallScreen || lowDeviceMemory || lowCpuCores;
+
+         if (disableTechGrid) {
+            root.classList.add('tech-grid-disabled');
+            return;
+         }
+
+         const allSections = Array.from(document.querySelectorAll('section'));
+         if (allSections.length < 2) {
+            return;
+         }
+
+         const shuffle = (items) => {
+            for (let i = items.length - 1; i > 0; i -= 1) {
+               const j = Math.floor(Math.random() * (i + 1));
+               [items[i], items[j]] = [items[j], items[i]];
+            }
+            return items;
+         };
+
+         const readStoredIndexes = () => {
+            try {
+               const stored = window.sessionStorage.getItem('techGridSectionIndexesV1');
+               if (!stored) return null;
+               const parsed = JSON.parse(stored);
+               if (!Array.isArray(parsed) || parsed.length === 0) return null;
+               const valid = parsed.filter((idx) => Number.isInteger(idx) && idx >= 0 && idx < allSections.length);
+               return valid.length ? valid : null;
+            } catch {
+               return null;
+            }
+         };
+
+         const storeIndexes = (indexes) => {
+            try {
+               window.sessionStorage.setItem('techGridSectionIndexesV1', JSON.stringify(indexes));
+            } catch {
+               // no-op: storage can fail in strict privacy modes
+            }
+         };
+
+         const minCount = Math.min(2, allSections.length);
+         const maxCount = Math.max(minCount, Math.floor(allSections.length * 0.55));
+         const storedIndexes = readStoredIndexes();
+         const chosenIndexes = storedIndexes || shuffle(allSections.map((_, idx) => idx))
+            .slice(0, Math.max(minCount, Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount));
+         if (!storedIndexes) {
+            storeIndexes(chosenIndexes);
+         }
+         const selectedSections = chosenIndexes.map((idx) => allSections[idx]).filter(Boolean);
+
+         const randomInRange = (min, max) => (Math.random() * (max - min)) + min;
+         const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+         selectedSections.forEach((section) => {
+            section.classList.add('tech-grid-layer');
+            section.style.setProperty('--tech-grid-cell', `${Math.round(randomInRange(34, 56))}px`);
+            section.style.setProperty('--tech-grid-opacity', clamp(randomInRange(0.085, 0.145), 0.08, 0.2).toFixed(3));
+            section.style.setProperty('--tech-grid-offset-x', `${Math.round(randomInRange(-24, 24))}px`);
+            section.style.setProperty('--tech-grid-offset-y', `${Math.round(randomInRange(-24, 24))}px`);
+            section.dataset.techGridSpeed = randomInRange(0.035, 0.095).toFixed(3);
+            section.dataset.techGridXDrift = randomInRange(-0.015, 0.015).toFixed(3);
+            section.classList.remove('tech-grid-out');
+         });
+
+         let ticking = false;
+         const updateTechGrid = () => {
+            selectedSections.forEach((section) => {
+               const rect = section.getBoundingClientRect();
+               const centerDelta = rect.top + (rect.height / 2) - (window.innerHeight / 2);
+               const speed = Number(section.dataset.techGridSpeed || 0.06);
+               const xDrift = Number(section.dataset.techGridXDrift || 0);
+               const yShift = -(centerDelta * speed);
+               const xShift = centerDelta * xDrift;
+               section.style.setProperty('--tech-grid-shift-y', `${yShift.toFixed(2)}px`);
+               section.style.setProperty('--tech-grid-shift-x', `${xShift.toFixed(2)}px`);
+
+               const isInView = rect.bottom > (window.innerHeight * 0.05) && rect.top < (window.innerHeight * 0.95);
+               section.classList.toggle('tech-grid-out', !isInView);
+            });
+            ticking = false;
+         };
+
+         if (typeof IntersectionObserver === 'function') {
+            const visibilityObserver = new IntersectionObserver((entries) => {
+               entries.forEach((entry) => {
+                  entry.target.classList.toggle('tech-grid-out', !entry.isIntersecting);
+               });
+            }, { threshold: 0.04, rootMargin: '0px 0px 0px 0px' });
+            selectedSections.forEach((section) => visibilityObserver.observe(section));
+         }
+
+         window.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(updateTechGrid);
+         }, { passive: true });
+
+         window.addEventListener('resize', () => {
+            window.requestAnimationFrame(updateTechGrid);
+         }, { passive: true });
+
+         if (prefersReducedMotion) {
+            selectedSections.forEach((section) => {
+               section.style.setProperty('--tech-grid-shift-y', '0px');
+               section.style.setProperty('--tech-grid-shift-x', '0px');
+            });
+         }
+
+         updateTechGrid();
+         window.requestAnimationFrame(updateTechGrid);
+      })();
+
       // Smooth scrolling for anchor links
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
          anchor.addEventListener('click', function (e) {
