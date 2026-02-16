@@ -30,7 +30,7 @@
    </style>
 </head>
 
-<body>
+<body class="bg-[radial-gradient(circle_at_80%_20%,#1f2937_0%,#0f172a_46%,#030712_100%)] min-h-screen">
    <!-- Header/Navigation -->
    <header class="bg-[#0f172a]/95 backdrop-blur-xl border-b border-white/5 sticky top-0 z-[100] header-container">
       <div class="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
@@ -81,7 +81,7 @@
       </div>
    </section>
    <!-- Features Section -->
-   <section id="features" class="py-24 bg-[#0a0a0a]">
+   <section id="features" class="py-24 bg-[radial-gradient(circle_at_15%_25%,#1f2937_0%,#0f172a_46%,#030712_100%)]">
       <div class="container mx-auto px-4">
          <h2 class="text-4xl font-bold text-center text-white mb-6">Powerful features for file sharing</h2>
          <p class="text-xl text-center text-gray-400 mb-16 max-w-3xl mx-auto">Everything you need to share files securely and privately, surpassing traditional cloud storage services.</p>
@@ -241,7 +241,7 @@
    </section>
 
    <!-- How It Works Section -->
-   <section id="how-it-works" class="py-24 bg-[#020617]">
+   <section id="how-it-works" class="py-24 bg-[radial-gradient(circle_at_50%_50%,#1f2937_0%,#0f172a_46%,#030712_100%)]">
       <div class="container mx-auto px-4">
          <h2 class="text-4xl font-bold text-center text-white mb-6">How it works</h2>
          <p class="text-xl text-center text-gray-400 mb-16 max-w-3xl mx-auto">ErikrafT Drop uses WebRTC technology to create direct and secure connections between browsers.</p>
@@ -303,7 +303,7 @@
       </div>
    </section>
    <!-- Advantages Section -->
-   <section id="advantages" class="py-24 bg-[#0a0a0a]">
+   <section id="advantages" class="py-24 bg-[radial-gradient(circle_at_30%_70%,#1f2937_0%,#0f172a_46%,#030712_100%)]">
       <div class="container mx-auto px-4">
          <h2 class="text-4xl font-bold text-center text-white mb-6">Why choose ErikrafT Drop?</h2>
          <p class="text-xl text-center text-gray-400 mb-16 max-w-3xl mx-auto">The best alternative for file sharing, compared to traditional cloud services.</p>
@@ -359,7 +359,7 @@
    </section>
 
    <!-- Self Host Section -->
-   <section id="self-host" class="py-24 bg-[#020617]">
+   <section id="self-host" class="py-24 bg-[radial-gradient(circle_at_85%_75%,#1f2937_0%,#0f172a_46%,#030712_100%)]">
       <div class="container mx-auto px-4">
          <h2 class="text-4xl font-bold text-center text-white mb-6">Host your own ErikrafT Drop</h2>
          <p class="text-xl text-center text-gray-400 mb-16 max-w-3xl mx-auto">Open source and easy to deploy on your own infrastructure.</p>
@@ -388,13 +388,73 @@
                </div>
                <div>
                   <h3 class="text-2xl font-bold text-white mb-6">How to deploy</h3>
-                  <div class="bg-slate-900/80 rounded-2xl p-6 font-mono text-sm border border-white/5 overflow-hidden">
-                     <pre class="text-gray-300"><code><span class="text-gray-500"># Clone the repository</span>
-<span class="text-sky-400">git clone https://github.com/erikraft/Drop.git</span>
-<span class="text-gray-500"># Install dependencies</span>
-<span class="text-sky-400">npm install</span>
-<span class="text-gray-500"># Start server</span>
-<span class="text-sky-400">npm start</span></code></pre>
+                  <div class="flex-1 w-full max-w-lg">
+                     <div class="bg-[#0c0c0c] border border-white/10 shadow-2xl shadow-emerald-900/10 rounded-xl overflow-hidden">
+                        <div class="bg-[#1a1a1a] border-b border-white/5 flex items-center px-4 py-2">
+                           <div class="flex gap-2">
+                              <div class="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500"></div>
+                              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                              <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                           </div>
+                           <span class="text-xs text-gray-500 font-mono ml-auto">erikraft-drop@workspace:~</span>
+                        </div>
+                        <div class="p-6 font-mono text-sm h-[26rem] overflow-y-auto custom-scrollbar">
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="flex gap-2">
+                                 <span class="text-pink-500 font-bold">&gt;</span>
+                                 <span class="text-blue-400 font-bold">~</span>
+                                 <span class="text-emerald-400">&gt; git clone https://github.com/erikraft/Drop.git</span>
+                              </span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="text-gray-500">Cloning into 'Drop'...</span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="text-gray-500">remote: Enumerating objects: 123, done.</span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="flex gap-2">
+                                 <span class="text-pink-500 font-bold">&gt;</span>
+                                 <span class="text-blue-400 font-bold">~</span>
+                                 <span class="text-emerald-400">&gt; cd Drop</span>
+                              </span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="flex gap-2">
+                                 <span class="text-pink-500 font-bold">&gt;</span>
+                                 <span class="text-blue-400 font-bold">Drop</span>
+                                 <span class="text-emerald-400">&gt; npm install</span>
+                              </span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="text-gray-500">Installing dependencies...</span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="text-gray-500">✓ Dependencies installed successfully</span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="flex gap-2">
+                                 <span class="text-pink-500 font-bold">&gt;</span>
+                                 <span class="text-blue-400 font-bold">Drop</span>
+                                 <span class="text-emerald-400">&gt; npm start</span>
+                              </span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="text-emerald-400">Server running on http://localhost:3000</span>
+                           </div>
+                           <div class="mb-2 block" style="opacity: 1; transform: none;">
+                              <span class="text-gray-300"></span>
+                           </div>
+                           <div class="flex gap-2 mt-3">
+                              <span class="text-pink-500 font-bold">&gt;</span>
+                              <span class="text-blue-400 font-bold">Drop</span>
+                              <input type="text" id="terminal-input" class="flex-1 bg-transparent outline-none text-gray-300 caret-emerald-400" placeholder="Ready for next command..." value="">
+                           </div>
+                           <div id="error-output" class="hidden mt-2 block">
+                              <span class="text-red-500 font-mono text-sm">bash: command not found</span>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                   <div class="mt-8 flex flex-col gap-4">
                      <a href="https://github.com/erikraft/drop" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-sky-400 hover:text-sky-300 font-bold transition-colors">
@@ -988,6 +1048,35 @@
                animateMobileGlitch();
                window.setInterval(animateMobileGlitch, mobileGlitchInterval);
             }, delay);
+         }
+      });
+   </script>
+
+   <script>
+      // Terminal functionality
+      document.addEventListener('DOMContentLoaded', function() {
+         const terminalInput = document.getElementById('terminal-input');
+         const errorOutput = document.getElementById('error-output');
+         
+         if (terminalInput) {
+            terminalInput.addEventListener('keypress', function(e) {
+               if (e.key === 'Enter') {
+                  const command = this.value.trim();
+                  if (command) {
+                     // Show error message
+                     errorOutput.classList.remove('hidden');
+                     errorOutput.innerHTML = `<span class="text-red-500 font-mono text-sm">bash: ${command}: command not found</span>`;
+                     
+                     // Clear input
+                     this.value = '';
+                     
+                     // Hide error after 3 seconds
+                     setTimeout(() => {
+                        errorOutput.classList.add('hidden');
+                     }, 3000);
+                  }
+               }
+            });
          }
       });
    </script>
