@@ -10,24 +10,24 @@ class TechGridLayer {
          // Randomization settings
          randomizationChance: options.randomizationChance || 0.4, // 40% chance per section
          seed: options.seed || Date.now(),
-         
+
          // Performance settings
          parallaxSpeed: options.parallaxSpeed || 0.3,
          debounceDelay: options.debounceDelay || 16, // ~60fps
          reducedMotionMultiplier: options.reducedMotionMultiplier || 0.1,
-         
+
          // Visual settings
          minOpacity: options.minOpacity || 0.05,
          maxOpacity: options.maxOpacity || 0.12,
          cellSizeVariation: options.cellSizeVariation || 8, // px variation
-         
+
          // Responsive breakpoints
          mobileBreakpoint: options.mobileBreakpoint || 768,
-         
+
          // Selectors
          sectionSelector: options.sectionSelector || 'section',
          gridClass: options.gridClass || 'tech-grid-layer',
-         
+
          ...options
       };
 
@@ -38,7 +38,7 @@ class TechGridLayer {
       this.gridInstances = new Map();
       this.scrollY = 0;
       this.rafId = null;
-      
+
       // Performance tracking
       this.lastFrameTime = 0;
       this.frameCount = 0;
@@ -64,13 +64,13 @@ class TechGridLayer {
 
       // Check environment
       this.checkEnvironment();
-      
+
       // Find and process sections
       this.processSections();
-      
+
       // Set up event listeners
       this.setupEventListeners();
-      
+
       this.isInitialized = true;
    }
 
@@ -110,11 +110,11 @@ class TechGridLayer {
     */
    processSections() {
       const sections = document.querySelectorAll(this.config.sectionSelector);
-      
+
       sections.forEach((section, index) => {
          // Generate deterministic random based on section index and seed
          const random = this.seededRandom(this.config.seed + index);
-         
+
          if (random < this.config.randomizationChance) {
             this.applyGridToSection(section, index, random);
          }
@@ -135,7 +135,7 @@ class TechGridLayer {
    applyGridToSection(section, index, randomValue) {
       // Add grid class
       section.classList.add(this.config.gridClass);
-      
+
       // Generate unique properties for this instance
       const instanceConfig = {
          opacity: this.config.minOpacity + (randomValue * (this.config.maxOpacity - this.config.minOpacity)),
@@ -168,10 +168,10 @@ class TechGridLayer {
    setupEventListeners() {
       // Scroll listener with passive flag for performance
       window.addEventListener('scroll', this.handleScroll, { passive: true });
-      
+
       // Resize listener
       window.addEventListener('resize', this.debounce(this.handleResize, 250));
-      
+
       // Reduced motion change listener
       const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       motionQuery.addListener((e) => {
@@ -219,12 +219,12 @@ class TechGridLayer {
          const elementCenter = elementTop + elementHeight / 2;
          const viewportCenter = this.scrollY + viewportHeight / 2;
          const distanceFromCenter = elementCenter - viewportCenter;
-         
+
          // Apply parallax with reduced motion consideration
-         const parallaxMultiplier = this.prefersReducedMotion ? 
-            this.config.reducedMotionMultiplier : 
+         const parallaxMultiplier = this.prefersReducedMotion ?
+            this.config.reducedMotionMultiplier :
             config.parallaxSpeed;
-         
+
          const parallaxY = distanceFromCenter * parallaxMultiplier * 0.1;
          const parallaxX = Math.sin(distanceFromCenter * 0.001) * parallaxMultiplier * 5;
 
@@ -249,7 +249,7 @@ class TechGridLayer {
     */
    handleResize() {
       this.checkEnvironment();
-      
+
       if (this.shouldDisable()) {
          this.destroy();
          return;
@@ -284,23 +284,23 @@ class TechGridLayer {
          const now = performance.now();
          const delta = now - this.lastFrameTime;
          this.lastFrameTime = now;
-         
+
          this.frameCount++;
          if (this.frameCount % 60 === 0) {
             this.fps = 1000 / delta;
-            
+
             // Disable on low performance
             if (this.fps < 30) {
                console.warn('Tech Grid: Low FPS detected, disabling parallax');
                this.config.parallaxSpeed = 0.05;
             }
          }
-         
+
          if (this.isInitialized) {
             requestAnimationFrame(measureFPS);
          }
       };
-      
+
       requestAnimationFrame(measureFPS);
    }
 
@@ -314,7 +314,7 @@ class TechGridLayer {
          // Reduce grid instances on memory pressure
          const instancesToRemove = Math.floor(this.gridInstances.size * 0.3);
          let removed = 0;
-         
+
          this.gridInstances.forEach((config, section) => {
             if (removed < instancesToRemove) {
                section.classList.remove(this.config.gridClass);
@@ -346,13 +346,13 @@ class TechGridLayer {
       // Remove event listeners
       window.removeEventListener('scroll', this.handleScroll);
       window.removeEventListener('resize', this.handleResize);
-      
+
       // Cancel animation frame
       if (this.rafId) {
          cancelAnimationFrame(this.rafId);
          this.rafId = null;
       }
-      
+
       // Clean up grid instances
       this.gridInstances.forEach((config, section) => {
          section.classList.remove(this.config.gridClass, 'tech-grid-visible', 'tech-grid-hidden');
@@ -365,7 +365,7 @@ class TechGridLayer {
          section.style.removeProperty('--tech-grid-shift-y');
          section.style.removeProperty('--tech-grid-shift-x');
       });
-      
+
       this.gridInstances.clear();
       this.isInitialized = false;
    }
