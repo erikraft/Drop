@@ -1225,7 +1225,12 @@
                   if (command) {
                      // Show error message
                      errorOutput.classList.remove('hidden');
-                     errorOutput.innerHTML = `<span class="text-red-500 font-mono text-sm">bash: ${command}: command not found</span>`;
+                     // Safely render the error message without interpreting user input as HTML
+                     errorOutput.textContent = '';
+                     const span = document.createElement('span');
+                     span.className = 'text-red-500 font-mono text-sm';
+                     span.textContent = `bash: ${command}: command not found`;
+                     errorOutput.appendChild(span);
 
                      // Clear input
                      this.value = '';
