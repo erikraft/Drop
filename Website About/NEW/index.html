@@ -392,14 +392,37 @@
                   <div class="flex-1 w-full max-w-lg">
                      <div class="bg-[#0c0c0c] border border-white/10 shadow-2xl shadow-emerald-900/10 rounded-xl overflow-hidden self-host-terminal-shell">
                         <div class="bg-[#1a1a1a] border-b border-white/5 flex items-center px-4 py-2 self-host-terminal-header">
-                           <div class="flex gap-2">
+                           <div class="flex gap-2 items-center">
                               <div class="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500"></div>
-                              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                              <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                              <button type="button" onclick="copyTerminalLogs()" class="w-3 h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-500 flex-shrink-0" aria-label="Copiar logs" title="Copiar logs"></button>
+                              <div class="relative" id="ai-menu-container">
+                                 <button type="button" onclick="toggleAiMenu()" class="w-3 h-3 rounded-full bg-emerald-500/80 hover:bg-emerald-500 flex-shrink-0" aria-label="Perguntar para IA sobre o site e como funciona a ferramenta" title="Perguntar para IA"></button>
+                                 <div id="ai-menu" class="hidden absolute left-0 top-6 z-30 min-w-44 rounded-md border border-white/10 bg-[#141414] p-1 shadow-xl">
+                                    <button type="button" onclick="openAi('chatgpt')" class="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs text-slate-200 hover:bg-white/10">
+                                       <img src="images/logos/chatgpt.svg" alt="" class="h-3.5 w-3.5 shrink-0">
+                                       <span>ChatGPT</span>
+                                    </button>
+                                    <button type="button" onclick="openAi('perplexity')" class="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs text-slate-200 hover:bg-white/10">
+                                       <img src="images/logos/perplexity.svg" alt="" class="h-3.5 w-3.5 shrink-0">
+                                       <span>Perplexity</span>
+                                    </button>
+                                    <button type="button" onclick="openAi('claude')" class="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs text-slate-200 hover:bg-white/10">
+                                       <img src="images/logos/claude.svg" alt="" class="h-3.5 w-3.5 shrink-0">
+                                       <span>Claude</span>
+                                    </button>
+                                    <button type="button" onclick="openAi('grok')" class="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs text-slate-200 hover:bg-white/10">
+                                       <img src="images/logos/grok.svg" alt="" class="h-3.5 w-3.5 shrink-0">
+                                       <span>Grok</span>
+                                    </button>
+                                 </div>
+                              </div>
                            </div>
                            <span class="text-xs text-gray-500 font-mono ml-auto terminal-path">erikraft-drop@workspace:~</span>
                         </div>
-                        <div class="p-6 font-mono text-sm h-[26rem] overflow-y-auto custom-scrollbar self-host-terminal-content">
+                        <div class="p-6 font-mono text-sm h-[26rem] overflow-y-auto custom-scrollbar self-host-terminal-content relative">
+                           <div id="copied-toast" class="hidden absolute right-4 top-4 z-40 rounded-md border border-emerald-300/30 bg-emerald-500/15 px-3 py-1.5 text-xs text-emerald-100 shadow-lg">
+                              Logs Copiados
+                           </div>
                            <div class="mb-2 block" style="opacity: 1; transform: none;">
                               <span class="flex gap-2 terminal-command-row">
                                  <span class="text-pink-500 font-bold">&gt;</span>
@@ -1214,6 +1237,142 @@
                   }
                }
             });
+         }
+      });
+
+      // Funções dos botões do terminal
+      function copyTerminalLogs() {
+         const terminalContent = document.querySelector('.self-host-terminal-content');
+         const logs = Array.from(terminalContent.querySelectorAll('div.mb-2'))
+            .map(div => {
+               const spans = div.querySelectorAll('span');
+               if (spans.length > 0) {
+                  return Array.from(spans).map(span => span.textContent).join(' ');
+               }
+               return div.textContent;
+            })
+            .filter(text => text.trim())
+            .join('\n');
+
+         if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(logs || 'Sem logs.').then(() => {
+               showCopiedToast();
+            }).catch(() => {
+               // Fallback for older browsers
+               fallbackCopyTextToClipboard(logs || 'Sem logs.');
+               showCopiedToast();
+            });
+         } else {
+            // Fallback for older browsers
+            fallbackCopyTextToClipboard(logs || 'Sem logs.');
+            showCopiedToast();
+         }
+      }
+
+      function fallbackCopyTextToClipboard(text) {
+         const textArea = document.createElement('textarea');
+         textArea.value = text;
+         textArea.style.position = 'fixed';
+         textArea.style.left = '-999999px';
+         textArea.style.top = '-999999px';
+         document.body.appendChild(textArea);
+         textArea.focus();
+         textArea.select();
+         
+         try {
+            document.execCommand('copy');
+         } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+         }
+         
+         document.body.removeChild(textArea);
+      }
+
+      function showCopiedToast() {
+         const toast = document.getElementById('copied-toast');
+         toast.classList.remove('hidden');
+         
+         setTimeout(() => {
+            toast.classList.add('hidden');
+         }, 1800);
+      }
+
+      function toggleAiMenu() {
+         const menu = document.getElementById('ai-menu');
+         const isVisible = !menu.classList.contains('hidden');
+         
+         if (isVisible) {
+            menu.classList.add('hidden');
+         } else {
+            menu.classList.remove('hidden');
+         }
+      }
+
+      function openAi(providerId) {
+         const providers = {
+            chatgpt: {
+               url: (query) => `https://chatgpt.com/?q=${query}`,
+            },
+            perplexity: {
+               url: (query) => `https://www.perplexity.ai/search/new?q=${query}`,
+            },
+            claude: {
+               url: (query) => `https://claude.ai/new?q=${query}`,
+            },
+            grok: {
+               url: (query) => `https://grok.com/?q=${query}`,
+            }
+         };
+
+         const provider = providers[providerId];
+         if (!provider) return;
+
+         const terminalContent = document.querySelector('.self-host-terminal-content');
+         const logs = Array.from(terminalContent.querySelectorAll('div.mb-2'))
+            .slice(-60)
+            .map(div => {
+               const spans = div.querySelectorAll('span');
+               if (spans.length > 0) {
+                  return Array.from(spans).map(span => span.textContent).join(' ');
+               }
+               return div.textContent;
+            })
+            .filter(text => text.trim())
+            .join('\n');
+
+         const prompt = [
+            'Tenho dúvidas sobre este site e como funciona esta ferramenta.',
+            'Site: https://biodrop.erikraft.com/',
+            '',
+            'Por favor, fale mais informações do site, como funciona esta ferramenta,',
+            'quais são suas principais funcionalidades, recursos disponíveis e como utilizá-la.',
+            'Analise também a estrutura do site e me dê insights sobre sua proposta de valor.',
+            '',
+            'Logs/Informações:',
+            logs || '(sem informações adicionais)',
+         ].join('\n');
+
+         const query = encodeURIComponent(prompt.slice(0, 3200));
+         window.open(provider.url(query), '_blank', 'noopener,noreferrer');
+         
+         // Fechar menu
+         document.getElementById('ai-menu').classList.add('hidden');
+      }
+
+      // Fechar menu ao clicar fora
+      document.addEventListener('click', function(event) {
+         const aiMenuContainer = document.getElementById('ai-menu-container');
+         const aiMenu = document.getElementById('ai-menu');
+         
+         if (!aiMenuContainer.contains(event.target)) {
+            aiMenu.classList.add('hidden');
+         }
+      });
+
+      // Fechar menu ao pressionar ESC
+      document.addEventListener('keydown', function(event) {
+         if (event.key === 'Escape') {
+            document.getElementById('ai-menu').classList.add('hidden');
          }
       });
    </script>
