@@ -1283,20 +1283,20 @@
          document.body.appendChild(textArea);
          textArea.focus();
          textArea.select();
-         
+
          try {
             document.execCommand('copy');
          } catch (err) {
             console.error('Fallback: Oops, unable to copy', err);
          }
-         
+
          document.body.removeChild(textArea);
       }
 
       function showCopiedToast() {
          const toast = document.getElementById('copied-toast');
          toast.classList.remove('hidden');
-         
+
          setTimeout(() => {
             toast.classList.add('hidden');
          }, 1800);
@@ -1305,7 +1305,7 @@
       function toggleAiMenu() {
          const menu = document.getElementById('ai-menu');
          const isVisible = !menu.classList.contains('hidden');
-         
+
          if (isVisible) {
             menu.classList.add('hidden');
          } else {
@@ -1359,7 +1359,7 @@
 
          const query = encodeURIComponent(prompt.slice(0, 3200));
          window.open(provider.url(query), '_blank', 'noopener,noreferrer');
-         
+
          // Fechar menu
          document.getElementById('ai-menu').classList.add('hidden');
       }
@@ -1368,7 +1368,7 @@
       document.addEventListener('click', function(event) {
          const aiMenuContainer = document.getElementById('ai-menu-container');
          const aiMenu = document.getElementById('ai-menu');
-         
+
          if (!aiMenuContainer.contains(event.target)) {
             aiMenu.classList.add('hidden');
          }
