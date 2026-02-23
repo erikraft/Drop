@@ -17,6 +17,16 @@
     "primary": "#4285f4"
   },
 
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity"
+    ]
+  },
+
   "navigation": {
     "groups": [
       {
