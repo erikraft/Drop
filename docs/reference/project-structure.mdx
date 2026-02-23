@@ -1,0 +1,364 @@
+---
+title: "Project Structure"
+description: "Complete overview of ErikrafT Drop's file structure, organization, and key components."
+---
+
+# Project Structure
+
+ErikrafT Drop follows a well-organized structure separating client-side and server-side components, with clear separation of concerns for maintainability and scalability.
+
+## Root Directory Structure
+
+```
+Drop/
+├── public/                 # Client-side application
+├── server/                 # Server-side application
+├── docs/                   # Documentation
+├── scripts/                 # Build and utility scripts
+├── Android/                 # Android application
+├── Extensions/               # Browser extensions
+├── Discord/                 # Discord bot/activity
+├── erikraftdrop-cli/       # Command-line interface
+├── Shortcut/                # iOS shortcut
+├── Website About/           # Website assets
+├── package.json             # Node.js dependencies
+├── server.js               # Main server entry point
+├── docker-compose.yml        # Docker configuration
+└── README.md               # Project documentation
+```
+
+## Client-Side Structure (`public/`)
+
+### Main Application Files
+```
+public/
+├── index.html              # Main application entry point
+├── manifest.json           # PWA manifest
+├── service-worker.js        # PWA service worker
+├── styles/                # CSS stylesheets
+├── scripts/               # JavaScript modules
+├── images/                # Image assets
+├── fonts/                 # Font files
+├── sounds/                # Audio files
+├── lang/                  # Localization files
+└── .well-known/          # Web app configuration
+```
+
+### JavaScript Modules (`public/scripts/`)
+```
+scripts/
+├── main.js                    # Main application controller
+├── network.js                 # WebRTC and networking logic
+├── ui.js                      # User interface components
+├── ui-main.js                 # Main UI controller
+├── util.js                    # Utility functions
+├── localization.js             # Internationalization
+├── persistent-storage.js       # IndexedDB management
+├── browser-tabs-connector.js   # Cross-tab communication
+├── content-moderation.js       # Content filtering
+├── ai-image-client.js         # AI image processing
+├── photopea-integration.js    # Image editing integration
+└── worker/                    # Web Workers
+    └── crypto-worker.js         # Cryptographic operations
+```
+
+### Stylesheets (`public/styles/`)
+```
+styles/
+├── styles.css              # Main stylesheet
+├── styles-deferred.css    # Lazy-loaded styles
+└── fonts.css              # Font definitions
+```
+
+### Localization (`public/lang/`)
+```
+lang/
+├── en.json                 # English translations
+├── de.json                 # German translations
+├── fr.json                 # French translations
+├── es.json                 # Spanish translations
+├── it.json                 # Italian translations
+├── pt.json                 # Portuguese translations
+├── ru.json                 # Russian translations
+├── zh-CN.json              # Chinese (Simplified) translations
+└── ja.json                 # Japanese translations
+```
+
+## Server-Side Structure (`server/`)
+
+### Main Server Files
+```
+server/
+├── index.js                 # Main server application
+├── server.js               # HTTP server setup
+├── ws-server.js            # WebSocket server implementation
+├── peer.js                 # Peer connection management
+├── helper.js               # Utility functions
+├── proxy-server.js         # Reverse proxy functionality
+└── services/               # Additional services
+    ├── ai-image.js          # AI image processing
+    └── shardcloud.js        # Cloud storage integration
+```
+
+### Data Models (`server/model/`)
+```
+model/
+└── room-secrets.js         # Room secret management
+```
+
+## Key Components
+
+### Client-Side Architecture
+
+#### Main Application (`public/scripts/main.js`)
+```javascript
+class ErikrafTdrop {
+    constructor() {
+        this.$headerNotificationBtn = $('notification');
+        this.$headerEditPairedDevicesBtn = $('edit-paired-devices');
+        this.$footerPairedDevicesBadge = $$('.discovery-wrapper .badge-room-secret');
+        this.$chatFooterPairedDevicesBadge = $$('#chat-panel .badge-room-secret');
+        this.$headerInstallBtn = $('install');
+
+        this.deferredStyles = [
+            "styles/styles-deferred.css"
+        ];
+        this.deferredScripts = [
+            "scripts/browser-tabs-connector.js",
+            "scripts/util.js",
+            "scripts/network.js",
+            "scripts/ai-image-client.js",
+            "scripts/ui.js",
+            "scripts/libs/heic2any.min.js",
+            "scripts/libs/no-sleep.min.js",
+            "scripts/libs/qr-code.min.js",
+            "scripts/libs/zip.min.js",
+            "scripts/content-moderation.js"
+        ];
+    }
+}
+```
+
+#### Network Layer (`public/scripts/network.js`)
+```javascript
+// Key classes for networking
+class ServerConnection          // WebSocket connection management
+class RTCPeer                  // WebRTC peer implementation
+class WSPeer                   // WebSocket fallback peer
+class PeersManager             // Peer connection management
+class FileChunker              // File chunking for transfer
+class FileDigester              // File reassembly
+```
+
+#### UI Components (`public/scripts/ui.js`)
+```javascript
+// UI component classes
+class PairDeviceDialog          // Device pairing interface
+class EditPairedDevicesDialog  // Paired devices management
+class ReceiveFileDialog        // File reception interface
+class SendFileDialog          // File sending interface
+class Dialog                  // Base dialog component
+```
+
+### Server-Side Architecture
+
+#### WebSocket Server (`server/ws-server.js`)
+```javascript
+export default class ErikrafTdropWsServer {
+    constructor(server, conf) {
+        this._conf = conf;
+        this._rooms = {};           // Room management
+        this._roomSecrets = {};      // Pairing secrets
+        this._keepAliveTimers = {};  // Connection monitoring
+        this._wss = new WebSocketServer({ server });
+    }
+}
+```
+
+#### Peer Management (`server/peer.js`)
+```javascript
+export default class Peer {
+    constructor(socket, request, conf) {
+        this.socket = socket;
+        this.ip = this._setIP(request);
+        this.id = this._setPeerId(request);
+        this.rtcSupported = this._setRtcSupported(request);
+        this.name = this._setName(request);
+        this.roomSecrets = [];
+        this.pairKey = null;
+    }
+}
+```
+
+## Configuration Files
+
+### Package Configuration (`package.json`)
+```json
+{
+  "name": "erikraft-drop",
+  "version": "1.12.4",
+  "type": "module",
+  "description": "A maneira mais fácil de transferir arquivos entre dispositivos",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "start:prod": "node server/index.js --rate-limit --auto-restart",
+    "build": "npm install --omit=dev"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "dotenv": "^16.6.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^7.5.1",
+    "http-proxy-middleware": "^3.0.5",
+    "multer": "^2.0.1",
+    "redis": "^4.6.11",
+    "ua-parser-js": "^2.0.5",
+    "undici": "^6.23.0",
+    "unique-names-generator": "^4.7.1",
+    "ws": "^8.18.2"
+  },
+  "engines": {
+    "node": ">=20.18.1"
+  }
+}
+```
+
+### Docker Configuration (`docker-compose.yml`)
+```yaml
+version: '3.8'
+services:
+  erikraftdrop:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+```
+
+### RTC Configuration (`rtc_config_example.json`)
+```json
+{
+  "sdpSemantics": "unified-plan",
+  "iceServers": [
+    {
+      "urls": "stun:stun.l.google.com:19302"
+    }
+  ]
+}
+```
+
+## Build and Deployment
+
+### Development Setup
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Start with debugging
+DEBUG_MODE=true npm start
+```
+
+### Production Deployment
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm run start:prod
+
+# Docker deployment
+docker-compose up -d
+```
+
+### Environment Variables
+```bash
+# Server configuration
+PORT=3000
+HOST=0.0.0.0
+DEBUG_MODE=false
+
+# Rate limiting
+RATE_LIMIT=true
+
+# LAN mode
+ALLOW_LOCAL_ONLY=false
+
+# Redis (optional)
+REDIS_URL=redis://localhost:6379
+```
+
+## Extension and Integration Structure
+
+### Browser Extensions (`Extensions/`)
+```
+Extensions/
+├── chrome/                 # Chrome extension
+├── firefox/               # Firefox extension
+├── edge/                  # Edge extension
+└── safari/                 # Safari extension
+```
+
+### Mobile Applications
+```
+Android/                    # Android native app
+├── app/                   # Main application
+├── gradle/                 # Build configuration
+└── src/                    # Source code
+
+Shortcut/                   # iOS shortcut
+└── Send with ErikrafT Drop.shortcut
+```
+
+### CLI Tool (`erikraftdrop-cli/`)
+```
+erikraftdrop-cli/
+├── erikraftdrop           # Main bash script
+├── erikraftdrop.sh        # Windows shell script
+├── send-with-erikraftdrop # Nautilus script
+├── .erikraftdrop-cli-config.example    # Configuration template
+└── README.md              # CLI documentation
+```
+
+## Testing and Quality Assurance
+
+### Test Structure
+```
+tests/
+├── unit/                   # Unit tests
+├── integration/            # Integration tests
+├── e2e/                   # End-to-end tests
+└── performance/            # Performance tests
+```
+
+### Code Quality Tools
+- **ESLint**: JavaScript linting
+- **Prettier**: Code formatting
+- **TypeScript**: Type checking (where applicable)
+- **Jest**: Unit testing framework
+- **Playwright**: E2E testing
+
+## Documentation Structure
+
+### Technical Documentation
+```
+docs/
+├── technical-documentation.md    # Technical overview
+├── how-to.md                  # Usage guides
+├── host-your-own.md           # Self-hosting guide
+├── faq.md                    # Frequently asked questions
+├── docker-swarm-usage.md      # Docker deployment
+└── release-notes.md           # Version changelog
+```
+
+### API Documentation
+- **WebSocket API**: Real-time communication
+- **HTTP Endpoints**: Configuration and health checks
+- **WebRTC API**: Peer-to-peer communication
+- **IndexedDB API**: Client-side storage
+
+This project structure provides a solid foundation for development, deployment, and maintenance of the ErikrafT Drop file sharing system.

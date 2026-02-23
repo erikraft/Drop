@@ -1,0 +1,46 @@
+---
+title: "Overview"
+description: "ErikrafT Drop is a browser-based P2P file sharing system using WebRTC technology for direct device-to-device transfers."
+---
+
+# ErikrafT Drop Overview
+
+ErikrafT Drop is a progressive web application that enables secure peer-to-peer file sharing directly between web browsers without requiring intermediate servers. Built on WebRTC technology, it provides encrypted, real-time file transfers with automatic device discovery on local networks.
+
+## Key Features
+
+- **Direct P2P Transfers**: Files are transferred directly between devices using WebRTC DataChannels
+- **Local Network Discovery**: Automatic detection of devices on the same network
+- **Device Pairing**: Persistent device connections using encrypted room secrets
+- **QR Code Pairing**: Quick device pairing using QR codes and 6-digit keys
+- **Cross-Platform**: Works on all modern browsers with WebRTC support
+- **Progressive Web App**: Installable as a native application
+- **No File Size Limits**: Limited only by browser memory and network constraints
+- **Real-time Chat**: Built-in messaging functionality
+- **WebSocket Fallback**: Alternative transfer method when WebRTC is unavailable
+
+## Technology Stack
+
+- **Frontend**: Vanilla JavaScript with WebRTC API
+- **Backend**: Node.js with Express and WebSocket (ws) server
+- **Storage**: IndexedDB for persistent device pairing data
+- **Protocol**: WebRTC for P2P, WebSocket for signaling
+- **Security**: DTLS/SRTP encryption provided by WebRTC
+
+## Use Cases
+
+- **Local File Sharing**: Quickly share files between devices on the same network
+- **Cross-Platform Transfer**: Share between iOS, Android, Windows, macOS, and Linux
+- **No Internet Required**: Works entirely on local networks
+- **Temporary Sharing**: No account registration or setup required
+- **Secure Transfers**: End-to-end encryption via WebRTC
+
+## Browser Support
+
+ErikrafT Drop requires modern browsers with WebRTC support:
+- Chrome 23+
+- Firefox 22+
+- Safari 11+
+- Edge 79+
+
+The application automatically detects WebRTC capabilities and falls back to WebSocket-based transfers when necessary.

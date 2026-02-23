@@ -1,0 +1,337 @@
+---
+title: "WebRTC Connection"
+description: "Detailed explanation of WebRTC implementation and peer-to-peer connection management in ErikrafT Drop."
+---
+
+# WebRTC Connection Implementation
+
+ErikrafT Drop leverages WebRTC (Web Real-Time Communication) to establish direct peer-to-peer connections for secure file transfers. The implementation handles connection establishment, signaling, and data channel management.
+
+## WebRTC Architecture
+
+### RTCPeer Connection Class
+
+The core WebRTC functionality is implemented in the `RTCPeer` class in `network.js`:
+
+```javascript
+class RTCPeer extends Peer {
+    constructor(serverConnection, isCaller, peerId, roomType, roomId, rtcConfig) {
+        super(serverConnection, isCaller, peerId, roomType, roomId);
+        
+        this.rtcSupported = true;
+        this.rtcConfig = rtcConfig;
+        
+        if (!this._isCaller) return; // we will listen for a caller
+        this._connect();
+    }
+}
+```
+
+### Connection Establishment Process
+
+#### 1. Connection Initialization
+```javascript
+// From network.js lines 1115-1121
+_openConnection() {
+    this._conn = new RTCPeerConnection(this.rtcConfig);
+    this._conn.onicecandidate = e => this._onIceCandidate(e);
+    this._conn.onicecandidateerror = e => this._onError(e);
+    this._conn.onconnectionstatechange = _ => this._onConnectionStateChange();
+    this._conn.oniceconnectionstatechange = e => this._onIceConnectionStateChange(e);
+}
+```
+
+#### 2. Data Channel Creation
+```javascript
+// From network.js lines 1123-1137
+_openChannel() {
+    if (!this._conn) return;
+
+    const channel = this._conn.createDataChannel('data-channel', {
+        ordered: true,
+        reliable: true // Obsolete. See MDN documentation
+    });
+    channel.onopen = e => this._onChannelOpened(e);
+    channel.onerror = e => this._onError(e);
+
+    this._conn
+        .createOffer()
+        .then(d => this._onDescription(d))
+        .catch(e => this._onError(e));
+}
+```
+
+## Signaling Process
+
+### Offer/Answer Pattern
+
+The WebRTC connection follows the standard offer/answer pattern:
+
+#### 1. Offer Creation (Caller)
+```javascript
+// From network.js lines 1139-1145
+_onDescription(description) {
+    this._conn
+        .setLocalDescription(description)
+        .then(_ => this._sendSignal({ sdp: description }))
+        .catch(e => this._onError(e));
+}
+```
+
+#### 2. Signal Relay
+```javascript
+// From network.js lines 1279-1285
+_sendSignal(signal) {
+    signal.type = 'signal';
+    signal.to = this._peerId;
+    signal.roomType = this._getRoomTypes()[0];
+    signal.roomId = this._roomIds[this._getRoomTypes()[0]];
+    this._server.send(signal);
+}
+```
+
+#### 3. Answer Creation (Receiver)
+```javascript
+// From network.js lines 1155-1165
+if (message.sdp) {
+    this._conn
+        .setRemoteDescription(message.sdp)
+        .then(_ => {
+            if (message.sdp.type === 'offer') {
+                return this._conn
+                    .createAnswer()
+                    .then(d => this._onDescription(d));
+            }
+        })
+        .catch(e => this._onError(e));
+}
+```
+
+### ICE Candidate Exchange
+
+#### 1. ICE Candidate Generation
+```javascript
+// From network.js lines 1147-1150
+_onIceCandidate(event) {
+    if (!event.candidate) return;
+    this._sendSignal({ ice: event.candidate });
+}
+```
+
+#### 2. ICE Candidate Processing
+```javascript
+// From network.js lines 1167-1171
+else if (message.ice) {
+    this._conn
+        .addIceCandidate(new RTCIceCandidate(message.ice))
+        .catch(e => this._onError(e));
+}
+```
+
+## Data Channel Management
+
+### Channel Configuration
+
+The data channel is configured for reliable, ordered delivery:
+
+```javascript
+const channel = this._conn.createDataChannel('data-channel', {
+    ordered: true,      // Maintain message order
+    reliable: true      // Ensure delivery (deprecated but maintained for compatibility)
+});
+```
+
+### Channel Event Handling
+
+#### 1. Channel Opened
+```javascript
+// From network.js lines 1174-1184
+_onChannelOpened(event) {
+    console.log('RTC: channel opened with', this._peerId);
+    const channel = event.channel || event.target;
+    channel.binaryType = 'arraybuffer';
+    channel.onmessage = e => this._onMessage(e.data);
+    channel.onclose = _ => this._onChannelClosed();
+    this._channel = channel;
+    Events.fire('peer-connected', {peerId: this._peerId, connectionHash: this.getConnectionHash()});
+}
+```
+
+#### 2. Message Handling
+```javascript
+// From network.js lines 1186-1191
+_onMessage(message) {
+    if (typeof message === 'string') {
+        console.log('RTC:', JSON.parse(message));
+    }
+    super._onMessage(message);
+}
+```
+
+## Connection State Management
+
+### Connection States
+
+WebRTC connections progress through several states:
+
+```javascript
+// From network.js lines 1245-1257
+_onConnectionStateChange() {
+    console.log('RTC: state changed:', this._conn.connectionState);
+    switch (this._conn.connectionState) {
+        case 'disconnected':
+            Events.fire('peer-disconnected', this._peerId);
+            this._onError('rtc connection disconnected');
+            break;
+        case 'failed':
+            Events.fire('peer-disconnected', this._peerId);
+            this._onError('rtc connection failed');
+            break;
+    }
+}
+```
+
+### ICE Connection States
+```javascript
+// From network.js lines 1259-1267
+_onIceConnectionStateChange() {
+    switch (this._conn.iceConnectionState) {
+        case 'failed':
+            this._onError('ICE Gathering failed');
+            break;
+        default:
+            console.log('ICE Gathering', this._conn.iceConnectionState);
+    }
+}
+```
+
+## Connection Hash Generation
+
+For security and identification, each connection generates a unique hash:
+
+```javascript
+// From network.js lines 1193-1217
+getConnectionHash() {
+    const localDescriptionLines = this._conn.localDescription.sdp.split("\r\n");
+    const remoteDescriptionLines = this._conn.remoteDescription.sdp.split("\r\n");
+    let localConnectionFingerprint, remoteConnectionFingerprint;
+    
+    // Extract fingerprints from SDP
+    for (let i=0; i<localDescriptionLines.length; i++) {
+        if (localDescriptionLines[i].startsWith("a=fingerprint:")) {
+            localConnectionFingerprint = localDescriptionLines[i].substring(14);
+            break;
+        }
+    }
+    
+    // Combine and hash fingerprints
+    const combinedFingerprints = this._isCaller
+        ? localConnectionFingerprint + remoteConnectionFingerprint
+        : remoteConnectionFingerprint + localConnectionFingerprint;
+    let hash = cyrb53(combinedFingerprints).toString();
+    while (hash.length < 16) {
+        hash = "0" + hash;
+    }
+    return hash;
+}
+```
+
+## Error Handling and Recovery
+
+### Connection Errors
+```javascript
+// From network.js lines 1269-1272
+_onError(error) {
+    console.error(error);
+    Events.fire('rtc-error', { peerId: this._peerId, error: error });
+}
+```
+
+### Automatic Reconnection
+```javascript
+// From network.js lines 1241-1243
+_onChannelClosed() {
+    console.log('RTC: channel closed', this._peerId);
+    Events.fire('peer-disconnected', this._peerId);
+    if (!this._isCaller) return;
+    this._connect(); // reopen the channel
+}
+```
+
+### Connection Refresh
+```javascript
+// From network.js lines 1287-1295
+refresh() {
+    // check if channel is open. otherwise create one
+    if (this._isConnected() || this._isConnecting()) return;
+
+    // only reconnect if peer is caller
+    if (!this._isCaller) return;
+
+    this._connect();
+}
+```
+
+## Configuration Options
+
+### RTC Configuration
+The WebRTC connection is configured with ICE servers:
+
+```javascript
+// From server.js lines 8-11
+const rtcConfig = {
+    sdpSemantics: "unified-plan",
+    iceServers: []
+};
+```
+
+### LAN Mode Configuration
+In LAN mode, ICE servers are disabled for local-only connections:
+
+```javascript
+// From network.js lines 153-155
+if (this._lanMode.enabled && msg.wsConfig) {
+    msg.wsConfig.rtcConfig = { iceServers: [] };
+}
+```
+
+## Performance Optimization
+
+### Binary Data Handling
+```javascript
+// Set binary type for efficient file transfer
+channel.binaryType = 'arraybuffer';
+```
+
+### Memory Management
+- **Streaming**: Files are streamed in chunks to prevent memory overload
+- **Garbage Collection**: Proper cleanup of closed connections
+- **Buffer Management**: Efficient buffer handling for large files
+
+### Network Optimization
+- **ICE Candidate Filtering**: Prioritize local candidates for LAN connections
+- **Connection Reuse**: Maintain persistent connections when possible
+- **Adaptive Chunking**: Adjust chunk size based on connection quality
+
+## Browser Compatibility
+
+### Feature Detection
+```javascript
+// WebRTC support detection
+window.isRtcSupported = !!window.RTCPeerConnection;
+```
+
+### Fallback Mechanism
+When WebRTC is not supported, the system falls back to WebSocket-based transfers:
+
+```javascript
+// From network.js lines 1425-1434
+if (window.isRtcSupported && rtcSupported) {
+    this.peers[peerId] = new RTCPeer(this._server, isCaller, peerId, roomType, roomId, this._wsConfig.rtcConfig);
+}
+else if (this._wsConfig.wsFallback) {
+    this.peers[peerId] = new WSPeer(this._server, isCaller, peerId, roomType, roomId);
+}
+```
+
+This WebRTC implementation provides secure, efficient peer-to-peer file transfers with automatic fallback mechanisms for maximum compatibility.

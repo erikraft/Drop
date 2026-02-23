@@ -1,0 +1,498 @@
+---
+title: "Configuration"
+description: "Complete configuration guide for ErikrafT Drop server, client, and deployment settings."
+---
+
+# Configuration Guide
+
+ErikrafT Drop provides extensive configuration options for different deployment scenarios, from local development to production environments. This guide covers all available configuration options.
+
+## Server Configuration
+
+### Environment Variables
+
+#### Basic Server Settings
+```bash
+# Server port (default: 3000)
+PORT=3000
+
+# Server host binding (default: 0.0.0.0)
+HOST=0.0.0.0
+
+# Debug mode for development (default: false)
+DEBUG_MODE=true
+
+# Production mode
+NODE_ENV=production
+```
+
+#### Network Configuration
+```bash
+# LAN-only mode - restrict to local networks
+ALLOW_LOCAL_ONLY=true
+
+# WebSocket fallback for WebRTC failures
+WS_FALLBACK=true
+
+# Rate limiting for pairing attempts
+RATE_LIMIT=true
+
+# IPv6 localization (number of segments)
+IPV6_LOCALIZE=2
+```
+
+#### Redis Configuration (Optional)
+```bash
+# Redis connection URL
+REDIS_URL=redis://localhost:6379
+
+# Redis connection options
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+```
+
+### RTC Configuration
+
+#### STUN/TURN Servers
+```json
+{
+  "sdpSemantics": "unified-plan",
+  "iceServers": [
+    {
+      "urls": "stun:stun.l.google.com:19302"
+    },
+    {
+      "urls": "turn:turn.example.com:3478",
+      "username": "user",
+      "credential": "password"
+    }
+  ]
+}
+```
+
+#### LAN Mode Configuration
+```javascript
+// From server.js lines 8-11
+const rtcConfig = {
+    sdpSemantics: "unified-plan",
+    iceServers: []
+};
+```
+
+### Server Options
+
+#### Rate Limiting
+```javascript
+// From peer.js lines 34-42
+rateLimitReached() {
+    if (this.requestRate >= 10) {
+        return true;
+    }
+    this.requestRate += 1;
+    setTimeout(() => this.requestRate -= 1, 10000);
+    return false;
+}
+```
+
+#### Local IP Detection
+```javascript
+// From ws-server.js lines 7-30
+function isLocalIp(ip) {
+    if (!ip) return false;
+    if (ip === '127.0.0.1' || ip === '::1') return true;
+    if (!ip.includes(":")) {
+        return LOCAL_IPV4_PATTERNS.some(pattern => pattern.test(ip));
+    }
+    // IPv6 validation logic
+}
+```
+
+## Client Configuration
+
+### Browser Settings
+
+#### WebRTC Configuration
+```javascript
+// From network.js lines 153-155
+if (this._lanMode.enabled && msg.wsConfig) {
+    msg.wsConfig.rtcConfig = { iceServers: [] };
+}
+```
+
+#### LAN Mode Storage
+```javascript
+// From network.js lines 1-4
+const LAN_STORAGE_KEYS = {
+    enabled: 'lan_mode_enabled',
+    server: 'lan_signaling_server'
+};
+```
+
+### Persistent Storage Configuration
+
+#### IndexedDB Settings
+```javascript
+// From persistent-storage.js
+class PersistentStorage {
+    constructor() {
+        this._db = null;
+        this._dbName = 'pairdrop-db';
+        this._version = 1;
+        this._stores = ['room-secrets', 'settings'];
+    }
+}
+```
+
+#### Room Secret Storage
+```javascript
+// Room secret structure
+{
+    id: "room-secret-256-char-string",
+    secret: "256-character-encrypted-room-secret",
+    displayName: "User-chosen-device-name",
+    autoAccept: false,
+    timestamp: 1640995200000
+}
+```
+
+## Deployment Configuration
+
+### Docker Configuration
+
+#### Docker Compose
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  erikraftdrop:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DEBUG_MODE=false
+      - RATE_LIMIT=true
+      - ALLOW_LOCAL_ONLY=false
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+```
+
+#### Dockerfile
+```dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+### Docker Swarm Configuration
+```yaml
+# docker-compose-swarm.yml
+version: '3.8'
+services:
+  erikraftdrop:
+    image: erikraftdrop:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        monitor: 5s
+        max_failure_ratio: 0.3
+```
+
+## Reverse Proxy Configuration
+
+### Nginx Configuration
+```nginx
+server {
+    listen 80;
+    server_name drop.example.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /server {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+    }
+}
+```
+
+### Apache Configuration
+```apache
+<VirtualHost *:80>
+    ServerName drop.example.com
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyPass / ws://localhost:3000/
+    ProxyPassReverse / ws://localhost:3000/
+    ProxyPassReverse /server ws://localhost:3000/
+</VirtualHost>
+```
+
+## Security Configuration
+
+### SSL/TLS Setup
+
+#### Let's Encrypt with Nginx
+```bash
+# Install certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Generate certificate
+sudo certbot --nginx -d drop.example.com
+
+# Auto-renewal
+sudo crontab -e
+# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+```
+
+#### SSL Configuration
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name drop.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/drop.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/drop.example.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512;
+    ssl_prefer_server_ciphers off;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        # ... proxy headers
+    }
+}
+```
+
+### Firewall Configuration
+
+#### UFW (Ubuntu)
+```bash
+# Allow HTTP/HTTPS
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Allow WebSocket port
+sudo ufw allow 3000/tcp
+
+# Enable firewall
+sudo ufw enable
+```
+
+#### iptables
+```bash
+# Allow HTTP/HTTPS
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# Allow WebSocket port
+iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
+
+# Save rules
+iptables-save > /etc/iptables/rules.v4
+```
+
+## Performance Configuration
+
+### Node.js Optimization
+
+#### Process Management
+```bash
+# Increase file descriptor limit
+ulimit -n 65536
+
+# Set Node.js options
+export NODE_OPTIONS="--max-old-space-size=4096"
+
+# Production optimizations
+export NODE_ENV=production
+```
+
+#### Clustering
+```javascript
+// cluster.js example
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
+} else {
+    require('./server/index.js');
+}
+```
+
+### Memory Management
+
+#### iOS Memory Limits
+```javascript
+// From network.js lines 819-822
+if (window.iOS && request.totalSize >= 200*1024*1024) {
+    this.sendJSON({
+        type: 'files-transfer-response', 
+        accepted: false, 
+        reason: 'ios-memory-limit'
+    });
+    return;
+}
+```
+
+#### File Chunking Configuration
+```javascript
+// From network.js lines 1671-1672
+this._chunkSize = 64000; // 64 KB chunks
+this._maxPartitionSize = 1e6; // 1 MB partitions
+```
+
+## Monitoring and Logging
+
+### Application Logging
+
+#### Development Logging
+```javascript
+// Debug mode logging
+if (this._conf.debugMode) {
+    console.debug("\n");
+    console.debug("----DEBUGGING-PEER-IP-START----");
+    console.debug("ErikrafTdrop uses:", this.ip);
+    console.debug("----DEBUGGING-PEER-IP-END----");
+}
+```
+
+#### Production Logging
+```bash
+# Log rotation
+/var/log/erikraftdrop/
+├── access.log
+├── error.log
+└── debug.log
+
+# Logrotate configuration
+/var/log/erikraftdrop/*.log {
+    daily
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    create 644 www-data www-data
+}
+```
+
+### Health Checks
+
+#### HTTP Endpoints
+```javascript
+// From server.js lines 23-27
+if (req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("ok");
+    return;
+}
+```
+
+#### Configuration Endpoint
+```javascript
+// From server.js lines 14-21
+if (req.url === "/config") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+        lanOnly: true,
+        rtcConfig
+    }));
+    return;
+}
+```
+
+## Development Configuration
+
+### Local Development
+```bash
+# Clone repository
+git clone https://github.com/erikraft/Drop.git
+cd Drop
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Enable debug mode
+DEBUG_MODE=true npm start
+```
+
+### Environment Files
+```bash
+# .env file
+NODE_ENV=development
+PORT=3000
+DEBUG_MODE=true
+RATE_LIMIT=false
+ALLOW_LOCAL_ONLY=true
+
+# .env.production file
+NODE_ENV=production
+PORT=3000
+DEBUG_MODE=false
+RATE_LIMIT=true
+ALLOW_LOCAL_ONLY=false
+```
+
+## CLI Configuration
+
+### Command Line Interface
+```bash
+# Configuration file location
+~/.erikraftdrop-cli-config
+
+# Configuration options
+domain=https://drop.erikraft.com/
+default_browser=chrome
+download_folder=~/Downloads
+```
+
+### CLI Usage
+```bash
+# Show configuration
+erikraftdrop --config
+
+# Set custom domain
+erikraftdrop -d "https://custom.example.com/"
+
+# Specify browser
+erikraftdrop -b firefox file.txt
+```
+
+This comprehensive configuration guide covers all aspects of deploying and customizing ErikrafT Drop for different use cases and environments.

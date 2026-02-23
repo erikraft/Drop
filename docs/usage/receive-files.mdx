@@ -1,0 +1,391 @@
+---
+title: "Receive Files"
+description: "Complete guide to receiving files, managing transfers, and handling incoming file requests in ErikrafT Drop."
+---
+
+# Receiving Files
+
+ErikrafT Drop provides a streamlined experience for receiving files from connected devices. This guide covers the complete receiving process, from transfer requests to file management and security considerations.
+
+## Transfer Request Process
+
+### 1. Incoming Transfer Notification
+When someone sends you files, you'll receive a transfer request:
+
+#### Request Dialog
+The transfer request dialog displays:
+- **Sender Information**: Device name and identification
+- **File List**: All files being sent with details
+- **Total Size**: Combined size of all files
+- **File Types**: Icons indicating file categories
+- **Accept/Decline Options**: Choice to accept or reject
+
+#### Request Information Structure
+```javascript
+{
+    type: 'request',
+    header: [
+        {
+            name: 'vacation-photo.jpg',
+            size: 2048576,
+            mime: 'image/jpeg'
+        },
+        {
+            name: 'document.pdf',
+            size: 1048576,
+            mime: 'application/pdf'
+        }
+    ],
+    totalSize: 3096562,
+    imagesOnly: false
+}
+```
+
+### 2. File Preview and Inspection
+Before accepting, you can inspect the incoming files:
+
+#### File Details
+- **File Names**: Exact names of files being sent
+- **File Sizes**: Individual and total file sizes
+- **File Types**: MIME types and file extensions
+- **File Count**: Number of files in transfer
+
+#### Security Indicators
+- **File Type Warnings**: Potentially dangerous file types
+- **Size Warnings**: Unusually large files
+- **Sender Verification**: Known vs unknown senders
+- **Auto-Accept Status**: For paired devices
+
+### 3. Acceptance Decision
+Choose how to handle the transfer request:
+
+#### Accept Transfer
+- **Click Accept**: Begin receiving files immediately
+- **Choose Location**: Select download destination (browser-dependent)
+- **Monitor Progress**: Watch transfer progress in real-time
+- **Completion Notification**: Receive success notification
+
+#### Decline Transfer
+- **Click Decline**: Reject the transfer request
+- **Optional Reason**: Send decline reason to sender
+- **Notification**: Sender receives decline notification
+- **Privacy**: No files are downloaded
+
+#### Auto-Accept (Paired Devices)
+For trusted paired devices:
+- **Automatic Accept**: Files download automatically
+- **Configurable**: Toggle per device in settings
+- **Trust Management**: Control which devices auto-accept
+- **Security**: Only enable for trusted devices
+
+## File Reception Process
+
+### 1. Header Reception
+```javascript
+// From network.js lines 841-867
+_respondToFileTransferRequest(accepted) {
+    this.sendJSON({type: 'files-transfer-response', accepted: accepted});
+    if (accepted) {
+        this._requestAccepted = this._requestPending;
+        this._totalBytesReceived = 0;
+        this._filesReceived = [];
+    }
+    this._requestPending = null;
+}
+```
+
+### 2. File Assembly
+Files are received in chunks and reassembled:
+
+#### FileDigester Process
+```javascript
+// From network.js lines 1718-1746
+class FileDigester {
+    constructor(meta, totalSize, totalBytesReceived, callback) {
+        this._buffer = [];
+        this._bytesReceived = 0;
+        this._size = meta.size;
+        this._name = meta.name;
+        this._mime = meta.mime;
+        this._totalSize = totalSize;
+        this._totalBytesReceived = totalBytesReceived;
+        this._callback = callback;
+    }
+
+    unchunk(chunk) {
+        this._buffer.push(chunk);
+        this._bytesReceived += chunk.byteLength || chunk.size;
+        this.progress = (this._totalBytesReceived + this._bytesReceived) / this._totalSize;
+        if (isNaN(this.progress)) this.progress = 1;
+
+        if (this._bytesReceived < this._size) return;
+        
+        const blob = new Blob(this._buffer);
+        this._buffer = null;
+        this._callback(new File([blob], this._name, {
+            type: this._mime || "application/octet-stream",
+            lastModified: new Date().getTime()
+        }));
+    }
+}
+```
+
+### 3. Progress Monitoring
+Track transfer progress in real-time:
+
+#### Progress Information
+- **Percentage**: 0-100% completion
+- **Transfer Speed**: Current download rate
+- **Time Remaining**: Estimated completion time
+- **File Progress**: Individual file progress for multiple files
+
+#### Progress Events
+```javascript
+// Progress tracking during reception
+_onProgress(progress) {
+    Events.fire('file-progress', {
+        progress: progress,
+        peerId: this._peerId
+    });
+}
+```
+
+## File Management
+
+### 1. Download Location
+Files are saved based on browser settings:
+
+#### Default Behavior
+- **Downloads Folder**: Most browsers use default Downloads folder
+- **Browser-Specific**: Each browser has its own download location
+- **User Configurable**: Can be changed in browser settings
+- **Prompt Option**: Some browsers prompt for location
+
+#### File Naming
+- **Original Names**: Preserves original file names
+- **Conflict Resolution**: Adds suffix for duplicate names
+- **Special Characters**: Handles special characters appropriately
+- **Extension Preservation**: Maintains file extensions
+
+### 2. File Organization
+Organize received files effectively:
+
+#### Automatic Organization
+- **Date Stamping**: Some browsers add timestamps
+- **Sender Identification**: Files may include sender info
+- **Type Grouping**: Consider organizing by file type
+- **Project Folders**: Create folders for different projects
+
+#### Manual Organization
+- **Review Files**: Check all received files
+- **Move to Folders**: Organize into appropriate directories
+- **Delete Duplicates**: Remove unnecessary copies
+- **Backup Important**: Backup critical files
+
+## Advanced Receiving Features
+
+### Multiple Simultaneous Transfers
+Receive files from multiple senders simultaneously:
+
+#### Concurrent Transfers
+- **Multiple Senders**: Accept transfers from different devices
+- **Independent Progress**: Each transfer tracked separately
+- **Bandwidth Sharing**: Transfer speed shared among transfers
+- **Queue Management**: Transfers queue automatically
+
+#### Transfer Management
+- **Pause/Resume**: Pause individual transfers if supported
+- **Priority Setting**: Prioritize important transfers
+- **Cancel Options**: Cancel unwanted transfers
+- **Retry Failed**: Automatic retry for failed transfers
+
+### Preview and Quick Actions
+Some files support preview before complete download:
+
+#### Image Previews
+- **Thumbnails**: Small preview images
+- **Basic Info**: Resolution and file size
+- **Format Support**: JPEG, PNG, GIF, WebP
+- **Quick Actions**: Save, share, or delete
+
+#### Document Previews
+- **Text Files**: Basic text preview
+- **PDF Info**: Document metadata
+- **File Properties**: Size, creation date, type
+- **Security Scan**: Basic security information
+
+## Security and Privacy
+
+### Transfer Security
+Ensure safe file reception:
+
+#### File Validation
+```javascript
+// File integrity verification
+_onFileTransferCompleted() {
+    const fileBlob = this._filesReceived[0];
+    this._totalBytesReceived += fileBlob.size;
+    this._completeTransfer('receive', true);
+
+    this.sendJSON({type: 'file-transfer-complete'});
+
+    const sameSize = fileBlob.size === acceptedHeader.size;
+    const sameName = fileBlob.name === acceptedHeader.name;
+    Events.fire('file-received', { 
+        file: fileBlob, 
+        peerId: this._peerId,
+        imagesOnly: request.imagesOnly,
+        sameSize, 
+        sameName 
+    });
+}
+```
+
+#### Security Checks
+- **Size Verification**: Confirm actual size matches declared size
+- **Name Verification**: Ensure file name matches expected
+- **Type Verification**: Validate MIME type consistency
+- **Integrity Check**: Verify file integrity
+
+### Privacy Protection
+Protect your privacy during file reception:
+
+#### Anonymous Reception
+- **No Registration**: No account required
+- **No Tracking**: Transfer not logged permanently
+- **Local Processing**: All processing on your device
+- **Temporary Data**: Minimal data stored temporarily
+
+#### Safe Practices
+- **Trusted Senders**: Only accept from known sources
+- **Scan Files**: Use antivirus software on received files
+- **Sandbox Opening**: Open suspicious files in sandbox
+- **Regular Cleanup**: Remove unnecessary downloaded files
+
+## Browser-Specific Behavior
+
+### Desktop Browsers
+
+#### Chrome/Edge
+- **Downloads Folder**: Files go to Downloads folder
+- **Download Bar**: Shows download progress at bottom
+- **Right-Click Options**: Context menu for file actions
+- **History**: Download history available
+
+#### Firefox
+- **Downloads Panel**: Separate downloads panel
+- **Custom Location**: Can set custom download folder
+- **Privacy Mode**: Enhanced privacy in private browsing
+- **Add-ons**: Extended functionality with add-ons
+
+#### Safari
+- **Downloads Folder**: Uses default Downloads folder
+- **Smart Download**: Organizes by file type sometimes
+- **Privacy Features**: Enhanced tracking protection
+- **iCloud Integration**: May sync with iCloud
+
+### Mobile Browsers
+
+#### Mobile Chrome
+- **Download Notification**: Shows download in notifications
+- **Download Folder**: Files go to device Downloads
+- **File Manager**: Access through file manager app
+- **Share Options**: Can share received files immediately
+
+#### Mobile Safari
+- **Files App**: Downloads go to Files app
+- **iCloud Drive**: May sync with iCloud Drive
+- **Privacy**: Enhanced privacy features
+- **Storage Management**: Storage space management
+
+## Troubleshooting Receiving Issues
+
+### Common Problems
+
+#### Transfer Not Starting
+**Causes:**
+- Transfer request not received
+- Network connectivity issues
+- Browser blocking downloads
+- Insufficient storage space
+
+**Solutions:**
+- Check network connection
+- Verify browser download settings
+- Clear browser cache
+- Check available storage
+
+#### Slow Transfer Speeds
+**Causes:**
+- Poor network quality
+- Network congestion
+- Browser performance issues
+- Large file sizes
+
+**Solutions:**
+- Improve network connection
+- Close other applications
+- Try different browser
+- Transfer during off-peak hours
+
+#### File Corruption
+**Causes:**
+- Network interruptions
+- Browser crashes during transfer
+- Storage issues
+- Transfer conflicts
+
+**Solutions:**
+- Re-request transfer
+- Check storage health
+- Use stable network
+- Verify file integrity
+
+#### Download Location Issues
+**Causes:**
+- Browser download settings
+- Permission issues
+- Storage full
+- Folder access problems
+
+**Solutions:**
+- Check browser settings
+- Verify folder permissions
+- Free up storage space
+- Choose different location
+
+### Performance Optimization
+
+#### Improve Reception Speed
+- **Wired Connection**: Use Ethernet when possible
+- **5GHz WiFi**: Faster and less interference
+- **Close Applications**: Free system resources
+- **Update Browser**: Latest versions perform better
+
+#### Storage Management
+- **Regular Cleanup**: Remove unnecessary files
+- **External Storage**: Use external drives for large files
+- **Cloud Backup**: Backup important received files
+- **Monitoring**: Monitor storage space usage
+
+## Best Practices
+
+### Security Best Practices
+- **Verify Senders**: Only accept from trusted sources
+- **Scan Files**: Use antivirus software
+- **Preview First**: Preview files before opening
+- **Backup Important**: Backup critical received files
+
+### Organization Best Practices
+- **Immediate Organization**: Organize files as received
+- **Consistent Naming**: Use consistent file naming
+- **Folder Structure**: Maintain logical folder structure
+- **Regular Cleanup**: Remove unnecessary files
+
+### Transfer Best Practices
+- **Stable Connection**: Ensure reliable network
+- **Sufficient Storage**: Check available space
+- **Browser Updates**: Keep browser current
+- **Patience**: Allow time for large transfers
+
+This comprehensive receiving guide ensures successful file reception while maintaining security and organization across all supported devices and browsers.

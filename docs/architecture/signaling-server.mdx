@@ -1,0 +1,424 @@
+---
+title: "Signaling Server"
+description: "WebSocket-based signaling server architecture for peer discovery and WebRTC connection establishment."
+---
+
+# Signaling Server Architecture
+
+The ErikrafT Drop signaling server facilitates peer discovery and WebRTC connection establishment through WebSocket communication. Built with Node.js and the `ws` library, it manages room-based peer grouping and message routing.
+
+## Server Overview
+
+### Main Server Entry Point
+
+The server is initialized in `server.js`:
+
+```javascript
+// From server.js lines 33-39
+new ErikrafTdropWsServer(server, {
+    rtcConfig,
+    wsFallback: false,
+    debugMode: process.env.DEBUG_MODE === "true",
+    rateLimit: false,
+    allowLocalOnly: true
+});
+```
+
+### Configuration Endpoints
+
+The server provides configuration via HTTP endpoints:
+
+```javascript
+// From server.js lines 14-21
+if (req.url === "/config") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+        lanOnly: true,
+        rtcConfig
+    }));
+    return;
+}
+```
+
+## WebSocket Server Implementation
+
+### ErikrafTdropWsServer Class
+
+The core WebSocket server is implemented in `server/ws-server.js`:
+
+```javascript
+export default class ErikrafTdropWsServer {
+    constructor(server, conf) {
+        this._conf = conf;
+        this._rooms = {}; // { roomId: peers[] }
+        this._roomSecrets = {}; // { pairKey: roomSecret }
+        this._keepAliveTimers = {};
+        
+        this._wss = new WebSocketServer({ server });
+        this._wss.on('connection', (socket, request) => this._onConnection(new Peer(socket, request, conf)));
+    }
+}
+```
+
+## Connection Management
+
+### Peer Connection Process
+
+#### 1. Connection Validation
+```javascript
+// From ws-server.js lines 46-54
+_onConnection(peer) {
+    if (this._conf.allowLocalOnly && !isLocalIp(peer.ip)) {
+        try {
+            peer.socket.close(1008, 'LAN only');
+        } catch (e) {
+            peer.socket.terminate();
+        }
+        return;
+    }
+    
+    peer.socket.on('message', message => this._onMessage(peer, message));
+    peer.socket.onerror = e => console.error(e);
+    this._keepAlive(peer);
+}
+```
+
+#### 2. IP Validation
+The server validates local IP addresses for LAN-only mode:
+
+```javascript
+// From ws-server.js lines 7-30
+function isLocalIp(ip) {
+    if (!ip) return false;
+    if (ip === '127.0.0.1' || ip === '::1') return true;
+    if (!ip.includes(":")) {
+        return LOCAL_IPV4_PATTERNS.some(pattern => pattern.test(ip));
+    }
+    
+    // IPv6 local address validation
+    const firstWord = ip.split(":").find(el => !!el);
+    if (/^fe[c-f][0-9a-f]$/.test(firstWord)) return true;
+    if (/^fc[0-9a-f]{2}$/.test(firstWord)) return true;
+    if (/^fd[0-9a-f]{2}$/.test(firstWord)) return true;
+    if (firstWord === "fe80") return true;
+    if (firstWord === "100") return true;
+    
+    return false;
+}
+```
+
+#### 3. Initial Configuration
+```javascript
+// From ws-server.js lines 61-77
+this._send(peer, {
+    type: 'ws-config',
+    wsConfig: {
+        rtcConfig: this._conf.rtcConfig,
+        wsFallback: this._conf.wsFallback
+    }
+});
+
+// send displayName
+this._send(peer, {
+    type: 'display-name',
+    displayName: peer.name.displayName,
+    deviceName: peer.name.deviceName,
+    clientType: peer.name.clientType,
+    peerId: peer.id,
+    peerIdHash: hasher.hashCodeSalted(peer.id)
+});
+```
+
+## Room Management
+
+### Room Types
+
+The server manages three types of rooms:
+
+#### 1. IP-Based Rooms (Local Network)
+```javascript
+// From ws-server.js lines 349-351
+_joinIpRoom(peer) {
+    this._joinRoom(peer, 'ip', peer.ip);
+}
+```
+
+#### 2. Secret Rooms (Paired Devices)
+```javascript
+// From ws-server.js lines 353-358
+_joinSecretRoom(peer, roomSecret) {
+    this._joinRoom(peer, 'secret', roomSecret);
+    peer.addRoomSecret(roomSecret);
+}
+```
+
+#### 3. Public Rooms (Temporary Rooms)
+```javascript
+// From ws-server.js lines 360-367
+_joinPublicRoom(peer, publicRoomId) {
+    this._leavePublicRoom(peer); // prevent joining multiple public rooms
+    this._joinRoom(peer, 'public-id', publicRoomId);
+    peer.publicRoomId = publicRoomId;
+}
+```
+
+### Room Operations
+
+#### Generic Room Join
+```javascript
+// From ws-server.js lines 369-385
+_joinRoom(peer, roomType, roomId) {
+    if (this._rooms[roomId] && this._rooms[roomId][peer.id]) {
+        this._leaveRoom(peer, roomType, roomId);
+    }
+
+    if (!this._rooms[roomId]) {
+        this._rooms[roomId] = {};
+    }
+
+    this._notifyPeers(peer, roomType, roomId);
+    this._rooms[roomId][peer.id] = peer;
+}
+```
+
+#### Peer Notification
+```javascript
+// From ws-server.js lines 435-468
+_notifyPeers(peer, roomType, roomId) {
+    if (!this._rooms[roomId]) return;
+
+    // notify all other peers that peer joined
+    for (const otherPeerId in this._rooms[roomId]) {
+        if (otherPeerId === peer.id) continue;
+        const otherPeer = this._rooms[roomId][otherPeerId];
+
+        let msg = {
+            type: 'peer-joined',
+            peer: peer.getInfo(),
+            roomType: roomType,
+            roomId: roomId
+        };
+
+        this._send(otherPeer, msg);
+    }
+
+    // notify peer about peers already in the room
+    const otherPeers = [];
+    for (const otherPeerId in this._rooms[roomId]) {
+        if (otherPeerId === peer.id) continue;
+        otherPeers.push(this._rooms[roomId][otherPeerId].getInfo());
+    }
+
+    let msg = {
+        type: 'peers',
+        peers: otherPeers,
+        roomType: roomType,
+        roomId: roomId
+    };
+
+    this._send(peer, msg);
+}
+```
+
+## Device Pairing System
+
+### Pairing Initiation
+```javascript
+// From ws-server.js lines 222-237
+_onPairDeviceInitiate(sender) {
+    let roomSecret = randomizer.getRandomString(256);
+    let pairKey = this._createPairKey(sender, roomSecret);
+
+    if (sender.pairKey) {
+        this._removePairKey(sender.pairKey);
+    }
+    sender.pairKey = pairKey;
+
+    this._send(sender, {
+        type: 'pair-device-initiated',
+        roomSecret: roomSecret,
+        pairKey: pairKey
+    });
+    this._joinSecretRoom(sender, roomSecret);
+}
+```
+
+### Pair Key Generation
+```javascript
+// From ws-server.js lines 327-340
+_createPairKey(creator, roomSecret) {
+    let pairKey;
+    do {
+        pairKey = crypto.randomInt(1000000, 1999999).toString().substring(1);
+    } while (pairKey in this._roomSecrets)
+
+    this._roomSecrets[pairKey] = {
+        roomSecret: roomSecret,
+        creator: creator
+    }
+
+    return pairKey;
+}
+```
+
+### Pairing Join Process
+```javascript
+// From ws-server.js lines 239-265
+_onPairDeviceJoin(sender, message) {
+    if (sender.rateLimitReached()) {
+        this._send(sender, { type: 'join-key-rate-limit' });
+        return;
+    }
+
+    if (!this._roomSecrets[message.pairKey] || sender.id === this._roomSecrets[message.pairKey].creator.id) {
+        this._send(sender, { type: 'pair-device-join-key-invalid' });
+        return;
+    }
+
+    const roomSecret = this._roomSecrets[message.pairKey].roomSecret;
+    const creator = this._roomSecrets[message.pairKey].creator;
+    this._removePairKey(message.pairKey);
+    
+    this._send(sender, {
+        type: 'pair-device-joined',
+        roomSecret: roomSecret,
+        peerId: creator.id
+    });
+    this._send(creator, {
+        type: 'pair-device-joined',
+        roomSecret: roomSecret,
+        peerId: sender.id
+    });
+    this._joinSecretRoom(sender, roomSecret);
+    this._removePairKey(sender.pairKey);
+}
+```
+
+## Message Handling
+
+### Message Router
+```javascript
+// From ws-server.js lines 80-150
+_onMessage(sender, message) {
+    try {
+        message = JSON.parse(message);
+    } catch (e) {
+        console.warn("WS: Received JSON is malformed");
+        return;
+    }
+
+    switch (message.type) {
+        case 'disconnect':
+            this._onDisconnect(sender);
+            break;
+        case 'pong':
+            this._setKeepAliveTimerToNow(sender);
+            break;
+        case 'join-ip-room':
+            this._joinIpRoom(sender);
+            break;
+        case 'room-secrets':
+            this._onRoomSecrets(sender, message);
+            break;
+        case 'pair-device-initiate':
+            this._onPairDeviceInitiate(sender);
+            break;
+        case 'signal':
+            this._signalAndRelay(sender, message);
+            break;
+        // ... other message types
+    }
+}
+```
+
+### Signal Relay
+```javascript
+// From ws-server.js lines 152-168
+_signalAndRelay(sender, message) {
+    const room = message.roomType === 'ip'
+        ? sender.ip
+        : message.roomId;
+
+    // relay message to recipient
+    if (message.to && Peer.isValidUuid(message.to) && this._rooms[room]) {
+        const recipient = this._rooms[room][message.to];
+        delete message.to;
+        // add sender
+        message.sender = {
+            id: sender.id,
+            rtcSupported: sender.rtcSupported
+        };
+        this._send(recipient, message);
+    }
+}
+```
+
+## Connection Monitoring
+
+### Keep-Alive System
+```javascript
+// From ws-server.js lines 489-509
+_keepAlive(peer) {
+    this._cancelKeepAlive(peer);
+    let timeout = 1000;
+
+    if (!this._keepAliveTimers[peer.id]) {
+        this._keepAliveTimers[peer.id] = {
+            timer: 0,
+            lastBeat: Date.now()
+        };
+    }
+
+    if (Date.now() - this._keepAliveTimers[peer.id].lastBeat > 5 * timeout) {
+        this._disconnect(peer);
+        return;
+    }
+
+    this._send(peer, { type: 'ping' });
+    this._keepAliveTimers[peer.id].timer = setTimeout(() => this._keepAlive(peer), timeout);
+}
+```
+
+### Rate Limiting
+```javascript
+// From peer.js lines 34-42
+rateLimitReached() {
+    if (this.requestRate >= 10) {
+        return true;
+    }
+    this.requestRate += 1;
+    setTimeout(() => this.requestRate -= 1, 10000);
+    return false;
+}
+```
+
+## Security Features
+
+### IP Filtering
+- **LAN-Only Mode**: Restricts connections to local IP addresses
+- **IP Validation**: Comprehensive IPv4 and IPv6 local address detection
+- **Connection Rejection**: Automatic termination of non-local connections
+
+### Input Validation
+- **JSON Parsing**: Safe parsing with error handling
+- **UUID Validation**: Strict peer ID format validation
+- **Room Secret Validation**: Length and character validation
+
+### Rate Limiting
+- **Request Throttling**: 10 requests per 10 seconds per peer
+- **Pairing Limits**: Prevents brute force pairing attempts
+- **Connection Limits**: Configurable maximum connections
+
+## Performance Optimization
+
+### Memory Management
+- **Room Cleanup**: Automatic removal of empty rooms
+- **Timer Management**: Proper cleanup of keep-alive timers
+- **Connection Cleanup**: Graceful connection termination
+
+### Message Efficiency
+- **Binary Support**: WebSocket binary frame support for file transfers
+- **Message Batching**: Efficient message routing within rooms
+- **Compression**: Optional message compression for large payloads
+
+This signaling server provides a robust foundation for peer discovery and WebRTC connection establishment while maintaining security and performance.

@@ -1,3 +1,8 @@
+---
+title: Host Your Own
+description: Complete guide to deploying and hosting your own ErikrafT Drop instance
+---
+
 # Deployment Notes
 
 ## TURN server for Internet Transfer
@@ -36,7 +41,11 @@ The easiest way to get ErikrafT Drop up and running is by using Docker.
 ```bash
 docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 lscr.io/linuxserver/pairdrop
 ```
-> This image is hosted by [linuxserver.io](https://linuxserver.io). For more information visit https://hub.docker.com/r/linuxserver/pairdrop
+> ⚠️ **This is a third-party community image** hosted by [linuxserver.io](https://linuxserver.io). 
+> This is based on PairDrop (a similar but unofficial project), not the official ErikrafT Drop.
+> For more information visit https://hub.docker.com/r/linuxserver/pairdrop
+> 
+> **For official ErikrafT Drop images, build from source using the Dockerfile below.**
 
 
 <br>
@@ -44,8 +53,10 @@ docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ls
 ### Docker Image from GitHub Container Registry (ghcr.io)
 
 ```bash
-docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ghcr.io/erikraft/Drop
+docker run -d --restart=unless-stopped --name=pairdrop -p 127.0.0.1:3000:3000 ghcr.io/schlagmichdoch/pairdrop
 ```
+> ⚠️ **This is the non-official PairDrop image** from the original PairDrop project.
+> This is based on PairDrop (a similar but unofficial project), not the official ErikrafT Drop.
 
 
 <br>
@@ -380,7 +391,7 @@ RTC_CONFIG="rtc_config.json"
 > You can use `rtc_config_example.json` as a starting point.
 >
 > To host your own TURN server you can follow this guide: https://gabrieltanner.org/blog/turn-server/
-> Alternatively, use a free, pre-configured TURN server like [OpenRelay](<[url](https://www.metered.ca/tools/openrelay/)>)
+> Alternatively, use a free, pre-configured TURN server like [OpenRelay](https://www.metered.ca/tools/openrelay/)
 >
 > Default configuration:
 >
@@ -427,7 +438,7 @@ SIGNALING_SERVER="pairdrop.net"
 
 ```bash
 DONATION_BUTTON_ACTIVE=true
-DONATION_BUTTON_LINK="https://www.buymeacoffee.com/pairdrop"
+DONATION_BUTTON_LINK="https://ko-fi.com/erikraft"
 DONATION_BUTTON_TITLE="Buy me a coffee"
 TWITTER_BUTTON_ACTIVE=true
 TWITTER_BUTTON_LINK="https://twitter.com/account"
@@ -705,5 +716,3 @@ Please note that the certificates (CA and webserver cert) expire after a day.
 Also, whenever you restart the NGINX Docker container new certificates are created.
 
 The site is served on `https://<Your FQDN>:8443` (Default: `https://localhost:8443`).
-
-[< Back](/README.md)

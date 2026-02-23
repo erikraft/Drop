@@ -1,0 +1,297 @@
+---
+title: "Connect Devices"
+description: "Step-by-step guide for connecting devices using local network discovery, device pairing, and QR codes."
+---
+
+# Connecting Devices
+
+ErikrafT Drop provides multiple methods for connecting devices, each suited for different scenarios. This guide covers all available connection methods and best practices for successful device discovery.
+
+## Connection Methods Overview
+
+### 1. Local Network Discovery (Automatic)
+- **Best for**: Devices on the same WiFi/network
+- **Setup**: No configuration required
+- **Speed**: Instant discovery
+- **Security**: Local network only
+
+### 2. Device Pairing (Persistent)
+- **Best for**: Frequently used devices across different networks
+- **Setup**: One-time pairing process
+- **Speed**: Quick reconnection
+- **Security**: Encrypted room secrets
+
+### 3. QR Code Connection (Quick)
+- **Best for**: Fast, temporary connections
+- **Setup**: Scan QR code or enter 6-digit key
+- **Speed**: Immediate connection
+- **Security**: Temporary pairing keys
+
+## Local Network Discovery
+
+### Prerequisites
+- **Same Network**: All devices must be connected to the same network
+- **Modern Browser**: WebRTC-compatible browser required
+- **Internet Access**: Initial server connection needed
+
+### Step-by-Step Process
+
+#### 1. Open ErikrafT Drop
+Navigate to [https://drop.erikraft.com/](https://drop.erikraft.com/) on all devices
+
+#### 2. Wait for Discovery
+- Devices automatically appear after 10-30 seconds
+- Look for device names in the main interface
+- Each device shows a unique display name (e.g., "Blue Fox", "Red Eagle")
+
+#### 3. Verify Connection
+- Connected devices show as active peers
+- Hover over devices to see connection details
+- Test with a small file transfer
+
+### Troubleshooting Local Discovery
+
+#### Devices Not Appearing
+**Check Network Configuration:**
+- Verify all devices are on the same WiFi network
+- Check router settings for client isolation
+- Disable VPN or proxy services
+
+**Browser Issues:**
+- Update to the latest browser version
+- Clear browser cache and cookies
+- Try a different browser
+
+**Network Problems:**
+- Restart router if necessary
+- Check firewall settings
+- Test with a simple ping between devices
+
+#### Slow Discovery
+- **Network Congestion**: Reduce network traffic
+- **Router Performance**: Restart if discovery is very slow
+- **Browser Performance**: Close unnecessary tabs
+
+## Device Pairing
+
+### When to Use Pairing
+- **Cross-Network**: Devices on different networks
+- **Frequent Use**: Regularly connected devices
+- **Mobile Devices**: Phones and tablets that move between networks
+- **Family Setup**: Multiple family devices
+
+### Pairing Process
+
+#### 1. Initiate Pairing
+On the first device:
+1. Click the **Pair Device** button
+2. Wait for the pairing dialog to appear
+3. Note the 6-digit key and QR code
+
+#### 2. Connect Second Device
+On the second device:
+1. Click **Pair Device** button
+2. Choose one of two methods:
+   - **Scan QR Code**: Use camera to scan the QR code
+   - **Enter Key**: Type the 6-digit key manually
+
+#### 3. Confirm Pairing
+- Both devices show pairing success
+- Devices are saved to persistent storage
+- Paired devices appear automatically in future sessions
+
+### QR Code Scanning
+
+#### Camera Access
+1. **Grant Permission**: Allow camera access when prompted
+2. **Position Camera**: Hold device 6-12 inches from screen
+3. **Lighting**: Ensure good lighting for clear scanning
+4. **Stability**: Keep device steady during scanning
+
+#### Manual Key Entry
+If camera access is unavailable:
+1. **Note the Key**: Write down the 6-digit key
+2. **Enter Carefully**: Type the key in the input field
+3. **Validate**: Ensure all 6 digits are correct
+4. **Submit**: Click submit or press Enter
+
+### Managing Paired Devices
+
+#### View Paired Devices
+1. Click **Edit Paired Devices** button
+2. View all previously paired devices
+3. See device names and pairing dates
+
+#### Device Options
+- **Auto-Accept**: Toggle automatic file acceptance
+- **Rename**: Change device display names
+- **Unpair**: Remove device from paired list
+
+#### Unpairing Devices
+1. Open **Edit Paired Devices** dialog
+2. Find the device to remove
+3. Click the **Unpair** button
+4. Confirm removal
+
+## QR Code Quick Connections
+
+### Temporary Sharing Scenarios
+- **Presentations**: Audience members connect quickly
+- **Classrooms**: Students connect to teacher's device
+- **Meetings**: Rapid file sharing during sessions
+- **Public Spaces**: Quick connections in cafes or offices
+
+### QR Code Generation
+
+#### Create QR Code
+1. Click **Pair Device** button
+2. QR code appears automatically
+3. 6-digit key displays below QR code
+4. QR code is valid for one connection
+
+#### Share QR Code
+- **Display**: Show QR code on screen
+- **Copy URL**: Click QR code to copy pairing URL
+- **Share Link**: Use browser's share functionality
+
+### QR Code Scanning
+
+#### Mobile Scanning
+1. Open ErikrafT Drop on mobile device
+2. Click **Pair Device**
+3. Grant camera permission
+4. Point camera at QR code
+5. Wait for automatic detection
+
+#### Desktop Scanning
+1. Use phone camera to scan desktop QR code
+2. Or use desktop QR code scanner app
+3. Manual entry always available as fallback
+
+## Connection Best Practices
+
+### Network Optimization
+
+#### WiFi Configuration
+- **5GHz Preferred**: Faster speeds and less interference
+- **Strong Signal**: Ensure good signal strength
+- **Channel Selection**: Use less congested channels
+- **Security**: WPA2/WPA3 encryption recommended
+
+#### Router Settings
+- **Disable Client Isolation**: Allow device communication
+- **UPnP Enabled**: Facilitate peer discovery
+- **DMZ Configuration**: For advanced users only
+- **Port Forwarding**: Not typically required
+
+### Browser Optimization
+
+#### Recommended Browsers
+- **Chrome**: Best WebRTC support and performance
+- **Firefox**: Good alternative with full support
+- **Edge**: Chromium-based, excellent compatibility
+- **Safari**: Good support, some limitations
+
+#### Browser Settings
+- **JavaScript Enabled**: Required for functionality
+- **Cookies Allowed**: For session persistence
+- **Camera Permission**: For QR code scanning
+- **Notifications**: Optional but recommended
+
+### Security Considerations
+
+#### Network Security
+- **Trusted Networks**: Only pair on trusted networks
+- **Public WiFi**: Use with caution
+- **VPN Considerations**: May affect local discovery
+- **Firewall Rules**: Ensure WebRTC traffic allowed
+
+#### Device Security
+- **Screen Lock**: Protect devices when unattended
+- **Auto-Accept**: Use only with trusted devices
+- **Regular Cleanup**: Remove unused paired devices
+- **Software Updates**: Keep browsers updated
+
+## Advanced Connection Scenarios
+
+### Cross-Platform Connections
+
+#### Mobile to Desktop
+1. **Local Network**: Automatic discovery works best
+2. **Different Networks**: Use device pairing
+3. **Quick Transfer**: QR code for temporary sharing
+
+#### Mixed Device Types
+- **iOS to Android**: Full compatibility
+- **Windows to macOS**: No compatibility issues
+- **Linux Support**: Full functionality on modern distributions
+
+### Multiple Device Networks
+
+#### Home Network Setup
+1. **Main Computer**: Primary file source
+2. **Mobile Devices**: Quick access to files
+3. **Tablets**: Media consumption devices
+4. **Smart TV**: Limited but possible support
+
+#### Office Environment
+1. **Work Computer**: Primary work device
+2. **Personal Phone**: Quick file transfers
+3. **Conference Room**: Presentation sharing
+4. **Guest Devices**: Temporary access
+
+## Connection Troubleshooting
+
+### Common Connection Issues
+
+#### Discovery Failures
+**Symptoms:**
+- Devices don't appear in list
+- Long wait times for discovery
+- Intermittent device visibility
+
+**Solutions:**
+- Restart all devices
+- Check network connectivity
+- Disable VPN/proxy services
+- Try different browsers
+
+#### Pairing Failures
+**Symptoms:**
+- QR code won't scan
+- Invalid key error
+- Pairing timeout
+
+**Solutions:**
+- Check lighting conditions
+- Verify 6-digit key accuracy
+- Regenerate QR code
+- Use manual key entry
+
+#### Connection Drops
+**Symptoms:**
+- Devices disconnect randomly
+- Transfer interruptions
+- Connection instability
+
+**Solutions:**
+- Check network stability
+- Move closer to router
+- Reduce network congestion
+- Restart network equipment
+
+### Performance Issues
+
+#### Slow Transfers
+- **Network Speed**: Test internet speed
+- **WiFi Signal**: Improve signal strength
+- **Browser Performance**: Close other applications
+- **File Size**: Large files take longer naturally
+
+#### High Latency
+- **Network Congestion**: Reduce network load
+- **Router Quality**: Consider upgrade if old
+- **Interference**: Check for wireless interference
+- **Distance**: Move closer to access point
+
+This comprehensive connection guide ensures successful device pairing and optimal performance across all supported scenarios and device types.

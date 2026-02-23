@@ -1,0 +1,129 @@
+---
+title: "How It Works"
+description: "Understanding the technical architecture of ErikrafT Drop's peer-to-peer file sharing system."
+---
+
+# How ErikrafT Drop Works
+
+ErikrafT Drop uses a hybrid approach combining WebRTC for direct peer-to-peer communication and WebSocket servers for signaling and discovery. The system is designed to work primarily on local networks while supporting remote connections through pairing.
+
+## Connection Flow
+
+### 1. Initial Connection
+When a user opens ErikrafT Drop in their browser:
+
+1. **WebSocket Connection**: The client connects to the signaling server via WebSocket
+2. **Device Identification**: A unique peer ID is generated and stored in sessionStorage
+3. **Network Detection**: The server identifies the client's IP address for local network grouping
+4. **WebRTC Capability Check**: The browser's WebRTC support is detected and reported
+
+### 2. Device Discovery
+Devices discover each other through multiple mechanisms:
+
+#### Local Network Discovery
+- Devices on the same IP address are automatically grouped together by the server
+- The server maintains rooms based on IP addresses (`_rooms[roomId]`)
+- When a device connects, it receives a list of peers already in its IP-based room
+- New connections trigger `peer-joined` events for existing devices
+
+#### Device Pairing
+- Paired devices use encrypted 256-character room secrets stored in IndexedDB
+- Room secrets are persisted across browser sessions using the PersistentStorage class
+- The server matches devices with identical room secrets regardless of IP address
+- Paired devices remain discoverable even when on different networks
+
+### 3. WebRTC Connection Process
+
+#### Signaling Phase
+1. **Offer Creation**: The initiating peer creates a WebRTC offer using `RTCPeerConnection.createOffer()`
+2. **Signal Relay**: The offer is sent through the WebSocket server to the target peer
+3. **Answer Creation**: The receiving peer creates an answer using `RTCPeerConnection.createAnswer()`
+4. **ICE Exchange**: Both peers exchange ICE candidates for network path discovery
+5. **Connection Establishment**: WebRTC establishes a direct connection when possible
+
+#### DataChannel Setup
+```javascript
+// From network.js lines 1126-1129
+const channel = this._conn.createDataChannel('data-channel', {
+    ordered: true,
+    reliable: true
+});
+```
+
+The DataChannel handles all file transfers and messaging once the WebRTC connection is established.
+
+## File Transfer Process
+
+### 1. Transfer Request
+When files are selected for transfer:
+
+1. **File Metadata**: The sender creates headers with file information (name, size, MIME type)
+2. **Transfer Request**: A `request` message is sent to the recipient
+3. **User Confirmation**: The recipient displays a transfer request dialog
+4. **Accept/Decline**: The recipient responds with `files-transfer-response`
+
+### 2. File Chunking
+Large files are divided into manageable chunks:
+
+```javascript
+// From network.js lines 1671-1672
+this._chunkSize = 64000; // 64 KB chunks
+this._maxPartitionSize = 1e6; // 1 MB partitions
+```
+
+- **FileChunker Class**: Breaks files into 64KB chunks
+- **Partition Management**: Groups chunks into 1MB partitions for progress tracking
+- **Memory Management**: Prevents browser memory overload with large files
+
+### 3. Data Transfer
+Once the transfer is accepted:
+
+1. **Header Transmission**: File metadata is sent first
+2. **Chunk Streaming**: File chunks are sent sequentially via DataChannel
+3. **Progress Tracking**: Both sender and receiver track transfer progress
+4. **Completion Notification**: `file-transfer-complete` message confirms successful transfer
+
+## Security Architecture
+
+### WebRTC Encryption
+- **DTLS/SRTP**: All WebRTC communications are encrypted by the browser
+- **Certificate Exchange**: Peers exchange certificates during connection setup
+- **Perfect Forward Secrecy**: Each session uses unique encryption keys
+
+### Server Security
+- **No File Storage**: The server never handles file content, only signaling
+- **Rate Limiting**: Pairing attempts are limited to prevent abuse
+- **IP Validation**: LAN-only mode restricts connections to local networks
+- **Hashed IDs**: Peer IDs are salted and hashed for privacy
+
+## Fallback Mechanisms
+
+### WebSocket Fallback
+When WebRTC is unavailable:
+
+1. **Detection**: The server detects WebRTC capability via `webrtc_supported` parameter
+2. **WSPeer Class**: Creates WebSocket-based peer connections
+3. **Base64 Encoding**: File chunks are encoded as base64 for WebSocket transmission
+4. **Server Relay**: The WebSocket server relays all data between peers
+
+### iOS Memory Management
+Special handling for iOS devices:
+
+```javascript
+// From network.js lines 819-822
+if (window.iOS && request.totalSize >= 200*1024*1024) {
+    // Request to send them in chunks of 200MB instead
+    this.sendJSON({type: 'files-transfer-response', accepted: false, reason: 'ios-memory-limit'});
+    return;
+}
+```
+
+## Room Management
+
+The server maintains different types of rooms:
+
+- **IP Rooms**: `roomType: 'ip'` - Devices on the same local network
+- **Secret Rooms**: `roomType: 'secret'` - Paired devices using room secrets
+- **Public Rooms**: `roomType: 'public-id'` - Temporary rooms with 5-character codes
+
+Each room manages peer membership, handles join/leave events, and coordinates signaling between members.

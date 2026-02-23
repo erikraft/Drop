@@ -1,0 +1,280 @@
+---
+title: "Getting Started"
+description: "Quick start guide for setting up and using ErikrafT Drop for file sharing."
+---
+
+# Getting Started with ErikrafT Drop
+
+ErikrafT Drop requires minimal setup and works immediately on most modern browsers. Follow this guide to start sharing files between devices.
+
+## Quick Start
+
+### 1. Open ErikrafT Drop
+Navigate to [https://drop.erikraft.com/](https://drop.erikraft.com/) in your web browser on all devices you want to connect.
+
+### 2. Discover Devices
+- **Local Network**: Devices on the same network automatically appear after a few seconds
+- **Paired Devices**: Previously paired devices appear automatically if they're online
+- **Manual Pairing**: Use QR codes or 6-digit keys to connect devices on different networks
+
+### 3. Share Files
+- **Drag & Drop**: Drag files onto the browser window
+- **Click to Select**: Click the main area to open file selector
+- **Share Menu**: Use the browser's share menu (on mobile devices)
+
+## System Requirements
+
+### Browser Support
+ErikrafT Drop works with all modern browsers that support WebRTC:
+
+| Browser | Minimum Version | WebRTC Support | Notes |
+|---------|----------------|----------------|-------|
+| Chrome | 23+ | Full | Recommended |
+| Firefox | 22+ | Full | Good alternative |
+| Safari | 11+ | Full | iOS and macOS |
+| Edge | 79+ | Full | Chromium-based |
+
+### Network Requirements
+- **Local Network**: Automatic discovery works on any local network
+- **Internet Connection**: Required for initial signaling server connection
+- **No Special Configuration**: Works with most home and office networks
+
+### Device Requirements
+- **Memory**: Sufficient RAM for file transfers (recommended 4GB+ for large files)
+- **Storage**: Available disk space for received files
+- **Browser**: Modern browser with JavaScript enabled
+
+## Installation Options
+
+### Web Application (Recommended)
+No installation required - simply use the web application directly.
+
+### Progressive Web App (PWA)
+Install as a native application:
+
+1. **Chrome/Edge**: Click the install icon in the address bar
+2. **Firefox**: Use the "Install Site" option in the menu
+3. **Safari**: Tap "Share" → "Add to Home Screen"
+
+### Command Line Interface
+For power users, the CLI tool enables file sharing from the terminal:
+
+```bash
+# Install (Linux/Mac)
+wget https://github.com/erikraft/Drop/releases/download/v1.12.4/erikraftdrop-cli.zip
+unzip erikraftdrop-cli.zip
+sudo chmod +x erikraftdrop
+sudo ln -s erikraftdrop /usr/local/bin/erikraftdrop
+
+# Usage
+erikraftdrop file1.txt file2.jpg
+erikraftdrop -t "Hello world"
+```
+
+## Ecosystem Components
+
+ErikrafT Drop provides a comprehensive ecosystem of applications and integrations across multiple platforms:
+
+### Discord Bot Integration
+The official Discord bot enables seamless file sharing directly within Discord servers and direct messages.
+
+**Key Features:**
+- **Slash Commands**: Use `/drop` command with 6-digit pairing keys
+- **File Transfer**: Send up to 3 files simultaneously (max 25MB each per Discord limits)
+- **Text Messages**: Send text messages up to 1800 characters inline, larger as attachments
+- **Bidirectional Transfer**: Both send and receive files through Discord
+- **Real-time Progress**: Live transfer progress updates with emoji indicators
+- **Error Handling**: Comprehensive error reporting and retry mechanisms
+
+**Technical Implementation:**
+- Built with Discord.js v14 using modern slash command architecture
+- WebRTC integration for peer-to-peer connections
+- Automatic file downloading and re-uploading through Discord's API
+- Environment-based configuration for deployment flexibility
+- Portuguese language support with localized error messages
+
+**Usage Example:**
+```
+/drop key:123456 name:"MyDevice" message:"Hello world!"
+/drop key:123456 file1:@image.png
+```
+
+### Browser Extensions
+Native browser extensions provide enhanced integration and quick access to ErikrafT Drop functionality.
+
+**Supported Browsers:**
+- **Chrome**: Manifest V3 extension with popup interface
+- **Firefox**: WebExtension with enhanced privacy features
+- **Edge**: Chromium-based extension with Microsoft Store integration
+- **Opera**: Opera extension with sidebar support
+
+**Extension Features:**
+- **Quick Launch**: One-click access to ErikrafT Drop
+- **Context Menu**: Right-click files to share directly
+- **Popup Interface**: Compact UI for rapid file sharing
+- **Icon Integration**: Native browser toolbar integration
+- **No Special Permissions**: Minimal permission requirements for privacy
+
+**Technical Details:**
+- Manifest V3 compliance for modern browser security
+- Host permissions limited to https://drop.erikraft.com/
+- No background scripts or persistent storage
+- Lightweight design with minimal resource usage
+
+### iOS Shortcut Integration
+Apple Shortcuts integration brings ErikrafT Drop functionality to iOS devices with native system integration.
+
+**Shortcut Features:**
+- **Native iOS Integration**: Works with iOS Shortcuts app
+- **System-wide Access**: Launch from anywhere using Siri or Shortcuts
+- **File Sharing**: Share files from other apps directly to ErikrafT Drop
+- **URL Scheme Support**: Deep linking for seamless app switching
+- **Background Processing**: Works in background for enhanced user experience
+
+**Implementation Details:**
+- Uses iOS Shortcuts framework for native integration
+- Leverages WebKit for embedded browser functionality
+- Supports file picker integration with iOS file system
+- Optimized for both iPhone and iPad layouts
+
+### Web Application
+The core web application provides the full ErikrafT Drop experience with modern web technologies.
+
+**Web Features:**
+- **Progressive Web App**: Installable as native application
+- **Responsive Design**: Optimized for all screen sizes and devices
+- **Offline Support**: Core functionality available without internet
+- **Real-time Updates**: Live connection status and transfer progress
+- **Multi-language Support**: Internationalization with JSON language files
+
+**Technical Stack:**
+- **Frontend**: Vanilla JavaScript with modern ES6+ features
+- **Styling**: Custom CSS with OpenSans and custom icon fonts
+- **WebRTC**: Peer-to-peer file transfer technology
+- **Service Workers**: PWA functionality and offline support
+- **IndexedDB**: Local storage for device pairing and preferences
+
+**Web Application Architecture:**
+- **Single Page Application**: Dynamic content loading without page refreshes
+- **Component-based Design**: Modular JavaScript architecture
+- **Event-driven Communication**: Real-time updates using WebRTC and WebSocket
+- **Security**: Content Security Policy and HTTPS enforcement
+- **Performance**: Lazy loading and resource optimization
+
+### Android Native Application
+The official Android app provides native integration with the Android operating system and enhanced features.
+
+**App Features:**
+- **Native Android UI**: Material Design 3 with system integration
+- **Background Service**: Continuous operation even when app is closed
+- **File System Integration**: Full access to Android storage and media
+- **Notification Support**: Transfer status and completion notifications
+- **Multi-device Support**: Phone, tablet, TV, and XR variants
+
+**Technical Specifications:**
+- **Package**: `com.erikraft.drop`
+- **Minimum SDK**: Android 5.0 (API 21)
+- **Target SDK**: Android 15 (API 35)
+- **Version**: 9.0.4 (Version Code 13)
+- **Build System**: Gradle with Android plugin
+
+**Android Architecture:**
+- **ViewBinding**: Modern UI binding approach
+- **Lifecycle Components**: Android Architecture Components integration
+- **WebView Integration**: Embedded browser for core functionality
+- **Storage Framework**: Android Storage Access Framework integration
+- **Material Design**: Google Material Design 3 components
+
+**Advanced Features:**
+- **Multi-window Support**: Split-screen and picture-in-picture modes
+- **Accessibility**: Full accessibility support with screen readers
+- **Dark Mode**: System theme integration
+- **Auto-start**: Optional automatic startup on device boot
+- **Network Awareness**: Automatic network change detection
+
+**Development and Distribution:**
+- **Google Play Store**: Official distribution channel
+- **Open Source**: Full source code available on GitHub
+- **Automated Builds**: CI/CD pipeline for automated testing and deployment
+- **Multi-language**: Crowdin-based translation management
+- **Privacy-focused**: No tracking or analytics integration
+
+## First Time Setup
+
+### Network Discovery
+1. **Connect Multiple Devices**: Open ErikrafT Drop on at least two devices
+2. **Same Network**: Ensure devices are on the same WiFi/network
+3. **Wait for Discovery**: Devices should appear within 10-30 seconds
+4. **Test Transfer**: Send a small test file to verify connectivity
+
+### Device Pairing (Optional)
+For persistent connections across networks:
+
+1. **Initiate Pairing**: Click "Pair Device" on one device
+2. **Scan QR Code**: Use the camera to scan the QR code on the second device
+3. **Or Enter Key**: Manually enter the 6-digit pairing key
+4. **Confirm Connection**: Both devices should show as paired
+
+### Browser Permissions
+ErikrafT Drop may request:
+
+- **Camera Access**: For QR code scanning (optional)
+- **File Access**: For reading files to share
+- **Storage Access**: For saving received files
+- **Notifications**: For transfer status updates (optional)
+
+## Troubleshooting Common Issues
+
+### Devices Not Discovering Each Other
+
+**Check Network Connection:**
+- Ensure both devices are on the same network
+- Verify internet connectivity is active
+- Try refreshing both browser windows
+
+**Browser Issues:**
+- Update to the latest browser version
+- Clear browser cache and cookies
+- Disable VPN or proxy services
+- Try a different browser
+
+**Network Configuration:**
+- Check firewall settings
+- Verify router doesn't block peer-to-peer connections
+- Try switching between WiFi and cellular data
+
+### Transfer Failures
+
+**Large Files:**
+- iOS devices have 200MB memory limits per transfer
+- Break large files into smaller chunks
+- Ensure sufficient available RAM
+
+**Connection Drops:**
+- WebRTC connections may drop on unstable networks
+- Files can be resumed if transfer is interrupted
+- Consider using WiFi for more stable connections
+
+### Performance Optimization
+
+**For Best Performance:**
+- Use modern browsers (Chrome/Edge recommended)
+- Connect via WiFi rather than cellular data
+- Close unnecessary browser tabs
+- Ensure sufficient available memory
+
+**Network Tips:**
+- 5GHz WiFi provides better performance than 2.4GHz
+- Ethernet connections are most stable
+- Avoid network congestion during large transfers
+
+## Next Steps
+
+Once you have ErikrafT Drop working:
+
+- **Explore Features**: Try the chat functionality and file preview
+- **Set Up Pairing**: Pair frequently used devices for quick access
+- **Install PWA**: Install as a native app for easier access
+- **CLI Integration**: Set up command-line tools for power users
+
+For detailed technical information, see the [Architecture](../architecture/system-overview) section.
