@@ -1,80 +1,77 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
+  "$schema": "https://mintlify.com/docs.json",
   "name": "ErikrafT Drop",
+  "theme": "mint",
+
   "logo": {
     "dark": "/images/logo-dark.svg",
     "light": "/images/logo-light.svg"
   },
+
   "favicon": "/images/favicon.png",
+
   "colors": {
-    "primary": "#4285f4",
-    "light": "#ffffff",
-    "dark": "#000000",
-    "anchors": "#4285f4"
+    "primary": "#4285f4"
   },
-  "topbarCtaButton": {
-    "type": "github",
-    "url": "https://github.com/erikraft/Drop"
-  },
-  "navigation": [
-    {
-      "group": "Introduction",
-      "pages": [
-        "introduction/overview",
-        "introduction/how-it-works",
-        "introduction/getting-started",
-        "introduction/getting-erikraft-drop"
-      ]
-    },
-    {
-      "group": "Architecture",
-      "pages": [
-        "architecture/system-overview",
-        "architecture/webrtc-connection",
-        "architecture/signaling-server",
-        "architecture/file-transfer-flow"
-      ]
-    },
-    {
-      "group": "Features",
-      "pages": [
-        "features/p2p-transfer",
-        "features/device-pairing",
-        "features/qr-connection"
-      ]
-    },
-    {
-      "group": "Usage",
-      "pages": [
-        "usage/connect-devices",
-        "usage/send-files",
-        "usage/receive-files"
-      ]
-    },
-    {
-      "group": "Ecosystem",
-      "pages": [
-        "ecosystem/overview",
-        "ecosystem/android",
-        "ecosystem/shortcut",
-        "ecosystem/extensions",
-        "ecosystem/discord"
-      ]
-    },
-    {
-      "group": "Reference",
-      "pages": [
-        "reference/project-structure",
-        "reference/configuration",
-        "reference/faq",
-        "reference/host-your-own",
-        "reference/how-to",
-        "reference/technical-documentation",
-        "reference/docker-swarm-usage"
-      ]
-    }
-  ],
-  "footerSocials": {
-    "github": "https://github.com/erikraft/Drop"
+
+  "navigation": {
+    "groups": [
+      {
+        "group": "Introduction",
+        "pages": [
+          "introduction/overview",
+          "introduction/how-it-works",
+          "introduction/getting-started",
+          "introduction/getting-erikraft-drop"
+        ]
+      },
+      {
+        "group": "Architecture",
+        "pages": [
+          "architecture/system-overview",
+          "architecture/webrtc-connection",
+          "architecture/signaling-server",
+          "architecture/file-transfer-flow"
+        ]
+      },
+      {
+        "group": "Features",
+        "pages": [
+          "features/p2p-transfer",
+          "features/device-pairing",
+          "features/qr-connection"
+        ]
+      },
+      {
+        "group": "Usage",
+        "pages": [
+          "usage/connect-devices",
+          "usage/send-files",
+          "usage/receive-files"
+        ]
+      },
+      {
+        "group": "Ecosystem",
+        "pages": [
+          "ecosystem/overview",
+          "ecosystem/android",
+          "ecosystem/shortcut",
+          "ecosystem/extensions",
+          "ecosystem/discord"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "reference/project-structure",
+          "reference/configuration",
+          "reference/faq",
+          "reference/host-your-own",
+          "reference/how-to",
+          "reference/technical-documentation",
+          "reference/docker-swarm-usage"
+        ]
+      }
+    ]
   }
 }
