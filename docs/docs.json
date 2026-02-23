@@ -8,7 +8,10 @@
     "light": "/images/logo-light.svg"
   },
 
-  "favicon": "/images/favicon.png",
+  "favicon": {
+    "light": "/images/favicon-light.png",
+    "dark": "/images/favicon-dark.png"
+  },
 
   "colors": {
     "primary": "#4285f4"
