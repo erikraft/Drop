@@ -36,23 +36,23 @@ graph TB
         Web[Web App]
         PWA[PWA Client]
     end
-    
+
     subgraph "Mobile Ecosystem"
         Android[Android App]
         iOS[iOS Shortcut]
     end
-    
+
     subgraph "Desktop Ecosystem"
         Browser[Browser Extensions]
         IDE[IDE Extensions]
         Thunderbird[Thunderbird Add-on]
     end
-    
+
     subgraph "Communication Ecosystem"
         Discord[Discord Bot]
         API[REST API]
     end
-    
+
     Web --> WS
     PWA --> WS
     Android --> WS
@@ -151,7 +151,7 @@ sequenceDiagram
     participant Client as Ecosystem Client
     participant Server as Signaling Server
     participant Peer as Remote Peer
-    
+
     Client->>Server: WebSocket connection
     Server->>Client: Peer list
     Client->>Server: WebRTC offer
@@ -167,7 +167,7 @@ sequenceDiagram
     participant Client as Ecosystem Client
     participant Server as Signaling Server
     participant Peer as Remote Peer
-    
+
     Client->>Server: WebSocket connection
     Server->>Client: Peer list
     Client->>Server: File transfer request

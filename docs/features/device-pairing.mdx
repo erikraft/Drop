@@ -172,7 +172,7 @@ _onPairDeviceJoin(sender, message) {
     const roomSecret = this._roomSecrets[message.pairKey].roomSecret;
     const creator = this._roomSecrets[message.pairKey].creator;
     this._removePairKey(message.pairKey);
-    
+
     this._send(sender, {
         type: 'pair-device-joined',
         roomSecret: roomSecret,
@@ -240,12 +240,12 @@ async _initDOM() {
     roomSecretsEntries.forEach(roomSecretsEntry => {
         let $pairedDevice = document.createElement('div');
         $pairedDevice.classList.add('paired-device');
-        
+
         // Device display information
         const displayDiv = document.createElement('div');
         displayDiv.className = 'display-name';
         displayDiv.textContent = roomSecretsEntry.displayName;
-        
+
         // Auto-accept toggle
         const input = document.createElement('input');
         input.type = 'checkbox';
@@ -255,7 +255,7 @@ async _initDOM() {
                 autoAccept: e.target.checked
             });
         });
-        
+
         $pairedDevice.appendChild(displayDiv);
         $pairedDevice.appendChild(input);
         this.$pairedDevicesWrapper.appendChild($pairedDevice);
@@ -334,7 +334,7 @@ class EditPairedDevicesDialog extends Dialog {
     constructor() {
         super('edit-paired-devices-dialog');
         this.$pairedDevicesWrapper = this.$el.querySelector('.paired-devices-wrapper');
-        
+
         Events.on('peer-display-name-changed', e => this._onPeerDisplayNameChanged(e));
         Events.on('keydown', e => this._onKeyDown(e));
     }

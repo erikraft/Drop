@@ -71,7 +71,7 @@ Devices discover each other through:
 ```javascript
 // From network.js lines 1104-1113
 _connect() {
-    if (!this._conn || this._conn.signalingState === "closed") 
+    if (!this._conn || this._conn.signalingState === "closed")
         this._openConnection();
 
     if (this._isCaller) {

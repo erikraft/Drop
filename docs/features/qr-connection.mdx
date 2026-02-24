@@ -119,8 +119,8 @@ The system requests camera access for QR code scanning:
 
 ```javascript
 // Camera access is handled by the browser's getUserMedia API
-navigator.mediaDevices.getUserMedia({ 
-    video: { facingMode: 'environment' } 
+navigator.mediaDevices.getUserMedia({
+    video: { facingMode: 'environment' }
 })
 .then(stream => {
     // Initialize QR code scanner
@@ -238,17 +238,17 @@ When camera access is unavailable:
 function validatePairUrl(url) {
     const parsedUrl = new URL(url);
     const pairKey = parsedUrl.searchParams.get('pair_key');
-    
+
     // Validate pair key format
     if (!/^\d{6}$/.test(pairKey)) {
         throw new Error('Invalid pair key format');
     }
-    
+
     // Validate domain
     if (!allowedDomains.includes(parsedUrl.hostname)) {
         throw new Error('Unauthorized domain');
     }
-    
+
     return pairKey;
 }
 ```

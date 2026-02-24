@@ -148,14 +148,14 @@ export function activate(context: vscode.ExtensionContext) {
         'erikraft-drop.shareFile',
         shareFileHandler
     );
-    
+
     // Register context menu
     vscode.commands.executeCommand(
         'setContext',
         'erikraft-drop.enabled',
         true
     );
-    
+
     context.subscriptions.push(shareFileCommand);
 }
 ```

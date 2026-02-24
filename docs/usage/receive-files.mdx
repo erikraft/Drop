@@ -119,7 +119,7 @@ class FileDigester {
         if (isNaN(this.progress)) this.progress = 1;
 
         if (this._bytesReceived < this._size) return;
-        
+
         const blob = new Blob(this._buffer);
         this._buffer = null;
         this._callback(new File([blob], this._name, {
@@ -231,12 +231,12 @@ _onFileTransferCompleted() {
 
     const sameSize = fileBlob.size === acceptedHeader.size;
     const sameName = fileBlob.name === acceptedHeader.name;
-    Events.fire('file-received', { 
-        file: fileBlob, 
+    Events.fire('file-received', {
+        file: fileBlob,
         peerId: this._peerId,
         imagesOnly: request.imagesOnly,
-        sameSize, 
-        sameName 
+        sameSize,
+        sameName
     });
 }
 ```

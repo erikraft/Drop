@@ -360,8 +360,8 @@ if (cluster.isMaster) {
 // From network.js lines 819-822
 if (window.iOS && request.totalSize >= 200*1024*1024) {
     this.sendJSON({
-        type: 'files-transfer-response', 
-        accepted: false, 
+        type: 'files-transfer-response',
+        accepted: false,
         reason: 'ios-memory-limit'
     });
     return;
