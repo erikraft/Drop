@@ -11,7 +11,7 @@
     Fork of ErikrafT Drop.
   </p>
 
-[![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docdrop.erikraft.com/)
+[![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/erikraft/Drop)
 [![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)
 ![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)
@@ -238,7 +238,7 @@ Connect to others in complex network situations, or over the Internet.
 <br />
 [<img src="https://biodrop.erikraft.com/images/Logo.png" width="20px" style="display:inline;">｜drop.erikraft.com](https://drop.erikraft.com/)
 <br />
-[✍🏻｜Documentation](https://docdrop.erikraft.com/)
+[✍🏻｜Documentation](https://docsdrop.erikraft.com/)
 <br />
 [🛡️｜Privacy Policy](https://drop.erikraft.com/privacy-policy.html)
 <br />
