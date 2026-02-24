@@ -17,10 +17,10 @@ The core WebRTC functionality is implemented in the `RTCPeer` class in `network.
 class RTCPeer extends Peer {
     constructor(serverConnection, isCaller, peerId, roomType, roomId, rtcConfig) {
         super(serverConnection, isCaller, peerId, roomType, roomId);
-        
+
         this.rtcSupported = true;
         this.rtcConfig = rtcConfig;
-        
+
         if (!this._isCaller) return; // we will listen for a caller
         this._connect();
     }
@@ -215,7 +215,7 @@ getConnectionHash() {
     const localDescriptionLines = this._conn.localDescription.sdp.split("\r\n");
     const remoteDescriptionLines = this._conn.remoteDescription.sdp.split("\r\n");
     let localConnectionFingerprint, remoteConnectionFingerprint;
-    
+
     // Extract fingerprints from SDP
     for (let i=0; i<localDescriptionLines.length; i++) {
         if (localDescriptionLines[i].startsWith("a=fingerprint:")) {
@@ -223,7 +223,7 @@ getConnectionHash() {
             break;
         }
     }
-    
+
     // Combine and hash fingerprints
     const combinedFingerprints = this._isCaller
         ? localConnectionFingerprint + remoteConnectionFingerprint

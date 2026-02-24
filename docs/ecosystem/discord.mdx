@@ -116,7 +116,7 @@ class ErikrafTDropBot {
                 GatewayIntentBits.MessageContent
             ]
         });
-        
+
         this.dropClient = new DropClient();
         this.setupEventHandlers();
     }
@@ -170,7 +170,7 @@ class DropCommand {
 
     async execute(interaction) {
         const { key, name, message, file1, file2, file3 } = interaction.options;
-        
+
         // Validate pairing key
         if (!this.validateKey(key)) {
             return interaction.reply({
@@ -185,7 +185,7 @@ class DropCommand {
 
         // Initiate transfer
         await this.initiateTransfer(key, name, files, textMessage);
-        
+
         // Send response
         await interaction.reply({
             content: 'Transfer initiated successfully',

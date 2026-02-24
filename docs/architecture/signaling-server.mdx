@@ -53,7 +53,7 @@ export default class ErikrafTdropWsServer {
         this._rooms = {}; // { roomId: peers[] }
         this._roomSecrets = {}; // { pairKey: roomSecret }
         this._keepAliveTimers = {};
-        
+
         this._wss = new WebSocketServer({ server });
         this._wss.on('connection', (socket, request) => this._onConnection(new Peer(socket, request, conf)));
     }
@@ -76,7 +76,7 @@ _onConnection(peer) {
         }
         return;
     }
-    
+
     peer.socket.on('message', message => this._onMessage(peer, message));
     peer.socket.onerror = e => console.error(e);
     this._keepAlive(peer);
@@ -94,7 +94,7 @@ function isLocalIp(ip) {
     if (!ip.includes(":")) {
         return LOCAL_IPV4_PATTERNS.some(pattern => pattern.test(ip));
     }
-    
+
     // IPv6 local address validation
     const firstWord = ip.split(":").find(el => !!el);
     if (/^fe[c-f][0-9a-f]$/.test(firstWord)) return true;
@@ -102,7 +102,7 @@ function isLocalIp(ip) {
     if (/^fd[0-9a-f]{2}$/.test(firstWord)) return true;
     if (firstWord === "fe80") return true;
     if (firstWord === "100") return true;
-    
+
     return false;
 }
 ```
@@ -278,7 +278,7 @@ _onPairDeviceJoin(sender, message) {
     const roomSecret = this._roomSecrets[message.pairKey].roomSecret;
     const creator = this._roomSecrets[message.pairKey].creator;
     this._removePairKey(message.pairKey);
-    
+
     this._send(sender, {
         type: 'pair-device-joined',
         roomSecret: roomSecret,

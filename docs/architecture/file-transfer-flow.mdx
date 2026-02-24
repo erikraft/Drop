@@ -43,10 +43,10 @@ async requestFileTransfer(files) {
             size: file.size,
             mime: file.type || mime.defaultMime
         };
-        
+
         header.push(fileHeader);
         totalSize += file.size;
-        
+
         if (!mime.isImage(file)) {
             imagesOnly = false;
         }
@@ -96,11 +96,11 @@ _onFilesTransferRequest(request) {
         this.sendJSON({type: 'files-transfer-response', accepted: false});
         return;
     }
-    
+
     if (window.iOS && request.totalSize >= 200*1024*1024) {
         this.sendJSON({
-            type: 'files-transfer-response', 
-            accepted: false, 
+            type: 'files-transfer-response',
+            accepted: false,
             reason: 'ios-memory-limit'
         });
         return;
@@ -169,7 +169,7 @@ async _sendFile(file) {
         name: file.name,
         mime: file.type || mime.defaultMime
     });
-    
+
     this._chunker = new FileChunker(
         file,
         chunk => this._send(chunk),
@@ -225,7 +225,7 @@ class FileDigester {
         if (isNaN(this.progress)) this.progress = 1;
 
         if (this._bytesReceived < this._size) return;
-        
+
         const blob = new Blob(this._buffer);
         this._buffer = null;
         this._callback(new File([blob], this._name, {
@@ -341,12 +341,12 @@ _onFileTransferCompleted() {
 
     const sameSize = fileBlob.size === acceptedHeader.size;
     const sameName = fileBlob.name === acceptedHeader.name;
-    Events.fire('file-received', { 
-        file: fileBlob, 
+    Events.fire('file-received', {
+        file: fileBlob,
         peerId: this._peerId,
         imagesOnly: request.imagesOnly,
-        sameSize, 
-        sameName 
+        sameSize,
+        sameName
     });
 }
 ```
