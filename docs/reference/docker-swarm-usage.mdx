@@ -1,6 +1,7 @@
 ---
-title: Docker Swarm Usage
-description: Guide for deploying ErikrafT Drop using Docker Swarm with health checks
+title: "Docker Swarm Usage"
+description: "Guide for deploying ErikrafT Drop using Docker Swarm with health checks"
+icon: "cubes"
 ---
 
 # Docker Swarm Usage
@@ -12,31 +13,30 @@ The [Docker Image](../Dockerfile) includes a health check with the following opt
 ```
 --interval=30s
 ```
+
 > Specifies the time interval to run the health check. \
 > In this case, the health check is performed every 30 seconds.
-<br>
 
 ```
 --timeout=10s
 ```
+
 > Specifies the amount of time to wait for a response from the "HEALTHCHECK" command. \
 > If the response does not arrive within 10 seconds, the health check fails.
-<br>
 
 ```
 --start-period=5s
 ```
+
 > Specifies the amount of time to wait before starting the health check process. \
 > In this case, the health check process will begin 5 seconds after the container is started.
-<br>
 
 ```
 --retries=3
 ```
+
 > Specifies the number of times Docker should retry the health check \
 > before considering the container to be unhealthy.
-<br>
-
 
 The CMD instruction is used to define the command that will be run as part of the health check. \
 In this case, the command is `wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1`. \

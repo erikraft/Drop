@@ -1,9 +1,11 @@
 ---
-title: Technical Documentation
-description: In-depth technical details about ErikrafT Drop's architecture and implementation
+title: "Technical Documentation"
+description: "In-depth technical details about ErikrafT Drop's architecture and implementation"
+icon: "book"
 ---
 
 # Technical Documentation
+
 ## Encryption, WebRTC, STUN and TURN
 
 Encryption is mandatory for WebRTC connections and completely done by the browser itself.
@@ -43,8 +45,7 @@ RTC iceServers and checks what works. \
 Only if the STUN server is not sufficient, \
 the TURN server is used.
 
-![img](https://www.wowza.com/wp-content/uploads/WeRTC-Encryption-Diagrams-01.jpg)
-_Diagram created by wowza.com_
+<img src="https://www.wowza.com/wp-content/uploads/WeRTC-Encryption-Diagrams-01.jpg" alt="img" /> _Diagram created by wowza.com_
 
 Good thing: if your device has an IPv6 address \
 it is uniquely reachable by that address. \
@@ -53,7 +54,6 @@ IPv6 addresses there is no need for a TURN server in any scenario.
 
 Learn more by reading https://www.wowza.com/blog/webrtc-encryption-and-security \
 which gives a good insight into STUN, TURN and WebRTC.
-
 
 ## Device Pairing
 
