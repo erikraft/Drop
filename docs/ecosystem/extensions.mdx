@@ -1,6 +1,7 @@
 ---
 title: "Browser and IDE Extensions"
 description: "Comprehensive guide to ErikrafT Drop browser extensions and IDE integrations for enhanced productivity."
+icon: "puzzle-piece"
 ---
 
 # Browser and IDE Extensions
@@ -10,6 +11,7 @@ The ErikrafT Drop extension ecosystem provides seamless integration with popular
 ## Extension Overview
 
 ### Extension Categories
+
 - **Browser Extensions**: Chrome, Firefox, Opera, and Thunderbird extensions
 - **IDE Extensions**: VS Code and Open VSX Registry extensions
 - **Integration Types**: Context menu, toolbar, and command palette integration
@@ -18,22 +20,25 @@ The ErikrafT Drop extension ecosystem provides seamless integration with popular
 ### Supported Platforms
 
 #### Browser Extensions
-| Browser | Extension Store | Extension ID | Features |
-|---------|-----------------|-------------|----------|
-| Chrome | Chrome Web Store | Available | Context menu, toolbar |
-| Firefox | Firefox Add-ons | Available | Context menu, toolbar |
-| Opera | Opera Add-ons | Available | Context menu, toolbar |
-| Thunderbird | Thunderbird Add-ons | Available | Email attachment sharing |
+
+| Browser     | Extension Store     | Extension ID | Features                 |
+| ----------- | ------------------- | ------------ | ------------------------ |
+| Chrome      | Chrome Web Store    | Available    | Context menu, toolbar    |
+| Firefox     | Firefox Add-ons     | Available    | Context menu, toolbar    |
+| Opera       | Opera Add-ons       | Available    | Context menu, toolbar    |
+| Thunderbird | Thunderbird Add-ons | Available    | Email attachment sharing |
 
 #### IDE Extensions
-| Platform | Marketplace | Extension ID | Features |
-|----------|------------|-------------|----------|
-| VS Code | VS Code Marketplace | `ErikrafT.erikraft-drop` | Command palette, explorer |
-| Open VSX | Open VSX Registry | `ErikrafT/erikraft-drop` | Command palette, explorer |
+
+| Platform | Marketplace         | Extension ID             | Features                  |
+| -------- | ------------------- | ------------------------ | ------------------------- |
+| VS Code  | VS Code Marketplace | `ErikrafT.erikraft-drop` | Command palette, explorer |
+| Open VSX | Open VSX Registry   | `ErikrafT/erikraft-drop` | Command palette, explorer |
 
 ## Browser Extensions
 
 ### Architecture Overview
+
 Browser extensions use the WebExtensions API for cross-browser compatibility:
 
 ```mermaid
@@ -50,18 +55,21 @@ graph TD
 ### Core Features
 
 #### Context Menu Integration
+
 - **Right-Click Menu**: Adds ErikrafT Drop options to context menu
 - **File Selection**: Works with selected files and text
 - **URL Sharing**: Share web page URLs directly
 - **Image Sharing**: Share images from web pages
 
 #### Toolbar Integration
+
 - **Quick Access**: One-click access to ErikrafT Drop
 - **Status Indicator**: Shows connection status
 - **Quick Actions**: Rapid file sharing actions
 - **Settings Access**: Extension configuration options
 
 #### WebSocket Connection
+
 - **Persistent Connection**: Maintains WebSocket connection
 - **Auto-Reconnection**: Automatic reconnection on disconnect
 - **Background Operation**: Works in background tabs
@@ -70,6 +78,7 @@ graph TD
 ### Browser-Specific Implementation
 
 #### Chrome Extension
+
 ```javascript
 // Chrome extension manifest structure
 {
@@ -92,6 +101,7 @@ graph TD
 ```
 
 #### Firefox Extension
+
 ```javascript
 // Firefox extension manifest structure
 {
@@ -116,18 +126,21 @@ graph TD
 ### Extension Features
 
 #### File Sharing Capabilities
+
 - **Multiple Files**: Select and share multiple files
 - **Directory Support**: Share entire directories
 - **Large Files**: Handle large file transfers
 - **Progress Tracking**: Monitor transfer progress
 
 #### Content Type Support
+
 - **Documents**: PDF, DOC, TXT, and other document formats
 - **Images**: JPG, PNG, GIF, WebP, and other image formats
 - **Code Files**: Source code files with syntax highlighting
 - **Archives**: ZIP, RAR, and other archive formats
 
 #### Integration Points
+
 - **File Explorer**: Integration with browser file explorer
 - **Download Manager**: Share downloaded files
 - **Web Pages**: Share web page content and URLs
@@ -138,6 +151,7 @@ graph TD
 ### VS Code Extension
 
 #### Architecture
+
 The VS Code extension integrates with the VS Code extension API:
 
 ```typescript
@@ -161,12 +175,14 @@ export function activate(context: vscode.ExtensionContext) {
 ```
 
 #### Features
+
 - **Command Palette Integration**: Access via Ctrl+Shift+P
 - **Explorer Context Menu**: Right-click files in explorer
 - **Editor Integration**: Share active editor content
 - **Workspace Integration**: Share entire workspace files
 
 #### Commands
+
 ```typescript
 // Available VS Code commands
 - 'erikraft-drop.shareFile': Share selected file
@@ -179,13 +195,16 @@ export function activate(context: vscode.ExtensionContext) {
 ### Open VSX Extension
 
 #### Compatibility
+
 The Open VSX extension provides the same functionality as the VS Code extension:
+
 - **Cross-Platform**: Works with VS Code forks
 - **Open Source**: Fully open-source implementation
 - **Feature Parity**: Same features as VS Code version
 - **Community Support**: Community-driven development
 
 #### Installation
+
 ```bash
 # Install via Open VSX CLI
 ovsx install ErikrafT.erikraft-drop
@@ -199,6 +218,7 @@ code --install-extension ErikrafT.erikraft-drop
 ### Browser Extension Installation
 
 #### Chrome Web Store
+
 1. **Visit Store**: [Chrome Web Store](https://chrome.google.com/webstore)
 2. **Search**: Search for "ErikrafT Drop"
 3. **Install**: Click "Add to Chrome"
@@ -206,6 +226,7 @@ code --install-extension ErikrafT.erikraft-drop
 5. **Setup**: Configure extension settings
 
 #### Firefox Add-ons
+
 1. **Visit Add-ons**: [Firefox Add-ons](https://addons.mozilla.org/firefox/)
 2. **Search**: Search for "ErikrafT Drop"
 3. **Install**: Click "Add to Firefox"
@@ -213,6 +234,7 @@ code --install-extension ErikrafT.erikraft-drop
 5. **Setup**: Configure extension settings
 
 #### Opera Add-ons
+
 1. **Visit Add-ons**: [Opera Add-ons](https://addons.opera.com/)
 2. **Search**: Search for "ErikrafT Drop"
 3. **Install**: Click "Add to Opera"
@@ -220,6 +242,7 @@ code --install-extension ErikrafT.erikraft-drop
 5. **Setup**: Configure extension settings
 
 #### Thunderbird Add-ons
+
 1. **Visit Add-ons**: [Thunderbird Add-ons](https://addons.thunderbird.net/)
 2. **Search**: Search for "ErikrafT Drop"
 3. **Install**: Click "Add to Thunderbird"
@@ -229,6 +252,7 @@ code --install-extension ErikrafT.erikraft-drop
 ### IDE Extension Installation
 
 #### VS Code Marketplace
+
 1. **Open VS Code**: Launch VS Code
 2. **Extensions View**: Press Ctrl+Shift+X
 3. **Search**: Search for "ErikrafT Drop"
@@ -236,6 +260,7 @@ code --install-extension ErikrafT.erikraft-drop
 5. **Setup**: Configure extension settings
 
 #### Open VSX Registry
+
 1. **Open VSX**: Visit [Open VSX](https://open-vsx.org/)
 2. **Search**: Search for "ErikrafT Drop"
 3. **Install**: Follow installation instructions
@@ -246,6 +271,7 @@ code --install-extension ErikrafT.erikraft-drop
 ### Browser Extension Usage
 
 #### File Sharing Workflow
+
 1. **Select Files**: Select files in browser or file system
 2. **Context Menu**: Right-click and select "Share with ErikrafT Drop"
 3. **Choose Recipient**: Select target device from list
@@ -253,6 +279,7 @@ code --install-extension ErikrafT.erikraft-drop
 5. **Confirmation**: Receive transfer confirmation
 
 #### Web Content Sharing
+
 1. **Web Page**: Open web page with content to share
 2. **Select Content**: Select text, images, or links
 3. **Share Action**: Use context menu or toolbar button
@@ -262,6 +289,7 @@ code --install-extension ErikrafT.erikraft-drop
 ### IDE Extension Usage
 
 #### Code Sharing Workflow
+
 1. **Select File**: Select file in VS Code explorer
 2. **Context Menu**: Right-click and select "Share with ErikrafT Drop"
 3. **Choose Target**: Select destination device
@@ -269,6 +297,7 @@ code --install-extension ErikrafT.erikraft-drop
 5. **Confirmation**: Receive transfer confirmation
 
 #### Project Sharing
+
 1. **Select Folder**: Select project folder in explorer
 2. **Command Palette**: Use Ctrl+Shift+P and search for ErikrafT Drop commands
 3. **Share Project**: Choose "Share Workspace" option
@@ -280,6 +309,7 @@ code --install-extension ErikrafT.erikraft-drop
 ### Extension Architecture
 
 #### Background Script
+
 ```javascript
 // Background script for WebSocket management
 class ErikrafTDropClient {
@@ -323,6 +353,7 @@ class ErikrafTDropClient {
 ```
 
 #### Content Script
+
 ```javascript
 // Content script for web page integration
 class WebPageIntegration {
@@ -357,6 +388,7 @@ class WebPageIntegration {
 ### IDE Extension Architecture
 
 #### VS Code Extension API Integration
+
 ```typescript
 // VS Code extension API usage
 export class ErikrafTDropExtension {
@@ -411,6 +443,7 @@ export class ErikrafTDropExtension {
 ### Extension Settings
 
 #### Browser Extension Configuration
+
 ```javascript
 // Extension settings structure
 const defaultSettings = {
@@ -425,6 +458,7 @@ const defaultSettings = {
 ```
 
 #### IDE Extension Configuration
+
 ```typescript
 // VS Code extension settings
 interface ErikrafTDropSettings {
@@ -441,12 +475,14 @@ interface ErikrafTDropSettings {
 ### Customization Options
 
 #### Server Configuration
+
 - **Custom Server**: Use self-hosted ErikrafT Drop instance
 - **Connection Settings**: Configure timeout and retry settings
 - **Authentication**: Set up authentication if required
 - **SSL/TLS**: Configure secure connection settings
 
 #### User Interface
+
 - **Theme**: Match editor or browser theme
 - **Notifications**: Configure notification preferences
 - **Status Indicators**: Show/hide connection status
@@ -457,18 +493,21 @@ interface ErikrafTDropSettings {
 ### Common Issues
 
 #### Extension Installation Problems
+
 - **Store Access**: Verify access to extension store
 - **Permissions**: Check extension permissions
 - **Browser Version**: Ensure browser compatibility
 - **System Requirements**: Verify system requirements
 
 #### Connection Issues
+
 - **Network Connectivity**: Check internet connection
 - **Server Status**: Verify ErikrafT Drop server status
 - **Firewall Settings**: Check firewall configuration
 - **Proxy Settings**: Verify proxy configuration
 
 #### File Transfer Problems
+
 - **File Size**: Check file size limitations
 - **File Type**: Verify supported file types
 - **Permissions**: Check file access permissions
@@ -477,6 +516,7 @@ interface ErikrafTDropSettings {
 ### Debug Information
 
 #### Browser Extension Debugging
+
 ```javascript
 // Debug logging
 console.log('ErikrafT Drop Extension Debug Info:', {
@@ -488,6 +528,7 @@ console.log('ErikrafT Drop Extension Debug Info:', {
 ```
 
 #### IDE Extension Debugging
+
 ```typescript
 // VS Code extension debugging
 vscode.window.showInformationMessage(
@@ -501,18 +542,21 @@ vscode.window.showInformationMessage(
 ### Planned Enhancements
 
 #### Browser Extensions
+
 - **Enhanced UI**: Improved user interface design
 - **Additional Browsers**: Support for additional browsers
 - **Advanced Features**: Enhanced file handling capabilities
 - **Performance**: Improved performance and responsiveness
 
 #### IDE Extensions
+
 - **Additional IDEs**: Support for additional IDEs
 - **Advanced Integration**: Enhanced IDE integration
 - **Collaboration Features**: Real-time collaboration capabilities
 - **Workflow Automation**: Automated workflow integration
 
 ### Technical Improvements
+
 - **WebSocket Optimization**: Enhanced WebSocket performance
 - **Security**: Improved security features
 - **Reliability**: Enhanced reliability and error handling

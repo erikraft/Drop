@@ -1,6 +1,7 @@
 ---
 title: "Device Pairing"
 description: "Persistent device pairing system using encrypted room secrets stored in IndexedDB for cross-network device discovery."
+icon: "network-wired"
 ---
 
 # Device Pairing System
@@ -20,6 +21,7 @@ let pairKey = this._createPairKey(sender, roomSecret);
 ```
 
 ### Persistent Storage
+
 Paired device information is stored using IndexedDB:
 
 ```javascript
@@ -44,6 +46,7 @@ class PersistentStorage {
 ### 1. Initiation Phase
 
 #### Pair Device Dialog
+
 ```javascript
 // From ui.js lines 1954-1956
 _pairDeviceInitiate() {
@@ -52,6 +55,7 @@ _pairDeviceInitiate() {
 ```
 
 #### Server-Side Initiation
+
 ```javascript
 // From ws-server.js lines 222-237
 _onPairDeviceInitiate(sender) {
@@ -75,6 +79,7 @@ _onPairDeviceInitiate(sender) {
 ### 2. Key Generation
 
 #### Secure Pair Key Creation
+
 ```javascript
 // From ws-server.js lines 327-340
 _createPairKey(creator, roomSecret) {
@@ -94,6 +99,7 @@ _createPairKey(creator, roomSecret) {
 ```
 
 #### Key Format
+
 - **Length**: 6 digits
 - **Format**: Numeric string (e.g., "123456")
 - **Uniqueness**: Guaranteed unique within server instance
@@ -102,6 +108,7 @@ _createPairKey(creator, roomSecret) {
 ### 3. QR Code Generation
 
 #### QR Code Display
+
 ```javascript
 // From ui.js lines 1966-1981
 _setKeyAndQRCode() {
@@ -124,6 +131,7 @@ _setKeyAndQRCode() {
 ```
 
 #### Pair URL Generation
+
 ```javascript
 // From ui.js lines 1983-2002
 _getPairUrl() {
@@ -140,6 +148,7 @@ _getPairUrl() {
 ## Joining a Pair
 
 ### 1. Key Entry
+
 ```javascript
 // From ui.js lines 2004-2014
 _submit() {
@@ -156,6 +165,7 @@ _pairDeviceJoin(pairKey) {
 ```
 
 ### 2. Server Validation
+
 ```javascript
 // From ws-server.js lines 239-265
 _onPairDeviceJoin(sender, message) {
@@ -189,6 +199,7 @@ _onPairDeviceJoin(sender, message) {
 ```
 
 ### 3. Pair Confirmation
+
 ```javascript
 // From ui.js lines 2016-2037
 _onPairDeviceJoined(peerId, roomSecret) {
@@ -220,6 +231,7 @@ _onPairDeviceJoined(peerId, roomSecret) {
 ## Paired Device Management
 
 ### Storage Structure
+
 ```javascript
 // IndexedDB stores paired device information
 {
@@ -232,6 +244,7 @@ _onPairDeviceJoined(peerId, roomSecret) {
 ```
 
 ### Device List Management
+
 ```javascript
 // From ui.js lines 2162-2243
 async _initDOM() {
@@ -264,6 +277,7 @@ async _initDOM() {
 ```
 
 ### Auto-Accept Feature
+
 ```javascript
 // From network.js lines 841-847
 _respondToFileTransferRequest(accepted) {
@@ -280,12 +294,14 @@ _respondToFileTransferRequest(accepted) {
 ## Security Features
 
 ### Cryptographic Security
+
 - **Room Secrets**: 256-character cryptographically random strings
 - **Hash Validation**: SHA3-512 hashing for integrity verification
 - **Rate Limiting**: 10 pairing attempts per 10 seconds
 - **Temporary Keys**: Pair keys expire after use
 
 ### Privacy Protection
+
 ```javascript
 // From peer.js lines 128-136
 _setPeerId(request) {
@@ -303,6 +319,7 @@ _setPeerId(request) {
 ## Cross-Network Discovery
 
 ### Persistent Connections
+
 Paired devices maintain discoverability across different networks:
 
 1. **Local Network**: Automatic discovery via IP-based rooms
@@ -311,6 +328,7 @@ Paired devices maintain discoverability across different networks:
 4. **Offline Support**: Pairing information persists offline
 
 ### Room Secret Synchronization
+
 ```javascript
 // From ws-server.js lines 188-198
 _onRoomSecrets(sender, message) {
@@ -328,6 +346,7 @@ _onRoomSecrets(sender, message) {
 ## Pairing Management
 
 ### Edit Paired Devices
+
 ```javascript
 // From ui.js lines 2141-2252
 class EditPairedDevicesDialog extends Dialog {
@@ -342,6 +361,7 @@ class EditPairedDevicesDialog extends Dialog {
 ```
 
 ### Unpairing Devices
+
 ```javascript
 // From ui.js lines 2221-2240
 input.addEventListener('click', e => {
@@ -358,16 +378,19 @@ input.addEventListener('click', e => {
 ## Use Cases
 
 ### Personal Device Ecosystem
+
 - **Phone to Computer**: Quick photo and document transfer
 - **Tablet to Laptop**: Seamless file synchronization
 - **Work to Home**: Access files across different networks
 
 ### Family Sharing
+
 - **Parent-Child Devices**: Easy family file sharing
 - **Multi-Device Households**: Shared family devices
 - **Guest Access**: Temporary pairing for visitors
 
 ### Professional Use
+
 - **Team Collaboration**: Persistent team device connections
 - **Conference Sharing**: Quick setup for presentations
 - **Remote Work**: Home-office device integration
@@ -375,12 +398,14 @@ input.addEventListener('click', e => {
 ## Troubleshooting
 
 ### Common Issues
+
 - **Invalid Key**: Ensure 6-digit key is entered correctly
 - **Expired Key**: Pair keys expire after use or timeout
 - **Network Issues**: Both devices need internet connection for pairing
 - **Browser Storage**: Ensure IndexedDB is enabled and not cleared
 
 ### Recovery Options
+
 - **Re-pairing**: Devices can be re-paired if needed
 - **Backup**: Export/import pairing information (planned feature)
 - **Manual Discovery**: Use local network discovery if pairing fails

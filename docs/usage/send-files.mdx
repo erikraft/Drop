@@ -1,6 +1,7 @@
 ---
 title: "Send Files"
 description: "Complete guide to sending files, folders, and text messages using ErikrafT Drop's peer-to-peer system."
+icon: "file-arrow-up"
 ---
 
 # Sending Files
@@ -10,15 +11,18 @@ ErikrafT Drop provides multiple methods for sending files, from simple drag-and-
 ## File Selection Methods
 
 ### 1. Drag and Drop (Recommended)
+
 The most intuitive method for sending files:
 
 #### Supported Content
+
 - **Files**: Any file type and size
 - **Folders**: Complete directory structures
 - **Multiple Items**: Select multiple files/folders simultaneously
 - **Mixed Content**: Files and folders together
 
 #### Step-by-Step Process
+
 1. **Open ErikrafT Drop** on both devices
 2. **Select Recipient**: Click on the target device
 3. **Drag Files**: Drag files/folders onto the browser window
@@ -26,35 +30,42 @@ The most intuitive method for sending files:
 5. **Wait for Acceptance**: Recipient must accept the transfer
 
 #### Best Practices
+
 - **Organize Files**: Group related files before transfer
 - **Check Sizes**: Large files take longer to transfer
 - **Network Quality**: Ensure stable connection for large transfers
 - **Recipient Ready**: Confirm recipient is available
 
 ### 2. Click to Select
+
 Traditional file selection method:
 
 #### Process
+
 1. **Click Main Area**: Click anywhere in the main interface
 2. **File Dialog**: Browser file selection dialog opens
 3. **Select Files**: Choose one or more files
 4. **Confirm Selection**: Click Open to start transfer
 
 #### Limitations
+
 - **Folder Selection**: Not supported in all browsers
 - **Multiple Selection**: Use Ctrl/Cmd+Click for multiple files
 - **File Types**: All file types supported
 
 ### 3. Share Menu Integration
+
 Native operating system integration:
 
 #### Mobile Devices
+
 1. **Select Files**: Use file manager or gallery app
 2. **Share Button**: Tap the share icon
 3. **Choose ErikrafT Drop**: Select from share menu
 4. **Select Recipient**: Choose target device
 
 #### Desktop Integration
+
 - **Windows**: Right-click → Send to → ErikrafT Drop
 - **macOS**: Right-click → Share → ErikrafT Drop
 - **Linux**: Context menu integration (if configured)
@@ -62,23 +73,28 @@ Native operating system integration:
 ## Transfer Process
 
 ### 1. Recipient Selection
+
 Before sending files, select the target recipient:
 
 #### Device List
+
 - **Available Devices**: Shows all connected devices
 - **Device Names**: Display names for easy identification
 - **Connection Status**: Shows connection quality
 - **Paired Devices**: Marked with special indicators
 
 #### Multiple Recipients
+
 - **Simultaneous Sending**: Send to multiple devices at once
 - **Individual Transfers**: Each recipient gets separate transfer
 - **Progress Tracking**: Monitor each transfer separately
 
 ### 2. Transfer Request
+
 When files are selected, a transfer request is sent:
 
 #### Request Information
+
 ```javascript
 {
     type: 'request',
@@ -95,15 +111,18 @@ When files are selected, a transfer request is sent:
 ```
 
 #### Recipient Experience
+
 - **Notification**: Transfer request notification appears
 - **File Preview**: Shows file names, sizes, and types
 - **Accept/Decline**: User chooses to accept or decline
 - **Auto-Accept**: For paired devices with auto-accept enabled
 
 ### 3. Transfer Execution
+
 Once accepted, the transfer begins:
 
 #### File Preparation
+
 ```javascript
 // From network.js lines 729-748
 async _sendFile(file) {
@@ -124,6 +143,7 @@ async _sendFile(file) {
 ```
 
 #### Chunking System
+
 - **Chunk Size**: 64KB chunks for memory efficiency
 - **Partition Size**: 1MB partitions for progress tracking
 - **Streaming**: Files processed in real-time
@@ -132,9 +152,11 @@ async _sendFile(file) {
 ## Advanced Sending Methods
 
 ### Command Line Interface
+
 For power users and automation:
 
 #### Basic Usage
+
 ```bash
 # Send single file
 erikraftdrop document.pdf
@@ -150,6 +172,7 @@ erikraftdrop -t "Hello world"
 ```
 
 #### Configuration
+
 ```bash
 # Specify custom server
 erikraftdrop -d "https://drop.erikraft.com/" file.txt
@@ -159,15 +182,18 @@ erikraftdrop -h
 ```
 
 ### URL Sharing
+
 Share links and web content:
 
 #### Process
+
 1. **Copy URL**: Copy link from browser
 2. **Paste**: Paste into ErikrafT Drop
 3. **Send**: Transfer as text message
 4. **Recipient**: Opens link in browser
 
 #### Supported Content
+
 - **Web Pages**: Complete URLs
 - **Search Queries**: Search terms as text
 - **Short Links**: Expanded to full URLs
@@ -176,33 +202,39 @@ Share links and web content:
 ## File Types and Handling
 
 ### Supported File Types
+
 ErikrafT Drop supports all file types:
 
 #### Documents
+
 - **PDF**: .pdf files
 - **Office**: .doc, .docx, .xls, .xlsx, .ppt, .pptx
 - **Text**: .txt, .md, .rtf
 - **Code**: .js, .py, .html, .css, etc.
 
 #### Media
+
 - **Images**: .jpg, .png, .gif, .svg, .webp
 - **Audio**: .mp3, .wav, .ogg, .m4a
 - **Video**: .mp4, .avi, .mov, .mkv
 - **Archives**: .zip, .rar, .7z, .tar
 
 #### Special Files
+
 - **Executables**: .exe, .dmg, .deb, .rpm
 - **System Files**: Configuration and system files
 - **Large Files**: Limited only by browser memory
 - **Encrypted Files**: Encrypted containers and archives
 
 ### MIME Type Detection
+
 ```javascript
 // Automatic MIME type detection
 mime.addMissingMimeTypesToFiles(files);
 ```
 
 #### File Recognition
+
 - **Extension-Based**: Uses file extensions for type detection
 - **Default Types**: Assigns default MIME for unknown types
 - **Preview Support**: Determines preview capabilities
@@ -213,6 +245,7 @@ mime.addMissingMimeTypesToFiles(files);
 ### Large File Handling
 
 #### iOS Memory Limits
+
 ```javascript
 // From network.js lines 819-822
 if (window.iOS && request.totalSize >= 200*1024*1024) {
@@ -226,6 +259,7 @@ if (window.iOS && request.totalSize >= 200*1024*1024) {
 ```
 
 #### Strategies for Large Files
+
 - **Break Down**: Split large archives into smaller parts
 - **Compress**: Use compression to reduce file size
 - **Stable Network**: Use reliable network connection
@@ -234,12 +268,14 @@ if (window.iOS && request.totalSize >= 200*1024*1024) {
 ### Network Optimization
 
 #### Connection Quality
+
 - **WiFi Preferred**: More stable than cellular
 - **5GHz Band**: Less interference, faster speeds
 - **Signal Strength**: Strong signal improves reliability
 - **Network Congestion**: Avoid peak usage times
 
 #### Transfer Speed
+
 - **Local Network**: 50-200+ MB/s possible
 - **WiFi Networks**: 10-50 MB/s typical
 - **Mobile Data**: 1-10 MB/s depending on connection
@@ -248,15 +284,18 @@ if (window.iOS && request.totalSize >= 200*1024*1024) {
 ## Progress Monitoring
 
 ### Real-time Feedback
+
 During transfer, both sender and receiver see progress:
 
 #### Progress Information
+
 - **Percentage**: 0-100% completion
 - **Transfer Speed**: Current transfer rate
 - **Time Remaining**: Estimated completion time
 - **File Count**: Progress for multiple files
 
 #### Progress Events
+
 ```javascript
 // Progress tracking implementation
 _sendProgress(progress) {
@@ -267,6 +306,7 @@ _sendProgress(progress) {
 ### Transfer States
 
 #### Sending States
+
 1. **Preparing**: File preparation and chunking
 2. **Request Sent**: Waiting for recipient acceptance
 3. **Accepted**: Recipient approved transfer
@@ -275,6 +315,7 @@ _sendProgress(progress) {
 6. **Failed**: Transfer error or cancellation
 
 #### Error Handling
+
 - **Network Issues**: Automatic retry mechanisms
 - **Recipient Offline**: Transfer queue and retry
 - **File Errors**: Corrupted file handling
@@ -283,12 +324,14 @@ _sendProgress(progress) {
 ## Security Considerations
 
 ### File Security
+
 - **No Server Storage**: Files never stored on servers
 - **Direct Transfer**: Peer-to-peer encryption
 - **Malware Scanning**: Recipient's responsibility
 - **File Integrity**: Automatic integrity verification
 
 ### Privacy Protection
+
 - **End-to-End Encryption**: WebRTC provides encryption
 - **No Metadata Tracking**: Minimal data collection
 - **Temporary Connections**: No persistent data stored
@@ -299,39 +342,48 @@ _sendProgress(progress) {
 ### Common Problems
 
 #### Transfer Fails to Start
+
 **Causes:**
+
 - Recipient not connected
 - Network connectivity issues
 - Browser compatibility problems
 - File access permissions
 
 **Solutions:**
+
 - Verify recipient connection
 - Check network connectivity
 - Try different browser
 - Check file permissions
 
 #### Transfer Interrupts
+
 **Causes:**
+
 - Network instability
 - Browser memory limits
 - Device going to sleep
 - Connection timeout
 
 **Solutions:**
+
 - Improve network stability
 - Close other applications
 - Adjust power settings
 - Reduce file sizes
 
 #### Slow Transfer Speeds
+
 **Causes:**
+
 - Poor network quality
 - Network congestion
 - Distance from router
 - Browser performance issues
 
 **Solutions:**
+
 - Improve network connection
 - Reduce network load
 - Move closer to router
@@ -340,12 +392,14 @@ _sendProgress(progress) {
 ### Performance Tips
 
 #### Optimize Transfer Speed
+
 - **Use Ethernet**: Wired connection is most stable
 - **Close Applications**: Free up system resources
 - **Update Browser**: Latest browser versions perform better
 - **Restart Network**: Refresh network connection
 
 #### Reduce Transfer Time
+
 - **Compress Files**: Use compression for large files
 - **Organize Transfers**: Group related files
 - **Batch Small Files**: Combine many small files

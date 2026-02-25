@@ -31,6 +31,7 @@
     "groups": [
       {
         "group": "Introduction",
+        "icon": "book",
         "pages": [
           "introduction/overview",
           "introduction/how-it-works",
@@ -40,6 +41,7 @@
       },
       {
         "group": "Architecture",
+        "icon": "diagram-project",
         "pages": [
           "architecture/system-overview",
           "architecture/webrtc-connection",
@@ -49,6 +51,7 @@
       },
       {
         "group": "Features",
+        "icon": "puzzle-piece",
         "pages": [
           "features/p2p-transfer",
           "features/device-pairing",
@@ -57,6 +60,7 @@
       },
       {
         "group": "Usage",
+        "icon": "chart-bar",
         "pages": [
           "usage/connect-devices",
           "usage/send-files",
@@ -65,6 +69,7 @@
       },
       {
         "group": "Ecosystem",
+        "icon": "diagram-project",
         "pages": [
           "ecosystem/overview",
           "ecosystem/android",
@@ -75,6 +80,7 @@
       },
       {
         "group": "Reference",
+        "icon": "book",
         "pages": [
           "reference/project-structure",
           "reference/configuration",

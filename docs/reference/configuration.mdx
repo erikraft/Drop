@@ -1,6 +1,7 @@
 ---
 title: "Configuration"
 description: "Complete configuration guide for ErikrafT Drop server, client, and deployment settings."
+icon: "gear"
 ---
 
 # Configuration Guide
@@ -12,6 +13,7 @@ ErikrafT Drop provides extensive configuration options for different deployment 
 ### Environment Variables
 
 #### Basic Server Settings
+
 ```bash
 # Server port (default: 3000)
 PORT=3000
@@ -27,6 +29,7 @@ NODE_ENV=production
 ```
 
 #### Network Configuration
+
 ```bash
 # LAN-only mode - restrict to local networks
 ALLOW_LOCAL_ONLY=true
@@ -42,6 +45,7 @@ IPV6_LOCALIZE=2
 ```
 
 #### Redis Configuration (Optional)
+
 ```bash
 # Redis connection URL
 REDIS_URL=redis://localhost:6379
@@ -56,6 +60,7 @@ REDIS_DB=0
 ### RTC Configuration
 
 #### STUN/TURN Servers
+
 ```json
 {
   "sdpSemantics": "unified-plan",
@@ -73,6 +78,7 @@ REDIS_DB=0
 ```
 
 #### LAN Mode Configuration
+
 ```javascript
 // From server.js lines 8-11
 const rtcConfig = {
@@ -84,6 +90,7 @@ const rtcConfig = {
 ### Server Options
 
 #### Rate Limiting
+
 ```javascript
 // From peer.js lines 34-42
 rateLimitReached() {
@@ -97,6 +104,7 @@ rateLimitReached() {
 ```
 
 #### Local IP Detection
+
 ```javascript
 // From ws-server.js lines 7-30
 function isLocalIp(ip) {
@@ -114,6 +122,7 @@ function isLocalIp(ip) {
 ### Browser Settings
 
 #### WebRTC Configuration
+
 ```javascript
 // From network.js lines 153-155
 if (this._lanMode.enabled && msg.wsConfig) {
@@ -122,6 +131,7 @@ if (this._lanMode.enabled && msg.wsConfig) {
 ```
 
 #### LAN Mode Storage
+
 ```javascript
 // From network.js lines 1-4
 const LAN_STORAGE_KEYS = {
@@ -133,6 +143,7 @@ const LAN_STORAGE_KEYS = {
 ### Persistent Storage Configuration
 
 #### IndexedDB Settings
+
 ```javascript
 // From persistent-storage.js
 class PersistentStorage {
@@ -146,6 +157,7 @@ class PersistentStorage {
 ```
 
 #### Room Secret Storage
+
 ```javascript
 // Room secret structure
 {
@@ -162,6 +174,7 @@ class PersistentStorage {
 ### Docker Configuration
 
 #### Docker Compose
+
 ```yaml
 # docker-compose.yml
 version: '3.8'
@@ -181,6 +194,7 @@ services:
 ```
 
 #### Dockerfile
+
 ```dockerfile
 FROM node:20-alpine
 
@@ -197,6 +211,7 @@ CMD ["npm", "start"]
 ```
 
 ### Docker Swarm Configuration
+
 ```yaml
 # docker-compose-swarm.yml
 version: '3.8'
@@ -220,6 +235,7 @@ services:
 ## Reverse Proxy Configuration
 
 ### Nginx Configuration
+
 ```nginx
 server {
     listen 80;
@@ -247,6 +263,7 @@ server {
 ```
 
 ### Apache Configuration
+
 ```apache
 <VirtualHost *:80>
     ServerName drop.example.com
@@ -263,6 +280,7 @@ server {
 ### SSL/TLS Setup
 
 #### Let's Encrypt with Nginx
+
 ```bash
 # Install certbot
 sudo apt install certbot python3-certbot-nginx
@@ -276,6 +294,7 @@ sudo crontab -e
 ```
 
 #### SSL Configuration
+
 ```nginx
 server {
     listen 443 ssl http2;
@@ -297,6 +316,7 @@ server {
 ### Firewall Configuration
 
 #### UFW (Ubuntu)
+
 ```bash
 # Allow HTTP/HTTPS
 sudo ufw allow 80/tcp
@@ -310,6 +330,7 @@ sudo ufw enable
 ```
 
 #### iptables
+
 ```bash
 # Allow HTTP/HTTPS
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
@@ -327,6 +348,7 @@ iptables-save > /etc/iptables/rules.v4
 ### Node.js Optimization
 
 #### Process Management
+
 ```bash
 # Increase file descriptor limit
 ulimit -n 65536
@@ -339,6 +361,7 @@ export NODE_ENV=production
 ```
 
 #### Clustering
+
 ```javascript
 // cluster.js example
 const cluster = require('cluster');
@@ -356,6 +379,7 @@ if (cluster.isMaster) {
 ### Memory Management
 
 #### iOS Memory Limits
+
 ```javascript
 // From network.js lines 819-822
 if (window.iOS && request.totalSize >= 200*1024*1024) {
@@ -369,6 +393,7 @@ if (window.iOS && request.totalSize >= 200*1024*1024) {
 ```
 
 #### File Chunking Configuration
+
 ```javascript
 // From network.js lines 1671-1672
 this._chunkSize = 64000; // 64 KB chunks
@@ -380,6 +405,7 @@ this._maxPartitionSize = 1e6; // 1 MB partitions
 ### Application Logging
 
 #### Development Logging
+
 ```javascript
 // Debug mode logging
 if (this._conf.debugMode) {
@@ -391,6 +417,7 @@ if (this._conf.debugMode) {
 ```
 
 #### Production Logging
+
 ```bash
 # Log rotation
 /var/log/erikraftdrop/
@@ -413,6 +440,7 @@ if (this._conf.debugMode) {
 ### Health Checks
 
 #### HTTP Endpoints
+
 ```javascript
 // From server.js lines 23-27
 if (req.url === "/health") {
@@ -423,6 +451,7 @@ if (req.url === "/health") {
 ```
 
 #### Configuration Endpoint
+
 ```javascript
 // From server.js lines 14-21
 if (req.url === "/config") {
@@ -438,6 +467,7 @@ if (req.url === "/config") {
 ## Development Configuration
 
 ### Local Development
+
 ```bash
 # Clone repository
 git clone https://github.com/erikraft/Drop.git
@@ -454,6 +484,7 @@ DEBUG_MODE=true npm start
 ```
 
 ### Environment Files
+
 ```bash
 # .env file
 NODE_ENV=development
@@ -473,6 +504,7 @@ ALLOW_LOCAL_ONLY=false
 ## CLI Configuration
 
 ### Command Line Interface
+
 ```bash
 # Configuration file location
 ~/.erikraftdrop-cli-config
@@ -484,6 +516,7 @@ download_folder=~/Downloads
 ```
 
 ### CLI Usage
+
 ```bash
 # Show configuration
 erikraftdrop --config

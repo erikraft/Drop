@@ -1,6 +1,7 @@
 ---
 title: "Android Application"
 description: "Comprehensive guide to the ErikrafT Drop Android application, features, and technical implementation."
+icon: "mobile"
 ---
 
 # ErikrafT Drop Android Application
@@ -10,6 +11,7 @@ The ErikrafT Drop Android application provides a native, fully-featured file sha
 ## Application Overview
 
 ### Core Features
+
 - **Native Android Integration**: Deep integration with Android share system
 - **System Share Menu**: Appears in Android share dialog across all apps
 - **Background Operation**: Works seamlessly while using other applications
@@ -19,6 +21,7 @@ The ErikrafT Drop Android application provides a native, fully-featured file sha
 - **Multi-language Support**: Available in multiple languages via Crowdin
 
 ### Technical Specifications
+
 - **Package Name**: `com.erikraft.drop`
 - **Minimum SDK**: Android 5.0 (API level 21)
 - **Target SDK**: Android 15 (API level 35)
@@ -29,6 +32,7 @@ The ErikrafT Drop Android application provides a native, fully-featured file sha
 ## Application Architecture
 
 ### Project Structure
+
 ```
 Android/
 ├── app/
@@ -53,6 +57,7 @@ Android/
 ```
 
 ### Build Configuration
+
 ```gradle
 // From app/build.gradle
 android {
@@ -79,6 +84,7 @@ android {
 ## Key Components
 
 ### MainActivity
+
 The main activity serves as the entry point and manages the WebView component:
 
 ```java
@@ -91,6 +97,7 @@ The main activity serves as the entry point and manages the WebView component:
 ```
 
 ### WebView Integration
+
 The app uses a WebView to display the ErikrafT Drop web interface with native enhancements:
 
 ```java
@@ -104,6 +111,7 @@ The app uses a WebView to display the ErikrafT Drop web interface with native en
 ```
 
 ### Share Receiver
+
 Handles incoming share intents from other Android applications:
 
 ```java
@@ -120,10 +128,11 @@ Handles incoming share intents from other Android applications:
 ### System Integration
 
 #### Share Menu Integration
+
 The Android app registers as a share target, appearing in the system share dialog:
 
 ```xml
-<!-- AndroidManifest.xml share intent filter -->
+{/*  AndroidManifest.xml share intent filter  */}
 <intent-filter>
     <action android:name="android.intent.action.SEND" />
     <category android:name="android.intent.category.DEFAULT" />
@@ -132,6 +141,7 @@ The Android app registers as a share target, appearing in the system share dialo
 ```
 
 #### File Association
+
 The app can handle various file types through MIME type registration:
 
 - **Documents**: PDF, DOC, TXT, etc.
@@ -143,12 +153,14 @@ The app can handle various file types through MIME type registration:
 ### Performance Optimizations
 
 #### Memory Management
+
 - **Efficient WebView**: Optimized WebView configuration
 - **Background Processing**: Non-blocking file operations
 - **Memory Leaks Prevention**: Proper lifecycle management
 - **Large File Handling**: Streaming for large files
 
 #### Battery Optimization
+
 - **Background Limits**: Respects Android battery optimization
 - **Efficient Networking**: Optimized WebSocket connections
 - **Resource Cleanup**: Proper resource management
@@ -157,15 +169,17 @@ The app can handle various file types through MIME type registration:
 ### Security Features
 
 #### Permissions
+
 ```xml
-<!-- Required permissions -->
+{/*  Required permissions  */}
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CAMERA" /> <!-- For QR scanning -->
+<uses-permission android:name="android.permission.CAMERA" /> {/*  For QR scanning  */}
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
 #### Security Measures
+
 - **HTTPS Only**: Secure connections only
 - **Certificate Pinning**: SSL certificate validation
 - **Input Validation**: Proper input sanitization
@@ -176,38 +190,48 @@ The app can handle various file types through MIME type registration:
 ### Official Distribution Channels
 
 #### Google Play Store
+
 **Primary distribution channel with automatic updates:**
-- **URL**: [https://play.google.com/store/apps/details?id=com.erikraft.drop](https://play.google.com/store/apps/details?id=com.erikraft.drop)
+
+- **URL**: https://play.google.com/store/apps/details?id=com.erikraft.drop
 - **Features**: Automatic updates, beta testing, review system
 - **Requirements**: Google Play account, Android 5.0+
 
 #### F-Droid
+
 **Open-source distribution channel:**
-- **URL**: [https://f-droid.org/en/packages/com.erikraft.drop/](https://f-droid.org/en/packages/com.erikraft.drop/)
+
+- **URL**: https://f-droid.org/en/packages/com.erikraft.drop/
 - **Features**: FOSS-only, no tracking, community-curated
 - **Requirements**: F-Droid client, Android 5.0+
 
 #### APKPure
+
 **Alternative APK distribution:**
+
 - **URL**: [https://apkpure.com/p/com.erikraft.drop](https://apkpure.com/p/com.erikraft.drop/)
 - **Features**: Direct APK downloads, version history
 - **Requirements**: Enable "Unknown Sources" in settings
 
 #### Direct GitHub Releases
+
 **Developer distribution channel:**
-- **URL**: [https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk](https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk)
+
+- **URL**: https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
 - **Features**: Latest releases, development versions
 - **Requirements**: Manual installation and updates
 
 ### Build Instructions
 
 #### Prerequisites
+
 - **Android Studio**: Latest version recommended
 - **Java Development Kit**: JDK 11 or higher
 - **Android SDK**: API level 35
 - **Gradle**: Version 8.13.2 or higher
 
 #### Build Process
+
 ```bash
 # Clone the repository
 git clone https://github.com/erikraft/Drop-Android.git
@@ -224,6 +248,7 @@ cd Drop-Android
 ```
 
 #### Release Build
+
 ```bash
 # Generate signed bundle for Play Store
 ./gradlew bundleRelease
@@ -235,15 +260,18 @@ cd Drop-Android
 ## Development Workflow
 
 ### Automated Build Pipeline
+
 The project uses GitHub Actions for continuous integration:
 
 #### CI/CD Features
+
 - **Automated Testing**: Unit and integration tests
 - **Code Quality**: Static analysis and linting
 - **Build Verification**: Multi-environment builds
 - **Release Automation**: Automatic Play Store publishing
 
 #### Play Store Automation
+
 ```yaml
 # GitHub Actions workflow for Play Store publishing
 - Build release bundle
@@ -253,6 +281,7 @@ The project uses GitHub Actions for continuous integration:
 ```
 
 #### F-Droid Automation
+
 ```yaml
 # GitHub Actions workflow for F-Droid publishing
 - Build signed APK
@@ -262,9 +291,11 @@ The project uses GitHub Actions for continuous integration:
 ```
 
 ### Translation Management
+
 Translations are managed through Crowdin:
 
 #### Supported Languages
+
 - English (en)
 - German (de)
 - French (fr)
@@ -276,6 +307,7 @@ Translations are managed through Crowdin:
 - Japanese (ja)
 
 #### Translation Process
+
 1. **Source Strings**: English strings in `res/values/strings.xml`
 2. **Crowdin Integration**: Automatic sync with Crowdin platform
 3. **Community Translation**: Community-contributed translations
@@ -286,24 +318,28 @@ Translations are managed through Crowdin:
 ### Advantages of Android App
 
 #### Performance
+
 - **Native Performance**: Better than WebView performance
 - **Memory Efficiency**: Optimized for mobile hardware
 - **Background Operation**: Works efficiently in background
 - **Battery Optimization**: Better battery management
 
 #### Integration
+
 - **System Share Menu**: Deep Android integration
 - **File Association**: Handles all file types natively
 - **Notification System**: Native notification handling
 - **Multi-window**: Split-screen support
 
 #### User Experience
+
 - **Material Design**: Consistent Android design language
 - **Touch Optimization**: Touch-optimized interface
 - **Gesture Support**: Android gesture navigation
 - **Accessibility**: Enhanced accessibility features
 
 ### Limitations
+
 - **Update Dependency**: Requires manual updates (sideloading)
 - **Platform Specific**: Android-only functionality
 - **Size**: Larger app size due to native components
@@ -314,24 +350,28 @@ Translations are managed through Crowdin:
 ### Common Issues
 
 #### Installation Problems
+
 - **Unknown Sources**: Enable installation from unknown sources
 - **Storage Space**: Ensure sufficient storage available
 - **Android Version**: Verify minimum Android version (5.0+)
 - **Architecture**: Check device architecture compatibility
 
 #### Connection Issues
+
 - **Network Permissions**: Verify network permissions granted
 - **Firewall**: Check firewall settings
 - **VPN**: Disable VPN if causing connection issues
 - **Server Status**: Verify ErikrafT Drop server status
 
 #### Performance Issues
+
 - **Memory**: Close other apps to free memory
 - **Storage**: Clear app cache if storage full
 - **Background**: Check battery optimization settings
 - **WebView**: Clear WebView data if corrupted
 
 ### Debug Information
+
 Enable debug logging for troubleshooting:
 
 ```bash
@@ -345,6 +385,7 @@ adb logcat -s ErikrafTDrop
 ## Future Development
 
 ### Planned Features
+
 - **Background Service**: Improved background operation
 - **Notification Channels**: Enhanced notification management
 - **Dark Mode**: System dark mode support
@@ -352,6 +393,7 @@ adb logcat -s ErikrafTDrop
 - **Widget**: Home screen widget for quick access
 
 ### Technical Improvements
+
 - **Kotlin Migration**: Gradual migration to Kotlin
 - **Modular Architecture**: Feature modules for better maintainability
 - **Performance**: Continued performance optimizations

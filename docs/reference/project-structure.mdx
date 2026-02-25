@@ -1,6 +1,7 @@
 ---
 title: "Project Structure"
 description: "Complete overview of ErikrafT Drop's file structure, organization, and key components."
+icon: "sitemap"
 ---
 
 # Project Structure
@@ -30,6 +31,7 @@ Drop/
 ## Client-Side Structure (`public/`)
 
 ### Main Application Files
+
 ```
 public/
 ├── index.html              # Main application entry point
@@ -45,6 +47,7 @@ public/
 ```
 
 ### JavaScript Modules (`public/scripts/`)
+
 ```
 scripts/
 ├── main.js                    # Main application controller
@@ -63,6 +66,7 @@ scripts/
 ```
 
 ### Stylesheets (`public/styles/`)
+
 ```
 styles/
 ├── styles.css              # Main stylesheet
@@ -71,6 +75,7 @@ styles/
 ```
 
 ### Localization (`public/lang/`)
+
 ```
 lang/
 ├── en.json                 # English translations
@@ -87,6 +92,7 @@ lang/
 ## Server-Side Structure (`server/`)
 
 ### Main Server Files
+
 ```
 server/
 ├── index.js                 # Main server application
@@ -101,6 +107,7 @@ server/
 ```
 
 ### Data Models (`server/model/`)
+
 ```
 model/
 └── room-secrets.js         # Room secret management
@@ -111,6 +118,7 @@ model/
 ### Client-Side Architecture
 
 #### Main Application (`public/scripts/main.js`)
+
 ```javascript
 class ErikrafTdrop {
     constructor() {
@@ -140,6 +148,7 @@ class ErikrafTdrop {
 ```
 
 #### Network Layer (`public/scripts/network.js`)
+
 ```javascript
 // Key classes for networking
 class ServerConnection          // WebSocket connection management
@@ -151,6 +160,7 @@ class FileDigester              // File reassembly
 ```
 
 #### UI Components (`public/scripts/ui.js`)
+
 ```javascript
 // UI component classes
 class PairDeviceDialog          // Device pairing interface
@@ -163,6 +173,7 @@ class Dialog                  // Base dialog component
 ### Server-Side Architecture
 
 #### WebSocket Server (`server/ws-server.js`)
+
 ```javascript
 export default class ErikrafTdropWsServer {
     constructor(server, conf) {
@@ -176,6 +187,7 @@ export default class ErikrafTdropWsServer {
 ```
 
 #### Peer Management (`server/peer.js`)
+
 ```javascript
 export default class Peer {
     constructor(socket, request, conf) {
@@ -193,6 +205,7 @@ export default class Peer {
 ## Configuration Files
 
 ### Package Configuration (`package.json`)
+
 ```json
 {
   "name": "erikraft-drop",
@@ -225,6 +238,7 @@ export default class Peer {
 ```
 
 ### Docker Configuration (`docker-compose.yml`)
+
 ```yaml
 version: '3.8'
 services:
@@ -238,6 +252,7 @@ services:
 ```
 
 ### RTC Configuration (`rtc_config_example.json`)
+
 ```json
 {
   "sdpSemantics": "unified-plan",
@@ -252,6 +267,7 @@ services:
 ## Build and Deployment
 
 ### Development Setup
+
 ```bash
 # Install dependencies
 npm install
@@ -264,6 +280,7 @@ DEBUG_MODE=true npm start
 ```
 
 ### Production Deployment
+
 ```bash
 # Build for production
 npm run build
@@ -276,6 +293,7 @@ docker-compose up -d
 ```
 
 ### Environment Variables
+
 ```bash
 # Server configuration
 PORT=3000
@@ -295,6 +313,7 @@ REDIS_URL=redis://localhost:6379
 ## Extension and Integration Structure
 
 ### Browser Extensions (`Extensions/`)
+
 ```
 Extensions/
 ├── chrome/                 # Chrome extension
@@ -304,6 +323,7 @@ Extensions/
 ```
 
 ### Mobile Applications
+
 ```
 Android/                    # Android native app
 ├── app/                   # Main application
@@ -315,6 +335,7 @@ Shortcut/                   # iOS shortcut
 ```
 
 ### CLI Tool (`erikraftdrop-cli/`)
+
 ```
 erikraftdrop-cli/
 ├── erikraftdrop           # Main bash script
@@ -327,6 +348,7 @@ erikraftdrop-cli/
 ## Testing and Quality Assurance
 
 ### Test Structure
+
 ```
 tests/
 ├── unit/                   # Unit tests
@@ -336,6 +358,7 @@ tests/
 ```
 
 ### Code Quality Tools
+
 - **ESLint**: JavaScript linting
 - **Prettier**: Code formatting
 - **TypeScript**: Type checking (where applicable)
@@ -345,6 +368,7 @@ tests/
 ## Documentation Structure
 
 ### Technical Documentation
+
 ```
 docs/
 ├── technical-documentation.md    # Technical overview
@@ -356,6 +380,7 @@ docs/
 ```
 
 ### API Documentation
+
 - **WebSocket API**: Real-time communication
 - **HTTP Endpoints**: Configuration and health checks
 - **WebRTC API**: Peer-to-peer communication

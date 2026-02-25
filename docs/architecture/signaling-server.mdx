@@ -1,6 +1,7 @@
 ---
 title: "Signaling Server"
 description: "WebSocket-based signaling server architecture for peer discovery and WebRTC connection establishment."
+icon: "server"
 ---
 
 # Signaling Server Architecture
@@ -65,6 +66,7 @@ export default class ErikrafTdropWsServer {
 ### Peer Connection Process
 
 #### 1. Connection Validation
+
 ```javascript
 // From ws-server.js lines 46-54
 _onConnection(peer) {
@@ -84,6 +86,7 @@ _onConnection(peer) {
 ```
 
 #### 2. IP Validation
+
 The server validates local IP addresses for LAN-only mode:
 
 ```javascript
@@ -108,6 +111,7 @@ function isLocalIp(ip) {
 ```
 
 #### 3. Initial Configuration
+
 ```javascript
 // From ws-server.js lines 61-77
 this._send(peer, {
@@ -136,6 +140,7 @@ this._send(peer, {
 The server manages three types of rooms:
 
 #### 1. IP-Based Rooms (Local Network)
+
 ```javascript
 // From ws-server.js lines 349-351
 _joinIpRoom(peer) {
@@ -144,6 +149,7 @@ _joinIpRoom(peer) {
 ```
 
 #### 2. Secret Rooms (Paired Devices)
+
 ```javascript
 // From ws-server.js lines 353-358
 _joinSecretRoom(peer, roomSecret) {
@@ -153,6 +159,7 @@ _joinSecretRoom(peer, roomSecret) {
 ```
 
 #### 3. Public Rooms (Temporary Rooms)
+
 ```javascript
 // From ws-server.js lines 360-367
 _joinPublicRoom(peer, publicRoomId) {
@@ -165,6 +172,7 @@ _joinPublicRoom(peer, publicRoomId) {
 ### Room Operations
 
 #### Generic Room Join
+
 ```javascript
 // From ws-server.js lines 369-385
 _joinRoom(peer, roomType, roomId) {
@@ -182,6 +190,7 @@ _joinRoom(peer, roomType, roomId) {
 ```
 
 #### Peer Notification
+
 ```javascript
 // From ws-server.js lines 435-468
 _notifyPeers(peer, roomType, roomId) {
@@ -223,6 +232,7 @@ _notifyPeers(peer, roomType, roomId) {
 ## Device Pairing System
 
 ### Pairing Initiation
+
 ```javascript
 // From ws-server.js lines 222-237
 _onPairDeviceInitiate(sender) {
@@ -244,6 +254,7 @@ _onPairDeviceInitiate(sender) {
 ```
 
 ### Pair Key Generation
+
 ```javascript
 // From ws-server.js lines 327-340
 _createPairKey(creator, roomSecret) {
@@ -262,6 +273,7 @@ _createPairKey(creator, roomSecret) {
 ```
 
 ### Pairing Join Process
+
 ```javascript
 // From ws-server.js lines 239-265
 _onPairDeviceJoin(sender, message) {
@@ -297,6 +309,7 @@ _onPairDeviceJoin(sender, message) {
 ## Message Handling
 
 ### Message Router
+
 ```javascript
 // From ws-server.js lines 80-150
 _onMessage(sender, message) {
@@ -332,6 +345,7 @@ _onMessage(sender, message) {
 ```
 
 ### Signal Relay
+
 ```javascript
 // From ws-server.js lines 152-168
 _signalAndRelay(sender, message) {
@@ -356,6 +370,7 @@ _signalAndRelay(sender, message) {
 ## Connection Monitoring
 
 ### Keep-Alive System
+
 ```javascript
 // From ws-server.js lines 489-509
 _keepAlive(peer) {
@@ -380,6 +395,7 @@ _keepAlive(peer) {
 ```
 
 ### Rate Limiting
+
 ```javascript
 // From peer.js lines 34-42
 rateLimitReached() {
@@ -395,16 +411,19 @@ rateLimitReached() {
 ## Security Features
 
 ### IP Filtering
+
 - **LAN-Only Mode**: Restricts connections to local IP addresses
 - **IP Validation**: Comprehensive IPv4 and IPv6 local address detection
 - **Connection Rejection**: Automatic termination of non-local connections
 
 ### Input Validation
+
 - **JSON Parsing**: Safe parsing with error handling
 - **UUID Validation**: Strict peer ID format validation
 - **Room Secret Validation**: Length and character validation
 
 ### Rate Limiting
+
 - **Request Throttling**: 10 requests per 10 seconds per peer
 - **Pairing Limits**: Prevents brute force pairing attempts
 - **Connection Limits**: Configurable maximum connections
@@ -412,11 +431,13 @@ rateLimitReached() {
 ## Performance Optimization
 
 ### Memory Management
+
 - **Room Cleanup**: Automatic removal of empty rooms
 - **Timer Management**: Proper cleanup of keep-alive timers
 - **Connection Cleanup**: Graceful connection termination
 
 ### Message Efficiency
+
 - **Binary Support**: WebSocket binary frame support for file transfers
 - **Message Batching**: Efficient message routing within rooms
 - **Compression**: Optional message compression for large payloads

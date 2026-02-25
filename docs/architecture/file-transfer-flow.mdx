@@ -1,6 +1,7 @@
 ---
 title: "File Transfer Flow"
 description: "Complete file transfer process from selection to completion in ErikrafT Drop's peer-to-peer system."
+icon: "arrows-turn-to-dots"
 ---
 
 # File Transfer Flow
@@ -29,6 +30,7 @@ flowchart TD
 ## File Selection and Metadata
 
 ### File Processing
+
 ```javascript
 // From network.js lines 675-702
 async requestFileTransfer(files) {
@@ -63,6 +65,7 @@ async requestFileTransfer(files) {
 ```
 
 ### MIME Type Detection
+
 The system automatically detects and adds missing MIME types:
 
 ```javascript
@@ -73,6 +76,7 @@ let files = mime.addMissingMimeTypesToFiles([...message.files]);
 ## Transfer Request Protocol
 
 ### Request Message Structure
+
 ```javascript
 {
     type: 'request',
@@ -89,6 +93,7 @@ let files = mime.addMissingMimeTypesToFiles([...message.files]);
 ```
 
 ### Request Handling
+
 ```javascript
 // From network.js lines 813-839
 _onFilesTransferRequest(request) {
@@ -117,6 +122,7 @@ _onFilesTransferRequest(request) {
 ## File Chunking System
 
 ### FileChunker Class
+
 The `FileChunker` class breaks large files into manageable chunks:
 
 ```javascript
@@ -137,6 +143,7 @@ class FileChunker {
 ```
 
 ### Chunk Reading Process
+
 ```javascript
 // From network.js lines 1687-1702
 _readChunk() {
@@ -160,6 +167,7 @@ _onChunkRead(chunk) {
 ## Transfer Execution
 
 ### Header Transmission
+
 ```javascript
 // From network.js lines 729-748
 async _sendFile(file) {
@@ -180,6 +188,7 @@ async _sendFile(file) {
 ```
 
 ### Progress Tracking
+
 ```javascript
 // From network.js lines 763-765
 _sendProgress(progress) {
@@ -188,6 +197,7 @@ _sendProgress(progress) {
 ```
 
 ### Partition Management
+
 ```javascript
 // From network.js lines 750-756
 _onPartitionEnd(offset) {
@@ -202,6 +212,7 @@ _onReceivedPartitionEnd(offset) {
 ## File Reception and Assembly
 
 ### FileDigester Class
+
 The `FileDigester` class reassembles received chunks:
 
 ```javascript
@@ -241,6 +252,7 @@ class FileDigester {
 ### Transfer Control Messages
 
 #### Request Message
+
 ```javascript
 {
     type: 'request',
@@ -251,6 +263,7 @@ class FileDigester {
 ```
 
 #### Response Message
+
 ```javascript
 {
     type: 'files-transfer-response',
@@ -260,6 +273,7 @@ class FileDigester {
 ```
 
 #### Header Message
+
 ```javascript
 {
     type: 'header',
@@ -270,6 +284,7 @@ class FileDigester {
 ```
 
 #### Progress Message
+
 ```javascript
 {
     type: 'progress',
@@ -278,6 +293,7 @@ class FileDigester {
 ```
 
 #### Partition Messages
+
 ```javascript
 {
     type: 'partition',
@@ -291,6 +307,7 @@ class FileDigester {
 ```
 
 #### Completion Messages
+
 ```javascript
 {
     type: 'file-transfer-complete'
@@ -304,6 +321,7 @@ class FileDigester {
 ## Error Handling and Recovery
 
 ### Transfer Cancellation
+
 ```javascript
 // From network.js lines 841-847
 _respondToFileTransferRequest(accepted) {
@@ -318,6 +336,7 @@ _respondToFileTransferRequest(accepted) {
 ```
 
 ### Connection Error Handling
+
 ```javascript
 // From network.js lines 869-873
 _onChunkReceived(chunk) {
@@ -330,6 +349,7 @@ _onChunkReceived(chunk) {
 ```
 
 ### Transfer Completion
+
 ```javascript
 // From network.js lines 902-913
 _onFileTransferCompleted() {
@@ -354,16 +374,19 @@ _onFileTransferCompleted() {
 ## Performance Optimizations
 
 ### Memory Management
+
 - **Streaming**: Files are processed in chunks to prevent memory overload
 - **Buffer Cleanup**: Automatic cleanup of completed transfers
 - **iOS Limits**: Special handling for iOS memory constraints
 
 ### Network Efficiency
+
 - **Chunk Size**: 64KB chunks balance memory usage and network efficiency
 - **Partition Tracking**: 1MB partitions for progress reporting
 - **Binary Transfer**: Direct binary data transfer via DataChannels
 
 ### Progress Feedback
+
 - **Real-time Updates**: Continuous progress reporting during transfer
 - **Partition Tracking**: Granular progress for large files
 - **UI Integration**: Seamless integration with user interface
@@ -383,6 +406,7 @@ _send(chunk) {
 ```
 
 ### Base64 Encoding
+
 ```javascript
 // From network.js lines 1454-1456
 const messageJSON = JSON.parse(message);

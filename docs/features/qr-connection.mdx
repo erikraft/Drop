@@ -1,6 +1,7 @@
 ---
 title: "QR Connection"
 description: "QR code-based device pairing system for quick and secure connections using camera scanning or manual key entry."
+icon: "qrcode"
 ---
 
 # QR Code Connection System
@@ -10,6 +11,7 @@ ErikrafT Drop's QR code feature provides a fast, user-friendly method for device
 ## QR Code Architecture
 
 ### QR Code Generation
+
 The QR code system uses the `qr-code.min.js` library to generate scannable codes:
 
 ```javascript
@@ -29,6 +31,7 @@ this.$qrCode.innerHTML = qr.svg();
 ```
 
 ### Pair URL Structure
+
 The QR code contains a URL with the pairing key as a parameter:
 
 ```javascript
@@ -45,6 +48,7 @@ _getPairUrl() {
 ```
 
 **Example URL:**
+
 ```
 https://drop.erikraft.com/?pair_key=123456
 ```
@@ -52,28 +56,34 @@ https://drop.erikraft.com/?pair_key=123456
 ## QR Code Components
 
 ### Visual Elements
+
 The QR code interface includes several key components:
 
 #### Pair Key Display
+
 ```javascript
 // From ui.js lines 1967
 this.$key.innerText = `${this.pairKey.substring(0, 3)} ${this.pairKey.substring(3, 6)}`
 ```
 
 #### QR Code Container
+
 ```javascript
 // From ui.js lines 1903
 this.$qrCode = this.$el.querySelector('.key-qr-code');
 ```
 
 #### Copy Functionality
+
 ```javascript
 // From ui.js lines 1931
 this.$qrCode.addEventListener('click', _ => this._copyPairUrl());
 ```
 
 ### Error Correction Levels
+
 The system uses Error Correction Level L (Low) which provides:
+
 - **7% error correction capability**
 - **Maximum data capacity**
 - **Optimal for digital displays**
@@ -83,6 +93,7 @@ The system uses Error Correction Level L (Low) which provides:
 ### 1. Generation Phase
 
 #### User Initiates Pairing
+
 ```javascript
 // From ui.js lines 1954-1956
 _pairDeviceInitiate() {
@@ -91,6 +102,7 @@ _pairDeviceInitiate() {
 ```
 
 #### Server Response
+
 ```javascript
 // From ws-server.js lines 231-236
 this._send(sender, {
@@ -101,6 +113,7 @@ this._send(sender, {
 ```
 
 #### QR Code Display
+
 ```javascript
 // From ui.js lines 1958-1964
 _onPairDeviceInitiated(msg) {
@@ -115,6 +128,7 @@ _onPairDeviceInitiated(msg) {
 ### 2. Scanning Phase
 
 #### Camera Access Request
+
 The system requests camera access for QR code scanning:
 
 ```javascript
@@ -131,6 +145,7 @@ navigator.mediaDevices.getUserMedia({
 ```
 
 #### QR Code Detection
+
 The QR code scanning uses the browser's built-in capabilities or third-party libraries for real-time detection:
 
 ```javascript
@@ -146,6 +161,7 @@ function scanQRCode(videoElement) {
 ### 3. Auto-Pairing Process
 
 #### URL Parameter Detection
+
 ```javascript
 // Automatic detection on page load
 const urlParams = new URLSearchParams(window.location.search);
@@ -159,6 +175,7 @@ if (pairKey) {
 ```
 
 #### Automatic Pair Submission
+
 ```javascript
 // From ui.js lines 2009-2014
 _pairDeviceJoin(pairKey) {
@@ -172,6 +189,7 @@ _pairDeviceJoin(pairKey) {
 ## QR Code Features
 
 ### Click to Copy
+
 Users can copy the pairing URL by clicking the QR code:
 
 ```javascript
@@ -189,6 +207,7 @@ _copyPairUrl() {
 ```
 
 ### Manual Key Entry
+
 For devices without camera access, users can manually enter the 6-digit key:
 
 ```javascript
@@ -199,14 +218,17 @@ if (/^\d{6}$/g.test(pairKey)) {
 ```
 
 ### Visual Feedback
+
 The system provides visual feedback throughout the process:
 
 #### Loading States
+
 - **QR Code Generation**: Shows loading indicator
 - **Camera Initialization**: Displays camera permission request
 - **Scanning Process**: Shows scanning animation
 
 #### Success/Error States
+
 - **Successful Scan**: Highlights detected key
 - **Invalid Key**: Shows error message
 - **Connection Success**: Displays success notification
@@ -214,11 +236,13 @@ The system provides visual feedback throughout the process:
 ## Browser Compatibility
 
 ### Camera Access Requirements
+
 - **HTTPS Required**: Camera access requires secure context
 - **User Permission**: Explicit user permission required
 - **Modern Browsers**: Chrome 53+, Firefox 52+, Safari 11+
 
 ### Fallback Options
+
 When camera access is unavailable:
 
 1. **Manual Entry**: 6-digit key input field
@@ -228,11 +252,13 @@ When camera access is unavailable:
 ## Security Considerations
 
 ### QR Code Security
+
 - **Temporary Keys**: Pair keys expire after use
 - **Rate Limiting**: Prevents brute force attacks
 - **Secure Context**: Requires HTTPS for camera access
 
 ### URL Security
+
 ```javascript
 // URL validation and sanitization
 function validatePairUrl(url) {
@@ -256,11 +282,13 @@ function validatePairUrl(url) {
 ## Performance Optimization
 
 ### QR Code Rendering
+
 - **SVG Format**: Scalable vector graphics for crisp display
 - **Optimized Size**: 130x130 pixels for balance of scannability and screen space
 - **Low Error Correction**: Maximum data capacity for simple URLs
 
 ### Camera Performance
+
 - **Environment Camera**: Uses rear camera on mobile devices
 - **Resolution Optimization**: Balanced resolution for scanning performance
 - **Frame Rate**: Optimized for real-time detection
@@ -268,11 +296,13 @@ function validatePairUrl(url) {
 ## User Experience
 
 ### Mobile-First Design
+
 - **Large Touch Targets**: Easy tapping on mobile devices
 - **Responsive Layout**: Adapts to different screen sizes
 - **Gesture Support**: Swipe and tap interactions
 
 ### Accessibility Features
+
 - **Keyboard Navigation**: Full keyboard accessibility
 - **Screen Reader Support**: Proper ARIA labels
 - **High Contrast**: Clear visual contrast
@@ -280,16 +310,19 @@ function validatePairUrl(url) {
 ## Use Cases
 
 ### Quick Device Pairing
+
 - **Mobile to Desktop**: Scan QR code on desktop with phone
 - **Desktop to Mobile**: Display QR code on desktop, scan with phone
 - **Tablet to Phone**: Cross-device pairing without typing
 
 ### Public Sharing
+
 - **Presentations**: Audience members can quickly connect
 - **Classrooms**: Students connect to teacher's device
 - **Meetings**: Quick file sharing during presentations
 
 ### Accessibility Scenarios
+
 - **Motor Impairments**: QR code eliminates typing requirements
 - **Visual Impairments**: Screen reader support for manual entry
 - **Temporary Disabilities**: Voice command support for hands-free operation
@@ -299,21 +332,25 @@ function validatePairUrl(url) {
 ### Common QR Code Issues
 
 #### Camera Not Working
+
 - **Check Permissions**: Ensure camera access is granted
 - **HTTPS Required**: Verify the site is loaded over HTTPS
 - **Browser Support**: Use a modern browser with camera support
 
 #### QR Code Not Scanning
+
 - **Lighting Conditions**: Ensure adequate lighting
 - **Screen Glare**: Adjust screen angle to reduce glare
 - **Distance**: Maintain appropriate distance from screen
 
 #### Invalid Pair Key
+
 - **Expired Key**: Generate a new QR code
 - **Already Used**: Each key can only be used once
 - **Network Issues**: Both devices need internet connection
 
 ### Recovery Options
+
 1. **Manual Entry**: Type the 6-digit key manually
 2. **Copy URL**: Copy and share the pairing URL
 3. **Regenerate**: Create a new QR code

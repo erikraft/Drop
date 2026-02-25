@@ -1,6 +1,7 @@
 ---
 title: "WebRTC Connection"
 description: "Detailed explanation of WebRTC implementation and peer-to-peer connection management in ErikrafT Drop."
+icon: "network-wired"
 ---
 
 # WebRTC Connection Implementation
@@ -30,6 +31,7 @@ class RTCPeer extends Peer {
 ### Connection Establishment Process
 
 #### 1. Connection Initialization
+
 ```javascript
 // From network.js lines 1115-1121
 _openConnection() {
@@ -42,6 +44,7 @@ _openConnection() {
 ```
 
 #### 2. Data Channel Creation
+
 ```javascript
 // From network.js lines 1123-1137
 _openChannel() {
@@ -68,6 +71,7 @@ _openChannel() {
 The WebRTC connection follows the standard offer/answer pattern:
 
 #### 1. Offer Creation (Caller)
+
 ```javascript
 // From network.js lines 1139-1145
 _onDescription(description) {
@@ -79,6 +83,7 @@ _onDescription(description) {
 ```
 
 #### 2. Signal Relay
+
 ```javascript
 // From network.js lines 1279-1285
 _sendSignal(signal) {
@@ -91,6 +96,7 @@ _sendSignal(signal) {
 ```
 
 #### 3. Answer Creation (Receiver)
+
 ```javascript
 // From network.js lines 1155-1165
 if (message.sdp) {
@@ -110,6 +116,7 @@ if (message.sdp) {
 ### ICE Candidate Exchange
 
 #### 1. ICE Candidate Generation
+
 ```javascript
 // From network.js lines 1147-1150
 _onIceCandidate(event) {
@@ -119,6 +126,7 @@ _onIceCandidate(event) {
 ```
 
 #### 2. ICE Candidate Processing
+
 ```javascript
 // From network.js lines 1167-1171
 else if (message.ice) {
@@ -144,6 +152,7 @@ const channel = this._conn.createDataChannel('data-channel', {
 ### Channel Event Handling
 
 #### 1. Channel Opened
+
 ```javascript
 // From network.js lines 1174-1184
 _onChannelOpened(event) {
@@ -158,6 +167,7 @@ _onChannelOpened(event) {
 ```
 
 #### 2. Message Handling
+
 ```javascript
 // From network.js lines 1186-1191
 _onMessage(message) {
@@ -192,6 +202,7 @@ _onConnectionStateChange() {
 ```
 
 ### ICE Connection States
+
 ```javascript
 // From network.js lines 1259-1267
 _onIceConnectionStateChange() {
@@ -239,6 +250,7 @@ getConnectionHash() {
 ## Error Handling and Recovery
 
 ### Connection Errors
+
 ```javascript
 // From network.js lines 1269-1272
 _onError(error) {
@@ -248,6 +260,7 @@ _onError(error) {
 ```
 
 ### Automatic Reconnection
+
 ```javascript
 // From network.js lines 1241-1243
 _onChannelClosed() {
@@ -259,6 +272,7 @@ _onChannelClosed() {
 ```
 
 ### Connection Refresh
+
 ```javascript
 // From network.js lines 1287-1295
 refresh() {
@@ -275,6 +289,7 @@ refresh() {
 ## Configuration Options
 
 ### RTC Configuration
+
 The WebRTC connection is configured with ICE servers:
 
 ```javascript
@@ -286,6 +301,7 @@ const rtcConfig = {
 ```
 
 ### LAN Mode Configuration
+
 In LAN mode, ICE servers are disabled for local-only connections:
 
 ```javascript
@@ -298,17 +314,20 @@ if (this._lanMode.enabled && msg.wsConfig) {
 ## Performance Optimization
 
 ### Binary Data Handling
+
 ```javascript
 // Set binary type for efficient file transfer
 channel.binaryType = 'arraybuffer';
 ```
 
 ### Memory Management
+
 - **Streaming**: Files are streamed in chunks to prevent memory overload
 - **Garbage Collection**: Proper cleanup of closed connections
 - **Buffer Management**: Efficient buffer handling for large files
 
 ### Network Optimization
+
 - **ICE Candidate Filtering**: Prioritize local candidates for LAN connections
 - **Connection Reuse**: Maintain persistent connections when possible
 - **Adaptive Chunking**: Adjust chunk size based on connection quality
@@ -316,12 +335,14 @@ channel.binaryType = 'arraybuffer';
 ## Browser Compatibility
 
 ### Feature Detection
+
 ```javascript
 // WebRTC support detection
 window.isRtcSupported = !!window.RTCPeerConnection;
 ```
 
 ### Fallback Mechanism
+
 When WebRTC is not supported, the system falls back to WebSocket-based transfers:
 
 ```javascript
