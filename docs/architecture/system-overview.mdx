@@ -14,12 +14,14 @@ The architecture is divided into logical layers that work together to enable sec
 The Express server provides static files and configuration data.
 
 ### Responsibilities:
+
 - Serve HTML, CSS, and JavaScript files
 - Provide `/config` endpoint
 - Deliver application settings
 - Initialize client configuration
 
 ### Components:
+
 - Express Server (`server/index.js`)
 - Static Files
 - Configuration API
@@ -31,12 +33,14 @@ The Express server provides static files and configuration data.
 The WebSocket server handles peer discovery and signaling required for WebRTC connections.
 
 ### Responsibilities:
+
 - Peer discovery
 - Room management
 - Signaling message exchange
 - Session coordination
 
 ### Components:
+
 - WebSocket Signaling Server (`server/ws-server.js`)
 - Rooms Manager
 - Peer Manager
@@ -52,12 +56,14 @@ The WebSocket server handles peer discovery and signaling required for WebRTC co
 File transfers occur directly between browsers using WebRTC DataChannels.
 
 ### Responsibilities:
+
 - Direct peer-to-peer communication
 - Encrypted file transfer
 - Chunked file streaming
 - Transfer reliability
 
 ### Components:
+
 - RTCPeer connections
 - RTCDataChannel
 - FileChunker
@@ -74,6 +80,7 @@ File transfers occur directly between browsers using WebRTC DataChannels.
 STUN and TURN servers enable connectivity across different networks.
 
 ### Components:
+
 - STUN Server (NAT discovery)
 - TURN Server (Relay fallback)
 
@@ -96,6 +103,13 @@ STUN and TURN servers enable connectivity across different networks.
 
 ## Architecture Diagram
 
-![ErikrafT Drop Architecture](/docs/images/erikraft-drop-architecture-diagram.png)
+<Frame>
+  <img
+    src="/images/erikraft-drop-architecture-diagram.svg"
+    alt="Erikraft Drop Architecture Diagram"
+    title="Erikraft Drop Architecture Diagram"
+    className="mx-auto"
+  />
+</Frame>
 
 This diagram represents the full signaling and peer-to-peer transfer workflow used by ErikrafT Drop.
