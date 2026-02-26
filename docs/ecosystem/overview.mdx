@@ -140,7 +140,7 @@ Each ecosystem component uses a unique client type:
 | Android App       | `android`           | Native Android application |
 | VS Code Extension | `vs-code-extension` | VS Code integration        |
 | Discord Bot       | `discord-bot`       | Discord server integration |
-| Browser Extension | `browseros-browser` | Browser OS integration     |
+| Browser Extension | `browser`           | Browser integration        |
 
 ### Feature Mapping
 
@@ -150,7 +150,7 @@ Different components support different feature sets:
 | ------------------- | ------- | ------- | --- | ---------- | --------------- |
 | WebRTC P2P          | ✅       | ✅       | ✅   | ✅          | ❌\*             |
 | WebSocket Fallback  | ✅       | ✅       | ✅   | ✅          | ✅               |
-| QR Code Scanning    | ✅       | ✅       | ✅   | ❌          | ❌               |
+| QR Code Scanning    | ✅       | ✅       | ✅   | ✅          | ❌               |
 | System Integration  | ❌       | ✅       | ✅   | ✅          | ❌               |
 | Auto-Accept         | ✅       | ✅       | ✅   | ✅          | ✅               |
 | Multi-file Transfer | ✅       | ✅       | ✅   | ✅          | ✅ (3 files max) |
@@ -167,13 +167,25 @@ sequenceDiagram
     participant Server as Signaling Server
     participant Peer as Remote Peer
 
-    Client->>Server: WebSocket connection
-    Server->>Client: Peer list
-    Client->>Server: WebRTC offer
-    Server->>Peer: Relay offer
-    Peer->>Server: WebRTC answer
-    Server->>Client: Relay answer
-    Client<-->Peer: Direct P2P connection
+    Client->>Server: Connect WebSocket
+    Server-->>Client: Connected
+
+    Client->>Server: Request peer list
+    Server-->>Client: Send peer list
+
+    Client->>Server: Send WebRTC offer
+    Server->>Peer: Forward offer
+
+    Peer->>Server: Send WebRTC answer
+    Server->>Client: Forward answer
+
+    Client->>Server: Send ICE candidates
+    Server->>Peer: Forward ICE candidates
+
+    Peer->>Server: Send ICE candidates
+    Server->>Client: Forward ICE candidates
+
+    Client->>Peer: P2P DataChannel established
 ```
 
 ### WebSocket Fallback Flow
