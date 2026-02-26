@@ -110,5 +110,11 @@
       "linkedin": "https://www.linkedin.com/in/erikraft/",
       "website": "https://biodrop.erikraft.com/"
     }
+  },
+  "description": "Official documentation for ErikrafT Drop — a secure WebRTC peer-to-peer file sharing platform. Includes guides, architecture, setup instructions, and developer references.",
+  "fonts": {
+    "family": "Space Grotesk",
+    "source": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap",
+    "format": "woff2"
   }
 }
