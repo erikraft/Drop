@@ -122,5 +122,21 @@
     "body": {
       "family": "Space Grotesk"
     }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Website",
+        "href": "https://drop.erikraft.com/"
+      },
+      {
+        "label": "GitHub repository",
+        "href": "https://github.com/erikraft/Drop"
+      },
+      {
+        "label": "Android GitHub repository",
+        "href": "https://github.com/erikraft/Drop-Android"
+      }
+    ]
   }
 }
