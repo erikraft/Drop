@@ -14,7 +14,9 @@
   },
 
   "colors": {
-    "primary": "#4285f4"
+    "primary": "#4285f4",
+    "light": "#4285f4",
+    "dark": "#4285f4"
   },
 
   "contextual": {
