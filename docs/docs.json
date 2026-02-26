@@ -90,6 +90,13 @@
           "reference/technical-documentation",
           "reference/docker-swarm-usage"
         ]
+      },
+      {
+        "group": "Technical Documentation",
+        "icon": "book",
+        "pages": [
+          "ssl-architecture"
+        ]
       }
     ]
   }

@@ -102,15 +102,116 @@ STUN and TURN servers enable connectivity across different networks.
 
 ---
 
-## Architecture Diagram
+## System Architecture (Technical View)
 
-<Frame>
-  <img
-    src="/images/erikraft-drop-architecture-diagram.png"
-    alt="Erikraft Drop Architecture Diagram"
-    title="Erikraft Drop Architecture Diagram"
-    className="mx-auto"
-  />
-</Frame>
+```mermaid
+flowchart LR
+
+%% Users (Outside)
+UA["User A"]
+UB["User B"]
+
+%% External Services
+subgraph External_Services
+    STUN["STUN Server<br/>NAT discovery"]
+    TURN["TURN Server<br/>Relay fallback"]
+end
+
+%% Network Layers
+subgraph Network_Layers
+    L1["Layer 1<br/>HTTP + Config + Static"]
+    L2["Layer 2<br/>WebSocket Signaling"]
+    L3["Layer 3<br/>WebRTC P2P Transfer"]
+end
+
+%% Server Side
+subgraph Server_Side
+    ES["Express Server<br/>HTTP + Static files<br/>server/index.js"]
+
+    WSS["WebSocket Signaling Server<br/>Peer discovery<br/>server/ws-server.js"]
+
+    RM["Rooms Manager<br/>IP / Secret / Public"]
+
+    PMGR["Peer Manager<br/>Peer tracking"]
+end
+
+%% Client Side
+subgraph Client_Side
+
+    UI["UI Interface<br/>PeersUI / PeerUI"]
+
+    PM["PeersManager"]
+
+    RTC["RTCPeer<br/>WebRTC P2P"]
+
+    WS["WSPeer fallback<br/>WebSocket relay"]
+
+    FC["FileChunker<br/>64KB chunks"]
+
+    FD["FileDigester<br/>File reassembly"]
+
+    DB["IndexedDB<br/>PersistentStorage"]
+
+end
+
+
+%% Users connect
+UA --> UI
+UB --> UI
+
+
+%% HTTP Flow
+UI -->|"HTTP"| L1
+L1 --> ES
+
+
+%% Signaling Flow
+PM -->|"WebSocket"| L2
+L2 --> WSS
+
+WSS --> RM
+WSS --> PMGR
+
+
+%% Peer Creation
+UI --> PM
+
+PM --> RTC
+PM --> WS
+
+
+%% Transfer Flow
+RTC -->|"Chunks"| FC
+FC --> FD
+
+WS -->|"Fallback"| FC
+
+
+%% Storage
+UI --> DB
+
+
+%% WebRTC
+RTC -->|"ICE"| L3
+L3 --> STUN
+L3 --> TURN
+
+
+%% Peer Connection
+UA -.->|"WebSocket signaling"| UB
+UA <-->|"WebRTC P2P"| UB
+
+
+%% Discovery Phase
+PM -.->|"Discovery Phase"| WSS
+
+
+%% Signaling Phase
+RTC -.->|"SDP Exchange"| WSS
+
+
+%% Transfer Phase
+RTC -.->|"Transfer Phase"| FD
+```
 
 This diagram represents the full signaling and peer-to-peer transfer workflow used by ErikrafT Drop.
