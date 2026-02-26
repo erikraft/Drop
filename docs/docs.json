@@ -30,75 +30,96 @@
   },
 
   "navigation": {
-    "groups": [
+    "tabs": [
       {
-        "group": "Introduction",
+        "tab": "Documentation",
         "icon": "book",
-        "pages": [
-          "introduction/overview",
-          "introduction/how-it-works",
-          "introduction/getting-started",
-          "introduction/getting-erikraft-drop"
+        "groups": [
+          {
+            "group": "Introduction",
+            "icon": "book",
+            "pages": [
+              "introduction/overview",
+              "introduction/how-it-works",
+              "introduction/getting-started",
+              "introduction/getting-erikraft-drop"
+            ]
+          },
+          {
+            "group": "Architecture",
+            "icon": "diagram-project",
+            "pages": [
+              "architecture/system-overview",
+              "architecture/webrtc-connection",
+              "architecture/signaling-server",
+              "architecture/file-transfer-flow"
+            ]
+          },
+          {
+            "group": "Features",
+            "icon": "puzzle-piece",
+            "pages": [
+              "features/p2p-transfer",
+              "features/device-pairing",
+              "features/qr-connection"
+            ]
+          },
+          {
+            "group": "Usage",
+            "icon": "chart-bar",
+            "pages": [
+              "usage/connect-devices",
+              "usage/send-files",
+              "usage/receive-files"
+            ]
+          },
+          {
+            "group": "Ecosystem",
+            "icon": "diagram-project",
+            "pages": [
+              "ecosystem/overview",
+              "ecosystem/android",
+              "ecosystem/shortcut",
+              "ecosystem/extensions",
+              "ecosystem/discord"
+            ]
+          },
+          {
+            "group": "Reference",
+            "icon": "book",
+            "pages": [
+              "reference/project-structure",
+              "reference/configuration",
+              "reference/faq",
+              "reference/host-your-own",
+              "reference/how-to",
+              "reference/technical-documentation",
+              "reference/docker-swarm-usage"
+            ]
+          },
+          {
+            "group": "Technical Documentation",
+            "icon": "book",
+            "pages": [
+              "ssl-architecture"
+            ]
+          }
         ]
       },
       {
-        "group": "Architecture",
-        "icon": "diagram-project",
-        "pages": [
-          "architecture/system-overview",
-          "architecture/webrtc-connection",
-          "architecture/signaling-server",
-          "architecture/file-transfer-flow"
-        ]
+        "tab": "Website",
+        "icon": "globe",
+        "href": "https://drop.erikraft.com/"
       },
       {
-        "group": "Features",
-        "icon": "puzzle-piece",
-        "pages": [
-          "features/p2p-transfer",
-          "features/device-pairing",
-          "features/qr-connection"
-        ]
+        "tab": "GitHub repository",
+        "icon": "code",
+        "href": "https://github.com/erikraft/Drop"
       },
       {
-        "group": "Usage",
-        "icon": "chart-bar",
-        "pages": [
-          "usage/connect-devices",
-          "usage/send-files",
-          "usage/receive-files"
-        ]
-      },
-      {
-        "group": "Ecosystem",
-        "icon": "diagram-project",
-        "pages": [
-          "ecosystem/overview",
-          "ecosystem/android",
-          "ecosystem/shortcut",
-          "ecosystem/extensions",
-          "ecosystem/discord"
-        ]
-      },
-      {
-        "group": "Reference",
-        "icon": "book",
-        "pages": [
-          "reference/project-structure",
-          "reference/configuration",
-          "reference/faq",
-          "reference/host-your-own",
-          "reference/how-to",
-          "reference/technical-documentation",
-          "reference/docker-swarm-usage"
-        ]
-      },
-      {
-        "group": "Technical Documentation",
-        "icon": "book",
-        "pages": [
-          "ssl-architecture"
-        ]
+        "tab": "Android GitHub repository",
+        "icon": "code",
+        "href": "https://github.com/erikraft/Drop-Android"
       }
     ]
   },
@@ -124,20 +145,7 @@
     }
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Website",
-        "href": "https://drop.erikraft.com/"
-      },
-      {
-        "label": "GitHub repository",
-        "href": "https://github.com/erikraft/Drop"
-      },
-      {
-        "label": "Android GitHub repository",
-        "href": "https://github.com/erikraft/Drop-Android"
-      }
-    ]
+    "links": []
   },
   "icons": {
     "library": "fontawesome"
