@@ -107,6 +107,13 @@
         ]
       },
       {
+        "tab": "Releases",
+        "icon": "tag",
+        "pages": [
+          "releases"
+        ]
+      },
+      {
         "tab": "Website",
         "icon": "globe",
         "href": "https://drop.erikraft.com/"
