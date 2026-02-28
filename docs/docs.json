@@ -4,8 +4,8 @@
   "theme": "mint",
 
   "logo": {
-    "dark": "/images/logo-dark.svg",
-    "light": "/images/logo-light.svg"
+    "light": "/images/ErikrafTDrop-Rectangular-LightMode.png",
+    "dark": "/images/ErikrafTDrop-Rectangular-DarkMode.png"
   },
 
   "favicon": {
