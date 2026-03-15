@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Bot do Discord para compartilhar arquivos através do ErikrafT Drop.",
   "overrides": {
-    "undici": "^6.23.0"
+    "undici": "^7.24.3"
   },
   "scripts": {
     "start": "node ./src/index.js",
