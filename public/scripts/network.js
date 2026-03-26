@@ -9,10 +9,6 @@ class ServerConnection {
         Events.on('pagehide', _ => this._disconnect());
         Events.on(window.visibilityChangeEvent, _ => this._onVisibilityChange());
 
-        if (navigator.connection) {
-            navigator.connection.addEventListener('change', _ => this._reconnect());
-        }
-
         Events.on('room-secrets', e => this.send({ type: 'room-secrets', roomSecrets: e.detail }));
         Events.on('join-ip-room', _ => this.send({ type: 'join-ip-room'}));
         Events.on('room-secrets-deleted', e => this.send({ type: 'room-secrets-deleted', roomSecrets: e.detail}));
@@ -30,6 +26,11 @@ class ServerConnection {
 
         this._lanMode = this._loadLanMode();
         Events.on('lan-mode-changed', e => this._onLanModeChanged(e.detail));
+
+        this._heartbeatInterval = 1000;
+        this._heartbeatGraceMultiplier = 5;
+        this._heartbeatTimer = null;
+        this._lastHeartbeatAt = 0;
 
         this._getConfig().then(() => this._connect());
     }
@@ -101,6 +102,7 @@ class ServerConnection {
 
     _onOpen() {
         console.log('WS: server connected');
+        this._markHeartbeat();
         Events.fire('ws-connected');
         if (this._isReconnect) Events.fire('notify-user', Localization.getTranslation("notifications.connected"));
     }
@@ -168,6 +170,7 @@ class ServerConnection {
                 Events.fire('signal', msg);
                 break;
             case 'ping':
+                this._markHeartbeat();
                 this.send({ type: 'pong' });
                 break;
             case 'display-name':
@@ -296,6 +299,7 @@ class ServerConnection {
     }
 
     _disconnect() {
+        this._clearHeartbeatTimeout();
         this.send({ type: 'disconnect' });
 
         const peerId = sessionStorage.getItem('peer_id');
@@ -316,6 +320,7 @@ class ServerConnection {
 
     _onDisconnect() {
         console.log('WS: server disconnected');
+        this._clearHeartbeatTimeout();
         setTimeout(() => {
             this._isReconnect = true;
             Events.fire('ws-disconnected');
@@ -346,8 +351,36 @@ class ServerConnection {
         Events.fire('ws-error', { error: e });
     }
 
+    _markHeartbeat() {
+        this._lastHeartbeatAt = Date.now();
+        this._scheduleHeartbeatTimeout();
+    }
+
+    _scheduleHeartbeatTimeout() {
+        this._clearHeartbeatTimeout();
+        this._heartbeatTimer = setTimeout(() => this._onHeartbeatTimeout(), this._heartbeatInterval * this._heartbeatGraceMultiplier);
+    }
+
+    _clearHeartbeatTimeout() {
+        if (!this._heartbeatTimer) return;
+        clearTimeout(this._heartbeatTimer);
+        this._heartbeatTimer = null;
+    }
+
+    _onHeartbeatTimeout() {
+        if (!this._socket) return;
+        if (!this._isConnected() && !this._isConnecting()) return;
+        if (Date.now() - this._lastHeartbeatAt < this._heartbeatInterval * this._heartbeatGraceMultiplier) {
+            this._scheduleHeartbeatTimeout();
+            return;
+        }
+        this._socket.close();
+    }
+
     _reconnect() {
-        this._disconnect();
+        if (this._isConnected() || this._isConnecting()) {
+            this._disconnect();
+        }
         this._connect();
     }
 
