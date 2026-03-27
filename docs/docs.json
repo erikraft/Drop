@@ -132,11 +132,11 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/erikraft/",
+      "github": "https://github.com/erikraft",
       "threads": "https://www.threads.com/@erik.developer",
       "instagram": "https://www.instagram.com/erik.developer",
-      "linkedin": "https://www.linkedin.com/in/erikraft/",
-      "website": "https://biodrop.erikraft.com/"
+      "linkedin": "https://linkedin.com/company/erikraft-drop",
+      "website": "https://biodrop.erikraft.com"
     }
   },
   "description": "Official documentation for ErikrafT Drop — a secure WebRTC peer-to-peer file sharing platform. Includes guides, architecture, setup instructions, and developer references.",
