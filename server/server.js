@@ -5,6 +5,7 @@ import path, {dirname} from "path";
 import http from "http";
 import multer from "multer";
 import {handleAiImageRequest} from "./services/ai-image.js";
+import ErikrafTdropWsServer from "./ws-server.js";
 
 // Ensure fetch/FormData/File exist for runtimes without native support (Node < 18)
 if (typeof fetch === "undefined" || typeof FormData === "undefined" || typeof File === "undefined") {
@@ -143,6 +144,14 @@ export default class ErikrafTdropServer {
         const hostname = conf.localhostOnly ? '127.0.0.1' : null;
         // Create HTTP server
         this.server = http.createServer(app);
+
+        // Initialize WebSocket server
+        this.wsServer = new ErikrafTdropWsServer(this.server, {
+            rtcConfig: conf.rtcConfig || { iceServers: [] },
+            wsFallback: conf.wsFallback || false,
+            debugMode: conf.debugMode || false,
+            rateLimit: conf.rateLimit || 1
+        });
 
         // Start listening
         this.server.listen(conf.port, hostname, () => {
