@@ -9,6 +9,10 @@ class ServerConnection {
         Events.on('pagehide', _ => this._disconnect());
         Events.on(window.visibilityChangeEvent, _ => this._onVisibilityChange());
 
+        if (navigator.connection) {
+            navigator.connection.addEventListener('change', _ => this._reconnect());
+        }
+
         Events.on('room-secrets', e => this.send({ type: 'room-secrets', roomSecrets: e.detail }));
         Events.on('join-ip-room', _ => this.send({ type: 'join-ip-room'}));
         Events.on('room-secrets-deleted', e => this.send({ type: 'room-secrets-deleted', roomSecrets: e.detail}));
