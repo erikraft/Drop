@@ -5,7 +5,6 @@ import path, {dirname} from "path";
 import http from "http";
 import multer from "multer";
 import {handleAiImageRequest} from "./services/ai-image.js";
-import ErikrafTdropWsServer from "./ws-server.js";
 
 // Ensure fetch/FormData/File exist for runtimes without native support (Node < 18)
 if (typeof fetch === "undefined" || typeof FormData === "undefined" || typeof File === "undefined") {
@@ -142,23 +141,14 @@ export default class ErikrafTdropServer {
         });
 
         const hostname = conf.localhostOnly ? '127.0.0.1' : null;
-        // Create HTTP server
-        this.server = http.createServer(app);
+        const server = http.createServer(app);
+        this.server = server;
 
-        // Initialize WebSocket server
-        this.wsServer = new ErikrafTdropWsServer(this.server, {
-            rtcConfig: conf.rtcConfig || { iceServers: [] },
-            wsFallback: conf.wsFallback || false,
-            debugMode: conf.debugMode || false,
-            rateLimit: conf.rateLimit || 1
-        });
-
-        // Start listening
-        this.server.listen(conf.port, hostname, () => {
+        server.listen(conf.port, hostname, () => {
             console.log(`Server running at http://${hostname}:${conf.port}/`);
         });
 
-        this.server.on('error', (err) => {
+        server.on('error', (err) => {
             if (err.code === 'EADDRINUSE') {
                 console.error(err);
                 console.info("Error EADDRINUSE received, exiting process without restarting process...");
