@@ -195,8 +195,8 @@ class Localization {
 
             if (useDefault || Localization.currentLocaleIsDefault()) {
                 // Is default locale already
-                // Use empty string as translation
-                translation = ""
+                // Use key as translation fallback to keep UI stable and debuggable
+                translation = key;
             }
             else {
                 // Is not default locale yet
