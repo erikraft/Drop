@@ -2,6 +2,523 @@
 const $ = query => document.getElementById(query);
 const $$ = query => document.querySelector(query);
 
+class DiscoveryBadgeState {
+    constructor() {
+        this.DEBUG = false;
+        this.RENDER_DEBOUNCE_MS = 75;
+        this.HIDE_GRACE_MS = 1200;
+        this.RECOVERY_TIMEOUT_MS = 2000;
+        this.EVENT_QUEUE_DEBOUNCE_MS = 50;
+        this.MAX_SYNC_ATTEMPTS = 3;
+
+        this.state = {
+            lan: false,
+            ip: false,
+            paired: false,
+            publicRoom: false,
+            publicRoomId: null
+        };
+        this.stateVersion = 0;
+        this.recoveryToken = 0;
+        this.isSyncing = false;
+        this._pendingRenderWhileSyncing = false;
+        this.stateMeta = {
+            lastUpdated: 0,
+            lastEventVersion: 0
+        };
+        this._syncRequirements = {
+            peers: false,
+            roomSecrets: false,
+            publicRoom: false
+        };
+        this._syncAttempts = 0;
+        this._renderTimer = null;
+        this._recoveryTimer = null;
+        this._eventQueueTimer = null;
+        this._eventQueue = [];
+        this._eventSequence = 0;
+        this._hideTimers = new Map();
+        this._wsConnected = false;
+
+        Events.on('peers', e => this._enqueueEvent('peers', e.detail));
+        Events.on('peer-joined', e => this._enqueueEvent('peer-joined', e.detail));
+        Events.on('room-secrets', e => this._enqueueEvent('room-secrets', e.detail));
+        Events.on('room-secrets-deleted', e => this._enqueueEvent('room-secrets-deleted', e.detail));
+        Events.on('join-public-room', e => this._enqueueEvent('join-public-room', e.detail));
+        Events.on('public-room-created', e => this._enqueueEvent('public-room-created', e.detail));
+        Events.on('public-room-left', _ => this._enqueueEvent('public-room-left', {}));
+        Events.on('discovery-public-room-id', e => this._enqueueEvent('public-room-created', e.detail));
+        Events.on('ws-connected', _ => this._enqueueEvent('ws-connected', {}));
+        Events.on('ws-disconnected', _ => this._enqueueEvent('ws-disconnected', {}));
+
+        this.initialize();
+    }
+
+    async initialize() {
+        await this._hydrateFromStorage();
+        this.scheduleRender();
+    }
+
+    _enqueueEvent(type, detail) {
+        this._eventQueue.push({
+            type,
+            detail,
+            token: this.recoveryToken,
+            version: ++this._eventSequence,
+            receivedAt: Date.now()
+        });
+
+        clearTimeout(this._eventQueueTimer);
+        this._eventQueueTimer = setTimeout(() => this._flushEventQueue(), this.EVENT_QUEUE_DEBOUNCE_MS);
+    }
+
+    _eventDedupKey(event) {
+        if (event.type === 'peers') return `peers:${event.detail?.roomType || ''}:${event.detail?.roomId || ''}`;
+        if (event.type === 'peer-joined') return `peer-joined:${event.detail?.roomType || ''}:${event.detail?.roomId || ''}`;
+        if (event.type === 'room-secrets') return 'room-secrets';
+        if (event.type === 'room-secrets-deleted') return 'room-secrets-deleted';
+        if (event.type === 'public-room-created') return 'public-room-created';
+        if (event.type === 'join-public-room') return 'join-public-room';
+        if (event.type === 'ws-connected') return 'ws-connected';
+        if (event.type === 'ws-disconnected') return 'ws-disconnected';
+        return `${event.type}:${event.version}`;
+    }
+
+    _flushEventQueue() {
+        if (!this._eventQueue.length) return;
+
+        const deduped = new Map();
+        this._eventQueue
+            .sort((a, b) => a.version - b.version)
+            .forEach(event => deduped.set(this._eventDedupKey(event), event));
+        this._eventQueue = [];
+
+        Array.from(deduped.values())
+            .sort((a, b) => a.version - b.version)
+            .forEach(event => this._processEvent(event));
+    }
+
+    async _hydrateFromStorage() {
+        const publicRoomId = sessionStorage.getItem('public_room_id');
+        this.patchState({
+            publicRoom: !!publicRoomId,
+            publicRoomId: publicRoomId || null
+        }, { render: false, source: 'hydrate-storage', allowNullFields: ['publicRoomId'] });
+        await this._refreshPairedFromStorage(false);
+    }
+
+    validateState(state) {
+        const nextState = {
+            lan: !!state.lan,
+            ip: !!state.ip,
+            paired: !!state.paired,
+            publicRoom: !!state.publicRoom,
+            publicRoomId: typeof state.publicRoomId === 'string' && state.publicRoomId.trim()
+                ? state.publicRoomId.trim().toLowerCase()
+                : null
+        };
+
+        if (nextState.publicRoom && !nextState.publicRoomId) {
+            nextState.publicRoom = false;
+        }
+
+        if (!nextState.publicRoomId) {
+            nextState.publicRoom = false;
+        }
+
+        return nextState;
+    }
+
+    patchState(partialUpdate, options = {}) {
+        const {
+            render = true,
+            allowNullFields = [],
+            timestamp = Date.now(),
+            source = 'unknown',
+            eventVersion = this.stateMeta.lastEventVersion + 1,
+            recoveryToken = this.recoveryToken,
+            destructive = false,
+            allowDuringSync = false
+        } = options;
+
+        if (recoveryToken !== this.recoveryToken) {
+            return false;
+        }
+
+        if (eventVersion < this.stateMeta.lastEventVersion) {
+            return false;
+        }
+
+        if (this.isSyncing && destructive && !allowDuringSync) {
+            return false;
+        }
+
+        if (timestamp < this.stateMeta.lastUpdated) {
+            return false;
+        }
+
+        const mergedState = { ...this.state };
+        Object.keys(partialUpdate || {}).forEach(key => {
+            if (!(key in mergedState)) return;
+            const value = partialUpdate[key];
+            if (typeof value === 'undefined') return;
+            if (value === null && !allowNullFields.includes(key)) return;
+            mergedState[key] = value;
+        });
+
+        const validatedState = this.validateState(mergedState);
+        const hasChanged = Object.keys(validatedState).some(key => validatedState[key] !== this.state[key]);
+        if (!hasChanged) {
+            this.stateMeta.lastEventVersion = Math.max(this.stateMeta.lastEventVersion, eventVersion);
+            return false;
+        }
+
+        this.state = validatedState;
+        this.stateMeta.lastUpdated = timestamp;
+        this.stateMeta.lastEventVersion = Math.max(this.stateMeta.lastEventVersion, eventVersion);
+        this.stateVersion += 1;
+
+        if (this.DEBUG) {
+            console.log('[Discovery State]', {
+                source,
+                state: this.state,
+                version: this.stateVersion,
+                syncing: this.isSyncing,
+                recoveryToken: this.recoveryToken
+            });
+        }
+
+        if (render) {
+            this.scheduleRender();
+        }
+
+        return true;
+    }
+
+    scheduleRender() {
+        if (this.isSyncing) {
+            this._pendingRenderWhileSyncing = true;
+            return;
+        }
+
+        clearTimeout(this._renderTimer);
+        this._renderTimer = setTimeout(() => this.renderBadges(), this.RENDER_DEBOUNCE_MS);
+    }
+
+    _requestResync(token) {
+        if (token !== this.recoveryToken) return;
+        Events.fire('join-ip-room');
+
+        if (typeof PersistentStorage !== 'undefined' && typeof PersistentStorage.getAllRoomSecrets === 'function') {
+            PersistentStorage.getAllRoomSecrets().then(roomSecrets => {
+                if (token !== this.recoveryToken) return;
+                Events.fire('room-secrets', roomSecrets);
+            });
+        }
+
+        const publicRoomId = sessionStorage.getItem('public_room_id');
+        if (publicRoomId) {
+            Events.fire('join-public-room', { roomId: publicRoomId, createIfInvalid: true });
+        }
+        else {
+            this._markSyncStep('publicRoom', token);
+        }
+    }
+
+    _scheduleRecovery(token) {
+        clearTimeout(this._recoveryTimer);
+        this._recoveryTimer = setTimeout(() => {
+            if (token !== this.recoveryToken) return;
+            if (!this.isSyncing) return;
+
+            this._syncAttempts += 1;
+            if (this._syncAttempts >= this.MAX_SYNC_ATTEMPTS) {
+                this.safeReset('sync-timeout');
+                return;
+            }
+
+            this._requestResync(token);
+            this._scheduleRecovery(token);
+        }, this.RECOVERY_TIMEOUT_MS);
+    }
+
+    _processEvent(event) {
+        switch (event.type) {
+            case 'ws-connected':
+                this._onWsConnected(event);
+                break;
+            case 'ws-disconnected':
+                this._onWsDisconnected(event);
+                break;
+            case 'peers':
+                this._onPeers(event);
+                break;
+            case 'peer-joined':
+                this._onPeerJoined(event);
+                break;
+            case 'room-secrets':
+                this._onRoomSecrets(event);
+                break;
+            case 'room-secrets-deleted':
+                this._onRoomSecretsDeleted(event);
+                break;
+            case 'join-public-room':
+                this._onJoinPublicRoom(event);
+                break;
+            case 'public-room-created':
+                this._onPublicRoomCreated(event);
+                break;
+            case 'public-room-left':
+                this._onPublicRoomLeft(event);
+                break;
+            default:
+                break;
+        }
+    }
+
+    _beginSyncHandshake() {
+        this.recoveryToken += 1;
+        const token = this.recoveryToken;
+        this.isSyncing = true;
+        this._syncAttempts = 0;
+        this._syncRequirements = {
+            peers: false,
+            roomSecrets: false,
+            publicRoom: false
+        };
+
+        this._requestResync(token);
+        this._scheduleRecovery(token);
+    }
+
+    _markSyncStep(step, token) {
+        if (token !== this.recoveryToken) return;
+        if (!this.isSyncing) return;
+
+        this._syncRequirements[step] = true;
+        const completed = Object.values(this._syncRequirements).every(Boolean);
+        if (!completed) return;
+
+        clearTimeout(this._recoveryTimer);
+        if (!this.assertConsistentState(this.state)) {
+            this.safeReset('post-sync-inconsistent');
+            return;
+        }
+
+        this.isSyncing = false;
+        if (this._pendingRenderWhileSyncing) {
+            this._pendingRenderWhileSyncing = false;
+            this.scheduleRender();
+        }
+    }
+
+    assertConsistentState(state) {
+        const validated = this.validateState(state);
+        return Object.keys(validated).every(key => validated[key] === state[key]);
+    }
+
+    safeReset(reason = 'unknown') {
+        const token = this.recoveryToken;
+        this.patchState({
+            lan: false,
+            ip: false,
+            publicRoom: false,
+            publicRoomId: null
+        }, {
+            source: `safe-reset:${reason}`,
+            recoveryToken: token,
+            allowNullFields: ['publicRoomId'],
+            destructive: true,
+            allowDuringSync: true
+        });
+        this._refreshPairedFromStorage();
+        if (this._wsConnected) {
+            this._beginSyncHandshake();
+        }
+    }
+
+    _onPeers(event) {
+        const message = event.detail;
+        if (message?.roomType === 'lan') {
+            this.patchState({ lan: true }, { source: 'peers-lan', eventVersion: event.version, recoveryToken: event.token });
+        }
+        if (message?.roomType === 'ip') {
+            this.patchState({ ip: true }, { source: 'peers-ip', eventVersion: event.version, recoveryToken: event.token });
+        }
+        if (message?.roomType === 'public-id') {
+            this.patchState({
+                publicRoom: !!message.roomId,
+                publicRoomId: message.roomId || null
+            }, {
+                source: 'peers-public',
+                allowNullFields: ['publicRoomId'],
+                eventVersion: event.version,
+                recoveryToken: event.token
+            });
+        }
+        this._markSyncStep('peers', event.token);
+    }
+
+    _onPeerJoined(event) {
+        const message = event.detail;
+        if (message?.roomType === 'lan') {
+            this.patchState({ lan: true }, { source: 'peer-joined-lan', eventVersion: event.version, recoveryToken: event.token });
+        }
+        if (message?.roomType === 'ip') {
+            this.patchState({ ip: true }, { source: 'peer-joined-ip', eventVersion: event.version, recoveryToken: event.token });
+        }
+        if (message?.roomType === 'public-id') {
+            this.patchState({
+                publicRoom: !!message.roomId,
+                publicRoomId: message.roomId || null
+            }, {
+                source: 'peer-joined-public',
+                allowNullFields: ['publicRoomId'],
+                eventVersion: event.version,
+                recoveryToken: event.token
+            });
+        }
+        this._markSyncStep('peers', event.token);
+    }
+
+    _onRoomSecrets(event) {
+        const roomSecrets = event.detail;
+        if (Array.isArray(roomSecrets) && roomSecrets.length > 0) {
+            this.patchState({ paired: true }, { source: 'room-secrets', eventVersion: event.version, recoveryToken: event.token });
+        }
+        this._refreshPairedFromStorage();
+        this._markSyncStep('roomSecrets', event.token);
+    }
+
+    _onRoomSecretsDeleted(event) {
+        this._refreshPairedFromStorage();
+        this._markSyncStep('roomSecrets', event.token);
+    }
+
+    _onJoinPublicRoom(event) {
+        const detail = event.detail;
+        if (!detail?.roomId) return;
+        this.patchState({
+            publicRoom: true,
+            publicRoomId: detail.roomId
+        }, {
+            source: 'join-public-room',
+            eventVersion: event.version,
+            recoveryToken: event.token
+        });
+        this._markSyncStep('publicRoom', event.token);
+    }
+
+    _onPublicRoomCreated(event) {
+        const roomId = event.detail;
+        if (!roomId) return;
+        this.patchState({
+            publicRoom: true,
+            publicRoomId: roomId
+        }, {
+            source: 'public-room-created',
+            eventVersion: event.version,
+            recoveryToken: event.token
+        });
+        this._markSyncStep('publicRoom', event.token);
+    }
+
+    _onPublicRoomLeft(event) {
+        this.patchState({
+            publicRoom: false,
+            publicRoomId: null
+        }, {
+            source: 'public-room-left',
+            allowNullFields: ['publicRoomId'],
+            eventVersion: event.version,
+            recoveryToken: event.token,
+            destructive: true
+        });
+        this._markSyncStep('publicRoom', event.token);
+    }
+
+    async _onWsConnected() {
+        this._wsConnected = true;
+        await this._hydrateFromStorage();
+        this._beginSyncHandshake();
+    }
+
+    _onWsDisconnected() {
+        this._wsConnected = false;
+        this.recoveryToken += 1;
+        this.isSyncing = false;
+        this._pendingRenderWhileSyncing = false;
+        clearTimeout(this._recoveryTimer);
+        clearTimeout(this._eventQueueTimer);
+    }
+
+    async _refreshPairedFromStorage(render = true) {
+        if (typeof PersistentStorage === 'undefined' || typeof PersistentStorage.getAllRoomSecrets !== 'function') {
+            return;
+        }
+        const roomSecrets = await PersistentStorage.getAllRoomSecrets();
+        this.patchState(
+            { paired: Array.isArray(roomSecrets) && roomSecrets.length > 0 },
+            { render, source: 'refresh-paired', eventVersion: this.stateMeta.lastEventVersion + 1 }
+        );
+    }
+
+    renderBadges() {
+        if (this.isSyncing) {
+            this._pendingRenderWhileSyncing = true;
+            return;
+        }
+
+        this.state = this.validateState(this.state);
+
+        this._renderBooleanBadge('lan', this.state.lan);
+        this._renderBooleanBadge('ip', this.state.ip);
+        this._renderBooleanBadge('paired', this.state.paired);
+        this._renderPublicBadge(this.state.publicRoom && !!this.state.publicRoomId, this.state.publicRoomId);
+
+        Events.fire('evaluate-footer-badges');
+    }
+
+    _renderBooleanBadge(badgeKey, visible) {
+        document.querySelectorAll(`[data-badge="${badgeKey}"]`).forEach((el, index) => {
+            const timerKey = `${badgeKey}-${index}`;
+            clearTimeout(this._hideTimers.get(timerKey));
+            if (visible) {
+                el.hidden = false;
+                this._hideTimers.delete(timerKey);
+                return;
+            }
+
+            this._hideTimers.set(timerKey, setTimeout(() => {
+                if (!this.state[badgeKey]) {
+                    el.hidden = true;
+                }
+                this._hideTimers.delete(timerKey);
+            }, this.HIDE_GRACE_MS));
+        });
+    }
+
+    _renderPublicBadge(visible, publicRoomId) {
+        document.querySelectorAll('[data-badge="public"]').forEach((el, index) => {
+            const timerKey = `public-${index}`;
+            clearTimeout(this._hideTimers.get(timerKey));
+            if (visible) {
+                el.hidden = false;
+                el.textContent = `na sala ${publicRoomId.toUpperCase()}`;
+                this._hideTimers.delete(timerKey);
+                return;
+            }
+
+            this._hideTimers.set(timerKey, setTimeout(() => {
+                if (!this.state.publicRoom || !this.state.publicRoomId) {
+                    el.hidden = true;
+                }
+                this._hideTimers.delete(timerKey);
+            }, this.HIDE_GRACE_MS));
+        });
+    }
+}
+
 // Event listener shortcuts
 class Events {
     static fire(type, detail = {}) {
