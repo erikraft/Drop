@@ -45,6 +45,10 @@ class ErikrafTdrop {
     }
 
     async initialize() {
+        if (document.readyState === 'loading') {
+            await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+        }
+
         this.registerServiceWorker();
 
         let startupError = null;
@@ -84,27 +88,38 @@ class ErikrafTdrop {
     }
 
     async hydrateUI() {
-        this.aboutUI = new AboutUI();
-        this.peersUI = new PeersUI();
-        this.languageSelectDialog = new LanguageSelectDialog();
-        this.receiveFileDialog = new ReceiveFileDialog();
-        this.receiveRequestDialog = new ReceiveRequestDialog();
-        this.sendTextDialog = new SendTextDialog();
-        this.receiveTextDialog = new ReceiveTextDialog();
-        this.pairDeviceDialog = new PairDeviceDialog();
-        this.clearDevicesDialog = new EditPairedDevicesDialog();
-        this.publicRoomDialog = new PublicRoomDialog();
-        this.lanModeDialog = new LanModeDialog();
-        this.base64Dialog = new Base64Dialog();
-        this.shareTextDialog = new ShareTextDialog();
-        this.toast = new Toast();
-        this.notifications = new Notifications();
-        this.networkStatusUI = new NetworkStatusUI();
-        this.webShareTargetUI = new WebShareTargetUI();
-        this.webFileHandlersUI = new WebFileHandlersUI();
-        this.noSleepUI = new NoSleepUI();
-        this.chatUI = new ChatUI();
-        this.broadCast = new BrowserTabsConnector();
+        const uiFactories = [
+            ['aboutUI', () => new AboutUI()],
+            ['peersUI', () => new PeersUI()],
+            ['languageSelectDialog', () => new LanguageSelectDialog()],
+            ['receiveFileDialog', () => new ReceiveFileDialog()],
+            ['receiveRequestDialog', () => new ReceiveRequestDialog()],
+            ['sendTextDialog', () => new SendTextDialog()],
+            ['receiveTextDialog', () => new ReceiveTextDialog()],
+            ['pairDeviceDialog', () => new PairDeviceDialog()],
+            ['clearDevicesDialog', () => new EditPairedDevicesDialog()],
+            ['publicRoomDialog', () => new PublicRoomDialog()],
+            ['lanModeDialog', () => new LanModeDialog()],
+            ['base64Dialog', () => new Base64Dialog()],
+            ['shareTextDialog', () => new ShareTextDialog()],
+            ['toast', () => new Toast()],
+            ['notifications', () => new Notifications()],
+            ['networkStatusUI', () => new NetworkStatusUI()],
+            ['webShareTargetUI', () => new WebShareTargetUI()],
+            ['webFileHandlersUI', () => new WebFileHandlersUI()],
+            ['noSleepUI', () => new NoSleepUI()],
+            ['chatUI', () => new ChatUI()],
+            ['broadCast', () => new BrowserTabsConnector()]
+        ];
+
+        uiFactories.forEach(([key, factory]) => {
+            try {
+                this[key] = factory();
+            } catch (error) {
+                this[key] = null;
+                console.error(`[App] Failed to initialize ${key}.`, error);
+            }
+        });
 
         this.contentModeration = await this.createContentModeration();
     }

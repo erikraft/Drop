@@ -2036,10 +2036,12 @@ class PairDeviceDialog extends Dialog {
         message.peers.forEach(messagePeer => {
             this._evaluateJoinedPeer(messagePeer.id, message.roomType, message.roomId);
         });
+        Events.fire('evaluate-footer-badges');
     }
 
     _onPeerJoined(message) {
         this._evaluateJoinedPeer(message.peer.id, message.roomType, message.roomId);
+        Events.fire('evaluate-footer-badges');
     }
 
     _evaluateJoinedPeer(peerId, roomType, roomId) {
@@ -2464,10 +2466,12 @@ class PublicRoomDialog extends Dialog {
         message.peers.forEach(messagePeer => {
             this._evaluateJoinedPeer(messagePeer.id, message.roomId);
         });
+        Events.fire('evaluate-footer-badges');
     }
 
     _onPeerJoined(message) {
         this._evaluateJoinedPeer(message.peer.id, message.roomId);
+        Events.fire('evaluate-footer-badges');
     }
 
     _evaluateJoinedPeer(peerId, roomId) {
@@ -2542,11 +2546,12 @@ class LanModeDialog extends Dialog {
 
         this._ipPeers = new Set();
         this._wsConnected = false;
+        this._initialized = !!(this.$el && this.$headerBtn && this.$toggle && this.$serverInput && this.$scanBtn && this.$applyBtn);
 
-        this.$headerBtn.addEventListener('click', _ => this.show());
-        this.$toggle.addEventListener('change', _ => this._applySettings());
-        this.$applyBtn.addEventListener('click', _ => this._applySettings());
-        this.$scanBtn.addEventListener('click', _ => this._scanCommonHosts());
+        if (this.$headerBtn) this.$headerBtn.addEventListener('click', _ => this.show());
+        if (this.$toggle) this.$toggle.addEventListener('change', _ => this._applySettings());
+        if (this.$applyBtn) this.$applyBtn.addEventListener('click', _ => this._applySettings());
+        if (this.$scanBtn) this.$scanBtn.addEventListener('click', _ => this._scanCommonHosts());
 
         Events.on('ws-connected', _ => this._onWsConnected());
         Events.on('ws-disconnected', _ => this._onWsDisconnected());
@@ -2555,16 +2560,23 @@ class LanModeDialog extends Dialog {
         Events.on('peer-left', e => this._onPeerLeft(e.detail));
         Events.on('translation-loaded', _ => this._updateStatus());
 
+        if (!this._initialized) {
+            console.warn('[LanModeDialog] Missing required DOM nodes. LAN mode UI will stay disabled.');
+            return;
+        }
+
         this._loadSettings();
         this._updateStatus();
     }
 
     show() {
+        if (!this._initialized) return;
         this._updateStatus();
         super.show();
     }
 
     _loadSettings() {
+        if (!this._initialized) return;
         let enabled = false;
         let server = '';
         try {
@@ -2581,6 +2593,7 @@ class LanModeDialog extends Dialog {
     }
 
     _applySettings() {
+        if (!this._initialized) return;
         const enabled = this.$toggle.checked;
         const server = (this.$serverInput.value || '').trim();
 
@@ -2674,6 +2687,7 @@ class LanModeDialog extends Dialog {
     }
 
     _updateStatus() {
+        if (!this._initialized) return;
         const enabled = this.$toggle.checked;
         if (!enabled) {
             if (this.$connectionStatus) this.$connectionStatus.textContent = '';
@@ -2686,6 +2700,7 @@ class LanModeDialog extends Dialog {
     }
 
     _updateLanBadges(enabled) {
+        if (!this.$lanBadges) return;
         this.$lanBadges.forEach(badge => {
             if (enabled) {
                 badge.removeAttribute('hidden');
@@ -2697,6 +2712,7 @@ class LanModeDialog extends Dialog {
     }
 
     async _scanCommonHosts() {
+        if (!this._initialized) return;
         if (location.protocol === 'https:') {
             Events.fire('notify-user', Localization.getTranslation("notifications.lan-https-blocked"));
             return;
@@ -3656,20 +3672,38 @@ class WebFileHandlersUI {
 
 class NoSleepUI {
     constructor() {
-        NoSleepUI._nosleep = new NoSleep();
+        try {
+            if (typeof NoSleep === 'function') {
+                NoSleepUI._nosleep = new NoSleep();
+            } else {
+                console.warn('[NoSleepUI] NoSleep library is unavailable.');
+                NoSleepUI._nosleep = null;
+            }
+        }
+        catch (error) {
+            console.warn('[NoSleepUI] Failed to initialize NoSleep.', error);
+            NoSleepUI._nosleep = null;
+        }
     }
 
     static enable() {
         if (!this._interval) {
+            if (!NoSleepUI._nosleep || typeof NoSleepUI._nosleep.enable !== 'function') {
+                return;
+            }
             NoSleepUI._nosleep.enable();
             NoSleepUI._interval = setInterval(() => NoSleepUI.disable(), 10000);
         }
     }
 
     static disable() {
+        if (!NoSleepUI._nosleep || typeof NoSleepUI._nosleep.disable !== 'function') {
+            return;
+        }
         if ($$('x-peer[status]') === null) {
             clearInterval(NoSleepUI._interval);
             NoSleepUI._nosleep.disable();
+            NoSleepUI._interval = null;
         }
     }
 }
@@ -3686,15 +3720,22 @@ class ChatUI {
         this.$uploadBtn = $('chat-upload');
         this.$uploadInput = $('chat-upload-input');
         this.$status = $('chat-room-status');
+        this.$footer = null;
+        this.$footerBadgeLocal = null;
+        this.$footerBadgePaired = null;
+        this.$footerBadgePublic = null;
+        this.$footerDiscovery = null;
+
+        if (!this.$panel || !this.$toggle || !this.$roomSelect || !this.$messages || !this.$form || !this.$input) {
+            console.warn('[ChatUI] Required DOM nodes are missing. Chat UI not initialized.');
+            return;
+        }
+
         this.$footer = this.$panel.querySelector('.chat-footer');
         this.$footerBadgeLocal = this.$panel.querySelector('.chat-footer .badge-room-ip');
         this.$footerBadgePaired = this.$panel.querySelector('.chat-footer .badge-room-secret');
         this.$footerBadgePublic = this.$panel.querySelector('.chat-footer .badge-room-public-id');
         this.$footerDiscovery = this.$panel.querySelector('.chat-footer .discovery-wrapper');
-
-        if (!this.$panel || !this.$toggle || !this.$roomSelect || !this.$messages || !this.$form || !this.$input) {
-            return;
-        }
 
         this._rooms = new Map();
         this._peerNames = new Map();
@@ -3704,7 +3745,10 @@ class ChatUI {
         this._selfDisplayName = '';
         this._defaultTitle = 'ErikrafT Drop | Transfer Files Cross-Platform. No Setup, No Signup.';
 
-        this.$toggle.addEventListener('click', _ => this.toggle());
+        this.$toggle.addEventListener('click', _ => {
+            console.debug('[ChatUI] WebChat toggle clicked.');
+            this.toggle();
+        });
         if (this.$close) {
             this.$close.addEventListener('click', _ => this.hide());
         }
