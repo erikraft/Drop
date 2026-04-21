@@ -1896,8 +1896,6 @@ class PairDeviceDialog extends Dialog {
         super('pair-device-dialog');
         this.$pairDeviceHeaderBtn = $('pair-device');
         this.$editPairedDevicesHeaderBtn = $('edit-paired-devices');
-        this.$footerInstructionsPairedDevices = $$('.discovery-wrapper .badge-room-secret');
-        this.$chatFooterPairedDevices = $$('#chat-panel .badge-room-secret');
 
         this.$key = this.$el.querySelector('.key');
         this.$qrCode = this.$el.querySelector('.key-qr-code');
@@ -2123,18 +2121,13 @@ class PairDeviceDialog extends Dialog {
             .then(roomSecrets => {
                 if (roomSecrets.length > 0) {
                     this.$editPairedDevicesHeaderBtn.removeAttribute('hidden');
-                    this.$footerInstructionsPairedDevices.removeAttribute('hidden');
-                    if (this.$chatFooterPairedDevices) {
-                        this.$chatFooterPairedDevices.removeAttribute('hidden');
-                    }
+                    Events.fire('room-secrets', roomSecrets);
                 }
                 else {
                     this.$editPairedDevicesHeaderBtn.setAttribute('hidden', true);
-                    this.$footerInstructionsPairedDevices.setAttribute('hidden', true);
-                    if (this.$chatFooterPairedDevices) {
-                        this.$chatFooterPairedDevices.setAttribute('hidden', true);
-                    }
+                    Events.fire('room-secrets-deleted', this._roomSecretsCached || []);
                 }
+                this._roomSecretsCached = roomSecrets;
                 Events.fire('evaluate-footer-badges');
             });
     }
@@ -2144,10 +2137,12 @@ class EditPairedDevicesDialog extends Dialog {
     constructor() {
         super('edit-paired-devices-dialog');
         this.$pairedDevicesWrapper = this.$el.querySelector('.paired-devices-wrapper');
-        this.$footerBadgePairedDevices = $$('.discovery-wrapper .badge-room-secret');
+        this.$footerBadgePairedDevices = document.querySelectorAll('.discovery-wrapper .badge-room-secret');
 
         $('edit-paired-devices').addEventListener('click', _ => this._onEditPairedDevices());
-        this.$footerBadgePairedDevices.addEventListener('click', _ => this._onEditPairedDevices());
+        this.$footerBadgePairedDevices.forEach($badge => {
+            $badge.addEventListener('click', _ => this._onEditPairedDevices());
+        });
 
         Events.on('peer-display-name-changed', e => this._onPeerDisplayNameChanged(e));
         Events.on('keydown', e => this._onKeyDown(e));
@@ -2304,8 +2299,7 @@ class PublicRoomDialog extends Dialog {
         this.$leaveBtn = this.$el.querySelector('.leave-room');
         this.$joinSubmitBtn = this.$el.querySelector('button[type="submit"]');
         this.$headerBtnJoinPublicRoom = $('join-public-room');
-        this.$footerBadgePublicRoomDevices = $$('.discovery-wrapper .badge-room-public-id');
-        this.$chatFooterBadgePublicRoomDevices = $$('#chat-panel .badge-room-public-id');
+        this.$footerBadgePublicRoomDevices = document.querySelectorAll('.discovery-wrapper .badge-room-public-id');
 
 
         this.$form.addEventListener('submit', e => this._onSubmit(e));
@@ -2313,7 +2307,9 @@ class PublicRoomDialog extends Dialog {
         this.$leaveBtn.addEventListener('click', _ => this._leavePublicRoom())
 
         this.$headerBtnJoinPublicRoom.addEventListener('click', _ => this._onHeaderBtnClick());
-        this.$footerBadgePublicRoomDevices.addEventListener('click', _ => this._onHeaderBtnClick());
+        this.$footerBadgePublicRoomDevices.forEach($badge => {
+            $badge.addEventListener('click', _ => this._onHeaderBtnClick());
+        });
 
         this.inputKeyContainer = new InputKeyContainer(
             this.$el.querySelector('.input-key-container'),
@@ -2396,18 +2392,7 @@ class PublicRoomDialog extends Dialog {
 
     setFooterBadge() {
         if (!this.roomId) return;
-
-        this.$footerBadgePublicRoomDevices.innerText = Localization.getTranslation("footer.public-room-devices", null, {
-            roomId: this.roomId.toUpperCase()
-        });
-        this.$footerBadgePublicRoomDevices.removeAttribute('hidden');
-        if (this.$chatFooterBadgePublicRoomDevices) {
-            this.$chatFooterBadgePublicRoomDevices.innerText = Localization.getTranslation("footer.public-room-devices", null, {
-                roomId: this.roomId.toUpperCase()
-            });
-            this.$chatFooterBadgePublicRoomDevices.removeAttribute('hidden');
-        }
-
+        Events.fire('discovery-public-room-id', this.roomId);
         Events.fire('evaluate-footer-badges');
     }
 
@@ -2523,10 +2508,6 @@ class PublicRoomDialog extends Dialog {
         this.roomId = null;
         this.inputKeyContainer._cleanUp();
         sessionStorage.removeItem('public_room_id');
-        this.$footerBadgePublicRoomDevices.setAttribute('hidden', true);
-        if (this.$chatFooterBadgePublicRoomDevices) {
-            this.$chatFooterBadgePublicRoomDevices.setAttribute('hidden', true);
-        }
         Events.fire('evaluate-footer-badges');
     }
 }

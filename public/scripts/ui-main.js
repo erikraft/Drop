@@ -2,6 +2,140 @@
 const $ = query => document.getElementById(query);
 const $$ = query => document.querySelector(query);
 
+function getDiscoveryState({ roomType, roomSecrets, publicRoomId }) {
+    const roomTypes = Array.isArray(roomType) ? roomType : [roomType];
+    return {
+        isLan: roomTypes.includes('lan'),
+        isIp: roomTypes.includes('ip'),
+        isPaired: Array.isArray(roomSecrets) && roomSecrets.length > 0,
+        publicRoomId: publicRoomId || null
+    };
+}
+
+function updateDiscoveryBadges(state) {
+    const { isLan, isIp, isPaired, publicRoomId } = state;
+
+    document.querySelectorAll('.badge-room-lan').forEach(el => {
+        el.hidden = !isLan;
+    });
+
+    document.querySelectorAll('.badge-room-ip').forEach(el => {
+        el.hidden = !isIp;
+    });
+
+    document.querySelectorAll('.badge-room-secret').forEach(el => {
+        el.hidden = !isPaired;
+    });
+
+    document.querySelectorAll('.badge-room-public-id').forEach(el => {
+        if (publicRoomId) {
+            el.hidden = false;
+            el.textContent = `na sala ${publicRoomId.toUpperCase()}`;
+        }
+        else {
+            el.hidden = true;
+        }
+    });
+
+    console.log('[Discovery State]', state);
+}
+
+class DiscoveryBadgeState {
+    constructor() {
+        this._activeRoomTypes = new Set();
+        this._roomSecrets = [];
+        this._publicRoomId = null;
+
+        Events.on('peers', e => this._onPeers(e.detail));
+        Events.on('peer-joined', e => this._onPeerJoined(e.detail));
+        Events.on('room-secrets', e => this._onRoomSecrets(e.detail));
+        Events.on('room-secrets-deleted', e => this._onRoomSecretsDeleted(e.detail));
+        Events.on('join-public-room', e => this._onJoinPublicRoom(e.detail));
+        Events.on('public-room-created', e => this._onPublicRoomCreated(e.detail));
+        Events.on('public-room-left', _ => this._onPublicRoomLeft());
+        Events.on('discovery-public-room-id', e => this._onPublicRoomCreated(e.detail));
+        Events.on('ws-disconnected', _ => this._onWsDisconnected());
+
+        this._initFromStorage();
+        this._render();
+    }
+
+    async _initFromStorage() {
+        this._publicRoomId = sessionStorage.getItem('public_room_id') || null;
+        if (typeof PersistentStorage !== 'undefined' && typeof PersistentStorage.getAllRoomSecrets === 'function') {
+            const roomSecrets = await PersistentStorage.getAllRoomSecrets();
+            this._roomSecrets = Array.isArray(roomSecrets) ? [...roomSecrets] : [];
+        }
+        this._render();
+    }
+
+    _onPeers(message) {
+        if (message?.roomType === 'lan' || message?.roomType === 'ip') {
+            this._activeRoomTypes.add(message.roomType);
+        }
+        if (message?.roomType === 'public-id' && message?.roomId) {
+            this._publicRoomId = message.roomId;
+        }
+        this._render();
+    }
+
+    _onPeerJoined(message) {
+        if (message?.roomType === 'lan' || message?.roomType === 'ip') {
+            this._activeRoomTypes.add(message.roomType);
+        }
+        if (message?.roomType === 'public-id' && message?.roomId) {
+            this._publicRoomId = message.roomId;
+        }
+        this._render();
+    }
+
+    _onRoomSecrets(roomSecrets) {
+        if (!Array.isArray(roomSecrets)) return;
+        const merged = new Set(this._roomSecrets);
+        roomSecrets.forEach(secret => merged.add(secret));
+        this._roomSecrets = Array.from(merged);
+        this._render();
+    }
+
+    _onRoomSecretsDeleted(roomSecrets) {
+        if (!Array.isArray(roomSecrets)) return;
+        this._roomSecrets = this._roomSecrets.filter(secret => !roomSecrets.includes(secret));
+        this._render();
+    }
+
+    _onJoinPublicRoom(detail) {
+        if (!detail?.roomId) return;
+        this._publicRoomId = detail.roomId;
+        this._render();
+    }
+
+    _onPublicRoomCreated(roomId) {
+        if (!roomId) return;
+        this._publicRoomId = roomId;
+        this._render();
+    }
+
+    _onPublicRoomLeft() {
+        this._publicRoomId = null;
+        this._render();
+    }
+
+    _onWsDisconnected() {
+        this._activeRoomTypes.clear();
+        this._render();
+    }
+
+    _render() {
+        const state = getDiscoveryState({
+            roomType: Array.from(this._activeRoomTypes),
+            roomSecrets: this._roomSecrets,
+            publicRoomId: this._publicRoomId
+        });
+        updateDiscoveryBadges(state);
+        Events.fire('evaluate-footer-badges');
+    }
+}
+
 // Event listener shortcuts
 class Events {
     static fire(type, detail = {}) {
