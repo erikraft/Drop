@@ -3,8 +3,6 @@ class ErikrafTdrop {
     constructor() {
         this.$headerNotificationBtn = $('notification');
         this.$headerEditPairedDevicesBtn = $('edit-paired-devices');
-        this.$footerPairedDevicesBadge = $$('.discovery-wrapper .badge-room-secret');
-        this.$chatFooterPairedDevicesBadge = $$('#chat-panel .badge-room-secret');
         this.$headerInstallBtn = $('install');
 
         this.deferredStyles = [
@@ -212,8 +210,7 @@ class ErikrafTdrop {
         }
 
         this.$headerEditPairedDevicesBtn?.removeAttribute('hidden');
-        this.$footerPairedDevicesBadge?.removeAttribute('hidden');
-        this.$chatFooterPairedDevicesBadge?.removeAttribute('hidden');
+        Events.fire('room-secrets', roomSecrets);
     }
 
     async localizationSafeInit() {
@@ -224,6 +221,7 @@ class ErikrafTdrop {
         this.headerUI = new HeaderUI();
         this.centerUI = new CenterUI();
         this.footerUI = new FooterUI();
+        this.discoveryBadgeState = new DiscoveryBadgeState();
 
         await this.localization.setInitialTranslation();
     }
