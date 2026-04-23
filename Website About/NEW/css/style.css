@@ -332,7 +332,7 @@
          --tech-grid-parallax-speed: 0.3;
       }
 
-      .tech-grid-layer > * {
+      .tech-grid-layer>* {
          position: relative;
          z-index: 1;
       }
@@ -414,6 +414,7 @@
             opacity: 0;
             transform: translate3d(var(--tech-grid-shift-x, 0px), calc(var(--tech-grid-shift-y, 0px) + 20px), 0);
          }
+
          100% {
             opacity: var(--tech-grid-opacity-safe, 0.08);
             transform: translate3d(var(--tech-grid-shift-x, 0px), var(--tech-grid-shift-y, 0px), 0);
@@ -442,13 +443,14 @@
          opacity: 0.34 !important;
       }
 
-      @media (max-width: 767px), (prefers-reduced-motion: reduce) {
-       .tech-grid-layer::before {
-         display: none;
-       }
+      @media (max-width: 767px),
+      (prefers-reduced-motion: reduce) {
+         .tech-grid-layer::before {
+            display: none;
+         }
       }
 
-      .terminal-command-row > span:last-child {
+      .terminal-command-row>span:last-child {
          min-width: 0;
          overflow-wrap: anywhere;
          word-break: break-word;
@@ -458,10 +460,10 @@
          color: #94a3b8;
       }
 
-       .self-host-link {
+      .self-host-link {
          border-radius: 0.85rem;
          padding: 0.45rem 0.2rem;
-       }
+      }
 
       footer a {
          overflow-wrap: anywhere;
@@ -506,13 +508,13 @@
       }
 
       /* 4. Previne elementos de mídia estourarem */
-       img,
-       iframe,
-       video {
+      img,
+      iframe,
+      video {
          max-width: 100%;
          height: auto;
          display: block;
-       }
+      }
 
       /* ========================================
    PROFESSIONAL REDESIGN OVERRIDES
@@ -586,7 +588,7 @@
          }
       }
 
-      body > * {
+      body>* {
          position: relative;
          z-index: 1;
       }
@@ -882,7 +884,7 @@
             linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(8, 14, 27, 0.92)) !important;
       }
 
-      .glass-card > * {
+      .glass-card>* {
          position: relative;
          z-index: 1;
       }
@@ -916,11 +918,11 @@
          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
       }
 
-      #features .grid > div,
-      #how-it-works .grid > div,
-      #reviews .grid > a,
-      #partnership .grid > div:last-child,
-      footer .grid > div {
+      #features .grid>div,
+      #how-it-works .grid>div,
+      #reviews .grid>a,
+      #partnership .grid>div:last-child,
+      footer .grid>div {
          animation: fadeLift 0.7s ease both;
       }
 
@@ -936,7 +938,7 @@
          }
       }
 
-      #how-it-works .grid.md\:grid-cols-4 > div {
+      #how-it-works .grid.md\:grid-cols-4>div {
          padding: 2rem 1.25rem;
          border-radius: 1.4rem;
          background: rgba(9, 14, 27, 0.45);
@@ -952,7 +954,7 @@
          box-shadow: 0 30px 70px rgba(2, 6, 23, 0.34);
       }
 
-      #advantages .grid.md\:grid-cols-3 > div:first-child {
+      #advantages .grid.md\:grid-cols-3>div:first-child {
          background:
             linear-gradient(180deg, rgba(23, 37, 84, 0.86), rgba(8, 47, 73, 0.78)) !important;
          border-color: rgba(96, 165, 250, 0.28) !important;
@@ -1051,6 +1053,7 @@
       }
 
       @media (max-width: 767px) {
+
          body::before,
          body::after {
             width: 22rem;
@@ -1084,6 +1087,527 @@
          word-wrap: break-word;
          overflow-wrap: break-word;
          hyphens: auto;
+      }
+
+      /* ========================================
+   PROFESSIONAL REDESIGN OVERRIDES
+   ======================================== */
+
+      /* ========================================
+   ANIMATIONS — Estilo imersivo
+   ======================================== */
+
+      /* --- Keyframes base --- */
+      @keyframes fadeUp {
+         from {
+            opacity: 0;
+            transform: translateY(24px);
+         }
+
+         to {
+            opacity: 1;
+            transform: translateY(0);
+         }
+      }
+
+      @keyframes fadeDown {
+         from {
+            opacity: 0;
+            transform: translateY(-20px);
+         }
+
+         to {
+            opacity: 1;
+            transform: translateY(0);
+         }
+      }
+
+      @keyframes fadeLeft {
+         from {
+            opacity: 0;
+            transform: translateX(-24px);
+         }
+
+         to {
+            opacity: 1;
+            transform: translateX(0);
+         }
+      }
+
+      @keyframes fadeRight {
+         from {
+            opacity: 0;
+            transform: translateX(24px);
+         }
+
+         to {
+            opacity: 1;
+            transform: translateX(0);
+         }
+      }
+
+      @keyframes scaleIn {
+         from {
+            opacity: 0;
+            transform: scale(0.92);
+         }
+
+         to {
+            opacity: 1;
+            transform: scale(1);
+         }
+      }
+
+      @keyframes slideIn {
+         0% {
+            transform: translateY(100%);
+            opacity: 0;
+         }
+
+         100% {
+            transform: translateY(0);
+            opacity: 1;
+         }
+      }
+
+      /* --- Drift: aurora blobs flutuando --- */
+      @keyframes drift {
+         0% {
+            transform: translate(0, 0) scale(1);
+         }
+
+         100% {
+            transform: translate(60px, 40px) scale(1.2);
+         }
+      }
+
+      /* --- Orb: anéis orbitais girando --- */
+      @keyframes orbSpin {
+         to {
+            transform: translate(-50%, -50%) rotate(360deg);
+         }
+      }
+
+      /* --- Badge dot pulsando --- */
+      @keyframes badgeBlink {
+
+         0%,
+         100% {
+            opacity: 1;
+            transform: scale(1);
+         }
+
+         50% {
+            opacity: 0.4;
+            transform: scale(0.7);
+         }
+      }
+
+      /* --- Glow pulsante nos CTAs --- */
+      @keyframes ctaGlow {
+
+         0%,
+         100% {
+            box-shadow: 0 16px 36px rgba(14, 165, 233, 0.22);
+         }
+
+         50% {
+            box-shadow: 0 22px 52px rgba(139, 92, 246, 0.38), 0 0 0 4px rgba(56, 189, 248, 0.08);
+         }
+      }
+
+      /* --- Shimmer de borda nos glass cards --- */
+      @keyframes borderShimmer {
+         0% {
+            background-position: -200% center;
+         }
+
+         100% {
+            background-position: 200% center;
+         }
+      }
+
+      /* --- Cursor piscando no terminal --- */
+      @keyframes cursorBlink {
+
+         0%,
+         100% {
+            opacity: 1;
+         }
+
+         50% {
+            opacity: 0;
+         }
+      }
+
+      /* --- Glow animado no texto gradient do hero --- */
+      @keyframes textGlow {
+
+         0%,
+         100% {
+            filter: brightness(1) drop-shadow(0 0 0px rgba(167, 139, 250, 0));
+         }
+
+         50% {
+            filter: brightness(1.15) drop-shadow(0 0 18px rgba(56, 189, 248, 0.35));
+         }
+      }
+
+      /* --- Contador numérico: apenas fade-in --- */
+      @keyframes statReveal {
+         from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.96);
+         }
+
+         to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+         }
+      }
+
+      /* ----------------------------------------
+   AURORA BLOBS (body::before / body::after)
+   ---------------------------------------- */
+      body::before {
+         animation: drift 18s ease-in-out infinite alternate;
+      }
+
+      body::after {
+         animation: drift 22s ease-in-out infinite alternate-reverse;
+      }
+
+      /* ----------------------------------------
+   ORBS ORBITAIS
+   Os elementos .orb-1 / .orb-2 / .orb-3
+   devem existir no HTML com class="orb orb-N"
+   ---------------------------------------- */
+      .orb {
+         position: absolute;
+         border-radius: 50%;
+         border: 1px solid rgba(255, 255, 255, 0.07);
+         pointer-events: none;
+         z-index: 0;
+         top: 50%;
+         left: 50%;
+         animation: orbSpin linear infinite;
+      }
+
+      .orb-dot {
+         position: absolute;
+         width: 5px;
+         height: 5px;
+         border-radius: 50%;
+         top: 0;
+         left: 50%;
+         transform: translate(-50%, -50%);
+      }
+
+      .orb-1 {
+         width: 360px;
+         height: 360px;
+         animation-duration: 28s;
+         border-color: rgba(124, 58, 237, 0.14);
+      }
+
+      .orb-1 .orb-dot {
+         background: #a78bfa;
+      }
+
+      .orb-2 {
+         width: 520px;
+         height: 520px;
+         animation-duration: 44s;
+         animation-direction: reverse;
+         border-color: rgba(14, 165, 233, 0.10);
+      }
+
+      .orb-2 .orb-dot {
+         background: #38bdf8;
+         width: 4px;
+         height: 4px;
+      }
+
+      .orb-3 {
+         width: 700px;
+         height: 700px;
+         animation-duration: 60s;
+         border-color: rgba(52, 211, 153, 0.07);
+      }
+
+      .orb-3 .orb-dot {
+         background: #34d399;
+         width: 4px;
+         height: 4px;
+      }
+
+      /* ----------------------------------------
+   CURSOR GLOW
+   Elemento .cursor-glow movido via JS
+   ---------------------------------------- */
+      .cursor-glow {
+         position: fixed;
+         width: 300px;
+         height: 300px;
+         border-radius: 50%;
+         pointer-events: none;
+         z-index: 4;
+         opacity: 0;
+         background: radial-gradient(circle, rgba(167, 139, 250, 0.15), transparent 70%);
+         transform: translate(-50%, -50%);
+         transition: opacity 0.3s ease;
+         mix-blend-mode: screen;
+      }
+
+      /* ----------------------------------------
+   HEADER — entrada do topo
+   ---------------------------------------- */
+      .header-container {
+         animation: fadeDown 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      /* ----------------------------------------
+   BADGE hero
+   ---------------------------------------- */
+      .hero-badge {
+         opacity: 0;
+         animation: fadeUp 0.7s 0.3s ease forwards;
+      }
+
+      .badge-dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         background: #a78bfa;
+         display: inline-block;
+         animation: badgeBlink 1.4s ease-in-out infinite;
+      }
+
+      /* ----------------------------------------
+   HERO — títulos com slide por linha
+   ---------------------------------------- */
+      .gradient-bg h1 {
+         opacity: 0;
+         animation: fadeUp 0.8s 0.55s ease forwards;
+      }
+
+      .gradient-bg h1 .line {
+         display: block;
+         overflow: hidden;
+      }
+
+      .gradient-bg h1 .line span {
+         display: inline-block;
+         animation: slideIn 0.9s ease forwards;
+         opacity: 0;
+      }
+
+      .gradient-bg h1 .line:nth-child(1) span {
+         animation-delay: 0.6s;
+      }
+
+      .gradient-bg h1 .line:nth-child(2) span {
+         animation-delay: 0.8s;
+      }
+
+      /* --- Glow no texto gradient --- */
+      .gradient-bg h1 span.gradient-text {
+         animation: textGlow 4s ease-in-out infinite;
+      }
+
+      .gradient-bg p {
+         opacity: 0;
+         animation: fadeUp 0.8s 1.1s ease forwards;
+      }
+
+      /* ----------------------------------------
+   CTAs — entrada + glow pulsante
+   ---------------------------------------- */
+      .gradient-bg .flex.flex-col.sm\:flex-row {
+         opacity: 0;
+         animation: fadeUp 0.8s 1.35s ease forwards;
+      }
+
+      .header-container nav a:last-child,
+      #partnership-request,
+      section.py-24.bg-gradient-to-br a {
+         animation: ctaGlow 3.5s ease-in-out infinite;
+      }
+
+      /* ----------------------------------------
+   STATS — revelação escalonada
+   ---------------------------------------- */
+      .stats-container {
+         opacity: 0;
+         animation: fadeUp 0.8s 1.6s ease forwards;
+      }
+
+      .stat-num {
+         animation: statReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      /* ----------------------------------------
+   GLASS CARDS — entrada escalonada
+   ---------------------------------------- */
+      .glass-card {
+         animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .glass-card:nth-child(1) {
+         animation-delay: 0.05s;
+      }
+
+      .glass-card:nth-child(2) {
+         animation-delay: 0.15s;
+      }
+
+      .glass-card:nth-child(3) {
+         animation-delay: 0.25s;
+      }
+
+      .glass-card:nth-child(4) {
+         animation-delay: 0.35s;
+      }
+
+      .glass-card:nth-child(5) {
+         animation-delay: 0.45s;
+      }
+
+      .glass-card:nth-child(6) {
+         animation-delay: 0.55s;
+      }
+
+      /* --- Shimmer de borda no hover --- */
+      .glass-card::after {
+         content: "";
+         position: absolute;
+         inset: 0;
+         border-radius: inherit;
+         background: linear-gradient(105deg,
+               transparent 30%,
+               rgba(139, 92, 246, 0.10) 50%,
+               rgba(56, 189, 248, 0.08) 60%,
+               transparent 70%);
+         background-size: 200% auto;
+         opacity: 0;
+         transition: opacity 0.3s ease;
+         pointer-events: none;
+         z-index: 0;
+      }
+
+      .glass-card:hover::after {
+         opacity: 1;
+         animation: borderShimmer 1.6s linear infinite;
+      }
+
+      /* --- Ícones flutuam no hover --- */
+      .glass-card .w-14.h-14,
+      .glass-card .w-16.h-16,
+      .glass-card .w-20.h-20 {
+         transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+            box-shadow 0.35s ease;
+      }
+
+      .glass-card:hover .w-14.h-14,
+      .glass-card:hover .w-16.h-16,
+      .glass-card:hover .w-20.h-20 {
+         transform: translateY(-5px) scale(1.10);
+         box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25) !important;
+      }
+
+      /* ----------------------------------------
+   SECTION TITLES
+   ---------------------------------------- */
+      section h2 {
+         animation: scaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      /* ----------------------------------------
+   SELF-HOST — entradas opostas
+   ---------------------------------------- */
+      .self-host-card {
+         animation: fadeLeft 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+      }
+
+      .self-host-terminal-shell {
+         animation: fadeRight 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+      }
+
+      /* --- Cursor piscando no terminal --- */
+      .self-host-terminal-input::after {
+         content: "|";
+         color: #34d399;
+         margin-left: 1px;
+         animation: cursorBlink 1.1s step-start infinite;
+      }
+
+      /* ----------------------------------------
+   BADGES (app stores etc.)
+   ---------------------------------------- */
+      .badges-container a img {
+         transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+      }
+
+      .badges-container a:hover img {
+         transform: translateY(-5px) scale(1.05);
+         border-color: rgba(96, 165, 250, 0.4);
+         box-shadow: 0 18px 40px rgba(2, 6, 23, 0.3);
+      }
+
+      /* ----------------------------------------
+   NAV LINKS — underline deslizante
+   ---------------------------------------- */
+      .header-container nav a {
+         transition: color 0.22s ease;
+      }
+
+      /* ----------------------------------------
+   FEATURE CARDS — hover lift
+   ---------------------------------------- */
+      .feature-card {
+         transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 0.3s ease;
+      }
+
+      .feature-card:hover {
+         transform: translateY(-6px);
+         box-shadow: 0 24px 60px rgba(2, 6, 23, 0.45);
+      }
+
+      /* ----------------------------------------
+   FOOTER — fade suave ao entrar na viewport
+   ---------------------------------------- */
+      footer {
+         animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      /* ----------------------------------------
+   ORBS: esconde em mobile para performance
+   ---------------------------------------- */
+      @media (max-width: 767px) {
+         .orb {
+            display: none;
+         }
+
+         .cursor-glow {
+            display: none;
+         }
+      }
+
+      /* ----------------------------------------
+   RESPEITA preferência do usuário
+   ---------------------------------------- */
+      @media (prefers-reduced-motion: reduce) {
+
+         *,
+         *::before,
+         *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+         }
       }
 
       /* ========================================
