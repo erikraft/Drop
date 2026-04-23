@@ -1,0 +1,90 @@
+:root {
+   --site-cursor-arrow: #4a8fe0;
+   --site-cursor-badge-bg: #4a8fe0;
+   --site-cursor-badge-text: #ffffff;
+}
+
+html.cursor-enhanced,
+html.cursor-enhanced body,
+html.cursor-enhanced a,
+html.cursor-enhanced button,
+html.cursor-enhanced [role="button"],
+html.cursor-enhanced input,
+html.cursor-enhanced textarea,
+html.cursor-enhanced select,
+html.cursor-enhanced summary,
+html.cursor-enhanced label {
+   cursor: none !important;
+}
+
+.site-cursor {
+   position: fixed;
+   top: 0;
+   left: 0;
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+   pointer-events: none;
+   opacity: 0;
+   z-index: 99999;
+   transform: none;
+   transition: opacity 0.08s linear;
+}
+
+.site-cursor.is-visible {
+   opacity: 1;
+}
+
+.site-cursor.is-clicking {
+   opacity: 0.92;
+}
+
+.site-cursor-arrow {
+   width: 26px;
+   height: 26px;
+   flex: 0 0 auto;
+   display: block;
+}
+
+.site-cursor.is-clicking .site-cursor-arrow {
+   transform: scale(0.94);
+   transform-origin: 2px 2px;
+}
+
+.site-cursor-badge {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   padding: 6px 16px;
+   border-radius: 50px;
+   background: var(--site-cursor-badge-bg);
+   color: var(--site-cursor-badge-text);
+   font-family: sans-serif;
+   font-size: 14px;
+   font-weight: 700;
+   line-height: 1;
+   letter-spacing: 0;
+   white-space: nowrap;
+   border: 2px solid #ffffff;
+   box-shadow: none;
+   outline: none;
+}
+
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+   html.cursor-enhanced,
+   html.cursor-enhanced body,
+   html.cursor-enhanced a,
+   html.cursor-enhanced button,
+   html.cursor-enhanced [role="button"],
+   html.cursor-enhanced input,
+   html.cursor-enhanced textarea,
+   html.cursor-enhanced select,
+   html.cursor-enhanced summary,
+   html.cursor-enhanced label {
+      cursor: auto !important;
+   }
+
+   .site-cursor {
+      display: none !important;
+   }
+}

@@ -22,6 +22,7 @@
    <script src="https://cdn.tailwindcss.com"></script>
    <script src="https://cdn.lordicon.com/lordicon.js"></script>
    <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="css/cursor.css">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -32,6 +33,15 @@
 </head>
 
 <body class="bg-[radial-gradient(circle_at_80%_20%,#1f2937_0%,#0f172a_46%,#030712_100%)] min-h-screen">
+   <canvas id="particle-network" class="particle-network-canvas" aria-hidden="true"></canvas>
+   <div class="page-aurora" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+   </div>
+   <div class="page-grid" aria-hidden="true"></div>
+   <div id="cursor-glow" class="cursor-glow" aria-hidden="true"></div>
    <!-- Header/Navigation -->
    <header class="bg-[#0f172a]/95 backdrop-blur-xl border-b border-white/5 sticky top-0 z-[100] header-container">
       <div class="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
@@ -595,7 +605,7 @@
          <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto">Try ErikrafT Drop right now - fast, secure, and hassle-free.</p>
          <a href="https://drop.erikraft.com" target="_blank" rel="noopener noreferrer"
             class="inline-flex bg-white text-slate-900 hover:bg-gray-100 px-10 py-5 rounded-2xl font-bold text-xl transition-all hover:scale-105 active:scale-95 shadow-2xl">
-            <i class="fa-solid fa-paper-plane mr-3 text-sky-600"></i> Start Sharing
+            <i class="fa-solid fa-paper-plane"></i>ㅤStart Sharing
          </a>
       </div>
       <div class="absolute inset-0 pointer-events-none opacity-30">
@@ -890,6 +900,7 @@
 -->
 
 
+   <script src="js/cursor.js"></script>
    <script>
       (() => {
          if (document.documentElement.dataset.techGridInit === 'true') {
@@ -1215,6 +1226,138 @@
             }, delay);
          }
       });
+
+      (() => {
+         const canvas = document.getElementById('particle-network');
+         if (!canvas) return;
+
+         const glow = document.getElementById('cursor-glow');
+         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+         if (prefersReducedMotion) return;
+
+         const ctx = canvas.getContext('2d');
+         if (!ctx) return;
+
+         let width = 0;
+         let height = 0;
+         let animationFrame = 0;
+         const mouse = { x: -9999, y: -9999 };
+         const smallScreen = window.matchMedia('(max-width: 767px)').matches;
+         const particleCount = smallScreen ? 54 : 90;
+         const linkDistance = smallScreen ? 100 : 130;
+         const mouseDistance = smallScreen ? 120 : 160;
+         const particles = [];
+
+         const createParticle = () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: (Math.random() - 0.5) * 0.35,
+            r: Math.random() * 1.5 + 0.4,
+            a: Math.random()
+         });
+
+         const resizeCanvas = () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+
+            if (!particles.length) {
+               for (let i = 0; i < particleCount; i += 1) {
+                  particles.push(createParticle());
+               }
+               return;
+            }
+
+            particles.forEach((particle) => {
+               particle.x = Math.min(particle.x, width);
+               particle.y = Math.min(particle.y, height);
+            });
+         };
+
+         const draw = () => {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i += 1) {
+               const particle = particles[i];
+               particle.x += particle.vx;
+               particle.y += particle.vy;
+
+               if (particle.x < 0) particle.x = width;
+               if (particle.x > width) particle.x = 0;
+               if (particle.y < 0) particle.y = height;
+               if (particle.y > height) particle.y = 0;
+
+               const dxMouse = particle.x - mouse.x;
+               const dyMouse = particle.y - mouse.y;
+               const mouseDist = Math.hypot(dxMouse, dyMouse);
+               if (mouseDist > 0 && mouseDist < mouseDistance) {
+                  particle.x += (dxMouse / mouseDist) * 0.6;
+                  particle.y += (dyMouse / mouseDist) * 0.6;
+               }
+
+               ctx.beginPath();
+               ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
+               ctx.fillStyle = `rgba(167, 139, 250, ${0.35 + particle.a * 0.3})`;
+               ctx.fill();
+            }
+
+            for (let i = 0; i < particles.length; i += 1) {
+               for (let j = i + 1; j < particles.length; j += 1) {
+                  const dx = particles[i].x - particles[j].x;
+                  const dy = particles[i].y - particles[j].y;
+                  const dist = Math.hypot(dx, dy);
+
+                  if (dist < linkDistance) {
+                     ctx.beginPath();
+                     ctx.moveTo(particles[i].x, particles[i].y);
+                     ctx.lineTo(particles[j].x, particles[j].y);
+                     ctx.strokeStyle = `rgba(167, 139, 250, ${0.12 * (1 - dist / linkDistance)})`;
+                     ctx.lineWidth = 0.6;
+                     ctx.stroke();
+                  }
+               }
+
+               const dxMouse = particles[i].x - mouse.x;
+               const dyMouse = particles[i].y - mouse.y;
+               const distMouse = Math.hypot(dxMouse, dyMouse);
+
+               if (distMouse < mouseDistance) {
+                  ctx.beginPath();
+                  ctx.moveTo(particles[i].x, particles[i].y);
+                  ctx.lineTo(mouse.x, mouse.y);
+                  ctx.strokeStyle = `rgba(56, 189, 248, ${0.18 * (1 - distMouse / mouseDistance)})`;
+                  ctx.lineWidth = 0.7;
+                  ctx.stroke();
+               }
+            }
+
+            animationFrame = window.requestAnimationFrame(draw);
+         };
+
+         resizeCanvas();
+         draw();
+
+         window.addEventListener('resize', resizeCanvas, { passive: true });
+         document.addEventListener('mousemove', (event) => {
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+            if (glow) {
+               glow.style.left = `${event.clientX}px`;
+               glow.style.top = `${event.clientY}px`;
+               glow.style.opacity = '0.13';
+            }
+         }, { passive: true });
+         document.addEventListener('mouseleave', () => {
+            mouse.x = -9999;
+            mouse.y = -9999;
+            if (glow) {
+               glow.style.opacity = '0';
+            }
+         }, { passive: true });
+         window.addEventListener('beforeunload', () => {
+            window.cancelAnimationFrame(animationFrame);
+         });
+      })();
    </script>
 
    <script>
