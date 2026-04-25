@@ -42,19 +42,34 @@ async function main() {
         if (!interaction.isChatInputCommand()) return;
 
         const command = client.commands.get(interaction.commandName);
-        if (!command) return;
+        if (!command) {
+            await interaction.reply({
+                content: 'Esse comando não está disponível no momento. Tente registrar os comandos novamente.',
+                ephemeral: true
+            });
+            return;
+        }
 
         try {
+            if (!interaction.deferred && !interaction.replied) {
+                await interaction.deferReply({ ephemeral: true });
+            }
             await command.execute(interaction);
         }
         catch (error) {
             console.error(error);
             const content = 'Ocorreu um erro ao executar este comando.';
-            if (interaction.deferred || interaction.replied) {
-                await interaction.editReply({ content });
+
+            try {
+                if (interaction.deferred || interaction.replied) {
+                    await interaction.editReply({ content });
+                }
+                else {
+                    await interaction.reply({ content, ephemeral: true });
+                }
             }
-            else {
-                await interaction.reply({ content, ephemeral: true });
+            catch (responseError) {
+                console.error('Falha ao enviar resposta de erro da interação:', responseError);
             }
         }
     });
