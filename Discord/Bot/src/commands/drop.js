@@ -102,7 +102,9 @@ export const data = new SlashCommandBuilder()
         option.setName('file3').setDescription('Third file (optional).'));
 
 export async function execute(interaction) {
-    await interaction.deferReply({ ephemeral: true });
+    if (!interaction.deferred && !interaction.replied) {
+        await interaction.deferReply({ ephemeral: true });
+    }
 
     const rawPairKey = interaction.options.getString('key', true);
     const pairKey = normalizePairKey(rawPairKey);
