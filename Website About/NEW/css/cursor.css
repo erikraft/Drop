@@ -27,7 +27,11 @@ html.cursor-enhanced label {
    pointer-events: none;
    opacity: 0;
    z-index: 99999;
-   transform: none;
+
+   /* Real optimization */
+   transform: translate3d(0, 0, 0);
+   will-change: transform, opacity;
+
    transition: opacity 0.08s linear;
 }
 
@@ -44,6 +48,9 @@ html.cursor-enhanced label {
    height: 26px;
    flex: 0 0 auto;
    display: block;
+
+   /* Smooths out micro-animation */
+   transition: transform 0.12s ease;
 }
 
 .site-cursor.is-clicking .site-cursor-arrow {
@@ -66,11 +73,19 @@ html.cursor-enhanced label {
    letter-spacing: 0;
    white-space: nowrap;
    border: 2px solid #ffffff;
-   box-shadow: none;
-   outline: none;
+
+   /* Micro visual improvement */
+   transition: transform 0.12s ease;
 }
 
-@media (hover: none), (pointer: coarse), (max-width: 767px) {
+.site-cursor.is-clicking .site-cursor-badge {
+   transform: scale(0.96);
+}
+
+@media (hover: none),
+(pointer: coarse),
+(max-width: 767px) {
+
    html.cursor-enhanced,
    html.cursor-enhanced body,
    html.cursor-enhanced a,
