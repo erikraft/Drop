@@ -22,26 +22,24 @@
             stroke-linejoin="round"
             stroke-linecap="round"/>
       </svg>
-      <div class="site-cursor-badge">Você</div>
+      <div class="site-cursor-badge">You</div>
    `;
 
    document.body.appendChild(cursor);
    root.classList.add('cursor-enhanced');
 
    let mouseX = 0, mouseY = 0;
-   let currentX = 0, currentY = 0;
 
-   const speed = 0.18; // suavidade
+   const show = () => {
+      cursor.classList.add('is-visible');
+   };
 
-   const show = () => cursor.classList.add('is-visible');
-   const hide = () => cursor.classList.remove('is-visible', 'is-clicking');
+   const hide = () => {
+      cursor.classList.remove('is-visible');
+   };
 
    const update = () => {
-      currentX += (mouseX - currentX) * speed;
-      currentY += (mouseY - currentY) * speed;
-
-      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-
+      cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
       requestAnimationFrame(update);
    };
 
