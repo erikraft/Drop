@@ -27,9 +27,140 @@
    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    <script src="js/tech-grid.js"></script>
-   <style>
-
-   </style>
+   <!-- SEO / Schema.org -->
+   <script type="application/ld+json">
+   {
+     "@context": "https://schema.org",
+     "@graph": [
+       {
+         "@type": "WebSite",
+         "@id": "https://biodrop.erikraft.com/#website",
+         "url": "https://biodrop.erikraft.com/",
+         "name": "ErikrafT Drop",
+         "description": "Secure and direct file sharing in your browser with end-to-end encryption and WebRTC technology.",
+         "publisher": {
+           "@id": "https://biodrop.erikraft.com/#organization"
+         },
+         "inLanguage": "en",
+         "potentialAction": {
+           "@type": "SearchAction",
+           "target": "https://biodrop.erikraft.com/?q={search_term_string}",
+           "query-input": "required name=search_term_string"
+         }
+       },
+       {
+         "@type": "Organization",
+         "@id": "https://biodrop.erikraft.com/#organization",
+         "name": "ErikrafT Drop",
+         "url": "https://biodrop.erikraft.com/",
+         "logo": {
+           "@type": "ImageObject",
+           "url": "https://biodrop.erikraft.com/images/Logo.png"
+         },
+         "sameAs": [
+           "https://github.com/erikraft/Drop",
+           "https://github.com/erikraft/Drop-Android",
+           "https://discord.gg/KWvqwRxjnA",
+           "https://linkedin.com/company/erikraft-drop",
+           "https://ko-fi.com/erikraft"
+         ],
+         "founder": {
+           "@type": "Person",
+           "name": "ErikrafT"
+         }
+       },
+       {
+         "@type": "SoftwareApplication",
+         "@id": "https://biodrop.erikraft.com/#app",
+         "name": "ErikrafT Drop",
+         "applicationCategory": "UtilitiesApplication",
+         "operatingSystem": "Windows, Linux, macOS, Android, iOS, ChromeOS",
+         "url": "https://drop.erikraft.com/",
+         "downloadUrl": "https://play.google.com/store/apps/details?id=com.erikraft.drop",
+         "image": "https://biodrop.erikraft.com/images/Logo.png",
+         "description": "A secure peer-to-peer file sharing platform using WebRTC and end-to-end encryption directly in the browser.",
+         "offers": {
+           "@type": "Offer",
+           "price": "0",
+           "priceCurrency": "USD"
+         },
+         "author": {
+           "@id": "https://biodrop.erikraft.com/#organization"
+         },
+         "featureList": [
+           "End-to-end encryption",
+           "Peer-to-peer file transfer",
+           "No registration required",
+           "Browser-based file sharing",
+           "Cross-platform support",
+           "Open source",
+           "WebRTC technology",
+           "Discord integration",
+           "Mobile applications",
+           "Browser extensions"
+         ]
+       },
+       {
+         "@type": "FAQPage",
+         "@id": "https://biodrop.erikraft.com/#faq",
+         "mainEntity": [
+           {
+             "@type": "Question",
+             "name": "What is ErikrafT Drop?",
+             "acceptedAnswer": {
+               "@type": "Answer",
+               "text": "ErikrafT Drop is a secure peer-to-peer file sharing platform that allows users to transfer files directly between devices using WebRTC technology."
+             }
+           },
+           {
+             "@type": "Question",
+             "name": "Does ErikrafT Drop require installation?",
+             "acceptedAnswer": {
+               "@type": "Answer",
+               "text": "No. ErikrafT Drop works directly in the browser without installation or registration."
+             }
+           },
+           {
+             "@type": "Question",
+             "name": "Are files encrypted?",
+             "acceptedAnswer": {
+               "@type": "Answer",
+               "text": "Yes. ErikrafT Drop uses end-to-end encryption to protect files during transfer."
+             }
+           },
+           {
+             "@type": "Question",
+             "name": "Does ErikrafT Drop use cloud storage?",
+             "acceptedAnswer": {
+               "@type": "Answer",
+               "text": "No. Files are transferred directly between devices and are not stored on intermediate servers."
+             }
+           },
+           {
+             "@type": "Question",
+             "name": "Can I self-host ErikrafT Drop?",
+             "acceptedAnswer": {
+               "@type": "Answer",
+               "text": "Yes. ErikrafT Drop is open source and can be deployed on your own infrastructure."
+             }
+           }
+         ]
+       },
+       {
+         "@type": "BreadcrumbList",
+         "@id": "https://biodrop.erikraft.com/#breadcrumb",
+         "itemListElement": [
+           {
+             "@type": "ListItem",
+             "position": 1,
+             "name": "Home",
+             "item": "https://biodrop.erikraft.com/"
+           }
+         ]
+       }
+     ]
+   }
+   </script>
 </head>
 
 <body class="bg-[radial-gradient(circle_at_80%_20%,#1f2937_0%,#0f172a_46%,#030712_100%)] min-h-screen">
