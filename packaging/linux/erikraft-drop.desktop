@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=ErikrafT Drop
+Comment=File sharing by ErikrafT
+Exec=erikraft-drop
+Icon=erikraft-drop
+Terminal=false
+Type=Application
+Categories=Network;Utility;

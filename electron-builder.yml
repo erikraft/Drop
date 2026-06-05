@@ -1,0 +1,46 @@
+appId: io.github.erikraft.Drop
+productName: ErikrafT Drop
+executableName: erikraft-drop
+artifactName: ${name}-${version}-${os}-${arch}.${ext}
+directories:
+  output: dist/desktop
+files:
+  - desktop/**
+  - server/**
+  - public/**
+  - package.json
+extraMetadata:
+  main: desktop/main.cjs
+linux:
+  target:
+    - target: deb
+      arch:
+        - x64
+  category: Network;Utility;
+  icon: public/images/icon-drop.svg
+  desktop:
+    Name: ErikrafT Drop
+    Comment: File sharing by ErikrafT
+    Icon: erikraft-drop
+    Terminal: 'false'
+    Type: Application
+    Categories: Network;Utility;
+deb:
+  fpm:
+    - public/images/icon-drop.svg=/usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
+  packageName: erikraft-drop
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+win:
+  target:
+    - nsis
+  icon: public/images/icon-drop.svg
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true

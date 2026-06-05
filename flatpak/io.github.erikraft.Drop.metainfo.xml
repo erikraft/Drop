@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.erikraft.Drop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>ISC</project_license>
+  <name>ErikrafT Drop</name>
+  <summary>File sharing by ErikrafT</summary>
+  <description>
+    <p>ErikrafT Drop helps share files between nearby devices through a simple desktop window.</p>
+    <p>The Linux desktop integration uses the existing project SVG icon without generating derived binary icons.</p>
+  </description>
+  <launchable type="desktop-id">io.github.erikraft.Drop.desktop</launchable>
+  <categories>
+    <category>Network</category>
+    <category>Utility</category>
+  </categories>
+  <url type="homepage">https://drop.erikraft.com/</url>
+  <url type="bugtracker">https://github.com/erikraft/Drop/issues</url>
+  <url type="vcs-browser">https://github.com/erikraft/Drop</url>
+  <branding>
+    <color type="primary" scheme_preference="light">#3079ff</color>
+    <color type="primary" scheme_preference="dark">#1f4fb5</color>
+  </branding>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/erikraft/Drop/master/public/images/screenshot/ErikrafT-Drop_Screenshots_1.png</image>
+      <caption>ErikrafT Drop desktop interface</caption>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="1.12.4" date="2026-06-04" />
+  </releases>
+</component>
