@@ -2,14 +2,22 @@
   "name": "erikraft-drop",
   "version": "1.12.4",
   "type": "module",
-  "description": "A maneira mais fácil de transferir arquivos entre dispositivos",
+  "description": "File sharing by ErikrafT",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
     "start:prod": "node server/index.js --rate-limit --auto-restart",
-    "build": "npm install --omit=dev"
+    "build": "npm install --omit=dev",
+    "package:linux": "npm run validate:linux-icon && electron-builder --linux deb --x64",
+    "package:windows": "npm run validate:linux-icon && electron-builder --win nsis --x64",
+    "package:flatpak": "npm run validate:linux-icon && flatpak-builder --force-clean --repo=dist/flatpak-repo dist/flatpak flatpak/io.github.erikraft.Drop.yml",
+    "validate:linux-icon": "node scripts/validate-linux-icon.js"
   },
-  "author": "",
+  "author": {
+    "name": "ErikrafT",
+    "email": "erikraft@users.noreply.github.com",
+    "url": "https://github.com/erikraft"
+  },
   "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.1",
@@ -25,10 +33,13 @@
     "ws": "^8.18.2"
   },
   "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
     "nodemon": "^3.1.10"
   },
   "engines": {
     "node": ">=20.18.1"
   },
-  "private": true
+  "private": true,
+  "homepage": "https://drop.erikraft.com/"
 }

@@ -1,0 +1,31 @@
+app-id: io.github.erikraft.Drop
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '24.08'
+command: erikraft-drop
+separate-locales: false
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=xdg-download
+modules:
+  - name: erikraft-drop
+    buildsystem: simple
+    build-commands:
+      - npm ci
+      - npm run validate:linux-icon
+      - npx electron-builder --linux dir --x64 --config electron-builder.yml
+      - install -Dm755 flatpak/erikraft-drop-flatpak.sh /app/bin/erikraft-drop
+      - mkdir -p /app/erikraft-drop
+      - cp -a dist/desktop/linux-unpacked/. /app/erikraft-drop/
+      - install -Dm644 flatpak/io.github.erikraft.Drop.desktop /app/share/applications/io.github.erikraft.Drop.desktop
+      - install -Dm644 flatpak/io.github.erikraft.Drop.metainfo.xml /app/share/metainfo/io.github.erikraft.Drop.metainfo.xml
+      - install -Dm644 public/images/icon-drop.svg /app/share/icons/hicolor/scalable/apps/io.github.erikraft.Drop.svg
+    sources:
+      - type: dir
+        path: ..
