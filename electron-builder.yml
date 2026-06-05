@@ -19,12 +19,14 @@ linux:
   category: Network;Utility;
   icon: public/images/icon-drop.svg
   desktop:
-    Name: ErikrafT Drop
-    Comment: File sharing by ErikrafT
-    Icon: erikraft-drop
-    Terminal: 'false'
-    Type: Application
-    Categories: Network;Utility;
+    entry:
+      Name: ErikrafT Drop
+      Comment: File sharing by ErikrafT
+      Icon: erikraft-drop
+      Terminal: 'false'
+      Type: Application
+      Categories: Network;Utility;
+      Keywords: file;transfer;sharing
 deb:
   fpm:
     - public/images/icon-drop.svg=/usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
@@ -39,8 +41,11 @@ deb:
 win:
   target:
     - nsis
-  icon: public/images/icon-drop.svg
+  icon: public/images/android-chrome-512x512.png
 nsis:
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: ErikrafT Drop
