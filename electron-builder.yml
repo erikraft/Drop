@@ -17,7 +17,7 @@ linux:
       arch:
         - x64
   category: Network;Utility;
-  icon: public/images/icon-drop.svg
+  icon: packaging/linux/icons/icon-drop.svg
   desktop:
     entry:
       Name: ErikrafT Drop
@@ -29,7 +29,9 @@ linux:
       Keywords: file;transfer;sharing
 deb:
   fpm:
-    - public/images/icon-drop.svg=/usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
+    - packaging/linux/icons/icon-drop.svg=/usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
+    - packaging/linux/icons/android-chrome-512x512.png=/usr/share/icons/hicolor/512x512/apps/erikraft-drop.png
+    - packaging/linux/icons/android-chrome-512x512-maskable.png=/usr/share/icons/hicolor/512x512/apps/erikraft-drop-maskable.png
   packageName: erikraft-drop
   depends:
     - libgtk-3-0
