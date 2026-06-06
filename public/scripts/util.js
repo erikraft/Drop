@@ -39,6 +39,12 @@ if (!navigator.clipboard) {
 
 // Polyfills
 window.isRtcSupported = !!(window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection);
+console.log('WebRTC support detected:', window.isRtcSupported);
+if (window.RTCPeerConnection) {
+    console.log('RTCPeerConnection is available.');
+} else {
+    console.warn('RTCPeerConnection is NOT available.');
+}
 
 window.hiddenProperty = 'hidden' in document
     ? 'hidden'

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, session } = require('electron');
 const path = require('path');
 const { pathToFileURL } = require('url');
 
@@ -15,6 +15,19 @@ async function startBundledServer() {
 
 async function createWindow() {
   await startBundledServer();
+
+  // WebRTC and other permissions handling
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    const url = webContents.getURL();
+    // Only allow permissions for our local server
+    if (url.startsWith(`http://127.0.0.1:${PORT}`) || url.startsWith(`http://localhost:${PORT}`)) {
+      const allowedPermissions = ['media', 'display-capture', 'mediaKeySystem'];
+      if (allowedPermissions.includes(permission)) {
+        return callback(true);
+      }
+    }
+    callback(false);
+  });
 
   mainWindow = new BrowserWindow({
     width: 1200,
