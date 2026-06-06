@@ -4,7 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>ISC</project_license>
   <name>ErikrafT Drop</name>
-  <summary>File sharing by ErikrafT</summary>
+  <summary>File sharing by ErikrafT Drop</summary>
   <description>
     <p>ErikrafT Drop helps share files between nearby devices through a simple desktop window.</p>
     <p>The Linux desktop integration uses packaging/linux/icons/icon-drop.svg as the primary icon with the existing 512px PNG icons as fallbacks.</p>
