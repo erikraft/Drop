@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=ErikrafT Drop
-Comment=File sharing by ErikrafT
+Comment=File sharing by ErikrafT Drop
 Exec=erikraft-drop
 Icon=io.github.erikraft.Drop
 Terminal=false
