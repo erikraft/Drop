@@ -1150,11 +1150,27 @@ class RTCPeer extends Peer {
     }
 
     _openConnection() {
+        console.log('RTC: opening connection with config:', this.rtcConfig);
         this._conn = new RTCPeerConnection(this.rtcConfig);
         this._conn.onicecandidate = e => this._onIceCandidate(e);
-        this._conn.onicecandidateerror = e => this._onError(e);
-        this._conn.onconnectionstatechange = _ => this._onConnectionStateChange();
-        this._conn.oniceconnectionstatechange = e => this._onIceConnectionStateChange(e);
+        this._conn.onicecandidateerror = e => {
+            console.error('RTC: ICE candidate error:', e.errorCode, e.errorText, e.url);
+            this._onError(e);
+        };
+        this._conn.onconnectionstatechange = _ => {
+            console.log('RTC: connection state changed:', this._conn.connectionState);
+            this._onConnectionStateChange();
+        };
+        this._conn.oniceconnectionstatechange = e => {
+            console.log('RTC: ICE connection state changed:', this._conn.iceConnectionState);
+            this._onIceConnectionStateChange(e);
+        };
+        this._conn.onicegatheringstatechange = _ => {
+            console.log('RTC: ICE gathering state changed:', this._conn.iceGatheringState);
+        };
+        this._conn.onsignalingstatechange = _ => {
+            console.log('RTC: signaling state changed:', this._conn.signalingState);
+        };
     }
 
     _openChannel() {
@@ -1209,11 +1225,17 @@ class RTCPeer extends Peer {
     }
 
     _onChannelOpened(event) {
-        console.log('RTC: channel opened with', this._peerId);
         const channel = event.channel || event.target;
+        console.log('RTC: channel opened with', this._peerId, 'label:', channel.label);
         channel.binaryType = 'arraybuffer';
         channel.onmessage = e => this._onMessage(e.data);
-        channel.onclose = _ => this._onChannelClosed();
+        channel.onclose = _ => {
+            console.log('RTC: data channel closed with', this._peerId);
+            this._onChannelClosed();
+        };
+        channel.onerror = e => {
+            console.error('RTC: data channel error with', this._peerId, e);
+        };
         this._channel = channel;
         Events.on('beforeunload', e => this._onBeforeUnload(e));
         Events.on('pagehide', _ => this._onPageHide());
