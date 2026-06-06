@@ -136,7 +136,7 @@ export default class ErikrafTdropServer {
         });
 
         app.get('/', (req, res) => {
-            res.sendFile('index.html');
+            res.sendFile(path.join(publicPathAbs, 'index.html'));
             console.log(`Serving client files from:\n${publicPathAbs}`)
         });
 
