@@ -35,7 +35,7 @@ jobs:
       - name: Configure Git
         run: |
           git config --global user.name "autofix-bot"
-          git config --global user.email "autofix@users.noreply.github.com"
+          git config --global user.email "contact+app@erikraft.com"
 
       - name: Check for changes
         id: changes
