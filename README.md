@@ -64,7 +64,7 @@ File sharing on your local network that works on all platforms.
 <br>
 
 - Desktop Applications
-  
+
   - Linux (.deb)
     - https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
 
