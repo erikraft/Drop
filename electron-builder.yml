@@ -28,6 +28,7 @@ linux:
       Categories: Network;Utility;
       Keywords: file;transfer;sharing
 deb:
+  maintainer: ErikrafT <contact+app@erikraft.com>
   fpm:
     - packaging/linux/icons/icon-drop.svg=/usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
     - packaging/linux/icons/android-chrome-512x512.png=/usr/share/icons/hicolor/512x512/apps/erikraft-drop.png

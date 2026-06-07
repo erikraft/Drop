@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Bot do Discord para compartilhar arquivos através do ErikrafT Drop.",
+  "author": {
+    "name": "ErikrafT",
+    "email": "contact+app@erikraft.com",
+    "url": "https://github.com/erikraft"
+  },
   "overrides": {
     "undici": "^7.24.3"
   },
