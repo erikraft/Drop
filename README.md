@@ -16,9 +16,6 @@
 [![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)
 ![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)
 
-![Stars](https://img.shields.io/github/stars/erikraft/Drop?style=social)
-![Forks](https://img.shields.io/github/forks/erikraft/Drop?style=social)
-![Watchers](https://img.shields.io/github/watchers/erikraft/Drop?style=social)
 
 [🤝🏻 Form a Partnership](PARTNERSHIP.md)
 
@@ -195,6 +192,9 @@ Connect to others in complex network situations, or over the Internet.
   <a href="https://drop.erikraft.com/" target="_blank">
     <img alt="Open the Web App" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20WEB.png">
   </a>
+<a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb" target="_blank">
+  <img alt="Download for Linux (.deb)" style="height: 80px;" src="./public/images/badges/BadgeLinux.png">
+</a>
   <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
     <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
   </a>
