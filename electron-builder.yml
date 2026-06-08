@@ -28,6 +28,7 @@ linux:
       Categories: Network;Utility;
       Keywords: file;transfer;sharing
 deb:
+  artifactName: erikraft-drop-linux-amd64.deb
   maintainer: ErikrafT <contact+app@erikraft.com>
   fpm:
     - packaging/linux/icons/icon-drop.svg=/usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
