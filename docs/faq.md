@@ -214,7 +214,7 @@ which omits the need of the TURN server.
 - [How to open a hotspot on macOS](https://support.apple.com/guide/mac-help/share-internet-connection-mac-network-users-mchlp1540/mac)
 - [Library to open a hotspot on Linux](https://github.com/lakinduakash/linux-wifi-hotspot)
 
-You can also use mobile hotspots on phones to do that. 
+You can also use mobile hotspots on phones to do that.
 Then, all data should be sent directly between devices and not use your data plan.
 
 <br>
@@ -232,9 +232,9 @@ Snapdrop, PairDrop and ErikrafT Drop are a study in radical simplicity.
 The user interface is insanely simple.
 Features are chosen very carefully because complexity grows quadratically
 since every feature potentially interferes with each other feature.
-We focus very narrowly on a single use case: instant file transfer. 
+We focus very narrowly on a single use case: instant file transfer.
 Not facilitating optimal edge-cases means better flow for average users.
-Don't be sad. We may decline your feature request for the sake of simplicity. 
+Don't be sad. We may decline your feature request for the sake of simplicity.
 
 Read *Insanely Simple: The Obsession that Drives Apple's Success*,
 and/or *Thinking, Fast and Slow* to learn more.
@@ -245,7 +245,7 @@ and/or *Thinking, Fast and Slow* to learn more.
 
 <details>
 <summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    ErikrafT Drop is awesome. How can I support it? 
+    ErikrafT Drop is awesome. How can I support it?
 </summary>
 
 <br>
