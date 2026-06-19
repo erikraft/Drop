@@ -28,7 +28,7 @@
     "multer": "^2.2.0",
     "redis": "^4.6.11",
     "ua-parser-js": "^2.0.5",
-    "undici": "^6.24.0",
+    "undici": "^6.27.0",
     "unique-names-generator": "^4.7.1",
     "ws": "^8.18.2"
   },
