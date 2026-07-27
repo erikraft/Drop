@@ -19,20 +19,11 @@ class ErikrafTDropQR {
             return null;
         }
 
-        // Clean up previous instance in this container to prevent memory leaks and duplicate rendering
+        // Clean up previous instance in this container to prevent memory leaks and duplicate rendering.
+        // We MUST completely destroy the previous instance and clean the container as requested:
+        // "Quando um novo QR Code for gerado: destruir a instância anterior, limpar o container, renderizar novamente. Não permitir múltiplos QR Codes empilhados."
         if (container._qrInstance) {
-            try {
-                // If there's an existing instance, update its options directly to avoid rebuilding from scratch.
-                // However, since we want a completely fresh rendering with high precision, we can also clear and recreate,
-                // or use .update(). Let's use the .update() method of qr-code-styling as recommended for performance,
-                // or recreate if needed. Let's update data if the instance exists.
-                container._qrInstance.update({
-                    data: data
-                });
-                return container._qrInstance;
-            } catch (error) {
-                console.error('[QR Helper] Error updating QR code instance:', error);
-            }
+            this.destroy(container);
         }
 
         // Clear any old SVGs/Canvases inside container first
@@ -40,13 +31,14 @@ class ErikrafTDropQR {
 
         // Create a new instance
         // Options tailored to requirements: modern, rounded dots/corners, white background/margin, excellent contrast, and blue drop icon logo.
+        // Let's use a crisp resolution (e.g., width & height 160 or larger like 256 for sharp look)
         const qrCode = new QRCodeStyling({
-            width: 130,
-            height: 130,
+            width: 256,
+            height: 256,
             type: 'svg', // Ensure crisp, highly scalable vector rendering
             data: data,
             image: 'images/icon-drop-blue.svg', // Exact project file
-            margin: 4, // Quiet zone margin
+            margin: 10, // Quiet zone margin
             qrOptions: {
                 typeNumber: 0,
                 mode: 'Byte',
@@ -54,8 +46,8 @@ class ErikrafTDropQR {
             },
             imageOptions: {
                 hideBackgroundDots: true,
-                imageSize: 0.35, // Balanced central area so it doesn't cover excess area
-                margin: 4, // White margin around the logo for excellent legibility
+                imageSize: 0.3, // Balanced central area so it doesn't cover excess area
+                margin: 5, // White margin around the logo for excellent legibility
                 crossOrigin: 'anonymous',
                 saveAsBlob: true
             },
