@@ -39,7 +39,7 @@
     "nodemon": "^3.1.10"
   },
   "engines": {
-    "node": ">=20.18.1"
+    "node": ">=22.12.0"
   },
   "private": true,
   "homepage": "https://drop.erikraft.com/"
