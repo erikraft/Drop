@@ -19,7 +19,8 @@ class ErikrafTdrop {
             'scripts/ui.js',
             'scripts/libs/heic2any.min.js',
             'scripts/libs/no-sleep.min.js',
-            'scripts/libs/qr-code.min.js',
+            'scripts/libs/qr-code-styling.js',
+            'scripts/qr-helper.js',
             'scripts/libs/zip.min.js'
         ];
 

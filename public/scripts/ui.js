@@ -1964,18 +1964,8 @@ class PairDeviceDialog extends Dialog {
     _setKeyAndQRCode() {
         this.$key.innerText = `${this.pairKey.substring(0, 3)} ${this.pairKey.substring(3, 6)}`
 
-        // Display the QR code for the url
-        const qr = new QRCode({
-            content: this._getPairUrl(),
-            width: 130,
-            height: 130,
-            padding: 1,
-            background: 'white',
-            color: 'rgb(18, 18, 18)',
-            ecl: "L",
-            join: true
-        });
-        this.$qrCode.innerHTML = qr.svg();
+        // Display the QR code for the url using the new styled QR Code helper
+        ErikrafTDropQR.render(this.$qrCode, this._getPairUrl());
     }
 
     _getPairUrl() {
@@ -2374,18 +2364,8 @@ class PublicRoomDialog extends Dialog {
 
         this.$key.innerText = this.roomId.toUpperCase();
 
-        // Display the QR code for the url
-        const qr = new QRCode({
-            content: this._getShareRoomUrl(),
-            width: 130,
-            height: 130,
-            padding: 1,
-            background: 'white',
-            color: 'rgb(18, 18, 18)',
-            ecl: "L",
-            join: true
-        });
-        this.$qrCode.innerHTML = qr.svg();
+        // Display the QR code for the url using the new styled QR Code helper
+        ErikrafTDropQR.render(this.$qrCode, this._getShareRoomUrl());
 
         this.setFooterBadge();
     }
