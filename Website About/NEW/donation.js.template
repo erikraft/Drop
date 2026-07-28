@@ -1,0 +1,566 @@
+/**
+ * donation.js
+ * Dynamic interactive logic for donation.html:
+ * - PIX payload generation & QR Code rendering with offline CRC16 CCITT.
+ * - 3D credit card visual effect using Three.js and GSAP interaction.
+ * - UI enhancements.
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  init3DCard();
+  initAnimations();
+});
+
+// ============================================================
+// 2. Three.js 3D Interactive Card Animation
+// ============================================================
+
+function init3DCard() {
+  const container = document.getElementById("three-card-container");
+  const THREE = window.THREE;
+
+  if (!container || !THREE) return;
+
+  // Scene configuration
+  const scene = new THREE.Scene();
+
+  // Camera (optimized closer position to make the card larger and extremely clear)
+  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.z = 7.5;
+
+  // Renderer with High Fidelity Settings
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+  container.appendChild(renderer.domElement);
+
+  // Lighting Setup: Multi-point Studio Configuration
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.42);
+  scene.add(ambientLight);
+
+  // Main directional light
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
+  keyLight.position.set(6, 6, 8);
+  scene.add(keyLight);
+
+  // Soft sky-blue/cyan fill light matching premium fintech aesthetic
+  const fillLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
+  fillLight.position.set(-6, -4, 5);
+  scene.add(fillLight);
+
+  // Rim Light 1 (back-left edge gloss highlighter)
+  const rimLightLeft = new THREE.DirectionalLight(0xffffff, 2.5);
+  rimLightLeft.position.set(-8, 5, -5);
+  scene.add(rimLightLeft);
+
+  // Rim Light 2 (back-right edge balance)
+  const rimLightRight = new THREE.DirectionalLight(0xffffff, 2.0);
+  rimLightRight.position.set(8, -5, -5);
+  scene.add(rimLightRight);
+
+  // Interactive Point Light (sliding specular gold chip & matte body gloss highlight - optimized Z distance to prevent washing out colors)
+  const pointLight = new THREE.PointLight(0xffffff, 4.0, 15);
+  pointLight.position.set(0, 0, 6.0);
+  scene.add(pointLight);
+
+  // ==========================================
+  // PROCEDURAL TEXTURE GENERATION FUNCTIONS
+  // ==========================================
+
+  // Embossed text helper
+  function drawEmbossedText(ctx, text, x, y, font, baseColor, shadowColor, offset = 1.5) {
+    ctx.font = font;
+    ctx.fillStyle = shadowColor;
+    ctx.fillText(text, x + offset, y + offset);
+    ctx.fillStyle = baseColor;
+    ctx.fillText(text, x, y);
+  }
+
+  // Card Front and Back Procedural Texture
+  function createCardTexture() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 2048;
+    canvas.height = 640;
+    const ctx = canvas.getContext("2d");
+
+    // ==========================================
+    // FRONT OF THE CARD (0 to 1024)
+    // ==========================================
+
+    // 1. Premium Blue Fintech Gradient
+    const frontGrad = ctx.createLinearGradient(0, 0, 1024, 640);
+    frontGrad.addColorStop(0, "#15305b"); // Premium deep royal blue
+    frontGrad.addColorStop(0.5, "#1d4a8a"); // Rich medium-dark fintech blue
+    frontGrad.addColorStop(1, "#2b6cb0"); // Modern vibrant blue
+    ctx.fillStyle = frontGrad;
+    ctx.fillRect(0, 0, 1024, 640);
+
+    // Subtle premium light curves on front to make it look highly designed and elegant
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+    ctx.beginPath();
+    ctx.moveTo(0, 120);
+    ctx.bezierCurveTo(300, 350, 700, 100, 1024, 400);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(43, 108, 176, 0.2)";
+    ctx.lineWidth = 2.0;
+    ctx.beginPath();
+    ctx.moveTo(0, 480);
+    ctx.bezierCurveTo(400, 600, 800, 300, 1024, 520);
+    ctx.stroke();
+
+    // Subtle edge highlight border
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2, 2, 1020, 636);
+
+    // 2. Contactless (NFC) Symbol (Top Right)
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+    ctx.lineWidth = 3.5;
+    ctx.lineCap = "round";
+    const nfcX = 920;
+    const nfcY = 100;
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath();
+      ctx.arc(nfcX - i * 8, nfcY, 6 + i * 8, -Math.PI / 4, Math.PI / 4);
+      ctx.stroke();
+    }
+
+    // 3. Centralized Card Number
+    // Centered at x = 512, y = 310
+    ctx.font = 'bold 48px "DM Sans", sans-serif';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    // Extremely subtle dark drop shadow for emboss depth
+    ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+    ctx.fillText("0000 0000 0000 0000", 512 + 1.5, 310 + 1.5);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("0000 0000 0000 0000", 512, 310);
+
+    // 4. Validity Details (Stacked beautifully below number)
+    // Small text, white with transparency
+    ctx.font = 'bold 15px "DM Sans", sans-serif';
+    ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+    ctx.fillText("VALID THRU", 512, 390);
+
+    ctx.font = 'bold 13px "DM Sans", sans-serif';
+    ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+    ctx.fillText("MONTH/YEAR", 512, 410);
+
+    ctx.font = 'bold 26px "DM Sans", sans-serif';
+    ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+    ctx.fillText("00/00", 512, 444);
+
+    // 5. Cardholder Name (Bottom Left)
+    ctx.font = 'bold 28px "DM Sans", sans-serif';
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText("NOME DA PESSOA", 80, 540);
+
+
+    // ==========================================
+    // BACK OF THE CARD (1024 to 2048)
+    // ==========================================
+
+    // 1. Matching Blue Gradient
+    const backGrad = ctx.createLinearGradient(1024, 0, 2048, 640);
+    backGrad.addColorStop(0, "#15305b");
+    backGrad.addColorStop(0.5, "#1d4a8a");
+    backGrad.addColorStop(1, "#2b6cb0");
+    ctx.fillStyle = backGrad;
+    ctx.fillRect(1024, 0, 1024, 640);
+
+    // Subtle edge highlight border
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(1026, 2, 1020, 636);
+
+    // 2. Magnetic Stripe (Faixa Magnética)
+    ctx.fillStyle = "#111111";
+    ctx.fillRect(1024, 60, 1024, 95);
+
+    // 3. Signature Area (Área de Assinatura)
+    const sigX = 1024 + 80;
+    const sigY = 205;
+    const sigW = 600;
+    const sigH = 85;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(sigX, sigY, sigW, sigH);
+
+    // Fine horizontal light-grey lines inside signature area
+    ctx.strokeStyle = "#cbd5e1";
+    ctx.lineWidth = 1.0;
+    for (let ly = sigY + 12; ly < sigY + sigH; ly += 15) {
+      ctx.beginPath();
+      ctx.moveTo(sigX + 15, ly);
+      ctx.lineTo(sigX + sigW - 15, ly);
+      ctx.stroke();
+    }
+
+    // 4. CVV Field (Código de Segurança)
+    const cvvX = sigX + sigW + 20; // 1024 + 80 + 600 + 20 = 1724
+    const cvvW = 120;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.lineWidth = 2;
+    ctx.fillRect(cvvX, sigY, cvvW, sigH);
+    ctx.strokeRect(cvvX, sigY, cvvW, sigH);
+
+    // Security dots instead of real numbers
+    ctx.font = 'italic 700 24px "DM Sans", sans-serif';
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("•••", cvvX + cvvW / 2, sigY + sigH / 2);
+
+    // ==========================================
+    // TEXTURE GRAPHIC FINISHES (NOISE FILTER)
+    // ==========================================
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    for (let i = 0; i < data.length; i += 4) {
+      const noise = (Math.random() - 0.5) * 6.0; // Realistic premium matte composite grain
+      data[i] = Math.min(255, Math.max(0, data[i] + noise));
+      data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
+      data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  // Metallic EMV Chip Procedural Texture
+  function createChipTexture() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+
+    // Rich physical gold radial base gradient
+    const grad = ctx.createRadialGradient(
+      canvas.width / 2,
+      canvas.height / 2,
+      20,
+      canvas.width / 2,
+      canvas.height / 2,
+      canvas.width * 0.72
+    );
+    grad.addColorStop(0, "#faeaa4");   // Bright gold highlight
+    grad.addColorStop(0.5, "#d4af37"); // Solid mid-tone gold
+    grad.addColorStop(1, "#a1791b");   // Bronze shadow
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Detailed contact pad dividing lines (EMV microcircuit shape)
+    ctx.strokeStyle = "#382905"; // Dark metallic oxide line
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+
+    // Outer safety margin frame
+    const margin = 12;
+    ctx.strokeRect(margin, margin, canvas.width - margin * 2, canvas.height - margin * 2);
+
+    // Main horizontal divider
+    ctx.beginPath();
+    ctx.moveTo(margin, canvas.height / 2);
+    ctx.lineTo(canvas.width - margin, canvas.height / 2);
+    ctx.stroke();
+
+    // Left and right vertical grid lines
+    ctx.beginPath();
+    ctx.moveTo(canvas.width * 0.32, margin);
+    ctx.lineTo(canvas.width * 0.32, canvas.height - margin);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(canvas.width * 0.68, margin);
+    ctx.lineTo(canvas.width * 0.68, canvas.height - margin);
+    ctx.stroke();
+
+    // Central pattern pad
+    ctx.fillStyle = "#a1791b";
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, 28, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#faeaa4";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Secondary detail horizontal arcs
+    ctx.strokeStyle = "#382905";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(canvas.width * 0.32, canvas.height * 0.25);
+    ctx.lineTo(canvas.width * 0.68, canvas.height * 0.25);
+    ctx.moveTo(canvas.width * 0.32, canvas.height * 0.75);
+    ctx.lineTo(canvas.width * 0.68, canvas.height * 0.75);
+    ctx.stroke();
+
+    // Micro-metallic noise/sputter layer
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    for (let i = 0; i < data.length; i += 4) {
+      const noise = (Math.random() - 0.5) * 8.0;
+      data[i] = Math.min(255, Math.max(0, data[i] + noise));
+      data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
+      data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  // ==========================================
+  // GEOMETRY AND MATERIAL FABRICATION
+  // ==========================================
+
+  // Rounded Card Geometry Builder (Standard ISO/IEC 7810 proportions)
+  const cardWidth = 5.2;
+  const cardHeight = 3.25;
+  const cardRadius = 0.24;
+
+  const shape = new THREE.Shape();
+  shape.moveTo(-cardWidth / 2 + cardRadius, cardHeight / 2);
+  shape.lineTo(cardWidth / 2 - cardRadius, cardHeight / 2);
+  shape.quadraticCurveTo(cardWidth / 2, cardHeight / 2, cardWidth / 2, cardHeight / 2 - cardRadius);
+  shape.lineTo(cardWidth / 2, -cardHeight / 2 + cardRadius);
+  shape.quadraticCurveTo(cardWidth / 2, -cardHeight / 2, cardWidth / 2 - cardRadius, -cardHeight / 2);
+  shape.lineTo(-cardWidth / 2 + cardRadius, -cardHeight / 2);
+  shape.quadraticCurveTo(-cardWidth / 2, -cardHeight / 2, -cardWidth / 2, -cardHeight / 2 + cardRadius);
+  shape.lineTo(-cardWidth / 2, cardHeight / 2 - cardRadius);
+  shape.quadraticCurveTo(-cardWidth / 2, cardHeight / 2, -cardWidth / 2 + cardRadius, cardHeight / 2);
+
+  // Natural ultra-smooth borders and perfect beveled edge
+  const extrudeSettings = {
+    depth: 0.08,
+    bevelEnabled: true,
+    bevelSegments: 8, // Super smooth curved edges
+    steps: 1,
+    bevelSize: 0.016, // Beautiful razor-sharp chamfer
+    bevelThickness: 0.014
+  };
+
+  const cardGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  cardGeometry.center();
+
+  // Custom UV mapping for a single geometry double-sided texture mapping
+  const posAttr = cardGeometry.attributes.position;
+  const uvAttr = cardGeometry.attributes.uv;
+  let minZ = 999, maxZ = -999;
+  let frontCount = 0, backCount = 0, sideCount = 0;
+  for (let i = 0; i < posAttr.count; i++) {
+    const x = posAttr.getX(i);
+    const y = posAttr.getY(i);
+    const z = posAttr.getZ(i);
+    if (z < minZ) minZ = z;
+    if (z > maxZ) maxZ = z;
+
+    // Normalize local x and y to [0, 1]
+    const uNorm = (x / cardWidth) + 0.5;
+    const vNorm = (y / cardHeight) + 0.5;
+
+    let u = uNorm;
+    let v = vNorm;
+
+    if (z > 0.01) {
+      // Front cap: map normalized u [0, 1] to left half of texture canvas [0, 0.5]
+      u = uNorm * 0.5;
+      frontCount++;
+    } else if (z < -0.01) {
+      // Back cap: map normalized u [0, 1] to right half of texture canvas [0.5, 1.0] and mirror horizontally to prevent backward text
+      u = 0.5 + (1.0 - uNorm) * 0.5;
+      backCount++;
+    } else {
+      sideCount++;
+    }
+    uvAttr.setXY(i, u, v);
+  }
+  console.log(`Z coordinates range: [${minZ}, ${maxZ}]. Front: ${frontCount}, Back: ${backCount}, Side: ${sideCount}`);
+  uvAttr.needsUpdate = true;
+
+  // Create High-resolution textures
+  const cardTexture = createCardTexture();
+
+  // Material 1: Front and Back Face (PBR Matte Polycarbonate/Premium Plastic)
+  const materialCap = new THREE.MeshPhysicalMaterial({
+    map: cardTexture,
+    roughness: 0.35,              // Matte but realistic plastic roughness
+    metalness: 0.12,              // Low metalness as requested for premium plastic
+    clearcoat: 1.0,               // Clearcoat for protective outer gloss laminate
+    clearcoatRoughness: 0.12,     // Polished clearcoat layer with soft organic highlights
+    reflectivity: 0.75,           // Soft, premium reflectivity
+    sheen: 0.4,
+    sheenRoughness: 0.3,
+    sheenColor: new THREE.Color(0xffffff)
+  });
+
+  // Material 2: Beveled Side Edges (Premium polished nickel / gunmetal edge core)
+  const materialSides = new THREE.MeshPhysicalMaterial({
+    color: 0x1f242e,              // Dark nickel grey
+    roughness: 0.18,
+    metalness: 0.95,              // Highly metallic core
+    clearcoat: 0.8,
+    clearcoatRoughness: 0.12,
+    reflectivity: 1.0
+  });
+
+  // Mesh with caps and sides multi-material array
+  const cardMesh = new THREE.Mesh(cardGeometry, [materialCap, materialSides]);
+  scene.add(cardMesh);
+
+  // ==========================================
+  // HARDWARE RELEFS AND EMV CHIP MESHES
+  // ==========================================
+
+  // Low-relief Pocket indentation (Simulating physical card slot milling in top-left)
+  const pocketGeom = new THREE.BoxGeometry(0.74, 0.60, 0.01);
+  const pocketMat = new THREE.MeshPhysicalMaterial({
+    color: 0x090a0d, // Dark inner socket depth
+    roughness: 0.85,
+    metalness: 0.1,
+    clearcoat: 0.0
+  });
+  const pocket = new THREE.Mesh(pocketGeom, pocketMat);
+  pocket.position.set(-1.6, 0.65, 0.054); // Anchored at the extrusion plane surface in upper-left corner
+  cardMesh.add(pocket);
+
+  // Physical Golden PBR Chip with realistic metallic reflections and relief
+  const chipGeom = new THREE.BoxGeometry(0.68, 0.54, 0.02);
+  const chipTexture = createChipTexture();
+  const chipMat = new THREE.MeshPhysicalMaterial({
+    map: chipTexture,
+    bumpMap: chipTexture,
+    bumpScale: 0.008,            // Real relief (relevo) for lines
+    metalness: 1.0,               // 100% metallic gold
+    roughness: 0.18,              // Polished premium finish
+    clearcoat: 0.8,               // Extra layer of resin/sealant gloss
+    clearcoatRoughness: 0.15,
+    reflectivity: 0.95
+  });
+  const chip = new THREE.Mesh(chipGeom, chipMat);
+  chip.position.set(-1.6, 0.65, 0.062); // Nestled inside the pocket with slight protruded physical height
+  cardMesh.add(chip);
+
+  // Card Interactive Motion, Flipping and Specular Shine tracking
+  container.style.cursor = "pointer"; // Change cursor to pointer for clicking/flipping
+  let targetRotationX = 0;
+  let targetRotationY = 0;
+  let targetLightX = 0;
+  let targetLightY = 1.5; // Starts at nice center-top specular highlight position
+  let isHovered = false;
+  let isFlipped = false; // Tracks if user has clicked to view the back
+  let spinAngle = 0;
+
+  const handleMouseMove = (e) => {
+    isHovered = true;
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Convert mouse position to normalised coordinates (-1 to +1)
+    const normalizedX = (x / rect.width) * 2 - 1;
+    const normalizedY = (y / rect.height) * 2 - 1;
+
+    // Soft elegant rotation limits (approx 15 degrees of manual rotation)
+    const baseAngleY = isFlipped ? Math.PI : 0;
+    targetRotationY = baseAngleY + normalizedX * 0.35;
+    targetRotationX = normalizedY * 0.25;
+
+    // Target coordinates for point light movement to simulate shiny vernier glide
+    targetLightX = normalizedX * 5.0;
+    targetLightY = -normalizedY * 4.0;
+  };
+
+  container.addEventListener("mousemove", handleMouseMove);
+
+  // Toggle flipped state on click for full manual control
+  container.addEventListener("click", (e) => {
+    isFlipped = !isFlipped;
+    // Re-trigger MouseMove coordinates to instantly update target rotation Y
+    handleMouseMove(e);
+  });
+
+  // Reset rotation and specular light on mouse leaves
+  container.addEventListener("mouseleave", () => {
+    isHovered = false;
+    targetRotationX = 0;
+    targetRotationY = 0;
+    targetLightX = 0;
+    targetLightY = 1.5; // Returns to a gorgeous standard portrait center specular spot
+
+    // Sync spinAngle with current card Y rotation to prevent jump glitches when auto-rotation resumes
+    spinAngle = cardMesh.rotation.y;
+  });
+
+  // Render Loop
+  const animate = () => {
+    requestAnimationFrame(animate);
+
+    const time = Date.now() * 0.0015;
+
+    // Seamless glide of the dynamic point light
+    pointLight.position.x += (targetLightX - pointLight.position.x) * 0.1;
+    pointLight.position.y += (targetLightY - pointLight.position.y) * 0.1;
+
+    if (isHovered) {
+      // Smooth lerping to match cursor tracking
+      cardMesh.rotation.x += (targetRotationX - cardMesh.rotation.x) * 0.08;
+      cardMesh.rotation.y += (targetRotationY - cardMesh.rotation.y) * 0.08;
+      cardMesh.rotation.z += (0 - cardMesh.rotation.z) * 0.08;
+      cardMesh.position.y += (0 - cardMesh.position.y) * 0.08;
+      // Keep spinAngle synced with mouse tracking state
+      spinAngle = cardMesh.rotation.y;
+    } else {
+      // Steady continuous rotation on Y axis
+      spinAngle += 0.012;
+
+      // Soft natural floating animation on Y axis
+      const targetY = Math.sin(time * 0.8) * 0.12;
+      cardMesh.position.y += (targetY - cardMesh.position.y) * 0.08;
+
+      // Elegant cyclic tilt on X axis
+      const targetX = 0.08 * Math.sin(time * 0.5);
+      cardMesh.rotation.x += (targetX - cardMesh.rotation.x) * 0.08;
+      cardMesh.rotation.y = spinAngle;
+      cardMesh.rotation.z += (0 - cardMesh.rotation.z) * 0.08;
+    }
+
+    renderer.render(scene, camera);
+  };
+
+  animate();
+
+  // Resize handler
+  const handleResize = () => {
+    if (!container) return;
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  };
+
+  window.addEventListener("resize", handleResize);
+}
+
+
+// ============================================================
+// 3. Page Layout Entry & Glow Animations (GSAP)
+// ============================================================
+
+function initAnimations() {
+  const gsapInstance = window.gsap;
+  if (!gsapInstance) return;
+
+  // Stagger reveal cards
+  gsapInstance.from(".support-card", {
+    autoAlpha: 0,
+    y: 40,
+    duration: 0.9,
+    stagger: 0.15,
+    ease: "power3.out"
+  });
+}

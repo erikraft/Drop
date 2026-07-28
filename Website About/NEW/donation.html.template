@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikrafT｜Apoie o canal com uma Doação</title>
+  <meta name="description" content="Página oficial de doações e formas de apoio do ErikrafT: contribua para continuarmos criando conteúdos e projetos incríveis.">
+  <meta name="keywords" content="ErikrafT, apoiar, doação, PIX, Ko-fi, Minecraft, gaming, creator, developer">
+  <meta name="author" content="ErikrafT">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.erikraft.com/donation.html">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="favicon.ico">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#867d6c">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Apoie com uma Doação | ErikrafT">
+  <meta property="og:description" content="Contribua para a criação de conteúdo e desenvolvimento de projetos do ErikrafT.">
+  <meta property="og:url" content="https://www.erikraft.com/donation.html">
+  <meta property="og:image" content="https://www.erikraft.com/ErikrafT_Title_Logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Apoie com uma Doação | ErikrafT">
+  <meta name="twitter:description" content="Escolha entre PIX, Cartão ou Ko-fi para apoiar o canal e comunidade.">
+  <meta name="twitter:image" content="https://www.erikraft.com/ErikrafT_Title_Logo.png">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-68ZD5MLVQ3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-68ZD5MLVQ3');
+  </script>
+</head>
+<body class="page-donation">
+  <canvas id="particle-background" aria-hidden="true"></canvas>
+  <div class="background-effects" aria-hidden="true">
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="#top" aria-label="Ir para o início">
+        <img src="ErikrafT_Title_Logo.png" alt="Logo ErikrafT">
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Principal">
+        <a href="/">Home</a>
+        <a href="#about">Sobre</a>
+        <a href="#social-links">Redes sociais</a>
+        <a href="loja.html">Loja</a>
+        <a href="donation.html">Doações</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="skin.html">Skin Viewer</a>
+        <a class="nav-cta" href="https://www.youtube.com/@ErikrafT">YouTube</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero section">
+      <div class="container page-hero-shell">
+        <div class="section-heading reveal">
+          <p class="page-hero-label">Apoio</p>
+          <h1>Formas de Apoio</h1>
+          <p>Seu apoio voluntário impulsiona diretamente a criação de conteúdo de alta qualidade, novos lançamentos na comunidade gamer e desenvolvimento contínuo de projetos digitais inovadores.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="donation-options section" style="padding-top: 0;">
+      <div class="container">
+        <div class="donation-grid">
+
+          <!-- Box 1: PIX (Premium) -->
+          <div class="support-card pix-card">
+            <div class="support-card-header">
+              <div class="support-card-info">
+                <div class="support-card-icon">
+                  <i class="fa-brands fa-pix"></i>
+                </div>
+                <div>
+                  <h2>PIX</h2>
+                  <p style="margin: 0.2rem 0 0; color: var(--muted); font-size: 0.95rem;">Apoie meu trabalho com uma doação via PIX instantânea.</p>
+                </div>
+              </div>
+              <div class="support-card-header-badge" style="color: #63e6be; background: rgba(51, 230, 190, 0.08); border: 1px solid rgba(51, 230, 190, 0.24);">
+                <span>Recomendado</span>
+              </div>
+            </div>
+
+            <div class="quick-values" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+              <button class="value-btn button button-secondary" data-value="5">R$ 5</button>
+              <button class="value-btn button button-secondary" data-value="10">R$ 10</button>
+              <button class="value-btn button button-secondary" data-value="20">R$ 20</button>
+              <button class="value-btn button button-secondary" data-value="50">R$ 50</button>
+              <button class="value-btn button button-secondary" data-value="100">R$ 100</button>
+            </div>
+
+            <div class="custom-value-area" style="margin-bottom: 2.5rem; max-width: 400px;">
+              <label for="custom-pix-value" style="display: block; font-family: var(--mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.6rem;">Ou escolha outro valor</label>
+              <div style="position: relative; display: flex; align-items: center;">
+                <span style="position: absolute; left: 1.2rem; font-family: var(--mono); font-weight: 700; color: #63e6be;">R$</span>
+                <input type="number" id="custom-pix-value" placeholder="Digite o valor..." step="0.01" min="0.01" style="width: 100%; height: 52px; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border); border-radius: 999px; padding: 0 1.5rem 0 3.2rem; font-family: var(--mono); color: #fff; font-size: 1rem; outline: none; transition: border-color var(--transition);">
+              </div>
+            </div>
+
+            <button id="generate-pix-btn" class="button button-primary" style="background: linear-gradient(135deg, #32bcad 0%, #63e6be 100%); color: #12100e; border: none; font-weight: 700; width: 100%; max-width: 280px; min-height: 52px; box-shadow: 0 16px 34px rgba(51, 230, 190, 0.25);">
+              Gerar PIX
+            </button>
+
+            <!-- Pix Output Display Area -->
+            <div id="pix-output" class="pix-output-container">
+              <div class="pix-output-content">
+
+                <!-- Título e Descrição -->
+                <div class="pix-header-group">
+                  <h3 class="pix-output-title">Código Copia e Cola</h3>
+                  <p class="pix-output-desc">Abra o app do seu banco e escaneie o QR Code ou copie o código Pix abaixo.</p>
+                </div>
+
+                <!-- QR Code Wrapper -->
+                <div class="pix-qr-wrapper">
+                  <div class="pix-qr-card" id="qrcode-container-wrapper">
+                    <div id="pix-qrcode">
+                      <!-- QRCode will be rendered here -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Campo do Código e Botão Copiar (Desktop: lado a lado, Mobile: empilhados) -->
+                <div class="pix-input-button-row">
+                  <input type="text" id="pix-payload-input" readonly aria-label="Código PIX Copia e Cola">
+                  <button id="copy-pix-btn" class="button button-secondary">
+                    <i class="fa-regular fa-copy"></i> Copiar Código
+                  </button>
+                </div>
+
+                <div id="copy-success-toast">Código copiado com sucesso!</div>
+
+                <!-- Mensagem de agradecimento -->
+                <div id="thank-you-banner">
+                  <h4>Muito Obrigado! ❤️</h4>
+                  <p>Sua doação contribui enormemente para manter a qualidade dos conteúdos e projetos online do ErikrafT.</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Box 2: Cartão (EM BREVE) -->
+          <div class="support-card card-card">
+            <div class="support-card-header">
+              <div class="support-card-info">
+                <div class="support-card-icon">
+                  <i class="fa-solid fa-credit-card"></i>
+                </div>
+                <div>
+                  <h2>Cartão de Crédito</h2>
+                  <p style="margin: 0.2rem 0 0; color: var(--muted); font-size: 0.95rem;">Faça seu apoio seguro usando cartões nacionais ou internacionais.</p>
+                </div>
+              </div>
+              <div class="support-card-header-badge" aria-label="Bandeiras suportadas">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-jcb"></i>
+              </div>
+            </div>
+
+            <!-- Three.js 3D Card Area -->
+            <div class="card-card-body">
+              <div id="three-card-container">
+                <!-- 3D Card Canvas will live here -->
+              </div>
+              <div>
+                <span class="status-pill" style="color: #8ea1ff; background: rgba(88, 142, 255, 0.10); border-color: rgba(88, 142, 255, 0.24); margin-bottom: 1rem;">Em Desenvolvimento</span>
+                <h3 style="font-family: var(--mono); font-size: 1.5rem; color: #fff; margin: 0 0 1rem 0;">EM BREVE</h3>
+                <p style="margin: 0; line-height: 1.7; font-size: 0.95rem;">Em breve será possível apoiar utilizando cartão de crédito, débito e outros meios de pagamento de forma nativa e integrada diretamente ao site.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box 3: Outras Formas (Ko-fi) -->
+          <div class="support-card kofi-card">
+            <div class="support-card-header">
+              <div class="support-card-info">
+                <div class="support-card-icon kofi-icon-badge">
+                  <svg role="img" viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px;"><title>Ko-fi</title><path d="M11.351 2.715c-2.7 0-4.986.025-6.83.26C2.078 3.285 0 5.154 0 8.61c0 3.506.182 6.13 1.585 8.493 1.584 2.701 4.233 4.182 7.662 4.182h.83c4.209 0 6.494-2.234 7.637-4a9.5 9.5 0 0 0 1.091-2.338C21.792 14.688 24 12.22 24 9.208v-.415c0-3.247-2.13-5.507-5.792-5.87-1.558-.156-2.65-.208-6.857-.208m0 1.947c4.208 0 5.09.052 6.571.182 2.624.311 4.13 1.584 4.13 4v.39c0 2.156-1.792 3.844-3.87 3.844h-.935l-.156.649c-.208 1.013-.597 1.818-1.039 2.546-.909 1.428-2.545 3.064-5.922 3.064h-.805c-2.571 0-4.831-.883-6.078-3.195-1.09-2-1.298-4.155-1.298-7.506 0-2.181.857-3.402 3.012-3.714 1.533-.233 3.559-.26 6.39-.26m6.547 2.287c-.416 0-.65.234-.65.546v2.935c0 .311.234.545.65.545 1.324 0 2.051-.754 2.051-2s-.727-2.026-2.052-2.026m-10.39.182c-1.818 0-3.013 1.48-3.013 3.142 0 1.533.858 2.857 1.949 3.897.727.701 1.87 1.429 2.649 1.896a1.47 1.47 0 0 0 1.507 0c.78-.467 1.922-1.195 2.623-1.896 1.117-1.039 1.974-2.364 1.974-3.897 0-1.662-1.247-3.142-3.039-3.142-1.065 0-1.792.545-2.338 1.298-.493-.753-1.246-1.298-2.312-1.298"/></svg>
+                </div>
+                <div>
+                  <h2>Ko-fi</h2>
+                  <p style="margin: 0.2rem 0 0; color: var(--muted); font-size: 0.95rem;">Prefere apoiar pelo Ko-fi? Utilize a plataforma para enviar sua contribuição.</p>
+                </div>
+              </div>
+              <div class="support-card-header-badge" style="color: #72a4f2; background: rgba(114, 164, 242, 0.08); border: 1px solid rgba(114, 164, 242, 0.24);">
+                <span>Internacional</span>
+              </div>
+            </div>
+
+            <div class="kofi-card-body">
+              <div>
+                <p style="margin: 0 0 1.5rem; line-height: 1.7;">Apoie diretamente através do Ko-fi. Você pode doar qualquer valor de forma segura, com suporte internacional e diversas opções de pagamento disponíveis.</p>
+                <a class="button button-primary" href="https://ko-fi.com/erikraft/tip" target="_blank" rel="noopener noreferrer" style="background: #72a4f2; color: #fff; border: none; box-shadow: 0 16px 34px rgba(114, 164, 242, 0.35);">
+                  Apoiar no Ko-fi
+                </a>
+              </div>
+
+              <!-- Ko-fi Widget Embed -->
+              <div class="kofi-widget-box">
+                <script type="text/javascript" src="https://storage.ko-fi.com/cdn/widget/Widget_2.js"></script>
+                <script type="text/javascript">
+                  kofiwidget2.init(
+                    'Support me on Ko-fi',
+                    '#72a4f2',
+                    'N4N21G65RC'
+                  );
+                  kofiwidget2.draw();
+                </script>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div>
+        <p class="footer-brand">ErikrafT</p>
+        <p class="footer-copy">Conteúdo, comunidade, código e criatividade para o universo gamer moderno.</p>
+      </div>
+      <div class="footer-actions">
+        <a class="button button-secondary" href="donation.html">Doações</a>
+        <a class="button button-primary" href="mailto:contact2@erikraft.com">E-mail</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>&copy; <span id="currentYear"></span> ErikrafT. Todos os direitos reservados.</span>
+      <div style="display: flex; gap: 1rem;">
+        <a href="skin.html" style="font-size: 0.7rem; opacity: 0.7;">Visualizador de Skin</a>
+        <a href="#top">Voltar ao topo</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- VLIBRAS -->
+  <div class="enabled" vw="vw">
+    <div class="active" vw-access-button="vw-access-button"></div>
+    <div vw-plugin-wrapper="vw-plugin-wrapper">
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget("https://vlibras.gov.br/app");
+  </script>
+  <!-- FIM VLIBRAS -->
+
+  <!-- Standard Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+  <!-- QRCode Library -->
+  <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+  <!-- Main Logic Scripts -->
+  <script src="script.js" defer></script>
+  <script src="pix.js" defer></script>
+  <script src="donation.js" defer></script>
+</body>
+</html>

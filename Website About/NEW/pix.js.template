@@ -1,0 +1,284 @@
+/**
+ * pix.js
+ * Modern modular PIX QR Code generation system for donation.html.
+ * Generates official EMV standard payload and renders high-res premium QR Code via qr-code-styling.
+ */
+
+// Module-scoped variable to track the active QRCodeStyling instance
+let qrCodeInstance = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+  initPixCard();
+});
+
+// ============================================================
+// 1. PIX Payload Generation (EMV Standard Offline)
+// ============================================================
+
+/**
+ * Generate standard EMV Pix Payload
+ * @param {string} key - PIX Key (e.g. "11925416678")
+ * @param {string} value - Formatted value with 2 decimal places (e.g. "10.00")
+ * @param {string} merchantName - Receiver name (e.g. "ERIK RODRIGUES BALISA")
+ * @param {string} merchantCity - Receiver city (e.g. "PERUIBE")
+ * @returns {string} Fully compliant EMV PIX Copy and Paste payload
+ */
+function generatePixPayload(key, value, merchantName, merchantCity) {
+  // Helper to construct EMV tags
+  const emvField = (id, val) => {
+    const len = String(val).length.toString().padStart(2, "0");
+    return `${id}${len}${val}`;
+  };
+
+  // 00: Payload Format Indicator (Always '01')
+  const payloadFormat = emvField("00", "01");
+
+  // 26: Merchant Account Information
+  const gui = emvField("00", "br.gov.bcb.pix");
+  const keyField = emvField("01", key);
+  const merchantAccount = emvField("26", `${gui}${keyField}`);
+
+  // 52: Merchant Category Code (Always '0000')
+  const categoryCode = emvField("52", "0000");
+
+  // 53: Transaction Currency (Always '986' for BRL)
+  const currency = emvField("53", "986");
+
+  // 54: Transaction Amount
+  const amount = emvField("54", value);
+
+  // 58: Country Code (Always 'BR')
+  const country = emvField("58", "BR");
+
+  // 59: Merchant Name
+  const name = emvField("59", merchantName);
+
+  // 60: Merchant City
+  const city = emvField("60", merchantCity);
+
+  // 62: Additional Data Field (Always '***' or reference payload)
+  const txId = emvField("05", "***");
+  const additionalData = emvField("62", txId);
+
+  // Combine everything excluding the CRC checksum field itself (ID 63)
+  const partialPayload = `${payloadFormat}${merchantAccount}${categoryCode}${currency}${amount}${country}${name}${city}${additionalData}6304`;
+
+  // Calculate CRC16 CCITT
+  const crc = calculateCRC16(partialPayload);
+
+  return `${partialPayload}${crc}`;
+}
+
+/**
+ * Calculates CRC16 CCITT checksum (Polynomial: 0x1021, Init: 0xFFFF)
+ * @param {string} data - Payload string to calculate CRC16 for
+ * @returns {string} 4-character uppercase hexadecimal CRC checksum
+ */
+function calculateCRC16(data) {
+  let crc = 0xFFFF;
+  const polynomial = 0x1021;
+
+  for (let i = 0; i < data.length; i++) {
+    const b = data.charCodeAt(i);
+    for (let j = 0; j < 8; j++) {
+      const bit = ((b >> (7 - j)) & 1) === 1;
+      const c15 = ((crc >> 15) & 1) === 1;
+      crc <<= 1;
+      if (c15 ^ bit) {
+        crc ^= polynomial;
+      }
+    }
+  }
+
+  crc &= 0xFFFF;
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+
+// ============================================================
+// 2. Responsive Sizing & Configuration Helpers
+// ============================================================
+
+/**
+ * Calculates the ideal width/height for the QR Code based on viewport size.
+ * Desktop: ~320px
+ * Tablet: ~280px
+ * Mobile: ~240px
+ * @returns {number} Width/height in pixels
+ */
+function getResponsiveSize() {
+  const width = window.innerWidth;
+  if (width >= 992) {
+    return 320;
+  } else if (width >= 576) {
+    return 280;
+  } else {
+    return 230; // Matches exactly 220-240px for mobile phones
+  }
+}
+
+// ============================================================
+// 3. PIX Card Generation & UI Management
+// ============================================================
+
+function initPixCard() {
+  const valueButtons = document.querySelectorAll(".value-btn");
+  const customInput = document.getElementById("custom-pix-value");
+  const generateBtn = document.getElementById("generate-pix-btn");
+  const outputArea = document.getElementById("pix-output");
+  const qrcodeContainer = document.getElementById("pix-qrcode");
+  const payloadInput = document.getElementById("pix-payload-input");
+  const copyBtn = document.getElementById("copy-pix-btn");
+  const copyToast = document.getElementById("copy-success-toast");
+
+  let selectedValue = null;
+
+  // Handle Quick Value Buttons
+  valueButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      // Toggle selection styling
+      valueButtons.forEach(b => {
+        b.classList.remove("button-primary");
+        b.classList.add("button-secondary");
+        b.style.borderColor = "var(--border)";
+      });
+
+      btn.classList.remove("button-secondary");
+      btn.classList.add("button-primary");
+      btn.style.borderColor = "#63e6be";
+
+      selectedValue = parseFloat(btn.dataset.value);
+      customInput.value = ""; // Clear custom input if quick button clicked
+    });
+  });
+
+  // Handle Custom Input
+  customInput.addEventListener("input", () => {
+    // Clear button selections
+    valueButtons.forEach(b => {
+      b.classList.remove("button-primary");
+      b.classList.add("button-secondary");
+      b.style.borderColor = "var(--border)";
+    });
+    selectedValue = parseFloat(customInput.value) || null;
+  });
+
+  // Handle Generator Click
+  generateBtn.addEventListener("click", () => {
+    const finalValue = selectedValue;
+    if (!finalValue || isNaN(finalValue) || finalValue <= 0) {
+      alert("Por favor, selecione ou digite um valor válido para a doação.");
+      return;
+    }
+
+    const formattedValue = finalValue.toFixed(2);
+    // Configured Pix details: Key (11925416678), Name (ERIK RODRIGUES BALISA), City (ERIK RODRIGUES BALISA)
+    const pixPayload = generatePixPayload("11925416678", formattedValue, "ERIK RODRIGUES BALISA", "PERUIBE");
+
+    // Clear previous QR Code elements to prevent memory leaks and duplication
+    qrcodeContainer.innerHTML = "";
+    qrCodeInstance = null;
+
+    // Generate Premium styled QR Code using qr-code-styling
+    try {
+      const qrSize = getResponsiveSize();
+
+      qrCodeInstance = new QRCodeStyling({
+        width: qrSize,
+        height: qrSize,
+        type: "svg", // SVG ensures crisp, modern pixel-perfect render
+        data: pixPayload,
+        margin: 10,
+        image: "img/pix-logo.svg", // Local SVG logo centered
+        dotsOptions: {
+          color: "#000000",
+          type: "rounded" // Rounded dot pattern
+        },
+        backgroundOptions: {
+          color: "#ffffff" // Clean white background for high scanner compatibility
+        },
+        cornersSquareOptions: {
+          type: "extra-rounded", // Premium rounded outer markers
+          color: "#000000"
+        },
+        cornersDotOptions: {
+          type: "dot", // Premium rounded inner markers
+          color: "#000000"
+        },
+        imageOptions: {
+          crossOrigin: "anonymous",
+          hideBackgroundDots: true, // Clears background dots behind logo
+          imageSize: 0.35, // Balanced logo size that never obscures scan area
+          margin: 4 // Safety padding around the logo
+        }
+      });
+
+      // Render the newly created QR Code
+      qrCodeInstance.append(qrcodeContainer);
+
+    } catch (err) {
+      console.error("Erro ao gerar QRCode:", err);
+      qrcodeContainer.innerHTML = "<p style='color: #ff4c4c; font-family: var(--mono);'>Erro ao gerar QR Code</p>";
+    }
+
+    // Update input element with payload string
+    payloadInput.value = pixPayload;
+
+    // Display output with high-performance GSAP animation (fade, scale up, subtle blur filter)
+    outputArea.style.display = "block";
+    if (window.gsap) {
+      window.gsap.killTweensOf(outputArea); // Prevent overlapping animation states
+      window.gsap.fromTo(outputArea,
+        {
+          opacity: 0,
+          scale: 0.9,
+          filter: "blur(10px)"
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          duration: 0.7,
+          ease: "power3.out"
+        }
+      );
+    }
+  });
+
+  // Copy Code Button Interaction
+  copyBtn.addEventListener("click", () => {
+    if (!payloadInput.value) return;
+
+    navigator.clipboard.writeText(payloadInput.value)
+      .then(() => {
+        // Simple success state animation for copy success toast
+        if (window.gsap) {
+          window.gsap.killTweensOf(copyToast);
+          window.gsap.fromTo(copyToast,
+            { opacity: 0, y: 10 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.3,
+              ease: "power2.out",
+              onComplete: () => {
+                window.gsap.to(copyToast, {
+                  opacity: 0,
+                  delay: 2,
+                  duration: 0.4
+                });
+              }
+            }
+          );
+        } else {
+          // Fallback if GSAP is missing
+          copyToast.style.opacity = "1";
+          setTimeout(() => {
+            copyToast.style.opacity = "0";
+          }, 2000);
+        }
+      })
+      .catch(err => {
+        console.error("Falha ao copiar:", err);
+      });
+  });
+}
