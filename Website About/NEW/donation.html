@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>ErikrafT｜Apoie o canal com uma Doação via PIX</title>
+   <title>ErikrafT｜Support the channel with a PIX Donation</title>
    <meta name="description"
-      content="Página oficial de doações e formas de apoio do ErikrafT: contribua para continuarmos criando conteúdos e projetos incríveis.">
+      content="Official ErikrafT donations and support page: help us continue creating amazing content and projects.">
    <meta name="keywords"
       content="ErikrafT, apoiar, doação, PIX, Ko-fi, Minecraft, gaming, creator, developer">
    <meta name="author" content="ErikrafT">
@@ -25,8 +25,8 @@
    {
      "@context": "https://schema.org",
      "@type": "WebPage",
-     "name": "ErikrafT - Apoio via PIX",
-     "description": "Contribua com o canal e projetos do ErikrafT realizando uma doação segura e instantânea via PIX.",
+     "name": "ErikrafT - Support via PIX",
+     "description": "Support ErikrafT's channel and projects with a secure and instant PIX donation.",
      "publisher": {
        "@type": "Organization",
        "name": "ErikrafT Drop",
@@ -72,8 +72,8 @@
    <!-- Main Content Section -->
    <main class="flex-grow container mx-auto px-4 py-12 relative z-10 flex flex-col items-center justify-center">
       <div class="max-w-2xl w-full text-center mb-8">
-         <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">Apoie com uma <span class="text-emerald-400">Doação via PIX</span></h1>
-         <p class="text-gray-400 text-lg leading-relaxed max-w-lg mx-auto">Sua contribuição voluntária ajuda diretamente na manutenção de nossos projetos e na criação de conteúdos digitais inovadores.</p>
+         <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">Support with a <span class="text-emerald-400">PIX Donation</span></h1>
+         <p class="text-gray-400 text-lg leading-relaxed max-w-lg mx-auto">Your voluntary contribution directly supports the maintenance of our projects and the creation of innovative digital content.</p>
       </div>
 
       <!-- PIX Donation Box -->
@@ -84,16 +84,16 @@
                   <i class="fa-brands fa-pix text-emerald-400 text-2xl"></i>
                </div>
                <div class="text-left">
-                  <h2 class="text-xl font-bold text-white">PIX Instantâneo</h2>
-                  <p class="text-sm text-gray-400">Doação rápida, segura e sem intermediários.</p>
+                  <h2 class="text-xl font-bold text-white">Instant PIX</h2>
+                  <p class="text-sm text-gray-400">Fast, secure, and intermediary-free donation.</p>
                </div>
             </div>
-            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Recomendado</span>
+            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Recommended</span>
          </div>
 
          <!-- Quick Values Selector -->
          <div class="mb-6">
-            <label class="block font-mono text-xs text-gray-500 uppercase tracking-wider mb-3 text-left">Escolha um valor predefinido</label>
+            <label class="block font-mono text-xs text-gray-500 uppercase tracking-wider mb-3 text-left">Choose a preset amount</label>
             <div class="grid grid-cols-5 gap-3">
                <button class="value-btn bg-slate-800/60 hover:bg-emerald-500/20 hover:border-emerald-400 text-white border border-white/10 py-3 rounded-xl font-mono font-bold transition-all duration-300" data-value="5">R$ 5</button>
                <button class="value-btn bg-slate-800/60 hover:bg-emerald-500/20 hover:border-emerald-400 text-white border border-white/10 py-3 rounded-xl font-mono font-bold transition-all duration-300" data-value="10">R$ 10</button>
@@ -105,24 +105,24 @@
 
          <!-- Custom Value Input -->
          <div class="mb-6 text-left">
-            <label for="custom-pix-value" class="block font-mono text-xs text-gray-500 uppercase tracking-wider mb-2">Ou digite outro valor</label>
+            <label for="custom-pix-value" class="block font-mono text-xs text-gray-500 uppercase tracking-wider mb-2">Or enter another amount</label>
             <div class="relative flex items-center">
                <span class="absolute left-4 font-mono font-bold text-emerald-400">R$</span>
-               <input type="number" id="custom-pix-value" placeholder="Digite o valor desejado..." step="0.01" min="0.01"
+               <input type="number" id="custom-pix-value" placeholder="Enter the desired amount..." step="0.01" min="0.01"
                   class="w-full h-14 bg-slate-950/60 border border-white/10 rounded-xl pl-12 pr-4 font-mono text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all duration-300">
             </div>
          </div>
 
          <!-- Generate Button -->
          <button id="generate-pix-btn" class="w-full h-14 bg-gradient-to-r from-teal-500 to-emerald-400 hover:from-teal-400 hover:to-emerald-300 text-slate-950 font-bold text-lg rounded-xl shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
-            <i class="fa-solid fa-qrcode"></i> Gerar QR Code
+            <i class="fa-solid fa-qrcode"></i> Generate QR Code
          </button>
 
          <!-- Output Display Area -->
          <div id="pix-output" class="hidden mt-8 p-6 bg-slate-950/40 rounded-2xl border border-white/5 text-center">
             <div class="mb-6">
-               <h3 class="text-lg font-bold text-white mb-1">Código Copia e Cola</h3>
-               <p class="text-sm text-gray-400">Abra o app do seu banco, escolha pagar via Pix e escaneie o código abaixo:</p>
+               <h3 class="text-lg font-bold text-white mb-1">Copy and Paste Code</h3>
+               <p class="text-sm text-gray-400">Open your banking app, choose to pay with PIX, and scan the QR code below:</p>
             </div>
 
             <!-- QR Code Render Box -->
@@ -136,19 +136,19 @@
             <div class="flex flex-col sm:flex-row gap-3">
                <input type="text" id="pix-payload-input" readonly class="flex-grow h-12 bg-slate-950/80 border border-white/10 rounded-xl px-4 font-mono text-xs text-gray-300 focus:outline-none" aria-label="Código PIX Copia e Cola">
                <button id="copy-pix-btn" class="h-12 bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 rounded-xl border border-white/10 transition-all duration-300 flex items-center justify-center gap-2 flex-shrink-0">
-                  <i class="fa-regular fa-copy"></i> Copiar Código
+                  <i class="fa-regular fa-copy"></i> Copy Code
                </button>
             </div>
 
             <!-- Copy Toast -->
             <div id="copy-success-toast" class="hidden mt-3 text-emerald-400 font-medium text-sm">
-               Código copiado com sucesso!
+               Code copied successfully!
             </div>
 
             <!-- Thank You Message -->
             <div id="thank-you-banner" class="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
-               <h4 class="font-bold text-emerald-300 mb-1">Muito Obrigado! ❤️</h4>
-               <p class="text-xs text-gray-400">Sua contribuição apoia de forma inestimável todo o nosso trabalho independente.</p>
+               <h4 class="font-bold text-emerald-300 mb-1">Thank You Very Much! ❤️</h4>
+               <p class="text-xs text-gray-400">Your contribution provides invaluable support for all of our independent work.</p>
             </div>
          </div>
       </div>
@@ -163,7 +163,7 @@
             </a>
             <span class="text-lg font-bold text-white tracking-tight">ErikrafT Drop</span>
          </div>
-         <p class="text-sm">&copy; 2025 ErikrafT Drop. Todos os direitos reservados.</p>
+         <p class="text-sm">&copy; 2025 ErikrafT Drop. All rights reserved.</p>
          <div class="flex space-x-5">
             <a href="https://github.com/erikraft/Drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
                <i class="fab fa-github text-xl"></i>
@@ -174,19 +174,6 @@
          </div>
       </div>
    </footer>
-
-   <!-- VLIBRAS -->
-   <div class="enabled" vw="vw">
-      <div class="active" vw-access-button="vw-access-button"></div>
-      <div vw-plugin-wrapper="vw-plugin-wrapper">
-         <div class="vw-plugin-top-wrapper"></div>
-      </div>
-   </div>
-   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-   <script>
-      new window.VLibras.Widget("https://vlibras.gov.br/app");
-   </script>
-   <!-- FIM VLIBRAS -->
 
    <!-- Custom Cursor Glow Logic -->
    <script src="js/cursor.js"></script>
@@ -301,7 +288,7 @@
          generateBtn.addEventListener("click", () => {
             const finalValue = selectedValue;
             if (!finalValue || isNaN(finalValue) || finalValue <= 0) {
-               alert("Por favor, selecione ou digite um valor válido para a doação.");
+               alert("Please select or enter a valid donation amount.");
                return;
             }
 
@@ -349,8 +336,8 @@
                qrCodeInstance.append(qrcodeContainer);
 
             } catch (err) {
-               console.error("Erro ao gerar QRCode:", err);
-               qrcodeContainer.innerHTML = "<p style='color: #ff4c4c; font-family: monospace;'>Erro ao gerar QR Code</p>";
+               console.error("Error generating QR Code:", err);
+               qrcodeContainer.innerHTML = "<p style='color: #ff4c4c; font-family: monospace;'>Error generating QR Code</p>";
             }
 
             // Update input element with payload string
@@ -387,7 +374,7 @@
                   }, 2500);
                })
                .catch(err => {
-                  console.error("Falha ao copiar:", err);
+                  console.error("Failed to copy:", err);
                });
          });
       });
