@@ -145,6 +145,48 @@
             <span class="effective-date">This policy is effective as of 1 May 2025 13:47</span>
         </div>
     </div>
+
+    <!-- Include FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Footer -->
+    <footer class="bg-[#020617] text-gray-400 py-12 border-t border-white/5 relative z-10 w-full mt-12" style="background-color: #020617; color: #9ca3af; border-top: 1px solid rgba(255,255,255,0.05); padding: 3rem 0; width: 100%; margin-top: 3rem;">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0 2rem; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 0.875rem;">
+            <div class="flex items-center space-x-3" style="display: flex; align-items: center; gap: 0.75rem;">
+                <a href="/">
+                    <img src="images/Logo.png" alt="ErikrafT Drop" width="45" class="select-none pointer-events-none" style="user-select: none; pointer-events: none; width: 45px;">
+                </a>
+                <span class="text-lg font-bold text-white tracking-tight" style="color: #333; font-weight: 700; font-size: 1.125rem;">ErikrafT Drop</span>
+            </div>
+            <p class="text-sm" style="font-size: 0.875rem; margin: 0;">&copy; <span id="copyright-year"></span> ErikrafT Drop. All rights reserved.</p>
+            <div class="flex space-x-5" style="display: flex; gap: 1.25rem;">
+                <a href="https://github.com/erikraft/Drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fab fa-github text-xl" style="font-size: 1.25rem;"></i>
+                </a>
+                <a href="https://linkedin.com/company/erikraft-drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fa-brands fa-linkedin text-xl" style="font-size: 1.25rem;"></i>
+                </a>
+                <a href="https://www.instagram.com/erikraft_drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fa-brands fa-instagram text-xl" style="font-size: 1.25rem;"></i>
+                </a>
+                <a href="https://www.threads.com/@erikraft_drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fa-brands fa-threads text-xl" style="font-size: 1.25rem;"></i>
+                </a>
+                <a href="https://discord.gg/KWvqwRxjnA" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fab fa-discord text-xl" style="font-size: 1.25rem;"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const yearSpan = document.getElementById("copyright-year");
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
     <script src="js/cursor.js"></script>
 </body>
 </html>

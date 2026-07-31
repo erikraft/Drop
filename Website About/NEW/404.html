@@ -22,6 +22,45 @@
         <p>I don't know... the page just vanished. Maybe my friend's cat ate it? It probably tasted like pudding with a hint of HTML tags. Mmm, delicious!</p>
         <a href="/" class="btn-voltar"><i class="fa-solid fa-house"></i> Back to Home</a>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#020617] text-gray-400 py-12 border-t border-white/5 relative z-10 w-full mt-12">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6" style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; color: #9ca3af; font-family: 'Space Grotesk', sans-serif;">
+            <div class="flex items-center space-x-3" style="display: flex; align-items: center; gap: 0.75rem;">
+                <a href="/">
+                    <img src="images/Logo.png" alt="ErikrafT Drop" width="45" class="select-none pointer-events-none">
+                </a>
+                <span class="text-lg font-bold text-white tracking-tight" style="color: #fff; font-weight: 700; font-size: 1.125rem;">ErikrafT Drop</span>
+            </div>
+            <p class="text-sm" style="font-size: 0.875rem; margin: 0;">&copy; <span id="copyright-year"></span> ErikrafT Drop. All rights reserved.</p>
+            <div class="flex space-x-5" style="display: flex; gap: 1.25rem;">
+                <a href="https://github.com/erikraft/Drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+                <a href="https://linkedin.com/company/erikraft-drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fa-brands fa-linkedin text-xl"></i>
+                </a>
+                <a href="https://www.instagram.com/erikraft_drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                </a>
+                <a href="https://www.threads.com/@erikraft_drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fa-brands fa-threads text-xl"></i>
+                </a>
+                <a href="https://discord.gg/KWvqwRxjnA" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors" style="color: #6b7280; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#6b7280'">
+                    <i class="fab fa-discord text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const yearSpan = document.getElementById("copyright-year");
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
     <script src="js/cursor.js"></script>
 </body>
 </html>

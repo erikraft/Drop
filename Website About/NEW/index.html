@@ -380,6 +380,19 @@
                   and <a href="https://github.com/erikraft/Drop/tree/master/docs" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:underline">Documentation on GitHub</a>.
                </p>
             </div>
+
+            <!-- Feature 14 -->
+            <div class="glass-card p-8 rounded-2xl" data-lordicon-hover-card>
+               <div class="w-14 h-14 bg-sky-500/10 rounded-xl flex items-center justify-center mb-6 border border-sky-500/20">
+                  <lord-icon src="https://cdn.lordicon.com/unukhmst.json" trigger="morph" state="morph-heart"
+                     colors="primary:#38bdf8" style="width:32px;height:32px"></lord-icon>
+               </div>
+               <h3 class="text-xl font-bold text-white mb-3">Support the Project</h3>
+               <p class="text-gray-400 leading-relaxed">
+                  ErikrafT Drop is a fully independent open-source project. If you find it useful, consider supporting its development with a donation.
+                  Visit our <a href="donation.html" class="text-sky-400 hover:underline font-bold">Donation Page</a> to contribute via PIX or Ko-fi.
+               </p>
+            </div>
          </div>
       </div>
    </section>
@@ -764,6 +777,12 @@
                   <a href="https://linkedin.com/company/erikraft-drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
                      <i class="fa-brands fa-linkedin text-xl"></i>
                   </a>
+                  <a href="https://www.instagram.com/erikraft_drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
+                     <i class="fa-brands fa-instagram text-xl"></i>
+                  </a>
+                  <a href="https://www.threads.com/@erikraft_drop" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
+                     <i class="fa-brands fa-threads text-xl"></i>
+                  </a>
                   <a href="https://discord.gg/KWvqwRxjnA" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
                      <i class="fab fa-discord text-xl"></i>
                   </a>
@@ -945,7 +964,7 @@
          </div>
 
          <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-            <p class="mb-6 w-full text-center">&copy; 2025 ErikrafT Drop. Todos os direitos reservados.</p>
+            <p class="mb-6 w-full text-center">&copy; <span id="copyright-year"></span> ErikrafT Drop. All rights reserved.</p>
          </div>
       </div>
    </footer>
@@ -1657,6 +1676,15 @@
       document.addEventListener('keydown', function(event) {
          if (event.key === 'Escape') {
             document.getElementById('ai-menu').classList.add('hidden');
+         }
+      });
+   </script>
+
+   <script>
+      document.addEventListener("DOMContentLoaded", () => {
+         const yearSpan = document.getElementById("copyright-year");
+         if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
          }
       });
    </script>
