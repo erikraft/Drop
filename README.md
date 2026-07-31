@@ -11,10 +11,13 @@
     Fork of ErikrafT Drop.
   </p>
 
-[![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/erikraft/Drop)
-[![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)
-![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)
+[![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)&nbsp;
+[![Instagram](https://custom-icon-badges.demolab.com/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/erikraft_drop)&nbsp;
+[![Threads](https://custom-icon-badges.demolab.com/badge/Threads-000000?style=for-the-badge&logo=threads&logoColor=white)](https://www.threads.com/@erikraft_drop)&nbsp;
+[![LinkedIn](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin-white&logoColor=white)](https://linkedin.com/company/erikraft-drop)&nbsp;
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/erikraft/Drop)&nbsp;
+[![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)&nbsp;
+![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)&nbsp;
 
 
 [🤝🏻 Form a Partnership](PARTNERSHIP.md)
