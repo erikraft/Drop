@@ -3,12 +3,12 @@
     <img src="https://biodrop.erikraft.com/images/Logo.png" alt="Logo" width="150" height="150">
   </a>
 
-  <h1><em>Send it</em>, with <a href="https://drop.erikraft.com/">ErikrafT Drop</a></h1>
+  <h1><em>Send it</em>, with <a href="https://drop.erikraft.com/">ErikrafT Drop™</a></h1>
 
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
     Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.<br>
-    Fork of ErikrafT Drop.
+    Fork of ErikrafT Drop™.
   </p>
 
 [![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)&nbsp;
@@ -39,7 +39,7 @@
 <br>
 <br>
 <br>
-ErikrafT Drop Community
+ErikrafT Drop™ Community
 <br>
  	  <a href="https://discord.gg/KWvqwRxjnA"><img src="https://img.shields.io/discord/1372342747494613032?label=discord&style=flat-square&color=5a66f6"></a>
 	  &nbsp;
@@ -57,7 +57,7 @@ ErikrafT Drop Community
 
 <br>
 
-<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
+<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop™ Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
 
 <br>
 
@@ -87,7 +87,7 @@ File sharing on your local network that works on all platforms.
   - Works on all devices with a modern web-browser.
 - **Discord integrations**
   - Send files directly from Discord using the example bot located at [`Discord/Bot`](Discord/Bot/README.md). The device appears on the website with a Discord icon, and transfers occur in real time using the official WebSocket fallback.
-  - Publish a custom activity from [`Discord/Activities`](Discord/Atividades/README.md) to embed ErikrafT Drop directly inside Discord with automatic device identification.
+  - Publish a custom activity from [`Discord/Activities`](Discord/Atividades/README.md) to embed ErikrafT Drop™ directly inside Discord with automatic device identification.
 
 - **iOS Share Menu integration**
   - Send images, files, folders, URLs, or text directly from the iOS share menu using a custom Shortcut.
@@ -102,17 +102,17 @@ Send a file from your phone to your laptop?
 <br>Share private files peer-to-peer between Linux systems?
 
 <br>
-<img src="docs/erikraftdrop_screenshot_mobile.gif" alt="Screenshot GIF showing ErikrafT Drop in use" style="width: 300px">
+<img src="docs/erikraftdrop_screenshot_mobile.gif" alt="Screenshot GIF showing ErikrafT Drop™ in use" style="width: 300px">
 
 ---
 
 ## 🌍 Help with Translation
 
-Want to help make ErikrafT Drop available in more languages? You can contribute to the translation efforts at:
+Want to help make ErikrafT Drop™ available in more languages? You can contribute to the translation efforts at:
 
 **https://crowdin.com/project/erikraft-drop**
 
-Join our community of translators and help bring ErikrafT Drop to users around the world!
+Join our community of translators and help bring ErikrafT Drop™ to users around the world!
 
 ---
 
@@ -123,7 +123,7 @@ Join our community of translators and help bring ErikrafT Drop to users around t
 * Transfer files over the Internet between paired devices or by entering temporary public rooms.
 * Connect to devices in complex network environments (public Wi-Fi, company network, iCloud Private Relay, VPN, etc.).
 * Connect to devices on your mobile hotspot.
-* Devices outside of your local network that are behind a NAT are auto-connected via the ErikrafT Drop TURN server.
+* Devices outside of your local network that are behind a NAT are auto-connected via the ErikrafT Drop™ TURN server.
 * Devices from the local network, in the same public room, or previously paired are shown.
 
 #### 🔐 Persistent Device Pairing
@@ -132,7 +132,7 @@ Always connect to known devices
 
 * Pair devices via a 6-digit code or a QR-Code.
 * Paired devices always find each other via shared secrets independently of their local network.
-* Pairing is persistent. You find your devices even after reopening ErikrafT Drop.
+* Pairing is persistent. You find your devices even after reopening ErikrafT Drop™.
 * You can edit and unpair devices easily.
 
 #### 🌎 Temporary Public Rooms
@@ -142,7 +142,7 @@ Connect to others in complex network situations, or over the Internet.
 * Enter a public room via a 5-letter code or a QR-code.
 * Enter a public room to temporarily connect to devices outside your local network.
 * All devices in the same public room see each other.
-* Public rooms are temporary. Closing ErikrafT Drop  leaves all rooms.
+* Public rooms are temporary. Closing ErikrafT Drop™  leaves all rooms.
 
 ### ✨ [Improved UI for Sending/Receiving Files](https://github.com/RobinLinus/snapdrop/issues/560)
 * Files are transferred after a request is accepted. Files are auto-downloaded upon completing a transfer, if possible.
@@ -161,15 +161,15 @@ Connect to others in complex network situations, or over the Internet.
 * Change your display name to easily differentiate your devices.
 * [Paste files/text and choose the recipient afterwards ](https://github.com/RobinLinus/snapdrop/pull/534)
 * [Prevent devices from sleeping on file transfer](https://github.com/RobinLinus/snapdrop/pull/413)
-* Warn user before ErikrafT Drop is closed on file transfer
-* Open ErikrafT Drop on multiple tabs simultaneously (Thanks [@willstott101](https://github.com/willstott101))
+* Warn user before ErikrafT Drop™ is closed on file transfer
+* Open ErikrafT Drop™ on multiple tabs simultaneously (Thanks [@willstott101](https://github.com/willstott101))
 * [Video and audio preview](https://github.com/RobinLinus/snapdrop/pull/455) (Thanks [@victorwads](https://github.com/victorwads))
 * Switch theme back to auto/system after dark or light mode is on
 * Node-only implementation (Thanks [@Bellisario](https://github.com/Bellisario))
 * Auto-restart on error (Thanks [@KaKi87](https://github.com/KaKi87))
 * Lots of stability fixes (Thanks [@MWY001](https://github.com/MWY001) [@skiby7](https://github.com/skiby7) and [@willstott101](https://github.com/willstott101))
-* To host ErikrafT Drop on your local network (e.g. on Raspberry Pi): [All peers connected with private IPs are discoverable by each other](https://github.com/RobinLinus/snapdrop/pull/558)
-* When hosting ErikrafT Drop yourself, you can [set your own STUN/TURN servers](docs/host-your-own.md#specify-stunturn-servers)
+* To host ErikrafT Drop™ on your local network (e.g. on Raspberry Pi): [All peers connected with private IPs are discoverable by each other](https://github.com/RobinLinus/snapdrop/pull/558)
+* When hosting ErikrafT Drop™ yourself, you can [set your own STUN/TURN servers](docs/host-your-own.md#specify-stunturn-servers)
 * Translations.
 
 </details>
@@ -195,7 +195,7 @@ Connect to others in complex network situations, or over the Internet.
 
 ---
 
-## ⏬ Getting ErikrafT Drop
+## ⏬ Getting ErikrafT Drop™
 
 <div align="center" style="display: inline_block; gap: 10px;"><br>
   <a href="https://drop.erikraft.com/" target="_blank">
@@ -257,7 +257,7 @@ Connect to others in complex network situations, or over the Internet.
 <br />
 [🛡️｜Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
 <br />
-[<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop Android Github Repository](https://github.com/erikraft/Drop-Android)
+[<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop™ Android Github Repository](https://github.com/erikraft/Drop-Android)
 <br />
 
 ---
@@ -269,7 +269,7 @@ Connect to others in complex network situations, or over the Internet.
 <br />
 <br />
 
-ErikrafT Drop is libre, and always will be. \
+ErikrafT Drop™ is libre, and always will be. \
 If you find it useful and want to support free and open-source software, please consider donating using the button above. \
 I footed the bill for the domain and the server, and you can help create and maintain great software by supporting me. \
 Thank you very much for your contribution!

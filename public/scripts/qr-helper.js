@@ -1,7 +1,7 @@
 /**
  * Reusable QR Code Helper utilizing qr-code-styling.
  * Standardizes the design, error correction, and logo centralisation
- * for ErikrafT Drop permanent pairing and temporary public rooms.
+ * for ErikrafT Drop™ permanent pairing and temporary public rooms.
  */
 
 class ErikrafTDropQR {

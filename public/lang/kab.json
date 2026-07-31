@@ -59,8 +59,8 @@
         "edit-ai": "Edit with AI"
     },
     "about": {
-        "github_title": "ErikrafT Drop deg GitHub",
-        "close-about_aria-label": "Mdel Ɣef ErikrafT Drop"
+        "github_title": "ErikrafT Drop™ deg GitHub",
+        "close-about_aria-label": "Mdel Ɣef ErikrafT Drop™"
     },
     "notifications": {
         "lan-disabled": "",
@@ -73,10 +73,10 @@
     },
     "header": {
         "lan-mode_title": "",
-        "about_aria-label": "Ldi Ɣef ErikrafT Drop",
-        "about_title": "Ɣef ErikrafT Drop",
+        "about_aria-label": "Ldi Ɣef ErikrafT Drop™",
+        "about_title": "Ɣef ErikrafT Drop™",
         "language-selector_title": "Fren tutlayt",
-        "install_title": "Sbedd ErikrafT Drop",
+        "install_title": "Sbedd ErikrafT Drop™",
         "edit-share-mode": "Ẓreg",
         "cloud": "Cloud",
         "webchat": "WebChat",

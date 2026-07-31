@@ -61,18 +61,18 @@ function formatPairKey(pairKey) {
 
 export const data = new SlashCommandBuilder()
     .setName('receive')
-    .setDescription('Receive files from ErikrafT Drop.')
+    .setDescription('Receive files from ErikrafT Drop™.')
     .addStringOption(option =>
         option
             .setName('key')
-            .setDescription('Pairing key (6 digits) from ErikrafT Drop.')
+            .setDescription('Pairing key (6 digits) from ErikrafT Drop™.')
             .setRequired(true)
             .setMinLength(6)
             .setMaxLength(6))
     .addStringOption(option =>
         option
             .setName('name')
-            .setDescription('Display name shown on ErikrafT Drop (optional).')
+            .setDescription('Display name shown on ErikrafT Drop™ (optional).')
             .setRequired(false)
             .setMaxLength(64));
 
@@ -118,7 +118,7 @@ export async function execute(interaction) {
         const onStatus = (status) => {
             switch (status.stage) {
                 case 'connecting':
-                    queueMessage(formatMessage('<a:Loading:1432449524500271175> Connecting to ErikrafT Drop...'));
+                    queueMessage(formatMessage('<a:Loading:1432449524500271175> Connecting to ErikrafT Drop™...'));
                     break;
                 case 'connected':
                     queueMessage(formatMessage('<a:Loading:1432449524500271175> Session established. Validating the pairing key...'));

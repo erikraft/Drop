@@ -1,4 +1,4 @@
-# Discord Bot – ErikrafT Drop
+# Discord Bot – ErikrafT Drop™
 
 <div align="center" style="display: inline_block; gap: 10px;"><br>
   <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
@@ -8,11 +8,11 @@
 
 <p align="center">
   <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
-    Adicionar o "ErikrafT Drop" ao Discord
+    Adicionar o "ErikrafT Drop™" ao Discord
   </a>
 </p>
 
-This directory contains an example bot built on [discord.js](https://discord.js.org/) that performs real file transfers through ErikrafT Drop. The bot connects to the same signaling server used by the website, joins secret rooms via a pairing key, and sends files using the official WebSocket fallback. The corresponding device appears instantly in `public/index.html` with the Discord icon.
+This directory contains an example bot built on [discord.js](https://discord.js.org/) that performs real file transfers through ErikrafT Drop™. The bot connects to the same signaling server used by the website, joins secret rooms via a pairing key, and sends files using the official WebSocket fallback. The corresponding device appears instantly in `public/index.html` with the Discord icon.
 
 ## Features
 
@@ -20,18 +20,18 @@ This directory contains an example bot built on [discord.js](https://discord.js.
 - Downloads attachments sent with the command directly from the Discord API.
 - Supports sending up to 3 files or text messages per command.
 - Supports receiving files and text messages from paired devices.
-- Connects to ErikrafT Drop via WebSocket using `client_type=discord-bot`, ensuring the device is displayed on the web interface in real time.
+- Connects to ErikrafT Drop™ via WebSocket using `client_type=discord-bot`, ensuring the device is displayed on the web interface in real time.
 - Sends files through the same message queue used by browsers: the recipient receives the request, accepts it, and files are transmitted in chunks until final confirmation.
 - Ephemeral responses (visible only to the command user), preventing content leaks in public channels.
 
-> **Important requirement:** The ErikrafT Drop server must have the WebSocket fallback enabled (`wsFallback: true`). The public instance `https://drop.erikraft.com/` already has this feature enabled.
+> **Important requirement:** The ErikrafT Drop™ server must have the WebSocket fallback enabled (`wsFallback: true`). The public instance `https://drop.erikraft.com/` already has this feature enabled.
 
 ## Prerequisites
 
 - Node.js 18 or higher.
 - A registered bot application on the [Discord Developer Portal](https://discord.com/developers/applications).
 - Permissions to register slash commands in the desired server.
-- An ErikrafT Drop instance (public or self-hosted) with WebSocket fallback enabled.
+- An ErikrafT Drop™ instance (public or self-hosted) with WebSocket fallback enabled.
 
 ## Configuration
 
@@ -46,7 +46,7 @@ This directory contains an example bot built on [discord.js](https://discord.js.
    | `DISCORD_TOKEN`               | Bot token generated on the Discord portal.                                  |
    | `DISCORD_APPLICATION_ID`      | Application ID (Client ID).                                                 |
    | `DISCORD_GUILD_ID` (optional) | Provide to register commands only on one server for testing.                |
-   | `DROP_BASE_URL` (optional)    | Base URL of the ErikrafT Drop (used to identify the client).                |
+   | `DROP_BASE_URL` (optional)    | Base URL of the ErikrafT Drop™ (used to identify the client).                |
    | `DROP_SIGNALING_URL` (optional)| Full URL of the signaling server (`wss://.../server`).                      |
 
    > When `DROP_SIGNALING_URL` is not provided, the bot uses `server` relative to `DROP_BASE_URL`.
@@ -74,13 +74,13 @@ This directory contains an example bot built on [discord.js](https://discord.js.
 - `src/index.js` – Initializes the Discord client, loads commands, and handles interactions.
 - `src/registerCommands.js` – Utility for registering slash commands via REST.
 - `src/commands/drop.js` – Implementation of the `/drop` command with flow control and user feedback.
-- `src/client/dropClient.js` – Headless ErikrafT Drop client responsible for connecting via WebSocket and sending files.
+- `src/client/dropClient.js` – Headless ErikrafT Drop™ client responsible for connecting via WebSocket and sending files.
 
 ## Command Options
 
 The `/drop` command supports the following options:
 
-- `key` (required): 6-digit pairing key from ErikrafT Drop
+- `key` (required): 6-digit pairing key from ErikrafT Drop™
 - `name` (optional): Custom display name shown to the recipient
 - `message` (optional): Text message to send (up to 2000 characters)
 - `file1`, `file2`, `file3` (optional): Files to attach and send
@@ -89,7 +89,7 @@ The `/drop` command supports the following options:
 
 ## Usage Flow
 
-1. In ErikrafT Drop, open the **Pair Device** menu and generate a 6-digit key.
+1. In ErikrafT Drop™, open the **Pair Device** menu and generate a 6-digit key.
 2. Run the `/drop` command with the key and optionally:
    - Attach up to 3 files to send them
    - Add a text message to send it
@@ -101,7 +101,7 @@ The `/drop` command supports the following options:
 ## Security
 
 - Files are not written to disk; everything remains in memory while the command is being processed.
-- Data is transmitted directly to the recipient through the ErikrafT Drop WebSocket (or via the TURN server configured for the instance), following the same verification and confirmation flow as the web client.
+- Data is transmitted directly to the recipient through the ErikrafT Drop™ WebSocket (or via the TURN server configured for the instance), following the same verification and confirmation flow as the web client.
 - Tokens and secrets are **not** versioned; keep your `.env` file secure.
 
 ## Suggested Free Hosting

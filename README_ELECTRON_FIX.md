@@ -1,4 +1,4 @@
-# 🎉 ErikrafT Drop - Electron Builder 26.8.1 ✅ CORRIGIDO
+# 🎉 ErikrafT Drop™ - Electron Builder 26.8.1 ✅ CORRIGIDO
 
 **Status**: ✅ **PRONTO PARA PRODUÇÃO**
 **Data**: 2026-06-05
@@ -85,13 +85,13 @@ Criamos **5 documentos de referência** para você:
 ```yaml
 # ANTES ❌
 desktop:
-  Name: ErikrafT Drop
+  Name: ErikrafT Drop™
   Comment: File sharing by ErikrafT
 
 # DEPOIS ✅
 desktop:
   entry:
-    Name: ErikrafT Drop
+    Name: ErikrafT Drop™
     Comment: File sharing by ErikrafT
 ```
 
@@ -117,7 +117,7 @@ nsis:
   # Adicionado:
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: ErikrafT Drop
+  shortcutName: ErikrafT Drop™
 ```
 
 ---
@@ -173,7 +173,7 @@ BrowserWindow abre e carrega URL local
 Interface web renderiza em janela própria
     (SEM barra do navegador)
     ↓
-Usuário inteira com ErikrafT Drop
+Usuário inteira com ErikrafT Drop™
 (100% OFFLINE)
 ```
 
@@ -194,7 +194,7 @@ Usuário inteira com ErikrafT Drop
 
 ### Linux (.deb)
 ```
-/opt/ErikrafT Drop/
+/opt/ErikrafT Drop™/
 ├── erikraft-drop (executável)
 ├── resources/app.asar
 └── ...
@@ -208,16 +208,16 @@ Usuário inteira com ErikrafT Drop
 
 ### Windows (.exe)
 ```
-Program Files/ErikrafT Drop/
+Program Files/ErikrafT Drop™/
 ├── erikraft-drop.exe
 ├── resources/
 └── ...
 
 Desktop/
-└── ErikrafT Drop.lnk (atalho)
+└── ErikrafT Drop™.lnk (atalho)
 
 Start Menu/
-└── ErikrafT Drop.lnk (atalho)
+└── ErikrafT Drop™.lnk (atalho)
 ```
 
 ---
@@ -330,7 +330,7 @@ O projeto mantém sua licença original (ISC).
 
 ## 🏆 Conclusão
 
-✅ **Seu projeto ErikrafT Drop está 100% compatível com Electron Builder 26.8.1**
+✅ **Seu projeto ErikrafT Drop™ está 100% compatível com Electron Builder 26.8.1**
 
 - ✅ Sem erros de configuração
 - ✅ Builds funcionando

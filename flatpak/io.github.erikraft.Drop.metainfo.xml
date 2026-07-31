@@ -4,10 +4,10 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>ISC</project_license>
   <developer_name>ErikrafT</developer_name>
-  <name>ErikrafT Drop</name>
-  <summary>File sharing by ErikrafT Drop</summary>
+  <name>ErikrafT Drop™</name>
+  <summary>File sharing by ErikrafT Drop™</summary>
   <description>
-    <p>ErikrafT Drop helps share files between nearby devices through a simple desktop window.</p>
+    <p>ErikrafT Drop™ helps share files between nearby devices through a simple desktop window.</p>
     <p>The Linux desktop integration uses packaging/linux/icons/icon-drop.svg as the primary icon with the existing 512px PNG icons as fallbacks.</p>
   </description>
   <launchable type="desktop-id">io.github.erikraft.Drop.desktop</launchable>
@@ -25,7 +25,7 @@
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/erikraft/Drop/refs/heads/master/public/images/screenshot/ErikrafT_Drop_Linux_Screenshot.png</image>
-      <caption>ErikrafT Drop desktop interface</caption>
+      <caption>ErikrafT Drop™ desktop interface</caption>
     </screenshot>
   </screenshots>
   <content_rating type="oars-1.1" />

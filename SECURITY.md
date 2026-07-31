@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The following versions of **ErikrafT Drop** are currently receiving security updates:
+The following versions of **ErikrafT Drop™** are currently receiving security updates:
 
 | Version | Support Status    |
 | ------- | ----------------- |
@@ -23,7 +23,7 @@ The following versions of **ErikrafT Drop** are currently receiving security upd
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in **ErikrafT Drop**, please follow the instructions below to report it responsibly:
+If you discover a security vulnerability in **ErikrafT Drop™**, please follow the instructions below to report it responsibly:
 
 * **Contact 1:** Send an email to: [contact+security@erikraft.com](mailto:contact+security@erikraft.com)
 * **Contact 2:** Send a message in `#ticket` via: [discord.erikraft.com](https://discord.erikraft.com/)
@@ -37,4 +37,4 @@ If you discover a security vulnerability in **ErikrafT Drop**, please follow the
 **Response time:** You will receive an initial response within **5 business days**.
 **Responsible disclosure:** We kindly ask that you do not publicly disclose any details of the vulnerability until a fix has been released.
 
-Thank you for helping keep **ErikrafT Drop** secure and reliable!
+Thank you for helping keep **ErikrafT Drop™** secure and reliable!

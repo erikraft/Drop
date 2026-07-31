@@ -11,4 +11,4 @@ tasks:
       npm install
   - name: Pronto
     command: |
-      echo "✅ Ambiente ErikrafT Drop pronto para desenvolvimento!"
+      echo "✅ Ambiente ErikrafT Drop™ pronto para desenvolvimento!"

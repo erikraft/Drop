@@ -1,6 +1,6 @@
 {
   "name": "erikraft-drop",
-  "displayName": "ErikrafT Drop",
+  "displayName": "ErikrafT Drop™",
   "description": "The easiest way to transfer files across devices.",
   "version": "9.0.7",
   "engines": {
@@ -13,7 +13,7 @@
       "activitybar": [
         {
           "id": "erikraftDrop",
-          "title": "ErikrafT Drop",
+          "title": "ErikrafT Drop™",
           "icon": "images/ui-icon.svg"
         }
       ]
@@ -22,7 +22,7 @@
       "erikraftDrop": [
         {
           "id": "erikraftDrop.view",
-          "name": "ErikrafT Drop",
+          "name": "ErikrafT Drop™",
           "type": "webview"
         }
       ]

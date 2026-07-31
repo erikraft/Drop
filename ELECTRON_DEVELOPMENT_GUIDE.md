@@ -1,4 +1,4 @@
-# 🚀 Guia Prático: Desenvolvimento e Deploy do ErikrafT Drop Desktop
+# 🚀 Guia Prático: Desenvolvimento e Deploy do ErikrafT Drop™ Desktop
 
 ## 1️⃣ Desenvolvimento Local
 
@@ -16,7 +16,7 @@ npx electron desktop/main.cjs
 1. Electron inicia
 2. Servidor Node.js é iniciado automaticamente na porta 33571
 3. BrowserWindow abre e carrega http://127.0.0.1:33571
-4. Interface do ErikrafT Drop aparece em uma janela própria
+4. Interface do ErikrafT Drop™ aparece em uma janela própria
 
 ### Variáveis de Ambiente (Opcional)
 
@@ -52,7 +52,7 @@ sudo dpkg -i dist/desktop/erikraft-drop-1.12.4-linux-amd64.deb
 # Iniciar o aplicativo
 erikraft-drop
 
-# Ou via interface gráfica (Applications → Network → ErikrafT Drop)
+# Ou via interface gráfica (Applications → Network → ErikrafT Drop™)
 
 # Desinstalar (se necessário)
 sudo apt remove erikraft-drop
@@ -114,9 +114,9 @@ npm run package:windows
 
 ```ini
 [Desktop Entry]
-Name=ErikrafT Drop
+Name=ErikrafT Drop™
 Comment=File sharing by ErikrafT
-Exec=/opt/ErikrafT Drop/erikraft-drop
+Exec=/opt/ErikrafT Drop™/erikraft-drop
 Icon=erikraft-drop
 Terminal=false
 Type=Application
@@ -137,7 +137,7 @@ Keywords=file;transfer;sharing;
 ### No .deb (Linux)
 
 ```
-/opt/ErikrafT Drop/
+/opt/ErikrafT Drop™/
 ├── erikraft-drop          (executável)
 ├── resources/
 │   ├── app.asar           (aplicação)
@@ -161,7 +161,7 @@ Keywords=file;transfer;sharing;
 
 ```
 Program Files/
-└── ErikrafT Drop/
+└── ErikrafT Drop™/
     ├── erikraft-drop.exe   (executável)
     ├── resources/
     │   ├── app.asar
@@ -169,11 +169,11 @@ Program Files/
     └── ...
 
 Desktop/
-└── ErikrafT Drop.lnk       (atalho)
+└── ErikrafT Drop™.lnk       (atalho)
 
 Start Menu/
-└── ErikrafT Drop/
-    └── ErikrafT Drop.lnk   (atalho)
+└── ErikrafT Drop™/
+    └── ErikrafT Drop™.lnk   (atalho)
 ```
 
 ---
@@ -319,9 +319,9 @@ journalctl -u erikraft-drop -f
 **Windows**:
 ```bash
 # Executar com console (cmd)
-"C:\Program Files\ErikrafT Drop\erikraft-drop.exe" --enable-logging
+"C:\Program Files\ErikrafT Drop™\erikraft-drop.exe" --enable-logging
 
-# Logs em: %APPDATA%/ErikrafT Drop/logs/
+# Logs em: %APPDATA%/ErikrafT Drop™/logs/
 ```
 
 ---

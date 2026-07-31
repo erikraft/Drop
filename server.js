@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
     }
 
     res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("ErikrafT Drop LAN signaling server");
+    res.end("ErikrafT Drop™ LAN signaling server");
 });
 
 new ErikrafTdropWsServer(server, {
@@ -39,7 +39,7 @@ new ErikrafTdropWsServer(server, {
 });
 
 server.listen(port, host, () => {
-    console.log(`ErikrafT Drop LAN signaling server running at http://${host}:${port}/`);
+    console.log(`ErikrafT Drop™ LAN signaling server running at http://${host}:${port}/`);
     console.log("LAN-only mode enabled (local network connections only).");
 });
 

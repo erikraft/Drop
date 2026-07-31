@@ -5,17 +5,17 @@ icon: "lock-keyhole"
 
 # SSL and Secure Architecture
 
-ErikrafT Drop requires **secure connections** to operate correctly. All communication between clients and the signaling server is protected using **SSL/TLS**.
+ErikrafT Drop™ requires **secure connections** to operate correctly. All communication between clients and the signaling server is protected using **SSL/TLS**.
 
 Secure transport is mandatory for modern browsers when using **WebRTC** and **Secure WebSockets (WSS)**. Without HTTPS, device discovery and file transfer may fail or be blocked entirely.
 
-This page explains how SSL/TLS integrates into the ErikrafT Drop architecture.
+This page explains how SSL/TLS integrates into the ErikrafT Drop™ architecture.
 
 ---
 
 ## Why SSL is Required
 
-ErikrafT Drop depends on secure browser APIs that only work in **secure contexts**.
+ErikrafT Drop™ depends on secure browser APIs that only work in **secure contexts**.
 
 SSL/TLS is required for:
 
@@ -44,7 +44,7 @@ With SSL:
 
 ## Secure Communication Layers
 
-ErikrafT Drop uses multiple secure layers.
+ErikrafT Drop™ uses multiple secure layers.
 
 ### HTTPS (TLS)
 
@@ -102,7 +102,7 @@ Even when using TURN servers:
 
 ## Architecture Overview
 
-Below is a **controllable architecture diagram** showing how SSL/TLS is used in ErikrafT Drop.
+Below is a **controllable architecture diagram** showing how SSL/TLS is used in ErikrafT Drop™.
 
 ```mermaid placement="top-left" actions={true}
 flowchart LR
@@ -133,7 +133,7 @@ B <-->|Fallback WSS| REL
 
 ### Step 1 — Load Application
 
-The browser loads ErikrafT Drop over HTTPS.
+The browser loads ErikrafT Drop™ over HTTPS.
 
 ```
 Browser → HTTPS Server
@@ -215,7 +215,7 @@ Properties:
 
 ## SSL Configuration
 
-ErikrafT Drop supports standard TLS certificates.
+ErikrafT Drop™ supports standard TLS certificates.
 
 Recommended options:
 
@@ -245,7 +245,7 @@ Useful for local testing.
 
 ## Required Protocols
 
-ErikrafT Drop requires the following protocols:
+ErikrafT Drop™ requires the following protocols:
 
 | Protocol | Purpose          | Required |
 | :------- | :--------------- | :------- |
@@ -253,7 +253,7 @@ ErikrafT Drop requires the following protocols:
 | WSS      | Signaling        | Yes      |
 | WebRTC   | P2P transfer     | Yes      |
 
-If HTTPS or WSS is disabled, ErikrafT Drop may not function correctly.
+If HTTPS or WSS is disabled, ErikrafT Drop™ may not function correctly.
 
 ---
 

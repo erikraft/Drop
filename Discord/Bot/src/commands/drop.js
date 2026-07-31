@@ -74,7 +74,7 @@ function formatPairKey(pairKey) {
 
 export const data = new SlashCommandBuilder()
     .setName('drop')
-    .setDescription('Send or receive with ErikrafT Drop.')
+    .setDescription('Send or receive with ErikrafT Drop™.')
     .addStringOption(option =>
         option
             .setName('key')
@@ -85,7 +85,7 @@ export const data = new SlashCommandBuilder()
     .addStringOption(option =>
         option
             .setName('name')
-            .setDescription('Display name on ErikrafT Drop (optional).')
+            .setDescription('Display name on ErikrafT Drop™ (optional).')
             .setRequired(false)
             .setMaxLength(64))
     .addStringOption(option =>
@@ -188,7 +188,7 @@ export async function execute(interaction) {
         const onStatus = (status) => {
             switch (status.stage) {
                 case 'connecting':
-                    queueMessage(formatMessage('<a:Loading:1432449524500271175> Connecting to ErikrafT Drop...'));
+                    queueMessage(formatMessage('<a:Loading:1432449524500271175> Connecting to ErikrafT Drop™...'));
                     break;
                 case 'connected':
                     queueMessage(formatMessage('<a:Loading:1432449524500271175> Session established. Validating the pairing key...'));
@@ -320,7 +320,7 @@ export async function execute(interaction) {
                 lines.push('', '📦 Files sent:', details);
             }
 
-            lines.push('', 'If the recipient does not see the notification immediately, ask them to check the ErikrafT Drop tab.');
+            lines.push('', 'If the recipient does not see the notification immediately, ask them to check the ErikrafT Drop™ tab.');
 
             const finalMessage = formatLines(lines, { emoji: '<:ErikrafT_Drop_notification:1367869433065771119>' });
 

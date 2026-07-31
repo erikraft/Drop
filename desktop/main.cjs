@@ -34,7 +34,7 @@ async function createWindow() {
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    title: 'ErikrafT Drop',
+    title: 'ErikrafT Drop™',
     icon: path.join(app.getAppPath(), 'public', 'images', 'icon-drop.svg'),
     webPreferences: {
       contextIsolation: true,

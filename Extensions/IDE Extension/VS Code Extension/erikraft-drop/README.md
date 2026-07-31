@@ -1,13 +1,13 @@
 <div align="center">
   <a href="https://drop.erikraft.com">
-    <img src="https://i.imgur.com/bLNnAlU.png" width="120" alt="ErikrafT Drop Logo">
+    <img src="https://i.imgur.com/bLNnAlU.png" width="120" alt="ErikrafT Drop™ Logo">
   </a>
 </div>
 
-# ErikrafT Drop for VS Code
+# ErikrafT Drop™ for VS Code
 
 **Send it.**<br>
-Seamless file sharing inside Visual Studio Code — powered by [ErikrafT Drop](https://drop.erikraft.com).
+Seamless file sharing inside Visual Studio Code — powered by [ErikrafT Drop™](https://drop.erikraft.com).
 
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/erikraft.erikraft-drop?color=brightgreen)](https://marketplace.visualstudio.com/items?itemName=erikraft.erikraft-drop)
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/erikraft.erikraft-drop?color=blue)](https://marketplace.visualstudio.com/items?itemName=erikraft.erikraft-drop)
@@ -31,14 +31,14 @@ Install from the **Visual Studio Marketplace**:
 
 [👉 Click here to install](https://marketplace.visualstudio.com/items?itemName=erikraft.erikraft-drop)
 
-Or search for **"ErikrafT Drop"** in the **Extensions** view in VS Code (`Ctrl+Shift+X` or `⌘+Shift+X`).
+Or search for **"ErikrafT Drop™"** in the **Extensions** view in VS Code (`Ctrl+Shift+X` or `⌘+Shift+X`).
 
 ---
 
 ## 🧑‍💻 Usage
 
 1. Open the **Command Palette** (`Ctrl+Shift+P` or `⌘+Shift+P`)
-2. Run `ErikrafT Drop: Open Panel`
+2. Run `ErikrafT Drop™: Open Panel`
 3. Choose how to share:
    - **Local network (P2P)**
    - **Temporary Public Room**
@@ -61,11 +61,11 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in VS Code (`Ctrl+S
 
 ---
 
-## 🌐 Powered by ErikrafT Drop
+## 🌐 Powered by ErikrafT Drop™
 
-This extension embeds the [ErikrafT Drop](https://github.com/erikraft/Drop) web app inside a VS Code WebView. All sharing features are available from within your code editor.
+This extension embeds the [ErikrafT Drop™](https://github.com/erikraft/Drop) web app inside a VS Code WebView. All sharing features are available from within your code editor.
 
-> Inspired by AirDrop, Snapdrop and ErikrafT Drop and rebuilt for the modern cross-platform web.
+> Inspired by AirDrop, Snapdrop and ErikrafT Drop™ and rebuilt for the modern cross-platform web.
 
 ---
 

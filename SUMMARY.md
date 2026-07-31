@@ -85,7 +85,7 @@ using a configuration object that does not match the API schema.
 ```diff
   desktop:
 +   entry:
-      Name: ErikrafT Drop
+      Name: ErikrafT Drop™
       Comment: File sharing by ErikrafT
       Icon: erikraft-drop
       Terminal: 'false'
@@ -117,7 +117,7 @@ using a configuration object that does not match the API schema.
     allowToChangeInstallationDirectory: true
 +   createDesktopShortcut: true
 +   createStartMenuShortcut: true
-+   shortcutName: ErikrafT Drop
++   shortcutName: ErikrafT Drop™
 ```
 
 ---

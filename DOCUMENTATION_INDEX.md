@@ -1,4 +1,4 @@
-# 📚 Índice de Documentação - ErikrafT Drop Electron Builder Fix
+# 📚 Índice de Documentação - ErikrafT Drop™ Electron Builder Fix
 
 **Data**: 2026-06-05
 **Versão**: 1.12.4

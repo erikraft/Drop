@@ -107,7 +107,7 @@ class PeersUI {
             await this._deactivateShareMode();
         }
 
-        // close About ErikrafT Drop page on Escape
+        // close About ErikrafT Drop™ page on Escape
         if (e.key === "Escape") {
             window.location.hash = '#';
         }
@@ -852,7 +852,7 @@ class Dialog {
             document.activeElement.blur();
             window.blur();
         }
-        document.title = 'ErikrafT Drop | Transfer Files Cross-Platform. No Setup, No Signup.';
+        document.title = 'ErikrafT Drop™ | Transfer Files Cross-Platform. No Setup, No Signup.';
         changeFavicon("images/favicon-96x96.png");
         this.correspondingPeerId = undefined;
     }
@@ -1163,8 +1163,8 @@ class ReceiveFileDialog extends ReceiveDialog {
         };
 
         document.title = files.length === 1
-            ? `${Localization.getTranslation("document-titles.file-received")} - ErikrafT Drop`
-            : `${Localization.getTranslation("document-titles.file-received-plural", null, { count: files.length })} - ErikrafT Drop`;
+            ? `${Localization.getTranslation("document-titles.file-received")} - ErikrafT Drop™`
+            : `${Localization.getTranslation("document-titles.file-received-plural", null, { count: files.length })} - ErikrafT Drop™`;
         changeFavicon("images/favicon-96x96-notification.png");
 
         Events.fire('set-progress', { peerId: peerId, progress: 1, status: 'process' })
@@ -1744,7 +1744,7 @@ class ReceiveRequestDialog extends ReceiveDialog {
 
         this.$receiveTitle.innerText = transferRequestTitle;
 
-        document.title = `${transferRequestTitle} - ErikrafT Drop`;
+        document.title = `${transferRequestTitle} - ErikrafT Drop™`;
         changeFavicon("images/favicon-96x96-notification.png");
 
         this.$acceptRequestBtn.removeAttribute('disabled');
@@ -2996,8 +2996,8 @@ class ReceiveTextDialog extends Dialog {
 
     _setDocumentTitleMessages() {
         document.title = this._receiveTextQueue.length <= 1
-            ? `${Localization.getTranslation("document-titles.message-received")} - ErikrafT Drop`
-            : `${Localization.getTranslation("document-titles.message-received-plural", null, { count: this._receiveTextQueue.length + 1 })} - ErikrafT Drop`;
+            ? `${Localization.getTranslation("document-titles.message-received")} - ErikrafT Drop™`
+            : `${Localization.getTranslation("document-titles.message-received-plural", null, { count: this._receiveTextQueue.length + 1 })} - ErikrafT Drop™`;
     }
 
     async _onCopy() {
@@ -3704,7 +3704,7 @@ class ChatUI {
         this._messageIndex = new Map();
         this._currentRoomKey = null;
         this._selfDisplayName = '';
-        this._defaultTitle = 'ErikrafT Drop | Transfer Files Cross-Platform. No Setup, No Signup.';
+        this._defaultTitle = 'ErikrafT Drop™ | Transfer Files Cross-Platform. No Setup, No Signup.';
 
         this.$toggle.addEventListener('click', _ => {
             console.debug('[ChatUI] WebChat toggle clicked.');
@@ -4200,8 +4200,8 @@ class ChatUI {
     _setChatDocumentIndicators() {
         const unreadCount = this._getUnreadCount();
         document.title = unreadCount <= 1
-            ? `${Localization.getTranslation("document-titles.message-received")} - ErikrafT Drop`
-            : `${Localization.getTranslation("document-titles.message-received-plural", null, { count: unreadCount })} - ErikrafT Drop`;
+            ? `${Localization.getTranslation("document-titles.message-received")} - ErikrafT Drop™`
+            : `${Localization.getTranslation("document-titles.message-received-plural", null, { count: unreadCount })} - ErikrafT Drop™`;
         changeFavicon("images/favicon-96x96-notification.png");
     }
 

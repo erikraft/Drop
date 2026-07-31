@@ -1,11 +1,11 @@
 # Priorities
-- ErikrafT Drop should be extremely simple, clean, and easy to use.
+- ErikrafT Drop™ should be extremely simple, clean, and easy to use.
 - The main user flow should never be obstructed!
 - New features must be tested thoroughly before we are able to merge them.
 - Stability always comes first!
 
 # Agenda
-ErikrafT Drop is a study in radical simplicity. The user interface is insanely simple. Features are chosen very carefully because complexity grows quadratically since every feature potentially interferes with each other feature. We focus very narrowly on a single use case: instant file transfer.
+ErikrafT Drop™ is a study in radical simplicity. The user interface is insanely simple. Features are chosen very carefully because complexity grows quadratically since every feature potentially interferes with each other feature. We focus very narrowly on a single use case: instant file transfer.
 We are not trying to optimize for some edge-cases. We are optimizing the user flow of the average users. Don't be sad if we decline your feature request for the sake of simplicity.
 
 # Contributing guidelines

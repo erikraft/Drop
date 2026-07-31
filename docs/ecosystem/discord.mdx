@@ -1,21 +1,21 @@
 ---
 title: "Discord Bot Integration"
-description: "Complete guide to the ErikrafT Drop Discord bot for file sharing within Discord servers."
+description: "Complete guide to the ErikrafT Drop™ Discord bot for file sharing within Discord servers."
 icon: "puzzle-piece"
 ---
 
 # Discord Bot Integration
 
-The ErikrafT Drop Discord bot brings file sharing capabilities directly to Discord servers, enabling users to send and receive files through Discord commands while maintaining the security and efficiency of the ErikrafT Drop peer-to-peer system.
+The ErikrafT Drop™ Discord bot brings file sharing capabilities directly to Discord servers, enabling users to send and receive files through Discord commands while maintaining the security and efficiency of the ErikrafT Drop™ peer-to-peer system.
 
 ## Bot Overview
 
 ### Core Functionality
 
-The Discord bot provides a bridge between Discord and ErikrafT Drop:
+The Discord bot provides a bridge between Discord and ErikrafT Drop™:
 
 - **Slash Commands**: `/drop` command for file sharing operations
-- **Real-time Integration**: Appears as paired device in ErikrafT Drop web interface
+- **Real-time Integration**: Appears as paired device in ErikrafT Drop™ web interface
 - **Multi-file Support**: Send up to 3 files per command
 - **Text Messaging**: Send text messages alongside files
 - **Bidirectional Transfer**: Send and receive files through Discord
@@ -25,7 +25,7 @@ The Discord bot provides a bridge between Discord and ErikrafT Drop:
 ```mermaid
 graph TD
     A[Discord Server] --> B[Discord Bot]
-    B --> C[ErikrafT Drop WebSocket]
+    B --> C[ErikrafT Drop™ WebSocket]
     C --> D[Signaling Server]
     D --> E[Web App Clients]
     B --> F[File Processing]
@@ -43,7 +43,7 @@ graph TD
 
 - **Node.js 18+**: Required for bot operation
 - **Discord Server**: Server with bot administration permissions
-- **ErikrafT Drop Instance**: With WebSocket fallback enabled
+- **ErikrafT Drop™ Instance**: With WebSocket fallback enabled
 - **Bot Application**: Registered on Discord Developer Portal
 
 ### Self-Hosting Setup
@@ -106,7 +106,7 @@ Discord/Bot/
 │   ├── commands/
 │   │   └── drop.js          # /drop command implementation
 │   └── client/
-│       └── dropClient.js    # ErikrafT Drop WebSocket client
+│       └── dropClient.js    # ErikrafT Drop™ WebSocket client
 ├── .env.example              # Environment variables template
 ├── package.json              # Node.js dependencies
 └── README.md                 # Bot documentation
@@ -139,10 +139,10 @@ class ErikrafTDropBot {
 }
 ```
 
-#### ErikrafT Drop Client (`src/client/dropClient.js`)
+#### ErikrafT Drop™ Client (`src/client/dropClient.js`)
 
 ```javascript
-// WebSocket client for ErikrafT Drop integration
+// WebSocket client for ErikrafT Drop™ integration
 class DropClient {
     constructor() {
         this.ws = null;
@@ -220,7 +220,7 @@ The primary command for file sharing operations:
 /drop <key> [name] [message] [file1] [file2] [file3]
 
 Required:
-  key         6-digit pairing key from ErikrafT Drop
+  key         6-digit pairing key from ErikrafT Drop™
 
 Optional:
   name        Custom display name for the bot
@@ -283,7 +283,7 @@ Optional:
 
 ### Real-time Device Discovery
 
-The bot appears as a paired device in the ErikrafT Drop web interface:
+The bot appears as a paired device in the ErikrafT Drop™ web interface:
 
 #### Device Identification
 
@@ -317,7 +317,7 @@ The bot uses WebSocket fallback for file transfers:
 sequenceDiagram
     participant User as Discord User
     participant Bot as Discord Bot
-    participant Server as ErikrafT Drop Server
+    participant Server as ErikrafT Drop™ Server
     participant Web as Web Client
 
     User->>Bot: /drop command with files
@@ -352,7 +352,7 @@ sequenceDiagram
 - **Command Permissions**: Role-based command access control
 - **User Validation**: Discord user identity verification
 
-#### ErikrafT Drop Integration
+#### ErikrafT Drop™ Integration
 
 - **Pairing Key Validation**: 6-digit key format validation
 - **Room Access**: Secure room access through pairing keys
@@ -465,7 +465,7 @@ services:
 
 #### Connection Problems
 
-- **WebSocket Connection**: Verify ErikrafT Drop server accessibility
+- **WebSocket Connection**: Verify ErikrafT Drop™ server accessibility
 - **Discord API**: Check Discord API status and bot permissions
 - **Network Issues**: Verify network connectivity and firewall settings
 - **Token Issues**: Validate Discord bot token and application ID
@@ -482,7 +482,7 @@ services:
 - **File Size**: Check Discord file size limitations
 - **Memory Issues**: Monitor bot memory usage
 - **Network Stability**: Verify network stability during transfers
-- **Server Status**: Check ErikrafT Drop server status
+- **Server Status**: Check ErikrafT Drop™ server status
 
 ### Debug Information
 
@@ -490,7 +490,7 @@ services:
 
 ```javascript
 // Debug logging for troubleshooting
-console.log('ErikrafT Drop Bot Debug:', {
+console.log('ErikrafT Drop™ Bot Debug:', {
     version: package.version,
     discordUser: interaction.user.tag,
     guildId: interaction.guildId,
@@ -539,4 +539,4 @@ this.ws.onerror = (error) => {
 - **Monitoring**: Enhanced monitoring and alerting
 - **Scalability**: Improved scalability for large servers
 
-The Discord bot integration provides a powerful bridge between Discord communities and the ErikrafT Drop ecosystem, enabling seamless file sharing within Discord servers while maintaining the security and efficiency of the peer-to-peer file transfer system.
+The Discord bot integration provides a powerful bridge between Discord communities and the ErikrafT Drop™ ecosystem, enabling seamless file sharing within Discord servers while maintaining the security and efficiency of the peer-to-peer file transfer system.

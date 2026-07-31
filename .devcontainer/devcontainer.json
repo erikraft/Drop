@@ -1,11 +1,11 @@
 {
-    "name": "ErikrafT Drop Dev Environment",
+    "name": "ErikrafT Drop™ Dev Environment",
     "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
     // 🔧 VS Code extensions installed automatically:
     "customizations": {
         "vscode": {
             "extensions": [
-                "erikraft.erikraft-drop", // ErikrafT Drop custom extension
+                "erikraft.erikraft-drop", // ErikrafT Drop™ custom extension
                 "ms-vsliveshare.vsliveshare", // Live Share (collaboration)
                 "ms-vscode.live-server", // Official Live Server by Microsoft
                 "ritwickdey.liveserver", // Alternative Live Server (ritwickdey)

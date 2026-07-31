@@ -1,5 +1,5 @@
 /**
- * ErikrafT Drop - Helper Utilities
+ * ErikrafT Drop™ - Helper Utilities
  *
  * This module provides secure hashing and randomization functions
  * for internal pairing operations (NOT for user passwords).

@@ -1,15 +1,15 @@
 {
     "header": {
         "lan-mode_title": "",
-        "about_aria-label": "Otevřít o ErikrafT Drop",
-        "about_title": "O službě ErikrafT Drop",
+        "about_aria-label": "Otevřít o ErikrafT Drop™",
+        "about_title": "O službě ErikrafT Drop™",
         "language-selector_title": "Nastavit jazyk",
         "theme-auto_title": "Automatické přizpůsobení tématu systému",
         "pair-device_title": "Spárovat zařízení permanentně",
         "theme-light_title": "Vždy používat světlé téma",
         "theme-dark_title": "Vždy používat tmavé téma",
         "notification_title": "Povolit upozornění",
-        "install_title": "Nainstalovat ErikrafT Drop",
+        "install_title": "Nainstalovat ErikrafT Drop™",
         "edit-paired-devices_title": "Upravit spárovaná zařízení",
         "join-public-room_title": "Připojte se dočasně k veřejné místnosti",
         "cancel-share-mode": "Zrušit",
@@ -22,11 +22,11 @@
     },
     "about": {
         "buy-me-a-coffee_title": "Kupte mi kávu!",
-        "close-about_aria-label": "Zavřít O ErikrafT Drop",
+        "close-about_aria-label": "Zavřít O ErikrafT Drop™",
         "claim": "Nejjednodušší způsob přenosu souborů mezi zařízeními",
-        "github_title": "ErikrafT Drop na GitHubu",
-        "tweet_title": "Tweet o ErikrafT Drop",
-        "mastodon_title": "Napište o ErikrafT Drop na Mastodon",
+        "github_title": "ErikrafT Drop™ na GitHubu",
+        "tweet_title": "Tweet o ErikrafT Drop™",
+        "mastodon_title": "Napište o ErikrafT Drop™ na Mastodon",
         "custom_title": "Sledujte nás",
         "privacypolicy_title": "Otevřete naše zásady ochrany osobních údajů",
         "bluesky_title": "Sledujte nás na BlueSky",
@@ -148,7 +148,7 @@
     },
     "instructions": {
         "no-peers_data-drop-bg": "Uvolněním vyberte příjemce",
-        "no-peers-title": "Otevřete ErikrafT Drop na jiných zařízeních a posílejte soubory",
+        "no-peers-title": "Otevřete ErikrafT Drop™ na jiných zařízeních a posílejte soubory",
         "no-peers-subtitle": "Spárujte zařízení nebo vstupte do veřejné místnosti, abyste byli zjistitelní v jiných sítích",
         "x-instructions_desktop": "Kliknutím odešlete soubory nebo kliknutím pravým tlačítkem odešlete zprávu",
         "x-instructions_mobile": "Klepnutím odešlete soubory nebo dlouhým klepnutím odešlete zprávu",
@@ -156,13 +156,13 @@
         "x-instructions_data-drop-bg": "Uvolněním vyberte příjemce",
         "x-instructions-share-mode_desktop": "Kliknutím odešlete {{descriptor}}",
         "x-instructions-share-mode_mobile": "Klepnutím odešlete {{descriptor}}",
-        "activate-share-mode-base": "Pro odeslání otevřete ErikrafT Drop na jiných zařízeních",
+        "activate-share-mode-base": "Pro odeslání otevřete ErikrafT Drop™ na jiných zařízeních",
         "activate-share-mode-and-other-file": "a 1 další soubor",
         "activate-share-mode-and-other-files-plural": "a {{count}} dalších souborů",
         "activate-share-mode-shared-text": "sdílený text",
         "activate-share-mode-shared-file": "sdílený soubor",
         "activate-share-mode-shared-files-plural": "{{count}} sdílených souborů",
-        "webrtc-requirement": "Chcete-li použít ErikrafT Drop, musí být povoleno WebRTC!"
+        "webrtc-requirement": "Chcete-li použít ErikrafT Drop™, musí být povoleno WebRTC!"
     },
     "notifications": {
         "lan-disabled": "",
@@ -208,7 +208,7 @@
         "file-transfer-completed": "Přenos souborů byl dokončen",
         "message-transfer-completed": "Přenos zprávy byl dokončen",
         "ios-memory-limit": "Odesílání souborů do iOS je možné pouze do velikosti 200 MB najednou",
-        "unfinished-transfers-warning": "Existují nedokončené přenosy Opravdu chcete zavřít ErikrafT Drop?",
+        "unfinished-transfers-warning": "Existují nedokončené přenosy Opravdu chcete zavřít ErikrafT Drop™?",
         "rate-limit-join-key": "Bylo dosaženo limitu. Počkejte 10 sekund a zkuste to znovu.",
         "selected-peer-left": "Vybraný partner odešel"
     },

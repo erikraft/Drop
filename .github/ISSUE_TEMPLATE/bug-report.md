@@ -34,11 +34,11 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**Bug occurs on official ErikrafT Drop instance https://drop.erikraft.com/**
+**Bug occurs on official ErikrafT Drop™ instance https://drop.erikraft.com/**
 No | Yes
 Version: v1.12.4
 
-**Bug occurs on self-hosted ErikrafT Drop instance**
+**Bug occurs on self-hosted ErikrafT Drop™ instance**
 No | Yes
 
 **Self-Hosted Setup**
