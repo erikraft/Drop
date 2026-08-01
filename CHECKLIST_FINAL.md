@@ -1,7 +1,7 @@
 # ✅ CHECKLIST FINAL - Electron Builder 26.8.1
 
 **Data**: 2026-06-05
-**Projeto**: ErikrafT Drop v1.12.4
+**Projeto**: ErikrafT Drop™ v1.12.4
 **Status**: ✅ 100% COMPLETO
 
 ---
@@ -206,7 +206,7 @@ ls -1 README_ELECTRON_FIX.md ELECTRON*.md SUMMARY.md
 - [x] ✅ Compatibilidade entre plataformas
 - [x] ✅ Requisitos de ícone por plataforma
 
-### Sobre ErikrafT Drop
+### Sobre ErikrafT Drop™
 - [x] ✅ Arquitetura: Electron wrapper + Node.js local
 - [x] ✅ Funciona 100% offline
 - [x] ✅ Servidor integrado em http://127.0.0.1:33571

@@ -1,13 +1,13 @@
 <div align="center">
   <a href="https://drop.erikraft.com">
-    <img src="https://i.imgur.com/bLNnAlU.png" width="120" alt="ErikrafT Drop Logo">
+    <img src="https://i.imgur.com/bLNnAlU.png" width="120" alt="ErikrafT Drop™ Logo">
   </a>
 </div>
 
-# ErikrafT Drop for Open VSX Registry Extension
+# ErikrafT Drop™ for Open VSX Registry Extension
 
 **Send it.**<br>
-Seamless file sharing inside Open VSX Registry Extension — powered by [ErikrafT Drop](https://drop.erikraft.com).
+Seamless file sharing inside Open VSX Registry Extension — powered by [ErikrafT Drop™](https://drop.erikraft.com).
 
 ---
 
@@ -27,14 +27,14 @@ Install from the **Open VSX Registry**:
 
 [👉 Click here to install](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
 
-Or search for **"ErikrafT Drop"** in the **Extensions** view in Open VSX Registry Extension (`Ctrl+Shift+X` or `⌘+Shift+X`).
+Or search for **"ErikrafT Drop™"** in the **Extensions** view in Open VSX Registry Extension (`Ctrl+Shift+X` or `⌘+Shift+X`).
 
 ---
 
 ## 🧑‍💻 Usage
 
 1. Open the **Command Palette** (`Ctrl+Shift+P` or `⌘+Shift+P`)
-2. Run `ErikrafT Drop: Open Panel`
+2. Run `ErikrafT Drop™: Open Panel`
 3. Choose how to share:
    - **Local network (P2P)**
    - **Temporary Public Room**
@@ -57,11 +57,11 @@ Or search for **"ErikrafT Drop"** in the **Extensions** view in Open VSX Registr
 
 ---
 
-## 🌐 Powered by ErikrafT Drop
+## 🌐 Powered by ErikrafT Drop™
 
-This extension embeds the [ErikrafT Drop](https://github.com/erikraft/Drop) web app inside a Open VSX Registry Extension WebView. All sharing features are available from within your code editor.
+This extension embeds the [ErikrafT Drop™](https://github.com/erikraft/Drop) web app inside a Open VSX Registry Extension WebView. All sharing features are available from within your code editor.
 
-> Inspired by AirDrop, Snapdrop and ErikrafT Drop and rebuilt for the modern cross-platform web.
+> Inspired by AirDrop, Snapdrop and ErikrafT Drop™ and rebuilt for the modern cross-platform web.
 
 ---
 

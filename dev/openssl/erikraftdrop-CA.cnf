@@ -9,7 +9,7 @@ string_mask        = utf8only
 prompt             = no
 
 [ subject ]
-organizationName = ErikrafT Drop
+organizationName = ErikrafT Drop™
 OU               = CA
 commonName       = erikraftdrop-CA
 

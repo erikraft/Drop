@@ -2,7 +2,7 @@
 
 This directory contains information and resources for various extensions including Browser Extensions, Open VSX Registry Extensions, and VS Code Extensions.
 
-## ErikrafT Drop Extension
+## ErikrafT Drop™ Extension
 
 ### Download Links
 
@@ -25,9 +25,9 @@ This directory contains information and resources for various extensions includi
 ### Extension Platforms
 - **VS Code Marketplace**: [ErikrafT.erikraft-drop](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
 - **Open VSX Registry**: [ErikrafT/erikraft-drop](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
-- **Opera Add-ons**: [ErikrafT Drop](https://addons.opera.com/en/extensions/details/erikraft-drop/)
-- **Thunderbird Add-ons**: [ErikrafT Drop](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
-- **Firefox Browser ADD-ONS**: [ErikrafT Drop](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
+- **Opera Add-ons**: [ErikrafT Drop™](https://addons.opera.com/en/extensions/details/erikraft-drop/)
+- **Thunderbird Add-ons**: [ErikrafT Drop™](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
+- **Firefox Browser ADD-ONS**: [ErikrafT Drop™](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
 
 ## Browser Extensions
 

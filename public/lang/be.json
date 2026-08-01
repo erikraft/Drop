@@ -1,8 +1,8 @@
 {
     "header": {
         "lan-mode_title": "",
-        "about_aria-label": "Адкрыйце Аб ErikrafT Drop",
-        "about_title": "Аб ErikrafT Drop",
+        "about_aria-label": "Адкрыйце Аб ErikrafT Drop™",
+        "about_title": "Аб ErikrafT Drop™",
         "theme-auto_title": "Аўтаматычная адаптацыя тэмы да сістэмы",
         "theme-light_title": "Заўсёды выкарыстоўваць светлую тэму",
         "theme-dark_title": "Заўсёды выкарыстоўваць цёмную тэму",
@@ -11,7 +11,7 @@
         "join-public-room_title": "Часова далучыцца да публічнага пакоя",
         "cancel-share-mode": "Адмяніць",
         "language-selector_title": "Задаць мову",
-        "install_title": "Усталяваць ErikrafT Drop",
+        "install_title": "Усталяваць ErikrafT Drop™",
         "pair-device_title": "Злучыце свае прылады назаўжды",
         "edit-share-mode": "Рэдагаваць",
         "expand_title": "Разгарнуць радок кнопак",
@@ -22,7 +22,7 @@
     },
     "instructions": {
         "no-peers_data-drop-bg": "Адпусціце, каб выбраць атрымальніка",
-        "no-peers-title": "Адкрыйце ErikrafT Drop на іншых прыладах, каб адправіць файлы",
+        "no-peers-title": "Адкрыйце ErikrafT Drop™ на іншых прыладах, каб адправіць файлы",
         "x-instructions_data-drop-peer": "Адпусціце, каб адправіць вузлу",
         "x-instructions_data-drop-bg": "Адпусціце, каб выбраць атрымальніка",
         "x-instructions-share-mode_mobile": "Дакраніцеся, каб адправіць {{descriptor}}",
@@ -35,7 +35,7 @@
         "x-instructions_mobile": "Дакраніцеся, каб адправіць файлы, або доўга трымайце, каб адправіць паведамленне",
         "x-instructions-share-mode_desktop": "Націсніце, каб адправіць {{descriptor}}",
         "x-instructions_desktop": "Націсніце, каб адправіць файлы, або націсніце правай кнопкай мышы, каб адправіць паведамленне",
-        "activate-share-mode-base": "Адкрыйце ErikrafT Drop на іншых прыладах, каб адправіць",
+        "activate-share-mode-base": "Адкрыйце ErikrafT Drop™ на іншых прыладах, каб адправіць",
         "activate-share-mode-shared-file": "агульны файл"
     },
     "footer": {
@@ -154,13 +154,13 @@
     },
     "about": {
         "buy-me-a-coffee_title": "Купіць мне кавы!",
-        "mastodon_title": "Напішыце пра ErikrafT Drop на Mastodon",
-        "tweet_title": "Твіт пра ErikrafT Drop",
-        "github_title": "ErikrafT Drop на GitHub",
+        "mastodon_title": "Напішыце пра ErikrafT Drop™ на Mastodon",
+        "tweet_title": "Твіт пра ErikrafT Drop™",
+        "github_title": "ErikrafT Drop™ на GitHub",
         "custom_title": "Сачыце за намі",
         "bluesky_title": "Сачыце за намі на BlueSky",
         "faq_title": "Часта задаюць пытанні",
-        "close-about_aria-label": "Закрыць Аб ErikrafT Drop",
+        "close-about_aria-label": "Закрыць Аб ErikrafT Drop™",
         "claim": "Самы просты спосаб перадачы файлаў паміж прыладамі",
         "privacypolicy_title": "Адкрыйце нашу палітыку прыватнасці"
     },
@@ -209,7 +209,7 @@
         "display-name-changed-temporarily": "Адлюстраванае імя зменена толькі для гэтага сеансу",
         "ios-memory-limit": "Адначасовая адпраўка файлаў на iOS магчымая толькі да 200 МБ",
         "message-transfer-completed": "Перадача паведамлення завершана",
-        "unfinished-transfers-warning": "Ёсць незавершаныя перадачы. Вы ўпэўнены, што хочаце закрыць ErikrafT Drop?",
+        "unfinished-transfers-warning": "Ёсць незавершаныя перадачы. Вы ўпэўнены, што хочаце закрыць ErikrafT Drop™?",
         "rate-limit-join-key": "Ліміт хуткасці дасягнуты. Пачакайце 10 секунд і паўтарыце спробу.",
         "metadata-removed": "Метаданыя выдаленыя",
         "compress-success": "Выява сціснутая",

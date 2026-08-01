@@ -138,7 +138,7 @@ export default class DropTransferClient extends EventEmitter {
             case 'ws-config':
                 this._wsFallbackEnabled = Boolean(message.wsConfig?.wsFallback);
                 if (!this._wsFallbackEnabled) {
-                    this._fail(new Error('A instância do ErikrafT Drop não está com o fallback via WebSocket habilitado.'));
+                    this._fail(new Error('A instância do ErikrafT Drop™ não está com o fallback via WebSocket habilitado.'));
                 }
                 break;
             case 'display-name':

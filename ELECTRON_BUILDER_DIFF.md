@@ -16,7 +16,7 @@ linux:
   category: Network;Utility;
   icon: public/images/icon-drop.svg
   desktop:
-    Name: ErikrafT Drop                    # ❌ Erro aqui
+    Name: ErikrafT Drop™                    # ❌ Erro aqui
     Comment: File sharing by ErikrafT     # ❌ Erro aqui
     Icon: erikraft-drop                   # ❌ Erro aqui
     Terminal: 'false'                     # ❌ Erro aqui
@@ -45,7 +45,7 @@ linux:
   icon: public/images/icon-drop.svg
   desktop:
     entry:                                # ✅ Novo nível de aninhamento
-      Name: ErikrafT Drop
+      Name: ErikrafT Drop™
       Comment: File sharing by ErikrafT
       Icon: erikraft-drop
       Terminal: 'false'
@@ -150,7 +150,7 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true              # ✨ NOVO
   createStartMenuShortcut: true            # ✨ NOVO
-  shortcutName: ErikrafT Drop              # ✨ NOVO
+  shortcutName: ErikrafT Drop™              # ✨ NOVO
 ```
 
 ### 📝 Explicação das Adições
@@ -159,7 +159,7 @@ nsis:
 |------------|-------|--------|
 | `createDesktopShortcut` | `true` | Coloca atalho na Área de Trabalho |
 | `createStartMenuShortcut` | `true` | Coloca atalho no Menu Iniciar |
-| `shortcutName` | `ErikrafT Drop` | Nome personalizado nos atalhos |
+| `shortcutName` | `ErikrafT Drop™` | Nome personalizado nos atalhos |
 
 **Experiência do Usuário**:
 - ✅ Aplicativo acessível facilmente (Desktop)
@@ -172,7 +172,7 @@ nsis:
 
 ```diff
  appId: io.github.erikraft.Drop
- productName: ErikrafT Drop
+ productName: ErikrafT Drop™
  executableName: erikraft-drop
  artifactName: ${name}-${version}-${os}-${arch}.${ext}
 
@@ -197,7 +197,7 @@ nsis:
    icon: public/images/icon-drop.svg
    desktop:
 +    entry:
-       Name: ErikrafT Drop
+       Name: ErikrafT Drop™
        Comment: File sharing by ErikrafT
        Icon: erikraft-drop
        Terminal: 'false'
@@ -229,7 +229,7 @@ nsis:
    allowToChangeInstallationDirectory: true
 +  createDesktopShortcut: true
 +  createStartMenuShortcut: true
-+  shortcutName: ErikrafT Drop
++  shortcutName: ErikrafT Drop™
 ```
 
 ---
@@ -241,7 +241,7 @@ nsis:
 ```diff
   desktop:
 +   entry:
-      Name: ErikrafT Drop
+      Name: ErikrafT Drop™
 ```
 
 **O quê**: Encapsula propriedades Desktop Entry
@@ -288,7 +288,7 @@ nsis:
     allowToChangeInstallationDirectory: true
 +   createDesktopShortcut: true
 +   createStartMenuShortcut: true
-+   shortcutName: ErikrafT Drop
++   shortcutName: ErikrafT Drop™
 ```
 
 **O quê**: Configura criação automática de atalhos

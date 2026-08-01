@@ -12,7 +12,7 @@ https://www.cdc.gov/niosh/mining/tools/installpwa.html
 
 
 **Chromium-based browser on Desktop (Chrome, Edge, BrowserOS, Vivaldi, Brave, etc.)** \
-Easily install ErikrafT Drop PWA on your desktop by clicking the install-button in the top-right corner while on [drop.erikraft.com](https://drop.erikraft.com).
+Easily install ErikrafT Drop™ PWA on your desktop by clicking the install-button in the top-right corner while on [drop.erikraft.com](https://drop.erikraft.com).
 
 <img width="400" src="pwa-install.png" alt="Example on how to install a pwa with Edge">
 
@@ -121,10 +121,10 @@ Yes.
 
 <br>
 
-These third-party apps are compatible with ErikrafT Drop:
+These third-party apps are compatible with ErikrafT Drop™:
 
-1. [ErikrafT Drop Android App](https://github.com/erikraft/Drop-Android)
-2. [ErikrafT Drop for Firefox (Addon)](https://addons.mozilla.org/en-US/firefox/addon/erikraft-drop/)
+1. [ErikrafT Drop™ Android App](https://github.com/erikraft/Drop-Android)
+2. [ErikrafT Drop™ for Firefox (Addon)](https://addons.mozilla.org/en-US/firefox/addon/erikraft-drop/)
 3. Feel free to make one :)
 
 <br>
@@ -146,13 +146,13 @@ If the devices are on the same network,
 none of your files are ever sent to any server.
 
 If your devices are paired and behind a NAT,
-the ErikrafT Drop TURN Server is used to route your files and messages.
+the ErikrafT Drop™ TURN Server is used to route your files and messages.
 See the [Technical Documentation](technical-documentation.md#encryption-webrtc-stun-and-turn)
 to learn more about STUN, TURN and WebRTC.
 
 If you host your own instance
 and want to support devices that do not support WebRTC,
-you can [start the ErikrafT Drop instance with an activated WebSocket fallback](https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md#websocket-fallback-for-vpn).
+you can [start the ErikrafT Drop™ instance with an activated WebSocket fallback](https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md#websocket-fallback-for-vpn).
 
 <br>
 
@@ -166,7 +166,7 @@ you can [start the ErikrafT Drop instance with an activated WebSocket fallback](
 <br>
 
 Files are sent directly between peers.
-ErikrafT Drop doesn't even use a database.
+ErikrafT Drop™ doesn't even use a database.
 If curious, study [the signaling server](https://github.com/erikraft/Drop/blob/master/server/ws-server.js).
 WebRTC encrypts the files in transit.
 
@@ -174,7 +174,7 @@ If the devices are on the same network,
 none of your files are ever sent to any server.
 
 If your devices are paired and behind a NAT,
-the ErikrafT Drop TURN Server is used to route your files and messages.
+the ErikrafT Drop™ TURN Server is used to route your files and messages.
 See the [Technical Documentation](technical-documentation.md#encryption-webrtc-stun-and-turn)
 to learn more about STUN, TURN and WebRTC.
 
@@ -190,7 +190,7 @@ to learn more about STUN, TURN and WebRTC.
 <br>
 
 Yes. Your files are sent using WebRTC, encrypting them in transit.
-Still you have to trust the ErikrafT Drop server. To ensure the connection is secure and there is no [MITM](https://en.m.wikipedia.org/wiki/Man-in-the-middle_attack) there is a plan to make ErikrafT Drop
+Still you have to trust the ErikrafT Drop™ server. To ensure the connection is secure and there is no [MITM](https://en.m.wikipedia.org/wiki/Man-in-the-middle_attack) there is a plan to make ErikrafT Drop™
 zero trust by encrypting the signaling and implementing a verification process. See [issue #180](https://github.com/schlagmichdoch/PairDrop/issues/180) to keep updated.
 
 <br>
@@ -228,7 +228,7 @@ Then, all data should be sent directly between devices and not use your data pla
 
 <br>
 
-Snapdrop, PairDrop and ErikrafT Drop are a study in radical simplicity.
+Snapdrop, PairDrop and ErikrafT Drop™ are a study in radical simplicity.
 The user interface is insanely simple.
 Features are chosen very carefully because complexity grows quadratically
 since every feature potentially interferes with each other feature.
@@ -245,14 +245,14 @@ and/or *Thinking, Fast and Slow* to learn more.
 
 <details>
 <summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    ErikrafT Drop is awesome. How can I support it?
+    ErikrafT Drop™ is awesome. How can I support it?
 </summary>
 
 <br>
 
 * [ko-fi.com/erikraft](https://ko-fi.com/erikraft) to pay for the domain and the server, and support libre software.
 * [File bugs, give feedback, submit suggestions](https://github.com/erikraft/Drop/issues)
-* Share ErikrafT Drop on social media.
+* Share ErikrafT Drop™ on social media.
 * Fix bugs and create a pull request.
 * Do some security analysis and make suggestions.
 * Participate in [active discussions](https://github.com/erikraft/Drop/discussions)

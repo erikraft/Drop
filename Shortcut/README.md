@@ -18,18 +18,18 @@ Choose one of the following download links:
 
 1. **Download**: Tap one of the links above on your iOS device. This will open the shortcut in the Shortcuts app.
 2. **Install**: Follow the prompts to add the shortcut to your Shortcuts library. You may need to allow untrusted shortcuts in your Settings if prompted.
-3. **Share Content**: Open any app (Photos, Files, Safari, etc.), select the content you want to send, tap the **Share** button, scroll down, and select **ErikrafT Drop** from the list of actions.
+3. **Share Content**: Open any app (Photos, Files, Safari, etc.), select the content you want to send, tap the **Share** button, scroll down, and select **ErikrafT Drop™** from the list of actions.
 
 ## Features
 
 - Send almost any type of content (images, documents, links, plain text) directly from the native iOS share sheet.
-- Seamlessly integrates with the ErikrafT Drop ecosystem.
+- Seamlessly integrates with the ErikrafT Drop™ ecosystem.
 - Fast and secure transfer to your connected devices.
 
 ## Requirements
 
 - iOS 12 or later (Shortcuts app required).
-- The ErikrafT Drop service running on a target device (web, desktop app, or VS Code extension).
+- The ErikrafT Drop™ service running on a target device (web, desktop app, or VS Code extension).
 
 ## Troubleshooting
 

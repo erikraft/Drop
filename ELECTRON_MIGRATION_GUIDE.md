@@ -227,7 +227,7 @@ win:
 
 ### Exemplos
 
-- [Projeto atual (ErikrafT Drop)](../electron-builder.yml)
+- [Projeto atual (ErikrafT Drop™)](../electron-builder.yml)
 - [Comunidade Electron](https://github.com/electron/electron/discussions)
 
 ### Ferramentas

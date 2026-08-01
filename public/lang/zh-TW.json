@@ -1,13 +1,13 @@
 {
     "header": {
-        "about_title": "關於 ErikrafT Drop",
+        "about_title": "關於 ErikrafT Drop™",
         "language-selector_title": "設定語言",
-        "about_aria-label": "開啟關於 ErikrafT Drop",
+        "about_aria-label": "開啟關於 ErikrafT Drop™",
         "theme-auto_title": "自動使用系統主題",
         "theme-light_title": "總是使用淺色主題",
         "theme-dark_title": "總是使用深色主題",
         "notification_title": "啟用通知",
-        "install_title": "安裝 ErikrafT Drop",
+        "install_title": "安裝 ErikrafT Drop™",
         "pair-device_title": "永久配對你的裝置",
         "edit-paired-devices_title": "編輯已配對的裝置",
         "join-public-room_title": "暫時加入公共房間",
@@ -22,7 +22,7 @@
     },
     "instructions": {
         "no-peers_data-drop-bg": "釋放以選擇接收者",
-        "no-peers-title": "在其他裝置上開啟 ErikrafT Drop 以傳送檔案",
+        "no-peers-title": "在其他裝置上開啟 ErikrafT Drop™ 以傳送檔案",
         "no-peers-subtitle": "配對裝置或加入一個公共房間以便在其他網路上可見",
         "x-instructions_desktop": "點擊以發送檔案或右鍵點擊以發送一則訊息",
         "x-instructions_mobile": "輕觸以發送檔案或輕觸並按住以發送一則訊息",
@@ -30,13 +30,13 @@
         "x-instructions_data-drop-bg": "釋放以選擇接收者",
         "x-instructions-share-mode_desktop": "點擊以發送 {{descriptor}}",
         "x-instructions-share-mode_mobile": "輕觸以發送 {{descriptor}}",
-        "activate-share-mode-base": "在其他裝置上開啟 ErikrafT Drop 以傳送",
+        "activate-share-mode-base": "在其他裝置上開啟 ErikrafT Drop™ 以傳送",
         "activate-share-mode-and-other-file": "和另外 1 個檔案",
         "activate-share-mode-and-other-files-plural": "和另外 {{count}} 個檔案",
         "activate-share-mode-shared-text": "已分享的文字",
         "activate-share-mode-shared-file": "已分享的檔案",
         "activate-share-mode-shared-files-plural": "{{count}} 個已分享的檔案",
-        "webrtc-requirement": "要使用此 ErikrafT Drop 實例，必須啟用 WebRTC！"
+        "webrtc-requirement": "要使用此 ErikrafT Drop™ 實例，必須啟用 WebRTC！"
     },
     "footer": {
         "known-as": "此裝置名稱為：",
@@ -154,12 +154,12 @@
         "lan-mode-server_placeholder": "192.168.0.10:3000"
     },
     "about": {
-        "close-about_aria-label": "關閉關於 ErikrafT Drop",
+        "close-about_aria-label": "關閉關於 ErikrafT Drop™",
         "claim": "跨裝置傳輸檔案的最簡單方法",
-        "github_title": "GitHub 上的 ErikrafT Drop",
+        "github_title": "GitHub 上的 ErikrafT Drop™",
         "buy-me-a-coffee_title": "給我買一杯咖啡吧！",
-        "tweet_title": "發佈關於 ErikrafT Drop 的推文",
-        "mastodon_title": "在 Mastodon 上撰寫有關 ErikrafT Drop 的文章",
+        "tweet_title": "發佈關於 ErikrafT Drop™ 的推文",
+        "mastodon_title": "在 Mastodon 上撰寫有關 ErikrafT Drop™ 的文章",
         "bluesky_title": "在 Bluesky 上關注我們",
         "custom_title": "關注我們",
         "privacypolicy_title": "開啟我們的隱私權政策",
@@ -212,7 +212,7 @@
         "file-transfer-completed": "檔案傳輸已完成",
         "ios-memory-limit": "向 iOS 發送檔案每次只能最大 200 MB",
         "message-transfer-completed": "訊息傳輸已完成",
-        "unfinished-transfers-warning": "還有未完成的傳輸。你確定要關閉 ErikrafT Drop 嗎？",
+        "unfinished-transfers-warning": "還有未完成的傳輸。你確定要關閉 ErikrafT Drop™ 嗎？",
         "rate-limit-join-key": "已達到速率限制。請等待 10 秒鐘，然後再試一次。",
         "selected-peer-left": "選定的對象已離開"
     },

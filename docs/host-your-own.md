@@ -7,18 +7,18 @@ Beware that you have to host your own TURN server to enable transfers between di
 Follow [this guide](https://gabrieltanner.org/blog/turn-server/) to either install coturn directly on your system (Step 1)
 or deploy it via Docker (Step 5).
 
-You can use the `docker-compose-coturn.yml` in this repository. See [Coturn and ErikrafT Drop via Docker Compose](#coturn-and-erikraft-drop-via-docker-compose).
+You can use the `docker-compose-coturn.yml` in this repository. See [Coturn and ErikrafT Drop™ via Docker Compose](#coturn-and-erikraft-drop-via-docker-compose).
 
 Alternatively, use a free, pre-configured TURN server like [OpenRelay](https://www.metered.ca/tools/openrelay/)
 
 <br>
 
-## ErikrafT Drop via HTTPS
+## ErikrafT Drop™ via HTTPS
 
-On some browsers ErikrafT Drop must be served over TLS in order for some features to work properly.
+On some browsers ErikrafT Drop™ must be served over TLS in order for some features to work properly.
 These may include:
 - Copying an incoming message via the 'copy' button
-- Installing ErikrafT Drop as PWA
+- Installing ErikrafT Drop™ as PWA
 - Persistent pairing of devices
 - Changing of the display name
 - Notifications
@@ -29,7 +29,7 @@ Naturally, this is also recommended to increase security.
 
 ## Deployment with Docker
 
-- PairDrop is a competitor of ErikrafT Drop.
+- PairDrop is a competitor of ErikrafT Drop™.
 
 The easiest way to get PairDrop up and running is by using Docker.
 
@@ -204,7 +204,7 @@ npm start -- --localhost-only
 > You must use a server proxy to set the `X-Forwarded-For` header
 > to prevent all clients from discovering each other (See [#HTTP-Server](#http-server)).
 >
-> Use this when deploying ErikrafT Drop with node to prevent
+> Use this when deploying ErikrafT Drop™ with node to prevent
 > bypassing the reverse proxy by reaching the Node.js server directly.
 
 #### Automatic restart on error
@@ -271,20 +271,20 @@ DEBUG_MODE="true"
 > is configured correctly, so the auto-discovery feature works correctly.
 > Otherwise, all clients discover each other mutually, independently of their network status.
 >
-> If this flag is set to `"true"` each peer that connects to the ErikrafT Drop server will produce a log to STDOUT like this:
+> If this flag is set to `"true"` each peer that connects to the ErikrafT Drop™ server will produce a log to STDOUT like this:
 >
 > ```
 > ----DEBUGGING-PEER-IP-START----
 > remoteAddress: ::ffff:172.17.0.1
 > x-forwarded-for: 19.117.63.126
 > cf-connecting-ip: undefined
-> ErikrafT Drop uses: 19.117.63.126
+> ErikrafT Drop™ uses: 19.117.63.126
 > IP is private: false
 > if IP is private, '127.0.0.1' is used instead
 > ----DEBUGGING-PEER-IP-END----
 > ```
 >
-> If the IP address "ErikrafT Drop uses" matches the public IP address of the client device, everything is set up correctly. \
+> If the IP address "ErikrafT Drop™ uses" matches the public IP address of the client device, everything is set up correctly. \
 > To find out the public IP address of the client device visit https://whatsmyip.com/.
 >
 > To preserve your clients' privacy: \
@@ -311,8 +311,8 @@ RATE_LIMIT=1
 >
 > To find the correct number to use for this setting:
 >
-> 1. Start ErikrafT Drop with `DEBUG_MODE=True` and `RATE_LIMIT=1`
-> 2. Make a `get` request to `/ip` of the ErikrafT Drop instance (e.g. `https://erikraftdrop-example.com/ip`)
+> 1. Start ErikrafT Drop™ with `DEBUG_MODE=True` and `RATE_LIMIT=1`
+> 2. Make a `get` request to `/ip` of the ErikrafT Drop™ instance (e.g. `https://erikraftdrop-example.com/ip`)
 > 3. Check if the IP address returned in the response matches your public IP address (find out by visiting e.g. https://whatsmyip.com/)
 > 4. You have found the correct number if the IP addresses match. If not, then increase `RATE_LIMIT` by one and redo 1. - 4.
 >
@@ -349,7 +349,7 @@ WS_FALLBACK=true
 
 > Default: `false`
 >
-> Provides ErikrafT Drop to clients with an included websocket fallback \
+> Provides ErikrafT Drop™ to clients with an included websocket fallback \
 > if the peer to peer WebRTC connection is not available to the client.
 >
 > This is not used on the official https://drop.erikraft.com website,
@@ -377,7 +377,7 @@ RTC_CONFIG="rtc_config.json"
 
 > Default: `false`
 >
-> Specify the STUN/TURN servers ErikrafT Drop clients use by setting \
+> Specify the STUN/TURN servers ErikrafT Drop™ clients use by setting \
 > `RTC_CONFIG` to a JSON file including the configuration. \
 > You can use `rtc_config_example.json` as a starting point.
 >
@@ -414,11 +414,11 @@ SIGNALING_SERVER="drop.erikraft.com"
 >
 > By using `SIGNALING_SERVER`, you can host an instance that uses another signaling server.
 >
-> This can be useful if you want to ensure the integrity of the client files and don't want to trust the client files that are hosted on another ErikrafT Drop instance but still want to connect to devices that use the other instance.
+> This can be useful if you want to ensure the integrity of the client files and don't want to trust the client files that are hosted on another ErikrafT Drop™ instance but still want to connect to devices that use the other instance.
 > E.g. host your own client files under *erikraftdrop.your-domain.com* but use the official signaling server under *drop.erikraft.com*
 > This way devices connecting to *erikraftdrop.your-domain.com* and *erikraftdrop.net* can discover each other.
 >
-> Beware that the version of your ErikrafT Drop server must be compatible with the version of the signaling server.
+> Beware that the version of your ErikrafT Drop™ server must be compatible with the version of the signaling server.
 >
 > `SIGNALING_SERVER` must be a valid url without the protocol prefix.
 > Examples of valid values: `drop.erikraft.com`, `erikraftdrop.your-domain.com:3000`, `your-domain.com/erikraftdrop`
@@ -426,7 +426,7 @@ SIGNALING_SERVER="drop.erikraft.com"
 
 <br>
 
-### Customizable buttons for the _About ErikrafT Drop_ page
+### Customizable buttons for the _About ErikrafT Drop™_ page
 
 ```bash
 DONATION_BUTTON_ACTIVE=true
@@ -473,7 +473,7 @@ PRIVACYPOLICY_BUTTON_TITLE="Open our privacy policy"
 
 ## HTTP-Server
 
-When running ErikrafT Drop, the `X-Forwarded-For` header has to be set by a proxy. \
+When running ErikrafT Drop™, the `X-Forwarded-For` header has to be set by a proxy. \
 Otherwise, all clients will be mutually visible.
 
 To check if your setup is configured correctly [use the environment variable `DEBUG_MODE="true"`](#debug-mode).
@@ -599,10 +599,10 @@ service apache2 reload
 
 <br>
 
-## Coturn and ErikrafT Drop via Docker Compose
+## Coturn and ErikrafT Drop™ via Docker Compose
 
 ### Setup container
-To run coturn and ErikrafT Drop at once by using the `docker-compose-coturn.yml` with TURN over TLS enabled
+To run coturn and ErikrafT Drop™ at once by using the `docker-compose-coturn.yml` with TURN over TLS enabled
 you need to follow these steps:
 
 1. Generate or retrieve certificates for your `<DOMAIN>` (e.g. letsencrypt / certbot)
@@ -612,7 +612,7 @@ you need to follow these steps:
 5. Create a dh-params file: `openssl dhparam -out ./ssl/dhparams.pem 4096`
 6. Copy `rtc_config_example.json` to `rtc_config.json`
 7. Copy `turnserver_example.conf` to `turnserver.conf`
-8. Change `<DOMAIN>` in both files to the domain where your ErikrafT Drop instance is running
+8. Change `<DOMAIN>` in both files to the domain where your ErikrafT Drop™ instance is running
 9. Change `username` and `password` in `turnserver.conf` and `rtc-config.json`
 10. To start the container including coturn run: \
   `docker compose -f docker-compose-coturn.yml up -d`
@@ -632,7 +632,7 @@ To stop the container including coturn run: \
 <br>
 
 ### Firewall
-To run ErikrafT Drop including its own coturn-server you need to punch holes in the firewall. These ports must be opened additionally:
+To run ErikrafT Drop™ including its own coturn-server you need to punch holes in the firewall. These ports must be opened additionally:
 - 3478 tcp/udp
 - 5349 tcp/udp
 - 10000:20000 tcp/udp
@@ -702,7 +702,7 @@ Alternatively:
 
 ##### Google Chrome
 - To skip the installation of the certificate, you can also open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
-- The feature `Insecure origins treated as secure` must be enabled and the list must include your ErikrafT Drop test instance. E.g.: `http://127.0.0.1:3000,https://127.0.0.1:8443`
+- The feature `Insecure origins treated as secure` must be enabled and the list must include your ErikrafT Drop™ test instance. E.g.: `http://127.0.0.1:3000,https://127.0.0.1:8443`
 
 Please note that the certificates (CA and webserver cert) expire after a day.
 Also, whenever you restart the NGINX Docker container new certificates are created.

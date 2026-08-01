@@ -54,7 +54,7 @@ class ErikrafTDropViewProvider {
       <head>
         <meta charset="UTF-8" />
         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; style-src ${webview.cspSource} 'unsafe-inline'; script-src ${webview.cspSource} 'unsafe-inline'; frame-src https://drop.erikraft.com/">
-        <title>ErikrafT Drop</title>
+        <title>ErikrafT Drop™</title>
         <style>
           html, body {
             padding: 0;
@@ -226,7 +226,7 @@ class ErikrafTDropViewProvider {
     try {
       const files = await vscode.window.showOpenDialog({
         canSelectMany: true,
-        openLabel: 'Enviar com ErikrafT Drop'
+        openLabel: 'Enviar com ErikrafT Drop™'
       });
 
       if (!files) {
