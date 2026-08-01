@@ -1,13 +1,13 @@
 {
     "header": {
-        "about_title": "关于 ErikrafT Drop™",
+        "about_title": "About ErikrafT Drop™",
         "language-selector_title": "设置语言",
-        "about_aria-label": "打开 关于 ErikrafT Drop™",
+        "about_aria-label": "Open About ErikrafT Drop™",
         "theme-auto_title": "主题适应系统",
         "theme-light_title": "总是使用明亮主题",
         "theme-dark_title": "总是使用暗黑主题",
         "notification_title": "开启通知",
-        "install_title": "安装 ErikrafT Drop™",
+        "install_title": "Install ErikrafT Drop™",
         "pair-device_title": "永久配对您的设备",
         "edit-paired-devices_title": "管理已配对设备",
         "join-public-room_title": "暂时加入公共房间",
@@ -22,7 +22,7 @@
     },
     "instructions": {
         "no-peers_data-drop-bg": "释放来选择接收者",
-        "no-peers-title": "在其他设备上打开 ErikrafT Drop™ 来发送文件",
+        "no-peers-title": "Open ErikrafT Drop™ on other devices to send files",
         "no-peers-subtitle": "配对新设备 或 加入一个公共房间 以便在其他网络上可见",
         "x-instructions_desktop": "点击以发送文件 或 右键来发送信息",
         "x-instructions_mobile": "轻触以发送文件 或 长按来发送信息",
@@ -30,13 +30,13 @@
         "x-instructions_data-drop-bg": "释放来选择接收者",
         "x-instructions-share-mode_desktop": "单击发送 {{descriptor}}",
         "x-instructions-share-mode_mobile": "轻触发送 {{descriptor}}",
-        "activate-share-mode-base": "在其他设备上打开 ErikrafT Drop™ 来发送",
+        "activate-share-mode-base": "Open ErikrafT Drop™ on other devices to send",
         "activate-share-mode-and-other-file": "及其余 1 个文件",
         "activate-share-mode-and-other-files-plural": "和 {{count}} 个其他的文件",
         "activate-share-mode-shared-text": "分享文本",
         "activate-share-mode-shared-file": "分享的文件",
         "activate-share-mode-shared-files-plural": "{{count}} 个已分享的文件",
-        "webrtc-requirement": "要使用此 ErikrafT Drop™ 示例。必须开启 WebRTC！"
+        "webrtc-requirement": "To use this ErikrafT Drop™ instance, WebRTC must be enabled!"
     },
     "footer": {
         "known-as": "你的名字是:",
@@ -154,12 +154,12 @@
         "lan-mode-server_placeholder": "192.168.0.10:3000"
     },
     "about": {
-        "close-about_aria-label": "关闭 关于 ErikrafT Drop™",
+        "close-about_aria-label": "Close About ErikrafT Drop™",
         "claim": "最简单的跨设备传输方案",
-        "github_title": "ErikrafT Drop™ 在 GitHub 上开源",
+        "github_title": "ErikrafT Drop™ on GitHub",
         "buy-me-a-coffee_title": "帮我买杯咖啡！",
-        "tweet_title": "关于 ErikrafT Drop™ 的推特",
-        "mastodon_title": "在 Maston 上推广 ErikrafT Drop™",
+        "tweet_title": "Tweet about ErikrafT Drop™",
+        "mastodon_title": "Write about ErikrafT Drop™ on Mastodon",
         "bluesky_title": "在 BlueSky 上关注",
         "custom_title": "关注我们",
         "privacypolicy_title": "打开隐私政策",
@@ -212,7 +212,7 @@
         "file-transfer-completed": "文件传输已完成",
         "ios-memory-limit": "向 iOS 发送文件 一次最多只能发送 200 MB",
         "message-transfer-completed": "信息传输已完成",
-        "unfinished-transfers-warning": "还有未完成的传输任务。你确定要关闭 ErikrafT Drop™ 吗？",
+        "unfinished-transfers-warning": "There are unfinished transfers. Are you sure you want to close ErikrafT Drop™?",
         "rate-limit-join-key": "已达连接限制。请等待 10秒 后再试。",
         "selected-peer-left": "选择的 peer 已离开"
     },
