@@ -4,8 +4,6 @@ const relativePathsToCache = [
     './',
     'index.html',
     'manifest.json',
-    'privacy-policy.html',
-    'terms-of-use.html',
     'ads.html',
     'styles/styles-main.css',
     'styles/styles-deferred.css',
