@@ -686,6 +686,9 @@ class PeerUI {
         if (clientType === 'browseros-browser' || clientType === 'browseros') {
             return '#icon-browseros';
         }
+        if (clientType === 'isearch-cli') {
+            return '#icon-isearch-cli';
+        }
 
         // Fall back to device type for regular browser clients
         const device = this._peer.name.device || this._peer.name;
