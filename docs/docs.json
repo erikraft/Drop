@@ -81,7 +81,8 @@
               "ecosystem/android",
               "ecosystem/shortcut",
               "ecosystem/extensions",
-              "ecosystem/discord"
+              "ecosystem/discord",
+              "ecosystem/isearch-cli"
             ]
           },
           {

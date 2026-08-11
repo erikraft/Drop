@@ -124,6 +124,56 @@ export default class ErikrafTdropServer {
 
         app.post('/api/ai/image', upload.single('image'), handleAiImageRequest);
 
+        app.get('/api/cli', (req, res) => {
+            res.json({
+                version: 1,
+                client: {
+                    name: 'ErikrafT Drop',
+                    cli: true,
+                    officialClient: 'iSearch CLI™'
+                },
+                title: 'ErikrafT Drop',
+                description: 'Fast peer-to-peer file transfer.',
+                features: [
+                    'Send files',
+                    'Receive files',
+                    'Cross-platform',
+                    'Device discovery',
+                    'Pairing',
+                    'Progress updates',
+                    'Integrity validation'
+                ],
+                protocol: {
+                    websocket: '/server?client_type=isearch-cli&webrtc_supported=false',
+                    clientIdentification: {
+                        clientType: 'isearch-cli',
+                        userAgent: 'iSearchCLI/<version>',
+                        queryParameters: ['client_name', 'version', 'platform', 'architecture']
+                    },
+                    messages: [
+                        'ws-config',
+                        'display-name',
+                        'peer-joined',
+                        'peer-left',
+                        'signal',
+                        'request',
+                        'files-transfer-response',
+                        'header',
+                        'partition',
+                        'partition-received',
+                        'progress',
+                        'file-transfer-complete',
+                        'disconnect'
+                    ]
+                },
+                security: {
+                    executeReceivedFiles: false,
+                    executeReceivedCode: false,
+                    secretsInResponse: false
+                }
+            });
+        });
+
         app.get('/config', (req, res) => {
             res.send({
                 signalingServer: conf.signalingServer,
