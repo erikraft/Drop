@@ -133,12 +133,12 @@
       },
       {
         "tab": "GitHub repository",
-        "icon": "code",
+        "icon": "github",
         "href": "https://github.com/erikraft/Drop"
       },
       {
         "tab": "Android GitHub repository",
-        "icon": "code",
+        "icon": "github",
         "href": "https://github.com/erikraft/Drop-Android"
       }
     ]
