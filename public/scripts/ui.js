@@ -2598,7 +2598,7 @@ class TorDialog extends Dialog {
                     <svg class="icon" style="width: 22px; height: 22px; fill: currentColor;">
                         <use xlink:href="#tor-icon"></use>
                     </svg>
-                    <strong data-i18n-key="dialogs.tor-unavailable-title">Endereço Onion indisponível</strong>
+                    <strong data-i18n-key="dialogs.tor-unavailable-title">ㅤEndereço Onion indisponível</strong>
                 </div>
                 <p class="font-caption text-secondary mt-1" style="opacity: 0.8; margin: 8px 0;" data-i18n-key="dialogs.tor-unavailable-desc">
                     O serviço Tor ainda não está disponível. Tente novamente em alguns instantes.
