@@ -1054,27 +1054,42 @@
     <x-dialog id="tor-dialog">
         <x-background class="full center">
             <x-paper shadow="2">
-                <div class="column center p-2 text-center">
-                    <h2 class="dialog-title" style="margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <svg class="icon" style="width: 24px; height: 24px;">
+                <div class="row center p-2 dialog-header">
+                    <h2 class="dialog-title">
+                        <svg class="icon">
                             <use xlink:href="#tor-icon"></use>
                         </svg>
-                        Rede Tor (Onion Service)
+                        <span data-i18n-key="dialogs.tor-title">Rede Tor (Onion Service)</span>
                     </h2>
-                    <p style="font-size: 14px; line-height: 1.5; margin-bottom: 16px; opacity: 0.9;">
-                        As transferências podem ser realizadas diretamente através do endereço seguro Onion Service na rede Tor.<br>
-                        É necessário utilizar o <strong>Tor Browser</strong> para acessar endereços <code>.onion</code>.
+                </div>
+                <div class="tor-dialog-body column center p-3">
+                    <p class="tor-description font-body2 text-center" data-i18n-key="dialogs.tor-desc">
+                        Transfira arquivos através da rede Tor usando o endereço Onion Service do ErikrafT Drop.
                     </p>
-                    <div id="tor-address-wrapper" class="column gap-1 full-width" style="margin-bottom: 16px;">
-                        <input id="tor-address-input" type="text" readonly value="Carregando endereço .onion..." style="text-align: center; font-family: monospace; font-size: 13px; padding: 8px;">
-                        <div class="row center gap-1">
-                            <button id="tor-copy-btn" type="button" class="btn btn-small btn-rounded btn-dark" data-i18n-key="dialogs.copy" data-i18n-attrs="text">Copiar</button>
-                            <a id="tor-open-btn" href="#" target="_blank" class="btn btn-small btn-rounded btn-dark text-white" style="text-decoration: none;" hidden>Abrir</a>
-                        </div>
+
+                    <div id="tor-address-wrapper" class="tor-address-card column center full-width">
+                        <div id="tor-status-box" class="column center full-width"></div>
                     </div>
-                    <div class="row center mt-1">
-                        <div class="close-btn button-text text-white text-center font-subheading" data-i18n-key="dialogs.close" data-i18n-attrs="text">Fechar</div>
+
+                    <div class="tor-actions column center full-width">
+                        <a id="tor-open-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-rounded btn-tor full-width text-white" style="text-decoration: none;" hidden>
+                            <svg class="icon btn-icon"><use xlink:href="#tor-icon"></use></svg>
+                            <span data-i18n-key="dialogs.tor-open-browser">Abrir no Tor Browser</span>
+                        </a>
+                        <button id="tor-copy-btn" type="button" class="btn btn-rounded btn-grey full-width">
+                            <svg id="tor-copy-icon" class="icon btn-icon"><use xlink:href="#icon-copy"></use></svg>
+                            <span id="tor-copy-text" data-i18n-key="dialogs.tor-copy-address">Copiar endereço</span>
+                        </button>
                     </div>
+
+                    <hr class="tor-divider">
+
+                    <p class="tor-help-text font-caption text-center" data-i18n-key="dialogs.tor-help">
+                        Para acessar endereços .onion, utilize o Tor Browser.
+                    </p>
+                </div>
+                <div class="center row-reverse btn-row wrap">
+                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" data-i18n-attrs="text" close>Fechar</button>
                 </div>
             </x-paper>
         </x-background>

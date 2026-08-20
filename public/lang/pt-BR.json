@@ -62,6 +62,18 @@
         "lan": "LAN"
     },
     "dialogs": {
+        "tor-title": "Rede Tor (Onion Service)",
+        "tor-desc": "Transfira arquivos através da rede Tor usando o endereço Onion Service do ErikrafT Drop.",
+        "tor-open-browser": "Abrir no Tor Browser",
+        "tor-copy-address": "Copiar endereço",
+        "tor-address-copied": "Endereço copiado",
+        "tor-copy-failed": "Não foi possível copiar o endereço.",
+        "tor-help": "Para acessar endereços .onion, utilize o Tor Browser.",
+        "tor-checking": "Verificando conexão com a rede Tor...",
+        "tor-available": "Rede Tor disponível",
+        "tor-unavailable-title": "Endereço Onion indisponível",
+        "tor-unavailable-desc": "O serviço Tor ainda não está disponível. Tente novamente em alguns instantes.",
+        "tor-refresh": "Atualizar",
         "pair-devices-title": "Emparelhar Dispositivos Permanentemente",
         "input-key-on-this-device": "Insira esta chave em outro dispositivo",
         "scan-qr-code": "ou escaneie o código QR.",
