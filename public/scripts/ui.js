@@ -2495,6 +2495,73 @@ class PublicRoomDialog extends Dialog {
     }
 }
 
+class TorDialog extends Dialog {
+    constructor() {
+        super('tor-dialog');
+
+        this.$torConfigBtn = $('tor-config-btn');
+        this.$torBadges = document.querySelectorAll('.discovery-wrapper [data-badge="tor"]');
+        this.$addressInput = $('tor-address-input');
+        this.$copyBtn = $('tor-copy-btn');
+        this.$openBtn = $('tor-open-btn');
+
+        if (this.$torConfigBtn) {
+            this.$torConfigBtn.addEventListener('click', _ => this.show());
+        }
+
+        this.$torBadges.forEach($badge => {
+            $badge.addEventListener('click', _ => this.show());
+        });
+
+        if (this.$copyBtn && this.$addressInput) {
+            this.$copyBtn.addEventListener('click', _ => {
+                const text = this.$addressInput.value;
+                if (text && text.endsWith('.onion')) {
+                    navigator.clipboard.writeText(text).then(_ => {
+                        Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard"));
+                    }).catch(_ => {
+                        this.$addressInput.select();
+                    });
+                }
+            });
+        }
+
+        this._onionAddress = null;
+        this._fetchOnionAddress();
+    }
+
+    async _fetchOnionAddress() {
+        try {
+            const res = await fetch('/api/onion-info');
+            const data = await res.json();
+            if (data && data.success && data.onionAddress) {
+                this._onionAddress = data.onionAddress;
+                if (this.$addressInput) {
+                    this.$addressInput.value = this._onionAddress;
+                }
+                if (this.$openBtn) {
+                    this.$openBtn.href = `http://${this._onionAddress}`;
+                    this.$openBtn.removeAttribute('hidden');
+                }
+            } else {
+                if (this.$addressInput) {
+                    this.$addressInput.value = ".onion indisponível (Secret do Render não configurado)";
+                }
+            }
+        } catch (err) {
+            console.warn("Nao foi possivel carregar o endereco .onion:", err);
+            if (this.$addressInput) {
+                this.$addressInput.value = ".onion indisponivel";
+            }
+        }
+    }
+
+    show() {
+        this._fetchOnionAddress();
+        super.show();
+    }
+}
+
 class LanModeDialog extends Dialog {
     constructor() {
         super('lan-mode-dialog');

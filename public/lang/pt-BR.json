@@ -49,6 +49,12 @@
         "paired-devices_title": "Você pode ser descoberto por dispositivos emparelhados a qualquer momento, independentemente da rede.",
         "public-room-devices": "na sala {{roomId}}",
         "public-room-devices_title": "Você pode ser descoberto por dispositivos nesta sala pública, independentemente da rede.",
+        "tor-network": "na rede Tor",
+        "tor-network_title": "Você pode ser descoberto por usuários do Tor Browser no endereço .onion.",
+        "tor-status": "Rede Tor",
+        "tor-status_title": "Conectado via Tor Onion Service",
+        "use-tor": "Usar rede Tor",
+        "use-tor_title": "Configurar ou compartilhar transferência via rede Tor"
         "traffic": "O tráfego é",
         "routed": "roteado pelo servidor",
         "webrtc": "se o WebRTC não estiver disponível.",
