@@ -54,7 +54,7 @@
         "tor-status": "Rede Tor",
         "tor-status_title": "Conectado via Tor Onion Service",
         "use-tor": "Usar rede Tor",
-        "use-tor_title": "Configurar ou compartilhar transferência via rede Tor"
+        "use-tor_title": "Configurar ou compartilhar transferência via rede Tor",
         "traffic": "O tráfego é",
         "routed": "roteado pelo servidor",
         "webrtc": "se o WebRTC não estiver disponível.",
