@@ -540,6 +540,11 @@
                 <use xlink:href="#public-room-icon"></use>
             </svg>
         </div>
+        <div id="tor-config-btn" class="icon-button" data-i18n-key="footer.use-tor" data-i18n-attrs="title">
+            <svg class="icon">
+                <use xlink:href="#tor-icon"></use>
+            </svg>
+        </div>
         <!-- Removed: LAN Mode -->
         <!--  <div id="lan-mode" class="icon-button" data-i18n-key="header.lan-mode" data-i18n-attrs="title">
             <svg class="icon">
@@ -849,6 +854,10 @@
                         data-i18n-attrs="text title" hidden></span>
                     <span class="badge badge-room-public-id pointer" data-badge="public" data-i18n-key="footer.public-room-devices"
                         data-i18n-attrs="title" hidden>in room IAIAI</span>
+                    <span class="badge badge-tor-network pointer" data-badge="tor" data-i18n-key="footer.tor-network"
+                        data-i18n-attrs="text title" hidden>na rede Tor</span>
+                    <span class="badge badge-tor-status" data-badge="tor-status" data-i18n-key="footer.tor-status"
+                        data-i18n-attrs="text title" style="background: rgba(125, 70, 150, 0.2); border: 1px solid rgba(125, 70, 150, 0.5);" hidden>Rede Tor</span>
                 </div>
             </div>
         </div>
@@ -1037,6 +1046,35 @@
                 <div class="center row-reverse btn-row wrap">
                     <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close"
                         data-i18n-attrs="text" close></button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <x-dialog id="tor-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2">
+                <div class="column center p-2 text-center">
+                    <h2 class="dialog-title" style="margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <svg class="icon" style="width: 24px; height: 24px;">
+                            <use xlink:href="#tor-icon"></use>
+                        </svg>
+                        Rede Tor (Onion Service)
+                    </h2>
+                    <p style="font-size: 14px; line-height: 1.5; margin-bottom: 16px; opacity: 0.9;">
+                        As transferências podem ser realizadas diretamente através do endereço seguro Onion Service na rede Tor.<br>
+                        É necessário utilizar o <strong>Tor Browser</strong> para acessar endereços <code>.onion</code>.
+                    </p>
+                    <div id="tor-address-wrapper" class="column gap-1 full-width" style="margin-bottom: 16px;">
+                        <input id="tor-address-input" type="text" readonly value="Carregando endereço .onion..." style="text-align: center; font-family: monospace; font-size: 13px; padding: 8px;">
+                        <div class="row center gap-1">
+                            <button id="tor-copy-btn" type="button" class="btn btn-small btn-rounded btn-dark" data-i18n-key="dialogs.copy" data-i18n-attrs="text">Copiar</button>
+                            <a id="tor-open-btn" href="#" target="_blank" class="btn btn-small btn-rounded btn-dark text-white" style="text-decoration: none;" hidden>Abrir</a>
+                        </div>
+                    </div>
+                    <div class="row center mt-1">
+                        <div class="close-btn button-text text-white text-center font-subheading" data-i18n-key="dialogs.close" data-i18n-attrs="text">Fechar</div>
+                    </div>
                 </div>
             </x-paper>
         </x-background>
@@ -1932,6 +1970,11 @@
             <!--! Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc. -->
             <path fill="currentColor"
                 d="M64 416L64 192C64 139 107 96 160 96L480 96C533 96 576 139 576 192L576 416C576 469 533 512 480 512L360 512C354.8 512 349.8 513.7 345.6 516.8L230.4 603.2C226.2 606.3 221.2 608 216 608C202.7 608 192 597.3 192 584L192 512L160 512C107 512 64 469 64 416z" />
+        </symbol>
+
+        <symbol id="tor-icon" viewBox="0 0 512 512">
+            <!--! Font Awesome Tor Network Shield Icon -->
+            <path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 464c-114.7 0-208-93.3-208-208S141.3 48 256 48s208 93.3 208 208-93.3 208-208 208zm0-368c-88.2 0-160 71.8-160 160s71.8 160 160 160 160-71.8 160-160-71.8-160-160-160zm0 272c-61.8 0-112-50.2-112-112s50.2-112 112-112 112 50.2 112 112-50.2 112-112 112zm0-176c-35.3 0-64 28.7-64 64s28.7 64 64 64 64-28.7 64-64-28.7-64-64-64z"/>
         </symbol>
 
         <symbol id="icon-language-selector" viewBox="0 0 640 512">

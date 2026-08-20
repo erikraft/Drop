@@ -99,6 +99,7 @@ class ErikrafTdrop {
             ['clearDevicesDialog', () => new EditPairedDevicesDialog()],
             ['publicRoomDialog', () => new PublicRoomDialog()],
             ['lanModeDialog', () => new LanModeDialog()],
+            ['torDialog', () => new TorDialog()],
             ['base64Dialog', () => new Base64Dialog()],
             ['shareTextDialog', () => new ShareTextDialog()],
             ['toast', () => new Toast()],

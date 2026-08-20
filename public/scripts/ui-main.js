@@ -16,7 +16,8 @@ class DiscoveryBadgeState {
             ip: false,
             paired: false,
             publicRoom: false,
-            publicRoomId: null
+            publicRoomId: null,
+            tor: false
         };
         this.stateVersion = 0;
         this.recoveryToken = 0;
@@ -474,7 +475,14 @@ class DiscoveryBadgeState {
         this._renderBooleanBadge('lan', this.state.lan);
         this._renderBooleanBadge('ip', this.state.ip);
         this._renderBooleanBadge('paired', this.state.paired);
+        this._renderBooleanBadge('tor', this.state.tor || window.location.hostname.endsWith('.onion'));
         this._renderPublicBadge(this.state.publicRoom && !!this.state.publicRoomId, this.state.publicRoomId);
+
+        // Check if accessing via .onion address to show Tor Status badge
+        const isTorAccess = window.location.hostname.endsWith('.onion');
+        document.querySelectorAll('[data-badge="tor-status"]').forEach(el => {
+            el.hidden = !isTorAccess;
+        });
 
         Events.fire('evaluate-footer-badges');
     }

@@ -3,6 +3,7 @@ import RateLimit from "express-rate-limit";
 import {fileURLToPath} from "url";
 import path, {dirname} from "path";
 import http from "http";
+import fs from "fs";
 import multer from "multer";
 import {handleAiImageRequest} from "./services/ai-image.js";
 
@@ -123,6 +124,19 @@ export default class ErikrafTdropServer {
         });
 
         app.post('/api/ai/image', upload.single('image'), handleAiImageRequest);
+
+        app.get('/api/onion-info', (req, res) => {
+            const torHostnamePath = '/var/lib/tor/erikraft_drop_onion/hostname';
+            try {
+                if (fs.existsSync(torHostnamePath)) {
+                    const onionAddress = fs.readFileSync(torHostnamePath, 'utf8').trim();
+                    return res.json({ success: true, onionAddress });
+                }
+            } catch (err) {
+                console.error("Error reading Tor hostname file:", err);
+            }
+            return res.json({ success: false, onionAddress: null });
+        });
 
         app.get('/api/cli', (req, res) => {
             res.json({

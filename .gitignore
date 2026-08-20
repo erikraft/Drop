@@ -10,6 +10,15 @@ node_modules/
 /turnserver.conf
 /rtc_config.json
 
+# Tor hidden service private keys and state
+hostname
+private_key
+hs_ed25519_*
+*.key
+*.pem
+/var/lib/tor/
+onion-gateway/temp_onion/
+
 # Diretórios e arquivos gerados
 qrcode-svg/
 
