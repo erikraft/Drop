@@ -64,11 +64,11 @@
     "dialogs": {
         "tor-title": "Rede Tor (Onion Service)",
         "tor-desc": "Transfira arquivos através da rede Tor usando o endereço Onion Service do ErikrafT Drop.",
-        "tor-open-browser": "Abrir no Tor Browser",
+        "tor-open-browser": "Abrir endereço Onion",
         "tor-copy-address": "Copiar endereço",
         "tor-address-copied": "Endereço copiado",
         "tor-copy-failed": "Não foi possível copiar o endereço.",
-        "tor-help": "Para acessar endereços .onion, utilize o Tor Browser.",
+        "tor-help": "Abra este endereço .onion em um navegador compatível com a rede Tor.",
         "tor-checking": "Verificando conexão com a rede Tor...",
         "tor-available": "Rede Tor disponível",
         "tor-unavailable-title": "Endereço Onion indisponível",
