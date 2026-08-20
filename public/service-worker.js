@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.12.4-torfix';
+const cacheVersion = 'v1.12.5';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
