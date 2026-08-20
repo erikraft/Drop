@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache tor base64
+RUN apk add --no-cache tor
 
 WORKDIR /home/node/app
 
