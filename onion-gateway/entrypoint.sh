@@ -18,7 +18,7 @@ mkdir -p "$TOR_DIR"
 
 if [ -n "$ONION_PRIVATE_KEY_BASE64" ]; then
     echo "[ONION] Decoding ONION_PRIVATE_KEY_BASE64 secret..."
-    echo "$ONION_PRIVATE_KEY_BASE64" | base64 -d > "$TOR_DIR/hs_ed25519_secret_key"
+    echo "$ONION_PRIVATE_KEY_BASE64" | tr -d '\r\n ' | base64 -d > "$TOR_DIR/hs_ed25519_secret_key"
     chown -R "$TOR_USER:$TOR_USER" /var/lib/tor
     chmod 700 "$TOR_DIR"
     chmod 600 "$TOR_DIR/hs_ed25519_secret_key" 2>/dev/null || true
@@ -29,34 +29,36 @@ elif [ "$GENERATE_ONION_KEY" = "true" ]; then
 else
     echo "[ONION] WARNING: ONION_PRIVATE_KEY_BASE64 secret is missing or empty."
     echo "[ONION] Tor Onion Service will NOT be loaded with a persistent key."
-    echo "[ONION] To generate a key, run with GENERATE_ONION_KEY=true or follow onion-gateway/README.md instructions."
+    echo "[ONION] To configure a key, set ONION_PRIVATE_KEY_BASE64 or see onion-gateway/README.md instructions."
 fi
 
 if [ -n "$ONION_PRIVATE_KEY_BASE64" ] || [ "$GENERATE_ONION_KEY" = "true" ]; then
     echo "[ONION] Starting Tor..."
     su -s /bin/sh "$TOR_USER" -c "tor -f /etc/tor/torrc" &
 
-    # Wait for hostname file to be generated / verified
-    TIMEOUT=30
-    COUNT=0
-    while [ ! -f "$TOR_DIR/hostname" ] && [ $COUNT -lt $TIMEOUT ]; do
-        sleep 1
-        COUNT=$((COUNT + 1))
-    done
+    # Asynchronously wait for hostname file to set readable permissions for local app discovery
+    (
+        TIMEOUT=30
+        COUNT=0
+        while [ ! -f "$TOR_DIR/hostname" ] && [ $COUNT -lt $TIMEOUT ]; do
+            sleep 1
+            COUNT=$((COUNT + 1))
+        done
 
-    if [ -f "$TOR_DIR/hostname" ]; then
-        HOSTNAME_VAL=$(cat "$TOR_DIR/hostname")
-        echo "[ONION] Tor connected"
-        echo "[ONION] Onion Service started"
-        echo "[ONION] Hostname: $HOSTNAME_VAL"
-        if [ "$GENERATE_ONION_KEY" = "true" ] && [ -f "$TOR_DIR/hs_ed25519_secret_key" ]; then
-            KEY_BASE64=$(base64 "$TOR_DIR/hs_ed25519_secret_key" | tr -d '\n')
-            echo "[ONION] Base64 Encoded Private Key for ONION_PRIVATE_KEY_BASE64 secret:"
-            echo "$KEY_BASE64"
+        if [ -f "$TOR_DIR/hostname" ]; then
+            chmod 644 "$TOR_DIR/hostname" 2>/dev/null || true
+            HOSTNAME_VAL=$(cat "$TOR_DIR/hostname")
+            echo "[ONION] Tor connected"
+            echo "[ONION] Onion Service started"
+            echo "[ONION] Hostname: $HOSTNAME_VAL"
+            if [ "$GENERATE_ONION_KEY" = "true" ]; then
+                echo "[ONION] Key generated successfully in container storage ($TOR_DIR/hs_ed25519_secret_key)."
+                echo "[ONION] NOTE: Secret key output is suppressed in logs for security."
+            fi
+        else
+            echo "[ONION] WARNING: Tor started but $TOR_DIR/hostname was not found within $TIMEOUT seconds."
         fi
-    else
-        echo "[ONION] WARNING: Tor started but $TOR_DIR/hostname was not found within $TIMEOUT seconds."
-    fi
+    ) &
 fi
 
 echo "[DROP] Starting ErikrafT Drop..."
