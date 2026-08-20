@@ -3,6 +3,37 @@ import { UAParser } from "ua-parser-js";
 import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { cyrb53, hasher } from "./helper.js";
 
+export const ISEARCH_CLI_CLIENT_TYPE = 'isearch-cli';
+export const ISEARCH_CLI_NAME = 'iSearch CLI™';
+export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser', ISEARCH_CLI_CLIENT_TYPE]);
+
+export function isISearchCliRequest(req) {
+    const searchParams = new URL(req.url, 'http://server').searchParams;
+    const clientType = (searchParams.get('client_type') || '').toLowerCase();
+    const clientName = searchParams.get('client_name') || '';
+    const userAgent = req.headers['user-agent'] || '';
+
+    return clientType === ISEARCH_CLI_CLIENT_TYPE
+        || /^iSearch[- ]?CLI(?:\/|\b)/i.test(userAgent)
+        || clientName === ISEARCH_CLI_NAME
+        || /^iSearch[- ]?CLI$/i.test(clientName);
+}
+
+function readCliMetadata(req) {
+    const searchParams = new URL(req.url, 'http://server').searchParams;
+    const userAgent = req.headers['user-agent'] || '';
+    const uaMatch = userAgent.match(/^iSearch[- ]?CLI\/([^\s]+)/i);
+    const platform = searchParams.get('platform') || searchParams.get('os') || req.headers['x-isearch-cli-platform'] || '';
+    const architecture = searchParams.get('architecture') || searchParams.get('arch') || req.headers['x-isearch-cli-architecture'] || '';
+    const version = searchParams.get('version') || searchParams.get('client_version') || req.headers['x-isearch-cli-version'] || uaMatch?.[1] || '';
+
+    return {
+        version: version.toString().substring(0, 64),
+        platform: platform.toString().substring(0, 64),
+        architecture: architecture.toString().substring(0, 64)
+    };
+}
+
 export default class Peer {
 
     constructor(socket, request, conf) {
@@ -143,6 +174,7 @@ export default class Peer {
 
     _setName(req) {
         const clientType = this._resolveClientType(req);
+        const cliMetadata = clientType === ISEARCH_CLI_CLIENT_TYPE ? readCliMetadata(req) : null;
         const userAgent = req.headers['user-agent'] || '';
         const ua = new UAParser(userAgent).getResult();
         const device = ua.device || (ua.device = {});
@@ -181,6 +213,10 @@ export default class Peer {
             'browseros-browser': {
                 deviceName: 'BrowserOS',
                 browser: 'BrowserOS'
+            },
+            [ISEARCH_CLI_CLIENT_TYPE]: {
+                deviceName: ISEARCH_CLI_NAME,
+                browser: ISEARCH_CLI_NAME
             }
         };
 
@@ -215,13 +251,30 @@ export default class Peer {
         })
 
         this.name = {
-            model: ua.device.model,
-            os: ua.os.name,
+            model: cliMetadata?.architecture || ua.device.model,
+            os: cliMetadata?.platform || ua.os.name,
             browser: clientLabels[clientType]?.browser || ua.browser.name,
-            type: ua.device.type,
+            type: clientType === ISEARCH_CLI_CLIENT_TYPE ? 'desktop' : ua.device.type,
             deviceName,
             displayName,
-            clientType
+            clientType,
+            ...(cliMetadata ? {
+                version: cliMetadata.version,
+                platform: cliMetadata.platform,
+                architecture: cliMetadata.architecture,
+                capabilities: {
+                    cli: true,
+                    protocolVersion: 1,
+                    signaling: true,
+                    websocketFallback: true,
+                    webRTC: this.rtcSupported,
+                    fileTransfer: true,
+                    progress: true,
+                    pairing: true,
+                    reconnect: true,
+                    integrity: 'transfer-size-and-digester'
+                }
+            } : {})
         };
 
         if (!this.name.type) {
@@ -230,11 +283,14 @@ export default class Peer {
     }
 
     _resolveClientType(req) {
-        const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser']);
+        if (isISearchCliRequest(req)) {
+            return ISEARCH_CLI_CLIENT_TYPE;
+        }
+
         const searchParams = new URL(req.url, 'http://server').searchParams;
         const rawClientType = (searchParams.get('client_type') || '').toLowerCase();
 
-        return allowedClientTypes.has(rawClientType)
+        return ALLOWED_CLIENT_TYPES.has(rawClientType)
             ? rawClientType
             : 'browser';
     }

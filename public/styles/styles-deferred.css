@@ -363,6 +363,10 @@ x-paper .dialog-title {
     --accent-color: var(--public-room-color);
 }
 
+#tor-dialog {
+    --accent-color: #7D4696;
+}
+
 #pair-device-dialog ::-moz-selection,
 #pair-device-dialog ::selection {
     color: black;
@@ -373,6 +377,176 @@ x-paper .dialog-title {
 #public-room-dialog ::selection {
     color: black;
     background: var(--public-room-color);
+}
+
+#tor-dialog ::-moz-selection,
+#tor-dialog ::selection {
+    color: white;
+    background: #7D4696;
+}
+
+#tor-dialog x-paper > .dialog-header {
+    background-color: #7D4696;
+    margin-bottom: 0;
+}
+
+.tor-dialog-body {
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tor-description {
+    margin: 0;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.tor-address-card {
+    width: 100%;
+    background: rgba(125, 70, 150, 0.08);
+    border: 1px solid rgba(125, 70, 150, 0.3);
+    border-radius: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+.tor-onion-box {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #e2b3ff;
+    border: 1px solid rgba(125, 70, 150, 0.35);
+    user-select: all;
+    -webkit-user-select: all;
+    text-align: center;
+    margin-top: 10px;
+}
+
+body[theme="light"] .tor-onion-box {
+    background: #f3e9f9;
+    color: #5a1d7c;
+    border-color: rgba(125, 70, 150, 0.3);
+}
+
+.tor-available-badge {
+    color: #00e676;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tor-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #00e676;
+    margin-right: 6px;
+    box-shadow: 0 0 8px rgba(0, 230, 118, 0.6);
+}
+
+.tor-dot.pulse {
+    animation: tor-pulse 2s infinite;
+}
+
+@keyframes tor-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(0, 230, 118, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 230, 118, 0);
+    }
+}
+
+.tor-state-loading {
+    color: #7D4696;
+    font-weight: 500;
+}
+
+.tor-spinner {
+    animation: tor-spin 1.5s linear infinite;
+}
+
+@keyframes tor-spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.tor-unavailable-header {
+    color: #7D4696;
+    font-size: 15px;
+}
+
+.tor-actions {
+    width: 100%;
+    gap: 10px;
+}
+
+.tor-actions .btn {
+    min-height: 42px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 600;
+}
+
+.tor-actions .btn .btn-icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.tor-divider {
+    width: 100%;
+    border: 0;
+    height: 1px;
+    background: rgba(var(--shadow-color-dialog-rgb, 128, 128, 128), 0.2);
+    margin: 4px 0;
+}
+
+.tor-help-text {
+    opacity: 0.75;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.btn-tor {
+    background-color: var(--accent-color, #7D4696) !important;
+    color: #ffffff !important;
+}
+
+.btn-tor:hover {
+    background-color: #6a3b80 !important;
+}
+
+.btn-outline-tor {
+    border: 1px solid var(--accent-color, #7D4696) !important;
+    color: var(--accent-color, #7D4696) !important;
+    background: transparent;
+}
+
+.btn-outline-tor:hover {
+    background-color: rgba(125, 70, 150, 0.1);
 }
 
 x-dialog:not([show]) {

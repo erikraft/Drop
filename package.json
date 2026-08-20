@@ -11,7 +11,8 @@
     "package:linux": "npm run validate:linux-icon && electron-builder --linux deb --x64",
     "package:windows": "npm run validate:linux-icon && electron-builder --win nsis --x64",
     "package:flatpak": "npm run validate:linux-icon && flatpak-builder --force-clean --repo=dist/flatpak-repo dist/flatpak flatpak/io.github.erikraft.Drop.yml",
-    "validate:linux-icon": "node scripts/validate-linux-icon.js"
+    "validate:linux-icon": "node scripts/validate-linux-icon.js",
+    "test": "node test/isearch-cli.test.js"
   },
   "author": {
     "name": "ErikrafT",
@@ -34,7 +35,7 @@
     "ws": "^8.21.1"
   },
   "devDependencies": {
-    "electron": "^39.8.5",
+    "electron": "^41.10.5",
     "electron-builder": "^26.15.3",
     "nodemon": "^3.1.10"
   },

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: erikraft-drop
+    env: docker
+    dockerfilePath: onion-gateway/Dockerfile
+    plan: free
+    region: oregon
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: ONION_PRIVATE_KEY_BASE64
+        sync: false

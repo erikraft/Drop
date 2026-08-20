@@ -9,10 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#3367d6">
     <meta name="color-scheme" content="dark light">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ErikrafT Drop™">
     <meta name="application-name" content="ErikrafT Drop™">
+    <meta name="iSearch-cli" content="true">
+    <meta name="iSearch-cli-version" content="1">
+    <meta name="iSearch-cli-endpoint" content="https://drop.erikraft.com/api/cli">
     <!-- Descriptions -->
     <meta name="description"
         content="Instantly share images, videos, PDFs, and links with people nearby. Peer2Peer and Open Source. No Setup, No Signup.">
@@ -45,7 +49,6 @@
     <!-- Resources -->
     <link rel="preload" href="lang/en.json" as="fetch">
     <link rel="preload" href="fonts/OpenSans/static/OpenSans-Medium.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="fonts/ErikrafT-Icon/ErikrafT-Icons.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" type="text/css" href="styles/styles-main.css">
     <link rel="stylesheet" type="text/css" href="styles/content-moderation.css">
     <link rel="manifest" href="manifest.json">
@@ -266,7 +269,7 @@
     <script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.0/dist/nsfwjs.min.js"></script>
     <script>
         (function () {
-            const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser']);
+            const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser', 'isearch-cli']);
             const sessionKey = 'client_type';
 
             const params = new URLSearchParams(window.location.search);
@@ -535,6 +538,11 @@
         <div id="join-public-room" class="icon-button" data-i18n-key="header.join-public-room" data-i18n-attrs="title">
             <svg class="icon">
                 <use xlink:href="#public-room-icon"></use>
+            </svg>
+        </div>
+        <div id="tor-config-btn" class="icon-button" data-i18n-key="footer.use-tor" data-i18n-attrs="title">
+            <svg class="icon">
+                <use xlink:href="#tor-icon"></use>
             </svg>
         </div>
         <!-- Removed: LAN Mode -->
@@ -846,6 +854,10 @@
                         data-i18n-attrs="text title" hidden></span>
                     <span class="badge badge-room-public-id pointer" data-badge="public" data-i18n-key="footer.public-room-devices"
                         data-i18n-attrs="title" hidden>in room IAIAI</span>
+                    <span class="badge badge-tor-network pointer" data-badge="tor" data-i18n-key="footer.tor-network"
+                        data-i18n-attrs="text title" hidden>na rede Tor</span>
+                    <span class="badge badge-tor-status" data-badge="tor-status" data-i18n-key="footer.tor-status"
+                        data-i18n-attrs="text title" style="background: rgba(125, 70, 150, 0.2); border: 1px solid rgba(125, 70, 150, 0.5);" hidden>Rede Tor</span>
                 </div>
             </div>
         </div>
@@ -1034,6 +1046,49 @@
                 <div class="center row-reverse btn-row wrap">
                     <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close"
                         data-i18n-attrs="text" close></button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <x-dialog id="tor-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2">
+                <div class="row center p-2 dialog-header">
+                    <h2 class="dialog-title">
+                        <svg class="icon">
+                            <use xlink:href="#tor-icon"></use>
+                        </svg>
+                        <span data-i18n-key="dialogs.tor-title">ㅤRede Tor (Onion Service)</span>
+                    </h2>
+                </div>
+                <div class="tor-dialog-body column center p-3">
+                    <p class="tor-description font-body2 text-center" data-i18n-key="dialogs.tor-desc">
+                        Transfira arquivos através da rede Tor usando o endereço Onion Service do ErikrafT Drop.
+                    </p>
+
+                    <div id="tor-address-wrapper" class="tor-address-card column center full-width">
+                        <div id="tor-status-box" class="column center full-width"></div>
+                    </div>
+
+                    <div class="tor-actions column center full-width">
+                        <a id="tor-open-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-rounded btn-tor full-width text-white" style="text-decoration: none;" hidden>
+                            <svg class="icon btn-icon"><use xlink:href="#tor-icon"></use></svg>
+                            <span data-i18n-key="dialogs.tor-open-browser">Abrir endereço Onion</span>
+                        </a>
+                        <button id="tor-copy-btn" type="button" class="btn btn-rounded btn-grey full-width">
+							<span id="tor-copy-text" data-i18n-key="dialogs.tor-copy-address">Copiar endereço</span>
+                        </button>
+                    </div>
+
+                    <hr class="tor-divider">
+
+                    <p class="tor-help-text font-caption text-center" data-i18n-key="dialogs.tor-help">
+                        Abra este endereço .onion em um navegador compatível com a rede Tor.
+                    </p>
+                </div>
+                <div class="center row-reverse btn-row wrap">
+                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" data-i18n-attrs="text" close>Fechar</button>
                 </div>
             </x-paper>
         </x-background>
@@ -1584,7 +1639,7 @@
 
                 <!-- Privacy Policy -->
                 <a class="icon-button" id="privacypolicy-btn" target="_blank"
-                    href="https://biodrop.erikraft.com/privacy-policy" rel="noreferrer"
+                    href="https://biodrop.erikraft.com/privacy.html" rel="noreferrer"
                     data-i18n-key="about.privacypolicy" data-i18n-attrs="title">
                     <svg class="icon">
                         <use xlink:href="#privacypolicy"></use>
@@ -1775,6 +1830,12 @@
                 d="m36.5 13.39c-2.75 0.69-6.8 2.18-9 3.32-2.2 1.13-5.82 4.02-8.04 6.42-2.22 2.4-5.15 6.62-6.5 9.37l-2.46 5v128c4.15 8.53 7.63 13.14 10.42 15.75 2.8 2.61 5.64 4.76 6.33 4.78 0.69 0.01 4.17-1.85 7.75-4.14 3.58-2.29 9.2-6.92 12.5-10.28 3.3-3.37 7.35-8.67 9-11.79 2.67-5.05 3.41-5.73 6.75-6.25 2.06-0.31 5.21-1.3 7-2.19 1.79-0.89 4.71-2.69 6.5-4 1.79-1.31 4.45-4.74 5.91-7.63 2.17-4.26 2.67-6.66 2.71-12.75 0.02-4.13-0.54-9.3-1.25-11.5-0.71-2.2-3.97-9.63-7.24-16.5-3.27-6.88-6.2-14.3-6.51-16.5-0.39-2.77 0.09-5.7 1.53-9.5 1.16-3.03 2.1-5.84 2.1-6.25 0-0.41-0.56-0.76-1.25-0.78-0.69-0.01-2.21 1-3.38 2.25-1.18 1.26-2.92 3.86-3.88 5.78-1.25 2.52-1.63 5.18-1.36 9.5 0.27 4.18 1.32 7.82 3.47 12 1.7 3.3 4.73 9.15 6.74 13 2.01 3.85 4.16 9.7 4.77 13 0.83 4.43 0.83 7.11 0.01 10.25-0.71 2.68-2.69 5.84-5.37 8.57-2.62 2.65-6.17 4.97-9.25 6.04-3.42 1.19-6.26 1.52-9 1.05-2.2-0.37-5.58-1.46-7.5-2.41-1.92-0.94-5.08-3.57-7-5.83-1.92-2.26-3.84-4.12-4.25-4.14-0.41-0.02-0.86 1.43-1 3.22l-0.26 3.25c-5.42-5.49-7.55-8.86-8.22-11.04-0.68-2.18-1.23-5.99-1.23-8.46 0-2.47 0.88-6.3 1.96-8.5 1.08-2.2 3.57-6.25 5.53-9 1.97-2.75 4-6.58 4.52-8.5 0.52-1.92 0.93-5.75 0.92-8.5 0-2.75 0.71-7.03 1.58-9.5 0.88-2.47 2.39-5.63 3.37-7 0.98-1.38 3.86-3.85 6.4-5.5 2.55-1.65 4.3-3.35 3.9-3.78-0.39-0.43-2.18-0.76-3.97-0.75-2.92 0.03-3.15-0.17-2.25-1.97 0.55-1.1 2.91-3.1 5.25-4.44 2.34-1.35 6.44-3.03 9.11-3.75 2.98-0.8 6.85-3 10-5.68 2.83-2.4 6.26-4.93 7.64-5.61 1.38-0.68 3.63-1.52 5-1.86 1.38-0.34 4.08-0.17 6 0.38 1.92 0.55 6.54 2.79 10.25 4.98 3.86 2.27 7.5 3.76 8.5 3.46 1.58-0.47 1.53-0.71-0.5-2.5-1.24-1.09-2.25-2.43-2.25-2.98 0-0.55 0.67-1.23 1.5-1.5 0.83-0.28 2.96-0.49 4.75-0.48 1.79 0.01 5.05 0.84 7.25 1.84 2.2 1 5.24 3.46 6.75 5.48 2.14 2.85 4.13 4.09 9 5.6 4.4 1.37 7.21 3 9.5 5.5 1.79 1.96 3.25 4.01 3.25 4.56 0 0.55-1.12 0.77-2.5 0.5-1.37-0.28-2.71-0.16-2.96 0.25-0.25 0.41 0.84 2.33 2.41 4.25 1.57 1.92 3.35 4.74 3.95 6.25 0.61 1.51 1.1 6.01 1.09 10 0 4.81 0.5 8.01 1.5 9.5 1.17 1.75 3.13 2.51 8.76 3.41 5.3 0.84 7.86 1.78 9.5 3.5 1.93 2.01 2.25 3.43 2.27 10.09 0.01 4.26-0.51 9.33-1.15 11.25-0.63 1.92-1.88 4.3-2.76 5.28-0.89 0.98-2.74 1.76-4.11 1.74-1.37-0.03-3.18-0.46-4-0.97-1.28-0.79-1.31-1.52-0.25-4.99 0.69-2.23 2.6-5.41 4.25-7.06 1.65-1.65 3.45-4.13 4-5.5 0.55-1.38 1-3.4 1-4.5 0-1.1-0.68-2.68-1.5-3.5-1.01-1.01-3.55-1.51-7.75-1.52-3.44-0.01-7.71 0.44-9.5 1-2.72 0.85-3.25 1.51-3.25 4.02 0 1.89 1.11 4.3 3 6.5 1.65 1.92 3.68 3.5 4.5 3.5 0.82 0 1.48 0.56 1.46 1.25-0.03 0.69-1.72 2.89-3.75 4.88-2.24 2.2-5.49 4.12-8.21 4.84-2.47 0.66-6.07 1.01-8 0.79-1.93-0.23-6.2-1.65-9.5-3.15-3.3-1.51-7.35-3.82-9-5.13-1.65-1.32-3.35-2.08-3.78-1.69-0.43 0.39-0.75 1.61-0.72 2.71 0.03 1.1 2.07 3.91 4.53 6.25 2.46 2.34 4.92 4.03 5.47 3.75 0.55-0.28 1-0.05 1 0.5 0 0.55 2.03 1.45 4.5 2 2.47 0.55 7.09 0.99 10.25 0.97 3.16-0.02 8.22-0.87 11.25-1.9 4.28-1.45 5.89-1.61 7.25-0.72 0.97 0.63 1.74 1.83 1.73 2.65-0.02 0.82-1.93 3.3-4.26 5.51-2.64 2.51-6.28 4.67-9.72 5.77-3.03 0.97-8.2 1.75-11.5 1.75-4.35-0.02-8.2-0.89-14-3.18-4.43-1.74-9.4-4.54-11.14-6.25-1.73-1.71-3.4-2.65-3.72-2.1-0.31 0.55 0.92 4.15 2.73 8 1.82 3.85 5.48 10.82 8.15 15.5 2.66 4.68 8.47 14.07 12.91 20.88l8.07 12.39c23.49-0.81 25.7-1.19 30.75-3.56 3.16-1.49 7.9-4.85 10.53-7.46 3.09-3.07 5.57-6.79 7-10.5 2.22-5.75 2.22-5.76 1.97-69.5l-0.25-63.75c-3.87-7.72-7.25-12.13-10-14.78-2.91-2.82-7.29-5.75-10.5-7.02-5.43-2.17-6.28-2.2-65.5-2.38-45.4-0.14-61.22 0.12-65 1.07zm97.5 66.61c-1.1 1.1-2 2.67-2 3.5 0 0.83 0.34 2.24 0.75 3.15 0.41 0.91 1.88 2.04 3.25 2.52 1.76 0.61 3.16 0.42 4.75-0.65q2.25-1.52 2.25-4.52 0-3-2.25-4.51c-1.24-0.83-2.81-1.5-3.5-1.5-0.69 0.01-2.15 0.91-3.25 2.01zm-28.88 1.55c-1.61 1.05-2.35 2.44-2.27 4.26 0.06 1.48 0.69 3.26 1.38 3.96 0.7 0.69 2.51 1.26 4.02 1.25 1.86-0.01 3.24-0.83 4.25-2.52 1.09-1.82 1.23-3.05 0.5-4.5-0.55-1.1-1.9-2.45-3-3-1.1-0.55-2.11-1-2.25-1.01-0.14 0-1.32 0.7-2.63 1.56z" />
         </symbol>
 
+        <symbol id="icon-isearch-cli" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+            <rect x="8" y="16" width="84" height="68" rx="10" ry="10" fill="none" stroke="currentColor" stroke-width="8" />
+            <path d="M25 39l16 12-16 12" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M49 65h24" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" />
+        </symbol>
+
         <symbol id="icon-vscode" viewBox="0 0 100 100">
             <path fill-rule="evenodd" clip-rule="evenodd"
                 d="M70.912 99.317a6.223 6.223 0 0 0 4.96-.19l20.589-9.907A6.25 6.25 0 0 0 100 83.587V16.413a6.25 6.25 0 0 0-3.54-5.632L75.874.874a6.226 6.226 0 0 0-7.104 1.21L29.355 38.04 12.187 25.01a4.162 4.162 0 0 0-5.318.236l-5.506 5.009a4.168 4.168 0 0 0-.004 6.162L16.247 50 1.36 63.583a4.168 4.168 0 0 0 .004 6.162l5.506 5.01a4.162 4.162 0 0 0 5.318.236l17.168-13.032L68.77 97.917a6.217 6.217 0 0 0 2.143 1.4ZM75.015 27.3 45.11 50l29.906 22.701V27.3Z"
@@ -1923,6 +1984,11 @@
             <!--! Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc. -->
             <path fill="currentColor"
                 d="M64 416L64 192C64 139 107 96 160 96L480 96C533 96 576 139 576 192L576 416C576 469 533 512 480 512L360 512C354.8 512 349.8 513.7 345.6 516.8L230.4 603.2C226.2 606.3 221.2 608 216 608C202.7 608 192 597.3 192 584L192 512L160 512C107 512 64 469 64 416z" />
+        </symbol>
+
+        <symbol id="tor-icon" viewBox="64 64 512 512">
+            <!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+            <path d="M320.5 529.4L320.5 498.4C418.8 498.1 498.4 418.4 498.4 320C498.4 221.6 418.8 141.9 320.5 141.6L320.5 110.6C436 110.8 529.4 204.5 529.4 320C529.4 435.5 436 529.2 320.5 529.4zM320.5 420.8C375.9 420.5 420.8 375.5 420.8 320C420.8 264.5 376 219.5 320.5 219.2L320.5 188.2C393.1 188.5 451.9 247.4 451.9 320C451.9 392.6 393.1 451.6 320.5 451.8L320.5 420.8zM320.5 265.7C350.2 266 374.3 290.2 374.3 320C374.3 349.8 350.3 374 320.5 374.3L320.5 265.7zM64 320C64 461.4 178.6 576 320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320z"/>
         </symbol>
 
         <symbol id="icon-language-selector" viewBox="0 0 640 512">

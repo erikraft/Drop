@@ -1,0 +1,74 @@
+---
+title: "iSearch CLI™"
+description: "Official ErikrafT Drop support for the iSearch CLI™ terminal client."
+icon: "terminal"
+tag: "cli"
+---
+
+# iSearch CLI™
+
+ErikrafT Drop recognizes **iSearch CLI™** as a first-class terminal client. The CLI uses the same signaling, pairing, discovery, and transfer messages as the web app instead of a parallel protocol.
+
+## Client identification
+
+The preferred WebSocket identity is:
+
+```text
+iSearchCLI/<version>
+```
+
+The CLI can also connect with query parameters on the existing `/server` WebSocket endpoint:
+
+```text
+/server?client_type=isearch-cli&version=1.0.0&platform=Windows&architecture=x86_64&webrtc_supported=false
+```
+
+Supported metadata fields are:
+
+- `client_type=isearch-cli`
+- `client_name=iSearch CLI™`
+- `version` or `client_version`
+- `platform` or `os`
+- `architecture` or `arch`
+
+Equivalent headers are also accepted for CLI metadata:
+
+- `User-Agent: iSearchCLI/<version>`
+- `X-iSearch-CLI-Version`
+- `X-iSearch-CLI-Platform`
+- `X-iSearch-CLI-Architecture`
+
+## Discovery and pairing
+
+When connected, iSearch CLI™ joins the same rooms as other peers and appears in device discovery with its terminal icon (`>_`). Pairing uses the existing `pair-device-initiate`, `pair-device-join`, rejection, invalid session, and room secret flow.
+
+## Transfer protocol
+
+The CLI reuses the existing Drop transfer protocol messages:
+
+- `request`
+- `files-transfer-response`
+- `header`
+- `partition`
+- `partition-received`
+- `progress`
+- `file-transfer-complete`
+- `disconnect`
+
+This enables browser-to-CLI and CLI-to-browser transfers through the existing WebRTC/WebSocket fallback compatibility layer. Progress and integrity state are reported through the same message flow used by browser clients.
+
+## CLI metadata API
+
+The website advertises CLI support with HTML metadata and a versioned JSON endpoint:
+
+```html
+<meta name="iSearch-cli" content="true">
+<meta name="iSearch-cli-version" content="1">
+<meta name="iSearch-cli-endpoint" content="https://drop.erikraft.com/api/cli">
+```
+
+`GET /api/cli` returns structured JSON describing the versioned CLI contract and supported protocol messages. It never returns executable code.
+
+## Security
+
+Drop does not execute received files, commands, or client-provided code. CLI clients must explicitly accept or reject incoming transfers unless they intentionally implement a safe user-approved automation mode.

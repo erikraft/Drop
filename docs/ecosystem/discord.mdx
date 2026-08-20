@@ -1,7 +1,7 @@
 ---
 title: "Discord Bot Integration"
 description: "Complete guide to the ErikrafT Drop™ Discord bot for file sharing within Discord servers."
-icon: "puzzle-piece"
+icon: "discord"
 ---
 
 # Discord Bot Integration
@@ -37,11 +37,11 @@ graph TD
 
 ### Bot Invitation
 
-**Invite the bot to your Discord server:** https://discord.com/oauth2/authorize?client_id=1367869058707492955
+**Invite the bot to your Discord server:** [https://discord.com/oauth2/authorize?client\_id=1367869058707492955](https://discord.com/oauth2/authorize?client_id=1367869058707492955)
 
 ### Prerequisites
 
-- **Node.js 18+**: Required for bot operation
+- **Node.js 18\+**: Required for bot operation
 - **Discord Server**: Server with bot administration permissions
 - **ErikrafT Drop™ Instance**: With WebSocket fallback enabled
 - **Bot Application**: Registered on Discord Developer Portal
@@ -98,7 +98,7 @@ npm start
 
 ### Project Structure
 
-```
+```text
 Discord/Bot/
 ├── src/
 │   ├── index.js              # Main bot initialization
@@ -216,7 +216,7 @@ The primary command for file sharing operations:
 
 #### Command Options
 
-```
+```text
 /drop <key> [name] [message] [file1] [file2] [file3]
 
 Required:
@@ -234,25 +234,25 @@ Optional:
 
 **Basic File Sharing:**
 
-```
+```text
 /drop key:123456 file1:@document.pdf
 ```
 
 **With Custom Name:**
 
-```
+```text
 /drop key:123456 name:"Development Server" file1:@code.zip
 ```
 
 **Text Message Only:**
 
-```
+```text
 /drop key:123456 message:"Here are the updated files"
 ```
 
 **Multiple Files:**
 
-```
+```text
 /drop key:123456 file1:@image.png file2:@data.csv file3:@report.pdf
 ```
 
@@ -439,8 +439,8 @@ Deploy to cloud platforms for 24/7 operation:
 
 #### Recommended Platforms
 
-- **Shard Cloud**: https://shardcloud.app/pt-br/dash
-- **Discloud**: https://discloud.com/dashboard
+- **Shard Cloud**: [https://shardcloud.app/pt-br/dash](https://shardcloud.app/pt-br/dash)
+- **Discloud**: [https://discloud.com/dashboard](https://discloud.com/dashboard)
 - **Heroku**: Platform-as-a-Service deployment
 - **DigitalOcean**: Cloud VPS deployment
 

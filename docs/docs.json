@@ -25,7 +25,19 @@
       "view",
       "chatgpt",
       "claude",
-      "perplexity"
+      "perplexity",
+      "assistant",
+      "download-pdf",
+      "download-spec",
+      "grok",
+      "aistudio",
+      "devin",
+      "windsurf",
+      "mcp",
+      "add-mcp",
+      "cursor",
+      "vscode",
+      "devin-mcp"
     ]
   },
 
@@ -81,7 +93,8 @@
               "ecosystem/android",
               "ecosystem/shortcut",
               "ecosystem/extensions",
-              "ecosystem/discord"
+              "ecosystem/discord",
+              "ecosystem/isearch-cli"
             ]
           },
           {
@@ -120,12 +133,12 @@
       },
       {
         "tab": "GitHub repository",
-        "icon": "code",
+        "icon": "github",
         "href": "https://github.com/erikraft/Drop"
       },
       {
         "tab": "Android GitHub repository",
-        "icon": "code",
+        "icon": "github",
         "href": "https://github.com/erikraft/Drop-Android"
       }
     ]
@@ -133,8 +146,8 @@
   "footer": {
     "socials": {
       "github": "https://github.com/erikraft",
-      "threads": "https://www.threads.com/@erik.developer",
-      "instagram": "https://www.instagram.com/erik.developer",
+      "threads": "https://www.threads.com/@erikraft_drop",
+      "instagram": "https://www.instagram.com/erikraft_drop",
       "linkedin": "https://linkedin.com/company/erikraft-drop",
       "website": "https://biodrop.erikraft.com",
       "discord": "https://discord.gg/KWvqwRxjnA"
@@ -160,5 +173,8 @@
   },
   "appearance": {
     "default": "system"
+  },
+  "styling": {
+    "codeblocks": "dark"
   }
 }
