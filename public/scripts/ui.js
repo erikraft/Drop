@@ -2501,9 +2501,14 @@ class TorDialog extends Dialog {
 
         this.$torConfigBtn = $('tor-config-btn');
         this.$torBadges = document.querySelectorAll('.discovery-wrapper [data-badge="tor"]');
-        this.$addressInput = $('tor-address-input');
+        this.$statusBox = $('tor-status-box');
         this.$copyBtn = $('tor-copy-btn');
+        this.$copyIcon = $('tor-copy-icon');
+        this.$copyText = $('tor-copy-text');
         this.$openBtn = $('tor-open-btn');
+
+        this._copyResetTimer = null;
+        this._onionAddress = null;
 
         if (this.$torConfigBtn) {
             this.$torConfigBtn.addEventListener('click', _ => this.show());
@@ -2513,46 +2518,183 @@ class TorDialog extends Dialog {
             $badge.addEventListener('click', _ => this.show());
         });
 
-        if (this.$copyBtn && this.$addressInput) {
-            this.$copyBtn.addEventListener('click', _ => {
-                const text = this.$addressInput.value;
-                if (text && text.endsWith('.onion')) {
-                    navigator.clipboard.writeText(text).then(_ => {
-                        Events.fire('notify-user', Localization.getTranslation("notifications.copied-to-clipboard"));
-                    }).catch(_ => {
-                        this.$addressInput.select();
-                    });
-                }
-            });
+        if (this.$copyBtn) {
+            this.$copyBtn.addEventListener('click', _ => this._copyAddress());
         }
 
-        this._onionAddress = null;
         this._fetchOnionAddress();
     }
 
+    _getStatusBox() {
+        if (!this.$statusBox) this.$statusBox = $('tor-status-box');
+        return this.$statusBox;
+    }
+    _getCopyBtn() {
+        if (!this.$copyBtn) this.$copyBtn = $('tor-copy-btn');
+        return this.$copyBtn;
+    }
+    _getCopyIcon() {
+        if (!this.$copyIcon) this.$copyIcon = $('tor-copy-icon');
+        return this.$copyIcon;
+    }
+    _getCopyText() {
+        if (!this.$copyText) this.$copyText = $('tor-copy-text');
+        return this.$copyText;
+    }
+    _getOpenBtn() {
+        if (!this.$openBtn) this.$openBtn = $('tor-open-btn');
+        return this.$openBtn;
+    }
+
+    _renderLoading() {
+        const $statusBox = this._getStatusBox();
+        if (!$statusBox) return;
+        $statusBox.innerHTML = `
+            <div class="tor-state-loading column center text-center p-2">
+                <svg class="icon tor-spinner" style="width: 28px; height: 28px; margin-bottom: 10px;">
+                    <use xlink:href="#tor-icon"></use>
+                </svg>
+                <span data-i18n-key="dialogs.tor-checking">Verificando conexão com a rede Tor...</span>
+            </div>
+        `;
+        const $openBtn = this._getOpenBtn();
+        const $copyBtn = this._getCopyBtn();
+        if ($openBtn) $openBtn.hidden = true;
+        if ($copyBtn) $copyBtn.disabled = true;
+    }
+
+    _renderAvailable(onionAddress) {
+        const $statusBox = this._getStatusBox();
+        if (!$statusBox) return;
+        $statusBox.innerHTML = `
+            <div class="tor-state-available column center text-center full-width">
+                <div class="tor-available-badge row center">
+                    <span class="tor-dot pulse"></span>
+                    <span data-i18n-key="dialogs.tor-available">Rede Tor disponível</span>
+                </div>
+                <div id="tor-onion-address-box" class="tor-onion-box" title="${onionAddress}">
+                    ${onionAddress}
+                </div>
+            </div>
+        `;
+        const $openBtn = this._getOpenBtn();
+        const $copyBtn = this._getCopyBtn();
+        if ($openBtn) {
+            $openBtn.href = `http://${onionAddress}`;
+            $openBtn.hidden = false;
+        }
+        if ($copyBtn) {
+            $copyBtn.disabled = false;
+        }
+    }
+
+    _renderUnavailable() {
+        const $statusBox = this._getStatusBox();
+        if (!$statusBox) return;
+
+        $statusBox.innerHTML = `
+            <div class="tor-state-unavailable column center text-center full-width p-1">
+                <div class="tor-unavailable-header row center gap-1">
+                    <svg class="icon" style="width: 22px; height: 22px; fill: currentColor;">
+                        <use xlink:href="#tor-icon"></use>
+                    </svg>
+                    <strong data-i18n-key="dialogs.tor-unavailable-title">Endereço Onion indisponível</strong>
+                </div>
+                <p class="font-caption text-secondary mt-1" style="opacity: 0.8; margin: 8px 0;" data-i18n-key="dialogs.tor-unavailable-desc">
+                    O serviço Tor ainda não está disponível. Tente novamente em alguns instantes.
+                </p>
+                <button id="tor-refresh-btn" type="button" class="btn btn-small btn-rounded btn-outline-tor mt-1">
+                    <svg class="icon" style="width: 14px; height: 14px; fill: currentColor; margin-right: 6px;">
+                        <use xlink:href="#icon-refresh"></use>
+                    </svg>
+                    <span data-i18n-key="dialogs.tor-refresh">Atualizar</span>
+                </button>
+            </div>
+        `;
+
+        const $refreshBtn = $('tor-refresh-btn');
+        if ($refreshBtn) {
+            $refreshBtn.addEventListener('click', _ => this._fetchOnionAddress());
+        }
+
+        const $openBtn = this._getOpenBtn();
+        const $copyBtn = this._getCopyBtn();
+        if ($openBtn) $openBtn.hidden = true;
+        if ($copyBtn) $copyBtn.disabled = true;
+    }
+
     async _fetchOnionAddress() {
+        this._renderLoading();
         try {
             const res = await fetch('/api/onion-info');
             const data = await res.json();
             if (data && data.success && data.onionAddress) {
                 this._onionAddress = data.onionAddress;
-                if (this.$addressInput) {
-                    this.$addressInput.value = this._onionAddress;
-                }
-                if (this.$openBtn) {
-                    this.$openBtn.href = `http://${this._onionAddress}`;
-                    this.$openBtn.removeAttribute('hidden');
+                this._renderAvailable(this._onionAddress);
+                if (window.Server && window.Server.updateState) {
+                    window.Server.updateState({ tor: true });
                 }
             } else {
-                if (this.$addressInput) {
-                    this.$addressInput.value = ".onion indisponível (Secret do Render não configurado)";
-                }
+                this._onionAddress = null;
+                this._renderUnavailable();
             }
         } catch (err) {
-            console.warn("Nao foi possivel carregar o endereco .onion:", err);
-            if (this.$addressInput) {
-                this.$addressInput.value = ".onion indisponivel";
+            console.warn("Could not fetch .onion address:", err);
+            this._onionAddress = null;
+            this._renderUnavailable();
+        }
+    }
+
+    _copyAddress() {
+        if (!this._onionAddress) return;
+
+        const copiedLabel = Localization.getTranslation("dialogs.tor-address-copied") || "Endereço copiado";
+        const copyLabel = Localization.getTranslation("dialogs.tor-copy-address") || "Copiar endereço";
+        const copyFailedLabel = Localization.getTranslation("dialogs.tor-copy-failed") || "Não foi possível copiar o endereço.";
+
+        const $copyText = this._getCopyText();
+        const $copyIcon = this._getCopyIcon();
+
+        const updateCopyUI = (success) => {
+            clearTimeout(this._copyResetTimer);
+            if (success) {
+                if ($copyText) $copyText.textContent = copiedLabel;
+                if ($copyIcon && $copyIcon.querySelector('use')) {
+                    $copyIcon.querySelector('use').setAttribute('xlink:href', '#icon-check');
+                }
+                Events.fire('notify-user', copiedLabel);
+            } else {
+                Events.fire('notify-user', copyFailedLabel);
             }
+
+            this._copyResetTimer = setTimeout(() => {
+                if ($copyText) $copyText.textContent = copyLabel;
+                if ($copyIcon && $copyIcon.querySelector('use')) {
+                    $copyIcon.querySelector('use').setAttribute('xlink:href', '#icon-copy');
+                }
+            }, 2000);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(this._onionAddress)
+                .then(() => updateCopyUI(true))
+                .catch(() => this._fallbackCopy(updateCopyUI));
+        } else {
+            this._fallbackCopy(updateCopyUI);
+        }
+    }
+
+    _fallbackCopy(callback) {
+        try {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = this._onionAddress;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            callback(successful);
+        } catch (err) {
+            callback(false);
         }
     }
 
