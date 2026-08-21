@@ -209,7 +209,7 @@ export default class ErikrafTdropServer {
         this.server = server;
 
         server.listen(conf.port, hostname, () => {
-            console.log(`Server running at http://${hostname}:${conf.port}/`);
+            console.log(`Server running at http://${hostname || '0.0.0.0'}:${conf.port}/`);
         });
 
         server.on('error', (err) => {
