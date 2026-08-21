@@ -2604,9 +2604,6 @@ class TorDialog extends Dialog {
                     O serviço Tor ainda não está disponível. Tente novamente em alguns instantes.
                 </p>
                 <button id="tor-refresh-btn" type="button" class="btn btn-small btn-rounded btn-outline-tor mt-1">
-                    <svg class="icon" style="width: 14px; height: 14px; fill: currentColor; margin-right: 6px;">
-                        <use xlink:href="#icon-refresh"></use>
-                    </svg>
                     <span data-i18n-key="dialogs.tor-refresh">Atualizar</span>
                 </button>
             </div>
