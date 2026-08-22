@@ -58,6 +58,35 @@ export default class ErikrafTdropServer {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = dirname(__filename);
 
+        // Middleware to announce Onion-Location header for Tor Service Discovery
+        let cachedOnionHost = null;
+        const getOnionHost = () => {
+            if (cachedOnionHost) return cachedOnionHost;
+            const torHostnamePath = '/var/lib/tor/erikraft_drop_onion/hostname';
+            try {
+                if (fs.existsSync(torHostnamePath)) {
+                    const host = fs.readFileSync(torHostnamePath, 'utf8').trim();
+                    if (host) {
+                        cachedOnionHost = host;
+                        return cachedOnionHost;
+                    }
+                }
+            } catch (err) {
+                // ignore error
+            }
+            return 'nozudb2e4jy4betognmnwoxvdu44wvjoqvmwios5ql7mxagqqpnn64ad.onion';
+        };
+
+        app.use((req, res, next) => {
+            const hostHeader = req.headers.host || req.hostname || '';
+            if (!hostHeader.endsWith('.onion')) {
+                const onionHost = getOnionHost();
+                const onionUrl = `http://${onionHost}${req.originalUrl || req.url || '/'}`;
+                res.setHeader('Onion-Location', onionUrl);
+            }
+            next();
+        });
+
         const publicPathAbs = path.join(__dirname, '../public');
         app.use(express.static(publicPathAbs));
 

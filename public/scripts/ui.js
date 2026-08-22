@@ -82,7 +82,7 @@ class PeersUI {
         }
         else {
             this.$wsFallbackWarning.hidden = true;
-            if (!window.isRtcSupported) {
+            if (!window.isRtcSupported && !wsConfig.wsFallback) {
                 alert(Localization.getTranslation("instructions.webrtc-requirement"));
             }
         }

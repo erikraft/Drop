@@ -13,7 +13,7 @@ class DiscoveryBadgeState {
 
         this.state = {
             lan: false,
-            ip: false,
+            ip: true,
             paired: false,
             publicRoom: false,
             publicRoomId: null,
@@ -322,7 +322,7 @@ class DiscoveryBadgeState {
         const token = this.recoveryToken;
         this.patchState({
             lan: false,
-            ip: false,
+            ip: true,
             publicRoom: false,
             publicRoomId: null
         }, {

@@ -576,6 +576,14 @@ footer .logo {
     --badge-color: var(--public-room-color);
 }
 
+.badge-tor-network {
+    --badge-color: var(--primary-color);
+}
+
+.badge-tor-status {
+    --badge-color: var(--tor-color, #7D4696);
+}
+
 .known-as-wrapper {
     font-size: 16px;
     /* prevents auto-zoom on edit */
