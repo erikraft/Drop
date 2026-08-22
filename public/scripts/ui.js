@@ -15,29 +15,6 @@ class PeersUI {
         this.$shareModeDescriptorOther = $$('.shr-panel .descriptor-other');
         this.$shareModeCancelBtn = $$('.shr-panel .cancel-btn');
         this.$shareModeEditBtn = $$('.shr-panel .edit-btn');
-        this.$shareModeAiActions = $$('.shr-panel .ai-actions');
-        this.$shareModeAiVariationBtn = $$('.shr-panel .ai-variation-btn');
-        this.$shareModeAiNewImageBtn = $$('.shr-panel .ai-new-image-btn');
-
-        this._onAiVariation = async () => {
-            if (!this.shareMode.files.length) return;
-            await this._handleShareModeAiAction({
-                variation: true,
-                sourceFile: this.shareMode.files[0]
-            });
-        };
-        this._onAiGenerateNew = async () => {
-            await this._handleShareModeAiAction({
-                variation: false
-            });
-        };
-
-        if (this.$shareModeAiVariationBtn) {
-            this.$shareModeAiVariationBtn.addEventListener('click', this._onAiVariation);
-        }
-        if (this.$shareModeAiNewImageBtn) {
-            this.$shareModeAiNewImageBtn.addEventListener('click', this._onAiGenerateNew);
-        }
 
         this.peers = {};
 
@@ -349,7 +326,6 @@ class PeersUI {
         this.$shareModeDescriptor.removeAttribute('hidden');
         this.$shareModeDescriptorItem.innerText = descriptorItem;
 
-        this._toggleShareModeAiButtons(files.length > 0 && files.every(file => (file.type || '').split('/')[0] === 'image'));
 
         this.shareMode.active = true;
         this.shareMode.descriptor = descriptorComplete;
@@ -403,64 +379,11 @@ class PeersUI {
         this.$shareModeDescriptorOther.setAttribute('hidden', true);
         this.$shareModeEditBtn.removeEventListener('click', this._editShareTextCallback);
         this.$shareModeEditBtn.setAttribute('hidden', true);
-        this._toggleShareModeAiButtons(false);
 
         console.log('Share mode deactivated.')
         Events.fire('share-mode-changed', { active: false });
     }
 
-    async _handleShareModeAiAction({ variation = false, sourceFile = null } = {}) {
-        try {
-            Events.fire('notify-user', Localization.getTranslation('notifications.processing')); // generic feedback
-
-            let generated;
-
-            if (variation && sourceFile) {
-                generated = await AiImageClient.generateVariationFromFile(sourceFile);
-            }
-            else {
-                generated = await AiImageClient.generateFromPrompt();
-            }
-
-            if (!generated) {
-                Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
-                return;
-            }
-
-            // Convert base64 payload into a File for downstream flow
-            const file = await AiImageClient.toFile(generated, {
-                name: variation && sourceFile ? `${sourceFile.name || 'image'}-ai.png` : 'ai-image.png'
-            });
-
-            if (file) {
-                // Re-activate share mode with the new file
-                if (this.shareMode.active) {
-                    await this._deactivateShareMode();
-                }
-                await this._activateShareMode([file], "");
-                Events.fire('notify-user', Localization.getTranslation('notifications.file-transfer-completed'));
-            }
-        }
-        catch (error) {
-            console.error('AI action failed', error);
-            Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
-        }
-    }
-
-    _toggleShareModeAiButtons(show) {
-        if (!this.$shareModeAiActions) return;
-
-        if (!show) {
-            this.$shareModeAiActions.setAttribute('hidden', true);
-            if (this.$shareModeAiVariationBtn) this.$shareModeAiVariationBtn.setAttribute('hidden', true);
-            if (this.$shareModeAiNewImageBtn) this.$shareModeAiNewImageBtn.setAttribute('hidden', true);
-            return;
-        }
-
-        this.$shareModeAiActions.removeAttribute('hidden');
-        if (this.$shareModeAiVariationBtn) this.$shareModeAiVariationBtn.removeAttribute('hidden');
-        if (this.$shareModeAiNewImageBtn) this.$shareModeAiNewImageBtn.removeAttribute('hidden');
-    }
 
     _sendShareData(e) {
         // send the shared file/text content
@@ -679,12 +602,6 @@ class PeerUI {
         }
         if (clientType === 'open-vsx-registry-extension') {
             return '#icon-open-vsx';
-        }
-        if (clientType === 'comet-browser') {
-            return '#icon-comet';
-        }
-        if (clientType === 'browseros-browser' || clientType === 'browseros') {
-            return '#icon-browseros';
         }
         if (clientType === 'isearch-cli') {
             return '#icon-isearch-cli';
