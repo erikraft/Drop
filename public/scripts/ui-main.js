@@ -478,11 +478,6 @@ class DiscoveryBadgeState {
         this._renderBooleanBadge('tor', this.state.tor || window.location.hostname.endsWith('.onion'));
         this._renderPublicBadge(this.state.publicRoom && !!this.state.publicRoomId, this.state.publicRoomId);
 
-        // Check if accessing via .onion address to show Tor Status badge
-        const isTorAccess = window.location.hostname.endsWith('.onion');
-        document.querySelectorAll('[data-badge="tor-status"]').forEach(el => {
-            el.hidden = !isTorAccess;
-        });
 
         Events.fire('evaluate-footer-badges');
     }
