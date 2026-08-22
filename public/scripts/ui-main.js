@@ -507,7 +507,7 @@ class DiscoveryBadgeState {
             clearTimeout(this._hideTimers.get(timerKey));
             if (visible) {
                 el.hidden = false;
-                el.textContent = `na sala ${publicRoomId.toUpperCase()}`;
+                el.textContent = Localization.getTranslation("footer.public-room-devices", null, { roomId: publicRoomId.toUpperCase() });
                 this._hideTimers.delete(timerKey);
                 return;
             }
