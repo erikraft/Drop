@@ -2554,9 +2554,12 @@ class TorDialog extends Dialog {
                 <svg class="icon tor-spinner" style="width: 28px; height: 28px; margin-bottom: 10px;">
                     <use xlink:href="#tor-icon"></use>
                 </svg>
-                <span data-i18n-key="dialogs.tor-checking">Verificando conexão com a rede Tor...</span>
+                <span data-i18n-key="dialogs.tor-checking" data-i18n-attrs="text"></span>
             </div>
         `;
+        if (window.Localization && Localization.translateElement) {
+            $statusBox.querySelectorAll('[data-i18n-key]').forEach(el => Localization.translateElement(el));
+        }
         const $openBtn = this._getOpenBtn();
         const $copyBtn = this._getCopyBtn();
         if ($openBtn) $openBtn.hidden = true;
@@ -2570,13 +2573,16 @@ class TorDialog extends Dialog {
             <div class="tor-state-available column center text-center full-width">
                 <div class="tor-available-badge row center">
                     <span class="tor-dot pulse"></span>
-                    <span data-i18n-key="dialogs.tor-available">Rede Tor disponível</span>
+                    <span data-i18n-key="dialogs.tor-available" data-i18n-attrs="text"></span>
                 </div>
                 <div id="tor-onion-address-box" class="tor-onion-box" title="${onionAddress}">
                     ${onionAddress}
                 </div>
             </div>
         `;
+        if (window.Localization && Localization.translateElement) {
+            $statusBox.querySelectorAll('[data-i18n-key]').forEach(el => Localization.translateElement(el));
+        }
         const $openBtn = this._getOpenBtn();
         const $copyBtn = this._getCopyBtn();
         if ($openBtn) {
@@ -2598,16 +2604,17 @@ class TorDialog extends Dialog {
                     <svg class="icon" style="width: 22px; height: 22px; fill: currentColor;">
                         <use xlink:href="#tor-icon"></use>
                     </svg>
-                    <strong data-i18n-key="dialogs.tor-unavailable-title">ㅤEndereço Onion indisponível</strong>
+                    <strong data-i18n-key="dialogs.tor-unavailable-title" data-i18n-attrs="text"></strong>
                 </div>
-                <p class="font-caption text-secondary mt-1" style="opacity: 0.8; margin: 8px 0;" data-i18n-key="dialogs.tor-unavailable-desc">
-                    O serviço Tor ainda não está disponível. Tente novamente em alguns instantes.
-                </p>
+                <p class="font-caption text-secondary mt-1" style="opacity: 0.8; margin: 8px 0;" data-i18n-key="dialogs.tor-unavailable-desc" data-i18n-attrs="text"></p>
                 <button id="tor-refresh-btn" type="button" class="btn btn-small btn-rounded btn-outline-tor mt-1">
-                    <span data-i18n-key="dialogs.tor-refresh">Atualizar</span>
+                    <span data-i18n-key="dialogs.tor-refresh" data-i18n-attrs="text"></span>
                 </button>
             </div>
         `;
+        if (window.Localization && Localization.translateElement) {
+            $statusBox.querySelectorAll('[data-i18n-key]').forEach(el => Localization.translateElement(el));
+        }
 
         const $refreshBtn = $('tor-refresh-btn');
         if ($refreshBtn) {

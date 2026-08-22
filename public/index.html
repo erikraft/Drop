@@ -1055,14 +1055,10 @@
         <x-background class="full center">
             <x-paper shadow="2">
                 <div class="row center p-2 dialog-header">
-                    <h2 class="dialog-title">
-                        <span data-i18n-key="dialogs.tor-title">Rede Tor (Onion Service)</span>
-                    </h2>
+                    <h2 class="dialog-title" data-i18n-key="dialogs.tor-title" data-i18n-attrs="text"></h2>
                 </div>
                 <div class="tor-dialog-body column center p-3">
-                    <p class="tor-description font-body2 text-center" data-i18n-key="dialogs.tor-desc">
-                        Transfira arquivos através da rede Tor usando o endereço Onion Service do ErikrafT Drop.
-                    </p>
+                    <p class="tor-description font-body2 text-center" data-i18n-key="dialogs.tor-desc" data-i18n-attrs="text"></p>
 
                     <div id="tor-address-wrapper" class="tor-address-card column center full-width">
                         <div id="tor-status-box" class="column center full-width"></div>
@@ -1071,21 +1067,19 @@
                     <div class="tor-actions column center full-width">
                         <a id="tor-open-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-rounded btn-tor full-width text-white" style="text-decoration: none;" hidden>
                             <svg class="icon btn-icon"><use xlink:href="#tor-icon"></use></svg>
-                            <span data-i18n-key="dialogs.tor-open-browser">Abrir endereço Onion</span>
+                            <span data-i18n-key="dialogs.tor-open-browser" data-i18n-attrs="text"></span>
                         </a>
                         <button id="tor-copy-btn" type="button" class="btn btn-rounded btn-grey full-width">
-							<span id="tor-copy-text" data-i18n-key="dialogs.tor-copy-address">Copiar endereço</span>
+							<span id="tor-copy-text" data-i18n-key="dialogs.tor-copy-address" data-i18n-attrs="text"></span>
                         </button>
                     </div>
 
                     <hr class="tor-divider">
 
-                    <p class="tor-help-text font-caption text-center" data-i18n-key="dialogs.tor-help">
-                        Abra este endereço .onion em um navegador compatível com a rede Tor.
-                    </p>
+                    <p class="tor-help-text font-caption text-center" data-i18n-key="dialogs.tor-help" data-i18n-attrs="text"></p>
                 </div>
                 <div class="center row-reverse btn-row wrap">
-                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" data-i18n-attrs="text" close>Fechar</button>
+                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" data-i18n-attrs="text" close></button>
                 </div>
             </x-paper>
         </x-background>
