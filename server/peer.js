@@ -233,12 +233,16 @@ export default class Peer {
             }
         }
 
+        const searchParams = new URL(req.url, "http://server").searchParams;
+        const clientId = searchParams.get('client_id');
+        const seedValue = clientId ? clientId : this.id;
+
         const displayName = uniqueNamesGenerator({
             length: 2,
             separator: ' ',
             dictionaries: [colors, animals],
             style: 'capital',
-            seed: cyrb53(this.id)
+            seed: cyrb53(seedValue)
         })
 
         this.name = {
