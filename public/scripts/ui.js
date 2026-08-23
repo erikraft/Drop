@@ -3342,6 +3342,7 @@ class AnimatedQRReceiveDialog extends Dialog {
     }
 
     openScanner() {
+        this.show();
         if (!window.ErikrafTQRScanner) return;
         this.scanner = new ErikrafTQRScanner(this.$video, {
             onStateChange: (state) => {
