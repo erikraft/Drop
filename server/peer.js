@@ -5,7 +5,7 @@ import { cyrb53, hasher } from "./helper.js";
 
 export const ISEARCH_CLI_CLIENT_TYPE = 'isearch-cli';
 export const ISEARCH_CLI_NAME = 'iSearch CLI™';
-export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser', ISEARCH_CLI_CLIENT_TYPE]);
+export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', ISEARCH_CLI_CLIENT_TYPE]);
 
 export function isISearchCliRequest(req) {
     const searchParams = new URL(req.url, 'http://server').searchParams;
@@ -204,15 +204,6 @@ export default class Peer {
             'open-vsx-registry-extension': {
                 deviceName: 'Open VSX Extension',
                 browser: 'Open VSX'
-            },
-            'comet-browser': {
-                deviceName: 'Comet Browser',
-                browser: 'Comet'
-            }
-            ,
-            'browseros-browser': {
-                deviceName: 'BrowserOS',
-                browser: 'BrowserOS'
             },
             [ISEARCH_CLI_CLIENT_TYPE]: {
                 deviceName: ISEARCH_CLI_NAME,
