@@ -3270,11 +3270,8 @@ class AnimatedQRSendDialog extends Dialog {
     constructor() {
         super('animated-qr-send-dialog');
         this.$container = this.$el.querySelector('#qr-send-canvas-container');
-        this.$progress = this.$el.querySelector('#qr-send-progress');
-        this.$info = this.$el.querySelector('#qr-send-info');
+        this.$status = this.$el.querySelector('#qr-send-status');
         this.$pauseBtn = this.$el.querySelector('#qr-send-pause-btn');
-        this.$logToggle = this.$el.querySelector('#qr-send-log-toggle');
-        this.$logContent = this.$el.querySelector('#qr-send-log-content');
 
         if (this.$pauseBtn) {
             this.$pauseBtn.addEventListener('click', () => {
@@ -3288,36 +3285,14 @@ class AnimatedQRSendDialog extends Dialog {
                 }
             });
         }
-
-        if (this.$logToggle && this.$logContent) {
-            this.$logToggle.addEventListener('click', () => {
-                const isHidden = this.$logContent.style.display === 'none';
-                this.$logContent.style.display = isHidden ? 'block' : 'none';
-                this.$logToggle.textContent = isHidden ? '[ Ocultar detalhes ]' : '[ Mostrar detalhes ]';
-            });
-        }
     }
 
     async send(data) {
         if (!window.ErikrafTQRTransmitter) return;
-        if (this.$logContent) this.$logContent.innerHTML = '';
-
         this.transmitter = new ErikrafTQRTransmitter(this.$container, {
             onProgress: (p) => {
-                if (this.$progress) {
-                    this.$progress.textContent = `Transmitindo via QR Code... (Símbolo ${p.currentIndex + 1})`;
-                }
-                if (this.$info) {
-                    const totalKb = (p.totalSize / 1024).toFixed(1);
-                    this.$info.textContent = `${totalKb} KB total | ${p.speedKbps} KB/s`;
-                }
-            },
-            onLog: (msg) => {
-                if (this.$logContent) {
-                    const line = document.createElement('div');
-                    line.textContent = msg;
-                    this.$logContent.appendChild(line);
-                    this.$logContent.scrollTop = this.$logContent.scrollHeight;
+                if (this.$status) {
+                    this.$status.textContent = `Símbolo ${p.currentIndex + 1}/${p.totalFrames}`;
                 }
             }
         });
@@ -3347,17 +3322,6 @@ class AnimatedQRReceiveDialog extends Dialog {
         this.$video = this.$el.querySelector('#qr-scanner-video');
         this.$state = this.$el.querySelector('#qr-receive-state');
         this.$progress = this.$el.querySelector('#qr-receive-progress');
-        this.$info = this.$el.querySelector('#qr-receive-info');
-        this.$logToggle = this.$el.querySelector('#qr-receive-log-toggle');
-        this.$logContent = this.$el.querySelector('#qr-receive-log-content');
-
-        if (this.$logToggle && this.$logContent) {
-            this.$logToggle.addEventListener('click', () => {
-                const isHidden = this.$logContent.style.display === 'none';
-                this.$logContent.style.display = isHidden ? 'block' : 'none';
-                this.$logToggle.textContent = isHidden ? '[ Ocultar detalhes ]' : '[ Mostrar detalhes ]';
-            });
-        }
 
         this.$headerBtn = $('animated-qr-btn');
         if (this.$headerBtn) {
@@ -3367,19 +3331,17 @@ class AnimatedQRReceiveDialog extends Dialog {
                     const text = window.erikrafTdrop.peersUI.shareMode.text;
                     if (files.length) {
                         window.erikrafTdrop.animatedQRSendDialog.send({ file: files[0] });
-                        return;
                     } else if (text) {
                         window.erikrafTdrop.animatedQRSendDialog.send({ text: text });
-                        return;
                     }
+                } else {
+                    this.openScanner();
                 }
-                this.openScanner();
             });
         }
     }
 
     openScanner() {
-        if (this.$logContent) this.$logContent.innerHTML = '';
         this.show();
         if (!window.ErikrafTQRScanner) return;
         this.scanner = new ErikrafTQRScanner(this.$video, {
@@ -3388,19 +3350,7 @@ class AnimatedQRReceiveDialog extends Dialog {
             },
             onProgress: (p) => {
                 if (this.$progress) {
-                    this.$progress.textContent = `Dados recuperados: ${p.pct}% (${p.recoveredBlocks}/${p.totalBlocks} blocos)`;
-                }
-                if (this.$info) {
-                    const sizeKb = (p.size / 1024).toFixed(1);
-                    this.$info.textContent = `${sizeKb} KB | Velocidade: ${p.speedKbps} KB/s`;
-                }
-            },
-            onLog: (msg) => {
-                if (this.$logContent) {
-                    const line = document.createElement('div');
-                    line.textContent = msg;
-                    this.$logContent.appendChild(line);
-                    this.$logContent.scrollTop = this.$logContent.scrollHeight;
+                    this.$progress.textContent = `Dados recuperados: ${p.pct}% (${p.received}/${p.total} símbolos)`;
                 }
             },
             onComplete: (res) => {
@@ -3410,14 +3360,15 @@ class AnimatedQRReceiveDialog extends Dialog {
                     Events.fire('files-received', {
                         peerId: 'QR',
                         files: [res.file],
-                        imagesOnly: res.mime ? res.mime.startsWith('image/') : false,
-                        totalSize: res.file.size || res.buffer.byteLength
+                        imagesOnly: res.mime.startsWith('image/'),
+                        totalSize: res.file.size
                     });
                 }
                 this.hide();
             }
         });
 
+        this.show();
         this.scanner.start();
     }
 

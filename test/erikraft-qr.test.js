@@ -1,8 +1,10 @@
 import assert from "assert";
 import crypto from "crypto";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// Polyfill web crypto subtle digest for Node test runner if needed
 if (!globalThis.crypto || !globalThis.crypto.subtle) {
     globalThis.crypto = crypto.webcrypto;
 }
@@ -12,11 +14,6 @@ const __dirname = path.dirname(__filename);
 
 const qrModulePath = path.join(__dirname, "../public/scripts/erikraft-qr.js");
 const {
-    TransferIntegrity,
-    OpticalTransferProtocol,
-    FountainEncoder,
-    FountainDecoder,
-    AdaptiveTransport,
     ErikrafTQRTransmitter,
     ErikrafTQRScanner,
     crc32,
@@ -26,464 +23,169 @@ const {
 } = await import(qrModulePath);
 
 async function runTests() {
-    console.log("==================================================");
-    console.log("Starting ERIKRAFT-QR v2.0 Technical Test Suite");
-    console.log("==================================================");
+    console.log("Starting ERIKRAFT-QR Unit Tests...");
 
-    // 1. Small Text Transfer
+    // 1. Test Text Encoding & Recovery with Shuffled / Out-of-Order Frames
     {
-        console.log("-> 1. Small text transfer");
-        const sample = "Small text";
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 16 });
-        await tx.prepareText(sample);
+        console.log("-> Test 1: Text transfer with shuffled frames");
+        const originalText = "Hello, ErikrafT Drop™ QR Optical Transfer Protocol!";
+        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 20 });
+        await tx.prepareText(originalText);
 
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
+        assert(tx.frames.length > 0, "Frames should be generated");
+        const frame0 = JSON.parse(tx.frames[0]);
+        assert.strictEqual(frame0.h, "EKQR", "Magic header must be EKQR");
+        assert.strictEqual(frame0.v, 1, "Version must be 1");
+        assert.strictEqual(frame0.t, "text", "Type must be text");
 
-        for (const frame of tx.frames) {
+        let completedResult = null;
+        const rx = new ErikrafTQRScanner(null, {
+            onComplete: (res) => { completedResult = res; }
+        });
+
+        rx.start();
+
+        // Feed frames in reverse/shuffled order
+        const shuffledFrames = [...tx.frames].reverse();
+        for (const frame of shuffledFrames) {
             await rx._processRawData(frame);
         }
-        assert(res !== null, "Small text transfer should complete");
-        assert.strictEqual(res.text, sample);
-        console.log("   ✓ Small text transfer passed");
+
+        assert(completedResult !== null, "Transfer should complete");
+        assert.strictEqual(completedResult.type, "text");
+        assert.strictEqual(completedResult.text, originalText, "Reassembled text must match original");
+        console.log("   ✓ Text transfer test passed");
     }
 
-    // 2. Large Text Transfer
+    // 2. Test Binary File Transfer Across Exact Boundary Sizes
     {
-        console.log("-> 2. Large text transfer");
-        const largeText = "A".repeat(15000);
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 200 });
-        await tx.prepareText(largeText);
+        console.log("-> Test 2: Binary file transfer across exact boundary sizes");
+        const sizesToTest = [1023, 1024, 1025, 2047, 2048, 2049, 10240];
 
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const frame of tx.frames) {
-            await rx._processRawData(frame);
-        }
-        assert(res !== null, "Large text transfer should complete");
-        assert.strictEqual(res.text, largeText);
-        console.log("   ✓ Large text transfer passed");
-    }
-
-    // 3. Small Binary File Transfer
-    {
-        console.log("-> 3. Small binary file transfer");
-        const smallBin = crypto.randomBytes(128).buffer;
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 32 });
-        await tx.prepareFile({ buffer: smallBin, name: "small.bin", type: "application/octet-stream" });
-
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const frame of tx.frames) {
-            await rx._processRawData(frame);
-        }
-        assert(res !== null, "Small file transfer should complete");
-        assert.strictEqual(res.name, "small.bin");
-        assert.strictEqual(res.buffer.byteLength, 128);
-        console.log("   ✓ Small binary file transfer passed");
-    }
-
-    // 4. Binary File Transfer Across Exact Boundary Sizes
-    {
-        console.log("-> 4. Binary boundary size tests (1023, 1024, 1025, 2048)");
-        for (const sz of [1023, 1024, 1025, 2048]) {
-            const buf = crypto.randomBytes(sz).buffer;
+        for (const size of sizesToTest) {
+            const randomBuffer = crypto.randomBytes(size).buffer;
             const tx = new ErikrafTQRTransmitter(null, { chunkSize: 180 });
-            await tx.prepareFile({ buffer: buf, name: `b-${sz}.bin`, type: "application/octet-stream" });
+            await tx.prepareFile({
+                buffer: randomBuffer,
+                name: `test-${size}.bin`,
+                type: "application/octet-stream"
+            });
 
-            let res = null;
-            const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-            rx.state = 'Searching for QR...';
-            rx.scanning = true;
+            let completedResult = null;
+            const rx = new ErikrafTQRScanner(null, {
+                onComplete: (res) => { completedResult = res; }
+            });
+            rx.start();
 
             for (const frame of tx.frames) {
                 await rx._processRawData(frame);
             }
-            assert(res !== null, `Boundary size ${sz} failed`);
-            assert.strictEqual(res.buffer.byteLength, sz);
+
+            assert(completedResult !== null, `Transfer for size ${size} should complete`);
+            assert.strictEqual(completedResult.name, `test-${size}.bin`);
+            assert.strictEqual(completedResult.buffer.byteLength, size, `Byte length must equal ${size}`);
+
+            const origSha = await sha256Buffer(randomBuffer);
+            const rxSha = await sha256Buffer(completedResult.buffer);
+            assert.strictEqual(rxSha, origSha, `SHA-256 for size ${size} must match original`);
         }
         console.log("   ✓ Binary boundary size tests passed");
     }
 
-    // 5. Larger Binary File Transfer (20 KB)
+    // 3. Test Fountain / FEC Parity Reconstruction (Simulate Missing Base Chunks)
     {
-        console.log("-> 5. Larger binary file transfer (20 KB)");
-        const buf = crypto.randomBytes(20480).buffer;
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 250 });
-        await tx.prepareFile({ buffer: buf, name: "large.bin", type: "application/octet-stream" });
-
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const frame of tx.frames) {
-            await rx._processRawData(frame);
-        }
-        assert(res !== null, "Large binary transfer failed");
-        assert.strictEqual(res.buffer.byteLength, 20480);
-        console.log("   ✓ Larger binary file transfer passed");
-    }
-
-    // 6. Fountain / FEC Frame Loss Recovery (Drop Base Block 1 & 3)
-    {
-        console.log("-> 6. Fountain/FEC frame loss recovery");
-        const buf = crypto.randomBytes(3000).buffer;
+        console.log("-> Test 3: Fountain / FEC Parity reconstruction with lost chunks");
+        const binaryData = crypto.randomBytes(2000).buffer;
         const tx = new ErikrafTQRTransmitter(null, { chunkSize: 200 });
-        await tx.prepareFile({ buffer: buf, name: "fec.bin", type: "application/octet-stream" });
-
-        const framesWithLoss = tx.frames.filter(fStr => {
-            const parsed = JSON.parse(fStr);
-            const isSingle = parsed.b && parsed.b.length === 1;
-            return !(isSingle && (parsed.b[0] === 1 || parsed.b[0] === 3));
+        await tx.prepareFile({
+            buffer: binaryData,
+            name: "fec-test.dat",
+            type: "application/octet-stream"
         });
 
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
+        // Drop index 1 base frame, but keep FEC parity frame
+        const framesWithLoss = tx.frames.filter(fStr => {
+            const parsed = JSON.parse(fStr);
+            return !(parsed.i === 1 && !parsed.fec);
+        });
+
+        let completedResult = null;
+        const rx = new ErikrafTQRScanner(null, {
+            onComplete: (res) => { completedResult = res; }
+        });
+        rx.start();
 
         for (const frame of framesWithLoss) {
             await rx._processRawData(frame);
         }
-        assert(res !== null, "FEC recovery failed under frame loss");
-        const origSha = await sha256Buffer(buf);
-        const rxSha = await sha256Buffer(res.buffer);
-        assert.strictEqual(rxSha, origSha);
-        console.log("   ✓ Fountain/FEC frame loss recovery passed");
+
+        assert(completedResult !== null, "Transfer with 1 lost chunk should recover via FEC");
+        const origSha = await sha256Buffer(binaryData);
+        const rxSha = await sha256Buffer(completedResult.buffer);
+        assert.strictEqual(rxSha, origSha, "Recovered binary hash must match original SHA-256");
+        console.log("   ✓ Fountain/FEC parity test passed");
     }
 
-    // 7. Duplicate Frame Filtering
+    // 4. Test Corruption Rejection (Corrupted SHA / Bad CRC)
     {
-        console.log("-> 7. Duplicate frame filtering");
-        const text = "Duplicate frame test";
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 15 });
-        await tx.prepareText(text);
+        console.log("-> Test 4: Integrity check failure on corrupted SHA-256");
+        const originalText = "Sensitive secret data that must not be corrupted";
+        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 50 });
+        await tx.prepareText(originalText);
 
-        const dupFrames = [];
-        for (const f of tx.frames) {
-            dupFrames.push(f, f, f);
-        }
+        // Tamper with the SHA in frame 0
+        const parsed0 = JSON.parse(tx.frames[0]);
+        parsed0.sha = "0000000000000000000000000000000000000000000000000000000000000000";
+        // Recalculate CRC for modified JSON data payload if required, or keep data intact
+        tx.frames[0] = JSON.stringify(parsed0);
 
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const frame of dupFrames) {
-            await rx._processRawData(frame);
-        }
-        assert(res !== null);
-        assert.strictEqual(rx.decoder !== null && rx.decoder.duplicateFramesCount > 0, true);
-        console.log("   ✓ Duplicate frame filtering passed");
-    }
-
-    // 8. Out-of-Order Frame Reassembly
-    {
-        console.log("-> 8. Out-of-order frame reassembly");
-        const text = "Out of order frame reassembly test";
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 12 });
-        await tx.prepareText(text);
-
-        const shuffled = [...tx.frames].reverse();
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const frame of shuffled) {
-            await rx._processRawData(frame);
-        }
-        assert(res !== null);
-        assert.strictEqual(res.text, text);
-        console.log("   ✓ Out-of-order frame reassembly passed");
-    }
-
-    // 9. Corrupted Frame CRC Rejection
-    {
-        console.log("-> 9. Corrupted frame CRC rejection");
-        const text = "CRC check test";
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 15 });
-        await tx.prepareText(text);
-
-        const badFramePayload = JSON.parse(tx.frames[0]);
-        badFramePayload.crc = 99999999;
-        const badFrameStr = JSON.stringify(badFramePayload);
-
-        const rx = new ErikrafTQRScanner(null, {});
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        await rx._processRawData(badFrameStr);
-        assert.strictEqual(rx.invalidFrameCount, 1);
-        console.log("   ✓ Corrupted frame CRC rejection passed");
-    }
-
-    // 10. Consecutive Frame Loss Handling
-    {
-        console.log("-> 10. Consecutive frame loss handling");
-        const buf = crypto.randomBytes(4000).buffer;
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 200 });
-        await tx.prepareFile({ buffer: buf, name: "consec.bin", type: "application/octet-stream" });
-
-        // Drop 4 consecutive frames (indices 2,3,4,5)
-        const framesWithConsecLoss = tx.frames.filter(fStr => {
-            const parsed = JSON.parse(fStr);
-            const isSingle = parsed.b && parsed.b.length === 1;
-            return !(isSingle && (parsed.b[0] >= 2 && parsed.b[0] <= 5));
-        });
-
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const frame of framesWithConsecLoss) {
-            await rx._processRawData(frame);
-        }
-        assert(res !== null, "Consecutive frame loss recovery failed");
-        console.log("   ✓ Consecutive frame loss handling passed");
-    }
-
-    // 11. Full Decoder Reconstruction
-    {
-        console.log("-> 11. Full decoder reconstruction");
-        const fe = new FountainEncoder(new Uint8Array([10, 20, 30, 40, 50, 60]).buffer, 2);
-        const fd = new FountainDecoder(fe.numBlocks, 6, 2);
-
-        for (let i = 0; i < fe.numBlocks; i++) {
-            const blocks = fe.getFrameBlocks(i);
-            const data = fe.encodeFrameData(blocks);
-            fd.addFrame(blocks, data.buffer);
-        }
-        assert.strictEqual(fd.isComplete(), true);
-        assert.strictEqual(fd.getRecoveryProgress(), 100);
-        console.log("   ✓ Full decoder reconstruction passed");
-    }
-
-    // 12. Correct SHA-256 Validation
-    {
-        console.log("-> 12. Correct SHA-256 validation");
-        const sampleBuf = new Uint8Array([1, 2, 3, 4, 5]).buffer;
-        const hash = await sha256Buffer(sampleBuf);
-        assert.strictEqual(typeof hash, "string");
-        assert.strictEqual(hash.length, 64);
-        console.log("   ✓ Correct SHA-256 validation passed");
-    }
-
-    // 13. Corrupted SHA-256 Rejection
-    {
-        console.log("-> 13. Corrupted SHA-256 rejection");
-        const text = "SHA validation test string";
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 20 });
-        await tx.prepareText(text);
-
-        const tampered0 = JSON.parse(tx.frames[0]);
-        tampered0.sha = "0000000000000000000000000000000000000000000000000000000000000000";
-        tx.frames[0] = JSON.stringify(tampered0);
-
-        let res = null;
-        let state = "";
+        let completedResult = null;
+        let finalState = "";
         const rx = new ErikrafTQRScanner(null, {
-            onStateChange: (s) => { state = s; },
-            onComplete: (r) => { res = r; }
+            onStateChange: (st) => { finalState = st; },
+            onComplete: (res) => { completedResult = res; }
         });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const f of tx.frames) {
-            await rx._processRawData(f);
-        }
-        assert.strictEqual(res, null);
-        assert.strictEqual(state, "Integrity check failed");
-        console.log("   ✓ Corrupted SHA-256 rejection passed");
-    }
-
-    // 14. Bad CRC Rejection via Protocol Parser
-    {
-        console.log("-> 14. Bad CRC rejection via protocol parser");
-        const frameStr = OpticalTransferProtocol.createFramePayload({
-            transferId: "TESTID12",
-            type: "text",
-            totalSize: 10,
-            frameIdx: 0,
-            totalChunks: 1,
-            blocks: [0],
-            dataB64: bufferToBase64(new Uint8Array([1, 2, 3]).buffer),
-            sha: "abc"
-        });
-        const parsed = JSON.parse(frameStr);
-        parsed.crc = 12345;
-        assert.throws(() => OpticalTransferProtocol.parseFramePayload(JSON.stringify(parsed)), /CRC checksum failure/);
-        console.log("   ✓ Bad CRC rejection passed");
-    }
-
-    // 15. Session Cancellation & Cleaning
-    {
-        console.log("-> 15. Session cancellation & cleaning");
-        const rx = new ErikrafTQRScanner(null, {});
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-        rx.stop();
-        assert.strictEqual(rx.scanning, false);
-        console.log("   ✓ Session cancellation passed");
-    }
-
-    // 16. Session Isolation between Different Transfers
-    {
-        console.log("-> 16. Session isolation");
-        const tx1 = new ErikrafTQRTransmitter(null, { chunkSize: 20 });
-        await tx1.prepareText("Session 1");
-        const tx2 = new ErikrafTQRTransmitter(null, { chunkSize: 20 });
-        await tx2.prepareText("Session 2");
-
-        const rx = new ErikrafTQRScanner(null, {});
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        await rx._processRawData(tx1.frames[0]);
-        const initialId = rx.meta.id;
-
-        // Process frame from session 2 -> should be ignored
-        await rx._processRawData(tx2.frames[0]);
-        assert.strictEqual(rx.meta.id, initialId);
-        console.log("   ✓ Session isolation passed");
-    }
-
-    // 17. Protocol Versioning Check
-    {
-        console.log("-> 17. Protocol versioning check");
-        const payload = JSON.parse(tx1Payload());
-        payload.v = 99;
-        assert.throws(() => OpticalTransferProtocol.parseFramePayload(JSON.stringify(payload)), /Unsupported protocol version/);
-        console.log("   ✓ Protocol versioning check passed");
-
-        function tx1Payload() {
-            return OpticalTransferProtocol.createFramePayload({
-                transferId: "VERTEST1",
-                type: "text",
-                totalSize: 5,
-                frameIdx: 0,
-                totalChunks: 1,
-                blocks: [0],
-                dataB64: bufferToBase64(new Uint8Array([1, 2, 3]).buffer),
-                sha: "abc"
-            });
-        }
-    }
-
-    // 18. Adaptive Transport Latency Tuning
-    {
-        console.log("-> 18. Adaptive transport latency tuning");
-        const adapt = new AdaptiveTransport();
-        assert.strictEqual(adapt.getFps(), 10);
-        for (let i = 0; i < 12; i++) adapt.recordDecode(150); // High latency
-        // Simulate time jump for adjustment interval
-        adapt.lastAdjustTime = Date.now() - 3000;
-        adapt.recordDecode(150);
-        assert(adapt.getFps() < 10, "FPS should decrease on high latency");
-        console.log("   ✓ Adaptive transport tuning passed");
-    }
-
-    // 19. Empty & Edge Payload Handling
-    {
-        console.log("-> 19. Empty payload handling");
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 20 });
-        await tx.prepareText("");
-        let res = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
-
-        for (const f of tx.frames) {
-            await rx._processRawData(f);
-        }
-        assert(res !== null);
-        assert.strictEqual(res.text, "");
-        console.log("   ✓ Empty payload handling passed");
-    }
-
-    // 20. Fountain/LT Stress Simulator (1%, 5%, 10%, 20%, 30% Frame Loss Rates)
-    {
-        console.log("-> 20. Fountain/LT Stress Simulator (1% - 30% loss)");
-        const testPayload = crypto.randomBytes(8000).buffer;
-        const lossRates = [0.01, 0.05, 0.10, 0.20, 0.30];
-
-        for (const rate of lossRates) {
-            const tx = new ErikrafTQRTransmitter(null, { chunkSize: 200 });
-            await tx.prepareFile({ buffer: testPayload, name: `stress-${rate}.bin`, type: "application/octet-stream" });
-
-            // Generate extra parity frames dynamically up to 4x to guarantee Fountain recovery at high loss rates
-            const totalFramesNeeded = Math.ceil(tx.encoder.numBlocks * 4.0);
-            for (let extra = tx.frames.length; extra < totalFramesNeeded; extra++) {
-                const blocks = tx.encoder.getFrameBlocks(extra);
-                const frameDataBuf = tx.encoder.encodeFrameData(blocks);
-                const dataB64 = bufferToBase64(frameDataBuf.buffer);
-                tx.frames.push(OpticalTransferProtocol.createFramePayload({
-                    transferId: tx.transferId,
-                    type: tx.metadata.type,
-                    name: tx.metadata.name,
-                    mime: tx.metadata.mime,
-                    totalSize: tx.totalSize,
-                    frameIdx: extra,
-                    totalChunks: tx.encoder.numBlocks,
-                    blocks: blocks,
-                    dataB64: dataB64,
-                    sha: tx.sha
-                }));
-            }
-
-            // Simulate loss deterministically based on frame index
-            const receivedFrames = tx.frames.filter((_, idx) => (idx % 100) / 100 >= rate);
-
-            let res = null;
-            const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { res = r; } });
-            rx.state = 'Searching for QR...';
-            rx.scanning = true;
-
-            for (const frame of receivedFrames) {
-                await rx._processRawData(frame);
-                if (res !== null) break;
-            }
-
-            assert(res !== null, `Stress simulator failed at ${(rate * 100)}% loss rate`);
-            assert.strictEqual(res.buffer.byteLength, 8000);
-            console.log(`   ✓ Loss rate ${(rate * 100)}%: Recovered successfully (${rx.decoder.validFramesReceived} frames processed)`);
-        }
-    }
-
-    // 21. Cross-Platform Roundtrip Validation (Android <-> Web simulated)
-    {
-        console.log("-> 21. Cross-platform roundtrip validation");
-        const txText = "Android <-> Web Cross Platform ERIKRAFT-QR Payload";
-        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 25 });
-        await tx.prepareText(txText);
-
-        let rxRes = null;
-        const rx = new ErikrafTQRScanner(null, { onComplete: (r) => { rxRes = r; } });
-        rx.state = 'Searching for QR...';
-        rx.scanning = true;
+        rx.start();
 
         for (const frame of tx.frames) {
             await rx._processRawData(frame);
         }
 
-        assert(rxRes !== null);
-        assert.strictEqual(rxRes.text, txText);
-        console.log("   ✓ Cross-platform roundtrip passed");
+        assert.strictEqual(completedResult, null, "Corrupted transfer MUST NOT complete");
+        assert.strictEqual(finalState, "Integrity check failed", "State should be 'Integrity check failed'");
+        console.log("   ✓ Corruption rejection test passed");
     }
 
-    console.log("==================================================");
-    console.log("All 21 ERIKRAFT-QR v2.0 Tests Passed Successfully!");
-    console.log("==================================================");
+    // 5. Test Duplicate and Out-of-Order Frames
+    {
+        console.log("-> Test 5: Duplicate and out-of-order frame handling");
+        const sampleText = "Duplicate frame tolerance test string for ERIKRAFT-QR Scanner";
+        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 15 });
+        await tx.prepareText(sampleText);
+
+        // Duplicate each frame 3 times and scramble order
+        const noisyFrames = [];
+        for (const f of tx.frames) {
+            noisyFrames.push(f, f, f);
+        }
+        noisyFrames.sort(() => Math.random() - 0.5);
+
+        let completedResult = null;
+        const rx = new ErikrafTQRScanner(null, {
+            onComplete: (res) => { completedResult = res; }
+        });
+        rx.start();
+
+        for (const frame of noisyFrames) {
+            await rx._processRawData(frame);
+        }
+
+        assert(completedResult !== null, "Noisy transfer should complete");
+        assert.strictEqual(completedResult.text, sampleText, "Noisy transfer text must match original");
+        console.log("   ✓ Duplicate & noisy frames test passed");
+    }
+
+    console.log("\nAll ERIKRAFT-QR Unit Tests Passed Successfully!");
 }
 
 runTests().catch(err => {

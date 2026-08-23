@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.13.0';
+const cacheVersion = 'v1.12.5';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
@@ -21,9 +21,7 @@ const relativePathsToCache = [
     'scripts/libs/heic2any.min.js',
     'scripts/libs/no-sleep.min.js',
     'scripts/libs/qr-code-styling.js',
-    'scripts/libs/jsQR.js',
     'scripts/qr-helper.js',
-    'scripts/erikraft-qr.js',
     'scripts/libs/zip.min.js',
     'sounds/blop.mp3',
     'sounds/blop.ogg',
