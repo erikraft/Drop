@@ -4,7 +4,6 @@ import {fileURLToPath} from "url";
 import path, {dirname} from "path";
 import http from "http";
 import fs from "fs";
-import multer from "multer";
 
 // Ensure fetch/FormData/File exist for runtimes without native support (Node < 18)
 if (typeof fetch === "undefined" || typeof FormData === "undefined" || typeof File === "undefined") {

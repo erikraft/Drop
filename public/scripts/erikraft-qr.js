@@ -76,7 +76,7 @@ class ErikrafTQRTransmitter {
     }
 
     async prepareFile(file) {
-        const buffer = await file.arrayBuffer();
+        const buffer = typeof file.arrayBuffer === 'function' ? await file.arrayBuffer() : file.buffer;
         await this.prepareBuffer(buffer, {
             type: 'file',
             name: file.name,
@@ -184,7 +184,9 @@ class ErikrafTQRTransmitter {
         if (!this.running || this.paused) return;
 
         const frameStr = this.frames[this.currentIndex];
-        ErikrafTDropQR.render(this.containerEl, frameStr);
+        if (typeof ErikrafTDropQR !== 'undefined' && this.containerEl) {
+            ErikrafTDropQR.render(this.containerEl, frameStr);
+        }
 
         this.onProgress({
             currentIndex: this.currentIndex,
@@ -221,11 +223,15 @@ class ErikrafTQRScanner {
         this.meta = null;
 
         try {
-            this.stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
-            this.videoEl.srcObject = this.stream;
-            await this.videoEl.play();
+            if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+                this.stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                if (this.videoEl) {
+                    this.videoEl.srcObject = this.stream;
+                    await this.videoEl.play();
+                }
+            }
             this._scanLoop();
         } catch (err) {
             console.error('Camera access failed:', err);
@@ -249,7 +255,7 @@ class ErikrafTQRScanner {
     async _scanLoop() {
         if (!this.scanning) return;
 
-        if ('BarcodeDetector' in window) {
+        if (typeof BarcodeDetector !== 'undefined') {
             try {
                 if (!this.detector) {
                     this.detector = new BarcodeDetector({ formats: ['qr_code'] });
@@ -261,7 +267,7 @@ class ErikrafTQRScanner {
             } catch (e) {
                 // ignore frame detection error
             }
-        } else if (window.jsQR && this.videoEl.readyState === this.videoEl.HAVE_ENOUGH_DATA) {
+        } else if (typeof window !== 'undefined' && window.jsQR && this.videoEl && this.videoEl.readyState === this.videoEl.HAVE_ENOUGH_DATA) {
             try {
                 if (!this.canvas) {
                     this.canvas = document.createElement('canvas');
@@ -280,8 +286,55 @@ class ErikrafTQRScanner {
             }
         }
 
-        if (this.scanning) {
+        if (this.scanning && typeof requestAnimationFrame !== 'undefined') {
             requestAnimationFrame(() => this._scanLoop());
+        }
+    }
+
+    _tryApplyFec() {
+        if (!this.meta) return;
+        let progressMade = true;
+        while (progressMade && this.receivedChunks.size < this.meta.numChunks) {
+            progressMade = false;
+            for (const fecFrame of this.fecFrames) {
+                if (!fecFrame.fec || fecFrame.fec.length !== 2) continue;
+                const [idx1, idx2] = fecFrame.fec;
+                const has1 = this.receivedChunks.has(idx1);
+                const has2 = this.receivedChunks.has(idx2);
+                if (has1 && !has2) {
+                    const b1 = new Uint8Array(this.receivedChunks.get(idx1));
+                    const xorBuf = new Uint8Array(base64ToBuffer(fecFrame.d));
+                    const recovered = new Uint8Array(xorBuf.length);
+                    for (let b = 0; b < xorBuf.length; b++) {
+                        recovered[b] = (b1[b] || 0) ^ xorBuf[b];
+                    }
+                    let expectedLen = xorBuf.length;
+                    if (idx2 === this.meta.numChunks - 1) {
+                        const calculatedTotal = (this.meta.numChunks - 1) * b1.length + expectedLen;
+                        if (calculatedTotal > this.meta.totalSize) {
+                            expectedLen = this.meta.totalSize - (this.meta.numChunks - 1) * b1.length;
+                        }
+                    }
+                    this.receivedChunks.set(idx2, recovered.slice(0, expectedLen).buffer);
+                    progressMade = true;
+                } else if (has2 && !has1) {
+                    const b2 = new Uint8Array(this.receivedChunks.get(idx2));
+                    const xorBuf = new Uint8Array(base64ToBuffer(fecFrame.d));
+                    const recovered = new Uint8Array(xorBuf.length);
+                    for (let b = 0; b < xorBuf.length; b++) {
+                        recovered[b] = (b2[b] || 0) ^ xorBuf[b];
+                    }
+                    let expectedLen = xorBuf.length;
+                    if (idx1 === this.meta.numChunks - 1) {
+                        const calculatedTotal = (this.meta.numChunks - 1) * b2.length + expectedLen;
+                        if (calculatedTotal > this.meta.totalSize) {
+                            expectedLen = this.meta.totalSize - (this.meta.numChunks - 1) * b2.length;
+                        }
+                    }
+                    this.receivedChunks.set(idx1, recovered.slice(0, expectedLen).buffer);
+                    progressMade = true;
+                }
+            }
         }
     }
 
@@ -322,6 +375,8 @@ class ErikrafTQRScanner {
                 }
             }
 
+            this._tryApplyFec();
+
             this.state = 'Receiving...';
             this.onStateChange(this.state);
 
@@ -336,7 +391,7 @@ class ErikrafTQRScanner {
             });
 
             if (receivedCount >= this.meta.numChunks) {
-                this._finishReconstruction();
+                return this._finishReconstruction();
             }
         } catch (e) {
             // invalid JSON or chunk
@@ -380,12 +435,47 @@ class ErikrafTQRScanner {
             const text = new TextDecoder().decode(totalBytes);
             this.onComplete({ type: 'text', text: text });
         } else {
-            const blob = new Blob([totalBytes], { type: this.meta.mime });
-            const file = new File([blob], this.meta.name, { type: this.meta.mime });
-            this.onComplete({ type: 'file', file: file, name: this.meta.name, mime: this.meta.mime });
+            const blob = typeof Blob !== 'undefined' ? new Blob([totalBytes], { type: this.meta.mime }) : totalBytes;
+            const file = typeof File !== 'undefined' && typeof Blob !== 'undefined' ? new File([blob], this.meta.name, { type: this.meta.mime }) : { buffer: totalBytes.buffer, name: this.meta.name, type: this.meta.mime };
+            this.onComplete({ type: 'file', file: file, name: this.meta.name, mime: this.meta.mime, buffer: totalBytes.buffer });
         }
     }
 }
 
-window.ErikrafTQRTransmitter = ErikrafTQRTransmitter;
-window.ErikrafTQRScanner = ErikrafTQRScanner;
+if (typeof window !== 'undefined') {
+    window.ErikrafTQRTransmitter = ErikrafTQRTransmitter;
+    window.ErikrafTQRScanner = ErikrafTQRScanner;
+    window.crc32 = crc32;
+    window.sha256Buffer = sha256Buffer;
+    window.bufferToBase64 = bufferToBase64;
+    window.base64ToBuffer = base64ToBuffer;
+}
+
+if (typeof globalThis !== 'undefined') {
+    globalThis.ErikrafTQRTransmitter = ErikrafTQRTransmitter;
+    globalThis.ErikrafTQRScanner = ErikrafTQRScanner;
+    globalThis.crc32 = crc32;
+    globalThis.sha256Buffer = sha256Buffer;
+    globalThis.bufferToBase64 = bufferToBase64;
+    globalThis.base64ToBuffer = base64ToBuffer;
+}
+
+export {
+    ErikrafTQRTransmitter,
+    ErikrafTQRScanner,
+    crc32,
+    sha256Buffer,
+    bufferToBase64,
+    base64ToBuffer
+};
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        ErikrafTQRTransmitter,
+        ErikrafTQRScanner,
+        crc32,
+        sha256Buffer,
+        bufferToBase64,
+        base64ToBuffer
+    };
+}
