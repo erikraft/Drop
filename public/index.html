@@ -1513,14 +1513,19 @@
     <!-- Animated QR Send Dialog -->
     <x-dialog id="animated-qr-send-dialog">
         <x-background class="full center">
-            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+            <x-paper shadow="2" style="max-width: 520px; width: 92%;">
                 <div class="row center p-2">
-                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Transferência por QR Code</h2>
+                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Enviar via QR Code Animado</h2>
                 </div>
                 <div class="column center p-2">
-                    <div id="qr-send-canvas-container" class="center p-2" style="background: #fff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
-                    <div class="font-body2 text-center mt-2" data-i18n-key="dialogs.animated-qr-instruction">Mantenha o outro dispositivo apontado para este QR Code</div>
-                    <div id="qr-send-status" class="font-caption text-secondary mt-1">Status: Ativo</div>
+                    <div id="qr-send-canvas-container" class="center p-2" style="background: #ffffff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
+                    <div class="font-body2 text-center mt-2" data-i18n-key="dialogs.animated-qr-instruction">Mantenha a câmera do dispositivo receptor apontada para esta tela</div>
+
+                    <div id="qr-send-progress" class="font-body2 text-primary font-weight-bold mt-2">Dados recuperados: Transmitindo...</div>
+                    <div id="qr-send-info" class="font-caption text-secondary mt-1">0 KB / 0 KB | 0.0 KB/s</div>
+
+                    <div id="qr-send-log-toggle" class="font-caption text-secondary mt-2 cursor-pointer" style="text-decoration: underline;">[ Mostrar detalhes ]</div>
+                    <div id="qr-send-log-content" class="column fw mt-2 p-2" style="display: none; max-height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.2); border-radius: 6px; word-break: break-all;"></div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2">
                     <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey">Pausar</button>
@@ -1533,14 +1538,24 @@
     <!-- Animated QR Receive Dialog -->
     <x-dialog id="animated-qr-receive-dialog">
         <x-background class="full center">
-            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+            <x-paper shadow="2" style="max-width: 520px; width: 92%;">
                 <div class="row center p-2">
-                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber por QR Code Animado</h2>
+                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber via QR Code Animado</h2>
                 </div>
                 <div class="column center p-2">
-                    <video id="qr-scanner-video" playsinline style="width: 100%; max-height: 260px; border-radius: 12px; background: #000; object-fit: cover;"></video>
-                    <div id="qr-receive-state" class="font-body2 text-center mt-2">Procurando QR...</div>
-                    <div id="qr-receive-progress" class="font-caption text-secondary mt-1">Dados recuperados: 0%</div>
+                    <div style="position: relative; width: 100%; max-height: 280px; overflow: hidden; border-radius: 12px; background: #000;">
+                        <video id="qr-scanner-video" playsinline style="width: 100%; height: 260px; object-fit: cover;"></video>
+                        <div style="position: absolute; top: 12px; left: 12px; right: 12px; padding: 6px 12px; background: rgba(0,0,0,0.6); border-radius: 6px; color: #fff; font-size: 12px; text-align: center;">
+                            Posicione o QR Code dentro da moldura | Segure o celular estável
+                        </div>
+                    </div>
+
+                    <div id="qr-receive-state" class="font-body2 text-center mt-2">Procurando QR Code...</div>
+                    <div id="qr-receive-progress" class="font-body2 text-primary font-weight-bold mt-1">Dados recuperados: 0%</div>
+                    <div id="qr-receive-info" class="font-caption text-secondary mt-1">0 KB / 0 KB | 0.0 KB/s</div>
+
+                    <div id="qr-receive-log-toggle" class="font-caption text-secondary mt-2 cursor-pointer" style="text-decoration: underline;">[ Mostrar detalhes ]</div>
+                    <div id="qr-receive-log-content" class="column fw mt-2 p-2" style="display: none; max-height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.2); border-radius: 6px; word-break: break-all;"></div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2">
                     <button class="btn btn-rounded btn-grey" close>Cancelar</button>
