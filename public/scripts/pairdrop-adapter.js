@@ -45,13 +45,47 @@ class PairDropAdapter {
     static parseIncomingSignal(msg) {
         if (!msg) return msg;
 
-        // If incoming signal is from PairDrop, ensure header fields match ErikrafT Drop™ expectations
+        if (typeof msg === 'string') {
+            try {
+                msg = JSON.parse(msg);
+            } catch (e) {
+                return msg;
+            }
+        }
+
+        // If incoming signal is from PairDrop or contains PairDrop request format
         if (msg.type === 'request' && msg.header) {
             msg.header = this.normalizeHeader(msg.header);
         }
 
+        if (msg.type === 'peer-joined' && msg.peer) {
+            msg.peer = this.normalizePeer(msg.peer);
+        }
+
         return msg;
+    }
+
+    static normalizePeer(peer) {
+        if (!peer) return peer;
+        return {
+            id: peer.id || peer.peerId,
+            name: peer.name || {
+                displayName: peer.displayName || peer.name || 'PairDrop Device',
+                deviceName: peer.deviceName || 'PairDrop Web',
+                clientType: 'pairdrop-web'
+            },
+            rtcSupported: peer.rtcSupported !== false
+        };
+    }
+
+    static getChunkSize() {
+        return 65536; // 64 KB standard WebRTC chunk
     }
 }
 
-window.PairDropAdapter = PairDropAdapter;
+if (typeof window !== 'undefined') {
+    window.PairDropAdapter = PairDropAdapter;
+}
+
+export { PairDropAdapter };
+export default PairDropAdapter;

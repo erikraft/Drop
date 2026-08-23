@@ -921,8 +921,6 @@ class ReceiveFileDialog extends ReceiveDialog {
 
         this.$downloadBtn = this.$el.querySelector('#download-btn');
         this.$shareBtn = this.$el.querySelector('#share-btn');
-        this.$editPhotopeaBtn = this.$el.querySelector('#edit-photopea-btn');
-        this.$editVectorpeaBtn = this.$el.querySelector('#edit-vectorpea-btn');
         this.$copyImageBtn = this.$el.querySelector('#copy-image-btn');
         this.$metadataBtn = this.$el.querySelector('#metadata-btn');
         this.$compressBtn = this.$el.querySelector('#compress-btn');
@@ -1116,14 +1114,6 @@ class ReceiveFileDialog extends ReceiveDialog {
             const primary = files[0];
             const mime = (primary.type || '').toLowerCase();
             // Reset
-            if (this.$editPhotopeaBtn) {
-                this.$editPhotopeaBtn.setAttribute('hidden', true);
-                this.$editPhotopeaBtn.onclick = null;
-            }
-            if (this.$editVectorpeaBtn) {
-                this.$editVectorpeaBtn.setAttribute('hidden', true);
-                this.$editVectorpeaBtn.onclick = null;
-            }
             if (this.$copyImageBtn) {
                 this.$copyImageBtn.setAttribute('hidden', true);
                 this.$copyImageBtn.onclick = null;
@@ -1160,33 +1150,6 @@ class ReceiveFileDialog extends ReceiveDialog {
             if (this.$compressBtn) {
                 this.$compressBtn.setAttribute('hidden', true);
                 this.$compressBtn.onclick = null;
-            }
-
-            // Photopea: aceita imagens e .psd
-            const photopeaExts = ['.psd', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff'];
-            const fileName = primary.name ? primary.name.toLowerCase() : '';
-            const isPhotopea = mime.startsWith('image/') || photopeaExts.some(ext => fileName.endsWith(ext));
-            if (isPhotopea && this.$editPhotopeaBtn) {
-                this.$editPhotopeaBtn.removeAttribute('hidden');
-                this.$editPhotopeaBtn.onclick = _ => {
-                    console.log('UI: editPhotopea clicked', primary && primary.name, primary && primary.type);
-                    if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithPhotopea) {
-                        window.PhotopeaIntegration.editWithPhotopea(primary);
-                    }
-                };
-            }
-
-            // Vectorpea: aceita imagens, .ai, .sketch, .fig
-            const vectorpeaExts = ['.ai', '.sketch', '.fig', '.svg', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-            const isVectorpea = vectorpeaExts.some(ext => fileName.endsWith(ext)) || mime === 'image/svg+xml';
-            if (isVectorpea && this.$editVectorpeaBtn) {
-                this.$editVectorpeaBtn.removeAttribute('hidden');
-                this.$editVectorpeaBtn.onclick = _ => {
-                    console.log('UI: editVectorpea clicked', primary && primary.name, primary && primary.type);
-                    if (window.PhotopeaIntegration && window.PhotopeaIntegration.editWithVectorpea) {
-                        window.PhotopeaIntegration.editWithVectorpea(primary);
-                    }
-                };
             }
 
             // Copy image to clipboard (if supported)
@@ -1587,14 +1550,6 @@ class ReceiveFileDialog extends ReceiveDialog {
         setTimeout(async () => {
             this.$shareBtn.setAttribute('hidden', true);
             this.$downloadBtn.setAttribute('disabled', true);
-            if (this.$editPhotopeaBtn) {
-                this.$editPhotopeaBtn.setAttribute('hidden', true);
-                this.$editPhotopeaBtn.onclick = null;
-            }
-            if (this.$editVectorpeaBtn) {
-                this.$editVectorpeaBtn.setAttribute('hidden', true);
-                this.$editVectorpeaBtn.onclick = null;
-            }
             this.$previewBox.innerHTML = '';
             this._busy = false;
             await this._nextFiles();
