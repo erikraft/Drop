@@ -288,6 +288,15 @@ class ServerConnection {
 
         wsUrl.searchParams.append('webrtc_supported', window.isRtcSupported ? 'true' : 'false');
 
+        let clientId = localStorage.getItem('client_id');
+        if (!clientId) {
+            clientId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : Math.random().toString(36).substring(2) + Date.now().toString(36);
+            localStorage.setItem('client_id', clientId);
+        }
+        wsUrl.searchParams.append('client_id', clientId);
+
         const peerId = sessionStorage.getItem('peer_id');
         const peerIdHash = sessionStorage.getItem('peer_id_hash');
         if (peerId && peerIdHash) {
@@ -435,6 +444,15 @@ class ServerConnection {
 
         const wsUrl = new URL(`${parsed.protocol}://${parsed.hostPortPath.replace(/\/+$/, '')}/server`);
         wsUrl.searchParams.append('webrtc_supported', window.isRtcSupported ? 'true' : 'false');
+
+        let clientId = localStorage.getItem('client_id');
+        if (!clientId) {
+            clientId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : Math.random().toString(36).substring(2) + Date.now().toString(36);
+            localStorage.setItem('client_id', clientId);
+        }
+        wsUrl.searchParams.append('client_id', clientId);
 
         const peerId = sessionStorage.getItem('peer_id');
         const peerIdHash = sessionStorage.getItem('peer_id_hash');
@@ -1498,7 +1516,15 @@ class PeersManager {
 
     _onMessage(message) {
         const peerId = message.sender.id;
-        this.peers[peerId].onServerMessage(message);
+        if (!this._peerExists(peerId)) {
+            const roomType = message.roomType || 'ip';
+            const roomId = message.roomId || peerId;
+            const rtcSupported = message.sender ? message.sender.rtcSupported : true;
+            this._createOrRefreshPeer(false, peerId, roomType, roomId, rtcSupported);
+        }
+        if (this.peers[peerId]) {
+            this.peers[peerId].onServerMessage(message);
+        }
     }
 
     _refreshPeer(peerId, roomType, roomId) {

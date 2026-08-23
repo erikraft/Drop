@@ -30,9 +30,13 @@ function sha256(data) {
     return crypto.createHash('sha256').update(data).digest('hex');
 }
 
-function createClient(originHeader = 'https://drop.erikraft.com', clientType = 'browser') {
+function createClient(originHeader = 'https://drop.erikraft.com', clientType = 'browser', clientId = null, peerId = null) {
     return new Promise((resolve, reject) => {
-        const ws = new WebSocket(`${serverUrl}?client_type=${clientType}&webrtc_supported=false`, {
+        let url = `${serverUrl}?client_type=${clientType}&webrtc_supported=false`;
+        if (clientId) url += `&client_id=${clientId}`;
+        if (peerId) url += `&peer_id=${peerId}`;
+
+        const ws = new WebSocket(url, {
             headers: { 'Origin': originHeader }
         });
         const messages = [];
@@ -49,6 +53,9 @@ function createClient(originHeader = 'https://drop.erikraft.com', clientType = '
         });
 
         ws.on('json-message', (msg) => {
+            if (msg.type === 'ping') {
+                ws.send(JSON.stringify({ type: 'pong' }));
+            }
             if (msg.type === 'display-name') {
                 resolve({ ws, peerInfo: msg, messages });
             }
@@ -86,6 +93,72 @@ const peerJoinedMsg = await new Promise(resolve => {
 
 assert.strictEqual(peerJoinedMsg.peer.id, httpsClientB.peerInfo.peerId, 'Client B should be discovered by Client A');
 console.log('   ✓ HTTPS ↔ HTTPS signaling and discovery passed\n');
+
+// TEST A2: Multi-tab same client discovery and bidirectionality
+console.log('-> TEST A2: Multi-tab discovery, shared client identity and bidirectional peer list');
+const sharedClientId = 'shared-client-uuid-1234';
+
+const tabA = await createClient('https://drop.erikraft.com', 'browser', sharedClientId);
+const tabB = await createClient('https://drop.erikraft.com', 'browser', sharedClientId);
+
+// Both tabs share same displayName seed because they share clientId
+assert.strictEqual(tabA.peerInfo.displayName, tabB.peerInfo.displayName, 'Tabs on same client should share displayName');
+assert.notStrictEqual(tabA.peerInfo.peerId, tabB.peerInfo.peerId, 'Tabs must have unique peerIds');
+
+// Register listeners BEFORE sending messages
+const peersPromiseA = new Promise(resolve => {
+    tabA.ws.on('json-message', msg => {
+        if (msg.type === 'peers') resolve(msg);
+    });
+});
+tabA.ws.send(JSON.stringify({ type: 'join-ip-room' }));
+const peersMsgA = await peersPromiseA;
+
+const peersPromiseB = new Promise(resolve => {
+    tabB.ws.on('json-message', msg => {
+        if (msg.type === 'peers') resolve(msg);
+    });
+});
+const peerJoinedPromiseA = new Promise(resolve => {
+    tabA.ws.on('json-message', msg => {
+        if (msg.type === 'peer-joined') resolve(msg);
+    });
+});
+
+tabB.ws.send(JSON.stringify({ type: 'join-ip-room' }));
+
+const [peersMsgB, peerJoinedOnA] = await Promise.all([peersPromiseB, peerJoinedPromiseA]);
+
+// Verify Tab A sees Tab B, and Tab B sees Tab A
+assert.strictEqual(peerJoinedOnA.peer.id, tabB.peerInfo.peerId, 'Tab A should see Tab B join');
+assert.ok(peersMsgB.peers.some(p => p.id === tabA.peerInfo.peerId), 'Tab B should receive Tab A in peers list');
+
+// Tab A closes/disconnects
+tabA.ws.close();
+
+const peerLeftOnB = await new Promise(resolve => {
+    tabB.ws.on('json-message', msg => {
+        if (msg.type === 'peer-left') resolve(msg);
+    });
+});
+
+assert.strictEqual(peerLeftOnB.peerId, tabA.peerInfo.peerId, 'Tab B should observe Tab A disconnecting');
+
+// Tab A reconnects
+const tabAReconnected = await createClient('https://drop.erikraft.com', 'browser', sharedClientId);
+tabAReconnected.ws.send(JSON.stringify({ type: 'join-ip-room' }));
+
+const peerRejoinedOnB = await new Promise(resolve => {
+    tabB.ws.on('json-message', msg => {
+        if (msg.type === 'peer-joined') resolve(msg);
+    });
+});
+
+assert.strictEqual(peerRejoinedOnB.peer.id, tabAReconnected.peerInfo.peerId, 'Tab B should see reconnected Tab A');
+
+tabAReconnected.ws.close();
+tabB.ws.close();
+console.log('   ✓ Multi-tab discovery and bidirectional peer list passed\n');
 
 // TEST B: ONION ↔ ONION Signaling & Transfer
 console.log('-> TEST B: ONION ↔ ONION signaling and transfer with WSPeer fallback');
@@ -355,3 +428,5 @@ server.close();
 console.log('==================================================');
 console.log('ALL INTEROPERABILITY TESTS PASSED SUCCESSFULLY!');
 console.log('==================================================');
+
+process.exit(0);

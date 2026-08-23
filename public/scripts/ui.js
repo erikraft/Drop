@@ -54,14 +54,19 @@ class PeersUI {
     }
 
     _evaluateRtcSupport(wsConfig) {
-        if (wsConfig.wsFallback) {
+        // Only show routing/fallback warning when WebRTC is not supported locally
+        // or when active connections are running over WebSocket relay.
+        const isRtcDisabled = !window.isRtcSupported;
+        const hasWsPeers = Object.values(this.peers).some(peer => !peer.rtcSupported || peer._wsFallbackActive);
+
+        if (isRtcDisabled || hasWsPeers) {
             this.$wsFallbackWarning.hidden = false;
-        }
-        else {
+        } else {
             this.$wsFallbackWarning.hidden = true;
-            if (!window.isRtcSupported && !wsConfig.wsFallback) {
-                alert(Localization.getTranslation("instructions.webrtc-requirement"));
-            }
+        }
+
+        if (!window.isRtcSupported && !wsConfig.wsFallback) {
+            alert(Localization.getTranslation("instructions.webrtc-requirement"));
         }
     }
 
