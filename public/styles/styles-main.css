@@ -254,22 +254,13 @@ html[dir="rtl"] #expand.flipped>.icon {
     display: none !important;
 }
 
-/* Hide BrowserOS button on mobile devices */
-.hidden-mobile {
-    display: flex;
-}
-
 @media (max-width: 768px) {
-    .hidden-mobile {
-        display: none !important;
-    }
-
     /* Hide header completely on mobile when it only has hidden elements */
-    header:has(> *:not([hidden]):not(.hidden-mobile)) {
+    header:has(> *:not([hidden])) {
         display: flex;
     }
 
-    header:not(:has(> *:not([hidden]):not(.hidden-mobile))) {
+    header:not(:has(> *:not([hidden]))) {
         display: none;
     }
 }
@@ -1017,32 +1008,6 @@ body.chat-open {
     }
 }
 
-#cloud-upload-dialog .status {
-    color: var(--accent-color, #4fc3f7);
-    font-weight: 500;
-}
-
-#cloud-upload-dialog .status.error {
-    color: var(--error-color, #ff5252);
-}
-
-#cloud-upload-dialog .status[hidden] {
-    display: none;
-}
-
-#cloud-upload-dialog .result {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-#cloud-upload-link {
-    padding: 6px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.1);
-    color: inherit;
-}
 
 .btn-round {
     border-radius: 50%;
