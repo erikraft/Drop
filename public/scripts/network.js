@@ -1075,12 +1075,6 @@ class Peer {
 
     _onChatMessage(message) {
         const payload = message.payload || {};
-        const text = (payload.text || '').trim();
-        const attachment = payload.attachment || null;
-
-        // Ignore empty messages that have neither text content nor file attachment
-        if (!text && !attachment) return;
-
         const roomType = payload.roomType || this._getRoomTypes()[0];
         const roomId = payload.roomId || this._roomIds[roomType];
         const timestamp = message.timestamp || Date.now();
@@ -1090,8 +1084,8 @@ class Peer {
         Events.fire('chat-message-received', {
             message: {
                 id: payload.id,
-                text: text,
-                attachment: attachment,
+                text: payload.text || '',
+                attachment: payload.attachment || null,
                 roomType: roomType,
                 roomId: roomId,
                 timestamp: timestamp,

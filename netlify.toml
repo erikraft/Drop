@@ -1,0 +1,14 @@
+[build]
+  publish = "public"
+  command = "echo 'Building ErikrafT Drop for Netlify'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    X-Frame-Options = "ALLOWALL"

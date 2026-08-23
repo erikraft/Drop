@@ -6,7 +6,6 @@ The following versions of **ErikrafT Drop™** are currently receiving security 
 
 | Version | Support Status    |
 | ------- | ----------------- |
-| 1.13.x  | ✅ Supported       |
 | 1.12.x  | ✅ Supported       |
 | 1.11.x  | ✅ Supported       |
 | 1.10.x  | ✅ Supported       |

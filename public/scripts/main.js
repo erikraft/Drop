@@ -14,14 +14,13 @@ class ErikrafTdrop {
         this.deferredScripts = [
             'scripts/browser-tabs-connector.js',
             'scripts/util.js',
-            'scripts/pairdrop-adapter.js',
-            'scripts/libs/qr-code-styling.js',
-            'scripts/qr-helper.js',
-            'scripts/erikraft-qr.js',
             'scripts/network.js',
+            'scripts/ai-image-client.js',
             'scripts/ui.js',
             'scripts/libs/heic2any.min.js',
             'scripts/libs/no-sleep.min.js',
+            'scripts/libs/qr-code-styling.js',
+            'scripts/qr-helper.js',
             'scripts/libs/zip.min.js'
         ];
 
@@ -101,8 +100,6 @@ class ErikrafTdrop {
             ['publicRoomDialog', () => new PublicRoomDialog()],
             ['lanModeDialog', () => new LanModeDialog()],
             ['torDialog', () => new TorDialog()],
-            ['animatedQRSendDialog', () => new AnimatedQRSendDialog()],
-            ['animatedQRReceiveDialog', () => new AnimatedQRReceiveDialog()],
             ['base64Dialog', () => new Base64Dialog()],
             ['shareTextDialog', () => new ShareTextDialog()],
             ['toast', () => new Toast()],
