@@ -524,6 +524,9 @@
             <i class="fa-solid fa-qrcode" style="font-size: 24px;"></i>
         </div> -->
 
+        <div id="animated-qr-btn" class="icon-button" data-i18n-key="header.animated-qr" data-i18n-attrs="title" title="Transfer via Animated QR">
+            <i class="fa-solid fa-qrcode icon" style="font-size: 20px;" aria-hidden="true"></i>
+        </div>
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
             <svg class="icon">
                 <use xlink:href="#pair-device-icon"></use>
@@ -1505,6 +1508,63 @@
             </x-background>
         </form>
     </x-dialog>
+    <!-- Animated QR Send Dialog -->
+    <x-dialog id="animated-qr-send-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Transferência por QR Code</h2>
+                </div>
+                <div class="column center p-2">
+                    <div id="qr-send-canvas-container" class="center p-2" style="background: #fff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
+                    <div class="font-body2 text-center mt-2" data-i18n-key="dialogs.animated-qr-instruction">Mantenha o outro dispositivo apontado para este QR Code</div>
+                    <div id="qr-send-status" class="font-caption text-secondary mt-1">Status: Ativo</div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2">
+                    <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey">Pausar</button>
+                    <button class="btn btn-rounded btn-grey" close>Cancelar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- Animated QR Receive Dialog -->
+    <x-dialog id="animated-qr-receive-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber por QR Code Animado</h2>
+                </div>
+                <div class="column center p-2">
+                    <video id="qr-scanner-video" playsinline style="width: 100%; max-height: 260px; border-radius: 12px; background: #000; object-fit: cover;"></video>
+                    <div id="qr-receive-state" class="font-body2 text-center mt-2">Procurando QR...</div>
+                    <div id="qr-receive-progress" class="font-caption text-secondary mt-1">Dados recuperados: 0%</div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2">
+                    <button class="btn btn-rounded btn-grey" close>Cancelar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- EXIF Metadata Dialog -->
+    <x-dialog id="exif-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 600px; width: 90%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.metadata-exif" data-i18n-attrs="text">EXIF Metadata</h2>
+                </div>
+                <div class="row p-2">
+                    <div id="exif-content" class="column fw" style="max-height: 350px; overflow-y: auto; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;"></div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2">
+                    <button id="exif-remove-btn" class="btn btn-rounded btn-grey" hidden>Remove Metadata</button>
+                    <button class="btn btn-rounded btn-grey" data-i18n-key="dialogs.close" data-i18n-attrs="text" close></button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
     <!-- base64 Paste Dialog -->
     <x-dialog id="base64-paste-dialog">
         <x-background class="full center">
@@ -1552,7 +1612,7 @@
             </svg>
             <div class="title-wrapper" dir="ltr">
                 <h1>ErikrafT Drop™</h1>
-                <div class="font-subheading">v1.12.4</div>
+                <div class="font-subheading">v1.13.0</div>
             </div>
             <div class="font-subheading" data-i18n-key="about.claim" data-i18n-attrs="text">
                 A maneira mais fácil de transferir arquivos entre dispositivos
@@ -2138,6 +2198,10 @@
     <script src="scripts/photopea-integration.js" defer></script>
     <script src="scripts/ui-main.js" defer></script>
     <script src="scripts/content-moderation.js" defer></script>
+    <script src="scripts/pairdrop-adapter.js" defer></script>
+    <script src="scripts/libs/qr-code-styling.js" defer></script>
+    <script src="scripts/qr-helper.js" defer></script>
+    <script src="scripts/erikraft-qr.js" defer></script>
     <script src="scripts/main.js" defer></script>
     <!-- Sounds -->
     <audio id="blop" autobuffer="true">

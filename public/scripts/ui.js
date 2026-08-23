@@ -1298,25 +1298,22 @@ class ReceiveFileDialog extends ReceiveDialog {
                                 }
                             }
 
-                            const w = window.open('', '_blank');
-                            w.document.title = title;
-                            w.document.body.style.whiteSpace = 'pre-wrap';
-                            w.document.body.style.fontFamily = 'monospace';
-                            w.document.body.innerText = info;
+                            let canRemove = false;
+                            let onRemove = null;
 
-                            // Offer removal only for images
                             if ((mime || '').startsWith('image/')) {
                                 const ab = await primary.arrayBuffer();
                                 const view = new Uint8Array(ab);
-                                let found = -1;
+                                let foundExif = -1;
                                 for (let i = 0; i < view.length - 1; i++) {
                                     if (view[i] === 0xFF && view[i + 1] === 0xE1) {
-                                        found = i;
+                                        foundExif = i;
                                         break;
                                     }
                                 }
-                                if (found !== -1) {
-                                    if (confirm(Localization.getTranslation('dialogs.metadata-exif') + ': Remove metadata from this image?')) {
+                                if (foundExif !== -1) {
+                                    canRemove = true;
+                                    onRemove = () => {
                                         try {
                                             const img = document.createElement('img');
                                             img.src = URL.createObjectURL(primary);
@@ -1343,10 +1340,13 @@ class ReceiveFileDialog extends ReceiveDialog {
                                             };
                                         } catch (err) {
                                             console.error('Remove EXIF failed', err);
-                                            Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
                                         }
-                                    }
+                                    };
                                 }
+                            }
+
+                            if (window.erikrafTdrop && window.erikrafTdrop.exifDialog) {
+                                window.erikrafTdrop.exifDialog.displayExif(info, canRemove, onRemove);
                             }
                         } catch (err) {
                             console.error('Read metadata failed', err);
@@ -3266,6 +3266,147 @@ class ShareTextDialog extends Dialog {
     }
 }
 
+class AnimatedQRSendDialog extends Dialog {
+    constructor() {
+        super('animated-qr-send-dialog');
+        this.$container = this.$el.querySelector('#qr-send-canvas-container');
+        this.$status = this.$el.querySelector('#qr-send-status');
+        this.$pauseBtn = this.$el.querySelector('#qr-send-pause-btn');
+
+        if (this.$pauseBtn) {
+            this.$pauseBtn.addEventListener('click', () => {
+                if (!this.transmitter) return;
+                if (this.transmitter.paused) {
+                    this.transmitter.resume();
+                    this.$pauseBtn.textContent = 'Pausar';
+                } else {
+                    this.transmitter.pause();
+                    this.$pauseBtn.textContent = 'Retomar';
+                }
+            });
+        }
+    }
+
+    async send(data) {
+        if (!window.ErikrafTQRTransmitter) return;
+        this.transmitter = new ErikrafTQRTransmitter(this.$container, {
+            onProgress: (p) => {
+                if (this.$status) {
+                    this.$status.textContent = `Símbolo ${p.currentIndex + 1}/${p.totalFrames}`;
+                }
+            }
+        });
+
+        if (data.file) {
+            await this.transmitter.prepareFile(data.file);
+        } else if (data.text) {
+            await this.transmitter.prepareText(data.text);
+        }
+
+        this.show();
+        this.transmitter.start();
+    }
+
+    hide() {
+        if (this.transmitter) {
+            this.transmitter.stop();
+            this.transmitter = null;
+        }
+        super.hide();
+    }
+}
+
+class AnimatedQRReceiveDialog extends Dialog {
+    constructor() {
+        super('animated-qr-receive-dialog');
+        this.$video = this.$el.querySelector('#qr-scanner-video');
+        this.$state = this.$el.querySelector('#qr-receive-state');
+        this.$progress = this.$el.querySelector('#qr-receive-progress');
+
+        this.$headerBtn = $('animated-qr-btn');
+        if (this.$headerBtn) {
+            this.$headerBtn.addEventListener('click', () => {
+                if (window.erikrafTdrop && window.erikrafTdrop.peersUI && window.erikrafTdrop.peersUI.shareMode && window.erikrafTdrop.peersUI.shareMode.active) {
+                    const files = window.erikrafTdrop.peersUI.shareMode.files;
+                    const text = window.erikrafTdrop.peersUI.shareMode.text;
+                    if (files.length) {
+                        window.erikrafTdrop.animatedQRSendDialog.send({ file: files[0] });
+                    } else if (text) {
+                        window.erikrafTdrop.animatedQRSendDialog.send({ text: text });
+                    }
+                } else {
+                    this.openScanner();
+                }
+            });
+        }
+    }
+
+    openScanner() {
+        if (!window.ErikrafTQRScanner) return;
+        this.scanner = new ErikrafTQRScanner(this.$video, {
+            onStateChange: (state) => {
+                if (this.$state) this.$state.textContent = state;
+            },
+            onProgress: (p) => {
+                if (this.$progress) {
+                    this.$progress.textContent = `Dados recuperados: ${p.pct}% (${p.received}/${p.total} símbolos)`;
+                }
+            },
+            onComplete: (res) => {
+                if (res.type === 'text') {
+                    Events.fire('text-received', { text: res.text, peerId: 'QR' });
+                } else if (res.type === 'file') {
+                    Events.fire('files-received', {
+                        peerId: 'QR',
+                        files: [res.file],
+                        imagesOnly: res.mime.startsWith('image/'),
+                        totalSize: res.file.size
+                    });
+                }
+                this.hide();
+            }
+        });
+
+        this.show();
+        this.scanner.start();
+    }
+
+    hide() {
+        if (this.scanner) {
+            this.scanner.stop();
+            this.scanner = null;
+        }
+        super.hide();
+    }
+}
+
+class ExifDialog extends Dialog {
+    constructor() {
+        super('exif-dialog');
+        this.$content = this.$el.querySelector('#exif-content');
+        this.$removeBtn = this.$el.querySelector('#exif-remove-btn');
+    }
+
+    displayExif(infoText, canRemove = false, onRemove = null) {
+        if (this.$content) {
+            this.$content.innerText = infoText || Localization.getTranslation('dialogs.metadata-none', 'No metadata found.');
+        }
+
+        if (canRemove && typeof onRemove === 'function') {
+            this.$removeBtn.removeAttribute('hidden');
+            this.$removeBtn.onclick = () => {
+                onRemove();
+                this.hide();
+            };
+        } else {
+            this.$removeBtn.setAttribute('hidden', true);
+            this.$removeBtn.onclick = null;
+        }
+
+        this.show();
+    }
+}
+
 class Base64Dialog extends Dialog {
 
     constructor() {
@@ -4171,23 +4312,31 @@ class ChatUI {
     }
 
     _onChatReceived(message) {
+        if (!message) return;
+        const messageId = message.id || `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+        if (this._messageIndex.has(messageId)) return;
+
         const room = this._ensureRoom(message.roomType, message.roomId);
         this._refreshRoomSelect();
         const senderName = message.senderName || this._peerNames.get(message.senderId) || message.senderId;
         const isUnread = this._currentRoomKey !== room.key || this.$panel.hidden;
         const entry = {
-            id: message.id || `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-            text: message.text,
+            id: messageId,
+            text: message.text || '',
             attachment: message.attachment || null,
             roomType: message.roomType,
             roomId: message.roomId,
-            timestamp: message.timestamp,
+            timestamp: message.timestamp || Date.now(),
             senderId: message.senderId,
             senderName: senderName,
             direction: 'in',
             unread: isUnread
         };
+
+        this._messageIndex.set(messageId, entry);
         room.messages.push(entry);
+
         if (this._currentRoomKey === room.key && !this.$panel.hidden) {
             this._appendMessageNode(entry);
             this._scrollToBottom();

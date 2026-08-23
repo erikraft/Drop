@@ -4,6 +4,25 @@ import {fileURLToPath} from "url";
 import path, {dirname} from "path";
 import http from "http";
 import fs from "fs";
+import multer from "multer";
+
+// Ensure fetch/FormData/File exist for runtimes without native support (Node < 18)
+if (typeof fetch === "undefined" || typeof FormData === "undefined" || typeof File === "undefined") {
+    const undici = await import("undici");
+
+    if (typeof fetch === "undefined" && undici.fetch) {
+        globalThis.fetch = undici.fetch;
+    }
+
+    if (typeof FormData === "undefined" && undici.FormData) {
+        globalThis.FormData = undici.FormData;
+    }
+
+    if (typeof File === "undefined" && undici.File) {
+        globalThis.File = undici.File;
+    }
+}
+
 export default class ErikrafTdropServer {
 
     constructor(conf) {
@@ -74,8 +93,6 @@ export default class ErikrafTdropServer {
             })
         }
 
-        // By default, clients connecting to your instance use the signaling server of your instance to connect to other devices.
-        // By using `WS_SERVER`, you can host an instance that uses another signaling server.
 
         app.get('/api/onion-info', (req, res) => {
             const torHostnamePath = '/var/lib/tor/erikraft_drop_onion/hostname';
