@@ -315,7 +315,7 @@ class ErikrafTQRScanner {
                             expectedLen = this.meta.totalSize - (this.meta.numChunks - 1) * b1.length;
                         }
                     }
-                    this.receivedChunks.set(idx2, recovered.subarray(0, expectedLen).buffer);
+                    this.receivedChunks.set(idx2, recovered.slice(0, expectedLen).buffer);
                     progressMade = true;
                 } else if (has2 && !has1) {
                     const b2 = new Uint8Array(this.receivedChunks.get(idx2));
@@ -331,7 +331,7 @@ class ErikrafTQRScanner {
                             expectedLen = this.meta.totalSize - (this.meta.numChunks - 1) * b2.length;
                         }
                     }
-                    this.receivedChunks.set(idx1, recovered.subarray(0, expectedLen).buffer);
+                    this.receivedChunks.set(idx1, recovered.slice(0, expectedLen).buffer);
                     progressMade = true;
                 }
             }
