@@ -12,15 +12,21 @@ ErikrafT Drop™ maintains its native peer-to-peer signaling and communication p
 
 ## 2. Compatibility Matrix
 
-| Feature | Native ErikrafT Drop™ | PairDrop Web | Interoperable via Adapter |
-| :--- | :---: | :---: | :---: |
-| **Peer Discovery (Local IP Room)** | ✅ | ✅ | Yes (WebRTC / Signaling Mapping) |
-| **Public Room Pairing** | ✅ | ✅ | Yes (Room Code Normalization) |
-| **Pairing Key Exchange** | ✅ | ✅ | Yes (Key Mapping) |
-| **WebRTC DataChannel File Transfer** | ✅ | ✅ | Yes (Chunk & Header Conversion) |
-| **Progress & Integrity Reporting** | ✅ | ✅ | Yes |
-| **Native WebChat** | ✅ | ❌ / Different | No (ErikrafT Drop™ Native Chat preserved) |
-| **Tor .onion Routing** | ✅ | ❌ | Restricted to ErikrafT Drop™ Tor Nodes |
+| Interoperability Direction | Transport Method | Discovery & Pairing | SHA-256 / File Integrity | Status |
+| :--- | :---: | :---: | :---: | :---: |
+| **HTTPS ↔ HTTPS** | WebRTC DataChannel / WSPeer | IP Room, Public Room, Pairing Key | ✅ Verified | Supported ✅ |
+| **ONION ↔ ONION** | WSPeer Relay / WebRTC | Public Room, Pairing Key | ✅ Verified | Supported ✅ |
+| **ONION → HTTPS** | WSPeer Relay / WebRTC | Public Room, Pairing Key | ✅ Verified | Supported ✅ |
+| **HTTPS → ONION** | WSPeer Relay / WebRTC | Public Room, Pairing Key | ✅ Verified | Supported ✅ |
+| **ErikrafT Drop™ ↔ PairDrop** | PairDrop Adapter + WebRTC | Public Room, Pairing Key, Signal Adapter | ✅ Verified | Supported ✅ |
+
+---
+
+## 2.1 Tor Network & Cross-Origin Transport Details
+
+- **WebRTC & Tor Browser Privacy:** Tor Browser restricts UDP and STUN requests to protect user IP addresses. When WebRTC ICE candidate gathering fails or is blocked by Tor Browser policies, ErikrafT Drop™ automatically falls back to `WSPeer` (WebSocket server relay) when `WS_FALLBACK` is enabled.
+- **Cross-Origin Signaling:** The server handles signaling dynamically across `https://drop.erikraft.com` and `http://nozudb2e4jy4betognmnwoxvdu44wvjoqvmwios5ql7mxagqqpnn64ad.onion` without hardcoding WebSocket endpoints.
+- **Tor UI Badges:** Onion clients retain the "Na Rede Tor" badge, while standard network clients retain "nesta rede", preserving Tor user privacy and transparency.
 
 ---
 

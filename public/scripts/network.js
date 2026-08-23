@@ -1337,8 +1337,26 @@ class RTCPeer extends Peer {
     }
 
     _send(message) {
-        if (!this._channel) this.refresh();
-        this._channel.send(message);
+        if (this._isRtcChannelOpen()) {
+            this._channel.send(message);
+        } else if (this._wsFallback) {
+            if (typeof message === 'string') {
+                try {
+                    const msgObj = JSON.parse(message);
+                    this._sendViaServer(msgObj);
+                } catch(e) {
+                    this._sendViaServer({ type: 'text', text: message });
+                }
+            } else {
+                this._sendViaServer({
+                    type: 'ws-chunk',
+                    chunk: arrayBufferToBase64(message)
+                });
+            }
+        } else {
+            if (!this._channel) this.refresh();
+            if (this._channel) this._channel.send(message);
+        }
     }
 
     _sendSignal(signal) {
@@ -1446,6 +1464,29 @@ class PeersManager {
         Events.on('ws-disconnected', _ => this._onWsDisconnected());
         Events.on('ws-relay', e => this._onWsRelay(e.detail));
         Events.on('ws-config', e => this._onWsConfig(e.detail));
+        Events.on('rtc-error', e => this._onRtcError(e.detail ? e.detail.peerId : null, e.detail ? e.detail.error : null));
+    }
+
+    _onRtcError(peerId, error) {
+        if (!peerId || !this.peers[peerId]) return;
+        const peer = this.peers[peerId];
+        if (peer && peer.rtcSupported && this._wsConfig && this._wsConfig.wsFallback) {
+            console.warn(`[Network] WebRTC error for peer ${peerId}. Downgrading to WSPeer (WebSocket relay).`, error);
+            const isCaller = peer._isCaller;
+            const roomTypes = peer._getRoomTypes();
+            const roomType = roomTypes[0] || 'ip';
+            const roomId = peer._roomIds[roomType] || peer._peerId;
+            const roomIds = { ...peer._roomIds };
+
+            if (typeof peer._disconnect === 'function') {
+                peer._disconnect();
+            }
+
+            const wsPeer = new WSPeer(this._server, isCaller, peerId, roomType, roomId);
+            wsPeer._wsFallback = true;
+            wsPeer._roomIds = roomIds;
+            this.peers[peerId] = wsPeer;
+        }
     }
 
     _onWsConfig(wsConfig) {
