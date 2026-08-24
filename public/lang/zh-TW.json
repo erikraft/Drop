@@ -17,7 +17,11 @@
         "expand_title": "展開標題按鈕列",
         "webchat": "聊天室",
         "ai-variation": "生成 AI 變體",
-        "ai-generate": "建立新的 AI 圖像"
+        "ai-generate": "建立新的 AI 圖像",
+        "animated-qr_title": "Transfer via Animated QR",
+        "animated-qr": {
+            "title": "Transfer via Animated QR"
+        }
     },
     "instructions": {
         "no-peers_data-drop-bg": "釋放以選擇接收者",
@@ -144,7 +148,10 @@
         "metadata-exif": "元數據 (EXIF)",
         "compress": "壓縮",
         "edit-ai": "使用 AI 編輯",
-        "lan-mode-server_placeholder": "192.168.0.10:3000"
+        "lan-mode-server_placeholder": "192.168.0.10:3000",
+        "animated-qr-send-title": "QR Code File Transfer",
+        "animated-qr-instruction": "Keep the other device pointed at this QR Code",
+        "animated-qr-receive-title": "Receive via Animated QR Code"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",
