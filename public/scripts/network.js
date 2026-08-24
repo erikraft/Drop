@@ -1230,8 +1230,22 @@ class RTCPeer extends Peer {
         if (!this._conn) this._connect();
 
         if (message.sdp) {
+            const currentState = this._conn.signalingState;
+            const sdpType = message.sdp.type;
+
+            // Prevent state errors when receiving duplicate or out-of-order SDPs
+            if (sdpType === 'answer' && currentState !== 'have-local-offer') {
+                console.warn(`RTC: Ignoring answer SDP in state '${currentState}' for peer ${this._peerId}`);
+                return;
+            }
+
+            if (sdpType === 'offer' && currentState !== 'stable' && currentState !== 'have-local-offer') {
+                console.warn(`RTC: Ignoring offer SDP in state '${currentState}' for peer ${this._peerId}`);
+                return;
+            }
+
             this._conn
-                .setRemoteDescription(message.sdp)
+                .setRemoteDescription(new RTCSessionDescription(message.sdp))
                 .then(_ => {
                     if (message.sdp.type === 'offer') {
                         return this._conn
@@ -1242,9 +1256,11 @@ class RTCPeer extends Peer {
                 .catch(e => this._onError(e));
         }
         else if (message.ice) {
-            this._conn
-                .addIceCandidate(new RTCIceCandidate(message.ice))
-                .catch(e => this._onError(e));
+            if (this._conn.remoteDescription) {
+                this._conn
+                    .addIceCandidate(new RTCIceCandidate(message.ice))
+                    .catch(e => this._onError(e));
+            }
         }
     }
 

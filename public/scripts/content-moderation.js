@@ -74,26 +74,6 @@ class ContentModeration {
 
         // Status de carregamento dos modelos
         this.modelLoading = false;
-
-        // URLs dos modelos
-        this.modelUrls = {
-            default: 'https://cdn.jsdelivr.net/npm/nsfwjs@2.4.0/dist/model/',
-            mobilenet: 'https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/model.json',
-            inception: 'https://storage.googleapis.com/tfjs-models/tfjs/inception_v3/2/model.json',
-            resnet: 'https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity@1.2.2/dist/model.json'
-        };
-
-        // APIs externas de moderação
-        this.externalApis = {
-            deepai: 'https://api.deepai.org/api/nsfw-detector',
-            sightengine: 'https://api.sightengine.com/1.0/check.json',
-            moderatecontent: 'https://api.moderatecontent.com/moderate/',
-            imagga: 'https://api.imagga.com/v2/categories/nsfw_beta',
-            cloudmersive: 'https://api.cloudmersive.com/image/nsfw/classify'
-        };
-
-        // Inicializa todos os modelos
-        this.loadAllModels();
     }
 
     async loadAllModels() {
@@ -101,26 +81,11 @@ class ContentModeration {
         this.modelLoading = true;
 
         try {
-            console.log('Carregando múltiplos modelos NSFW...');
-
-            // Carrega modelo principal do NSFWJS
-            this.nsfwModels.default = await nsfwjs.load(this.modelUrls.default);
-            console.log('Modelo NSFWJS principal carregado');
-
-            // Carrega MobileNet para detecção adicional
-            this.nsfwModels.mobilenet = await tf.loadLayersModel(this.modelUrls.mobilenet);
-            console.log('Modelo MobileNet carregado');
-
-            // Carrega Inception para classificação avançada
-            this.nsfwModels.inception = await tf.loadLayersModel(this.modelUrls.inception);
-            console.log('Modelo Inception carregado');
-
-            // Carrega ResNet para detecção de características
-            this.nsfwModels.resnet = await tf.loadLayersModel(this.modelUrls.resnet);
-            console.log('Modelo ResNet carregado');
-
+            if (typeof nsfwjs !== 'undefined' && nsfwjs.load) {
+                this.nsfwModels.default = await nsfwjs.load('server/model/model.json');
+            }
         } catch (error) {
-            console.error('Erro ao carregar modelos:', error);
+            console.warn('Modelo NSFW opcional não pôde ser carregado:', error);
         }
 
         this.modelLoading = false;
@@ -190,39 +155,46 @@ class ContentModeration {
     }
 
     async processMediaFrames(file) {
+        if (!this.nsfwModels || !this.nsfwModels.default) return false;
         return new Promise(async (resolve) => {
             const mediaElement = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
             mediaElement.src = URL.createObjectURL(file);
 
             mediaElement.onload = async () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = mediaElement.naturalWidth || mediaElement.videoWidth;
-                canvas.height = mediaElement.naturalHeight || mediaElement.videoHeight;
-
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(mediaElement, 0, 0);
-
-                // Verifica cada frame com os modelos NSFW
-                const result = await this.nsfwModels.default.classify(canvas);
-                resolve(result.some(p => p.className === 'Porn' && p.probability > 0.85));
-            };
-
-            if (file.type.startsWith('video/')) {
-                mediaElement.addEventListener('seeked', async () => {
+                try {
                     const canvas = document.createElement('canvas');
-                    canvas.width = mediaElement.videoWidth;
-                    canvas.height = mediaElement.videoHeight;
+                    canvas.width = mediaElement.naturalWidth || mediaElement.videoWidth;
+                    canvas.height = mediaElement.naturalHeight || mediaElement.videoHeight;
 
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(mediaElement, 0, 0);
 
                     const result = await this.nsfwModels.default.classify(canvas);
-                    if (result.some(p => p.className === 'Porn' && p.probability > 0.85)) {
-                        resolve(true);
+                    resolve(result.some(p => p.className === 'Porn' && p.probability > 0.85));
+                } catch (e) {
+                    resolve(false);
+                }
+            };
+
+            if (file.type.startsWith('video/')) {
+                mediaElement.addEventListener('seeked', async () => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = mediaElement.videoWidth;
+                        canvas.height = mediaElement.videoHeight;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(mediaElement, 0, 0);
+
+                        const result = await this.nsfwModels.default.classify(canvas);
+                        if (result.some(p => p.className === 'Porn' && p.probability > 0.85)) {
+                            resolve(true);
+                        }
+                    } catch (e) {
+                        // ignore frame error
                     }
                 });
 
-                // Verifica frames a cada 1 segundo
                 mediaElement.currentTime = 0;
                 const checkFrames = setInterval(() => {
                     if (mediaElement.currentTime >= mediaElement.duration) {

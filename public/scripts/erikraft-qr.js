@@ -229,13 +229,20 @@ class ErikrafTQRScanner {
                 });
                 if (this.videoEl) {
                     this.videoEl.srcObject = this.stream;
-                    await this.videoEl.play();
+                    try {
+                        await this.videoEl.play();
+                    } catch (playErr) {
+                        console.warn('Video play interrupted or rejected:', playErr);
+                    }
                 }
             }
             this._scanLoop();
         } catch (err) {
-            console.error('Camera access failed:', err);
-            this.state = 'Camera error';
+            console.warn('Camera access failed:', err.message);
+            const isPermissionError = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
+            this.state = isPermissionError
+                ? 'Acesso à câmera negado'
+                : 'Câmera indisponível ou não suportada';
             this.onStateChange(this.state);
             this.stop();
         }
