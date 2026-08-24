@@ -17,7 +17,11 @@
         "expand_title": "Expandir linha de botões de cabeçalho",
         "webchat": "Bate-papo",
         "ai-variation": "Gerar variação com IA",
-        "ai-generate": "Criar nova imagem com IA"
+        "ai-generate": "Criar nova imagem com IA",
+        "animated-qr_title": "Transferência por QR Code Animado",
+        "animated-qr": {
+            "title": "Transferência por QR Code Animado"
+        }
     },
     "instructions": {
         "no-peers_data-drop-bg": "Solte para selecionar o destinatário",
@@ -144,7 +148,10 @@
         "metadata-exif": "Metadados (EXIF)",
         "compress": "Comprimir",
         "edit-ai": "Editar com IA",
-        "lan-mode-server_placeholder": "192.168.0.10:3000"
+        "lan-mode-server_placeholder": "192.168.0.10:3000",
+        "animated-qr-send-title": "Transferência por QR Code",
+        "animated-qr-instruction": "Mantenha o outro dispositivo apontado para este QR Code",
+        "animated-qr-receive-title": "Receber por QR Code Animado"
     },
     "about": {
         "close-about_aria-label": "Fechar Sobre o ErikrafT Drop™",
