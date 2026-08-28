@@ -1,4 +1,4 @@
-[submodule "erikraft/Drop-Android"]
-	path = erikraft/Drop-Android
+[submodule "Android"]
+	path = Android
 	url = https://github.com/erikraft/Drop-Android.git
 	branch = master
