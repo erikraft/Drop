@@ -223,44 +223,30 @@ ERIKRAFT_DROP_DESKTOP_PORT=4000 npx electron desktop/main.cjs
 
 ## 7️⃣ CI/CD - Build Automatizado
 
-### GitHub Actions (Exemplo)
+### Building Linux & Flatpak packages (GitHub Actions)
 
-```yaml
-name: Build Desktop App
+Para gerar os pacotes Linux (.deb e Flatpak) manualmente:
 
-on:
-  push:
-    tags:
-      - 'v*'
+1. Acesse a aba **Actions** no GitHub
+2. Selecione o workflow **Build Linux Packages**
+3. Clique em **Run workflow**
+4. Selecione os pacotes a serem gerados (`build_linux` e/ou `build_flatpak`)
+5. Aguarde a conclusão do pipeline
+6. Baixe os pacotes prontos e o arquivo `SHA256SUMS.txt` na seção **Artifacts**
 
-jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - run: npm install
-      - run: npm run package:linux
-      - uses: actions/upload-artifact@v3
-        with:
-          name: linux-deb
-          path: dist/desktop/*.deb
+### Comandos de Build Local
 
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - run: npm install
-      - run: npm run package:windows
-      - uses: actions/upload-artifact@v3
-        with:
-          name: windows-exe
-          path: dist/desktop/*.exe
+**Linux (.deb)**:
+```bash
+npm run package:linux
+# O arquivo .deb será gerado em: dist/desktop/erikraft-drop-linux-amd64.deb
+```
+
+**Flatpak (.flatpak)**:
+```bash
+npm run package:flatpak
+flatpak build-bundle --architecture=x86_64 dist/flatpak-repo dist/desktop/io.github.erikraft.Drop.flatpak io.github.erikraft.Drop
+# O arquivo .flatpak será gerado em: dist/desktop/io.github.erikraft.Drop.flatpak
 ```
 
 ---
