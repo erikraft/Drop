@@ -101,6 +101,8 @@ class ErikrafTdrop {
             ['publicRoomDialog', () => new PublicRoomDialog()],
             ['lanModeDialog', () => new LanModeDialog()],
             ['torDialog', () => new TorDialog()],
+            ['qrScannerDialog', () => new QRScannerDialog()],
+            ['qrScannerConfirmDialog', () => new QRScannerConfirmDialog()],
             ['animatedQRSendDialog', () => new AnimatedQRSendDialog()],
             ['animatedQRReceiveDialog', () => new AnimatedQRReceiveDialog()],
             ['base64Dialog', () => new Base64Dialog()],

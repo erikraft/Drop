@@ -19,7 +19,9 @@ const {
     crc32,
     sha256Buffer,
     bufferToBase64,
-    base64ToBuffer
+    base64ToBuffer,
+    compressBuffer,
+    decompressBuffer
 } = await import(qrModulePath);
 
 async function runTests() {
@@ -136,7 +138,6 @@ async function runTests() {
         // Tamper with the SHA in frame 0
         const parsed0 = JSON.parse(tx.frames[0]);
         parsed0.sha = "0000000000000000000000000000000000000000000000000000000000000000";
-        // Recalculate CRC for modified JSON data payload if required, or keep data intact
         tx.frames[0] = JSON.stringify(parsed0);
 
         let completedResult = null;
@@ -183,6 +184,80 @@ async function runTests() {
         assert(completedResult !== null, "Noisy transfer should complete");
         assert.strictEqual(completedResult.text, sampleText, "Noisy transfer text must match original");
         console.log("   ✓ Duplicate & noisy frames test passed");
+    }
+
+    // 6. Test Multiline UTF-8 Text with Emojis & Portuguese Special Characters
+    {
+        console.log("-> Test 6: Multiline UTF-8 text with emojis & Portuguese accents");
+        const ptText = "Olá, mundo! 🚀\nEste é o protocolo ErikrafT Drop™ de transferência óptica.\nAcentuação em português: coração, ação, não, feijão, 100% offline. ✨";
+        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 30 });
+        await tx.prepareText(ptText);
+
+        let completedResult = null;
+        const rx = new ErikrafTQRScanner(null, {
+            onComplete: (res) => { completedResult = res; }
+        });
+        rx.start();
+
+        for (const frame of tx.frames) {
+            await rx._processRawData(frame);
+        }
+
+        assert(completedResult !== null, "UTF-8 transfer should complete");
+        assert.strictEqual(completedResult.text, ptText, "UTF-8 Portuguese text must match exactly");
+        console.log("   ✓ UTF-8 Portuguese & Emoji test passed");
+    }
+
+    // 7. Test Compression & Decompression Pipeline
+    {
+        console.log("-> Test 7: Compression & Decompression pipeline");
+        const repetitiveText = "ErikrafT Drop™ offline animated QR code optical transfer protocol. ".repeat(100);
+        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 100 });
+        await tx.prepareText(repetitiveText);
+
+        let completedResult = null;
+        const rx = new ErikrafTQRScanner(null, {
+            onComplete: (res) => { completedResult = res; }
+        });
+        rx.start();
+
+        for (const frame of tx.frames) {
+            await rx._processRawData(frame);
+        }
+
+        assert(completedResult !== null, "Compressed transfer should complete");
+        assert.strictEqual(completedResult.text, repetitiveText, "Decompressed text must match original exactly");
+        console.log("   ✓ Compression & Decompression pipeline test passed");
+    }
+
+    // 8. Test ZIP and Image Binary File Transfers
+    {
+        console.log("-> Test 8: ZIP and Image binary file transfers");
+        const fakeZipBuffer = crypto.randomBytes(4096).buffer;
+        const tx = new ErikrafTQRTransmitter(null, { chunkSize: 200 });
+        await tx.prepareFile({
+            buffer: fakeZipBuffer,
+            name: "archive.zip",
+            type: "application/zip"
+        });
+
+        let completedResult = null;
+        const rx = new ErikrafTQRScanner(null, {
+            onComplete: (res) => { completedResult = res; }
+        });
+        rx.start();
+
+        for (const frame of tx.frames) {
+            await rx._processRawData(frame);
+        }
+
+        assert(completedResult !== null, "ZIP transfer should complete");
+        assert.strictEqual(completedResult.name, "archive.zip");
+        assert.strictEqual(completedResult.mime, "application/zip");
+        const origSha = await sha256Buffer(fakeZipBuffer);
+        const rxSha = await sha256Buffer(completedResult.buffer);
+        assert.strictEqual(rxSha, origSha, "ZIP buffer SHA-256 must match");
+        console.log("   ✓ ZIP / Binary file transfer test passed");
     }
 
     console.log("\nAll ERIKRAFT-QR Unit Tests Passed Successfully!");

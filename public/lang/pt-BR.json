@@ -18,6 +18,10 @@
         "webchat": "Bate-papo",
         "ai-variation": "Gerar variação com IA",
         "ai-generate": "Criar nova imagem com IA",
+        "scan-qr_title": "Escanear QR Code",
+        "scan-qr": {
+            "title": "Escanear QR Code"
+        },
         "animated-qr_title": "Transferência por QR Code Animado",
         "animated-qr": {
             "title": "Transferência por QR Code Animado"
@@ -149,8 +153,16 @@
         "compress": "Comprimir",
         "edit-ai": "Editar com IA",
         "lan-mode-server_placeholder": "192.168.0.10:3000",
-        "animated-qr-send-title": "Transferência por QR Code",
-        "animated-qr-instruction": "Mantenha o outro dispositivo apontado para este QR Code",
+        "qr-scanner-title": "Escanear QR Code",
+        "qr-scanner-status-searching": "Procurando QR Code...",
+        "qr-scanner-manual-label": "Ou cole o conteúdo/URL do QR Code:",
+        "qr-scanner-process": "Processar",
+        "qr-scanner-detected": "QR Code Detectado",
+        "qr-scanner-external-warning": "Esse endereço não pertence ao ecossistema ErikrafT.",
+        "qr-scanner-open-anyway": "Abrir mesmo assim",
+        "animated-qr-send-title": "Transferência por QR Code Animado",
+        "animated-qr-instruction": "Aponte a câmera do outro dispositivo para este QR Code.",
+        "animated-qr-speed-label": "Velocidade (FPS):",
         "animated-qr-receive-title": "Receber por QR Code Animado"
     },
     "about": {

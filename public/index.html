@@ -519,15 +519,17 @@
             <i class="fa-brands fa-bluetooth-b icon" style="font-size: 24px;"></i>
         </div> -->
 
-        <!-- <div id="openQRScanner" class="icon-button" title="Escanear QR Code" data-i18n-key="header.scan-qr" data-i18n-attrs="title">
-            <i class="fa-solid fa-qrcode" style="font-size: 24px;"></i>
-        </div> -->
-
-        <!-- <div id="animated-qr-btn" class="icon-button" data-i18n-key="header.animated-qr" data-i18n-attrs="title" title="Transfer via Animated QR">
+        <div id="openQRScanner" class="icon-button" data-i18n-key="header.scan-qr" data-i18n-attrs="title aria-label" title="Escanear QR Code">
             <svg class="icon">
                 <use xlink:href="#qrcode-icon"></use>
             </svg>
-        </div> -->
+        </div>
+
+        <div id="animated-qr-btn" class="icon-button" data-i18n-key="header.animated-qr" data-i18n-attrs="title aria-label" title="Transfer via Animated QR">
+            <svg class="icon">
+                <use xlink:href="#qrcode-icon"></use>
+            </svg>
+        </div>
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
             <svg class="icon">
                 <use xlink:href="#pair-device-icon"></use>
@@ -1505,21 +1507,82 @@
             </x-background>
         </form>
     </x-dialog>
-    <!-- Animated QR Send Dialog -->
-    <x-dialog id="animated-qr-send-dialog">
+    <!-- Ecosystem QR Scanner Dialog -->
+    <x-dialog id="qr-scanner-dialog">
         <x-background class="full center">
             <x-paper shadow="2" style="max-width: 500px; width: 90%;">
                 <div class="row center p-2">
-                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Transferência por QR Code</h2>
+                    <h2 class="dialog-title" data-i18n-key="dialogs.qr-scanner-title">Escanear QR Code</h2>
                 </div>
                 <div class="column center p-2">
-                    <div id="qr-send-canvas-container" class="center p-2" style="background: #fff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
-                    <div class="font-body2 text-center mt-2" data-i18n-key="dialogs.animated-qr-instruction">Mantenha o outro dispositivo apontado para este QR Code</div>
-                    <div id="qr-send-status" class="font-caption text-secondary mt-1">Status: Ativo</div>
+                    <video id="qr-scanner-main-video" playsinline style="width: 100%; max-height: 240px; border-radius: 12px; background: #000; object-fit: cover;"></video>
+                    <div id="qr-scanner-main-status" class="font-body2 text-center mt-2" data-i18n-key="dialogs.qr-scanner-status-searching">Procurando QR Code...</div>
+
+                    <div class="divider my-2 fw" style="border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+                    <div class="column fw">
+                        <label for="qr-scanner-manual-input" class="font-caption text-secondary" data-i18n-key="dialogs.qr-scanner-manual-label">Ou cole o conteúdo/URL do QR Code:</label>
+                        <input type="text" id="qr-scanner-manual-input" class="fw mt-1 p-2" placeholder="https://drop.erikraft.com/..." autocomplete="off" style="border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: inherit;">
+                        <button id="qr-scanner-manual-submit" class="btn btn-rounded btn-dark text-white mt-2" type="button" data-i18n-key="dialogs.qr-scanner-process">Processar</button>
+                    </div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2">
+                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" close>Fechar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- Ecosystem QR Scanner Confirmation Dialog -->
+    <x-dialog id="qr-scanner-confirm-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+                <div class="row center p-2">
+                    <h2 id="qr-scanner-confirm-title" class="dialog-title" data-i18n-key="dialogs.qr-scanner-detected">QR Code Detectado</h2>
+                </div>
+                <div class="column center p-2 text-center">
+                    <div id="qr-scanner-confirm-badge" class="badge btn-dark text-white mb-2 p-1" style="border-radius: 8px; font-weight: bold; padding: 4px 12px; display: inline-block;">ErikrafT Drop™</div>
+                    <div id="qr-scanner-confirm-url" class="font-body2 style-code p-2 mt-2 fw" style="background: rgba(255,255,255,0.08); border-radius: 8px; word-break: break-all; font-family: monospace;"></div>
+                    <div id="qr-scanner-confirm-warning" class="font-caption text-warning mt-2" hidden data-i18n-key="dialogs.qr-scanner-external-warning">Esse endereço não pertence ao ecossistema ErikrafT.</div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2 gap-2">
+                    <button id="qr-scanner-confirm-open-btn" class="btn btn-rounded btn-dark text-white" type="button" data-i18n-key="dialogs.open">Abrir</button>
+                    <button id="qr-scanner-confirm-cancel-btn" class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.cancel" close>Cancelar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- Animated QR Send Dialog -->
+    <x-dialog id="animated-qr-send-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 520px; width: 92%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Transferência por QR Code Animado</h2>
+                </div>
+                <div class="column center p-2 fw">
+                    <div id="qr-send-file-info" class="font-body2 text-center mb-2 fw bold" style="color: var(--primary-color, #15acbd);"></div>
+                    <div id="qr-send-canvas-container" class="center p-2" style="background: #fff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
+
+                    <div class="fw mt-2 column gap-1">
+                        <progress id="qr-send-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
+                        <div class="row row-between font-caption text-secondary">
+                            <span id="qr-send-frames-count">Frames: 0/0</span>
+                            <span id="qr-send-fps-speed">Velocidade: 6 FPS</span>
+                        </div>
+                    </div>
+
+                    <div class="font-body2 text-center mt-2 text-secondary" data-i18n-key="dialogs.animated-qr-instruction">Aponte a câmera do outro dispositivo para este QR Code.</div>
+
+                    <div class="row center mt-2 gap-2 fw align-items-center">
+                        <label for="qr-send-fps-slider" class="font-caption" data-i18n-key="dialogs.animated-qr-speed-label">Velocidade (FPS):</label>
+                        <input type="range" id="qr-send-fps-slider" min="1" max="20" value="6" style="flex: 1;">
+                        <span id="qr-send-fps-val" class="font-caption bold">6 FPS</span>
+                    </div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2 gap-2">
                     <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey">Pausar</button>
-                    <button class="btn btn-rounded btn-grey" close>Cancelar</button>
+                    <button class="btn btn-rounded btn-grey" close>Fechar</button>
                 </div>
             </x-paper>
         </x-background>
@@ -1528,17 +1591,34 @@
     <!-- Animated QR Receive Dialog -->
     <x-dialog id="animated-qr-receive-dialog">
         <x-background class="full center">
-            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+            <x-paper shadow="2" style="max-width: 520px; width: 92%;">
                 <div class="row center p-2">
                     <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber por QR Code Animado</h2>
                 </div>
-                <div class="column center p-2">
-                    <video id="qr-scanner-video" playsinline style="width: 100%; max-height: 260px; border-radius: 12px; background: #000; object-fit: cover;"></video>
-                    <div id="qr-receive-state" class="font-body2 text-center mt-2">Procurando QR...</div>
-                    <div id="qr-receive-progress" class="font-caption text-secondary mt-1">Dados recuperados: 0%</div>
+                <div class="column center p-2 fw">
+                    <video id="qr-scanner-video" playsinline style="width: 100%; max-height: 240px; border-radius: 12px; background: #000; object-fit: cover;"></video>
+
+                    <div id="qr-receive-state" class="font-body2 text-center mt-2 bold">Procurando QR Code...</div>
+
+                    <div class="fw mt-2 column gap-1">
+                        <progress id="qr-receive-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
+                        <div class="row row-between font-caption text-secondary">
+                            <span id="qr-receive-frames-count">Frames recebidos: 0</span>
+                            <span id="qr-receive-data-size">Dados: 0 KB</span>
+                        </div>
+                    </div>
+
+                    <div id="qr-receive-complete-container" class="column center mt-3 p-2 fw" hidden style="background: rgba(21, 172, 189, 0.12); border-radius: 10px; border: 1px solid rgba(21, 172, 189, 0.4);">
+                        <div class="bold text-success font-body1 mb-1">✓ Transferência Concluída</div>
+                        <div id="qr-receive-complete-filename" class="font-body2 bold"></div>
+                        <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
+                        <div class="row gap-2 mt-2">
+                            <button id="qr-receive-action-btn" class="btn btn-rounded btn-dark text-white">Baixar</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2">
-                    <button class="btn btn-rounded btn-grey" close>Cancelar</button>
+                    <button class="btn btn-rounded btn-grey" close>Fechar</button>
                 </div>
             </x-paper>
         </x-background>
