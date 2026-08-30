@@ -67,7 +67,7 @@
 [submodule "References/qr-stream"]
 	path = References/qr-stream
 	url = https://github.com/hermitm0nk/qr-stream.git
-	branch = main
+	branch = master
 
 
 # Reference — TXQR
