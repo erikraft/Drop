@@ -111,7 +111,7 @@
 [submodule "References/airgapped-qr-code-transfer"]
 	path = References/airgapped-qr-code-transfer
 	url = https://github.com/mohankumarelec/airgapped-qr-code-transfer.git
-	branch = main
+	branch = master
 
 
 # Reference — cimbar / libcimbar
@@ -122,4 +122,4 @@
 [submodule "References/cimbar"]
 	path = References/cimbar
 	url = https://github.com/sz3/cimbar.git
-	branch = main
+	branch = master
