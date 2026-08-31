@@ -1230,7 +1230,7 @@ class RTCPeer extends Peer {
         if (!this._conn) this._connect();
 
         if (message.sdp) {
-            const currentState = this._conn.signalingState;
+            const currentState = this._conn ? this._conn.signalingState : 'closed';
             const sdpType = message.sdp.type;
 
             // Prevent state errors when receiving duplicate or out-of-order SDPs
@@ -1239,27 +1239,37 @@ class RTCPeer extends Peer {
                 return;
             }
 
-            if (sdpType === 'offer' && currentState !== 'stable' && currentState !== 'have-local-offer') {
+            if (sdpType === 'offer' && currentState !== 'stable') {
                 console.warn(`RTC: Ignoring offer SDP in state '${currentState}' for peer ${this._peerId}`);
                 return;
             }
 
+            if (this._conn.signalingState === 'closed') return;
+
             this._conn
                 .setRemoteDescription(new RTCSessionDescription(message.sdp))
                 .then(_ => {
-                    if (message.sdp.type === 'offer') {
+                    if (message.sdp.type === 'offer' && this._conn && this._conn.signalingState === 'have-remote-offer') {
                         return this._conn
                             .createAnswer()
                             .then(d => this._onDescription(d));
                     }
                 })
-                .catch(e => this._onError(e));
+                .catch(e => {
+                    if (e && (e.name === 'InvalidStateError' || (e.message && e.message.includes('wrong state')))) {
+                        console.warn(`RTC: Handled InvalidStateError during setRemoteDescription in state '${this._conn ? this._conn.signalingState : 'unknown'}':`, e.message || e);
+                    } else {
+                        this._onError(e);
+                    }
+                });
         }
         else if (message.ice) {
-            if (this._conn.remoteDescription) {
+            if (this._conn && this._conn.remoteDescription && this._conn.signalingState !== 'closed') {
                 this._conn
                     .addIceCandidate(new RTCIceCandidate(message.ice))
-                    .catch(e => this._onError(e));
+                    .catch(e => {
+                        console.warn('RTC: Ignored ICE candidate error:', e.message || e);
+                    });
             }
         }
     }

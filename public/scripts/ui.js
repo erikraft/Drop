@@ -3226,11 +3226,343 @@ class ShareTextDialog extends Dialog {
     }
 }
 
+function classifyScannedContent(raw) {
+    if (!raw || typeof raw !== 'string') return null;
+    let urlStr = raw.trim();
+    let parsedUrl = null;
+    try {
+        parsedUrl = new URL(urlStr);
+    } catch (e) {
+        if (urlStr.includes('room_id=') || urlStr.includes('pair_key=')) {
+            try {
+                parsedUrl = new URL('https://drop.erikraft.com/' + (urlStr.startsWith('?') ? urlStr : '?' + urlStr));
+            } catch (err) {}
+        }
+    }
+
+    if (!parsedUrl) {
+        return {
+            isUrl: false,
+            isEcosystem: false,
+            type: 'text',
+            title: 'QR Code (Texto)',
+            displayUrl: urlStr,
+            targetUrl: urlStr,
+            isExternal: false
+        };
+    }
+
+    const host = parsedUrl.hostname.toLowerCase();
+    const searchParams = parsedUrl.searchParams;
+
+    const isDropDomain = host === 'drop.erikraft.com' || host === 'localhost' || host === '127.0.0.1' || host.endsWith('.onion');
+    const isDocsDropDomain = host === 'docsdrop.erikraft.com';
+    const isBioDropDomain = host === 'biodrop.erikraft.com';
+    const isErikraftEcosystem = isDropDomain || isDocsDropDomain || isBioDropDomain || host.endsWith('.erikraft.com');
+
+    let title = 'ErikrafT Ecosystem';
+    let type = 'ecosystem';
+
+    if (searchParams.has('room_id')) {
+        title = 'ErikrafT Drop™ - Sala Pública/Privada';
+        type = 'drop-room';
+    } else if (searchParams.has('pair_key')) {
+        title = 'ErikrafT Drop™ - Emparelhamento de Dispositivo';
+        type = 'drop-pair';
+    } else if (isDocsDropDomain) {
+        title = 'DocsDrop - Documentação ErikrafT';
+        type = 'docsdrop';
+    } else if (isBioDropDomain) {
+        title = 'BioDrop - Link Bio ErikrafT';
+        type = 'biodrop';
+    } else if (isDropDomain) {
+        title = 'ErikrafT Drop™';
+        type = 'drop';
+    } else if (isErikraftEcosystem) {
+        title = 'ErikrafT Service';
+        type = 'erikraft-service';
+    } else {
+        title = 'QR Code Externo';
+        type = 'external';
+    }
+
+    return {
+        isUrl: true,
+        isEcosystem: isErikraftEcosystem,
+        type: type,
+        title: title,
+        displayUrl: parsedUrl.href,
+        targetUrl: parsedUrl.href,
+        searchParams: searchParams,
+        isExternal: !isErikraftEcosystem
+    };
+}
+
+class QRScannerConfirmDialog extends Dialog {
+    constructor() {
+        super('qr-scanner-confirm-dialog');
+        this.$title = this.$el.querySelector('#qr-scanner-confirm-title');
+        this.$badge = this.$el.querySelector('#qr-scanner-confirm-badge');
+        this.$url = this.$el.querySelector('#qr-scanner-confirm-url');
+        this.$warning = this.$el.querySelector('#qr-scanner-confirm-warning');
+        this.$openBtn = this.$el.querySelector('#qr-scanner-confirm-open-btn');
+        this.$cancelBtn = this.$el.querySelector('#qr-scanner-confirm-cancel-btn');
+        this.scannedData = null;
+
+        if (this.$openBtn) {
+            this.$openBtn.addEventListener('click', () => this.handleOpen());
+        }
+    }
+
+    showResult(parsed) {
+        this.scannedData = parsed;
+        if (!parsed) return;
+
+        if (this.$title) this.$title.textContent = parsed.title || 'QR Code Detectado';
+        if (this.$badge) {
+            this.$badge.textContent = parsed.isEcosystem ? 'ErikrafT Ecosystem' : 'URL Externa';
+            this.$badge.style.background = parsed.isEcosystem ? 'var(--tor-color, #7d4696)' : '#d9534f';
+        }
+        if (this.$url) this.$url.textContent = parsed.targetUrl || parsed.displayUrl;
+
+        if (this.$warning) {
+            if (parsed.isExternal) {
+                this.$warning.removeAttribute('hidden');
+                this.$warning.style.display = 'block';
+            } else {
+                this.$warning.setAttribute('hidden', '');
+                this.$warning.style.display = 'none';
+            }
+        }
+
+        if (this.$openBtn) {
+            const openTextKey = parsed.isExternal ? 'dialogs.qr-scanner-open-anyway' : 'dialogs.open';
+            this.$openBtn.setAttribute('data-i18n-key', openTextKey);
+            this.$openBtn.textContent = parsed.isExternal ? 'Abrir mesmo assim' : 'Abrir';
+        }
+
+        this.show();
+    }
+
+    handleOpen() {
+        if (!this.scannedData) return;
+        const targetUrl = this.scannedData.targetUrl;
+
+        if (this.scannedData.type === 'drop-room' && this.scannedData.searchParams) {
+            const roomId = this.scannedData.searchParams.get('room_id');
+            if (roomId) {
+                if (window.erikrafTdrop && window.erikrafTdrop.publicRoomDialog) {
+                    window.erikrafTdrop.publicRoomDialog.joinRoom(roomId);
+                } else {
+                    window.location.search = `?room_id=${encodeURIComponent(roomId)}`;
+                }
+                this.hide();
+                return;
+            }
+        }
+
+        if (this.scannedData.type === 'drop-pair' && this.scannedData.searchParams) {
+            const pairKey = this.scannedData.searchParams.get('pair_key');
+            if (pairKey) {
+                if (window.erikrafTdrop && window.erikrafTdrop.pairDeviceDialog) {
+                    window.erikrafTdrop.pairDeviceDialog.pairWithKey(pairKey);
+                } else {
+                    window.location.search = `?pair_key=${encodeURIComponent(pairKey)}`;
+                }
+                this.hide();
+                return;
+            }
+        }
+
+        if (this.scannedData.isUrl) {
+            window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        } else {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(targetUrl);
+                if (window.erikrafTdrop && window.erikrafTdrop.toast) {
+                    window.erikrafTdrop.toast.show('Conteúdo copiado para a área de transferência');
+                }
+            }
+        }
+
+        this.hide();
+    }
+}
+
+class QRScannerDialog extends Dialog {
+    constructor() {
+        super('qr-scanner-dialog');
+        this.$video = this.$el.querySelector('#qr-scanner-main-video');
+        this.$status = this.$el.querySelector('#qr-scanner-main-status');
+        this.$input = this.$el.querySelector('#qr-scanner-manual-input');
+        this.$submitBtn = this.$el.querySelector('#qr-scanner-manual-submit');
+        this.$headerBtn = $('openQRScanner');
+
+        this.scanning = false;
+        this.stream = null;
+
+        if (this.$headerBtn) {
+            this.$headerBtn.addEventListener('click', () => this.openScanner());
+        }
+
+        if (this.$submitBtn) {
+            this.$submitBtn.addEventListener('click', () => this.handleManualSubmit());
+        }
+
+        if (this.$input) {
+            this.$input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.handleManualSubmit();
+                }
+            });
+        }
+    }
+
+    openScanner() {
+        this.show();
+        this.startCamera();
+    }
+
+    async startCamera() {
+        this.scanning = true;
+        if (this.$status) this.$status.textContent = 'Procurando QR Code...';
+
+        if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+            try {
+                if (this.$video) {
+                    this.$video.setAttribute('playsinline', 'true');
+                    this.$video.setAttribute('autoplay', 'true');
+                    this.$video.muted = true;
+                }
+
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment' }
+                    });
+                } catch (envErr) {
+                    console.warn('Facing mode environment failed, falling back to default camera:', envErr);
+                    this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                }
+
+                if (this.$video) {
+                    this.$video.srcObject = this.stream;
+                    try {
+                        await this.$video.play();
+                    } catch (playErr) {
+                        console.warn('Video play interrupted or rejected:', playErr);
+                    }
+                }
+            } catch (err) {
+                console.warn('Camera access error:', err);
+                if (this.$status) {
+                    const isPermissionError = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
+                    this.$status.textContent = isPermissionError
+                        ? 'Acesso à câmera negado. Cole o link manualmente abaixo:'
+                        : 'Câmera indisponível. Cole o link manualmente abaixo:';
+                }
+                if (this.$input) this.$input.focus();
+                return;
+            }
+        }
+        this.scanLoop();
+    }
+
+    async scanLoop() {
+        if (!this.scanning) return;
+
+        let detectedRaw = null;
+
+        if (typeof BarcodeDetector !== 'undefined') {
+            try {
+                if (!this.detector) {
+                    this.detector = new BarcodeDetector({ formats: ['qr_code'] });
+                }
+                if (this.$video && this.$video.readyState >= 2) {
+                    const barcodes = await this.detector.detect(this.$video);
+                    if (barcodes && barcodes.length > 0) {
+                        detectedRaw = barcodes[0].rawValue;
+                    }
+                }
+            } catch (e) {}
+        } else if (typeof window !== 'undefined' && window.jsQR && this.$video && this.$video.readyState >= 2) {
+            try {
+                if (!this.canvas) {
+                    this.canvas = document.createElement('canvas');
+                    this.ctx = this.canvas.getContext('2d');
+                }
+                if (this.$video.videoWidth && this.$video.videoHeight) {
+                    this.canvas.width = this.$video.videoWidth;
+                    this.canvas.height = this.$video.videoHeight;
+                    this.ctx.drawImage(this.$video, 0, 0, this.canvas.width, this.canvas.height);
+                    const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                    const code = window.jsQR(imageData.data, imageData.width, imageData.height);
+                    if (code && code.data) {
+                        detectedRaw = code.data;
+                    }
+                }
+            } catch (e) {}
+        }
+
+        if (detectedRaw) {
+            this.processScannedRaw(detectedRaw);
+            return;
+        }
+
+        if (this.scanning && typeof requestAnimationFrame !== 'undefined') {
+            requestAnimationFrame(() => this.scanLoop());
+        }
+    }
+
+    processScannedRaw(raw) {
+        if (!raw) return;
+        this.stopCamera();
+        this.hide();
+
+        const classified = classifyScannedContent(raw);
+        if (window.erikrafTdrop && window.erikrafTdrop.qrScannerConfirmDialog) {
+            window.erikrafTdrop.qrScannerConfirmDialog.showResult(classified);
+        }
+    }
+
+    handleManualSubmit() {
+        const val = this.$input ? this.$input.value.trim() : '';
+        if (!val) return;
+        if (this.$input) this.$input.value = '';
+        this.processScannedRaw(val);
+    }
+
+    stopCamera() {
+        this.scanning = false;
+        if (this.stream) {
+            try {
+                this.stream.getTracks().forEach(track => {
+                    try { track.stop(); } catch (e) {}
+                });
+            } catch (e) {}
+            this.stream = null;
+        }
+        if (this.$video) {
+            this.$video.srcObject = null;
+        }
+    }
+
+    hide() {
+        this.stopCamera();
+        super.hide();
+    }
+}
+
 class AnimatedQRSendDialog extends Dialog {
     constructor() {
         super('animated-qr-send-dialog');
         this.$container = this.$el.querySelector('#qr-send-canvas-container');
-        this.$status = this.$el.querySelector('#qr-send-status');
+        this.$fileInfo = this.$el.querySelector('#qr-send-file-info');
+        this.$progressBar = this.$el.querySelector('#qr-send-progress-bar');
+        this.$framesCount = this.$el.querySelector('#qr-send-frames-count');
+        this.$fpsSpeed = this.$el.querySelector('#qr-send-fps-speed');
+        this.$fpsSlider = this.$el.querySelector('#qr-send-fps-slider');
+        this.$fpsVal = this.$el.querySelector('#qr-send-fps-val');
         this.$pauseBtn = this.$el.querySelector('#qr-send-pause-btn');
 
         if (this.$pauseBtn) {
@@ -3245,14 +3577,34 @@ class AnimatedQRSendDialog extends Dialog {
                 }
             });
         }
+
+        if (this.$fpsSlider) {
+            this.$fpsSlider.addEventListener('input', (e) => {
+                const fps = parseInt(e.target.value, 10) || 6;
+                if (this.$fpsVal) this.$fpsVal.textContent = `${fps} FPS`;
+                if (this.transmitter) this.transmitter.setFps(fps);
+            });
+        }
     }
 
     async send(data) {
         if (!window.ErikrafTQRTransmitter) return;
+
+        const currentFps = this.$fpsSlider ? (parseInt(this.$fpsSlider.value, 10) || 6) : 6;
         this.transmitter = new ErikrafTQRTransmitter(this.$container, {
+            fps: currentFps,
             onProgress: (p) => {
-                if (this.$status) {
-                    this.$status.textContent = `Símbolo ${p.currentIndex + 1}/${p.totalFrames}`;
+                if (this.$fileInfo) {
+                    this.$fileInfo.textContent = `${p.fileName} (${Util.formatBytes(p.totalSize)})`;
+                }
+                if (this.$progressBar) {
+                    this.$progressBar.value = p.progressPct;
+                }
+                if (this.$framesCount) {
+                    this.$framesCount.textContent = `Frames: ${p.currentIndex + 1}/${p.totalFrames}`;
+                }
+                if (this.$fpsSpeed) {
+                    this.$fpsSpeed.textContent = `Velocidade: ${p.fps} FPS`;
                 }
             }
         });
@@ -3281,7 +3633,13 @@ class AnimatedQRReceiveDialog extends Dialog {
         super('animated-qr-receive-dialog');
         this.$video = this.$el.querySelector('#qr-scanner-video');
         this.$state = this.$el.querySelector('#qr-receive-state');
-        this.$progress = this.$el.querySelector('#qr-receive-progress');
+        this.$progressBar = this.$el.querySelector('#qr-receive-progress-bar');
+        this.$framesCount = this.$el.querySelector('#qr-receive-frames-count');
+        this.$dataSize = this.$el.querySelector('#qr-receive-data-size');
+        this.$completeContainer = this.$el.querySelector('#qr-receive-complete-container');
+        this.$completeFilename = this.$el.querySelector('#qr-receive-complete-filename');
+        this.$completeSha = this.$el.querySelector('#qr-receive-complete-sha');
+        this.$actionBtn = this.$el.querySelector('#qr-receive-action-btn');
 
         this.$headerBtn = $('animated-qr-btn');
         if (this.$headerBtn) {
@@ -3289,7 +3647,7 @@ class AnimatedQRReceiveDialog extends Dialog {
                 if (window.erikrafTdrop && window.erikrafTdrop.peersUI && window.erikrafTdrop.peersUI.shareMode && window.erikrafTdrop.peersUI.shareMode.active) {
                     const files = window.erikrafTdrop.peersUI.shareMode.files;
                     const text = window.erikrafTdrop.peersUI.shareMode.text;
-                    if (files.length) {
+                    if (files && files.length) {
                         window.erikrafTdrop.animatedQRSendDialog.send({ file: files[0] });
                     } else if (text) {
                         window.erikrafTdrop.animatedQRSendDialog.send({ text: text });
@@ -3302,33 +3660,71 @@ class AnimatedQRReceiveDialog extends Dialog {
     }
 
     openScanner() {
+        if (this.$completeContainer) {
+            this.$completeContainer.setAttribute('hidden', '');
+            this.$completeContainer.style.display = 'none';
+        }
+        if (this.$progressBar) this.$progressBar.value = 0;
+        if (this.$framesCount) this.$framesCount.textContent = 'Frames recebidos: 0';
+        if (this.$dataSize) this.$dataSize.textContent = 'Dados: 0 KB';
+
         this.show();
         if (!window.ErikrafTQRScanner) return;
+
         this.scanner = new ErikrafTQRScanner(this.$video, {
             onStateChange: (state) => {
                 if (this.$state) this.$state.textContent = state;
             },
             onProgress: (p) => {
-                if (this.$progress) {
-                    this.$progress.textContent = `Dados recuperados: ${p.pct}% (${p.received}/${p.total} símbolos)`;
+                if (this.$progressBar) this.$progressBar.value = p.pct;
+                if (this.$framesCount) {
+                    this.$framesCount.textContent = `Frames: ${p.received}/${p.total}`;
+                }
+                if (this.$dataSize) {
+                    this.$dataSize.textContent = `Dados: ${Util.formatBytes(p.recoveredBytes || 0)} / ${Util.formatBytes(p.size || 0)}`;
                 }
             },
             onComplete: (res) => {
-                if (res.type === 'text') {
-                    Events.fire('text-received', { text: res.text, peerId: 'QR' });
-                } else if (res.type === 'file') {
-                    Events.fire('files-received', {
-                        peerId: 'QR',
-                        files: [res.file],
-                        imagesOnly: res.mime.startsWith('image/'),
-                        totalSize: res.file.size
+                if (this.$completeContainer) {
+                    this.$completeContainer.removeAttribute('hidden');
+                    this.$completeContainer.style.display = 'flex';
+                }
+                if (this.$completeFilename) {
+                    this.$completeFilename.textContent = res.name || (res.type === 'text' ? 'Texto Recebido' : 'Arquivo');
+                }
+                if (this.$completeSha) {
+                    this.$completeSha.textContent = `SHA-256: ${res.sha || 'Verificado'}`;
+                }
+
+                if (this.$actionBtn) {
+                    this.$actionBtn.textContent = res.type === 'text' ? 'Copiar Texto' : 'Baixar Arquivo';
+                    const newBtn = this.$actionBtn.cloneNode(true);
+                    this.$actionBtn.parentNode.replaceChild(newBtn, this.$actionBtn);
+                    this.$actionBtn = newBtn;
+
+                    this.$actionBtn.addEventListener('click', () => {
+                        if (res.type === 'text') {
+                            if (navigator.clipboard && navigator.clipboard.writeText) {
+                                navigator.clipboard.writeText(res.text);
+                                if (window.erikrafTdrop && window.erikrafTdrop.toast) {
+                                    window.erikrafTdrop.toast.show('Texto copiado com sucesso');
+                                }
+                            }
+                            Events.fire('text-received', { text: res.text, peerId: 'QR' });
+                        } else if (res.type === 'file') {
+                            Events.fire('files-received', {
+                                peerId: 'QR',
+                                files: [res.file],
+                                imagesOnly: res.mime && res.mime.startsWith('image/'),
+                                totalSize: res.file.size
+                            });
+                        }
+                        this.hide();
                     });
                 }
-                this.hide();
             }
         });
 
-        this.show();
         this.scanner.start();
     }
 

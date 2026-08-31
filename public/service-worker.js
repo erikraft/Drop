@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.13.0';
+const cacheVersion = 'v1.14.0';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
@@ -36,6 +36,14 @@ const relativePathsToCache = [
     'images/android-chrome-512x512.png',
     'images/android-chrome-512x512-maskable.png',
     'images/apple-touch-icon.png',
+    'images/badges/BadgeLinux.png',
+    'images/badges/F-Droid-get-it-on.png',
+    'images/badges/Get-it-from-Opera-Addons.png',
+    'images/badges/Get_it_on_APKPure_English.png',
+    'images/badges/Get_it_on_Google_Play_Store_English.png',
+    'images/badges/Get_it_on_Shortcuts_English.png',
+    'images/badges/Get_the_add-on_Thunderbird.png',
+    'images/badges/Support_me_on_Ko-fi.png',
     'fonts/OpenSans/static/OpenSans-Medium.ttf',
     'lang/ar.json',
     'lang/be.json',

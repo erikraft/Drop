@@ -1,7 +1,8 @@
 /**
- * ERIKRAFT-QR Offline Animated QR Optical Transfer Engine (v1.0)
+ * ERIKRAFT-QR Offline Animated QR Optical Transfer Engine (v2.0)
  * Handles client-side encoding, animated QR generation, camera scanning,
- * CRC32/SHA-256 verification, and offline text/file reassembly.
+ * Deflate payload compression, FEC/Fountain XOR recovery, CRC32/SHA-256 verification,
+ * and offline text/file reassembly without network dependencies.
  */
 
 // Simple CRC32 Calculation
@@ -27,42 +28,105 @@ const crc32Table = (() => {
 })();
 
 async function sha256Buffer(buffer) {
-    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    if (typeof crypto !== 'undefined' && crypto.subtle && typeof crypto.subtle.digest === 'function') {
+        const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    // Node.js fallback or lightweight SHA-256 if Subtle Crypto is unavailable
+    if (typeof require !== 'undefined') {
+        try {
+            const cryptoModule = require('crypto');
+            return cryptoModule.createHash('sha256').update(Buffer.from(bytes)).digest('hex');
+        } catch (e) {}
+    }
+    throw new Error('SHA-256 calculation unsupported in this environment');
 }
 
 function bufferToBase64(buffer) {
     let binary = '';
-    const bytes = new Uint8Array(buffer);
+    const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     const len = bytes.byteLength;
     for (let i = 0; i < len; i++) {
         binary += String.fromCharCode(bytes[i]);
     }
-    return btoa(binary);
+    if (typeof btoa === 'function') {
+        return btoa(binary);
+    }
+    if (typeof Buffer !== 'undefined') {
+        return Buffer.from(bytes).toString('base64');
+    }
+    throw new Error('Base64 encoding unsupported');
 }
 
 function base64ToBuffer(base64) {
-    const binary = atob(base64);
-    const len = binary.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-        bytes[i] = binary.charCodeAt(i);
+    if (typeof atob === 'function') {
+        const binary = atob(base64);
+        const len = binary.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes.buffer;
     }
-    return bytes.buffer;
+    if (typeof Buffer !== 'undefined') {
+        const buf = Buffer.from(base64, 'base64');
+        return new Uint8Array(buf).buffer;
+    }
+    throw new Error('Base64 decoding unsupported');
+}
+
+async function compressBuffer(inputBuffer) {
+    if (typeof CompressionStream !== 'undefined') {
+        try {
+            const bytes = inputBuffer instanceof Uint8Array ? inputBuffer : new Uint8Array(inputBuffer);
+            const cs = new CompressionStream('deflate-raw');
+            const writer = cs.writable.getWriter();
+            writer.write(bytes);
+            writer.close();
+            const res = await new Response(cs.readable).arrayBuffer();
+            if (res.byteLength < bytes.byteLength) {
+                return { buffer: res, compressed: 1 };
+            }
+        } catch (e) {
+            // Compression optional fallback
+        }
+    }
+    return { buffer: inputBuffer, compressed: 0 };
+}
+
+async function decompressBuffer(inputBuffer, isCompressed) {
+    if (isCompressed && typeof DecompressionStream !== 'undefined') {
+        try {
+            const bytes = inputBuffer instanceof Uint8Array ? inputBuffer : new Uint8Array(inputBuffer);
+            const ds = new DecompressionStream('deflate-raw');
+            const writer = ds.writable.getWriter();
+            writer.write(bytes);
+            writer.close();
+            return await new Response(ds.readable).arrayBuffer();
+        } catch (e) {
+            console.warn('Decompression failed, falling back to raw payload:', e);
+        }
+    }
+    return inputBuffer;
 }
 
 class ErikrafTQRTransmitter {
     constructor(containerEl, options = {}) {
         this.containerEl = containerEl;
         this.fps = options.fps || 6;
-        this.chunkSize = options.chunkSize || 180; // bytes
+        this.chunkSize = options.chunkSize || 180; // bytes per QR frame
         this.running = false;
         this.paused = false;
         this.timer = null;
         this.currentIndex = 0;
         this.frames = [];
         this.onProgress = options.onProgress || (() => {});
+    }
+
+    setFps(newFps) {
+        this.fps = Math.max(1, Math.min(30, parseInt(newFps, 10) || 6));
     }
 
     async prepareText(text) {
@@ -79,7 +143,7 @@ class ErikrafTQRTransmitter {
         const buffer = typeof file.arrayBuffer === 'function' ? await file.arrayBuffer() : file.buffer;
         await this.prepareBuffer(buffer, {
             type: 'file',
-            name: file.name,
+            name: file.name || 'file.bin',
             mime: file.type || 'application/octet-stream'
         });
     }
@@ -87,12 +151,16 @@ class ErikrafTQRTransmitter {
     async prepareBuffer(buffer, metadata) {
         const transferId = Math.random().toString(36).substring(2, 10).toUpperCase();
         const sha = await sha256Buffer(buffer);
-        const bytes = new Uint8Array(buffer);
-        const totalSize = bytes.length;
+        const originalBytes = new Uint8Array(buffer);
+        const totalSize = originalBytes.length;
+
+        // Try deflate compression
+        const { buffer: payloadBuffer, compressed } = await compressBuffer(buffer);
+        const payloadBytes = new Uint8Array(payloadBuffer);
 
         const baseChunks = [];
-        for (let i = 0; i < totalSize; i += this.chunkSize) {
-            const chunkBytes = bytes.subarray(i, i + this.chunkSize);
+        for (let i = 0; i < payloadBytes.length; i += this.chunkSize) {
+            const chunkBytes = payloadBytes.subarray(i, i + this.chunkSize);
             baseChunks.push(chunkBytes);
         }
 
@@ -112,6 +180,7 @@ class ErikrafTQRTransmitter {
                 sz: totalSize,
                 i: i,
                 n: numChunks,
+                c: compressed,
                 crc: crc32(b64Data),
                 sha: sha,
                 d: b64Data
@@ -119,8 +188,8 @@ class ErikrafTQRTransmitter {
             this.frames.push(JSON.stringify(payload));
         }
 
-        // Add 20% XOR FEC parity frames
-        const parityCount = Math.max(2, Math.floor(numChunks * 0.2));
+        // Add 25% XOR FEC Fountain parity frames
+        const parityCount = Math.max(2, Math.floor(numChunks * 0.25));
         for (let p = 0; p < parityCount; p++) {
             const idx1 = p % numChunks;
             const idx2 = (p + 1) % numChunks;
@@ -143,6 +212,7 @@ class ErikrafTQRTransmitter {
                 i: numChunks + p,
                 n: numChunks,
                 fec: [idx1, idx2],
+                c: compressed,
                 crc: crc32(b64Data),
                 sha: sha,
                 d: b64Data
@@ -152,6 +222,8 @@ class ErikrafTQRTransmitter {
 
         this.totalSize = totalSize;
         this.metadata = metadata;
+        this.numBaseChunks = numChunks;
+        this.totalFramesCount = this.frames.length;
     }
 
     start() {
@@ -191,8 +263,11 @@ class ErikrafTQRTransmitter {
         this.onProgress({
             currentIndex: this.currentIndex,
             totalFrames: this.frames.length,
+            numBaseChunks: this.numBaseChunks,
             fps: this.fps,
-            totalSize: this.totalSize
+            totalSize: this.totalSize,
+            fileName: this.metadata ? this.metadata.name : 'Data',
+            progressPct: Math.min(100, Math.round(((this.currentIndex + 1) / this.frames.length) * 100))
         });
 
         this.currentIndex = (this.currentIndex + 1) % this.frames.length;
@@ -212,6 +287,7 @@ class ErikrafTQRScanner {
         this.fecFrames = [];
         this.meta = null;
         this.state = 'Searching for QR...';
+        this.fecRecoveredCount = 0;
     }
 
     async start() {
@@ -221,12 +297,27 @@ class ErikrafTQRScanner {
         this.receivedChunks.clear();
         this.fecFrames = [];
         this.meta = null;
+        this.fecRecoveredCount = 0;
 
-        try {
-            if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
-                this.stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' }
-                });
+        if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+            try {
+                if (this.videoEl) {
+                    this.videoEl.setAttribute('playsinline', 'true');
+                    this.videoEl.setAttribute('autoplay', 'true');
+                    this.videoEl.muted = true;
+                }
+
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment' }
+                    });
+                } catch (envErr) {
+                    console.warn('Facing mode environment failed, falling back to default camera:', envErr);
+                    this.stream = await navigator.mediaDevices.getUserMedia({
+                        video: true
+                    });
+                }
+
                 if (this.videoEl) {
                     this.videoEl.srcObject = this.stream;
                     try {
@@ -235,23 +326,28 @@ class ErikrafTQRScanner {
                         console.warn('Video play interrupted or rejected:', playErr);
                     }
                 }
+            } catch (err) {
+                console.warn('Camera access error:', err.message);
+                const isPermissionError = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
+                this.state = isPermissionError
+                    ? 'Acesso à câmera negado'
+                    : 'Câmera indisponível ou não suportada';
+                this.onStateChange(this.state);
+                this.stop();
+                return;
             }
-            this._scanLoop();
-        } catch (err) {
-            console.warn('Camera access failed:', err.message);
-            const isPermissionError = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
-            this.state = isPermissionError
-                ? 'Acesso à câmera negado'
-                : 'Câmera indisponível ou não suportada';
-            this.onStateChange(this.state);
-            this.stop();
         }
+        this._scanLoop();
     }
 
     stop() {
         this.scanning = false;
         if (this.stream) {
-            this.stream.getTracks().forEach(track => track.stop());
+            try {
+                this.stream.getTracks().forEach(track => {
+                    try { track.stop(); } catch (e) {}
+                });
+            } catch (e) {}
             this.stream = null;
         }
         if (this.videoEl) {
@@ -267,26 +363,30 @@ class ErikrafTQRScanner {
                 if (!this.detector) {
                     this.detector = new BarcodeDetector({ formats: ['qr_code'] });
                 }
-                const barcodes = await this.detector.detect(this.videoEl);
-                for (const barcode of barcodes) {
-                    this._processRawData(barcode.rawValue);
+                if (this.videoEl && this.videoEl.readyState >= 2) {
+                    const barcodes = await this.detector.detect(this.videoEl);
+                    for (const barcode of barcodes) {
+                        this._processRawData(barcode.rawValue);
+                    }
                 }
             } catch (e) {
-                // ignore frame detection error
+                // ignore detection error on frame
             }
-        } else if (typeof window !== 'undefined' && window.jsQR && this.videoEl && this.videoEl.readyState === this.videoEl.HAVE_ENOUGH_DATA) {
+        } else if (typeof window !== 'undefined' && window.jsQR && this.videoEl && this.videoEl.readyState >= 2) {
             try {
                 if (!this.canvas) {
                     this.canvas = document.createElement('canvas');
                     this.ctx = this.canvas.getContext('2d');
                 }
-                this.canvas.width = this.videoEl.videoWidth;
-                this.canvas.height = this.videoEl.videoHeight;
-                this.ctx.drawImage(this.videoEl, 0, 0, this.canvas.width, this.canvas.height);
-                const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-                const code = window.jsQR(imageData.data, imageData.width, imageData.height);
-                if (code && code.data) {
-                    this._processRawData(code.data);
+                if (this.videoEl.videoWidth && this.videoEl.videoHeight) {
+                    this.canvas.width = this.videoEl.videoWidth;
+                    this.canvas.height = this.videoEl.videoHeight;
+                    this.ctx.drawImage(this.videoEl, 0, 0, this.canvas.width, this.canvas.height);
+                    const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                    const code = window.jsQR(imageData.data, imageData.width, imageData.height);
+                    if (code && code.data) {
+                        this._processRawData(code.data);
+                    }
                 }
             } catch (e) {
                 // ignore
@@ -308,6 +408,7 @@ class ErikrafTQRScanner {
                 const [idx1, idx2] = fecFrame.fec;
                 const has1 = this.receivedChunks.has(idx1);
                 const has2 = this.receivedChunks.has(idx2);
+
                 if (has1 && !has2) {
                     const b1 = new Uint8Array(this.receivedChunks.get(idx1));
                     const xorBuf = new Uint8Array(base64ToBuffer(fecFrame.d));
@@ -315,14 +416,8 @@ class ErikrafTQRScanner {
                     for (let b = 0; b < xorBuf.length; b++) {
                         recovered[b] = (b1[b] || 0) ^ xorBuf[b];
                     }
-                    let expectedLen = xorBuf.length;
-                    if (idx2 === this.meta.numChunks - 1) {
-                        const calculatedTotal = (this.meta.numChunks - 1) * b1.length + expectedLen;
-                        if (calculatedTotal > this.meta.totalSize) {
-                            expectedLen = this.meta.totalSize - (this.meta.numChunks - 1) * b1.length;
-                        }
-                    }
-                    this.receivedChunks.set(idx2, recovered.slice(0, expectedLen).buffer);
+                    this.receivedChunks.set(idx2, recovered.buffer);
+                    this.fecRecoveredCount++;
                     progressMade = true;
                 } else if (has2 && !has1) {
                     const b2 = new Uint8Array(this.receivedChunks.get(idx2));
@@ -331,14 +426,8 @@ class ErikrafTQRScanner {
                     for (let b = 0; b < xorBuf.length; b++) {
                         recovered[b] = (b2[b] || 0) ^ xorBuf[b];
                     }
-                    let expectedLen = xorBuf.length;
-                    if (idx1 === this.meta.numChunks - 1) {
-                        const calculatedTotal = (this.meta.numChunks - 1) * b2.length + expectedLen;
-                        if (calculatedTotal > this.meta.totalSize) {
-                            expectedLen = this.meta.totalSize - (this.meta.numChunks - 1) * b2.length;
-                        }
-                    }
-                    this.receivedChunks.set(idx1, recovered.slice(0, expectedLen).buffer);
+                    this.receivedChunks.set(idx1, recovered.buffer);
+                    this.fecRecoveredCount++;
                     progressMade = true;
                 }
             }
@@ -346,15 +435,15 @@ class ErikrafTQRScanner {
     }
 
     _processRawData(raw) {
-        if (!raw || !raw.startsWith('{"h":"EKQR"')) return;
+        if (!raw || typeof raw !== 'string' || !raw.startsWith('{"h":"EKQR"')) return;
 
         try {
             const payload = JSON.parse(raw);
             if (payload.h !== 'EKQR' || !payload.d) return;
 
-            // Verify CRC32
+            // CRC32 Checksum Verification
             if (crc32(payload.d) !== payload.crc) {
-                console.warn('Frame CRC mismatch, ignoring');
+                console.warn('Frame CRC32 mismatch, discarding corrupted frame');
                 return;
             }
 
@@ -366,16 +455,20 @@ class ErikrafTQRScanner {
                     mime: payload.mime,
                     totalSize: payload.sz,
                     numChunks: payload.n,
+                    compressed: payload.c || 0,
                     sha: payload.sha
                 };
                 this.state = 'QR detected';
                 this.onStateChange(this.state);
             }
 
-            if (payload.id !== this.meta.id) return; // ignore different transfer
+            if (payload.id !== this.meta.id) return; // ignore frame from different session
 
             if (payload.fec) {
-                this.fecFrames.push(payload);
+                // Avoid duplicate parity frames
+                if (!this.fecFrames.some(f => f.i === payload.i)) {
+                    this.fecFrames.push(payload);
+                }
             } else {
                 if (!this.receivedChunks.has(payload.i)) {
                     this.receivedChunks.set(payload.i, base64ToBuffer(payload.d));
@@ -390,18 +483,27 @@ class ErikrafTQRScanner {
             const receivedCount = this.receivedChunks.size;
             const progressPct = Math.min(100, Math.round((receivedCount / this.meta.numChunks) * 100));
 
+            // Estimate recovered bytes
+            let recoveredBytes = 0;
+            this.receivedChunks.forEach(chunkBuf => {
+                recoveredBytes += chunkBuf.byteLength;
+            });
+
             this.onProgress({
                 pct: progressPct,
                 received: receivedCount,
                 total: this.meta.numChunks,
-                size: this.meta.totalSize
+                size: this.meta.totalSize,
+                recoveredBytes: Math.min(this.meta.totalSize, recoveredBytes),
+                fileName: this.meta.name,
+                fecRecoveredCount: this.fecRecoveredCount
             });
 
             if (receivedCount >= this.meta.numChunks) {
                 return this._finishReconstruction();
             }
         } catch (e) {
-            // invalid JSON or chunk
+            // invalid JSON frame, ignore
         }
     }
 
@@ -411,22 +513,42 @@ class ErikrafTQRScanner {
         this.onStateChange(this.state);
 
         // Combine chunks
-        const sortedChunks = [];
+        const sortedChunkBuffers = [];
+        let combinedLength = 0;
         for (let i = 0; i < this.meta.numChunks; i++) {
-            sortedChunks.push(new Uint8Array(this.receivedChunks.get(i)));
+            const chunkBuf = this.receivedChunks.get(i);
+            if (!chunkBuf) {
+                this.state = 'Missing required chunk';
+                this.onStateChange(this.state);
+                this.stop();
+                return;
+            }
+            sortedChunkBuffers.push(new Uint8Array(chunkBuf));
+            combinedLength += chunkBuf.byteLength;
         }
 
-        const totalBytes = new Uint8Array(this.meta.totalSize);
+        const combinedBytes = new Uint8Array(combinedLength);
         let offset = 0;
-        for (const chunk of sortedChunks) {
-            totalBytes.set(chunk, offset);
+        for (const chunk of sortedChunkBuffers) {
+            combinedBytes.set(chunk, offset);
             offset += chunk.length;
         }
+
+        this.state = 'Decompressing...';
+        this.onStateChange(this.state);
+
+        const decompressedBuffer = await decompressBuffer(combinedBytes.buffer, this.meta.compressed);
+        const finalBytes = new Uint8Array(decompressedBuffer);
+
+        // If decompressed buffer size exceeds meta.totalSize (due to padding), slice to exact totalSize
+        const exactBytes = finalBytes.length > this.meta.totalSize
+            ? finalBytes.subarray(0, this.meta.totalSize)
+            : finalBytes;
 
         this.state = 'Verifying integrity...';
         this.onStateChange(this.state);
 
-        const calculatedSha = await sha256Buffer(totalBytes.buffer);
+        const calculatedSha = await sha256Buffer(exactBytes.buffer);
         if (calculatedSha.toLowerCase() !== this.meta.sha.toLowerCase()) {
             this.state = 'Integrity check failed';
             this.onStateChange(this.state);
@@ -439,12 +561,26 @@ class ErikrafTQRScanner {
         this.stop();
 
         if (this.meta.type === 'text') {
-            const text = new TextDecoder().decode(totalBytes);
-            this.onComplete({ type: 'text', text: text });
+            const text = new TextDecoder().decode(exactBytes);
+            this.onComplete({
+                type: 'text',
+                text: text,
+                sha: calculatedSha
+            });
         } else {
-            const blob = typeof Blob !== 'undefined' ? new Blob([totalBytes], { type: this.meta.mime }) : totalBytes;
-            const file = typeof File !== 'undefined' && typeof Blob !== 'undefined' ? new File([blob], this.meta.name, { type: this.meta.mime }) : { buffer: totalBytes.buffer, name: this.meta.name, type: this.meta.mime };
-            this.onComplete({ type: 'file', file: file, name: this.meta.name, mime: this.meta.mime, buffer: totalBytes.buffer });
+            const blob = typeof Blob !== 'undefined' ? new Blob([exactBytes], { type: this.meta.mime }) : exactBytes;
+            const file = typeof File !== 'undefined' && typeof Blob !== 'undefined'
+                ? new File([blob], this.meta.name, { type: this.meta.mime })
+                : { buffer: exactBytes.buffer, name: this.meta.name, type: this.meta.mime, size: exactBytes.byteLength };
+
+            this.onComplete({
+                type: 'file',
+                file: file,
+                name: this.meta.name,
+                mime: this.meta.mime,
+                buffer: exactBytes.buffer,
+                sha: calculatedSha
+            });
         }
     }
 }
@@ -456,6 +592,8 @@ if (typeof window !== 'undefined') {
     window.sha256Buffer = sha256Buffer;
     window.bufferToBase64 = bufferToBase64;
     window.base64ToBuffer = base64ToBuffer;
+    window.compressBuffer = compressBuffer;
+    window.decompressBuffer = decompressBuffer;
 }
 
 if (typeof globalThis !== 'undefined') {
@@ -465,6 +603,8 @@ if (typeof globalThis !== 'undefined') {
     globalThis.sha256Buffer = sha256Buffer;
     globalThis.bufferToBase64 = bufferToBase64;
     globalThis.base64ToBuffer = base64ToBuffer;
+    globalThis.compressBuffer = compressBuffer;
+    globalThis.decompressBuffer = decompressBuffer;
 }
 
 export {
@@ -473,7 +613,9 @@ export {
     crc32,
     sha256Buffer,
     bufferToBase64,
-    base64ToBuffer
+    base64ToBuffer,
+    compressBuffer,
+    decompressBuffer
 };
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -483,6 +625,8 @@ if (typeof module !== 'undefined' && module.exports) {
         crc32,
         sha256Buffer,
         bufferToBase64,
-        base64ToBuffer
+        base64ToBuffer,
+        compressBuffer,
+        decompressBuffer
     };
 }
