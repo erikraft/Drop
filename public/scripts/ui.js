@@ -3595,6 +3595,27 @@ class QRScannerDialog extends Dialog {
 class AnimatedQRSendDialog extends Dialog {
     constructor() {
         super('animated-qr-send-dialog');
+        this.$composeView = this.$el.querySelector('#qr-send-compose-view');
+        this.$activeView = this.$el.querySelector('#qr-send-active-view');
+
+        // Text composition elements
+        this.$textContainer = this.$el.querySelector('#qr-send-text-container');
+        this.$textInput = this.$el.querySelector('#qr-send-text-input');
+        this.$charCount = this.$el.querySelector('#qr-send-text-char-count');
+        this.$pasteBtn = this.$el.querySelector('#qr-send-text-paste-btn');
+
+        // File composition elements
+        this.$fileContainer = this.$el.querySelector('#qr-send-file-container');
+        this.$filePickerWrapper = this.$el.querySelector('#qr-send-file-picker-wrapper');
+        this.$selectFileBtn = this.$el.querySelector('#qr-send-select-file-btn');
+        this.$selectedCard = this.$el.querySelector('#qr-send-file-selected-card');
+        this.$selectedFilename = this.$el.querySelector('#qr-send-selected-filename');
+        this.$selectedFilesize = this.$el.querySelector('#qr-send-selected-filesize');
+        this.$removeFileBtn = this.$el.querySelector('#qr-send-remove-file-btn');
+
+        this.$startBtn = this.$el.querySelector('#qr-send-start-btn');
+
+        // Active view elements
         this.$container = this.$el.querySelector('#qr-send-canvas-container');
         this.$fileInfo = this.$el.querySelector('#qr-send-file-info');
         this.$progressBar = this.$el.querySelector('#qr-send-progress-bar');
@@ -3603,6 +3624,92 @@ class AnimatedQRSendDialog extends Dialog {
         this.$fpsSlider = this.$el.querySelector('#qr-send-fps-slider');
         this.$fpsVal = this.$el.querySelector('#qr-send-fps-val');
         this.$pauseBtn = this.$el.querySelector('#qr-send-pause-btn');
+        this.$backBtn = this.$el.querySelector('#qr-send-back-btn');
+
+        this.selectedFile = null;
+        this.mode = 'file'; // 'text' or 'file'
+
+        this.initEvents();
+    }
+
+    initEvents() {
+        if (this.$textInput) {
+            this.$textInput.addEventListener('input', () => {
+                const len = this.$textInput.value.length;
+                if (this.$charCount) {
+                    this.$charCount.textContent = `${len} ${Localization.getTranslation('dialogs.characters') || 'caracteres'}`;
+                }
+            });
+        }
+
+        if (this.$pasteBtn) {
+            this.$pasteBtn.addEventListener('click', async () => {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.readText) {
+                        const clipText = await navigator.clipboard.readText();
+                        if (clipText && this.$textInput) {
+                            this.$textInput.value = clipText;
+                            this.$textInput.dispatchEvent(new Event('input'));
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Clipboard paste error:', e);
+                }
+            });
+        }
+
+        if (this.$selectFileBtn) {
+            this.$selectFileBtn.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '*/*';
+                fileInput.onchange = (e) => {
+                    if (e.target.files && e.target.files[0]) {
+                        this.setSelectedFile(e.target.files[0]);
+                    }
+                };
+                fileInput.click();
+            });
+        }
+
+        if (this.$fileContainer) {
+            this.$fileContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.$fileContainer.style.borderColor = 'var(--primary-color, #15acbd)';
+            });
+            this.$fileContainer.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.$fileContainer.style.borderColor = 'rgba(21, 172, 189, 0.4)';
+            });
+            this.$fileContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.$fileContainer.style.borderColor = 'rgba(21, 172, 189, 0.4)';
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+                    this.setSelectedFile(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        if (this.$removeFileBtn) {
+            this.$removeFileBtn.addEventListener('click', () => {
+                this.selectedFile = null;
+                if (this.$selectedCard) {
+                    this.$selectedCard.setAttribute('hidden', '');
+                    this.$selectedCard.style.display = 'none';
+                }
+                if (this.$filePickerWrapper) {
+                    this.$filePickerWrapper.removeAttribute('hidden');
+                    this.$filePickerWrapper.style.display = 'flex';
+                }
+            });
+        }
+
+        if (this.$startBtn) {
+            this.$startBtn.addEventListener('click', () => this.startTransfer());
+        }
 
         if (this.$pauseBtn) {
             this.$pauseBtn.addEventListener('click', () => {
@@ -3617,6 +3724,13 @@ class AnimatedQRSendDialog extends Dialog {
             });
         }
 
+        if (this.$backBtn) {
+            this.$backBtn.addEventListener('click', () => {
+                this.stopTransmitter();
+                this.showComposeView();
+            });
+        }
+
         if (this.$fpsSlider) {
             this.$fpsSlider.addEventListener('input', (e) => {
                 const fps = parseInt(e.target.value, 10) || 6;
@@ -3626,8 +3740,94 @@ class AnimatedQRSendDialog extends Dialog {
         }
     }
 
+    setSelectedFile(file) {
+        if (!file) return;
+        this.selectedFile = file;
+        this.mode = 'file';
+        if (this.$selectedFilename) this.$selectedFilename.textContent = file.name;
+        if (this.$selectedFilesize) this.$selectedFilesize.textContent = Util.formatBytes(file.size);
+
+        if (this.$filePickerWrapper) {
+            this.$filePickerWrapper.setAttribute('hidden', '');
+            this.$filePickerWrapper.style.display = 'none';
+        }
+        if (this.$selectedCard) {
+            this.$selectedCard.removeAttribute('hidden');
+            this.$selectedCard.style.display = 'flex';
+        }
+    }
+
+    openCompose(mode = 'file') {
+        this.mode = mode;
+        this.showComposeView();
+        this.show();
+    }
+
+    showComposeView() {
+        if (this.$composeView) {
+            this.$composeView.removeAttribute('hidden');
+            this.$composeView.style.display = 'flex';
+        }
+        if (this.$activeView) {
+            this.$activeView.setAttribute('hidden', '');
+            this.$activeView.style.display = 'none';
+        }
+
+        if (this.mode === 'text') {
+            if (this.$textContainer) {
+                this.$textContainer.removeAttribute('hidden');
+                this.$textContainer.style.display = 'flex';
+            }
+            if (this.$fileContainer) {
+                this.$fileContainer.setAttribute('hidden', '');
+                this.$fileContainer.style.display = 'none';
+            }
+        } else {
+            if (this.$fileContainer) {
+                this.$fileContainer.removeAttribute('hidden');
+                this.$fileContainer.style.display = 'flex';
+            }
+            if (this.$textContainer) {
+                this.$textContainer.setAttribute('hidden', '');
+                this.$textContainer.style.display = 'none';
+            }
+        }
+    }
+
+    async startTransfer() {
+        if (this.mode === 'file') {
+            if (!this.selectedFile) {
+                if (window.erikrafTdrop && window.erikrafTdrop.toast) {
+                    window.erikrafTdrop.toast.show(Localization.getTranslation('dialogs.animated-qr-select-file-err') || 'Selecione um arquivo primeiro.');
+                }
+                return;
+            }
+            await this.send({ file: this.selectedFile });
+        } else {
+            const txt = this.$textInput ? this.$textInput.value.trim() : '';
+            if (!txt) {
+                if (window.erikrafTdrop && window.erikrafTdrop.toast) {
+                    window.erikrafTdrop.toast.show(Localization.getTranslation('dialogs.animated-qr-enter-text-err') || 'Digite um texto primeiro.');
+                }
+                return;
+            }
+            await this.send({ text: txt });
+        }
+    }
+
     async send(data) {
         if (!window.ErikrafTQRTransmitter) return;
+
+        this.stopTransmitter();
+
+        if (this.$composeView) {
+            this.$composeView.setAttribute('hidden', '');
+            this.$composeView.style.display = 'none';
+        }
+        if (this.$activeView) {
+            this.$activeView.removeAttribute('hidden');
+            this.$activeView.style.display = 'flex';
+        }
 
         const currentFps = this.$fpsSlider ? (parseInt(this.$fpsSlider.value, 10) || 6) : 6;
         this.transmitter = new ErikrafTQRTransmitter(this.$container, {
@@ -3640,10 +3840,10 @@ class AnimatedQRSendDialog extends Dialog {
                     this.$progressBar.value = p.progressPct;
                 }
                 if (this.$framesCount) {
-                    this.$framesCount.textContent = `Frames: ${p.currentIndex + 1}/${p.totalFrames}`;
+                    this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames') || 'Frames'}: ${p.currentIndex + 1}/${p.totalFrames}`;
                 }
                 if (this.$fpsSpeed) {
-                    this.$fpsSpeed.textContent = `Velocidade: ${p.fps} FPS`;
+                    this.$fpsSpeed.textContent = `${Localization.getTranslation('dialogs.speed') || 'Velocidade'}: ${p.fps} FPS`;
                 }
             }
         });
@@ -3658,11 +3858,15 @@ class AnimatedQRSendDialog extends Dialog {
         this.transmitter.start();
     }
 
-    hide() {
+    stopTransmitter() {
         if (this.transmitter) {
             this.transmitter.stop();
             this.transmitter = null;
         }
+    }
+
+    hide() {
+        this.stopTransmitter();
         super.hide();
     }
 }
@@ -3694,14 +3898,18 @@ class AnimatedQRMainDialog extends Dialog {
         if (this.$sendFileBtn) {
             this.$sendFileBtn.addEventListener('click', () => {
                 this.hide();
-                this.triggerFileSelection();
+                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
+                    window.erikrafTdrop.animatedQRSendDialog.openCompose('file');
+                }
             });
         }
 
         if (this.$sendTextBtn) {
             this.$sendTextBtn.addEventListener('click', () => {
                 this.hide();
-                this.triggerTextInput();
+                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
+                    window.erikrafTdrop.animatedQRSendDialog.openCompose('text');
+                }
             });
         }
 
@@ -3712,30 +3920,6 @@ class AnimatedQRMainDialog extends Dialog {
                     window.erikrafTdrop.animatedQRReceiveDialog.openScanner();
                 }
             });
-        }
-    }
-
-    triggerFileSelection() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '*/*';
-        input.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
-                    window.erikrafTdrop.animatedQRSendDialog.send({ file: file });
-                }
-            }
-        };
-        input.click();
-    }
-
-    triggerTextInput() {
-        const text = prompt('Digite o texto para enviar:');
-        if (text && text.trim()) {
-            if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
-                window.erikrafTdrop.animatedQRSendDialog.send({ text: text.trim() });
-            }
         }
     }
 }
