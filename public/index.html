@@ -597,11 +597,11 @@
                     <use xlink:href="#icon-comet-blue"></use>
                 </svg>
                 <div id="comet-popup-text">
-                    <h3 style="color: #14aabc;">Navegador Comet é Recomendado</h3>
+                    <h3 style="color: #14aabc;" data-i18n-key="dialogs.comet-title">Navegador Comet é Recomendado</h3>
                     <p>O Comet é um navegador inovador com IA integrada, recomendado pelo ErikrafT Drop™! Instale o Comet
                         e ganhe um ícone exclusivo como usuário do Comet Browser ao usar o ErikrafT Drop™.</p>
                     <div id="comet-popup-buttons">
-                        <button id="comet-download-btn" class="comet-btn">Baixar Comet</button>
+                        <button id="comet-download-btn" class="comet-btn" data-i18n-key="dialogs.comet-download">Baixar Comet</button>
                     </div>
                 </div>
             </div>
@@ -617,11 +617,11 @@
                     <use xlink:href="#icon-browseros-orange" fill="#f36320"></use>
                 </svg>
                 <div id="browseros-popup-text">
-                    <h3>Navegador BrowserOS é Recomendado</h3>
+                    <h3 data-i18n-key="dialogs.browseros-title">Navegador BrowserOS é Recomendado</h3>
                     <p>O BrowserOS é recomendado pelo ErikrafT Drop™! Instale o BrowserOS e ganhe um ícone exclusivo como
                         usuário do BrowserOS ao usar o ErikrafT Drop™.</p>
                     <div id="browseros-popup-buttons">
-                        <button id="browseros-download-btn" class="comet-btn">Baixar BrowserOS</button>
+                        <button id="browseros-download-btn" class="comet-btn" data-i18n-key="dialogs.browseros-download">Baixar BrowserOS</button>
                     </div>
                 </div>
             </div>
@@ -1590,8 +1590,8 @@
                     <div class="fw mt-2 column gap-1">
                         <progress id="qr-send-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
                         <div class="row row-between font-caption text-secondary">
-                            <span id="qr-send-frames-count">Frames: 0/0</span>
-                            <span id="qr-send-fps-speed">Velocidade: 6 FPS</span>
+                            <span id="qr-send-frames-count" data-i18n-key="qr.send-frames">Frames: 0/0</span>
+                            <span id="qr-send-fps-speed" data-i18n-key="qr.send-speed">Velocidade: 6 FPS</span>
                         </div>
                     </div>
 
@@ -1604,7 +1604,7 @@
                     </div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2 gap-2">
-                    <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey">Pausar</button>
+                    <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey" data-i18n-key="qr.pause">Pausar</button>
                     <button class="btn btn-rounded btn-grey" close>Fechar</button>
                 </div>
             </x-paper>
@@ -1626,8 +1626,8 @@
                     <div class="fw mt-2 column gap-1">
                         <progress id="qr-receive-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
                         <div class="row row-between font-caption text-secondary">
-                            <span id="qr-receive-frames-count">Frames recebidos: 0</span>
-                            <span id="qr-receive-data-size">Dados: 0 KB</span>
+                            <span id="qr-receive-frames-count" data-i18n-key="qr.receive-frames">Frames recebidos: 0</span>
+                            <span id="qr-receive-data-size" data-i18n-key="qr.receive-data-size">Dados: 0 KB</span>
                         </div>
                     </div>
 
@@ -1636,7 +1636,7 @@
                         <div id="qr-receive-complete-filename" class="font-body2 bold"></div>
                         <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
                         <div class="row gap-2 mt-2">
-                            <button id="qr-receive-action-btn" class="btn btn-rounded btn-dark text-white">Baixar</button>
+                            <button id="qr-receive-action-btn" class="btn btn-rounded btn-dark text-white" data-i18n-key="qr.download">Baixar</button>
                         </div>
                     </div>
                 </div>
@@ -1658,7 +1658,7 @@
                     <div id="exif-content" class="column fw" style="max-height: 350px; overflow-y: auto; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;"></div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2">
-                    <button id="exif-remove-btn" class="btn btn-rounded btn-grey" hidden>Remove Metadata</button>
+                    <button id="exif-remove-btn" class="btn btn-rounded btn-grey" hidden data-i18n-key="dialogs.remove-metadata">Remove Metadata</button>
                     <button class="btn btn-rounded btn-grey" data-i18n-key="dialogs.close" data-i18n-attrs="text" close></button>
                 </div>
             </x-paper>
@@ -1712,7 +1712,7 @@
             </svg>
             <div class="title-wrapper" dir="ltr">
                 <h1>ErikrafT Drop™</h1>
-                <div class="font-subheading">v1.13.0</div>
+                <div class="font-subheading">v1.14.0</div>
             </div>
             <div class="font-subheading" data-i18n-key="about.claim" data-i18n-attrs="text">
                 A maneira mais fácil de transferir arquivos entre dispositivos

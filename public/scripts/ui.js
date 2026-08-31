@@ -3426,7 +3426,7 @@ class QRScannerDialog extends Dialog {
 
     async startCamera() {
         this.scanning = true;
-        if (this.$status) this.$status.textContent = 'Iniciando câmera...';
+        if (this.$status) this.$status.textContent = Localization.getTranslation('qr.starting-camera');
 
         if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
             try {
@@ -3476,11 +3476,11 @@ class QRScannerDialog extends Dialog {
 
                     try {
                         await this.$video.play();
-                        if (this.$status) this.$status.textContent = 'Procurando QR Code...';
+                        if (this.$status) this.$status.textContent = Localization.getTranslation('qr.scanning');
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
                         if (this.$status) {
-                            this.$status.textContent = 'Erro ao reproduzir vídeo. Cole o link manualmente abaixo:';
+                            this.$status.textContent = Localization.getTranslation('qr.video-error');
                         }
                         if (this.$input) this.$input.focus();
                         return;
@@ -3499,7 +3499,7 @@ class QRScannerDialog extends Dialog {
             }
         } else {
             if (this.$status) {
-                this.$status.textContent = 'Câmera não suportada. Cole o link manualmente abaixo:';
+                this.$status.textContent = Localization.getTranslation('qr.camera-unsupported');
             }
             if (this.$input) this.$input.focus();
             return;
@@ -3609,10 +3609,10 @@ class AnimatedQRSendDialog extends Dialog {
                 if (!this.transmitter) return;
                 if (this.transmitter.paused) {
                     this.transmitter.resume();
-                    this.$pauseBtn.textContent = 'Pausar';
+                    this.$pauseBtn.textContent = Localization.getTranslation('qr.pause');
                 } else {
                     this.transmitter.pause();
-                    this.$pauseBtn.textContent = 'Retomar';
+                    this.$pauseBtn.textContent = Localization.getTranslation('qr.resume');
                 }
             });
         }
@@ -3841,7 +3841,7 @@ class ExifDialog extends Dialog {
 
     displayExif(infoText, canRemove = false, onRemove = null) {
         if (this.$content) {
-            this.$content.innerText = infoText || Localization.getTranslation('dialogs.metadata-none', 'No metadata found.');
+            this.$content.innerText = infoText || Localization.getTranslation('dialogs.metadata-none');
         }
 
         if (canRemove && typeof onRemove === 'function') {

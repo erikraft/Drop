@@ -191,11 +191,11 @@ class ContentModeration {
 
             const title = document.createElement('h2');
             title.className = 'frame-warning-title';
-            title.textContent = 'Tem certeza que deseja ver???';
+            title.textContent = Localization.getTranslation('moderation.confirm-title');
 
             const message = document.createElement('p');
             message.className = 'frame-warning-message';
-            message.textContent = 'Este conteúdo foi sinalizado como impróprio. Revele apenas se tiver certeza.';
+            message.textContent = Localization.getTranslation('moderation.confirm-msg');
 
             const mediaContainer = document.createElement('div');
             mediaContainer.className = 'frame-warning-media';
@@ -208,12 +208,12 @@ class ContentModeration {
             const noButton = document.createElement('button');
             noButton.type = 'button';
             noButton.className = 'frame-warning-btn frame-warning-btn-no';
-            noButton.textContent = 'Não';
+            noButton.textContent = Localization.getTranslation('moderation.no');
 
             const yesButton = document.createElement('button');
             yesButton.type = 'button';
             yesButton.className = 'frame-warning-btn frame-warning-btn-yes';
-            yesButton.textContent = 'Sim';
+            yesButton.textContent = Localization.getTranslation('moderation.yes');
 
             actions.appendChild(noButton);
             actions.appendChild(yesButton);
