@@ -266,7 +266,6 @@
             }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.0/dist/nsfwjs.min.js"></script>
     <script>
         (function () {
             const allowedClientTypes = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser', 'isearch-cli']);
@@ -520,10 +519,17 @@
             <i class="fa-brands fa-bluetooth-b icon" style="font-size: 24px;"></i>
         </div> -->
 
-        <!-- <div id="openQRScanner" class="icon-button" title="Escanear QR Code" data-i18n-key="header.scan-qr" data-i18n-attrs="title">
-            <i class="fa-solid fa-qrcode" style="font-size: 24px;"></i>
-        </div> -->
+        <div id="openQRScanner" class="icon-button" data-i18n-key="header.scan-qr" data-i18n-attrs="title aria-label" title="Escanear QR Code">
+            <svg class="icon">
+                <use xlink:href="#qrcode-icon"></use>
+            </svg>
+        </div>
 
+        <div id="animated-qr-btn" class="icon-button" data-i18n-key="header.animated-qr" data-i18n-attrs="title aria-label" title="Transfer via Animated QR">
+            <svg class="icon">
+                <use xlink:href="#qrcode-icon"></use>
+            </svg>
+        </div>
         <div id="pair-device" class="icon-button" data-i18n-key="header.pair-device" data-i18n-attrs="title">
             <svg class="icon">
                 <use xlink:href="#pair-device-icon"></use>
@@ -854,10 +860,8 @@
                         data-i18n-attrs="text title" hidden></span>
                     <span class="badge badge-room-public-id pointer" data-badge="public" data-i18n-key="footer.public-room-devices"
                         data-i18n-attrs="title" hidden>in room IAIAI</span>
-                    <span class="badge badge-tor-network pointer" data-badge="tor" data-i18n-key="footer.tor-network"
+                    <span class="badge badge-tor-status pointer" data-badge="tor" data-i18n-key="footer.tor-status"
                         data-i18n-attrs="text title" hidden>na rede Tor</span>
-                    <span class="badge badge-tor-status" data-badge="tor-status" data-i18n-key="footer.tor-status"
-                        data-i18n-attrs="text title" style="background: rgba(125, 70, 150, 0.2); border: 1px solid rgba(125, 70, 150, 0.5);" hidden>Rede Tor</span>
                 </div>
             </div>
         </div>
@@ -1055,17 +1059,10 @@
         <x-background class="full center">
             <x-paper shadow="2">
                 <div class="row center p-2 dialog-header">
-                    <h2 class="dialog-title">
-                        <svg class="icon">
-                            <use xlink:href="#tor-icon"></use>
-                        </svg>
-                        <span data-i18n-key="dialogs.tor-title">ㅤRede Tor (Onion Service)</span>
-                    </h2>
+                    <h2 class="dialog-title" data-i18n-key="dialogs.tor-title" data-i18n-attrs="text"></h2>
                 </div>
                 <div class="tor-dialog-body column center p-3">
-                    <p class="tor-description font-body2 text-center" data-i18n-key="dialogs.tor-desc">
-                        Transfira arquivos através da rede Tor usando o endereço Onion Service do ErikrafT Drop.
-                    </p>
+                    <p class="tor-description font-body2 text-center" data-i18n-key="dialogs.tor-desc" data-i18n-attrs="text"></p>
 
                     <div id="tor-address-wrapper" class="tor-address-card column center full-width">
                         <div id="tor-status-box" class="column center full-width"></div>
@@ -1074,21 +1071,19 @@
                     <div class="tor-actions column center full-width">
                         <a id="tor-open-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-rounded btn-tor full-width text-white" style="text-decoration: none;" hidden>
                             <svg class="icon btn-icon"><use xlink:href="#tor-icon"></use></svg>
-                            <span data-i18n-key="dialogs.tor-open-browser">Abrir endereço Onion</span>
+                            <span data-i18n-key="dialogs.tor-open-browser" data-i18n-attrs="text"></span>
                         </a>
                         <button id="tor-copy-btn" type="button" class="btn btn-rounded btn-grey full-width">
-							<span id="tor-copy-text" data-i18n-key="dialogs.tor-copy-address">Copiar endereço</span>
+							<span id="tor-copy-text" data-i18n-key="dialogs.tor-copy-address" data-i18n-attrs="text"></span>
                         </button>
                     </div>
 
                     <hr class="tor-divider">
 
-                    <p class="tor-help-text font-caption text-center" data-i18n-key="dialogs.tor-help">
-                        Abra este endereço .onion em um navegador compatível com a rede Tor.
-                    </p>
+                    <p class="tor-help-text font-caption text-center" data-i18n-key="dialogs.tor-help" data-i18n-attrs="text"></p>
                 </div>
                 <div class="center row-reverse btn-row wrap">
-                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" data-i18n-attrs="text" close>Fechar</button>
+                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" data-i18n-attrs="text" close></button>
                 </div>
             </x-paper>
         </x-background>
@@ -1346,10 +1341,6 @@
                 <div class="row-reverse center btn-row wrap">
                     <button id="share-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.share"
                         data-i18n-attrs="text" hidden></button>
-                    <button id="edit-photopea-btn" class="btn btn-rounded btn-grey"
-                        data-i18n-key="dialogs.edit-photopea" data-i18n-attrs="text" hidden></button>
-                    <button id="edit-vectorpea-btn" class="btn btn-rounded btn-grey"
-                        data-i18n-key="dialogs.edit-vectorpea" data-i18n-attrs="text" hidden></button>
                     <button id="copy-image-btn" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.copy"
                         data-i18n-attrs="text" hidden></button>
                     <!-- Removido: botão Editar com IA (desabilitado) -->
@@ -1516,6 +1507,141 @@
             </x-background>
         </form>
     </x-dialog>
+    <!-- Ecosystem QR Scanner Dialog -->
+    <x-dialog id="qr-scanner-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.qr-scanner-title">Escanear QR Code</h2>
+                </div>
+                <div class="column center p-2">
+                    <video id="qr-scanner-main-video" playsinline style="width: 100%; max-height: 240px; border-radius: 12px; background: #000; object-fit: cover;"></video>
+                    <div id="qr-scanner-main-status" class="font-body2 text-center mt-2" data-i18n-key="dialogs.qr-scanner-status-searching">Procurando QR Code...</div>
+
+                    <div class="divider my-2 fw" style="border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+                    <div class="column fw">
+                        <label for="qr-scanner-manual-input" class="font-caption text-secondary" data-i18n-key="dialogs.qr-scanner-manual-label">Ou cole o conteúdo/URL do QR Code:</label>
+                        <input type="text" id="qr-scanner-manual-input" class="fw mt-1 p-2" placeholder="https://drop.erikraft.com/..." autocomplete="off" style="border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: inherit;">
+                        <button id="qr-scanner-manual-submit" class="btn btn-rounded btn-dark text-white mt-2" type="button" data-i18n-key="dialogs.qr-scanner-process">Processar</button>
+                    </div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2">
+                    <button class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.close" close>Fechar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- Ecosystem QR Scanner Confirmation Dialog -->
+    <x-dialog id="qr-scanner-confirm-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+                <div class="row center p-2">
+                    <h2 id="qr-scanner-confirm-title" class="dialog-title" data-i18n-key="dialogs.qr-scanner-detected">QR Code Detectado</h2>
+                </div>
+                <div class="column center p-2 text-center">
+                    <div id="qr-scanner-confirm-badge" class="badge btn-dark text-white mb-2 p-1" style="border-radius: 8px; font-weight: bold; padding: 4px 12px; display: inline-block;">ErikrafT Drop™</div>
+                    <div id="qr-scanner-confirm-url" class="font-body2 style-code p-2 mt-2 fw" style="background: rgba(255,255,255,0.08); border-radius: 8px; word-break: break-all; font-family: monospace;"></div>
+                    <div id="qr-scanner-confirm-warning" class="font-caption text-warning mt-2" hidden data-i18n-key="dialogs.qr-scanner-external-warning">Esse endereço não pertence ao ecossistema ErikrafT.</div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2 gap-2">
+                    <button id="qr-scanner-confirm-open-btn" class="btn btn-rounded btn-dark text-white" type="button" data-i18n-key="dialogs.open">Abrir</button>
+                    <button id="qr-scanner-confirm-cancel-btn" class="btn btn-rounded btn-grey" type="button" data-i18n-key="dialogs.cancel" close>Cancelar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- Animated QR Send Dialog -->
+    <x-dialog id="animated-qr-send-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 520px; width: 92%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Transferência por QR Code Animado</h2>
+                </div>
+                <div class="column center p-2 fw">
+                    <div id="qr-send-file-info" class="font-body2 text-center mb-2 fw bold" style="color: var(--primary-color, #15acbd);"></div>
+                    <div id="qr-send-canvas-container" class="center p-2" style="background: #fff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
+
+                    <div class="fw mt-2 column gap-1">
+                        <progress id="qr-send-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
+                        <div class="row row-between font-caption text-secondary">
+                            <span id="qr-send-frames-count">Frames: 0/0</span>
+                            <span id="qr-send-fps-speed">Velocidade: 6 FPS</span>
+                        </div>
+                    </div>
+
+                    <div class="font-body2 text-center mt-2 text-secondary" data-i18n-key="dialogs.animated-qr-instruction">Aponte a câmera do outro dispositivo para este QR Code.</div>
+
+                    <div class="row center mt-2 gap-2 fw align-items-center">
+                        <label for="qr-send-fps-slider" class="font-caption" data-i18n-key="dialogs.animated-qr-speed-label">Velocidade (FPS):</label>
+                        <input type="range" id="qr-send-fps-slider" min="1" max="20" value="6" style="flex: 1;">
+                        <span id="qr-send-fps-val" class="font-caption bold">6 FPS</span>
+                    </div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2 gap-2">
+                    <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey">Pausar</button>
+                    <button class="btn btn-rounded btn-grey" close>Fechar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- Animated QR Receive Dialog -->
+    <x-dialog id="animated-qr-receive-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 520px; width: 92%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber por QR Code Animado</h2>
+                </div>
+                <div class="column center p-2 fw">
+                    <video id="qr-scanner-video" playsinline style="width: 100%; max-height: 240px; border-radius: 12px; background: #000; object-fit: cover;"></video>
+
+                    <div id="qr-receive-state" class="font-body2 text-center mt-2 bold">Procurando QR Code...</div>
+
+                    <div class="fw mt-2 column gap-1">
+                        <progress id="qr-receive-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
+                        <div class="row row-between font-caption text-secondary">
+                            <span id="qr-receive-frames-count">Frames recebidos: 0</span>
+                            <span id="qr-receive-data-size">Dados: 0 KB</span>
+                        </div>
+                    </div>
+
+                    <div id="qr-receive-complete-container" class="column center mt-3 p-2 fw" hidden style="background: rgba(21, 172, 189, 0.12); border-radius: 10px; border: 1px solid rgba(21, 172, 189, 0.4);">
+                        <div class="bold text-success font-body1 mb-1">✓ Transferência Concluída</div>
+                        <div id="qr-receive-complete-filename" class="font-body2 bold"></div>
+                        <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
+                        <div class="row gap-2 mt-2">
+                            <button id="qr-receive-action-btn" class="btn btn-rounded btn-dark text-white">Baixar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2">
+                    <button class="btn btn-rounded btn-grey" close>Fechar</button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
+    <!-- EXIF Metadata Dialog -->
+    <x-dialog id="exif-dialog">
+        <x-background class="full center">
+            <x-paper shadow="2" style="max-width: 600px; width: 90%;">
+                <div class="row center p-2">
+                    <h2 class="dialog-title" data-i18n-key="dialogs.metadata-exif" data-i18n-attrs="text">EXIF Metadata</h2>
+                </div>
+                <div class="row p-2">
+                    <div id="exif-content" class="column fw" style="max-height: 350px; overflow-y: auto; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;"></div>
+                </div>
+                <div class="btn-row row-reverse wrap p-2">
+                    <button id="exif-remove-btn" class="btn btn-rounded btn-grey" hidden>Remove Metadata</button>
+                    <button class="btn btn-rounded btn-grey" data-i18n-key="dialogs.close" data-i18n-attrs="text" close></button>
+                </div>
+            </x-paper>
+        </x-background>
+    </x-dialog>
+
     <!-- base64 Paste Dialog -->
     <x-dialog id="base64-paste-dialog">
         <x-background class="full center">
@@ -1563,7 +1689,7 @@
             </svg>
             <div class="title-wrapper" dir="ltr">
                 <h1>ErikrafT Drop™</h1>
-                <div class="font-subheading">v1.12.4</div>
+                <div class="font-subheading">v1.13.0</div>
             </div>
             <div class="font-subheading" data-i18n-key="about.claim" data-i18n-attrs="text">
                 A maneira mais fácil de transferir arquivos entre dispositivos
@@ -1986,6 +2112,11 @@
                 d="M64 416L64 192C64 139 107 96 160 96L480 96C533 96 576 139 576 192L576 416C576 469 533 512 480 512L360 512C354.8 512 349.8 513.7 345.6 516.8L230.4 603.2C226.2 606.3 221.2 608 216 608C202.7 608 192 597.3 192 584L192 512L160 512C107 512 64 469 64 416z" />
         </symbol>
 
+        <symbol id="qrcode-icon" viewBox="0 0 448 512">
+            <!--!Font Awesome Free v6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+            <path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48L0 80zM64 96l0 64 64 0 0-64-64 0zM0 336c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM256 80c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM256 288l32 0 0 32-32 0 0-32zm32 32l32 0 0 32-32 0 0-32zm-32 32l32 0 0 32-32 0 0-32zm64-64l32 0 0 32-32 0 0-32zm32 32l32 0 0 32-32 0 0-32zm-32 32l32 0 0 32-32 0 0-32zm32 32l32 0 0 32-32 0 0-32zm32-96l32 0 0 32-32 0 0-32zm0 64l32 0 0 32-32 0 0-32zm0 64l32 0 0 32-32 0 0-32z" />
+        </symbol>
+
         <symbol id="tor-icon" viewBox="64 64 512 512">
             <!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
             <path d="M320.5 529.4L320.5 498.4C418.8 498.1 498.4 418.4 498.4 320C498.4 221.6 418.8 141.9 320.5 141.6L320.5 110.6C436 110.8 529.4 204.5 529.4 320C529.4 435.5 436 529.2 320.5 529.4zM320.5 420.8C375.9 420.5 420.8 375.5 420.8 320C420.8 264.5 376 219.5 320.5 219.2L320.5 188.2C393.1 188.5 451.9 247.4 451.9 320C451.9 392.6 393.1 451.6 320.5 451.8L320.5 420.8zM320.5 265.7C350.2 266 374.3 290.2 374.3 320C374.3 349.8 350.3 374 320.5 374.3L320.5 265.7zM64 320C64 461.4 178.6 576 320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320z"/>
@@ -2146,9 +2277,12 @@
 
     <script src="scripts/localization.js" defer></script>
     <script src="scripts/persistent-storage.js" defer></script>
-    <script src="scripts/photopea-integration.js" defer></script>
     <script src="scripts/ui-main.js" defer></script>
     <script src="scripts/content-moderation.js" defer></script>
+    <script src="scripts/pairdrop-adapter.js" defer></script>
+    <script src="scripts/libs/qr-code-styling.js" defer></script>
+    <script src="scripts/qr-helper.js" defer></script>
+    <script src="scripts/erikraft-qr.js" defer></script>
     <script src="scripts/main.js" defer></script>
     <!-- Sounds -->
     <audio id="blop" autobuffer="true">

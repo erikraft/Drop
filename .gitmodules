@@ -1,3 +1,125 @@
+# ==============================================================================
+# ErikrafT Drop™ — Git Submodules
+# ==============================================================================
+#
+# OFICIAL:
+# Os submodules marcados como "Official" pertencem ao ecossistema do
+# ErikrafT Drop™ e são mantidos pelo projeto.
+#
+# REFERÊNCIAS:
+# Os submodules marcados como "Reference" são projetos de terceiros.
+# Eles NÃO pertencem ao ErikrafT Drop™ e são incluídos neste repositório
+# exclusivamente para estudo, pesquisa e referência técnica durante o
+# desenvolvimento de funcionalidades de transferência óptica.
+#
+# Créditos e direitos autorais permanecem com os respectivos autores e
+# mantenedores de cada projeto.
+#
+# A inclusão desses repositórios não implica propriedade, autoria, endosso
+# ou afiliação entre o ErikrafT Drop™ e os respectivos projetos.
+#
+# Nenhum código de terceiros deve ser copiado, redistribuído ou incorporado
+# ao ErikrafT Drop™ sem antes verificar sua licença e os respectivos termos
+# de uso.
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+# OFFICIAL — ErikrafT Drop™ Android
+# ------------------------------------------------------------------------------
+# Repositório oficial do aplicativo Android do ErikrafT Drop™.
+# Mantido pelo projeto ErikrafT Drop™.
 [submodule "Android"]
 	path = Android
 	url = https://github.com/erikraft/Drop-Android.git
+	branch = master
+
+
+# ------------------------------------------------------------------------------
+# REFERENCES — Optical Transfer Research
+# ------------------------------------------------------------------------------
+# Os projetos abaixo pertencem aos seus respectivos autores/mantenedores.
+# São utilizados somente como referências técnicas para pesquisa e
+# desenvolvimento do ErikrafT Drop™ Optical Transfer.
+#
+# Créditos:
+# Copyright, marcas, código-fonte e demais direitos permanecem com seus
+# respectivos autores e projetos.
+# Verifique a licença de cada repositório antes de reutilizar qualquer código.
+
+
+# Reference — Decimen Optical Transfer
+# https://github.com/bashalarmistalt/decimen-optical-transfer
+# Autor/Mantenedor: bashalarmistalt
+# Referência para transferência óptica screen-to-camera, QR animado,
+# Fountain Coding/FEC, funcionamento air-gapped e experiência de usuário.
+[submodule "References/decimen-optical-transfer"]
+	path = References/decimen-optical-transfer
+	url = https://github.com/bashalarmistalt/decimen-optical-transfer.git
+	branch = main
+
+
+# Reference — QR Stream
+# https://github.com/hermitm0nk/qr-stream
+# Autor/Mantenedor: hermitm0nk
+# Referência para QR streaming, arquivos, textos, Fountain Coding,
+# Reed-Solomon, CRC e transferência de dados por QR animado.
+[submodule "References/qr-stream"]
+	path = References/qr-stream
+	url = https://github.com/hermitm0nk/qr-stream.git
+	branch = master
+
+
+# Reference — TXQR
+# https://github.com/divan/txqr
+# Autor/Mantenedor: divan
+# Referência histórica e técnica para transmissão de dados através de
+# QR Codes animados e Fountain/Luby Transform Coding.
+[submodule "References/txqr"]
+	path = References/txqr
+	url = https://github.com/divan/txqr.git
+	branch = master
+
+
+# Reference — TXQR-Android
+# https://github.com/fionafibration/TXQR-Android
+# Autor/Mantenedor: fionafibration
+# Referência para implementação de transferência óptica baseada em TXQR
+# no Android.
+[submodule "References/txqr-android"]
+	path = References/txqr-android
+	url = https://github.com/fionafibration/TXQR-Android.git
+	branch = master
+
+
+# Reference — BitFountain
+# https://github.com/mguentner/bitfountain
+# Autor/Mantenedor: mguentner
+# Referência para Luby Transform Codes/Fountain Coding aplicados à
+# transmissão de dados por QR Code.
+[submodule "References/bitfountain"]
+	path = References/bitfountain
+	url = https://github.com/mguentner/bitfountain.git
+	branch = master
+
+
+# Reference — Airgapped QR Code Transfer
+# https://github.com/mohankumarelec/airgapped-qr-code-transfer
+# Autor/Mantenedor: mohankumarelec
+# Referência para transferência de arquivos por QR Code entre dispositivos
+# sem conexão de rede durante a transferência.
+[submodule "References/airgapped-qr-code-transfer"]
+	path = References/airgapped-qr-code-transfer
+	url = https://github.com/mohankumarelec/airgapped-qr-code-transfer.git
+	branch = master
+
+
+# Reference — cimbar / libcimbar
+# https://github.com/sz3/cimbar
+# Autor/Mantenedor: sz3
+# Referência para códigos ópticos de alta densidade e possíveis abordagens
+# futuras para aumentar o throughput da transferência óptica.
+[submodule "References/cimbar"]
+	path = References/cimbar
+	url = https://github.com/sz3/cimbar.git
+	branch = master

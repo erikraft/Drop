@@ -16,6 +16,23 @@ fi
 
 mkdir -p "$TOR_DIR"
 
+TOR_PID=""
+DROP_PID=""
+
+cleanup() {
+    echo "[SYSTEM] Signal received, stopping processes..."
+    if [ -n "$DROP_PID" ] && kill -0 "$DROP_PID" 2>/dev/null; then
+        kill -TERM "$DROP_PID" 2>/dev/null || true
+    fi
+    if [ -n "$TOR_PID" ] && kill -0 "$TOR_PID" 2>/dev/null; then
+        kill -TERM "$TOR_PID" 2>/dev/null || true
+    fi
+    wait
+    exit 0
+}
+
+trap cleanup INT TERM
+
 if [ -n "$ONION_PRIVATE_KEY_BASE64" ]; then
     echo "[ONION] Decoding ONION_PRIVATE_KEY_BASE64 secret..."
     echo "$ONION_PRIVATE_KEY_BASE64" | tr -d '\r\n ' | base64 -d > "$TOR_DIR/hs_ed25519_secret_key"
@@ -35,6 +52,7 @@ fi
 if [ -n "$ONION_PRIVATE_KEY_BASE64" ] || [ "$GENERATE_ONION_KEY" = "true" ]; then
     echo "[ONION] Starting Tor..."
     su -s /bin/sh "$TOR_USER" -c "tor -f /etc/tor/torrc" &
+    TOR_PID=$!
 
     # Asynchronously wait for hostname file to set readable permissions for local app discovery
     (
@@ -63,4 +81,7 @@ fi
 
 echo "[DROP] Starting ErikrafT Drop..."
 export PORT="$DROP_PORT"
-exec npm start
+npm start &
+DROP_PID=$!
+
+wait "$DROP_PID" 2>/dev/null || wait

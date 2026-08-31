@@ -288,6 +288,15 @@ class ServerConnection {
 
         wsUrl.searchParams.append('webrtc_supported', window.isRtcSupported ? 'true' : 'false');
 
+        let clientId = localStorage.getItem('client_id');
+        if (!clientId) {
+            clientId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : Math.random().toString(36).substring(2) + Date.now().toString(36);
+            localStorage.setItem('client_id', clientId);
+        }
+        wsUrl.searchParams.append('client_id', clientId);
+
         const peerId = sessionStorage.getItem('peer_id');
         const peerIdHash = sessionStorage.getItem('peer_id_hash');
         if (peerId && peerIdHash) {
@@ -435,6 +444,15 @@ class ServerConnection {
 
         const wsUrl = new URL(`${parsed.protocol}://${parsed.hostPortPath.replace(/\/+$/, '')}/server`);
         wsUrl.searchParams.append('webrtc_supported', window.isRtcSupported ? 'true' : 'false');
+
+        let clientId = localStorage.getItem('client_id');
+        if (!clientId) {
+            clientId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : Math.random().toString(36).substring(2) + Date.now().toString(36);
+            localStorage.setItem('client_id', clientId);
+        }
+        wsUrl.searchParams.append('client_id', clientId);
 
         const peerId = sessionStorage.getItem('peer_id');
         const peerIdHash = sessionStorage.getItem('peer_id_hash');
@@ -1075,6 +1093,12 @@ class Peer {
 
     _onChatMessage(message) {
         const payload = message.payload || {};
+        const text = (payload.text || '').trim();
+        const attachment = payload.attachment || null;
+
+        // Ignore empty messages that have neither text content nor file attachment
+        if (!text && !attachment) return;
+
         const roomType = payload.roomType || this._getRoomTypes()[0];
         const roomId = payload.roomId || this._roomIds[roomType];
         const timestamp = message.timestamp || Date.now();
@@ -1084,8 +1108,8 @@ class Peer {
         Events.fire('chat-message-received', {
             message: {
                 id: payload.id,
-                text: payload.text || '',
-                attachment: payload.attachment || null,
+                text: text,
+                attachment: attachment,
                 roomType: roomType,
                 roomId: roomId,
                 timestamp: timestamp,
@@ -1206,21 +1230,47 @@ class RTCPeer extends Peer {
         if (!this._conn) this._connect();
 
         if (message.sdp) {
+            const currentState = this._conn ? this._conn.signalingState : 'closed';
+            const sdpType = message.sdp.type;
+
+            // Prevent state errors when receiving duplicate or out-of-order SDPs
+            if (sdpType === 'answer' && currentState !== 'have-local-offer') {
+                console.warn(`RTC: Ignoring answer SDP in state '${currentState}' for peer ${this._peerId}`);
+                return;
+            }
+
+            if (sdpType === 'offer' && currentState !== 'stable') {
+                console.warn(`RTC: Ignoring offer SDP in state '${currentState}' for peer ${this._peerId}`);
+                return;
+            }
+
+            if (this._conn.signalingState === 'closed') return;
+
             this._conn
-                .setRemoteDescription(message.sdp)
+                .setRemoteDescription(new RTCSessionDescription(message.sdp))
                 .then(_ => {
-                    if (message.sdp.type === 'offer') {
+                    if (message.sdp.type === 'offer' && this._conn && this._conn.signalingState === 'have-remote-offer') {
                         return this._conn
                             .createAnswer()
                             .then(d => this._onDescription(d));
                     }
                 })
-                .catch(e => this._onError(e));
+                .catch(e => {
+                    if (e && (e.name === 'InvalidStateError' || (e.message && e.message.includes('wrong state')))) {
+                        console.warn(`RTC: Handled InvalidStateError during setRemoteDescription in state '${this._conn ? this._conn.signalingState : 'unknown'}':`, e.message || e);
+                    } else {
+                        this._onError(e);
+                    }
+                });
         }
         else if (message.ice) {
-            this._conn
-                .addIceCandidate(new RTCIceCandidate(message.ice))
-                .catch(e => this._onError(e));
+            if (this._conn && this._conn.remoteDescription && this._conn.signalingState !== 'closed') {
+                this._conn
+                    .addIceCandidate(new RTCIceCandidate(message.ice))
+                    .catch(e => {
+                        console.warn('RTC: Ignored ICE candidate error:', e.message || e);
+                    });
+            }
         }
     }
 
@@ -1331,8 +1381,26 @@ class RTCPeer extends Peer {
     }
 
     _send(message) {
-        if (!this._channel) this.refresh();
-        this._channel.send(message);
+        if (this._isRtcChannelOpen()) {
+            this._channel.send(message);
+        } else if (this._wsFallback) {
+            if (typeof message === 'string') {
+                try {
+                    const msgObj = JSON.parse(message);
+                    this._sendViaServer(msgObj);
+                } catch(e) {
+                    this._sendViaServer({ type: 'text', text: message });
+                }
+            } else {
+                this._sendViaServer({
+                    type: 'ws-chunk',
+                    chunk: arrayBufferToBase64(message)
+                });
+            }
+        } else {
+            if (!this._channel) this.refresh();
+            if (this._channel) this._channel.send(message);
+        }
     }
 
     _sendSignal(signal) {
@@ -1440,6 +1508,29 @@ class PeersManager {
         Events.on('ws-disconnected', _ => this._onWsDisconnected());
         Events.on('ws-relay', e => this._onWsRelay(e.detail));
         Events.on('ws-config', e => this._onWsConfig(e.detail));
+        Events.on('rtc-error', e => this._onRtcError(e.detail ? e.detail.peerId : null, e.detail ? e.detail.error : null));
+    }
+
+    _onRtcError(peerId, error) {
+        if (!peerId || !this.peers[peerId]) return;
+        const peer = this.peers[peerId];
+        if (peer && peer.rtcSupported && this._wsConfig && this._wsConfig.wsFallback) {
+            console.warn(`[Network] WebRTC error for peer ${peerId}. Downgrading to WSPeer (WebSocket relay).`, error);
+            const isCaller = peer._isCaller;
+            const roomTypes = peer._getRoomTypes();
+            const roomType = roomTypes[0] || 'ip';
+            const roomId = peer._roomIds[roomType] || peer._peerId;
+            const roomIds = { ...peer._roomIds };
+
+            if (typeof peer._disconnect === 'function') {
+                peer._disconnect();
+            }
+
+            const wsPeer = new WSPeer(this._server, isCaller, peerId, roomType, roomId);
+            wsPeer._wsFallback = true;
+            wsPeer._roomIds = roomIds;
+            this.peers[peerId] = wsPeer;
+        }
     }
 
     _onWsConfig(wsConfig) {
@@ -1451,7 +1542,15 @@ class PeersManager {
 
     _onMessage(message) {
         const peerId = message.sender.id;
-        this.peers[peerId].onServerMessage(message);
+        if (!this._peerExists(peerId)) {
+            const roomType = message.roomType || 'ip';
+            const roomId = message.roomId || peerId;
+            const rtcSupported = message.sender ? message.sender.rtcSupported : true;
+            this._createOrRefreshPeer(false, peerId, roomType, roomId, rtcSupported);
+        }
+        if (this.peers[peerId]) {
+            this.peers[peerId].onServerMessage(message);
+        }
     }
 
     _refreshPeer(peerId, roomType, roomId) {

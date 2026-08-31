@@ -378,10 +378,10 @@ export default class ErikrafTdropWsServer {
             this._rooms[roomId] = {};
         }
 
-        this._notifyPeers(peer, roomType, roomId);
-
-        // add peer to room
+        // add peer to room before notifying peers to prevent race conditions during list generation
         this._rooms[roomId][peer.id] = peer;
+
+        this._notifyPeers(peer, roomType, roomId);
     }
 
 

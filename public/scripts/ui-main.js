@@ -13,7 +13,7 @@ class DiscoveryBadgeState {
 
         this.state = {
             lan: false,
-            ip: false,
+            ip: true,
             paired: false,
             publicRoom: false,
             publicRoomId: null,
@@ -322,7 +322,7 @@ class DiscoveryBadgeState {
         const token = this.recoveryToken;
         this.patchState({
             lan: false,
-            ip: false,
+            ip: true,
             publicRoom: false,
             publicRoomId: null
         }, {
@@ -478,11 +478,6 @@ class DiscoveryBadgeState {
         this._renderBooleanBadge('tor', this.state.tor || window.location.hostname.endsWith('.onion'));
         this._renderPublicBadge(this.state.publicRoom && !!this.state.publicRoomId, this.state.publicRoomId);
 
-        // Check if accessing via .onion address to show Tor Status badge
-        const isTorAccess = window.location.hostname.endsWith('.onion');
-        document.querySelectorAll('[data-badge="tor-status"]').forEach(el => {
-            el.hidden = !isTorAccess;
-        });
 
         Events.fire('evaluate-footer-badges');
     }
@@ -512,7 +507,7 @@ class DiscoveryBadgeState {
             clearTimeout(this._hideTimers.get(timerKey));
             if (visible) {
                 el.hidden = false;
-                el.textContent = `na sala ${publicRoomId.toUpperCase()}`;
+                el.textContent = Localization.getTranslation("footer.public-room-devices", null, { roomId: publicRoomId.toUpperCase() });
                 this._hideTimers.delete(timerKey);
                 return;
             }

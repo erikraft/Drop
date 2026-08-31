@@ -5,7 +5,7 @@ import { cyrb53, hasher } from "./helper.js";
 
 export const ISEARCH_CLI_CLIENT_TYPE = 'isearch-cli';
 export const ISEARCH_CLI_NAME = 'iSearch CLI™';
-export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser', ISEARCH_CLI_CLIENT_TYPE]);
+export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', ISEARCH_CLI_CLIENT_TYPE]);
 
 export function isISearchCliRequest(req) {
     const searchParams = new URL(req.url, 'http://server').searchParams;
@@ -205,15 +205,6 @@ export default class Peer {
                 deviceName: 'Open VSX Extension',
                 browser: 'Open VSX'
             },
-            'comet-browser': {
-                deviceName: 'Comet Browser',
-                browser: 'Comet'
-            }
-            ,
-            'browseros-browser': {
-                deviceName: 'BrowserOS',
-                browser: 'BrowserOS'
-            },
             [ISEARCH_CLI_CLIENT_TYPE]: {
                 deviceName: ISEARCH_CLI_NAME,
                 browser: ISEARCH_CLI_NAME
@@ -242,12 +233,16 @@ export default class Peer {
             }
         }
 
+        const searchParams = new URL(req.url, "http://server").searchParams;
+        const clientId = searchParams.get('client_id');
+        const seedValue = clientId ? clientId : this.id;
+
         const displayName = uniqueNamesGenerator({
             length: 2,
             separator: ' ',
             dictionaries: [colors, animals],
             style: 'capital',
-            seed: cyrb53(this.id)
+            seed: cyrb53(seedValue)
         })
 
         this.name = {

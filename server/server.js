@@ -4,8 +4,6 @@ import {fileURLToPath} from "url";
 import path, {dirname} from "path";
 import http from "http";
 import fs from "fs";
-import multer from "multer";
-import {handleAiImageRequest} from "./services/ai-image.js";
 
 // Ensure fetch/FormData/File exist for runtimes without native support (Node < 18)
 if (typeof fetch === "undefined" || typeof FormData === "undefined" || typeof File === "undefined") {
@@ -28,12 +26,6 @@ export default class ErikrafTdropServer {
 
     constructor(conf) {
         const app = express();
-        const upload = multer({
-            storage: multer.memoryStorage(),
-            limits: {
-                fileSize: 100 * 1024 * 1024 // 100 MB
-            }
-        });
 
         if (conf.rateLimit) {
             const limiter = RateLimit({
@@ -58,6 +50,35 @@ export default class ErikrafTdropServer {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = dirname(__filename);
 
+        // Middleware to announce Onion-Location header for Tor Service Discovery
+        let cachedOnionHost = null;
+        const getOnionHost = () => {
+            if (cachedOnionHost) return cachedOnionHost;
+            const torHostnamePath = '/var/lib/tor/erikraft_drop_onion/hostname';
+            try {
+                if (fs.existsSync(torHostnamePath)) {
+                    const host = fs.readFileSync(torHostnamePath, 'utf8').trim();
+                    if (host) {
+                        cachedOnionHost = host;
+                        return cachedOnionHost;
+                    }
+                }
+            } catch (err) {
+                // ignore error
+            }
+            return 'nozudb2e4jy4betognmnwoxvdu44wvjoqvmwios5ql7mxagqqpnn64ad.onion';
+        };
+
+        app.use((req, res, next) => {
+            const hostHeader = req.headers.host || req.hostname || '';
+            if (!hostHeader.endsWith('.onion')) {
+                const onionHost = getOnionHost();
+                const onionUrl = `http://${onionHost}${req.originalUrl || req.url || '/'}`;
+                res.setHeader('Onion-Location', onionUrl);
+            }
+            next();
+        });
+
         const publicPathAbs = path.join(__dirname, '../public');
         app.use(express.static(publicPathAbs));
 
@@ -71,59 +92,6 @@ export default class ErikrafTdropServer {
             })
         }
 
-        // By default, clients connecting to your instance use the signaling server of your instance to connect to other devices.
-        // By using `WS_SERVER`, you can host an instance that uses another signaling server.
-        app.post('/api/cloud-upload', upload.single('file'), async (req, res) => {
-            if (!req.file) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Nenhum arquivo enviado.'
-                });
-            }
-
-            const allowedExpiry = new Set(['1h', '3h', '5h', '1d']);
-            const requestedExpiry = req.body?.expiry;
-            const expiry = allowedExpiry.has(requestedExpiry) ? requestedExpiry : '1d';
-
-            try {
-                const upstreamForm = new FormData();
-                const uploadedFile = new File([req.file.buffer], req.file.originalname || 'upload', {
-                    type: req.file.mimetype || 'application/octet-stream'
-                });
-
-                upstreamForm.append('file', uploadedFile);
-                upstreamForm.append('expires', expiry);
-
-                const upstreamResponse = await fetch('https://file.io', {
-                    method: 'POST',
-                    body: upstreamForm
-                });
-
-                const upstreamData = await upstreamResponse.json().catch(() => null);
-
-                if (!upstreamResponse.ok || !upstreamData?.success) {
-                    console.error('Erro ao enviar arquivo para file.io', upstreamData);
-                    return res.status(502).json({
-                        success: false,
-                        message: 'Serviço de hospedagem indisponível. Tente novamente mais tarde.'
-                    });
-                }
-
-                return res.json({
-                    success: true,
-                    link: upstreamData.link,
-                    expiresAt: upstreamData.expiry || upstreamData.expire || null
-                });
-            } catch (error) {
-                console.error('Erro interno ao enviar arquivo para a nuvem:', error);
-                return res.status(500).json({
-                    success: false,
-                    message: 'Erro interno ao enviar arquivo.'
-                });
-            }
-        });
-
-        app.post('/api/ai/image', upload.single('image'), handleAiImageRequest);
 
         app.get('/api/onion-info', (req, res) => {
             const torHostnamePath = '/var/lib/tor/erikraft_drop_onion/hostname';
@@ -209,7 +177,7 @@ export default class ErikrafTdropServer {
         this.server = server;
 
         server.listen(conf.port, hostname, () => {
-            console.log(`Server running at http://${hostname}:${conf.port}/`);
+            console.log(`Server running at http://${hostname || '0.0.0.0'}:${conf.port}/`);
         });
 
         server.on('error', (err) => {
