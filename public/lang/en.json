@@ -171,7 +171,10 @@
         "animated-qr-send-text": "Send Text",
         "animated-qr-receive-section": "Receive",
         "animated-qr-receive-description": "Point your camera at the sender's screen.",
-        "animated-qr-receive-action": "Receive"
+        "animated-qr-receive-action": "Receive",
+        "animated-qr-compose-desc": "Type/paste text below or select a file:",
+        "animated-qr-select-file": "Select File",
+        "animated-qr-start-stream": "Start Stream"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

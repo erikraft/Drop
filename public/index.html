@@ -1558,19 +1558,19 @@
                         <div class="font-body1 bold mb-2" style="color: var(--primary-color, #15acbd);" data-i18n-key="dialogs.animated-qr-send-section">Enviar</div>
                         <div class="font-body2 text-center text-secondary mb-3" data-i18n-key="dialogs.animated-qr-send-description">Envie arquivos ou textos através de QR Codes animados.</div>
                         <div class="row gap-2 fw center">
-                            <button id="animated-qr-send-file-btn" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-send-file">Enviar Arquivo</button>
-                            <button id="animated-qr-send-text-btn" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-send-text">Enviar Texto</button>
+                            <button id="animated-qr-send-file-btn" class="btn btn-rounded btn-primary" type="button" data-i18n-key="dialogs.animated-qr-send-file">Enviar Arquivo</button>
+                            <button id="animated-qr-send-text-btn" class="btn btn-rounded btn-primary" type="button" data-i18n-key="dialogs.animated-qr-send-text">Enviar Texto</button>
                         </div>
                     </div>
 
                     <div class="column center p-3 fw" style="background: rgba(0, 166, 156, 0.08); border-radius: 12px; border: 1px solid rgba(0, 166, 156, 0.3);">
                         <div class="font-body1 bold mb-2" style="color: var(--paired-device-color, #00a69c);" data-i18n-key="dialogs.animated-qr-receive-section">Receber</div>
                         <div class="font-body2 text-center text-secondary mb-3" data-i18n-key="dialogs.animated-qr-receive-description">Aponte sua câmera para a tela do remetente.</div>
-                        <button id="animated-qr-receive-btn" class="btn btn-rounded btn-primary" style="background: var(--paired-device-color, #00a69c);" data-i18n-key="dialogs.animated-qr-receive-action">Receber</button>
+                        <button id="animated-qr-receive-btn" class="btn btn-rounded btn-primary" type="button" style="background: var(--paired-device-color, #00a69c);" data-i18n-key="dialogs.animated-qr-receive-action">Receber</button>
                     </div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2">
-                    <button class="btn btn-rounded btn-grey" close data-i18n-key="dialogs.close">Fechar</button>
+                    <button class="btn btn-rounded btn-grey" type="button" close data-i18n-key="dialogs.close">Fechar</button>
                 </div>
             </x-paper>
         </x-background>
@@ -1583,7 +1583,26 @@
                 <div class="row center p-2">
                     <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Transferência por QR Code Animado</h2>
                 </div>
-                <div class="column center p-2 fw">
+
+                <!-- Mode 1: Compose / File Upload View -->
+                <div id="qr-send-compose-view" class="column center p-2 fw">
+                    <div id="qr-send-drop-zone" class="column center p-3 fw style-drop-zone" style="border: 2px dashed rgba(21, 172, 189, 0.4); border-radius: 12px; background: rgba(21, 172, 189, 0.04); transition: border-color 0.2s, background 0.2s;">
+                        <div class="font-body2 text-center text-secondary mb-2" data-i18n-key="dialogs.animated-qr-compose-desc">Digite/cole o texto abaixo ou selecione um arquivo:</div>
+                        <div id="qr-send-textarea" class="fw textarea mb-3" role="textbox" contenteditable style="min-height: 100px; max-height: 180px; overflow-y: auto; text-align: left;" data-i18n-key="dialogs.message" data-i18n-attrs="placeholder"></div>
+                        <div class="row gap-2 center wrap">
+                            <button id="qr-send-file-pick-btn" class="btn btn-rounded btn-secondary" type="button" data-i18n-key="dialogs.animated-qr-select-file">Selecionar Arquivo</button>
+                            <input type="file" id="qr-send-file-input" style="display: none;">
+                            <span id="qr-send-file-name-badge" class="badge" hidden></span>
+                        </div>
+                    </div>
+                    <div class="btn-row row-reverse wrap p-2 gap-2 fw mt-2">
+                        <button id="qr-send-start-btn" class="btn btn-rounded btn-primary" type="button" data-i18n-key="dialogs.animated-qr-start-stream">Iniciar Transmissão</button>
+                        <button class="btn btn-rounded btn-grey" type="button" close data-i18n-key="dialogs.cancel">Cancelar</button>
+                    </div>
+                </div>
+
+                <!-- Mode 2: Active QR Stream View -->
+                <div id="qr-send-active-view" class="column center p-2 fw" hidden>
                     <div id="qr-send-file-info" class="font-body2 text-center mb-2 fw bold" style="color: var(--primary-color, #15acbd);"></div>
                     <div id="qr-send-canvas-container" class="center p-2" style="background: #fff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
 
@@ -1602,10 +1621,12 @@
                         <input type="range" id="qr-send-fps-slider" min="1" max="20" value="6" style="flex: 1;">
                         <span id="qr-send-fps-val" class="font-caption bold">6 FPS</span>
                     </div>
-                </div>
-                <div class="btn-row row-reverse wrap p-2 gap-2">
-                    <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey">Pausar</button>
-                    <button class="btn btn-rounded btn-grey" close>Fechar</button>
+
+                    <div class="btn-row row-reverse wrap p-2 gap-2 fw mt-2">
+                        <button id="qr-send-pause-btn" class="btn btn-rounded btn-grey" type="button">Pausar</button>
+                        <button id="qr-send-edit-btn" class="btn btn-rounded btn-grey" type="button">Alterar Conteúdo</button>
+                        <button class="btn btn-rounded btn-grey" type="button" close data-i18n-key="dialogs.close">Fechar</button>
+                    </div>
                 </div>
             </x-paper>
         </x-background>
@@ -1632,16 +1653,16 @@
                     </div>
 
                     <div id="qr-receive-complete-container" class="column center mt-3 p-2 fw" hidden style="background: rgba(21, 172, 189, 0.12); border-radius: 10px; border: 1px solid rgba(21, 172, 189, 0.4);">
-                        <div class="bold text-success font-body1 mb-1">✓ Transferência Concluída</div>
+                        <div class="bold text-success font-body1 mb-1" id="qr-receive-complete-status">Transferência Concluída</div>
                         <div id="qr-receive-complete-filename" class="font-body2 bold"></div>
                         <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
                         <div class="row gap-2 mt-2">
-                            <button id="qr-receive-action-btn" class="btn btn-rounded btn-dark text-white">Baixar</button>
+                            <button id="qr-receive-action-btn" class="btn btn-rounded btn-dark text-white" type="button">Baixar</button>
                         </div>
                     </div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2">
-                    <button class="btn btn-rounded btn-grey" close>Fechar</button>
+                    <button class="btn btn-rounded btn-grey" type="button" close data-i18n-key="dialogs.close">Fechar</button>
                 </div>
             </x-paper>
         </x-background>

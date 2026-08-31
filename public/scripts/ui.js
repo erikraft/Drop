@@ -3566,7 +3566,10 @@ class QRScannerDialog extends Dialog {
 
     handleManualSubmit() {
         const val = this.$input ? this.$input.value.trim() : '';
-        if (!val) return;
+        if (!val) {
+            if (this.$status) this.$status.textContent = 'Cole ou digite o conteúdo/URL do QR Code antes de processar.';
+            return;
+        }
         if (this.$input) this.$input.value = '';
         this.processScannedRaw(val);
     }
@@ -3595,6 +3598,16 @@ class QRScannerDialog extends Dialog {
 class AnimatedQRSendDialog extends Dialog {
     constructor() {
         super('animated-qr-send-dialog');
+        this.$composeView = this.$el.querySelector('#qr-send-compose-view');
+        this.$activeView = this.$el.querySelector('#qr-send-active-view');
+
+        this.$textarea = this.$el.querySelector('#qr-send-textarea');
+        this.$filePickBtn = this.$el.querySelector('#qr-send-file-pick-btn');
+        this.$fileInput = this.$el.querySelector('#qr-send-file-input');
+        this.$fileNameBadge = this.$el.querySelector('#qr-send-file-name-badge');
+        this.$startBtn = this.$el.querySelector('#qr-send-start-btn');
+        this.$dropZone = this.$el.querySelector('#qr-send-drop-zone');
+
         this.$container = this.$el.querySelector('#qr-send-canvas-container');
         this.$fileInfo = this.$el.querySelector('#qr-send-file-info');
         this.$progressBar = this.$el.querySelector('#qr-send-progress-bar');
@@ -3603,6 +3616,63 @@ class AnimatedQRSendDialog extends Dialog {
         this.$fpsSlider = this.$el.querySelector('#qr-send-fps-slider');
         this.$fpsVal = this.$el.querySelector('#qr-send-fps-val');
         this.$pauseBtn = this.$el.querySelector('#qr-send-pause-btn');
+        this.$editBtn = this.$el.querySelector('#qr-send-edit-btn');
+
+        this.selectedFile = null;
+
+        if (this.$filePickBtn && this.$fileInput) {
+            this.$filePickBtn.addEventListener('click', () => this.$fileInput.click());
+            this.$fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    this.setSelectedFile(e.target.files[0]);
+                }
+            });
+        }
+
+        if (this.$dropZone) {
+            this.$dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                this.$dropZone.style.borderColor = 'var(--primary-color, #15acbd)';
+            });
+            this.$dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                this.$dropZone.style.borderColor = 'rgba(21, 172, 189, 0.4)';
+            });
+            this.$dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                this.$dropZone.style.borderColor = 'rgba(21, 172, 189, 0.4)';
+                if (e.dataTransfer.files && e.dataTransfer.files.length) {
+                    this.setSelectedFile(e.dataTransfer.files[0]);
+                } else if (e.dataTransfer.getData('text')) {
+                    if (this.$textarea) {
+                        this.$textarea.innerText = e.dataTransfer.getData('text');
+                    }
+                }
+            });
+        }
+
+        if (this.$startBtn) {
+            this.$startBtn.addEventListener('click', () => {
+                if (this.selectedFile) {
+                    this.send({ file: this.selectedFile });
+                } else {
+                    const text = this.$textarea ? this.$textarea.innerText.trim() : '';
+                    if (text) {
+                        this.send({ text: text });
+                    } else {
+                        if (window.erikrafTdrop && window.erikrafTdrop.toast) {
+                            window.erikrafTdrop.toast.show('Insira um texto ou selecione um arquivo.');
+                        }
+                    }
+                }
+            });
+        }
+
+        if (this.$editBtn) {
+            this.$editBtn.addEventListener('click', () => {
+                this.openCompose();
+            });
+        }
 
         if (this.$pauseBtn) {
             this.$pauseBtn.addEventListener('click', () => {
@@ -3626,8 +3696,54 @@ class AnimatedQRSendDialog extends Dialog {
         }
     }
 
+    setSelectedFile(file) {
+        this.selectedFile = file;
+        if (this.$fileNameBadge) {
+            if (file) {
+                this.$fileNameBadge.textContent = `${file.name} (${Util.formatBytes(file.size)})`;
+                this.$fileNameBadge.removeAttribute('hidden');
+            } else {
+                this.$fileNameBadge.setAttribute('hidden', '');
+                this.$fileNameBadge.textContent = '';
+            }
+        }
+    }
+
+    openCompose(initialData = {}) {
+        if (this.transmitter) {
+            this.transmitter.stop();
+            this.transmitter = null;
+        }
+
+        if (this.$composeView) this.$composeView.removeAttribute('hidden');
+        if (this.$activeView) this.$activeView.setAttribute('hidden', '');
+
+        if (initialData.file) {
+            this.setSelectedFile(initialData.file);
+        } else if (initialData.text) {
+            if (this.$textarea) this.$textarea.innerText = initialData.text;
+            this.setSelectedFile(null);
+        } else {
+            if (initialData.mode === 'file') {
+                if (this.$fileInput) this.$fileInput.click();
+            } else {
+                if (this.$textarea) this.$textarea.focus();
+            }
+        }
+
+        this.show();
+    }
+
     async send(data) {
         if (!window.ErikrafTQRTransmitter) return;
+
+        if (this.transmitter) {
+            this.transmitter.stop();
+            this.transmitter = null;
+        }
+
+        if (this.$composeView) this.$composeView.setAttribute('hidden', '');
+        if (this.$activeView) this.$activeView.removeAttribute('hidden');
 
         const currentFps = this.$fpsSlider ? (parseInt(this.$fpsSlider.value, 10) || 6) : 6;
         this.transmitter = new ErikrafTQRTransmitter(this.$container, {
@@ -3694,14 +3810,18 @@ class AnimatedQRMainDialog extends Dialog {
         if (this.$sendFileBtn) {
             this.$sendFileBtn.addEventListener('click', () => {
                 this.hide();
-                this.triggerFileSelection();
+                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
+                    window.erikrafTdrop.animatedQRSendDialog.openCompose({ mode: 'file' });
+                }
             });
         }
 
         if (this.$sendTextBtn) {
             this.$sendTextBtn.addEventListener('click', () => {
                 this.hide();
-                this.triggerTextInput();
+                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
+                    window.erikrafTdrop.animatedQRSendDialog.openCompose({ mode: 'text' });
+                }
             });
         }
 
@@ -3712,30 +3832,6 @@ class AnimatedQRMainDialog extends Dialog {
                     window.erikrafTdrop.animatedQRReceiveDialog.openScanner();
                 }
             });
-        }
-    }
-
-    triggerFileSelection() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '*/*';
-        input.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
-                    window.erikrafTdrop.animatedQRSendDialog.send({ file: file });
-                }
-            }
-        };
-        input.click();
-    }
-
-    triggerTextInput() {
-        const text = prompt('Digite o texto para enviar:');
-        if (text && text.trim()) {
-            if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
-                window.erikrafTdrop.animatedQRSendDialog.send({ text: text.trim() });
-            }
         }
     }
 }

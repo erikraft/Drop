@@ -19,11 +19,14 @@ class ErikrafTDropQR {
             return null;
         }
 
-        // Clean up previous instance in this container to prevent memory leaks and duplicate rendering.
-        // We MUST completely destroy the previous instance and clean the container as requested:
-        // "Quando um novo QR Code for gerado: destruir a instância anterior, limpar o container, renderizar novamente. Não permitir múltiplos QR Codes empilhados."
+        // Fast update path for existing instances (ideal for animated QR streams)
         if (container._qrInstance) {
-            this.destroy(container);
+            try {
+                container._qrInstance.update({ data: data });
+                return container._qrInstance;
+            } catch (e) {
+                this.destroy(container);
+            }
         }
 
         // Clear any old SVGs/Canvases inside container first
