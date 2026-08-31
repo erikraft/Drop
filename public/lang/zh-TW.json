@@ -1,13 +1,13 @@
 {
     "header": {
-        "about_title": "關於 ErikrafT Drop™",
+        "about_title": "About ErikrafT Drop™",
         "language-selector_title": "設定語言",
-        "about_aria-label": "開啟關於 ErikrafT Drop™",
+        "about_aria-label": "Open About ErikrafT Drop™",
         "theme-auto_title": "自動使用系統主題",
         "theme-light_title": "總是使用淺色主題",
         "theme-dark_title": "總是使用深色主題",
         "notification_title": "啟用通知",
-        "install_title": "安裝 ErikrafT Drop™",
+        "install_title": "Install ErikrafT Drop™",
         "pair-device_title": "永久配對你的裝置",
         "edit-paired-devices_title": "編輯已配對的裝置",
         "join-public-room_title": "暫時加入公共房間",
@@ -17,11 +17,19 @@
         "expand_title": "展開標題按鈕列",
         "webchat": "聊天室",
         "ai-variation": "生成 AI 變體",
-        "ai-generate": "建立新的 AI 圖像"
+        "ai-generate": "建立新的 AI 圖像",
+        "scan-qr_title": "Scan QR Code",
+        "scan-qr": {
+            "title": "Scan QR Code"
+        },
+        "animated-qr_title": "Transfer via Animated QR",
+        "animated-qr": {
+            "title": "Transfer via Animated QR"
+        }
     },
     "instructions": {
         "no-peers_data-drop-bg": "釋放以選擇接收者",
-        "no-peers-title": "在其他裝置上開啟 ErikrafT Drop™ 以傳送檔案",
+        "no-peers-title": "Open ErikrafT Drop™ on other devices to send files",
         "no-peers-subtitle": "配對裝置或加入一個公共房間以便在其他網路上可見",
         "x-instructions_desktop": "點擊以發送檔案或右鍵點擊以發送一則訊息",
         "x-instructions_mobile": "輕觸以發送檔案或輕觸並按住以發送一則訊息",
@@ -29,13 +37,13 @@
         "x-instructions_data-drop-bg": "釋放以選擇接收者",
         "x-instructions-share-mode_desktop": "點擊以發送 {{descriptor}}",
         "x-instructions-share-mode_mobile": "輕觸以發送 {{descriptor}}",
-        "activate-share-mode-base": "在其他裝置上開啟 ErikrafT Drop™ 以傳送",
+        "activate-share-mode-base": "Open ErikrafT Drop™ on other devices to send",
         "activate-share-mode-and-other-file": "和另外 1 個檔案",
         "activate-share-mode-and-other-files-plural": "和另外 {{count}} 個檔案",
         "activate-share-mode-shared-text": "已分享的文字",
         "activate-share-mode-shared-file": "已分享的檔案",
         "activate-share-mode-shared-files-plural": "{{count}} 個已分享的檔案",
-        "webrtc-requirement": "要使用此 ErikrafT Drop™ 實例，必須啟用 WebRTC！"
+        "webrtc-requirement": "To use this ErikrafT Drop™ instance, WebRTC must be enabled!"
     },
     "footer": {
         "known-as": "此裝置名稱為：",
@@ -48,6 +56,12 @@
         "paired-devices_title": "無論在任何網路，已配對的裝置都是隨時可見。",
         "public-room-devices": "在房間 {{roomId}} 中",
         "public-room-devices_title": "無論在任何網路，此公共房間中的裝置都是隨時可見。",
+        "tor-network": "on Tor network",
+        "tor-network_title": "You can be discovered by Tor Browser users on the .onion address.",
+        "tor-status": "on Tor network",
+        "tor-status_title": "You can be discovered by Tor Browser users on the .onion address.",
+        "use-tor": "Use Tor network",
+        "use-tor_title": "Configure or share file transfers via Tor Onion Service",
         "traffic": "流量將會",
         "routed": "途經伺服器",
         "webrtc": "如果無法使用 WebRTC。",
@@ -55,6 +69,18 @@
         "lan": "LAN"
     },
     "dialogs": {
+        "tor-title": "Tor Network (Onion Service)",
+        "tor-desc": "Transfer files through the Tor network using ErikrafT Drop's Onion Service address.",
+        "tor-open-browser": "Open Onion Address",
+        "tor-copy-address": "Copy address",
+        "tor-address-copied": "Address copied",
+        "tor-copy-failed": "Could not copy address.",
+        "tor-help": "Open this .onion address in a browser compatible with the Tor network.",
+        "tor-checking": "Checking connection to Tor network...",
+        "tor-available": "Tor network available",
+        "tor-unavailable-title": "Onion address unavailable",
+        "tor-unavailable-desc": "Tor service is not available yet. Please try again in a moment.",
+        "tor-refresh": "Refresh",
         "pair-devices-title": "永久配對裝置",
         "input-key-on-this-device": "在另一台裝置上輸入此密鑰",
         "scan-qr-code": "或掃描 QR 圖碼。",
@@ -126,15 +152,26 @@
         "metadata-exif": "元數據 (EXIF)",
         "compress": "壓縮",
         "edit-ai": "使用 AI 編輯",
-        "lan-mode-server_placeholder": "192.168.0.10:3000"
+        "lan-mode-server_placeholder": "192.168.0.10:3000",
+        "qr-scanner-title": "Scan QR Code",
+        "qr-scanner-status-searching": "Searching for QR Code...",
+        "qr-scanner-manual-label": "Or paste the QR Code content/URL:",
+        "qr-scanner-process": "Process",
+        "qr-scanner-detected": "QR Code Detected",
+        "qr-scanner-external-warning": "This address does not belong to the ErikrafT ecosystem.",
+        "qr-scanner-open-anyway": "Open Anyway",
+        "animated-qr-send-title": "Transfer via Animated QR Code",
+        "animated-qr-instruction": "Point the other device's camera at this QR Code.",
+        "animated-qr-speed-label": "Speed (FPS):",
+        "animated-qr-receive-title": "Receive via Animated QR Code"
     },
     "about": {
-        "close-about_aria-label": "關閉關於 ErikrafT Drop™",
+        "close-about_aria-label": "Close About ErikrafT Drop™",
         "claim": "跨裝置傳輸檔案的最簡單方法",
-        "github_title": "GitHub 上的 ErikrafT Drop™",
+        "github_title": "ErikrafT Drop™ on GitHub",
         "buy-me-a-coffee_title": "給我買一杯咖啡吧！",
-        "tweet_title": "發佈關於 ErikrafT Drop™ 的推文",
-        "mastodon_title": "在 Mastodon 上撰寫有關 ErikrafT Drop™ 的文章",
+        "tweet_title": "Tweet about ErikrafT Drop™",
+        "mastodon_title": "Write about ErikrafT Drop™ on Mastodon",
         "bluesky_title": "在 Bluesky 上關注我們",
         "custom_title": "關注我們",
         "privacypolicy_title": "開啟我們的隱私權政策",
@@ -187,7 +224,7 @@
         "file-transfer-completed": "檔案傳輸已完成",
         "ios-memory-limit": "向 iOS 發送檔案每次只能最大 200 MB",
         "message-transfer-completed": "訊息傳輸已完成",
-        "unfinished-transfers-warning": "還有未完成的傳輸。你確定要關閉 ErikrafT Drop™ 嗎？",
+        "unfinished-transfers-warning": "There are unfinished transfers. Are you sure you want to close ErikrafT Drop™?",
         "rate-limit-join-key": "已達到速率限制。請等待 10 秒鐘，然後再試一次。",
         "selected-peer-left": "選定的對象已離開"
     },
