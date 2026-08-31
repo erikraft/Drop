@@ -103,6 +103,7 @@ class ErikrafTdrop {
             ['torDialog', () => new TorDialog()],
             ['qrScannerDialog', () => new QRScannerDialog()],
             ['qrScannerConfirmDialog', () => new QRScannerConfirmDialog()],
+            ['animatedQRMainDialog', () => new AnimatedQRMainDialog()],
             ['animatedQRSendDialog', () => new AnimatedQRSendDialog()],
             ['animatedQRReceiveDialog', () => new AnimatedQRReceiveDialog()],
             ['base64Dialog', () => new Base64Dialog()],

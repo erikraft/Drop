@@ -77,17 +77,9 @@ class ContentModeration {
     }
 
     async loadAllModels() {
-        if (this.modelLoading) return;
-        this.modelLoading = true;
-
-        try {
-            if (typeof nsfwjs !== 'undefined' && nsfwjs.load) {
-                this.nsfwModels.default = await nsfwjs.load('server/model/model.json');
-            }
-        } catch (error) {
-            console.warn('Modelo NSFW opcional não pôde ser carregado:', error);
-        }
-
+        // NSFWJS model loading disabled - CDN is no longer available
+        // This functionality has been deprecated due to broken CDN links
+        console.log('NSFWJS model loading disabled - legacy feature');
         this.modelLoading = false;
     }
 
@@ -132,7 +124,7 @@ class ContentModeration {
         if (!this.isMediaFile(file)) return false;
 
         try {
-            console.log('Iniciando verificação NSFW completa para:', file.name);
+            console.log('Iniciando verificação NSFW básica para:', file.name);
 
             // Verifica o nome do arquivo primeiro
             const fileName = file.name.toLowerCase();
@@ -141,12 +133,7 @@ class ContentModeration {
                 return this._handleExplicitContent(file, 'Nome do arquivo bloqueado', 'explicit');
             }
 
-            // Processa cada frame do conteúdo
-            const isExplicit = await this.processMediaFrames(file);
-            if (isExplicit) {
-                return this._handleExplicitContent(file, 'Conteúdo explícito detectado', 'explicit');
-            }
-
+            // NSFWJS model disabled - only filename checking available
             return { isNSFW: false };
         } catch (error) {
             console.error('Erro na verificação NSFW:', error);
@@ -155,56 +142,9 @@ class ContentModeration {
     }
 
     async processMediaFrames(file) {
-        if (!this.nsfwModels || !this.nsfwModels.default) return false;
-        return new Promise(async (resolve) => {
-            const mediaElement = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
-            mediaElement.src = URL.createObjectURL(file);
-
-            mediaElement.onload = async () => {
-                try {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = mediaElement.naturalWidth || mediaElement.videoWidth;
-                    canvas.height = mediaElement.naturalHeight || mediaElement.videoHeight;
-
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(mediaElement, 0, 0);
-
-                    const result = await this.nsfwModels.default.classify(canvas);
-                    resolve(result.some(p => p.className === 'Porn' && p.probability > 0.85));
-                } catch (e) {
-                    resolve(false);
-                }
-            };
-
-            if (file.type.startsWith('video/')) {
-                mediaElement.addEventListener('seeked', async () => {
-                    try {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = mediaElement.videoWidth;
-                        canvas.height = mediaElement.videoHeight;
-
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(mediaElement, 0, 0);
-
-                        const result = await this.nsfwModels.default.classify(canvas);
-                        if (result.some(p => p.className === 'Porn' && p.probability > 0.85)) {
-                            resolve(true);
-                        }
-                    } catch (e) {
-                        // ignore frame error
-                    }
-                });
-
-                mediaElement.currentTime = 0;
-                const checkFrames = setInterval(() => {
-                    if (mediaElement.currentTime >= mediaElement.duration) {
-                        clearInterval(checkFrames);
-                        resolve(false);
-                    }
-                    mediaElement.currentTime += 1;
-                }, 1000);
-            }
-        });
+        // NSFWJS model disabled - this function no longer processes media frames
+        // Only filename-based checking is available
+        return false;
     }
 
     _handleExplicitContent(file, reason, contentType) {

@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.14.0';
+const cacheVersion = 'v1.15.0';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
@@ -44,6 +44,7 @@ const relativePathsToCache = [
     'images/badges/Get_it_on_Shortcuts_English.png',
     'images/badges/Get_the_add-on_Thunderbird.png',
     'images/badges/Support_me_on_Ko-fi.png',
+    'images/badges/Get it on WEB.png',
     'fonts/OpenSans/static/OpenSans-Medium.ttf',
     'lang/ar.json',
     'lang/be.json',

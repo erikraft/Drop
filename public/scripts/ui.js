@@ -3426,7 +3426,7 @@ class QRScannerDialog extends Dialog {
 
     async startCamera() {
         this.scanning = true;
-        if (this.$status) this.$status.textContent = 'Procurando QR Code...';
+        if (this.$status) this.$status.textContent = 'Iniciando câmera...';
 
         if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
             try {
@@ -3434,23 +3434,56 @@ class QRScannerDialog extends Dialog {
                     this.$video.setAttribute('playsinline', 'true');
                     this.$video.setAttribute('autoplay', 'true');
                     this.$video.muted = true;
+                    this.$video.controls = false;
                 }
 
                 try {
                     this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: 'environment' }
+                        video: { 
+                            facingMode: 'environment',
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        }
                     });
                 } catch (envErr) {
                     console.warn('Facing mode environment failed, falling back to default camera:', envErr);
-                    this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    this.stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        } 
+                    });
                 }
 
                 if (this.$video) {
                     this.$video.srcObject = this.stream;
+                    
+                    // Wait for video to be ready
+                    await new Promise((resolve, reject) => {
+                        if (this.$video) {
+                            this.$video.onloadedmetadata = () => {
+                                resolve();
+                            };
+                            this.$video.onerror = (e) => {
+                                reject(new Error('Video load error'));
+                            };
+                            // Timeout fallback
+                            setTimeout(() => resolve(), 3000);
+                        } else {
+                            reject(new Error('Video element not found'));
+                        }
+                    });
+
                     try {
                         await this.$video.play();
+                        if (this.$status) this.$status.textContent = 'Procurando QR Code...';
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
+                        if (this.$status) {
+                            this.$status.textContent = 'Erro ao reproduzir vídeo. Cole o link manualmente abaixo:';
+                        }
+                        if (this.$input) this.$input.focus();
+                        return;
                     }
                 }
             } catch (err) {
@@ -3464,6 +3497,12 @@ class QRScannerDialog extends Dialog {
                 if (this.$input) this.$input.focus();
                 return;
             }
+        } else {
+            if (this.$status) {
+                this.$status.textContent = 'Câmera não suportada. Cole o link manualmente abaixo:';
+            }
+            if (this.$input) this.$input.focus();
+            return;
         }
         this.scanLoop();
     }
@@ -3628,6 +3667,79 @@ class AnimatedQRSendDialog extends Dialog {
     }
 }
 
+class AnimatedQRMainDialog extends Dialog {
+    constructor() {
+        super('animated-qr-main-dialog');
+        this.$sendFileBtn = this.$el.querySelector('#animated-qr-send-file-btn');
+        this.$sendTextBtn = this.$el.querySelector('#animated-qr-send-text-btn');
+        this.$receiveBtn = this.$el.querySelector('#animated-qr-receive-btn');
+        this.$headerBtn = $('animated-qr-btn');
+
+        if (this.$headerBtn) {
+            this.$headerBtn.addEventListener('click', () => {
+                if (window.erikrafTdrop && window.erikrafTdrop.peersUI && window.erikrafTdrop.peersUI.shareMode && window.erikrafTdrop.peersUI.shareMode.active) {
+                    const files = window.erikrafTdrop.peersUI.shareMode.files;
+                    const text = window.erikrafTdrop.peersUI.shareMode.text;
+                    if (files && files.length) {
+                        window.erikrafTdrop.animatedQRSendDialog.send({ file: files[0] });
+                    } else if (text) {
+                        window.erikrafTdrop.animatedQRSendDialog.send({ text: text });
+                    }
+                } else {
+                    this.show();
+                }
+            });
+        }
+
+        if (this.$sendFileBtn) {
+            this.$sendFileBtn.addEventListener('click', () => {
+                this.hide();
+                this.triggerFileSelection();
+            });
+        }
+
+        if (this.$sendTextBtn) {
+            this.$sendTextBtn.addEventListener('click', () => {
+                this.hide();
+                this.triggerTextInput();
+            });
+        }
+
+        if (this.$receiveBtn) {
+            this.$receiveBtn.addEventListener('click', () => {
+                this.hide();
+                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRReceiveDialog) {
+                    window.erikrafTdrop.animatedQRReceiveDialog.openScanner();
+                }
+            });
+        }
+    }
+
+    triggerFileSelection() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '*/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
+                    window.erikrafTdrop.animatedQRSendDialog.send({ file: file });
+                }
+            }
+        };
+        input.click();
+    }
+
+    triggerTextInput() {
+        const text = prompt('Digite o texto para enviar:');
+        if (text && text.trim()) {
+            if (window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog) {
+                window.erikrafTdrop.animatedQRSendDialog.send({ text: text.trim() });
+            }
+        }
+    }
+}
+
 class AnimatedQRReceiveDialog extends Dialog {
     constructor() {
         super('animated-qr-receive-dialog');
@@ -3640,23 +3752,6 @@ class AnimatedQRReceiveDialog extends Dialog {
         this.$completeFilename = this.$el.querySelector('#qr-receive-complete-filename');
         this.$completeSha = this.$el.querySelector('#qr-receive-complete-sha');
         this.$actionBtn = this.$el.querySelector('#qr-receive-action-btn');
-
-        this.$headerBtn = $('animated-qr-btn');
-        if (this.$headerBtn) {
-            this.$headerBtn.addEventListener('click', () => {
-                if (window.erikrafTdrop && window.erikrafTdrop.peersUI && window.erikrafTdrop.peersUI.shareMode && window.erikrafTdrop.peersUI.shareMode.active) {
-                    const files = window.erikrafTdrop.peersUI.shareMode.files;
-                    const text = window.erikrafTdrop.peersUI.shareMode.text;
-                    if (files && files.length) {
-                        window.erikrafTdrop.animatedQRSendDialog.send({ file: files[0] });
-                    } else if (text) {
-                        window.erikrafTdrop.animatedQRSendDialog.send({ text: text });
-                    }
-                } else {
-                    this.openScanner();
-                }
-            });
-        }
     }
 
     openScanner() {

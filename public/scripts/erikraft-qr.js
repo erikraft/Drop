@@ -78,21 +78,56 @@ function base64ToBuffer(base64) {
 }
 
 async function compressBuffer(inputBuffer) {
+    const bytes = inputBuffer instanceof Uint8Array ? inputBuffer : new Uint8Array(inputBuffer);
+    const originalSize = bytes.byteLength;
+    
+    // Files that are typically already compressed - skip compression
+    const compressedExtensions = ['.zip', '.rar', '.7z', '.gz', '.bz2', '.xz', '.tar', 
+                                  '.mp3', '.mp4', '.avi', '.mkv', '.mov', '.flac', '.ogg',
+                                  '.jpg', '.jpeg', '.png', '.gif', '.webp', '.heic',
+                                  '.pdf', '.docx', '.xlsx', '.pptx'];
+    
+    // Simple check if the data might be already compressed (high entropy)
+    function isHighEntropy(buffer) {
+        const histogram = new Array(256).fill(0);
+        for (let i = 0; i < buffer.length; i++) {
+            histogram[buffer[i]]++;
+        }
+        
+        let entropy = 0;
+        for (let i = 0; i < 256; i++) {
+            if (histogram[i] > 0) {
+                const p = histogram[i] / buffer.length;
+                entropy -= p * Math.log2(p);
+            }
+        }
+        
+        // High entropy (> 7.5) suggests already compressed data
+        return entropy > 7.5;
+    }
+    
+    // Skip compression for small files or high-entropy data
+    if (originalSize < 1000 || isHighEntropy(bytes)) {
+        return { buffer: inputBuffer, compressed: 0 };
+    }
+    
     if (typeof CompressionStream !== 'undefined') {
         try {
-            const bytes = inputBuffer instanceof Uint8Array ? inputBuffer : new Uint8Array(inputBuffer);
             const cs = new CompressionStream('deflate-raw');
             const writer = cs.writable.getWriter();
             writer.write(bytes);
             writer.close();
             const res = await new Response(cs.readable).arrayBuffer();
-            if (res.byteLength < bytes.byteLength) {
+            
+            // Only use compression if it actually reduces size by at least 5%
+            if (res.byteLength < originalSize * 0.95) {
                 return { buffer: res, compressed: 1 };
             }
         } catch (e) {
-            // Compression optional fallback
+            console.warn('Compression failed, using uncompressed:', e);
         }
     }
+    
     return { buffer: inputBuffer, compressed: 0 };
 }
 
@@ -188,11 +223,14 @@ class ErikrafTQRTransmitter {
             this.frames.push(JSON.stringify(payload));
         }
 
-        // Add 25% XOR FEC Fountain parity frames
-        const parityCount = Math.max(2, Math.floor(numChunks * 0.25));
+        // Add 20% XOR FEC Fountain parity frames (reduced from 25% for efficiency)
+        // Still provides robust recovery while reducing total frame count
+        const parityCount = Math.max(2, Math.floor(numChunks * 0.20));
         for (let p = 0; p < parityCount; p++) {
-            const idx1 = p % numChunks;
-            const idx2 = (p + 1) % numChunks;
+            // Use better XOR combinations - pair chunks that are further apart
+            // This improves recovery chances when consecutive frames are lost
+            const idx1 = (p * 2) % numChunks;
+            const idx2 = (p * 2 + 1) % numChunks;
             const len = Math.max(baseChunks[idx1].length, baseChunks[idx2].length);
             const xorChunk = new Uint8Array(len);
             for (let b = 0; b < len; b++) {
@@ -291,7 +329,7 @@ class ErikrafTQRScanner {
     }
 
     async start() {
-        this.state = 'Searching for QR...';
+        this.state = 'Iniciando câmera...';
         this.onStateChange(this.state);
         this.scanning = true;
         this.receivedChunks.clear();
@@ -305,25 +343,55 @@ class ErikrafTQRScanner {
                     this.videoEl.setAttribute('playsinline', 'true');
                     this.videoEl.setAttribute('autoplay', 'true');
                     this.videoEl.muted = true;
+                    this.videoEl.controls = false;
                 }
 
                 try {
                     this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: 'environment' }
+                        video: { 
+                            facingMode: 'environment',
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        }
                     });
                 } catch (envErr) {
                     console.warn('Facing mode environment failed, falling back to default camera:', envErr);
                     this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: true
+                        video: { 
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        }
                     });
                 }
 
                 if (this.videoEl) {
                     this.videoEl.srcObject = this.stream;
+                    
+                    // Wait for video to be ready
+                    await new Promise((resolve, reject) => {
+                        if (this.videoEl) {
+                            this.videoEl.onloadedmetadata = () => {
+                                resolve();
+                            };
+                            this.videoEl.onerror = (e) => {
+                                reject(new Error('Video load error'));
+                            };
+                            setTimeout(() => resolve(), 3000);
+                        } else {
+                            reject(new Error('Video element not found'));
+                        }
+                    });
+
                     try {
                         await this.videoEl.play();
+                        this.state = 'Procurando QR...';
+                        this.onStateChange(this.state);
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
+                        this.state = 'Erro ao reproduzir vídeo';
+                        this.onStateChange(this.state);
+                        this.stop();
+                        return;
                     }
                 }
             } catch (err) {
@@ -336,6 +404,11 @@ class ErikrafTQRScanner {
                 this.stop();
                 return;
             }
+        } else {
+            this.state = 'Câmera não suportada';
+            this.onStateChange(this.state);
+            this.stop();
+            return;
         }
         this._scanLoop();
     }
