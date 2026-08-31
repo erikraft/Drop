@@ -18,6 +18,10 @@
         "webchat": "聊天室",
         "ai-variation": "生成 AI 變體",
         "ai-generate": "建立新的 AI 圖像",
+        "scan-qr_title": "Scan QR Code",
+        "scan-qr": {
+            "title": "Scan QR Code"
+        },
         "animated-qr_title": "Transfer via Animated QR",
         "animated-qr": {
             "title": "Transfer via Animated QR"
@@ -149,8 +153,16 @@
         "compress": "壓縮",
         "edit-ai": "使用 AI 編輯",
         "lan-mode-server_placeholder": "192.168.0.10:3000",
-        "animated-qr-send-title": "QR Code File Transfer",
-        "animated-qr-instruction": "Keep the other device pointed at this QR Code",
+        "qr-scanner-title": "Scan QR Code",
+        "qr-scanner-status-searching": "Searching for QR Code...",
+        "qr-scanner-manual-label": "Or paste the QR Code content/URL:",
+        "qr-scanner-process": "Process",
+        "qr-scanner-detected": "QR Code Detected",
+        "qr-scanner-external-warning": "This address does not belong to the ErikrafT ecosystem.",
+        "qr-scanner-open-anyway": "Open Anyway",
+        "animated-qr-send-title": "Transfer via Animated QR Code",
+        "animated-qr-instruction": "Point the other device's camera at this QR Code.",
+        "animated-qr-speed-label": "Speed (FPS):",
         "animated-qr-receive-title": "Receive via Animated QR Code"
     },
     "about": {
