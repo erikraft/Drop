@@ -1,0 +1,8 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Security-Policy = "frame-ancestors https://*.discord.com https://*.discord.gg https://*.discordapp.com;"
