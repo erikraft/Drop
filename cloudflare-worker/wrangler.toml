@@ -1,0 +1,16 @@
+name = "erikraft-drop-failover"
+main = "failover.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+PRIMARY_HOST = "drop.erikraft.com"
+FALLBACK_HOST = "drop-fallback.erikraft.com"
+HEALTH_CHECK_PATH = "/health"
+HEALTH_CHECK_INTERVAL = "30000"
+FAILURE_THRESHOLD = "3"
+RECOVERY_THRESHOLD = "2"
+
+# Route configuration - this will be set during deployment
+# routes = [
+#   { pattern = "drop.erikraft.com/*", zone_name = "erikraft.com" }
+# ]

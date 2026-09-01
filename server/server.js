@@ -163,6 +163,10 @@ export default class ErikrafTdropServer {
             });
         });
 
+        app.get('/health', (req, res) => {
+            res.status(200).send('ok');
+        });
+
         app.use((req, res) => {
             res.redirect(301, '/');
         });
