@@ -1515,7 +1515,7 @@
 
                     <div class="column fw">
                         <label for="qr-scanner-manual-input" class="font-caption text-secondary" data-i18n-key="dialogs.qr-scanner-manual-label">Ou cole o conteúdo/URL do QR Code:</label>
-                        <input type="text" id="qr-scanner-manual-input" class="fw mt-1 p-2" placeholder="https://drop.erikraft.com/..." autocomplete="off" style="border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: inherit;">
+                        <input type="text" id="qr-scanner-manual-input" class="fw mt-1 p-2" placeholder="https://drop.erikraft.com/..." autocomplete="off" style="border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: inherit; padding: 10px;">
                         <button id="qr-scanner-manual-submit" class="btn btn-rounded btn-primary mt-2" type="button" data-i18n-key="dialogs.qr-scanner-process">Processar</button>
                     </div>
                 </div>
@@ -1534,8 +1534,8 @@
                     <h2 id="qr-scanner-confirm-title" class="dialog-title" data-i18n-key="dialogs.qr-scanner-detected">QR Code Detectado</h2>
                 </div>
                 <div class="column center p-2 text-center">
-                    <div id="qr-scanner-confirm-badge" class="badge btn-dark text-white mb-2 p-1" style="border-radius: 8px; font-weight: bold; padding: 4px 12px; display: inline-block;">ErikrafT Drop™</div>
-                    <div id="qr-scanner-confirm-url" class="font-body2 style-code p-2 mt-2 fw" style="background: rgba(255,255,255,0.08); border-radius: 8px; word-break: break-all; font-family: monospace;"></div>
+                    <div id="qr-scanner-confirm-badge" class="badge btn-dark text-white mb-2 p-1" style="border-radius: 10px; font-weight: bold; padding: 6px 14px; display: inline-block;">ErikrafT Drop™</div>
+                    <div id="qr-scanner-confirm-url" class="font-body2 style-code p-2 mt-2 fw" style="background: rgba(255,255,255,0.08); border-radius: 10px; word-break: break-all; font-family: monospace; padding: 12px;"></div>
                     <div id="qr-scanner-confirm-warning" class="font-caption text-warning mt-2" hidden data-i18n-key="dialogs.qr-scanner-external-warning">Esse endereço não pertence ao ecossistema ErikrafT.</div>
                 </div>
                 <div class="btn-row row-reverse wrap p-2 gap-2">
@@ -1589,10 +1589,10 @@
                     <!-- Text composition container -->
                     <div id="qr-send-text-container" class="column fw">
                         <label for="qr-send-text-input" class="font-caption text-secondary mb-1" data-i18n-key="dialogs.animated-qr-enter-text">Digite ou cole o texto aqui:</label>
-                        <textarea id="qr-send-text-input" class="fw textarea p-2" rows="4" style="border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: inherit; resize: vertical;" placeholder="Mensagem ou texto para transferir..."></textarea>
+                        <textarea id="qr-send-text-input" class="fw textarea p-2" rows="4" style="border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: inherit; resize: vertical; padding: 10px;" placeholder="Mensagem ou texto para transferir..."></textarea>
                         <div class="row row-between font-caption text-secondary mt-1">
                             <span id="qr-send-text-char-count">0 caracteres</span>
-                            <button id="qr-send-text-paste-btn" type="button" class="btn btn-rounded btn-grey p-1" style="font-size: 11px; padding: 2px 10px;" data-i18n-key="dialogs.animated-qr-paste-text">Colar</button>
+                            <button id="qr-send-text-paste-btn" type="button" class="btn btn-rounded btn-grey p-1" style="font-size: 11px; padding: 4px 12px;" data-i18n-key="dialogs.animated-qr-paste-text">Colar</button>
                         </div>
                     </div>
 
@@ -1679,7 +1679,7 @@
                         <div class="bold text-success font-body1 mb-1" data-i18n-key="dialogs.animated-qr-transfer-complete">✓ Transferência Concluída</div>
                         <div id="qr-receive-complete-filename" class="font-body2 bold text-center word-break mt-1"></div>
                         <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
-                        <div id="qr-receive-text-preview" class="font-body2 p-2 mt-2 fw text-center" hidden style="background: rgba(255,255,255,0.08); border-radius: 8px; max-height: 120px; overflow-y: auto; word-break: break-word;"></div>
+                        <div id="qr-receive-text-preview" class="font-body2 p-2 mt-2 fw text-center" hidden style="background: rgba(255,255,255,0.08); border-radius: 10px; max-height: 120px; overflow-y: auto; word-break: break-word; padding: 12px;"></div>
                         <div class="row gap-2 mt-3 center wrap">
                             <button id="qr-receive-action-btn" type="button" class="btn btn-rounded btn-primary">Baixar</button>
                         </div>

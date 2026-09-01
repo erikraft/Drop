@@ -286,8 +286,16 @@ class ErikrafTQRTransmitter {
     stop() {
         this.running = false;
         this.paused = false;
-        if (this.timer) clearTimeout(this.timer);
-        if (this.containerEl) this.containerEl.innerHTML = '';
+        if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+        if (this.containerEl) {
+            ErikrafTDropQR.destroy(this.containerEl);
+            this.containerEl.innerHTML = '';
+        }
+        this.frames = [];
+        this.currentIndex = 0;
     }
 
     _tick() {
@@ -426,6 +434,17 @@ class ErikrafTQRScanner {
         if (this.videoEl) {
             this.videoEl.srcObject = null;
         }
+        if (this.canvas) {
+            this.canvas = null;
+            this.ctx = null;
+        }
+        if (this.detector) {
+            this.detector = null;
+        }
+        this.receivedChunks.clear();
+        this.fecFrames = [];
+        this.meta = null;
+        this.fecRecoveredCount = 0;
     }
 
     async _scanLoop() {

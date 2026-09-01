@@ -3301,6 +3301,8 @@ function classifyScannedContent(raw) {
 class QRScannerConfirmDialog extends Dialog {
     constructor() {
         super('qr-scanner-confirm-dialog');
+        // Remove peer-disconnected listener since QR scanner doesn't involve peer connections
+        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
         this.$title = this.$el.querySelector('#qr-scanner-confirm-title');
         this.$badge = this.$el.querySelector('#qr-scanner-confirm-badge');
         this.$url = this.$el.querySelector('#qr-scanner-confirm-url');
@@ -3392,6 +3394,8 @@ class QRScannerConfirmDialog extends Dialog {
 class QRScannerDialog extends Dialog {
     constructor() {
         super('qr-scanner-dialog');
+        // Remove peer-disconnected listener since QR scanner doesn't involve peer connections
+        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
         this.$video = this.$el.querySelector('#qr-scanner-main-video');
         this.$status = this.$el.querySelector('#qr-scanner-main-status');
         this.$input = this.$el.querySelector('#qr-scanner-manual-input');
@@ -3595,6 +3599,8 @@ class QRScannerDialog extends Dialog {
 class AnimatedQRSendDialog extends Dialog {
     constructor() {
         super('animated-qr-send-dialog');
+        // Remove peer-disconnected listener since QR transfer doesn't involve peer connections
+        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
         this.$composeView = this.$el.querySelector('#qr-send-compose-view');
         this.$activeView = this.$el.querySelector('#qr-send-active-view');
 
@@ -3867,6 +3873,18 @@ class AnimatedQRSendDialog extends Dialog {
 
     hide() {
         this.stopTransmitter();
+        // Clean up UI elements
+        if (this.$textInput) this.$textInput.value = '';
+        if (this.$charCount) this.$charCount.textContent = '0 caracteres';
+        this.selectedFile = null;
+        if (this.$selectedCard) {
+            this.$selectedCard.setAttribute('hidden', '');
+            this.$selectedCard.style.display = 'none';
+        }
+        if (this.$filePickerWrapper) {
+            this.$filePickerWrapper.removeAttribute('hidden');
+            this.$filePickerWrapper.style.display = 'flex';
+        }
         super.hide();
     }
 }
@@ -3874,6 +3892,8 @@ class AnimatedQRSendDialog extends Dialog {
 class AnimatedQRMainDialog extends Dialog {
     constructor() {
         super('animated-qr-main-dialog');
+        // Remove peer-disconnected listener since QR transfer doesn't involve peer connections
+        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
         this.$sendFileBtn = this.$el.querySelector('#animated-qr-send-file-btn');
         this.$sendTextBtn = this.$el.querySelector('#animated-qr-send-text-btn');
         this.$receiveBtn = this.$el.querySelector('#animated-qr-receive-btn');
@@ -3927,6 +3947,8 @@ class AnimatedQRMainDialog extends Dialog {
 class AnimatedQRReceiveDialog extends Dialog {
     constructor() {
         super('animated-qr-receive-dialog');
+        // Remove peer-disconnected listener since QR transfer doesn't involve peer connections
+        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
         this.$video = this.$el.querySelector('#qr-scanner-video');
         this.$state = this.$el.querySelector('#qr-receive-state');
         this.$progressBar = this.$el.querySelector('#qr-receive-progress-bar');
@@ -4012,6 +4034,15 @@ class AnimatedQRReceiveDialog extends Dialog {
             this.scanner.stop();
             this.scanner = null;
         }
+        // Clean up UI elements
+        if (this.$progressBar) this.$progressBar.value = 0;
+        if (this.$framesCount) this.$framesCount.textContent = 'Frames recebidos: 0';
+        if (this.$dataSize) this.$dataSize.textContent = 'Dados: 0 KB';
+        if (this.$completeContainer) {
+            this.$completeContainer.setAttribute('hidden', '');
+            this.$completeContainer.style.display = 'none';
+        }
+        if (this.$state) this.$state.textContent = 'Procurando QR Code...';
         super.hide();
     }
 }
