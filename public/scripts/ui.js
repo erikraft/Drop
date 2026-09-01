@@ -3683,17 +3683,17 @@ class AnimatedQRSendDialog extends Dialog {
             this.$fileContainer.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                this.$fileContainer.style.borderColor = 'var(--primary-color, #15acbd)';
+                this.$fileContainer.classList.add('drag-over');
             });
             this.$fileContainer.addEventListener('dragleave', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                this.$fileContainer.style.borderColor = 'rgba(21, 172, 189, 0.4)';
+                this.$fileContainer.classList.remove('drag-over');
             });
             this.$fileContainer.addEventListener('drop', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                this.$fileContainer.style.borderColor = 'rgba(21, 172, 189, 0.4)';
+                this.$fileContainer.classList.remove('drag-over');
                 if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
                     this.setSelectedFile(e.dataTransfer.files[0]);
                 }
@@ -3848,8 +3848,10 @@ class AnimatedQRSendDialog extends Dialog {
         this.transmitter = new ErikrafTQRTransmitter(this.$container, {
             fps: currentFps,
             onProgress: (p) => {
-                if (this.$fileInfo) {
-                    this.$fileInfo.textContent = `${p.fileName} (${Util.formatBytes(p.totalSize)})`;
+                // Update file info display
+                const fileInfoEl = this.$activeView.querySelector('#qr-send-file-info');
+                if (fileInfoEl) {
+                    fileInfoEl.textContent = `${p.fileName} (${Util.formatBytes(p.totalSize)})`;
                 }
                 if (this.$progressBar) {
                     this.$progressBar.value = p.progressPct;
@@ -3963,6 +3965,7 @@ class AnimatedQRReceiveDialog extends Dialog {
         this.$progressBar = this.$el.querySelector('#qr-receive-progress-bar');
         this.$framesCount = this.$el.querySelector('#qr-receive-frames-count');
         this.$dataSize = this.$el.querySelector('#qr-receive-data-size');
+        this.$fileInfo = this.$el.querySelector('#qr-receive-file-info');
         this.$completeContainer = this.$el.querySelector('#qr-receive-complete-container');
         this.$completeFilename = this.$el.querySelector('#qr-receive-complete-filename');
         this.$completeSha = this.$el.querySelector('#qr-receive-complete-sha');
@@ -3977,6 +3980,10 @@ class AnimatedQRReceiveDialog extends Dialog {
         if (this.$progressBar) this.$progressBar.value = 0;
         if (this.$framesCount) this.$framesCount.textContent = 'Frames recebidos: 0';
         if (this.$dataSize) this.$dataSize.textContent = 'Dados: 0 KB';
+        if (this.$fileInfo) {
+            this.$fileInfo.textContent = '';
+            this.$fileInfo.classList.remove('visible');
+        }
 
         this.show();
         if (!window.ErikrafTQRScanner) return;
@@ -3986,6 +3993,11 @@ class AnimatedQRReceiveDialog extends Dialog {
                 if (this.$state) this.$state.textContent = state;
             },
             onProgress: (p) => {
+                // Update file info display
+                if (this.$fileInfo && p.fileName) {
+                    this.$fileInfo.textContent = `${p.fileName} (${Util.formatBytes(p.size || 0)})`;
+                    this.$fileInfo.classList.add('visible');
+                }
                 if (this.$progressBar) this.$progressBar.value = p.pct;
                 if (this.$framesCount) {
                     this.$framesCount.textContent = `Frames: ${p.received}/${p.total}`;
@@ -4047,6 +4059,10 @@ class AnimatedQRReceiveDialog extends Dialog {
         if (this.$progressBar) this.$progressBar.value = 0;
         if (this.$framesCount) this.$framesCount.textContent = 'Frames recebidos: 0';
         if (this.$dataSize) this.$dataSize.textContent = 'Dados: 0 KB';
+        if (this.$fileInfo) {
+            this.$fileInfo.textContent = '';
+            this.$fileInfo.classList.remove('visible');
+        }
         if (this.$completeContainer) {
             this.$completeContainer.setAttribute('hidden', '');
             this.$completeContainer.style.display = 'none';

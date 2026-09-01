@@ -867,6 +867,89 @@ x-dialog .dialog-subheader {
 .shr-panel {
     min-width: 250px;
     max-width: calc(100vw - 20px);
+}
+
+/* QR Dialogs - Mobile Responsiveness & Dark/Light Mode */
+#qr-scanner-dialog,
+#qr-scanner-confirm-dialog,
+#animated-qr-main-dialog,
+#animated-qr-send-dialog,
+#animated-qr-receive-dialog {
+    font-size: 16px; /* prevents auto-zoom on mobile */
+}
+
+/* QR Send Dialog */
+#qr-send-text-input {
+    min-height: 100px;
+    max-height: 200px;
+}
+
+#qr-send-file-container {
+    min-height: 120px;
+}
+
+#qr-send-file-container.drag-over {
+    border-color: var(--primary-color, #15acbd);
+    background: rgba(21, 172, 189, 0.15);
+    transform: scale(1.02);
+}
+
+#qr-send-canvas-container {
+    width: 300px;
+    height: 300px;
+    max-width: 100%;
+    max-height: 300px;
+}
+
+/* QR Receive Dialog */
+#qr-scanner-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#qr-receive-file-info {
+    display: none;
+}
+
+#qr-receive-file-info.visible {
+    display: block;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    #qr-send-canvas-container {
+        width: 250px;
+        height: 250px;
+        max-width: 90vw;
+        max-height: 90vw;
+    }
+    
+    #qr-scanner-video,
+    #qr-scanner-main-video {
+        max-height: 240px;
+    }
+    
+    #animated-qr-send-dialog x-paper,
+    #animated-qr-receive-dialog x-paper,
+    #qr-scanner-dialog x-paper {
+        width: 95%;
+        max-width: 95%;
+    }
+}
+
+/* Dark/Light Mode Compatibility for QR Containers */
+@media (prefers-color-scheme: dark) {
+    #qr-send-canvas-container {
+        background: #1a1a1a;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    #qr-send-canvas-container {
+        background: #ffffff;
+    }
+}
     overflow: hidden;
     color: white;
     background-color: var(--primary-color);

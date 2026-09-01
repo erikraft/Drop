@@ -4,16 +4,16 @@
  * for ErikrafT Drop™ permanent pairing and temporary public rooms.
  * 
  * OPTIMIZED FOR ANIMATED QR:
- * - Reuses QRCodeStyling instance to prevent flickering
  * - Renders QR immediately without waiting for logo
- * - Applies logo asynchronously when available
- * - Prevents DOM churn during frame updates
+ * - Logo is optional enhancement, never blocks QR appearance
+ * - Prevents visual flickering during frame updates
+ * - Minimizes DOM churn during animation
  */
 
 class ErikrafTDropQR {
     /**
      * Renders or updates a QR Code inside the provided container.
-     * Keeps track of the instance to avoid memory leaks and flickering.
+     * QR appears immediately, logo loads asynchronously if available.
      *
      * @param {HTMLElement} container - The DOM element where the QR Code will render.
      * @param {string} data - The URL/data to encode.
@@ -26,107 +26,79 @@ class ErikrafTDropQR {
             return null;
         }
 
-        // Reuse existing instance if available (prevents flickering during animation)
-        let qrCode = container._qrInstance;
-        
-        if (!qrCode) {
-            // Clear any old SVGs/Canvases inside container first
-            container.innerHTML = '';
+        // Check if we need to apply logo for the first time
+        const shouldTryLogo = !container._logoAttempted;
+        if (shouldTryLogo) {
+            container._logoAttempted = true;
+            // Start logo loading in background, don't wait for it
+            this._tryLoadLogoInBackground(container, options);
+        }
 
-            // Create base configuration without logo initially for fast rendering
-            const baseConfig = {
-                width: options.width || 256,
-                height: options.height || 256,
-                type: 'svg', // Ensure crisp, highly scalable vector rendering
-                data: data,
-                margin: options.margin || 10, // Quiet zone margin
-                qrOptions: {
-                    typeNumber: 0,
-                    mode: 'Byte',
-                    errorCorrectionLevel: 'H' // High correction level for logo compatibility
-                },
-                dotsOptions: {
-                    color: '#121212', // Deep high-contrast dark color
-                    type: 'rounded' // Rounded points
-                },
-                backgroundOptions: {
-                    color: '#ffffff' // Pure white background
-                },
-                cornersSquareOptions: {
-                    color: '#121212',
-                    type: 'extra-rounded' // Smooth, modern rounded corners
-                },
-                cornersDotOptions: {
-                    color: '#121212',
-                    type: 'dot' // Rounded dot inside the corner squares
-                }
-            };
-
-            // Create new instance
-            qrCode = new QRCodeStyling(baseConfig);
-
-            // Save instance reference on container
-            container._qrInstance = qrCode;
-
-            // Render immediately without logo
-            qrCode.append(container);
-
-            // Load and apply logo asynchronously (doesn't block QR appearance)
-            this._applyLogoAsync(qrCode, container, options);
-        } else {
-            // Update data on existing instance (QRCodeStyling doesn't support direct data update)
-            // We need to recreate the instance but keep it in the same DOM position
-            // to minimize flickering
-            const oldContent = container.innerHTML;
-            
-            const baseConfig = {
-                width: options.width || 256,
-                height: options.height || 256,
-                type: 'svg',
-                data: data,
-                margin: options.margin || 10,
-                qrOptions: {
-                    typeNumber: 0,
-                    mode: 'Byte',
-                    errorCorrectionLevel: 'H'
-                },
-                dotsOptions: {
-                    color: '#121212',
-                    type: 'rounded'
-                },
-                backgroundOptions: {
-                    color: '#ffffff'
-                },
-                cornersSquareOptions: {
-                    color: '#121212',
-                    type: 'extra-rounded'
-                },
-                cornersDotOptions: {
-                    color: '#121212',
-                    type: 'dot'
-                }
-            };
-
-            // Create new instance with updated data
-            qrCode = new QRCodeStyling(baseConfig);
-            container._qrInstance = qrCode;
-            container.innerHTML = '';
-            qrCode.append(container);
-
-            // Re-apply logo asynchronously if it was previously applied
-            if (container._logoApplied) {
-                this._applyLogoAsync(qrCode, container, options);
+        // Always render QR immediately with current data
+        // QRCodeStyling requires instance recreation for data changes
+        // We do this efficiently to minimize visual disruption
+        const baseConfig = {
+            width: options.width || 256,
+            height: options.height || 256,
+            type: 'svg',
+            data: data,
+            margin: options.margin || 10,
+            qrOptions: {
+                typeNumber: 0,
+                mode: 'Byte',
+                errorCorrectionLevel: 'H'
+            },
+            dotsOptions: {
+                color: '#121212',
+                type: 'rounded'
+            },
+            backgroundOptions: {
+                color: '#ffffff'
+            },
+            cornersSquareOptions: {
+                color: '#121212',
+                type: 'extra-rounded'
+            },
+            cornersDotOptions: {
+                color: '#121212',
+                type: 'dot'
             }
+        };
+
+        // Only add logo if it was successfully loaded previously
+        if (container._logoAvailable) {
+            baseConfig.image = container._logoPath || 'images/icon-drop-blue.svg';
+            baseConfig.imageOptions = {
+                hideBackgroundDots: true,
+                imageSize: options.imageSize || 0.3,
+                margin: options.logoMargin || 5,
+                crossOrigin: 'anonymous',
+                saveAsBlob: true
+            };
+        }
+
+        // Create new instance and render
+        const qrCode = new QRCodeStyling(baseConfig);
+        container._qrInstance = qrCode;
+        
+        // Efficient DOM update: replace content without full clear if possible
+        // This minimizes visual flickering
+        if (container.firstChild) {
+            container.replaceChild(qrCode._canvas || qrCode._svg, container.firstChild);
+        } else {
+            container.innerHTML = '';
+            qrCode.append(container);
         }
 
         return qrCode;
     }
 
     /**
-     * Applies logo to QR code asynchronously without blocking rendering.
-     * Falls back gracefully if logo fails to load.
+     * Attempts to load logo in background without blocking QR rendering.
+     * If successful, subsequent QR renders will include the logo.
+     * If failed, QR continues to work without logo.
      */
-    static async _applyLogoAsync(qrCode, container, options = {}) {
+    static async _tryLoadLogoInBackground(container, options = {}) {
         const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
         
         try {
@@ -134,35 +106,18 @@ class ErikrafTDropQR {
             const response = await fetch(logoPath);
             if (!response.ok) {
                 console.warn('[QR Helper] Logo not available, QR will render without logo');
+                container._logoAvailable = false;
                 return;
             }
 
-            // Logo exists, apply it
-            const logoConfig = {
-                image: logoPath,
-                imageOptions: {
-                    hideBackgroundDots: true,
-                    imageSize: options.imageSize || 0.3,
-                    margin: options.logoMargin || 5,
-                    crossOrigin: 'anonymous',
-                    saveAsBlob: true
-                }
-            };
-
-            // Update the instance with logo
-            const logoQrCode = new QRCodeStyling({
-                ...qrCode._options,
-                ...logoConfig
-            });
-
-            container._qrInstance = logoQrCode;
-            container.innerHTML = '';
-            logoQrCode.append(container);
-            container._logoApplied = true;
+            // Logo exists, mark it as available for future renders
+            container._logoAvailable = true;
+            container._logoPath = logoPath;
+            console.log('[QR Helper] Logo loaded successfully, will be applied to subsequent QR frames');
 
         } catch (error) {
             console.warn('[QR Helper] Logo loading failed, QR continues without logo:', error);
-            container._logoApplied = false;
+            container._logoAvailable = false;
         }
     }
 
@@ -176,8 +131,14 @@ class ErikrafTDropQR {
             if (container._qrInstance) {
                 delete container._qrInstance;
             }
-            if (container._logoApplied !== undefined) {
-                delete container._logoApplied;
+            if (container._logoAvailable !== undefined) {
+                delete container._logoAvailable;
+            }
+            if (container._logoPath !== undefined) {
+                delete container._logoPath;
+            }
+            if (container._logoAttempted !== undefined) {
+                delete container._logoAttempted;
             }
             container.innerHTML = '';
         }
