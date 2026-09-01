@@ -1623,10 +1623,12 @@
                 <div id="qr-send-active-view" class="row center p-2" hidden>
                     <div class="column fw gap-2">
                         <div id="qr-send-file-info" class="font-body2 text-center bold" style="color: var(--primary-color, #15acbd);"></div>
-                        <div id="qr-send-canvas-container" class="center" style="background: #fff; padding: 16px; border-radius: 12px; min-width: 260px; min-height: 260px;"></div>
+                        
+                        <!-- Large QR Container - Central and prominent -->
+                        <div id="qr-send-canvas-container" class="center" style="background: #fff; padding: 20px; border-radius: 16px; min-width: 300px; min-height: 300px; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
 
                         <div class="fw column gap-1">
-                            <progress id="qr-send-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
+                            <progress id="qr-send-progress-bar" value="0" max="100" class="fw" style="height: 12px; border-radius: 6px; overflow: hidden;"></progress>
                             <div class="row row-between font-caption text-secondary">
                                 <span id="qr-send-frames-count">Frames: 0/0</span>
                                 <span id="qr-send-fps-speed">Velocidade: 6 FPS</span>
@@ -1655,43 +1657,54 @@
     <!-- Animated QR Receive Dialog -->
     <x-dialog id="animated-qr-receive-dialog">
         <x-background class="full center">
-            <x-paper shadow="2" style="max-width: 520px; width: 92%;">
+            <x-paper shadow="2">
                 <div class="row center p-2">
                     <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber por QR Code Animado</h2>
                 </div>
-                <div class="column center p-2 fw">
-                    <div id="qr-receive-scanner-view" class="column center fw">
-                        <div style="position: relative; width: 100%; max-height: 240px; border-radius: 12px; overflow: hidden; background: #000;">
-                            <video id="qr-scanner-video" playsinline autoplay muted style="width: 100%; height: 240px; object-fit: cover;"></video>
+                <div class="row center p-2">
+                    <div class="column fw">
+                        <div id="qr-receive-scanner-view" class="column center fw">
+                            <!-- Professional camera container with proper sizing -->
+                            <div style="position: relative; width: 100%; max-width: 480px; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                                <video id="qr-scanner-video" playsinline autoplay muted style="width: 100%; height: auto; min-height: 300px; object-fit: cover;"></video>
+                                
+                                <!-- Scanning indicator overlay -->
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border: 2px solid rgba(21, 172, 189, 0.8); border-radius: 12px; pointer-events: none;">
+                                    <div style="position: absolute; top: -2px; left: -2px; width: 20px; height: 20px; border-top: 3px solid #15acbd; border-left: 3px solid #15acbd; border-top-left-radius: 12px;"></div>
+                                    <div style="position: absolute; top: -2px; right: -2px; width: 20px; height: 20px; border-top: 3px solid #15acbd; border-right: 3px solid #15acbd; border-top-right-radius: 12px;"></div>
+                                    <div style="position: absolute; bottom: -2px; left: -2px; width: 20px; height: 20px; border-bottom: 3px solid #15acbd; border-left: 3px solid #15acbd; border-bottom-left-radius: 12px;"></div>
+                                    <div style="position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; border-bottom: 3px solid #15acbd; border-right: 3px solid #15acbd; border-bottom-right-radius: 12px;"></div>
+                                </div>
+                            </div>
+
+                            <div id="qr-receive-state" class="font-body2 text-center mt-2 bold" data-i18n-key="dialogs.animated-qr-searching">Procurando QR Code...</div>
+
+                            <div id="qr-receive-error-container" class="column center mt-2 p-2 fw" hidden style="background: rgba(255, 75, 75, 0.12); border-radius: 10px; border: 1px solid rgba(255, 75, 75, 0.4);">
+                                <div id="qr-receive-error-msg" class="font-caption text-center bold text-danger"></div>
+                                <button id="qr-receive-retry-btn" type="button" class="btn btn-rounded btn-grey mt-2 p-1" style="font-size: 12px;" data-i18n-key="dialogs.animated-qr-retry">Tentar novamente</button>
+                            </div>
+
+                            <div class="fw mt-2 column gap-1">
+                                <progress id="qr-receive-progress-bar" value="0" max="100" class="fw" style="height: 12px; border-radius: 6px; overflow: hidden;"></progress>
+                                <div class="row row-between font-caption text-secondary">
+                                    <span id="qr-receive-frames-count">Frames recebidos: 0</span>
+                                    <span id="qr-receive-data-size">Dados: 0 KB</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div id="qr-receive-state" class="font-body2 text-center mt-2 bold" data-i18n-key="dialogs.animated-qr-searching">Procurando QR Code...</div>
-
-                        <div id="qr-receive-error-container" class="column center mt-2 p-2 fw" hidden style="background: rgba(255, 75, 75, 0.12); border-radius: 10px; border: 1px solid rgba(255, 75, 75, 0.4);">
-                            <div id="qr-receive-error-msg" class="font-caption text-center bold text-danger"></div>
-                            <button id="qr-receive-retry-btn" type="button" class="btn btn-rounded btn-grey mt-2 p-1" style="font-size: 12px;" data-i18n-key="dialogs.animated-qr-retry">Tentar novamente</button>
-                        </div>
-
-                        <div class="fw mt-2 column gap-1">
-                            <progress id="qr-receive-progress-bar" value="0" max="100" class="fw" style="height: 10px; border-radius: 5px; overflow: hidden;"></progress>
-                            <div class="row row-between font-caption text-secondary">
-                                <span id="qr-receive-frames-count">Frames recebidos: 0</span>
-                                <span id="qr-receive-data-size">Dados: 0 KB</span>
+                        <div id="qr-receive-complete-container" class="column center mt-3 p-3 fw" hidden style="background: rgba(21, 172, 189, 0.12); border-radius: 12px; border: 1px solid rgba(21, 172, 189, 0.4);">
+                            <div class="bold text-success font-body1 mb-1" data-i18n-key="dialogs.animated-qr-transfer-complete">✓ Transferência Concluída</div>
+                            <div id="qr-receive-complete-filename" class="font-body2 bold text-center word-break mt-1"></div>
+                            <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
+                            <div id="qr-receive-text-preview" class="font-body2 p-2 mt-2 fw text-center" hidden style="background: rgba(255,255,255,0.08); border-radius: 10px; max-height: 120px; overflow-y: auto; word-break: break-word; padding: 12px;"></div>
+                            <div class="row gap-2 mt-3 center wrap">
+                                <button id="qr-receive-action-btn" type="button" class="btn btn-rounded btn-primary">Baixar</button>
                             </div>
                         </div>
                     </div>
-
-                    <div id="qr-receive-complete-container" class="column center mt-3 p-3 fw" hidden style="background: rgba(21, 172, 189, 0.12); border-radius: 12px; border: 1px solid rgba(21, 172, 189, 0.4);">
-                        <div class="bold text-success font-body1 mb-1" data-i18n-key="dialogs.animated-qr-transfer-complete">✓ Transferência Concluída</div>
-                        <div id="qr-receive-complete-filename" class="font-body2 bold text-center word-break mt-1"></div>
-                        <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
-                        <div id="qr-receive-text-preview" class="font-body2 p-2 mt-2 fw text-center" hidden style="background: rgba(255,255,255,0.08); border-radius: 10px; max-height: 120px; overflow-y: auto; word-break: break-word; padding: 12px;"></div>
-                        <div class="row gap-2 mt-3 center wrap">
-                            <button id="qr-receive-action-btn" type="button" class="btn btn-rounded btn-primary">Baixar</button>
-                        </div>
-                    </div>
                 </div>
-                <div class="btn-row row-reverse wrap p-2">
+                <div class="btn-row row-reverse wrap">
                     <button class="btn btn-rounded btn-grey" type="button" close data-i18n-key="dialogs.close">Fechar</button>
                 </div>
             </x-paper>
