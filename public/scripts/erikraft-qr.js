@@ -223,8 +223,16 @@ class ErikrafTQRTransmitter {
             this.frames.push(JSON.stringify(payload));
         }
 
-        // Add 20% XOR FEC Fountain parity frames (reduced from 25% for efficiency)
-        // Still provides robust recovery while reducing total frame count
+        // Add 20% XOR FEC parity frames (reduced from 25% for efficiency)
+        // NOTE: This is simple XOR parity between chunk pairs, NOT true Fountain/LT coding.
+        // True Fountain codes use Luby Transform with robust-soliton distribution for
+        // optimal recovery from frame loss, late receiver join, and out-of-order delivery.
+        // This implementation provides basic recovery for single frame loss but has limitations:
+        // - Can only recover if one chunk in a pair is lost
+        // - Cannot handle arbitrary frame loss patterns
+        // - Receiver must receive enough frames to complete pairs
+        // For production use with robust frame loss tolerance, consider implementing
+        // true Fountain/LT coding as seen in Decimen, TxQR, or BitFountain references.
         const parityCount = Math.max(2, Math.floor(numChunks * 0.20));
         for (let p = 0; p < parityCount; p++) {
             // Use better XOR combinations - pair chunks that are further apart
@@ -540,13 +548,39 @@ class ErikrafTQRScanner {
             }
 
             if (!this.meta) {
+                // Security: Validate payload values before using them
+                const totalSize = typeof payload.sz === 'number' && payload.sz > 0 && payload.sz < 100 * 1024 * 1024 
+                    ? payload.sz 
+                    : 0; // Max 100MB
+                const numChunks = typeof payload.n === 'number' && payload.n > 0 && payload.n < 10000 
+                    ? payload.n 
+                    : 0; // Max 10000 chunks
+                const chunkIndex = typeof payload.i === 'number' && payload.i >= 0 && payload.i < numChunks 
+                    ? payload.i 
+                    : -1;
+
+                if (totalSize === 0 || numChunks === 0 || chunkIndex === -1) {
+                    console.warn('Invalid payload metadata, discarding frame');
+                    return;
+                }
+
+                // Validate file name to prevent path traversal
+                const safeName = typeof payload.name === 'string' 
+                    ? payload.name.replace(/[\/\\]/g, '_').substring(0, 255) 
+                    : 'file.bin';
+
+                // Validate MIME type
+                const safeMime = typeof payload.mime === 'string' && payload.mime.length < 256 
+                    ? payload.mime 
+                    : 'application/octet-stream';
+
                 this.meta = {
                     id: payload.id,
                     type: payload.t,
-                    name: payload.name,
-                    mime: payload.mime,
-                    totalSize: payload.sz,
-                    numChunks: payload.n,
+                    name: safeName,
+                    mime: safeMime,
+                    totalSize: totalSize,
+                    numChunks: numChunks,
                     compressed: payload.c || 0,
                     sha: payload.sha
                 };
@@ -555,6 +589,12 @@ class ErikrafTQRScanner {
             }
 
             if (payload.id !== this.meta.id) return; // ignore frame from different session
+
+            // Security: Validate chunk index against metadata
+            if (typeof payload.i !== 'number' || payload.i < 0 || payload.i >= this.meta.numChunks + 1000) {
+                console.warn('Invalid chunk index, discarding frame');
+                return;
+            }
 
             if (payload.fec) {
                 // Avoid duplicate parity frames
@@ -604,8 +644,8 @@ class ErikrafTQRScanner {
         this.state = 'Reconstructing...';
         this.onStateChange(this.state);
 
-        // Combine chunks
-        const sortedChunkBuffers = [];
+        // Security: Validate total combined length before allocation
+        const maxTotalSize = 100 * 1024 * 1024; // 100MB max
         let combinedLength = 0;
         for (let i = 0; i < this.meta.numChunks; i++) {
             const chunkBuf = this.receivedChunks.get(i);
@@ -615,8 +655,20 @@ class ErikrafTQRScanner {
                 this.stop();
                 return;
             }
-            sortedChunkBuffers.push(new Uint8Array(chunkBuf));
             combinedLength += chunkBuf.byteLength;
+            if (combinedLength > maxTotalSize) {
+                this.state = 'Data size exceeds maximum limit';
+                this.onStateChange(this.state);
+                this.stop();
+                return;
+            }
+        }
+
+        // Combine chunks
+        const sortedChunkBuffers = [];
+        for (let i = 0; i < this.meta.numChunks; i++) {
+            const chunkBuf = this.receivedChunks.get(i);
+            sortedChunkBuffers.push(new Uint8Array(chunkBuf));
         }
 
         const combinedBytes = new Uint8Array(combinedLength);
@@ -631,6 +683,15 @@ class ErikrafTQRScanner {
 
         const decompressedBuffer = await decompressBuffer(combinedBytes.buffer, this.meta.compressed);
         const finalBytes = new Uint8Array(decompressedBuffer);
+
+        // Security: Prevent decompression bomb - check if decompressed size is reasonable
+        const maxDecompressedSize = 500 * 1024 * 1024; // 500MB max after decompression
+        if (finalBytes.length > maxDecompressedSize) {
+            this.state = 'Decompressed data exceeds maximum limit';
+            this.onStateChange(this.state);
+            this.stop();
+            return;
+        }
 
         // If decompressed buffer size exceeds meta.totalSize (due to padding), slice to exact totalSize
         const exactBytes = finalBytes.length > this.meta.totalSize
@@ -698,17 +759,6 @@ if (typeof globalThis !== 'undefined') {
     globalThis.compressBuffer = compressBuffer;
     globalThis.decompressBuffer = decompressBuffer;
 }
-
-export {
-    ErikrafTQRTransmitter,
-    ErikrafTQRScanner,
-    crc32,
-    sha256Buffer,
-    bufferToBase64,
-    base64ToBuffer,
-    compressBuffer,
-    decompressBuffer
-};
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {

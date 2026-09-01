@@ -3599,10 +3599,11 @@ class QRScannerDialog extends Dialog {
 class AnimatedQRSendDialog extends Dialog {
     constructor() {
         super('animated-qr-send-dialog');
-        // Remove peer-disconnected listener since QR transfer doesn't involve peer connections
-        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
+        // QR transfer doesn't involve peer connections, so correspondingPeerId will never be set
+        // and _onPeerDisconnected will not close this dialog
         this.$composeView = this.$el.querySelector('#qr-send-compose-view');
         this.$activeView = this.$el.querySelector('#qr-send-active-view');
+        this.$activeButtons = this.$el.querySelector('#qr-send-active-buttons');
 
         // Text composition elements
         this.$textContainer = this.$el.querySelector('#qr-send-text-container');
@@ -3778,6 +3779,10 @@ class AnimatedQRSendDialog extends Dialog {
             this.$activeView.setAttribute('hidden', '');
             this.$activeView.style.display = 'none';
         }
+        if (this.$activeButtons) {
+            this.$activeButtons.setAttribute('hidden', '');
+            this.$activeButtons.style.display = 'none';
+        }
 
         if (this.mode === 'text') {
             if (this.$textContainer) {
@@ -3833,6 +3838,10 @@ class AnimatedQRSendDialog extends Dialog {
         if (this.$activeView) {
             this.$activeView.removeAttribute('hidden');
             this.$activeView.style.display = 'flex';
+        }
+        if (this.$activeButtons) {
+            this.$activeButtons.removeAttribute('hidden');
+            this.$activeButtons.style.display = 'flex';
         }
 
         const currentFps = this.$fpsSlider ? (parseInt(this.$fpsSlider.value, 10) || 6) : 6;
@@ -3892,8 +3901,8 @@ class AnimatedQRSendDialog extends Dialog {
 class AnimatedQRMainDialog extends Dialog {
     constructor() {
         super('animated-qr-main-dialog');
-        // Remove peer-disconnected listener since QR transfer doesn't involve peer connections
-        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
+        // QR transfer doesn't involve peer connections, so correspondingPeerId will never be set
+        // and _onPeerDisconnected will not close this dialog
         this.$sendFileBtn = this.$el.querySelector('#animated-qr-send-file-btn');
         this.$sendTextBtn = this.$el.querySelector('#animated-qr-send-text-btn');
         this.$receiveBtn = this.$el.querySelector('#animated-qr-receive-btn');
@@ -3947,8 +3956,8 @@ class AnimatedQRMainDialog extends Dialog {
 class AnimatedQRReceiveDialog extends Dialog {
     constructor() {
         super('animated-qr-receive-dialog');
-        // Remove peer-disconnected listener since QR transfer doesn't involve peer connections
-        Events.off('peer-disconnected', e => this._onPeerDisconnected(e.detail));
+        // QR transfer doesn't involve peer connections, so correspondingPeerId will never be set
+        // and _onPeerDisconnected will not close this dialog
         this.$video = this.$el.querySelector('#qr-scanner-video');
         this.$state = this.$el.querySelector('#qr-receive-state');
         this.$progressBar = this.$el.querySelector('#qr-receive-progress-bar');
