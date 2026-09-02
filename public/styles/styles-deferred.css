@@ -895,10 +895,10 @@ x-dialog .dialog-subheader {
 }
 
 #qr-send-canvas-container {
-    width: 300px;
-    height: 300px;
+    width: 260px;
+    height: 260px;
     max-width: 100%;
-    max-height: 300px;
+    max-height: 260px;
 }
 
 /* QR Receive Dialog */
@@ -919,10 +919,10 @@ x-dialog .dialog-subheader {
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
     #qr-send-canvas-container {
-        width: 250px;
-        height: 250px;
-        max-width: 90vw;
-        max-height: 90vw;
+        width: 220px;
+        height: 220px;
+        max-width: 85vw;
+        max-height: 85vw;
     }
 
     #qr-scanner-video,
