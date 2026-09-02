@@ -3430,7 +3430,7 @@ class QRScannerDialog extends Dialog {
 
     async startCamera() {
         this.scanning = true;
-        if (this.$status) this.$status.textContent = 'Iniciando câmera...';
+        if (this.$status) this.$status.textContent = Localization.getTranslation('dialogs.camera-starting');
 
         if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
             try {
@@ -3480,11 +3480,11 @@ class QRScannerDialog extends Dialog {
 
                     try {
                         await this.$video.play();
-                        if (this.$status) this.$status.textContent = 'Procurando QR Code...';
+                        if (this.$status) this.$status.textContent = Localization.getTranslation('dialogs.camera-searching');
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
                         if (this.$status) {
-                            this.$status.textContent = 'Erro ao reproduzir vídeo. Cole o link manualmente abaixo:';
+                            this.$status.textContent = Localization.getTranslation('dialogs.camera-error-play');
                         }
                         if (this.$input) this.$input.focus();
                         return;
@@ -3496,14 +3496,14 @@ class QRScannerDialog extends Dialog {
                     const isPermissionError = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
                     this.$status.textContent = isPermissionError
                         ? 'Acesso à câmera negado. Cole o link manualmente abaixo:'
-                        : 'Câmera indisponível. Cole o link manualmente abaixo:';
+                        : Localization.getTranslation('dialogs.camera-unavailable');
                 }
                 if (this.$input) this.$input.focus();
                 return;
             }
         } else {
             if (this.$status) {
-                this.$status.textContent = 'Câmera não suportada. Cole o link manualmente abaixo:';
+                this.$status.textContent = Localization.getTranslation('dialogs.camera-unsupported');
             }
             if (this.$input) this.$input.focus();
             return;
@@ -3644,7 +3644,7 @@ class AnimatedQRSendDialog extends Dialog {
             this.$textInput.addEventListener('input', () => {
                 const len = this.$textInput.value.length;
                 if (this.$charCount) {
-                    this.$charCount.textContent = `${len} ${Localization.getTranslation('dialogs.characters') || 'caracteres'}`;
+            this.$charCount.textContent = `${len} ${Localization.getTranslation('dialogs.characters') || 'characters'}`;
                 }
             });
         }
@@ -3886,7 +3886,7 @@ class AnimatedQRSendDialog extends Dialog {
         this.stopTransmitter();
         // Clean up UI elements
         if (this.$textInput) this.$textInput.value = '';
-        if (this.$charCount) this.$charCount.textContent = '0 caracteres';
+        if (this.$charCount) this.$charCount.textContent = `0 ${Localization.getTranslation('dialogs.characters') || 'characters'}`;
         this.selectedFile = null;
         if (this.$selectedCard) {
             this.$selectedCard.setAttribute('hidden', '');
@@ -3978,8 +3978,8 @@ class AnimatedQRReceiveDialog extends Dialog {
             this.$completeContainer.style.display = 'none';
         }
         if (this.$progressBar) this.$progressBar.value = 0;
-        if (this.$framesCount) this.$framesCount.textContent = 'Frames recebidos: 0';
-        if (this.$dataSize) this.$dataSize.textContent = 'Dados: 0 KB';
+        if (this.$framesCount) this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames-received')}: 0`;
+        if (this.$dataSize) this.$dataSize.textContent = `${Localization.getTranslation('dialogs.data')}: 0 KB`;
         if (this.$fileInfo) {
             this.$fileInfo.textContent = '';
             this.$fileInfo.classList.remove('visible');
@@ -4000,10 +4000,10 @@ class AnimatedQRReceiveDialog extends Dialog {
                 }
                 if (this.$progressBar) this.$progressBar.value = p.pct;
                 if (this.$framesCount) {
-                    this.$framesCount.textContent = `Frames: ${p.received}/${p.total}`;
+                    this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames-received')}: ${p.received}/${p.total}`;
                 }
                 if (this.$dataSize) {
-                    this.$dataSize.textContent = `Dados: ${Util.formatBytes(p.recoveredBytes || 0)} / ${Util.formatBytes(p.size || 0)}`;
+                    this.$dataSize.textContent = `${Localization.getTranslation('dialogs.data')}: ${Util.formatBytes(p.recoveredBytes || 0)} / ${Util.formatBytes(p.size || 0)}`;
                 }
             },
             onComplete: (res) => {
@@ -4012,14 +4012,14 @@ class AnimatedQRReceiveDialog extends Dialog {
                     this.$completeContainer.style.display = 'flex';
                 }
                 if (this.$completeFilename) {
-                    this.$completeFilename.textContent = res.name || (res.type === 'text' ? 'Texto Recebido' : 'Arquivo');
+                    this.$completeFilename.textContent = res.name || (res.type === 'text' ? Localization.getTranslation('dialogs.text-received') : Localization.getTranslation('dialogs.file'));
                 }
                 if (this.$completeSha) {
                     this.$completeSha.textContent = `SHA-256: ${res.sha || 'Verificado'}`;
                 }
 
                 if (this.$actionBtn) {
-                    this.$actionBtn.textContent = res.type === 'text' ? 'Copiar Texto' : 'Baixar Arquivo';
+                    this.$actionBtn.textContent = res.type === 'text' ? Localization.getTranslation('dialogs.animated-qr-copy-text') : Localization.getTranslation('dialogs.animated-qr-download-file');
                     const newBtn = this.$actionBtn.cloneNode(true);
                     this.$actionBtn.parentNode.replaceChild(newBtn, this.$actionBtn);
                     this.$actionBtn = newBtn;
@@ -4029,7 +4029,7 @@ class AnimatedQRReceiveDialog extends Dialog {
                             if (navigator.clipboard && navigator.clipboard.writeText) {
                                 navigator.clipboard.writeText(res.text);
                                 if (window.erikrafTdrop && window.erikrafTdrop.toast) {
-                                    window.erikrafTdrop.toast.show('Texto copiado com sucesso');
+                                    window.erikrafTdrop.toast.show(Localization.getTranslation('dialogs.animated-qr-text-copied'));
                                 }
                             }
                             Events.fire('text-received', { text: res.text, peerId: 'QR' });
@@ -4057,8 +4057,8 @@ class AnimatedQRReceiveDialog extends Dialog {
         }
         // Clean up UI elements
         if (this.$progressBar) this.$progressBar.value = 0;
-        if (this.$framesCount) this.$framesCount.textContent = 'Frames recebidos: 0';
-        if (this.$dataSize) this.$dataSize.textContent = 'Dados: 0 KB';
+        if (this.$framesCount) this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames-received')}: 0`;
+        if (this.$dataSize) this.$dataSize.textContent = `${Localization.getTranslation('dialogs.data')}: 0 KB`;
         if (this.$fileInfo) {
             this.$fileInfo.textContent = '';
             this.$fileInfo.classList.remove('visible');
@@ -4067,7 +4067,7 @@ class AnimatedQRReceiveDialog extends Dialog {
             this.$completeContainer.setAttribute('hidden', '');
             this.$completeContainer.style.display = 'none';
         }
-        if (this.$state) this.$state.textContent = 'Procurando QR Code...';
+        if (this.$state) this.$state.textContent = Localization.getTranslation('dialogs.camera-searching');
         super.hide();
     }
 }
@@ -4081,7 +4081,7 @@ class ExifDialog extends Dialog {
 
     displayExif(infoText, canRemove = false, onRemove = null) {
         if (this.$content) {
-            this.$content.innerText = infoText || Localization.getTranslation('dialogs.metadata-none', 'No metadata found.');
+            this.$content.innerText = infoText || Localization.getTranslation('dialogs.metadata-none');
         }
 
         if (canRemove && typeof onRemove === 'function') {
@@ -5128,7 +5128,7 @@ class ChatUI {
         else {
             media = document.createElement('img');
             media.src = attachment.dataUrl;
-            media.alt = attachment.name || Localization.getTranslation('title-file');
+            media.alt = attachment.name || Localization.getTranslation('dialogs.title-file');
         }
 
         wrapper.appendChild(media);
@@ -5138,13 +5138,13 @@ class ChatUI {
 
         const nameSpan = document.createElement('span');
         nameSpan.className = 'chat-attachment-name';
-        nameSpan.innerText = attachment.name || Localization.getTranslation('title-file');
+        nameSpan.innerText = attachment.name || Localization.getTranslation('dialogs.title-file');
 
         const download = document.createElement('a');
         download.className = 'chat-download btn btn-small btn-rounded';
         download.href = attachment.dataUrl;
         download.download = attachment.name || 'attachment';
-        const downloadLabel = Localization.getTranslation('download');
+        const downloadLabel = Localization.getTranslation('dialogs.download');
         download.setAttribute('title', downloadLabel);
         download.setAttribute('aria-label', downloadLabel);
 

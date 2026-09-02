@@ -25,7 +25,19 @@
         "animated-qr_title": "Transfer via Animated QR",
         "animated-qr": {
             "title": "Transfer via Animated QR"
-        }
+        },
+        "scan-qr_aria-label": "Scan QR Code",
+        "animated-qr_aria-label": "Transfer via Animated QR",
+        "webchat_title": "WebChat",
+        "webchat_aria-label": "WebChat",
+        "android_title": "Download APK",
+        "android_aria-label": "Download APK",
+        "bluetooth_title": "Bluetooth",
+        "browseros_title": "BrowserOS",
+        "cloud_title": "Cloud Upload",
+        "comet_title": "Comet Browser",
+        "discord_title": "Discord",
+        "limewire_title": "LimeWire"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Release to select recipient",
@@ -66,7 +78,8 @@
         "routed": "routed through the server",
         "webrtc": "if WebRTC is not available.",
         "add-profile-photo": "Add Profile Photo",
-        "lan": "LAN"
+        "lan": "LAN",
+        "lan_title": "Local Area Network mode"
     },
     "dialogs": {
         "tor-title": "Tor Network (Onion Service)",
@@ -163,7 +176,68 @@
         "animated-qr-send-title": "Transfer via Animated QR Code",
         "animated-qr-instruction": "Point the other device's camera at this QR Code.",
         "animated-qr-speed-label": "Speed (FPS):",
-        "animated-qr-receive-title": "Receive via Animated QR Code"
+        "animated-qr-receive-title": "Receive via Animated QR Code",
+        "animated-qr-title": "Animated QR Transfer",
+        "animated-qr-send-section": "Send",
+        "animated-qr-send-description": "Send files or text through animated QR codes.",
+        "animated-qr-send-file": "Send File",
+        "animated-qr-send-text": "Send Text",
+        "animated-qr-receive-section": "Receive",
+        "animated-qr-receive-description": "Point your camera at the sender's screen.",
+        "animated-qr-receive-action": "Receive",
+        "animated-qr-enter-text": "Type or paste text here:",
+        "animated-qr-paste-text": "Paste",
+        "animated-qr-file-dropzone": "Drag a file or click below",
+        "animated-qr-select-file": "Select File",
+        "animated-qr-remove-file": "Remove File",
+        "animated-qr-start-transfer": "Start Transfer",
+        "animated-qr-pause": "Pause",
+        "animated-qr-resume": "Resume",
+        "animated-qr-back": "Back",
+        "animated-qr-searching": "Searching for QR Code...",
+        "animated-qr-retry": "Try Again",
+        "animated-qr-transfer-complete": "✓ Transfer Complete",
+        "animated-qr-copy-text": "Copy Text",
+        "animated-qr-download-file": "Download File",
+        "animated-qr-text-copied": "Text copied successfully",
+        "animated-qr-select-file-err": "Please select a file first.",
+        "animated-qr-enter-text-err": "Please enter text first.",
+        "characters": "characters",
+        "frames": "Frames",
+        "frames-received": "Received frames",
+        "speed": "Speed",
+        "data": "Data",
+        "text-received": "Received Text",
+        "file": "File",
+        "qr-scanner-searching": "Searching for QR Code...",
+        "open": "Open",
+        "send_title": "Send",
+        "send_aria-label": "Send",
+        "metadata-none": "No metadata found.",
+        "cloud-upload-title": "Cloud Upload",
+        "cloud-upload-file-label": "Select file to upload:",
+        "cloud-upload-link-label": "Download link:",
+        "cloud-upload-copy": "Copy Link",
+        "cloud-upload-send": "Upload File",
+        "cloud-upload-expiry-label": "Expires in:",
+        "cloud-upload-expiry-1h": "1 hour",
+        "cloud-upload-expiry-3h": "3 hours",
+        "cloud-upload-expiry-5h": "5 hours",
+        "cloud-upload-expiry-1d": "1 day",
+        "camera-starting": "Starting camera...",
+        "camera-searching": "Searching for QR Code...",
+        "camera-error-play": "Error playing video. Paste link manually below:",
+        "camera-unavailable": "Camera unavailable. Paste link manually below:",
+        "camera-unsupported": "Camera not supported. Paste link manually below:",
+        "moderation-warning-title": "Are you sure you want to view?",
+        "moderation-warning-message": "This content has been flagged as inappropriate. Reveal only if you are sure.",
+        "moderation-no": "No",
+        "moderation-yes": "Yes",
+        "explicit-content-detected": "Explicit Content Detected",
+        "spam-content-detected": "Possible Spam/Scam Detected",
+        "offensive-content-detected": "Offensive Content Detected",
+        "publish-instagram": "Publish to Instagram",
+        "publish-youtube": "Publish to YouTube"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",
@@ -175,7 +249,9 @@
         "bluesky_title": "Follow us on BlueSky",
         "custom_title": "Follow us",
         "privacypolicy_title": "Open our privacy policy",
-        "faq_title": "Frequently asked questions"
+        "faq_title": "Frequently asked questions",
+        "instagram_title": "ErikrafT Drop™ on Instagram",
+        "threads_title": "ErikrafT Drop™ on Threads"
     },
     "notifications": {
         "display-name-changed-permanently": "Display name is changed permanently",
@@ -226,7 +302,8 @@
         "message-transfer-completed": "Message transfer completed",
         "unfinished-transfers-warning": "There are unfinished transfers. Are you sure you want to close ErikrafT Drop™?",
         "rate-limit-join-key": "Rate limit reached. Wait 10 seconds and try again.",
-        "selected-peer-left": "Selected peer left"
+        "selected-peer-left": "Selected peer left",
+        "processing": "Processing…"
     },
     "document-titles": {
         "file-received": "File Received",
@@ -249,7 +326,8 @@
         "external": "Go to website"
     },
     "site": {
-        "biodrop": "Site"
+        "biodrop": "Site",
+        "biodrop_title": "BioDrop"
     },
     "chat": {
         "room_local": "Local network",
@@ -262,6 +340,15 @@
         "close_title": "Close chat",
         "room_select_title": "Chat room",
         "discover_paired": "Between paired devices",
-        "discovery": "You can be discovered:"
-    }
+        "discovery": "You can be discovered:",
+        "discover_paired_title": "Between paired devices",
+        "close_title_aria-label": "Close chat",
+        "close_title_title": "Close chat",
+        "room_select_title_aria-label": "Chat room"
+    },
+    "share": "Share",
+    "share_title": "Share",
+    "share_aria-label": "Share",
+    "download": "Download",
+    "title-file": "File"
 }

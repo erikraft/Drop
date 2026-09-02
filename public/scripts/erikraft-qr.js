@@ -28,7 +28,11 @@ const crc32Table = (() => {
 })();
 
 async function sha256Buffer(buffer) {
-    const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    const bytes = buffer instanceof Uint8Array
+        ? buffer
+        : (ArrayBuffer.isView(buffer)
+            ? new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength)
+            : new Uint8Array(buffer));
     if (typeof crypto !== 'undefined' && crypto.subtle && typeof crypto.subtle.digest === 'function') {
         const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -428,7 +432,6 @@ class ErikrafTQRScanner {
         } else {
             this.state = 'Câmera não suportada';
             this.onStateChange(this.state);
-            this.stop();
             return;
         }
         this._scanLoop();
@@ -539,8 +542,8 @@ class ErikrafTQRScanner {
         }
     }
 
-    _processRawData(raw) {
-        if (!raw || typeof raw !== 'string' || !raw.startsWith('{"h":"EKQR"')) return;
+    async _processRawData(raw) {
+        if (!this.scanning || !raw || typeof raw !== 'string' || !raw.startsWith('{"h":"EKQR"')) return;
 
         try {
             const payload = JSON.parse(raw);
@@ -560,7 +563,7 @@ class ErikrafTQRScanner {
                 const numChunks = typeof payload.n === 'number' && payload.n > 0 && payload.n < 10000 
                     ? payload.n 
                     : 0; // Max 10000 chunks
-                const chunkIndex = typeof payload.i === 'number' && payload.i >= 0 && payload.i < numChunks 
+                const chunkIndex = typeof payload.i === 'number' && payload.i >= 0 && payload.i < numChunks + 1000
                     ? payload.i 
                     : -1;
 
@@ -637,7 +640,7 @@ class ErikrafTQRScanner {
             });
 
             if (receivedCount >= this.meta.numChunks) {
-                return this._finishReconstruction();
+                return await this._finishReconstruction();
             }
         } catch (e) {
             // invalid JSON frame, ignore
@@ -706,7 +709,7 @@ class ErikrafTQRScanner {
         this.state = 'Verifying integrity...';
         this.onStateChange(this.state);
 
-        const calculatedSha = await sha256Buffer(exactBytes.buffer);
+        const calculatedSha = await sha256Buffer(exactBytes);
         if (calculatedSha.toLowerCase() !== this.meta.sha.toLowerCase()) {
             this.state = 'Integrity check failed';
             this.onStateChange(this.state);
@@ -716,9 +719,10 @@ class ErikrafTQRScanner {
 
         this.state = 'Transfer completed';
         this.onStateChange(this.state);
+        const meta = this.meta;
         this.stop();
 
-        if (this.meta.type === 'text') {
+        if (meta.type === 'text') {
             const text = new TextDecoder().decode(exactBytes);
             this.onComplete({
                 type: 'text',
@@ -726,16 +730,16 @@ class ErikrafTQRScanner {
                 sha: calculatedSha
             });
         } else {
-            const blob = typeof Blob !== 'undefined' ? new Blob([exactBytes], { type: this.meta.mime }) : exactBytes;
+            const blob = typeof Blob !== 'undefined' ? new Blob([exactBytes], { type: meta.mime }) : exactBytes;
             const file = typeof File !== 'undefined' && typeof Blob !== 'undefined'
-                ? new File([blob], this.meta.name, { type: this.meta.mime })
-                : { buffer: exactBytes.buffer, name: this.meta.name, type: this.meta.mime, size: exactBytes.byteLength };
+                ? new File([blob], meta.name, { type: meta.mime })
+                : { buffer: exactBytes.buffer, name: meta.name, type: meta.mime, size: exactBytes.byteLength };
 
             this.onComplete({
                 type: 'file',
                 file: file,
-                name: this.meta.name,
-                mime: this.meta.mime,
+                name: meta.name,
+                mime: meta.mime,
                 buffer: exactBytes.buffer,
                 sha: calculatedSha
             });
@@ -777,3 +781,14 @@ if (typeof module !== 'undefined' && module.exports) {
         decompressBuffer
     };
 }
+
+export {
+    ErikrafTQRTransmitter,
+    ErikrafTQRScanner,
+    crc32,
+    sha256Buffer,
+    bufferToBase64,
+    base64ToBuffer,
+    compressBuffer,
+    decompressBuffer
+};
