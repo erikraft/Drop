@@ -2,7 +2,7 @@
  * Reusable QR Code Helper utilizing qr-code-styling.
  * Standardizes the design, error correction, and logo centralisation
  * for ErikrafT Drop™ permanent pairing and temporary public rooms.
- * 
+ *
  * OPTIMIZED FOR ANIMATED QR:
  * - Renders QR immediately without waiting for logo
  * - Logo is optional enhancement, never blocks QR appearance
@@ -80,7 +80,7 @@ class ErikrafTDropQR {
         // Create new instance and render
         const qrCode = new QRCodeStyling(baseConfig);
         container._qrInstance = qrCode;
-        
+
         // Efficient DOM update: replace content without full clear if possible
         // This minimizes visual flickering
         if (container.firstChild) {
@@ -100,7 +100,7 @@ class ErikrafTDropQR {
      */
     static async _tryLoadLogoInBackground(container, options = {}) {
         const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
-        
+
         try {
             // Check if logo exists by attempting to load it
             const response = await fetch(logoPath);
