@@ -585,14 +585,14 @@ class ErikrafTQRScanner {
 
             if (!this.meta) {
                 // Security: Validate payload values before using them
-                const totalSize = typeof payload.sz === 'number' && payload.sz > 0 && payload.sz < 100 * 1024 * 1024 
-                    ? payload.sz 
+                const totalSize = typeof payload.sz === 'number' && payload.sz > 0 && payload.sz < 100 * 1024 * 1024
+                    ? payload.sz
                     : 0; // Max 100MB
-                const numChunks = typeof payload.n === 'number' && payload.n > 0 && payload.n < 10000 
-                    ? payload.n 
+                const numChunks = typeof payload.n === 'number' && payload.n > 0 && payload.n < 10000
+                    ? payload.n
                     : 0; // Max 10000 chunks
                 const chunkIndex = typeof payload.i === 'number' && payload.i >= 0 && payload.i < numChunks + 1000
-                    ? payload.i 
+                    ? payload.i
                     : -1;
 
                 if (totalSize === 0 || numChunks === 0 || chunkIndex === -1) {
@@ -601,13 +601,13 @@ class ErikrafTQRScanner {
                 }
 
                 // Validate file name to prevent path traversal
-                const safeName = typeof payload.name === 'string' 
-                    ? payload.name.replace(/[\/\\]/g, '_').substring(0, 255) 
+                const safeName = typeof payload.name === 'string'
+                    ? payload.name.replace(/[\/\\]/g, '_').substring(0, 255)
                     : 'file.bin';
 
                 // Validate MIME type
-                const safeMime = typeof payload.mime === 'string' && payload.mime.length < 256 
-                    ? payload.mime 
+                const safeMime = typeof payload.mime === 'string' && payload.mime.length < 256
+                    ? payload.mime
                     : 'application/octet-stream';
 
                 this.meta = {
