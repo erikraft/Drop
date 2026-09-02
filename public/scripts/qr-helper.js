@@ -61,8 +61,10 @@ class ErikrafTDropQR {
             return null;
         }
 
+        const showLogo = options.logo !== false && options.withLogo !== false;
         const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
-        if (!this._logoState.attempted) {
+
+        if (showLogo && !this._logoState.attempted) {
             this._ensureLogoLoaded(logoPath);
         }
 
@@ -107,7 +109,7 @@ class ErikrafTDropQR {
             }
         };
 
-        if (this._logoState.available) {
+        if (showLogo && this._logoState.available) {
             baseConfig.image = this._logoState.path;
             baseConfig.imageOptions = {
                 hideBackgroundDots: true,
