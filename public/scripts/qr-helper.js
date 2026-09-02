@@ -2,7 +2,7 @@
  * Reusable QR Code Helper utilizing qr-code-styling.
  * Standardizes the design, error correction, and logo centralisation
  * for ErikrafT Drop™ permanent pairing and temporary public rooms.
- * 
+ *
  * OPTIMIZED FOR ANIMATED QR:
  * - Renders QR immediately without waiting for logo
  * - Logo is optional enhancement, never blocks QR appearance
