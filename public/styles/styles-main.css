@@ -1759,60 +1759,13 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     }
 }
 
-/* Dialog container limits & structural layout */
+/* Dialog container limits */
 .erikraft-qr-paper {
     max-width: 520px !important;
     width: 92% !important;
     max-height: 90vh;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 24px !important;
-    gap: 16px;
     overflow-y: auto;
     box-sizing: border-box;
-}
-
-.erikraft-qr-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding-bottom: 4px;
-}
-
-.erikraft-qr-body {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.erikraft-qr-actions {
-    display: flex;
-    align-items: center;
-    padding-top: 8px;
-}
-
-.erikraft-qr-file-info {
-    color: var(--primary-color, #15acbd);
-    margin-bottom: 4px;
-}
-
-.erikraft-qr-instruction {
-    line-height: 1.4;
-}
-
-.erikraft-qr-speed-control {
-    width: 100%;
-    margin-top: 4px;
-}
-
-.erikraft-qr-slider {
-    flex: 1;
-    min-width: 0;
-}
-
-.min-w-40 {
-    min-width: 48px;
 }
 
 .erikraft-qr-card-send {
