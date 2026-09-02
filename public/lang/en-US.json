@@ -163,7 +163,9 @@
         "animated-qr-send-title": "Transfer via Animated QR Code",
         "animated-qr-instruction": "Point the other device's camera at this QR Code.",
         "animated-qr-speed-label": "Speed (FPS):",
-        "animated-qr-receive-title": "Receive via Animated QR Code"
+        "animated-qr-receive-title": "Receive via Animated QR Code",
+        "animated-qr-file-selected": "Selected file",
+        "animated-qr-change-file": "Change File"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

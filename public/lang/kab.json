@@ -32,7 +32,9 @@
         "cancel": "Sefsex",
         "metadata-exif": "Inɣmis (EXIF)",
         "compress": "Kemmed",
-        "edit-ai": "Edit with AI"
+        "edit-ai": "Edit with AI",
+        "animated-qr-file-selected": "Selected file",
+        "animated-qr-change-file": "Change File"
     },
     "about": {
         "github_title": "ErikrafT Drop™ deg GitHub",

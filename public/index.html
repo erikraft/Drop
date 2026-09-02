@@ -1501,24 +1501,32 @@
         </form>
     </x-dialog>
     <!-- Ecosystem QR Scanner Dialog -->
-    <x-dialog id="qr-scanner-dialog">
+    <x-dialog id="qr-scanner-dialog" class="erikraft-qr-dialog">
         <x-background class="full center">
-            <x-paper shadow="2" style="max-width: 500px; width: 90%;">
+            <x-paper shadow="2" class="erikraft-qr-paper">
                 <div class="row center p-2">
                     <h2 class="dialog-title" data-i18n-key="dialogs.qr-scanner-title">Escanear QR Code</h2>
                 </div>
-                <div class="column center p-2">
-                    <div style="position: relative; width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
-                        <video id="qr-scanner-main-video" playsinline autoplay muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <div class="column center p-2 gap-2">
+                    <div class="erikraft-qr-camera-wrapper">
+                        <video id="qr-scanner-main-video" playsinline autoplay muted></video>
+                        <div class="erikraft-qr-scan-frame">
+                            <div class="erikraft-qr-corner top-left"></div>
+                            <div class="erikraft-qr-corner top-right"></div>
+                            <div class="erikraft-qr-corner bottom-left"></div>
+                            <div class="erikraft-qr-corner bottom-right"></div>
+                        </div>
                     </div>
-                    <div id="qr-scanner-main-status" class="font-body2 text-center mt-2" data-i18n-key="dialogs.qr-scanner-status-searching">Procurando QR Code...</div>
+                    <div id="qr-scanner-main-status" class="font-body2 text-center text-secondary bold" data-i18n-key="dialogs.qr-scanner-status-searching">Procurando QR Code...</div>
 
-                    <div class="divider my-2 fw" style="border-top: 1px solid rgba(255,255,255,0.1);"></div>
+                    <div class="erikraft-qr-divider"></div>
 
-                    <div class="column fw">
+                    <div class="column fw gap-1">
                         <label for="qr-scanner-manual-input" class="font-caption text-secondary" data-i18n-key="dialogs.qr-scanner-manual-label">Ou cole o conteúdo/URL do QR Code:</label>
-                        <input type="text" id="qr-scanner-manual-input" class="fw textarea mt-1" placeholder="https://drop.erikraft.com/..." autocomplete="off">
-                        <button id="qr-scanner-manual-submit" class="btn btn-rounded btn-primary mt-2" type="button" data-i18n-key="dialogs.qr-scanner-process">Processar</button>
+                        <div class="erikraft-qr-manual-input-wrapper">
+                            <input type="text" id="qr-scanner-manual-input" class="erikraft-qr-input" placeholder="https://drop.erikraft.com/..." autocomplete="off">
+                            <button id="qr-scanner-manual-submit" class="btn btn-rounded btn-primary" type="button" data-i18n-key="dialogs.qr-scanner-process">Processar</button>
+                        </div>
                     </div>
                 </div>
                 <div class="btn-row row-reverse wrap gap-2 p-2">
@@ -1602,20 +1610,28 @@
                         </div>
 
                         <!-- File composition container -->
-                        <div id="qr-send-file-container" class="column center fw p-3" style="border: 2px dashed rgba(21, 172, 189, 0.4); border-radius: 12px; background: rgba(21, 172, 189, 0.05); min-height: 120px; transition: all 0.3s ease;">
-                            <div id="qr-send-file-picker-wrapper" class="column center">
+                        <div id="qr-send-file-container" class="column fw">
+                            <input type="file" id="qr-send-file-input" style="display: none;">
+
+                            <div id="qr-send-file-picker-wrapper" class="erikraft-qr-dropzone">
+                                <div class="erikraft-qr-dropzone-icon">📁</div>
                                 <div class="font-body2 text-center text-secondary mb-2" data-i18n-key="dialogs.animated-qr-file-dropzone">Arraste um arquivo ou clique abaixo</div>
                                 <button id="qr-send-select-file-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-select-file">Selecionar Arquivo</button>
                             </div>
-                            <div id="qr-send-file-selected-card" class="column fw gap-2 p-3" hidden style="background: rgba(21, 172, 189, 0.15); border-radius: 12px; border: 2px solid rgba(21, 172, 189, 0.5); box-shadow: 0 2px 8px rgba(21, 172, 189, 0.2);">
-                                <div class="row center gap-2">
-                                    <div class="font-body1 bold text-success" style="font-size: 32px; min-width: 40px; text-align: center;">✓</div>
-                                    <div class="column fw">
-                                        <div id="qr-send-selected-filename" class="font-body1 bold word-break" style="color: var(--primary-color, #15acbd);">file.txt</div>
+
+                            <div id="qr-send-file-selected-card" class="erikraft-qr-selected-card" hidden>
+                                <div class="erikraft-qr-selected-header">
+                                    <div class="erikraft-qr-badge-icon">✓</div>
+                                    <div class="column fw overflow-hidden">
+                                        <div class="font-caption text-secondary uppercase bold" data-i18n-key="dialogs.animated-qr-file-selected">Arquivo selecionado</div>
+                                        <div id="qr-send-selected-filename" class="font-body1 bold erikraft-qr-filename">file.txt</div>
                                         <div id="qr-send-selected-filesize" class="font-caption text-secondary">0 KB</div>
                                     </div>
                                 </div>
-                                <button id="qr-send-remove-file-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-remove-file">Remover Arquivo</button>
+                                <div class="erikraft-qr-card-actions">
+                                    <button id="qr-send-change-file-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-change-file">Alterar Arquivo</button>
+                                    <button id="qr-send-remove-file-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-remove-file">Remover Arquivo</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1632,13 +1648,10 @@
                         <div id="qr-send-file-info" class="font-body2 text-center bold" style="color: var(--primary-color, #15acbd);"></div>
                         
                         <!-- Large QR Container - Central and prominent with proper sizing -->
-                        <div id="qr-send-canvas-container" class="center" style="background: #fff; padding: 20px; border-radius: 16px; width: 300px; height: 300px; max-width: 100%; max-height: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; overflow: hidden;"></div>
+                        <div id="qr-send-canvas-container" class="erikraft-qr-canvas-box"></div>
 
                         <div class="fw column gap-1">
-                            <div class="row row-between font-body2 text-secondary mb-1">
-                                <span id="qr-send-file-info" class="bold" style="color: var(--primary-color, #15acbd);"></span>
-                            </div>
-                            <progress id="qr-send-progress-bar" value="0" max="100" class="fw" style="height: 16px; border-radius: 8px; overflow: hidden;"></progress>
+                            <progress id="qr-send-progress-bar" value="0" max="100" class="fw erikraft-qr-progress"></progress>
                             <div class="row row-between font-caption text-secondary">
                                 <span id="qr-send-frames-count">Frames: 0/0</span>
                                 <span id="qr-send-fps-speed">Velocidade: 6 FPS</span>
@@ -1665,40 +1678,37 @@
     </x-dialog>
 
     <!-- Animated QR Receive Dialog -->
-    <x-dialog id="animated-qr-receive-dialog">
+    <x-dialog id="animated-qr-receive-dialog" class="erikraft-qr-dialog">
         <x-background class="full center">
-            <x-paper shadow="2" style="max-width: 600px; width: 90%;">
+            <x-paper shadow="2" class="erikraft-qr-paper">
                 <div class="row center p-2">
                     <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber por QR Code Animado</h2>
                 </div>
                 <div class="row center p-2">
                     <div class="column fw">
-                        <div id="qr-receive-scanner-view" class="column center fw">
+                        <div id="qr-receive-scanner-view" class="column center fw gap-2">
                             <!-- Professional camera container with proper sizing and overflow control -->
-                            <div style="position: relative; width: 100%; max-width: 480px; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
-                                <video id="qr-scanner-video" playsinline autoplay muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                            <div class="erikraft-qr-camera-wrapper">
+                                <video id="qr-scanner-video" playsinline autoplay muted></video>
                                 
                                 <!-- Scanning indicator overlay -->
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border: 2px solid rgba(21, 172, 189, 0.8); border-radius: 12px; pointer-events: none;">
-                                    <div style="position: absolute; top: -2px; left: -2px; width: 20px; height: 20px; border-top: 3px solid #15acbd; border-left: 3px solid #15acbd; border-top-left-radius: 12px;"></div>
-                                    <div style="position: absolute; top: -2px; right: -2px; width: 20px; height: 20px; border-top: 3px solid #15acbd; border-right: 3px solid #15acbd; border-top-right-radius: 12px;"></div>
-                                    <div style="position: absolute; bottom: -2px; left: -2px; width: 20px; height: 20px; border-bottom: 3px solid #15acbd; border-left: 3px solid #15acbd; border-bottom-left-radius: 12px;"></div>
-                                    <div style="position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; border-bottom: 3px solid #15acbd; border-right: 3px solid #15acbd; border-bottom-right-radius: 12px;"></div>
+                                <div class="erikraft-qr-scan-frame">
+                                    <div class="erikraft-qr-corner top-left"></div>
+                                    <div class="erikraft-qr-corner top-right"></div>
+                                    <div class="erikraft-qr-corner bottom-left"></div>
+                                    <div class="erikraft-qr-corner bottom-right"></div>
                                 </div>
                             </div>
 
-                            <div id="qr-receive-state" class="font-body2 text-center mt-2 bold" data-i18n-key="dialogs.animated-qr-searching">Procurando QR Code...</div>
+                            <div id="qr-receive-state" class="font-body2 text-center text-secondary bold" data-i18n-key="dialogs.animated-qr-searching">Procurando QR Code...</div>
 
-                            <div id="qr-receive-error-container" class="column center mt-2 p-2 fw" hidden style="background: rgba(255, 75, 75, 0.12); border-radius: 10px; border: 1px solid rgba(255, 75, 75, 0.4);">
+                            <div id="qr-receive-error-container" class="column center p-2 fw erikraft-qr-error-box" hidden>
                                 <div id="qr-receive-error-msg" class="font-caption text-center bold text-danger"></div>
                                 <button id="qr-receive-retry-btn" type="button" class="btn btn-rounded btn-grey mt-2 p-1" style="font-size: 12px;" data-i18n-key="dialogs.animated-qr-retry">Tentar novamente</button>
                             </div>
 
-                            <div class="fw mt-2 column gap-1">
-                                <div class="row row-between font-body2 text-secondary mb-1">
-                                    <span id="qr-receive-file-info" class="bold" style="color: var(--primary-color, #15acbd);"></span>
-                                </div>
-                                <progress id="qr-receive-progress-bar" value="0" max="100" class="fw" style="height: 16px; border-radius: 8px; overflow: hidden;"></progress>
+                            <div class="fw column gap-1">
+                                <progress id="qr-receive-progress-bar" value="0" max="100" class="fw erikraft-qr-progress"></progress>
                                 <div class="row row-between font-caption text-secondary">
                                     <span id="qr-receive-frames-count">Frames recebidos: 0</span>
                                     <span id="qr-receive-data-size">Dados: 0 KB</span>
@@ -1706,11 +1716,11 @@
                             </div>
                         </div>
 
-                        <div id="qr-receive-complete-container" class="column center mt-3 p-3 fw" hidden style="background: rgba(21, 172, 189, 0.12); border-radius: 12px; border: 1px solid rgba(21, 172, 189, 0.4);">
+                        <div id="qr-receive-complete-container" class="column center p-3 fw erikraft-qr-success-box" hidden>
                             <div class="bold text-success font-body1 mb-1" data-i18n-key="dialogs.animated-qr-transfer-complete">✓ Transferência Concluída</div>
                             <div id="qr-receive-complete-filename" class="font-body2 bold text-center word-break mt-1"></div>
                             <div id="qr-receive-complete-sha" class="font-caption text-secondary style-code mt-1 word-break" style="font-family: monospace; font-size: 11px;"></div>
-                            <div id="qr-receive-text-preview" class="font-body2 p-2 mt-2 fw text-center" hidden style="background: rgba(255,255,255,0.08); border-radius: 10px; max-height: 120px; overflow-y: auto; word-break: break-word; padding: 12px;"></div>
+                            <div id="qr-receive-text-preview" class="font-body2 p-2 mt-2 fw text-center erikraft-qr-text-preview" hidden></div>
                             <div class="row gap-2 mt-3 center wrap">
                                 <button id="qr-receive-action-btn" type="button" class="btn btn-rounded btn-primary">Baixar</button>
                             </div>

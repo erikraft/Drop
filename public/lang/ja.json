@@ -237,7 +237,9 @@
         "spam-content-detected": "Possible Spam/Scam Detected",
         "offensive-content-detected": "Offensive Content Detected",
         "publish-instagram": "Publish to Instagram",
-        "publish-youtube": "Publish to YouTube"
+        "publish-youtube": "Publish to YouTube",
+        "animated-qr-file-selected": "選択されたファイル",
+        "animated-qr-change-file": "ファイルを変更"
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™についてを閉じる",

@@ -38,7 +38,9 @@
         "lan-mode-title": "",
         "metadata-exif": "Metatiedot (EXIF)",
         "compress": "Pakkaa",
-        "edit-ai": "Edit with AI"
+        "edit-ai": "Edit with AI",
+        "animated-qr-file-selected": "Selected file",
+        "animated-qr-change-file": "Change File"
     },
     "site": {
         "biodrop": "Site"

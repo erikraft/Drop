@@ -237,7 +237,9 @@
         "spam-content-detected": "Possible Spam/Scam Detected",
         "offensive-content-detected": "Offensive Content Detected",
         "publish-instagram": "Publish to Instagram",
-        "publish-youtube": "Publish to YouTube"
+        "publish-youtube": "Publish to YouTube",
+        "animated-qr-file-selected": "File selezionato",
+        "animated-qr-change-file": "Cambia file"
     },
     "about": {
         "close-about_aria-label": "Chiudi Informazioni su ErikrafT Drop™",

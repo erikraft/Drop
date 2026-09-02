@@ -237,7 +237,9 @@
         "spam-content-detected": "Possible Spam/Scam Detected",
         "offensive-content-detected": "Offensive Content Detected",
         "publish-instagram": "Publish to Instagram",
-        "publish-youtube": "Publish to YouTube"
+        "publish-youtube": "Publish to YouTube",
+        "animated-qr-file-selected": "선택된 파일",
+        "animated-qr-change-file": "파일 변경"
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™에 대하여 닫기",

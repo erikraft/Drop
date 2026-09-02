@@ -3618,6 +3618,7 @@ class AnimatedQRSendDialog extends Dialog {
         this.$selectedCard = this.$el.querySelector('#qr-send-file-selected-card');
         this.$selectedFilename = this.$el.querySelector('#qr-send-selected-filename');
         this.$selectedFilesize = this.$el.querySelector('#qr-send-selected-filesize');
+        this.$changeFileBtn = this.$el.querySelector('#qr-send-change-file-btn');
         this.$removeFileBtn = this.$el.querySelector('#qr-send-remove-file-btn');
 
         this.$startBtn = this.$el.querySelector('#qr-send-start-btn');
@@ -3665,18 +3666,24 @@ class AnimatedQRSendDialog extends Dialog {
             });
         }
 
+        const openFileInput = () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '*/*';
+            fileInput.onchange = (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    this.setSelectedFile(e.target.files[0]);
+                }
+            };
+            fileInput.click();
+        };
+
         if (this.$selectFileBtn) {
-            this.$selectFileBtn.addEventListener('click', () => {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = '*/*';
-                fileInput.onchange = (e) => {
-                    if (e.target.files && e.target.files[0]) {
-                        this.setSelectedFile(e.target.files[0]);
-                    }
-                };
-                fileInput.click();
-            });
+            this.$selectFileBtn.addEventListener('click', openFileInput);
+        }
+
+        if (this.$changeFileBtn) {
+            this.$changeFileBtn.addEventListener('click', openFileInput);
         }
 
         if (this.$fileContainer) {
