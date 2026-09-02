@@ -2021,6 +2021,13 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     }
 }
 
+.row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
 /* Canvas Box */
 .erikraft-qr-canvas-box {
     background: #ffffff;

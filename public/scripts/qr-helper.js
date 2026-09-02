@@ -11,6 +11,41 @@
  */
 
 class ErikrafTDropQR {
+    static _logoState = {
+        attempted: false,
+        available: false,
+        path: 'images/icon-drop-blue.svg',
+        promise: null
+    };
+
+    /**
+     * Ensures logo is loaded once globally without blocking QR creation.
+     */
+    static async _ensureLogoLoaded(logoPath = 'images/icon-drop-blue.svg') {
+        if (this._logoState.attempted) {
+            return this._logoState.promise;
+        }
+
+        this._logoState.attempted = true;
+        this._logoState.path = logoPath;
+
+        this._logoState.promise = (async () => {
+            try {
+                const response = await fetch(logoPath);
+                if (response.ok) {
+                    this._logoState.available = true;
+                    console.log('[QR Helper] Logo loaded successfully, cached for subsequent QR frames');
+                } else {
+                    this._logoState.available = false;
+                }
+            } catch (err) {
+                this._logoState.available = false;
+            }
+        })();
+
+        return this._logoState.promise;
+    }
+
     /**
      * Renders or updates a QR Code inside the provided container.
      * QR appears immediately, logo loads asynchronously if available.
@@ -26,16 +61,12 @@ class ErikrafTDropQR {
             return null;
         }
 
-        // Check if we need to apply logo for the first time
-        const shouldTryLogo = !container._logoAttempted;
-        if (shouldTryLogo) {
-            container._logoAttempted = true;
-            // Start logo loading in background, don't wait for it
-            this._tryLoadLogoInBackground(container, options);
+        const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
+        if (!this._logoState.attempted) {
+            this._ensureLogoLoaded(logoPath);
         }
 
         // Check if existing QRCodeStyling instance can be updated directly
-        // Update method is supported by qr-code-styling without recreating DOM elements or flickering
         if (container._qrInstance && typeof container._qrInstance.update === 'function') {
             try {
                 container._qrInstance.update({
@@ -76,9 +107,8 @@ class ErikrafTDropQR {
             }
         };
 
-        // Only add logo if it was successfully loaded previously
-        if (container._logoAvailable) {
-            baseConfig.image = container._logoPath || 'images/icon-drop-blue.svg';
+        if (this._logoState.available) {
+            baseConfig.image = this._logoState.path;
             baseConfig.imageOptions = {
                 hideBackgroundDots: true,
                 imageSize: options.imageSize || 0.25,
@@ -97,34 +127,6 @@ class ErikrafTDropQR {
     }
 
     /**
-     * Attempts to load logo in background without blocking QR rendering.
-     * If successful, subsequent QR renders will include the logo.
-     * If failed, QR continues to work without logo.
-     */
-    static async _tryLoadLogoInBackground(container, options = {}) {
-        const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
-        
-        try {
-            // Check if logo exists by attempting to load it
-            const response = await fetch(logoPath);
-            if (!response.ok) {
-                console.warn('[QR Helper] Logo not available, QR will render without logo');
-                container._logoAvailable = false;
-                return;
-            }
-
-            // Logo exists, mark it as available for future renders
-            container._logoAvailable = true;
-            container._logoPath = logoPath;
-            console.log('[QR Helper] Logo loaded successfully, will be applied to subsequent QR frames');
-
-        } catch (error) {
-            console.warn('[QR Helper] Logo loading failed, QR continues without logo:', error);
-            container._logoAvailable = false;
-        }
-    }
-
-    /**
      * Clean up and destroy the QR Code instance associated with the container.
      *
      * @param {HTMLElement} container - The DOM element containing the QR Code.
@@ -133,15 +135,6 @@ class ErikrafTDropQR {
         if (container) {
             if (container._qrInstance) {
                 delete container._qrInstance;
-            }
-            if (container._logoAvailable !== undefined) {
-                delete container._logoAvailable;
-            }
-            if (container._logoPath !== undefined) {
-                delete container._logoPath;
-            }
-            if (container._logoAttempted !== undefined) {
-                delete container._logoAttempted;
             }
             container.innerHTML = '';
         }

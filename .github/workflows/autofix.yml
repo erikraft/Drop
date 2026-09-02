@@ -53,6 +53,7 @@ jobs:
           token: ${{ secrets.PERSONAL_TOKEN }}
           commit-message: "✨ Autofix: correções automáticas de código"
           branch: "autofix/patch-${{ github.run_id }}"
+          base: master
           title: "✨ Autofix: correções automáticas de código"
           body: |
             Este Pull Request foi criado automaticamente pelo [autofix](https://github.com/autofix-dev/autofix).

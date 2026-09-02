@@ -5,10 +5,11 @@
  * and ErikrafT Drop™ native peer events without modifying core signaling logic.
  */
 
-class PairDropAdapter {
-    constructor() {
-        this._enabled = true;
-    }
+if (typeof PairDropAdapter === 'undefined') {
+    var PairDropAdapter = class PairDropAdapter {
+        constructor() {
+            this._enabled = true;
+        }
 
     static isPairDropPeer(peer) {
         if (!peer || !peer.name) return false;
@@ -78,9 +79,10 @@ class PairDropAdapter {
         };
     }
 
-    static getChunkSize() {
-        return 65536; // 64 KB standard WebRTC chunk
-    }
+        static getChunkSize() {
+            return 65536; // 64 KB standard WebRTC chunk
+        }
+    };
 }
 
 if (typeof window !== 'undefined') {

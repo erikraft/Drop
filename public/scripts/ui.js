@@ -3608,6 +3608,7 @@ class AnimatedQRSendDialog extends Dialog {
         // QR transfer doesn't involve peer connections, so correspondingPeerId will never be set
         // and _onPeerDisconnected will not close this dialog
         this.$composeView = this.$el.querySelector('#qr-send-compose-view');
+        this.$composeButtons = this.$el.querySelector('#qr-send-compose-buttons');
         this.$activeView = this.$el.querySelector('#qr-send-active-view');
         this.$activeButtons = this.$el.querySelector('#qr-send-active-buttons');
 
@@ -3823,6 +3824,10 @@ class AnimatedQRSendDialog extends Dialog {
             this.$composeView.removeAttribute('hidden');
             this.$composeView.style.display = 'flex';
         }
+        if (this.$composeButtons) {
+            this.$composeButtons.removeAttribute('hidden');
+            this.$composeButtons.style.display = 'flex';
+        }
         if (this.$activeView) {
             this.$activeView.setAttribute('hidden', '');
             this.$activeView.style.display = 'none';
@@ -3882,6 +3887,10 @@ class AnimatedQRSendDialog extends Dialog {
         if (this.$composeView) {
             this.$composeView.setAttribute('hidden', '');
             this.$composeView.style.display = 'none';
+        }
+        if (this.$composeButtons) {
+            this.$composeButtons.setAttribute('hidden', '');
+            this.$composeButtons.style.display = 'none';
         }
         if (this.$activeView) {
             this.$activeView.removeAttribute('hidden');
