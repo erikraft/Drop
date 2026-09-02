@@ -8,7 +8,7 @@
    <meta name="description"
       content="Official ErikrafT Drop™ donations and support page: help us continue maintaining and improving the platform.">
    <meta name="keywords"
-      content="ErikrafT, support, donation, PIX, Ko-fi, file sharing, open source, developer">
+      content="ErikrafT, support, donation, PIX, Bitcoin, BTC, Ko-fi, file sharing, open source, developer">
    <meta name="author" content="ErikrafT">
    <meta name="robots" content="index, follow">
    <link rel="canonical" href="https://drop.erikraft.com/donation.html">
@@ -25,7 +25,7 @@
    {
      "@context": "https://schema.org",
      "@type": "WebPage",
-     "name": "ErikrafT Drop™ - Support via PIX and Ko-fi",
+     "name": "ErikrafT Drop™ - Support via PIX, Bitcoin and Ko-fi",
      "description": "Support ErikrafT Drop™'s open source development with secure donations.",
      "publisher": {
        "@type": "Organization",
@@ -202,6 +202,117 @@
             </div>
          </div>
       </div>
+
+      <!-- Bitcoin (BTC) Section -->
+      <div class="max-w-5xl w-full mt-12 mb-6 text-center md:text-left">
+         <div class="flex items-center gap-3 mb-2 justify-center md:justify-start">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+               <i class="fa-brands fa-bitcoin text-2xl"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Donate via <span class="text-amber-400">Bitcoin (BTC)</span></h2>
+         </div>
+         <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-2xl">
+            Support ErikrafT Drop™ directly on the Bitcoin blockchain. Scan a QR code or copy an address below to donate directly from any Bitcoin wallet.
+         </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-5xl w-full">
+         <!-- Card 1: Primary Account -->
+         <div class="glass-card p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden backdrop-blur-xl bg-slate-900/50 flex flex-col justify-between">
+            <div>
+               <div class="flex items-center justify-between border-b border-white/5 pb-6 mb-6">
+                  <div class="flex items-center space-x-4">
+                     <div class="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20 text-amber-400">
+                        <i class="fa-solid fa-wallet text-2xl"></i>
+                     </div>
+                     <div class="text-left">
+                        <h3 class="text-xl font-bold text-white">Primary Account</h3>
+                        <p class="text-sm text-gray-400">Direct Native SegWit Bitcoin Address</p>
+                     </div>
+                  </div>
+                  <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Primary</span>
+               </div>
+
+               <!-- Interactive QR Code Container -->
+               <div class="flex flex-col items-center justify-center mb-6">
+                  <a href="bitcoin:bc1qn8pvw3fvl5dt0eq9fe4js6l3k3j2kekqwxdah2"
+                     title="Click to open in Bitcoin wallet"
+                     aria-label="QR Code para doação via Bitcoin — Primary Account"
+                     class="p-3 bg-white rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group focus:outline-none focus:ring-2 focus:ring-amber-400">
+                     <div id="btc-primary-qrcode" class="flex justify-center items-center">
+                        <!-- QRCode rendered via JS -->
+                     </div>
+                  </a>
+                  <p class="text-[11px] text-gray-400 mt-2 flex items-center gap-1">
+                     <i class="fa-solid fa-hand-pointer text-amber-400"></i> Tap QR Code to open wallet
+                  </p>
+               </div>
+
+               <!-- Address Display & Copy Button -->
+               <div class="flex flex-col gap-3 text-left">
+                  <label class="block font-mono text-xs text-gray-400 uppercase tracking-wider">Bitcoin Address</label>
+                  <div class="bg-slate-950/80 border border-white/10 rounded-xl p-3 font-mono text-xs text-amber-300 break-all select-all font-semibold tracking-wide">
+                     bc1qn8pvw3fvl5dt0eq9fe4js6l3k3j2kekqwxdah2
+                  </div>
+                  <button id="copy-btc-primary-btn" data-address="bc1qn8pvw3fvl5dt0eq9fe4js6l3k3j2kekqwxdah2"
+                     class="w-full h-12 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl border border-white/10 transition-all duration-300 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                     <i class="fa-regular fa-copy"></i> <span>Copy Address</span>
+                  </button>
+                  <div id="copy-btc-primary-toast" class="hidden text-emerald-400 font-medium text-xs text-center flex items-center justify-center gap-1">
+                     <i class="fa-solid fa-check"></i> Address copied successfully!
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Card 2: Bitcoin via Email -->
+         <div class="glass-card p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden backdrop-blur-xl bg-slate-900/50 flex flex-col justify-between">
+            <div>
+               <div class="flex items-center justify-between border-b border-white/5 pb-6 mb-6">
+                  <div class="flex items-center space-x-4">
+                     <div class="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20 text-amber-400">
+                        <i class="fa-solid fa-envelope text-2xl"></i>
+                     </div>
+                     <div class="text-left">
+                        <h3 class="text-xl font-bold text-white">Bitcoin via Email</h3>
+                        <p class="text-sm text-gray-400">Proton / Email linked wallet address</p>
+                     </div>
+                  </div>
+                  <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Email Linked</span>
+               </div>
+
+               <!-- Interactive QR Code Container -->
+               <div class="flex flex-col items-center justify-center mb-6">
+                  <a href="bitcoin:bc1q0mtp0lcyfr7c29xa6ngf8nyv4j0dts4hwynq6d"
+                     title="Click to open in Bitcoin wallet"
+                     aria-label="QR Code para doação via Bitcoin — Bitcoin via Email"
+                     class="p-3 bg-white rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group focus:outline-none focus:ring-2 focus:ring-amber-400">
+                     <div id="btc-email-qrcode" class="flex justify-center items-center">
+                        <!-- QRCode rendered via JS -->
+                     </div>
+                  </a>
+                  <p class="text-[11px] text-gray-400 mt-2 flex items-center gap-1">
+                     <i class="fa-solid fa-hand-pointer text-amber-400"></i> Tap QR Code to open wallet
+                  </p>
+               </div>
+
+               <!-- Address Display & Copy Button -->
+               <div class="flex flex-col gap-3 text-left">
+                  <label class="block font-mono text-xs text-gray-400 uppercase tracking-wider">Bitcoin Address</label>
+                  <div class="bg-slate-950/80 border border-white/10 rounded-xl p-3 font-mono text-xs text-amber-300 break-all select-all font-semibold tracking-wide">
+                     bc1q0mtp0lcyfr7c29xa6ngf8nyv4j0dts4hwynq6d
+                  </div>
+                  <button id="copy-btc-email-btn" data-address="bc1q0mtp0lcyfr7c29xa6ngf8nyv4j0dts4hwynq6d"
+                     class="w-full h-12 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl border border-white/10 transition-all duration-300 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                     <i class="fa-regular fa-copy"></i> <span>Copy Address</span>
+                  </button>
+                  <div id="copy-btc-email-toast" class="hidden text-emerald-400 font-medium text-xs text-center flex items-center justify-center gap-1">
+                     <i class="fa-solid fa-check"></i> Address copied successfully!
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
    </main>
 
    <!-- Footer -->
@@ -249,7 +360,7 @@
    <!-- QRCode Library -->
    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
 
-   <!-- PIX Logic integration -->
+   <!-- PIX & Bitcoin Logic integration -->
    <script>
       // Module-scoped variable to track the active QRCodeStyling instance
       let qrCodeInstance = null;
@@ -443,6 +554,165 @@
                   console.error("Failed to copy:", err);
                });
          });
+
+         // Render Bitcoin QR Codes
+         const btcPrimaryContainer = document.getElementById("btc-primary-qrcode");
+         const btcEmailContainer = document.getElementById("btc-email-qrcode");
+
+         function getBtcResponsiveSize() {
+            const width = window.innerWidth;
+            if (width >= 992) return 220;
+            if (width >= 576) return 200;
+            return 180;
+         }
+
+         if (btcPrimaryContainer && typeof QRCodeStyling !== "undefined") {
+            try {
+               const btcSize = getBtcResponsiveSize();
+               const primaryBtcQR = new QRCodeStyling({
+                  width: btcSize,
+                  height: btcSize,
+                  type: "svg",
+                  data: "bitcoin:bc1qn8pvw3fvl5dt0eq9fe4js6l3k3j2kekqwxdah2",
+                  margin: 6,
+                  image: "images/btc-logo.svg",
+                  qrOptions: {
+                     errorCorrectionLevel: "H"
+                  },
+                  dotsOptions: {
+                     color: "#000000",
+                     type: "rounded"
+                  },
+                  backgroundOptions: {
+                     color: "#ffffff"
+                  },
+                  cornersSquareOptions: {
+                     type: "extra-rounded",
+                     color: "#000000"
+                  },
+                  cornersDotOptions: {
+                     type: "dot",
+                     color: "#000000"
+                  },
+                  imageOptions: {
+                     crossOrigin: "anonymous",
+                     hideBackgroundDots: true,
+                     imageSize: 0.3,
+                     margin: 4
+                  }
+               });
+               primaryBtcQR.append(btcPrimaryContainer);
+            } catch (e) {
+               console.error("Error generating Primary BTC QR Code:", e);
+            }
+         }
+
+         if (btcEmailContainer && typeof QRCodeStyling !== "undefined") {
+            try {
+               const btcSize = getBtcResponsiveSize();
+               const emailBtcQR = new QRCodeStyling({
+                  width: btcSize,
+                  height: btcSize,
+                  type: "svg",
+                  data: "bitcoin:bc1q0mtp0lcyfr7c29xa6ngf8nyv4j0dts4hwynq6d",
+                  margin: 6,
+                  image: "images/btc-logo.svg",
+                  qrOptions: {
+                     errorCorrectionLevel: "H"
+                  },
+                  dotsOptions: {
+                     color: "#000000",
+                     type: "rounded"
+                  },
+                  backgroundOptions: {
+                     color: "#ffffff"
+                  },
+                  cornersSquareOptions: {
+                     type: "extra-rounded",
+                     color: "#000000"
+                  },
+                  cornersDotOptions: {
+                     type: "dot",
+                     color: "#000000"
+                  },
+                  imageOptions: {
+                     crossOrigin: "anonymous",
+                     hideBackgroundDots: true,
+                     imageSize: 0.3,
+                     margin: 4
+                  }
+               });
+               emailBtcQR.append(btcEmailContainer);
+            } catch (e) {
+               console.error("Error generating Email BTC QR Code:", e);
+            }
+         }
+
+         // Copy handler function for BTC addresses
+         function setupBtcCopyButton(btnId, toastId) {
+            const btn = document.getElementById(btnId);
+            const toast = document.getElementById(toastId);
+            if (!btn) return;
+
+            btn.addEventListener("click", () => {
+               const address = btn.dataset.address;
+               if (!address) return;
+
+               const performSuccessFeedback = () => {
+                  const icon = btn.querySelector("i");
+                  const span = btn.querySelector("span");
+                  const originalIconClass = icon ? icon.className : "";
+                  const originalText = span ? span.textContent : "";
+
+                  if (icon) icon.className = "fa-solid fa-check text-emerald-400";
+                  if (span) span.textContent = "Address Copied!";
+                  btn.classList.add("border-emerald-500/50", "text-emerald-300");
+
+                  if (toast) toast.classList.remove("hidden");
+
+                  setTimeout(() => {
+                     if (icon) icon.className = originalIconClass;
+                     if (span) span.textContent = originalText;
+                     btn.classList.remove("border-emerald-500/50", "text-emerald-300");
+                     if (toast) toast.classList.add("hidden");
+                  }, 2500);
+               };
+
+               if (navigator.clipboard && navigator.clipboard.writeText) {
+                  navigator.clipboard.writeText(address)
+                     .then(performSuccessFeedback)
+                     .catch(err => {
+                        console.error("Clipboard API failed, attempting fallback:", err);
+                        fallbackCopyText(address, performSuccessFeedback);
+                     });
+               } else {
+                  fallbackCopyText(address, performSuccessFeedback);
+               }
+            });
+         }
+
+         function fallbackCopyText(text, callback) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+               document.execCommand("copy");
+               if (callback) callback();
+            } catch (err) {
+               console.error("Fallback copy failed:", err);
+               alert("Copy failed. Please manually select and copy the address.");
+            }
+            document.body.removeChild(textArea);
+         }
+
+         setupBtcCopyButton("copy-btc-primary-btn", "copy-btc-primary-toast");
+         setupBtcCopyButton("copy-btc-email-btn", "copy-btc-email-toast");
       });
    </script>
    <script>
