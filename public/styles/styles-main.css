@@ -1768,6 +1768,32 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     box-sizing: border-box;
 }
 
+.erikraft-qr-card-send {
+    background: rgba(21, 172, 189, 0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(21, 172, 189, 0.3);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.erikraft-qr-card-receive {
+    background: rgba(0, 166, 156, 0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 166, 156, 0.3);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.text-primary {
+    color: var(--primary-color, #15acbd) !important;
+}
+
+.text-paired {
+    color: var(--paired-device-color, #00a69c) !important;
+}
+
+.btn-paired {
+    background-color: var(--paired-device-color, #00a69c) !important;
+}
+
 /* Camera wrapper and scanning frame */
 .erikraft-qr-camera-wrapper {
     position: relative;

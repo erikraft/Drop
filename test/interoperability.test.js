@@ -5,7 +5,9 @@ import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import ErikrafTdropWsServer from '../server/ws-server.js';
 import Peer from '../server/peer.js';
-import PairDropAdapter from '../public/scripts/pairdrop-adapter.js';
+import '../public/scripts/pairdrop-adapter.js';
+
+const PairDropAdapter = globalThis.PairDropAdapter;
 
 console.log('==================================================');
 console.log('STARTING ERIKRAFT DROP™ INTEROPERABILITY TESTS');

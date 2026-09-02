@@ -3,7 +3,6 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-
 // Polyfill web crypto subtle digest for Node test runner if needed
 if (!globalThis.crypto || !globalThis.crypto.subtle) {
     globalThis.crypto = crypto.webcrypto;
@@ -13,6 +12,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const qrModulePath = path.join(__dirname, "../public/scripts/erikraft-qr.js");
+await import(qrModulePath);
+
 const {
     ErikrafTQRTransmitter,
     ErikrafTQRScanner,
@@ -22,7 +23,7 @@ const {
     base64ToBuffer,
     compressBuffer,
     decompressBuffer
-} = await import(qrModulePath);
+} = globalThis;
 
 async function runTests() {
     console.log("Starting ERIKRAFT-QR Unit Tests...");

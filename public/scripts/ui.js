@@ -3404,6 +3404,7 @@ class QRScannerDialog extends Dialog {
 
         this.scanning = false;
         this.stream = null;
+        this.animFrameId = null;
 
         if (this.$headerBtn) {
             this.$headerBtn.addEventListener('click', () => this.openScanner());
@@ -3429,6 +3430,7 @@ class QRScannerDialog extends Dialog {
     }
 
     async startCamera() {
+        this.stopCamera(); // Clean up existing camera stream and loop before starting
         this.scanning = true;
         if (this.$status) this.$status.textContent = Localization.getTranslation('dialogs.camera-starting');
 
@@ -3553,7 +3555,7 @@ class QRScannerDialog extends Dialog {
         }
 
         if (this.scanning && typeof requestAnimationFrame !== 'undefined') {
-            requestAnimationFrame(() => this.scanLoop());
+            this.animFrameId = requestAnimationFrame(() => this.scanLoop());
         }
     }
 
@@ -3577,6 +3579,10 @@ class QRScannerDialog extends Dialog {
 
     stopCamera() {
         this.scanning = false;
+        if (this.animFrameId) {
+            cancelAnimationFrame(this.animFrameId);
+            this.animFrameId = null;
+        }
         if (this.stream) {
             try {
                 this.stream.getTracks().forEach(track => {
@@ -3613,6 +3619,7 @@ class AnimatedQRSendDialog extends Dialog {
 
         // File composition elements
         this.$fileContainer = this.$el.querySelector('#qr-send-file-container');
+        this.$fileInput = this.$el.querySelector('#qr-send-file-input');
         this.$filePickerWrapper = this.$el.querySelector('#qr-send-file-picker-wrapper');
         this.$selectFileBtn = this.$el.querySelector('#qr-send-select-file-btn');
         this.$selectedCard = this.$el.querySelector('#qr-send-file-selected-card');
@@ -3666,50 +3673,84 @@ class AnimatedQRSendDialog extends Dialog {
             });
         }
 
-        const openFileInput = () => {
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = '*/*';
-            fileInput.onchange = (e) => {
+        const triggerPicker = () => {
+            if (this.$fileInput) {
+                this.$fileInput.value = '';
+                this.$fileInput.click();
+            } else {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '*/*';
+                fileInput.onchange = (e) => {
+                    if (e.target.files && e.target.files[0]) {
+                        this.setSelectedFile(e.target.files[0]);
+                    }
+                };
+                fileInput.click();
+            }
+        };
+
+        if (this.$fileInput) {
+            this.$fileInput.addEventListener('change', (e) => {
                 if (e.target.files && e.target.files[0]) {
                     this.setSelectedFile(e.target.files[0]);
                 }
-            };
-            fileInput.click();
-        };
+            });
+        }
 
         if (this.$selectFileBtn) {
-            this.$selectFileBtn.addEventListener('click', openFileInput);
+            this.$selectFileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                triggerPicker();
+            });
         }
 
-        if (this.$changeFileBtn) {
-            this.$changeFileBtn.addEventListener('click', openFileInput);
-        }
+        if (this.$filePickerWrapper) {
+            this.$filePickerWrapper.addEventListener('click', (e) => {
+                if (e.target !== this.$selectFileBtn && !this.$selectFileBtn?.contains(e.target)) {
+                    triggerPicker();
+                }
+            });
 
-        if (this.$fileContainer) {
-            this.$fileContainer.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.$fileContainer.classList.add('drag-over');
+            // Drag & drop handlers
+            ['dragenter', 'dragover'].forEach(eventName => {
+                this.$filePickerWrapper.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.$filePickerWrapper.classList.add('dragover');
+                });
             });
-            this.$fileContainer.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.$fileContainer.classList.remove('drag-over');
+
+            ['dragleave', 'dragend'].forEach(eventName => {
+                this.$filePickerWrapper.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.$filePickerWrapper.classList.remove('dragover');
+                });
             });
-            this.$fileContainer.addEventListener('drop', (e) => {
+
+            this.$filePickerWrapper.addEventListener('drop', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                this.$fileContainer.classList.remove('drag-over');
+                this.$filePickerWrapper.classList.remove('dragover');
                 if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
                     this.setSelectedFile(e.dataTransfer.files[0]);
                 }
             });
         }
 
+        if (this.$changeFileBtn) {
+            this.$changeFileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                triggerPicker();
+            });
+        }
+
         if (this.$removeFileBtn) {
-            this.$removeFileBtn.addEventListener('click', () => {
+            this.$removeFileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.selectedFile = null;
+                if (this.$fileInput) this.$fileInput.value = '';
                 if (this.$selectedCard) {
                     this.$selectedCard.setAttribute('hidden', '');
                     this.$selectedCard.style.display = 'none';
@@ -3977,12 +4018,33 @@ class AnimatedQRReceiveDialog extends Dialog {
         this.$completeFilename = this.$el.querySelector('#qr-receive-complete-filename');
         this.$completeSha = this.$el.querySelector('#qr-receive-complete-sha');
         this.$actionBtn = this.$el.querySelector('#qr-receive-action-btn');
+        this.$errorContainer = this.$el.querySelector('#qr-receive-error-container');
+        this.$errorMsg = this.$el.querySelector('#qr-receive-error-msg');
+        this.$retryBtn = this.$el.querySelector('#qr-receive-retry-btn');
+
+        if (this.$retryBtn) {
+            this.$retryBtn.addEventListener('click', () => {
+                if (this.$errorContainer) {
+                    this.$errorContainer.setAttribute('hidden', '');
+                    this.$errorContainer.style.display = 'none';
+                }
+                if (this.scanner) {
+                    this.scanner.start();
+                } else {
+                    this.openScanner();
+                }
+            });
+        }
     }
 
     openScanner() {
         if (this.$completeContainer) {
             this.$completeContainer.setAttribute('hidden', '');
             this.$completeContainer.style.display = 'none';
+        }
+        if (this.$errorContainer) {
+            this.$errorContainer.setAttribute('hidden', '');
+            this.$errorContainer.style.display = 'none';
         }
         if (this.$progressBar) this.$progressBar.value = 0;
         if (this.$framesCount) this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames-received')}: 0`;
@@ -3995,9 +4057,25 @@ class AnimatedQRReceiveDialog extends Dialog {
         this.show();
         if (!window.ErikrafTQRScanner) return;
 
+        if (this.scanner) {
+            this.scanner.stop();
+        }
+
         this.scanner = new ErikrafTQRScanner(this.$video, {
             onStateChange: (state) => {
                 if (this.$state) this.$state.textContent = state;
+            },
+            onError: (err) => {
+                if (this.$errorMsg) {
+                    const isPermission = err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError');
+                    this.$errorMsg.textContent = isPermission
+                        ? (Localization.getTranslation('dialogs.camera-denied') || 'Acesso à câmera negado.')
+                        : (Localization.getTranslation('dialogs.camera-unavailable') || 'Câmera indisponível.');
+                }
+                if (this.$errorContainer) {
+                    this.$errorContainer.removeAttribute('hidden');
+                    this.$errorContainer.style.display = 'flex';
+                }
             },
             onProgress: (p) => {
                 // Update file info display
@@ -4073,6 +4151,10 @@ class AnimatedQRReceiveDialog extends Dialog {
         if (this.$completeContainer) {
             this.$completeContainer.setAttribute('hidden', '');
             this.$completeContainer.style.display = 'none';
+        }
+        if (this.$errorContainer) {
+            this.$errorContainer.setAttribute('hidden', '');
+            this.$errorContainer.style.display = 'none';
         }
         if (this.$state) this.$state.textContent = Localization.getTranslation('dialogs.camera-searching');
         super.hide();
