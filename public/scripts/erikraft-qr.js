@@ -80,20 +80,20 @@ function base64ToBuffer(base64) {
 async function compressBuffer(inputBuffer) {
     const bytes = inputBuffer instanceof Uint8Array ? inputBuffer : new Uint8Array(inputBuffer);
     const originalSize = bytes.byteLength;
-    
+
     // Files that are typically already compressed - skip compression
-    const compressedExtensions = ['.zip', '.rar', '.7z', '.gz', '.bz2', '.xz', '.tar', 
+    const compressedExtensions = ['.zip', '.rar', '.7z', '.gz', '.bz2', '.xz', '.tar',
                                   '.mp3', '.mp4', '.avi', '.mkv', '.mov', '.flac', '.ogg',
                                   '.jpg', '.jpeg', '.png', '.gif', '.webp', '.heic',
                                   '.pdf', '.docx', '.xlsx', '.pptx'];
-    
+
     // Simple check if the data might be already compressed (high entropy)
     function isHighEntropy(buffer) {
         const histogram = new Array(256).fill(0);
         for (let i = 0; i < buffer.length; i++) {
             histogram[buffer[i]]++;
         }
-        
+
         let entropy = 0;
         for (let i = 0; i < 256; i++) {
             if (histogram[i] > 0) {
@@ -101,16 +101,16 @@ async function compressBuffer(inputBuffer) {
                 entropy -= p * Math.log2(p);
             }
         }
-        
+
         // High entropy (> 7.5) suggests already compressed data
         return entropy > 7.5;
     }
-    
+
     // Skip compression for small files or high-entropy data
     if (originalSize < 1000 || isHighEntropy(bytes)) {
         return { buffer: inputBuffer, compressed: 0 };
     }
-    
+
     if (typeof CompressionStream !== 'undefined') {
         try {
             const cs = new CompressionStream('deflate-raw');
@@ -118,7 +118,7 @@ async function compressBuffer(inputBuffer) {
             writer.write(bytes);
             writer.close();
             const res = await new Response(cs.readable).arrayBuffer();
-            
+
             // Only use compression if it actually reduces size by at least 5%
             if (res.byteLength < originalSize * 0.95) {
                 return { buffer: res, compressed: 1 };
@@ -127,7 +127,7 @@ async function compressBuffer(inputBuffer) {
             console.warn('Compression failed, using uncompressed:', e);
         }
     }
-    
+
     return { buffer: inputBuffer, compressed: 0 };
 }
 
@@ -369,7 +369,7 @@ class ErikrafTQRScanner {
 
                 try {
                     this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: { 
+                        video: {
                             facingMode: 'environment',
                             width: { ideal: 1280 },
                             height: { ideal: 720 }
@@ -378,7 +378,7 @@ class ErikrafTQRScanner {
                 } catch (envErr) {
                     console.warn('Facing mode environment failed, falling back to default camera:', envErr);
                     this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: { 
+                        video: {
                             width: { ideal: 1280 },
                             height: { ideal: 720 }
                         }
@@ -387,7 +387,7 @@ class ErikrafTQRScanner {
 
                 if (this.videoEl) {
                     this.videoEl.srcObject = this.stream;
-                    
+
                     // Wait for video to be ready
                     await new Promise((resolve, reject) => {
                         if (this.videoEl) {

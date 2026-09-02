@@ -3443,7 +3443,7 @@ class QRScannerDialog extends Dialog {
 
                 try {
                     this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: { 
+                        video: {
                             facingMode: 'environment',
                             width: { ideal: 1280 },
                             height: { ideal: 720 }
@@ -3451,17 +3451,17 @@ class QRScannerDialog extends Dialog {
                     });
                 } catch (envErr) {
                     console.warn('Facing mode environment failed, falling back to default camera:', envErr);
-                    this.stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { 
+                    this.stream = await navigator.mediaDevices.getUserMedia({
+                        video: {
                             width: { ideal: 1280 },
                             height: { ideal: 720 }
-                        } 
+                        }
                     });
                 }
 
                 if (this.$video) {
                     this.$video.srcObject = this.stream;
-                    
+
                     // Wait for video to be ready
                     await new Promise((resolve, reject) => {
                         if (this.$video) {
