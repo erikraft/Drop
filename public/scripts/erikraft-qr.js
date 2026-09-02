@@ -315,11 +315,12 @@ class ErikrafTQRTransmitter {
 
         const frameStr = this.frames[this.currentIndex];
         if (typeof ErikrafTDropQR !== 'undefined' && this.containerEl) {
-            // Render QR with current frame data
-            // The helper now reuses instances to prevent flickering
+            // Render QR with current frame data without logo for instant frame appearance & max speed
+            // The helper reuses instances to prevent flickering
             ErikrafTDropQR.render(this.containerEl, frameStr, {
                 width: 300, // Larger size for better scanning
-                height: 300
+                height: 300,
+                logo: false
             });
         }
 
