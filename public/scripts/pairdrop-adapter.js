@@ -87,5 +87,10 @@ if (typeof window !== 'undefined') {
     window.PairDropAdapter = PairDropAdapter;
 }
 
-export { PairDropAdapter };
-export default PairDropAdapter;
+if (typeof globalThis !== 'undefined') {
+    globalThis.PairDropAdapter = PairDropAdapter;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { PairDropAdapter };
+}

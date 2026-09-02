@@ -344,6 +344,7 @@ class ErikrafTQRScanner {
         this.onStateChange = options.onStateChange || (() => {});
         this.onProgress = options.onProgress || (() => {});
         this.onComplete = options.onComplete || (() => {});
+        this.onError = options.onError || (() => {});
         this.scanning = false;
         this.stream = null;
         this.receivedChunks = new Map();
@@ -351,10 +352,14 @@ class ErikrafTQRScanner {
         this.meta = null;
         this.state = 'Searching for QR...';
         this.fecRecoveredCount = 0;
+        this.animFrameId = null;
     }
 
     async start() {
-        this.state = 'Iniciando câmera...';
+        this.stop(); // Stop any existing scan loop/stream before starting fresh
+        this.state = typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+            ? Localization.getTranslation('dialogs.camera-starting')
+            : 'Iniciando câmera...';
         this.onStateChange(this.state);
         this.scanning = true;
         this.receivedChunks.clear();
@@ -392,46 +397,63 @@ class ErikrafTQRScanner {
                 if (this.videoEl) {
                     this.videoEl.srcObject = this.stream;
 
-                    // Wait for video to be ready
-                    await new Promise((resolve, reject) => {
-                        if (this.videoEl) {
-                            this.videoEl.onloadedmetadata = () => {
+                    // Wait for video metadata to load with fallback timeout
+                    await new Promise((resolve) => {
+                        if (!this.videoEl) return resolve();
+                        let resolved = false;
+                        const onLoaded = () => {
+                            if (!resolved) {
+                                resolved = true;
                                 resolve();
-                            };
-                            this.videoEl.onerror = (e) => {
-                                reject(new Error('Video load error'));
-                            };
-                            setTimeout(() => resolve(), 3000);
+                            }
+                        };
+                        this.videoEl.onloadedmetadata = onLoaded;
+                        if (this.videoEl.readyState >= 1) {
+                            onLoaded();
                         } else {
-                            reject(new Error('Video element not found'));
+                            setTimeout(onLoaded, 3000);
                         }
                     });
 
                     try {
                         await this.videoEl.play();
-                        this.state = 'Procurando QR...';
+                        this.state = typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                            ? Localization.getTranslation('dialogs.camera-searching')
+                            : 'Procurando QR...';
                         this.onStateChange(this.state);
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
-                        this.state = 'Erro ao reproduzir vídeo';
+                        this.state = typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                            ? Localization.getTranslation('dialogs.camera-error-play')
+                            : 'Erro ao reproduzir vídeo';
                         this.onStateChange(this.state);
+                        this.onError(playErr);
                         this.stop();
                         return;
                     }
                 }
             } catch (err) {
-                console.warn('Camera access error:', err.message);
-                const isPermissionError = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
+                console.warn('Camera access error:', err);
+                const isPermissionError = err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError');
                 this.state = isPermissionError
-                    ? 'Acesso à câmera negado'
-                    : 'Câmera indisponível ou não suportada';
+                    ? (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                        ? Localization.getTranslation('dialogs.camera-denied')
+                        : 'Acesso à câmera negado')
+                    : (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                        ? Localization.getTranslation('dialogs.camera-unavailable')
+                        : 'Câmera indisponível ou não suportada');
                 this.onStateChange(this.state);
+                this.onError(err);
                 this.stop();
                 return;
             }
         } else {
-            this.state = 'Câmera não suportada';
+            const err = new Error('Camera unsupported');
+            this.state = typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                ? Localization.getTranslation('dialogs.camera-unsupported')
+                : 'Câmera não suportada';
             this.onStateChange(this.state);
+            this.onError(err);
             return;
         }
         this._scanLoop();
@@ -439,6 +461,10 @@ class ErikrafTQRScanner {
 
     stop() {
         this.scanning = false;
+        if (this.animFrameId) {
+            cancelAnimationFrame(this.animFrameId);
+            this.animFrameId = null;
+        }
         if (this.stream) {
             try {
                 this.stream.getTracks().forEach(track => {
@@ -449,6 +475,7 @@ class ErikrafTQRScanner {
         }
         if (this.videoEl) {
             this.videoEl.srcObject = null;
+            this.videoEl.onloadedmetadata = null;
         }
         if (this.canvas) {
             this.canvas = null;
@@ -502,7 +529,7 @@ class ErikrafTQRScanner {
         }
 
         if (this.scanning && typeof requestAnimationFrame !== 'undefined') {
-            requestAnimationFrame(() => this._scanLoop());
+            this.animFrameId = requestAnimationFrame(() => this._scanLoop());
         }
     }
 
@@ -781,14 +808,3 @@ if (typeof module !== 'undefined' && module.exports) {
         decompressBuffer
     };
 }
-
-export {
-    ErikrafTQRTransmitter,
-    ErikrafTQRScanner,
-    crc32,
-    sha256Buffer,
-    bufferToBase64,
-    base64ToBuffer,
-    compressBuffer,
-    decompressBuffer
-};
