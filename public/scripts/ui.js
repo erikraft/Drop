@@ -4077,9 +4077,10 @@ class AnimatedQRReceiveDialog extends Dialog {
             onError: (err) => {
                 if (this.$errorMsg) {
                     const isPermission = err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError');
-                    this.$errorMsg.textContent = isPermission
+                    const rawMsg = isPermission
                         ? (Localization.getTranslation('dialogs.camera-denied') || 'Acesso à câmera negado.')
                         : (Localization.getTranslation('dialogs.camera-unavailable') || 'Câmera indisponível.');
+                    this.$errorMsg.textContent = rawMsg.replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
                 }
                 if (this.$errorContainer) {
                     this.$errorContainer.removeAttribute('hidden');
