@@ -34,15 +34,26 @@ class ErikrafTDropQR {
             this._tryLoadLogoInBackground(container, options);
         }
 
-        // Always render QR immediately with current data
-        // QRCodeStyling requires instance recreation for data changes
-        // We do this efficiently to minimize visual disruption
+        // Check if existing QRCodeStyling instance can be updated directly
+        // Update method is supported by qr-code-styling without recreating DOM elements or flickering
+        if (container._qrInstance && typeof container._qrInstance.update === 'function') {
+            try {
+                container._qrInstance.update({
+                    data: data
+                });
+                return container._qrInstance;
+            } catch (err) {
+                console.warn('[QR Helper] Direct instance update failed, recreating:', err);
+            }
+        }
+
+        // Initial creation of QRCodeStyling instance
         const baseConfig = {
-            width: options.width || 256,
-            height: options.height || 256,
+            width: options.width || 280,
+            height: options.height || 280,
             type: 'svg',
             data: data,
-            margin: options.margin || 10,
+            margin: options.margin || 8,
             qrOptions: {
                 typeNumber: 0,
                 mode: 'Byte',
@@ -70,25 +81,17 @@ class ErikrafTDropQR {
             baseConfig.image = container._logoPath || 'images/icon-drop-blue.svg';
             baseConfig.imageOptions = {
                 hideBackgroundDots: true,
-                imageSize: options.imageSize || 0.3,
-                margin: options.logoMargin || 5,
+                imageSize: options.imageSize || 0.25,
+                margin: options.logoMargin || 4,
                 crossOrigin: 'anonymous',
                 saveAsBlob: true
             };
         }
 
-        // Create new instance and render
         const qrCode = new QRCodeStyling(baseConfig);
         container._qrInstance = qrCode;
-        
-        // Efficient DOM update: replace content without full clear if possible
-        // This minimizes visual flickering
-        if (container.firstChild) {
-            container.replaceChild(qrCode._canvas || qrCode._svg, container.firstChild);
-        } else {
-            container.innerHTML = '';
-            qrCode.append(container);
-        }
+        container.innerHTML = '';
+        qrCode.append(container);
 
         return qrCode;
     }

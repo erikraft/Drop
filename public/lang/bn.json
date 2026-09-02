@@ -51,7 +51,9 @@
         "lan-mode-title": "",
         "metadata-exif": "মেটাডেটা (EXIF)",
         "compress": "সংকুচিত করুন",
-        "edit-ai": "AI দিয়ে সম্পাদনা করুন"
+        "edit-ai": "AI দিয়ে সম্পাদনা করুন",
+        "animated-qr-file-selected": "Selected file",
+        "animated-qr-change-file": "Change File"
     },
     "site": {
         "biodrop": "Site"

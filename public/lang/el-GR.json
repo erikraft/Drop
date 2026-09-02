@@ -126,7 +126,9 @@
         "close-toast_title": "Close notification",
         "metadata-exif": "Metadata (EXIF)",
         "compress": "Compress",
-        "edit-ai": "Edit with AI"
+        "edit-ai": "Edit with AI",
+        "animated-qr-file-selected": "Selected file",
+        "animated-qr-change-file": "Change File"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

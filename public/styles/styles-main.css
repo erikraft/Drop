@@ -1728,3 +1728,322 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
 #profile-photo-upload-button:hover {
     background-color: #0056b3;
 }
+
+/* ==========================================
+   ErikrafT Drop™ - QR & Scanner UI Components
+   ========================================== */
+
+/* Buttons & Long text handling */
+.btn {
+    white-space: normal !important;
+    text-align: center;
+    word-break: break-word;
+    min-height: 40px;
+    padding: 8px 16px !important;
+    line-height: 1.2 !important;
+}
+
+.btn-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+@media (max-width: 480px) {
+    .btn-row {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+    .btn-row .btn {
+        width: 100%;
+    }
+}
+
+/* Dialog container limits */
+.erikraft-qr-paper {
+    max-width: 520px !important;
+    width: 92% !important;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Camera wrapper and scanning frame */
+.erikraft-qr-camera-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    margin: 0 auto;
+}
+
+.erikraft-qr-camera-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.erikraft-qr-scan-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(21, 172, 189, 0.6);
+    border-radius: 16px;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+.erikraft-qr-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: #15acbd;
+    border-style: solid;
+    border-width: 0;
+}
+
+.erikraft-qr-corner.top-left {
+    top: -2px;
+    left: -2px;
+    border-top-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 12px;
+}
+
+.erikraft-qr-corner.top-right {
+    top: -2px;
+    right: -2px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-top-right-radius: 12px;
+}
+
+.erikraft-qr-corner.bottom-left {
+    bottom: -2px;
+    left: -2px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-bottom-left-radius: 12px;
+}
+
+.erikraft-qr-corner.bottom-right {
+    bottom: -2px;
+    right: -2px;
+    border-bottom-width: 3px;
+    border-right-width: 3px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Divider */
+.erikraft-qr-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 8px 0;
+}
+
+/* Manual Input matching Pairing/Public Room fields */
+.erikraft-qr-manual-input-wrapper {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.erikraft-qr-input {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    outline: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: rgb(var(--text-color, 255, 255, 255));
+    background-color: var(--bg-color-secondary, rgba(255, 255, 255, 0.08));
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erikraft-qr-input:focus {
+    border-color: var(--primary-color, #15acbd);
+    box-shadow: 0 0 0 2px rgba(21, 172, 189, 0.25);
+}
+
+@media (max-width: 480px) {
+    .erikraft-qr-manual-input-wrapper {
+        flex-direction: column;
+    }
+    .erikraft-qr-manual-input-wrapper .btn {
+        width: 100%;
+    }
+}
+
+/* Textarea styling */
+.erikraft-qr-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    outline: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    min-height: 100px;
+    resize: vertical;
+    color: rgb(var(--text-color, 255, 255, 255));
+    background-color: var(--bg-color-secondary, rgba(255, 255, 255, 0.08));
+    font-family: inherit;
+}
+
+.erikraft-qr-textarea:focus {
+    border-color: var(--primary-color, #15acbd);
+    box-shadow: 0 0 0 2px rgba(21, 172, 189, 0.25);
+}
+
+/* File Dropzone */
+.erikraft-qr-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px dashed var(--primary-color, #15acbd);
+    border-radius: 16px;
+    background: rgba(21, 172, 189, 0.06);
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.erikraft-qr-dropzone.dragover {
+    background: rgba(21, 172, 189, 0.18);
+    border-color: var(--primary-color, #15acbd);
+}
+
+.erikraft-qr-dropzone-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+/* Selected File Card - EXTREMELY EVIDENT UX */
+.erikraft-qr-selected-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(21, 172, 189, 0.15);
+    border: 2px solid var(--primary-color, #15acbd);
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(21, 172, 189, 0.2);
+    animation: erikraftCardAppear 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes erikraftCardAppear {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.erikraft-qr-selected-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.erikraft-qr-badge-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary-color, #15acbd);
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.erikraft-qr-filename {
+    color: var(--primary-color, #15acbd);
+    word-break: break-all;
+    font-size: 15px;
+    line-height: 1.3;
+}
+
+.erikraft-qr-card-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.erikraft-qr-card-actions .btn {
+    flex: 1;
+}
+
+@media (max-width: 480px) {
+    .erikraft-qr-card-actions {
+        flex-direction: column;
+    }
+}
+
+/* Canvas Box */
+.erikraft-qr-canvas-box {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 16px;
+    width: 280px;
+    height: 280px;
+    max-width: 100%;
+    max-height: 280px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.erikraft-qr-canvas-box svg,
+.erikraft-qr-canvas-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* Progress bar */
+.erikraft-qr-progress {
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Status feedback boxes */
+.erikraft-qr-error-box {
+    background: rgba(255, 75, 75, 0.12);
+    border: 1px solid rgba(255, 75, 75, 0.4);
+    border-radius: 12px;
+}
+
+.erikraft-qr-success-box {
+    background: rgba(21, 172, 189, 0.12);
+    border: 1px solid rgba(21, 172, 189, 0.4);
+    border-radius: 12px;
+}
+
+.erikraft-qr-text-preview {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    max-height: 120px;
+    overflow-y: auto;
+    word-break: break-word;
+    padding: 12px;
+}

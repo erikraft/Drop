@@ -57,7 +57,9 @@
         "enter-key-from-another-device": "ระบุ Key ของอุปกรณ์อื่นที่นี่",
         "metadata-exif": "ข้อมูลเมตา (EXIF)",
         "compress": "บีบอัด",
-        "edit-ai": "Edit with AI"
+        "edit-ai": "Edit with AI",
+        "animated-qr-file-selected": "Selected file",
+        "animated-qr-change-file": "Change File"
     },
     "header": {
         "lan-mode_title": "",
