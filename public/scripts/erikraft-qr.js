@@ -498,7 +498,7 @@ class ErikrafTQRScanner {
                 if (!this.detector) {
                     this.detector = new BarcodeDetector({ formats: ['qr_code'] });
                 }
-                if (this.videoEl && this.videoEl.readyState >= 2) {
+                if (this.videoEl && this.videoEl.readyState >= 2 && this.videoEl.videoWidth > 0 && this.videoEl.videoHeight > 0) {
                     const barcodes = await this.detector.detect(this.videoEl);
                     for (const barcode of barcodes) {
                         this._processRawData(barcode.rawValue);
@@ -513,7 +513,7 @@ class ErikrafTQRScanner {
                     this.canvas = document.createElement('canvas');
                     this.ctx = this.canvas.getContext('2d');
                 }
-                if (this.videoEl.videoWidth && this.videoEl.videoHeight) {
+                if (this.videoEl.videoWidth > 0 && this.videoEl.videoHeight > 0) {
                     this.canvas.width = this.videoEl.videoWidth;
                     this.canvas.height = this.videoEl.videoHeight;
                     this.ctx.drawImage(this.videoEl, 0, 0, this.canvas.width, this.canvas.height);
