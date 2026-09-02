@@ -1592,18 +1592,18 @@
     <x-dialog id="animated-qr-send-dialog" class="erikraft-qr-dialog">
         <x-background class="full center">
             <x-paper shadow="2" class="erikraft-qr-paper">
-                <div class="erikraft-qr-header">
+                <div class="row center p-2">
                     <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-send-title">Transferência por QR Code Animado</h2>
                 </div>
 
                 <!-- Composition View: Mode selection & input -->
-                <div id="qr-send-compose-view" class="erikraft-qr-body">
+                <div id="qr-send-compose-view" class="row center p-2">
                     <div class="column fw gap-3">
                         <!-- Text composition container -->
-                        <div id="qr-send-text-container" class="column fw gap-1">
-                            <label for="qr-send-text-input" class="font-caption text-secondary" data-i18n-key="dialogs.animated-qr-enter-text">Digite ou cole o texto aqui:</label>
-                            <textarea id="qr-send-text-input" class="fw textarea erikraft-qr-textarea" rows="4" placeholder="Mensagem ou texto para transferir..."></textarea>
-                            <div class="row row-between font-caption text-secondary align-items-center mt-1">
+                        <div id="qr-send-text-container" class="column fw">
+                            <label for="qr-send-text-input" class="font-caption text-secondary mb-1" data-i18n-key="dialogs.animated-qr-enter-text">Digite ou cole o texto aqui:</label>
+                            <textarea id="qr-send-text-input" class="fw textarea erikraft-qr-textarea" rows="4" style="resize: vertical; min-height: 100px;" placeholder="Mensagem ou texto para transferir..."></textarea>
+                            <div class="row row-between font-caption text-secondary mt-1">
                                 <span id="qr-send-text-char-count">0 caracteres</span>
                                 <button id="qr-send-text-paste-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-paste-text">Colar</button>
                             </div>
@@ -1615,7 +1615,7 @@
 
                             <div id="qr-send-file-picker-wrapper" class="erikraft-qr-dropzone">
                                 <div class="erikraft-qr-dropzone-icon">
-                                    <svg class="icon" style="width: 44px; height: 44px; fill: var(--primary-color, #15acbd);"><use xlink:href="#file"></use></svg>
+                                    <svg class="icon" style="width: 42px; height: 42px; fill: var(--primary-color, #15acbd);"><use xlink:href="#file"></use></svg>
                                 </div>
                                 <div class="font-body2 text-center text-secondary mb-2" data-i18n-key="dialogs.animated-qr-file-dropzone">Arraste um arquivo ou clique abaixo</div>
                                 <button id="qr-send-select-file-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-select-file">Selecionar Arquivo</button>
@@ -1641,17 +1641,17 @@
                     </div>
                 </div>
 
-                <div id="qr-send-compose-buttons" class="erikraft-qr-actions btn-row row-reverse wrap gap-2">
+                <div id="qr-send-compose-buttons" class="btn-row row-reverse wrap gap-2 p-2">
                     <button id="qr-send-start-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-start-transfer">Iniciar Transferência</button>
                     <button type="button" class="btn btn-rounded btn-grey" close data-i18n-key="dialogs.cancel">Cancelar</button>
                 </div>
 
                 <!-- Active Streaming View -->
-                <div id="qr-send-active-view" class="erikraft-qr-body" hidden>
-                    <div class="column fw gap-3 align-items-center">
-                        <div id="qr-send-file-info" class="font-body1 text-center bold erikraft-qr-file-info"></div>
+                <div id="qr-send-active-view" class="row center p-2" hidden>
+                    <div class="column fw gap-2">
+                        <div id="qr-send-file-info" class="font-body2 text-center bold" style="color: var(--primary-color, #15acbd);"></div>
                         
-                        <!-- Prominent QR Container with proper stable box styling -->
+                        <!-- Large QR Container - Central and prominent with proper sizing -->
                         <div id="qr-send-canvas-container" class="erikraft-qr-canvas-box"></div>
 
                         <div class="fw column gap-1">
@@ -1662,17 +1662,17 @@
                             </div>
                         </div>
 
-                        <div class="font-body2 text-center text-secondary erikraft-qr-instruction" data-i18n-key="dialogs.animated-qr-instruction">Aponte a câmera do outro dispositivo para este QR Code.</div>
+                        <div class="font-body2 text-center text-secondary" data-i18n-key="dialogs.animated-qr-instruction">Aponte a câmera do outro dispositivo para este QR Code.</div>
 
-                        <div class="row center gap-2 fw align-items-center erikraft-qr-speed-control">
-                            <label for="qr-send-fps-slider" class="font-caption text-secondary" data-i18n-key="dialogs.animated-qr-speed-label">Velocidade (FPS):</label>
-                            <input type="range" id="qr-send-fps-slider" min="1" max="20" value="6" class="erikraft-qr-slider">
-                            <span id="qr-send-fps-val" class="font-caption bold min-w-40 text-right">6 FPS</span>
+                        <div class="row center gap-2 fw align-items-center">
+                            <label for="qr-send-fps-slider" class="font-caption" data-i18n-key="dialogs.animated-qr-speed-label">Velocidade (FPS):</label>
+                            <input type="range" id="qr-send-fps-slider" min="1" max="20" value="6" style="flex: 1;">
+                            <span id="qr-send-fps-val" class="font-caption bold">6 FPS</span>
                         </div>
                     </div>
                 </div>
 
-                <div id="qr-send-active-buttons" class="erikraft-qr-actions btn-row row-reverse wrap gap-2" hidden>
+                <div id="qr-send-active-buttons" class="btn-row row-reverse wrap gap-2 p-2" hidden>
                     <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-pause">Pausar</button>
                     <button id="qr-send-back-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-back">Voltar</button>
                     <button type="button" class="btn btn-rounded btn-grey" close data-i18n-key="dialogs.close">Fechar</button>
@@ -1685,13 +1685,13 @@
     <x-dialog id="animated-qr-receive-dialog" class="erikraft-qr-dialog">
         <x-background class="full center">
             <x-paper shadow="2" class="erikraft-qr-paper">
-                <div class="erikraft-qr-header">
+                <div class="row center p-2">
                     <h2 class="dialog-title" data-i18n-key="dialogs.animated-qr-receive-title">Receber por QR Code Animado</h2>
                 </div>
-                <div class="erikraft-qr-body">
+                <div class="row center p-2">
                     <div class="column fw">
-                        <div id="qr-receive-scanner-view" class="column center fw gap-3">
-                            <!-- Professional camera container with defined ratio and frame -->
+                        <div id="qr-receive-scanner-view" class="column center fw gap-2">
+                            <!-- Professional camera container with proper sizing and overflow control -->
                             <div class="erikraft-qr-camera-wrapper">
                                 <video id="qr-scanner-video" playsinline autoplay muted></video>
                                 
@@ -1731,7 +1731,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="erikraft-qr-actions btn-row row-reverse wrap gap-2">
+                <div class="btn-row row-reverse wrap gap-2 p-2">
                     <button class="btn btn-rounded btn-grey" type="button" close data-i18n-key="dialogs.close">Fechar</button>
                 </div>
             </x-paper>
