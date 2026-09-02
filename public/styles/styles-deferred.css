@@ -924,12 +924,12 @@ x-dialog .dialog-subheader {
         max-width: 90vw;
         max-height: 90vw;
     }
-
+    
     #qr-scanner-video,
     #qr-scanner-main-video {
         max-height: 240px;
     }
-
+    
     #animated-qr-send-dialog x-paper,
     #animated-qr-receive-dialog x-paper,
     #qr-scanner-dialog x-paper {
