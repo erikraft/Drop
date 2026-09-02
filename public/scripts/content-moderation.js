@@ -191,11 +191,11 @@ class ContentModeration {
 
             const title = document.createElement('h2');
             title.className = 'frame-warning-title';
-            title.textContent = 'Tem certeza que deseja ver???';
+            title.textContent = Localization.getTranslation('dialogs.moderation-warning-title');
 
             const message = document.createElement('p');
             message.className = 'frame-warning-message';
-            message.textContent = 'Este conteúdo foi sinalizado como impróprio. Revele apenas se tiver certeza.';
+            message.textContent = Localization.getTranslation('dialogs.moderation-warning-message');
 
             const mediaContainer = document.createElement('div');
             mediaContainer.className = 'frame-warning-media';
@@ -208,12 +208,12 @@ class ContentModeration {
             const noButton = document.createElement('button');
             noButton.type = 'button';
             noButton.className = 'frame-warning-btn frame-warning-btn-no';
-            noButton.textContent = 'Não';
+            noButton.textContent = Localization.getTranslation('dialogs.moderation-no');
 
             const yesButton = document.createElement('button');
             yesButton.type = 'button';
             yesButton.className = 'frame-warning-btn frame-warning-btn-yes';
-            yesButton.textContent = 'Sim';
+            yesButton.textContent = Localization.getTranslation('dialogs.moderation-yes');
 
             actions.appendChild(noButton);
             actions.appendChild(yesButton);
@@ -521,19 +521,19 @@ class ContentModeration {
                 icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ffdd00">
                     <path d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"/>
                 </svg>`;
-                text = 'Conteúdo Explícito Detectado';
+                text = Localization.getTranslation('dialogs.explicit-content-detected');
                 break;
             case 'spam':
                 icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ff0000">
                     <path d="M109-120q-11 0-20-5.5T75-140q-5-9-5.5-19.5T75-180l370-640q6-10 15.5-15t19.5-5q10 0 19.5 5t15.5 15l370 640q6 10 5.5 20.5T885-140q-5 9-14 14.5t-20 5.5H109Zm371-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm0-120q17 0 28.5-11.5T520-400v-120q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v120q0 17 11.5 28.5T480-360Z"/>
                 </svg>`;
-                text = 'Possível Spam/Golpe Detectado';
+                text = Localization.getTranslation('dialogs.spam-content-detected');
                 break;
             case 'offensive':
                 icon = `<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48" fill="#ffdd00">
                     <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440ZM363-120q-16 0-30.5-6T307-143L143-307q-11-11-17-25.5t-6-30.5v-234q0-16 6-30.5t17-25.5l164-164q11-11 25.5-17t30.5-6h234q16 0 30.5 6t25.5 17l164 164q11 11 17 25.5t6 30.5v234q0 16-6 30.5T817-307L653-143q-11 11-25.5 17t-30.5 6H363Z"/>
                 </svg>`;
-                text = 'Conteúdo Ofensivo Detectado';
+                text = Localization.getTranslation('dialogs.offensive-content-detected');
                 break;
         }
 
