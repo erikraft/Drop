@@ -419,13 +419,13 @@ class ErikrafTQRScanner {
                         await this.videoEl.play();
                         this.state = (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                             ? Localization.getTranslation('dialogs.camera-searching')
-                            : 'Procurando QR...').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
+                            : 'Procurando QR...').replace(/[\.\s]*(?:Cole o link|Paste link|Cole o).*$/gi, '').trim();
                         this.onStateChange(this.state);
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
                         this.state = (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                             ? Localization.getTranslation('dialogs.camera-error-play')
-                            : 'Erro ao reproduzir vídeo').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
+                            : 'Erro ao reproduzir vídeo').replace(/[\.\s]*(?:Cole o link|Paste link|Cole o).*$/gi, '').trim();
                         this.onStateChange(this.state);
                         this.onError(playErr);
                         this.stop();
@@ -438,10 +438,10 @@ class ErikrafTQRScanner {
                 this.state = isPermissionError
                     ? (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function' && Localization.getTranslation('dialogs.camera-denied')
                         ? Localization.getTranslation('dialogs.camera-denied')
-                        : 'Acesso à câmera negado.').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim()
+                        : 'Acesso à câmera negado.').replace(/[\.\s]*(?:Cole o link|Paste link|Cole o).*$/gi, '').trim()
                     : (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                         ? Localization.getTranslation('dialogs.camera-unavailable')
-                        : 'Câmera indisponível.').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
+                        : 'Câmera indisponível.').replace(/[\.\s]*(?:Cole o link|Paste link|Cole o).*$/gi, '').trim();
                 this.onStateChange(this.state);
                 this.onError(err);
                 this.stop();
@@ -451,7 +451,7 @@ class ErikrafTQRScanner {
             const err = new Error('Camera unsupported');
             this.state = (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                 ? Localization.getTranslation('dialogs.camera-unsupported')
-                : 'Câmera não suportada.').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
+                : 'Câmera não suportada.').replace(/[\.\s]*(?:Cole o link|Paste link|Cole o).*$/gi, '').trim();
             this.onStateChange(this.state);
             this.onError(err);
             return;

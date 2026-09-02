@@ -1761,16 +1761,16 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
 
 /* Dialog container limits */
 .erikraft-qr-paper {
-    max-width: 520px !important;
+    max-width: 480px !important;
     width: 92% !important;
     max-height: 90vh;
     overflow-y: auto;
     box-sizing: border-box;
-    padding: 24px 20px !important;
+    padding: 20px 16px !important;
 }
 
-.erikraft-qr-paper > .row.center.p-2 {
-    padding: 8px 0 !important;
+.erikraft-qr-paper > .row.center {
+    padding: 6px 0 !important;
 }
 
 .erikraft-qr-card-send {
@@ -2040,18 +2040,19 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
 /* Canvas Box */
 .erikraft-qr-canvas-box {
     background: #ffffff;
-    padding: 16px;
+    padding: 12px;
     border-radius: 16px;
-    width: 280px;
-    height: 280px;
+    width: 260px;
+    height: 260px;
     max-width: 100%;
-    max-height: 280px;
+    max-height: 260px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .erikraft-qr-canvas-box svg,
