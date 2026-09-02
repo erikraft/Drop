@@ -417,15 +417,15 @@ class ErikrafTQRScanner {
 
                     try {
                         await this.videoEl.play();
-                        this.state = typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                        this.state = (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                             ? Localization.getTranslation('dialogs.camera-searching')
-                            : 'Procurando QR...';
+                            : 'Procurando QR...').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
                         this.onStateChange(this.state);
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
-                        this.state = typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                        this.state = (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                             ? Localization.getTranslation('dialogs.camera-error-play')
-                            : 'Erro ao reproduzir vídeo';
+                            : 'Erro ao reproduzir vídeo').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
                         this.onStateChange(this.state);
                         this.onError(playErr);
                         this.stop();
@@ -436,12 +436,12 @@ class ErikrafTQRScanner {
                 console.warn('Camera access error:', err);
                 const isPermissionError = err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError');
                 this.state = isPermissionError
-                    ? (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+                    ? (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function' && Localization.getTranslation('dialogs.camera-denied')
                         ? Localization.getTranslation('dialogs.camera-denied')
-                        : 'Acesso à câmera negado')
+                        : 'Acesso à câmera negado.').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim()
                     : (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                         ? Localization.getTranslation('dialogs.camera-unavailable')
-                        : 'Câmera indisponível ou não suportada');
+                        : 'Câmera indisponível.').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
                 this.onStateChange(this.state);
                 this.onError(err);
                 this.stop();
@@ -449,9 +449,9 @@ class ErikrafTQRScanner {
             }
         } else {
             const err = new Error('Camera unsupported');
-            this.state = typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
+            this.state = (typeof Localization !== 'undefined' && typeof Localization.getTranslation === 'function'
                 ? Localization.getTranslation('dialogs.camera-unsupported')
-                : 'Câmera não suportada';
+                : 'Câmera não suportada.').replace(/[\.\s]*(?:Cole o link|Paste link).*/gi, '').trim();
             this.onStateChange(this.state);
             this.onError(err);
             return;

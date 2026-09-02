@@ -1766,12 +1766,19 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     max-height: 90vh;
     overflow-y: auto;
     box-sizing: border-box;
+    padding: 24px 20px !important;
+}
+
+.erikraft-qr-paper > .row.center.p-2 {
+    padding: 8px 0 !important;
 }
 
 .erikraft-qr-card-send {
     background: rgba(21, 172, 189, 0.08);
     border-radius: 12px;
     border: 1px solid rgba(21, 172, 189, 0.3);
+    padding: 20px 16px !important;
+    gap: 12px;
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
@@ -1779,6 +1786,8 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     background: rgba(0, 166, 156, 0.08);
     border-radius: 12px;
     border: 1px solid rgba(0, 166, 156, 0.3);
+    padding: 20px 16px !important;
+    gap: 12px;
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
