@@ -31,7 +31,10 @@
         const buttons = document.getElementById(IDS.activeButtons);
         const canvas = document.getElementById('qr-send-canvas-container');
         if (view) view.hidden = false;
-        if (buttons) buttons.hidden = false;
+        if (buttons) {
+            buttons.hidden = false;
+            buttons.removeAttribute('hidden');
+        }
         if (canvas) canvas.hidden = false;
     };
     const render = tx => {
@@ -43,21 +46,30 @@
         }
         tx.currentIndex = clamp(tx, tx.currentIndex);
         showActive();
-        qr.render(tx.containerEl, tx.frames[tx.currentIndex], {
-            width: 300,
-            height: 300,
-            animatedTransfer: true
-        });
-        if (typeof tx.onProgress === 'function') {
-            tx.onProgress({
-                currentIndex: tx.currentIndex,
-                totalFrames: tx.frames.length,
-                numBaseChunks: tx.numBaseChunks,
-                fps: tx.fps,
-                totalSize: tx.totalSize,
-                fileName: tx.metadata?.name || 'Data',
-                progressPct: Math.min(100, Math.round(((tx.currentIndex + 1) / tx.frames.length) * 100))
+        try {
+            qr.render(tx.containerEl, tx.frames[tx.currentIndex], {
+                width: 300,
+                height: 300,
+                animatedTransfer: true
             });
+        } catch (error) {
+            console.error('[Animated QR] Frame render failed:', error);
+            return false;
+        }
+        if (typeof tx.onProgress === 'function') {
+            try {
+                tx.onProgress({
+                    currentIndex: tx.currentIndex,
+                    totalFrames: tx.frames.length,
+                    numBaseChunks: tx.numBaseChunks,
+                    fps: tx.fps,
+                    totalSize: tx.totalSize,
+                    fileName: tx.metadata?.name || 'Data',
+                    progressPct: Math.min(100, Math.round(((tx.currentIndex + 1) / tx.frames.length) * 100))
+                });
+            } catch (error) {
+                console.warn('[Animated QR] Progress callback failed:', error);
+            }
         }
         return true;
     };
@@ -65,6 +77,11 @@
         if (!tx?.frames?.length) return;
         tx.currentIndex = clamp(tx, tx.currentIndex);
         const total = tx.frames.length;
+        const buttons = document.getElementById(IDS.activeButtons);
+        if (buttons) {
+            buttons.hidden = false;
+            buttons.removeAttribute('hidden');
+        }
         const seek = document.getElementById(IDS.seek);
         if (seek) {
             seek.min = '0';
@@ -85,6 +102,10 @@
         }
         const init = document.getElementById(IDS.initialize);
         if (init) init.hidden = !!tx.initialized;
+        const previous = document.getElementById(IDS.previous);
+        if (previous) previous.disabled = !tx.initialized;
+        const next = document.getElementById(IDS.next);
+        if (next) next.disabled = !tx.initialized;
         const pause = document.getElementById(IDS.pause);
         if (pause) {
             pause.textContent = tx.paused ? 'Play' : 'Pausar';
@@ -93,6 +114,8 @@
             pause.title = tx.paused ? 'Play' : 'Pausar';
             pause.disabled = !tx.initialized;
         }
+        const go = document.getElementById(IDS.frameGo);
+        if (go) go.disabled = !tx.initialized;
     };
     const select = (tx, index) => {
         if (!tx?.initialized || !tx.frames?.length) return;
@@ -106,8 +129,8 @@
     const install = tx => {
         if (!tx || !Array.isArray(tx.frames) || tx.__erikraftAnimatedControlsOwned) return;
         tx.__erikraftAnimatedControlsOwned = true;
-        // qr-helper.js historically installed a second controller before this file.
-        // Take ownership here instead of respecting its legacy marker.
+        // qr-helper.js has a legacy controller loaded before this file. Do not
+        // honor its marker: this controller is the final owner of playback.
         tx.__erikraftPlaybackControlsInstalled = true;
         tx.initialized = false;
         tx.start = function () {
@@ -128,7 +151,9 @@
             this.initialized = true;
             this.currentIndex = clamp(this, this.currentIndex);
             showActive();
-            render(this);
+            if (!render(this)) {
+                this.initialized = false;
+            }
             sync(this);
         };
         tx.pause = function () {
@@ -146,7 +171,11 @@
                     sync(this);
                     return;
                 }
-                render(this);
+                if (!render(this)) {
+                    this.paused = true;
+                    sync(this);
+                    return;
+                }
                 this.currentIndex = (this.currentIndex + 1) % this.frames.length;
                 sync(this);
                 this.timer = setTimeout(tick, 1000 / Math.max(1, Number(this.fps) || 6));
@@ -176,6 +205,12 @@
         const pause = document.getElementById(IDS.pause);
         if (!buttons || !pause || !tx) return false;
         install(tx);
+        // Frames are prepared before playback. Make the complete control row
+        // visible immediately; only actions that require initialization are disabled.
+        if (tx.frames?.length) {
+            buttons.hidden = false;
+            buttons.removeAttribute('hidden');
+        }
         const init = makeButton(IDS.initialize, 'Inicializar', 'Inicializar QR animado', () => getTransmitter()?.initialize?.(), pause);
         if (init && !init.parentNode) buttons.insertBefore(init, buttons.firstElementChild);
         const prev = makeButton(IDS.previous, 'Anterior', 'Mostrar QR anterior', () => getTransmitter()?.previousFrame?.(), pause);
