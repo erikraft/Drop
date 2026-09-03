@@ -3986,14 +3986,29 @@ class AnimatedQRSendDialog extends Dialog {
                 if (fileInfoEl) {
                     fileInfoEl.textContent = `${p.fileName} (${Util.formatBytes(p.totalSize)})`;
                 }
+                // Update progress bar
                 if (this.$progressBar) {
                     this.$progressBar.value = p.progressPct;
                 }
-                if (this.$framesCount) {
-                    this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames') || 'Frames'}: ${p.currentIndex + 1}/${p.totalFrames}`;
+                // Update frame count
+                const framesCountEl = this.$activeView.querySelector('#qr-send-frames-count');
+                if (framesCountEl) {
+                    framesCountEl.textContent = `${Localization.getTranslation('dialogs.frames') || 'Frames'}: ${p.currentIndex + 1}/${p.totalFrames}`;
                 }
-                if (this.$fpsSpeed) {
-                    this.$fpsSpeed.textContent = `${Localization.getTranslation('dialogs.speed') || 'Velocidade'}: ${p.fps} FPS`;
+                // Update progress percentage
+                const progressPctEl = this.$activeView.querySelector('#qr-send-progress-pct');
+                if (progressPctEl) {
+                    progressPctEl.textContent = `${p.progressPct}%`;
+                }
+                // Update tx rate
+                const txRateEl = this.$activeView.querySelector('#qr-send-tx-rate');
+                if (txRateEl) {
+                    txRateEl.textContent = `${p.fps} FPS`;
+                }
+                // Update frame payload
+                const framePayloadEl = this.$activeView.querySelector('#qr-send-frame-payload');
+                if (framePayloadEl) {
+                    framePayloadEl.textContent = `${bytesPerFrame} bytes/frame`;
                 }
             }
         });
