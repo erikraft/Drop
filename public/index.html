@@ -1666,8 +1666,49 @@
 
                         <div class="row center gap-2 fw align-items-center">
                             <label for="qr-send-fps-slider" class="font-caption" data-i18n-key="dialogs.animated-qr-speed-label">Velocidade (FPS):</label>
-                            <input type="range" id="qr-send-fps-slider" min="1" max="20" value="6" style="flex: 1;">
+                            <input type="range" id="qr-send-fps-slider" min="5" max="60" value="6" style="flex: 1;">
                             <span id="qr-send-fps-val" class="font-caption bold">6 FPS</span>
+                        </div>
+
+                        <!-- Transfer Settings -->
+                        <div class="fw column gap-2 mt-3">
+                            <div class="font-body2 bold text-center" data-i18n-key="dialogs.animated-qr-transfer-settings">Configurações de Transferência</div>
+                            
+                            <div class="row center gap-2 fw align-items-center">
+                                <label for="qr-send-bytes-per-frame" class="font-caption">Bytes/frame:</label>
+                                <select id="qr-send-bytes-per-frame" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                    <option value="1465">1465 (V27)</option>
+                                    <option value="2953" selected>2953 (V40)</option>
+                                </select>
+                            </div>
+
+                            <div class="row center gap-2 fw align-items-center">
+                                <label for="qr-send-ecc-level" class="font-caption">Correção de Erro:</label>
+                                <select id="qr-send-ecc-level" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                    <option value="L" selected>L (Baixa)</option>
+                                    <option value="M">M (Média)</option>
+                                    <option value="Q">Q (Quartil)</option>
+                                    <option value="H">H (Alta)</option>
+                                </select>
+                            </div>
+
+                            <div class="row center gap-2 fw align-items-center">
+                                <label for="qr-send-layout" class="font-caption">Layout:</label>
+                                <select id="qr-send-layout" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                    <option value="1" selected>1 código</option>
+                                    <option value="2" disabled>2 códigos (em breve)</option>
+                                    <option value="4" disabled>4 códigos (em breve)</option>
+                                </select>
+                            </div>
+
+                            <div class="row center gap-2 fw align-items-center">
+                                <label for="qr-send-display-size" class="font-caption">Tamanho:</label>
+                                <select id="qr-send-display-size" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                    <option value="small" data-i18n-key="dialogs.animated-qr-size-small">Pequeno</option>
+                                    <option value="medium" selected data-i18n-key="dialogs.animated-qr-size-medium">Médio</option>
+                                    <option value="large" data-i18n-key="dialogs.animated-qr-size-large">Grande</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
