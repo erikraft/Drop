@@ -132,22 +132,23 @@ window.ErikrafTDropQR = ErikrafTDropQR;
             seek.max = String(total - 1);
             seek.value = String(current);
             seek.setAttribute('aria-valuetext', `QR ${current + 1} de ${total}`);
+            seek.disabled = !transmitter.initialized;
         }
         if (input) {
             input.min = '1';
             input.max = String(total);
             input.value = String(current + 1);
             input.setAttribute('aria-label', `Número do QR, de 1 a ${total}`);
+            input.disabled = !transmitter.initialized;
         }
     };
 
     const setFrame = (transmitter, index) => {
-        if (!transmitter || !Array.isArray(transmitter.frames) || !transmitter.frames.length) return;
+        if (!transmitter || !transmitter.initialized || !Array.isArray(transmitter.frames) || !transmitter.frames.length) return;
         stopTimer(transmitter);
         transmitter.running = true;
         transmitter.paused = true;
-        transmitter.initialized = true;
-        transmitter.currentIndex = Math.max(0, Math.min(index, transmitter.frames.length - 1));
+        transmitter.currentIndex = Math.max(0, Math.min(Number.isFinite(index) ? index : 0, transmitter.frames.length - 1));
         renderCurrentFrame(transmitter, true);
         syncSeekUI(transmitter);
     };
@@ -201,17 +202,17 @@ window.ErikrafTDropQR = ErikrafTDropQR;
         };
 
         transmitter.previousFrame = function () {
-            if (!this.frames || !this.frames.length) return;
+            if (!this.initialized || !this.frames || !this.frames.length) return;
             setFrame(this, this.currentIndex - 1);
         };
 
         transmitter.nextFrame = function () {
-            if (!this.frames || !this.frames.length) return;
+            if (!this.initialized || !this.frames || !this.frames.length) return;
             setFrame(this, this.currentIndex + 1);
         };
 
         transmitter.seekFrame = function (index) {
-            if (!this.frames || !this.frames.length) return;
+            if (!this.initialized || !this.frames || !this.frames.length) return;
             setFrame(this, index);
         };
 
@@ -318,7 +319,7 @@ window.ErikrafTDropQR = ErikrafTDropQR;
             activeButtons.parentNode.insertBefore(seekWrapper, activeButtons);
             seek.addEventListener('input', event => {
                 const tx = getTransmitter();
-                if (!tx || !tx.frames || !tx.frames.length) return;
+                if (!tx || !tx.initialized || !tx.frames || !tx.frames.length) return;
                 setFrame(tx, Number(event.target.value));
             });
         }
@@ -349,7 +350,7 @@ window.ErikrafTDropQR = ErikrafTDropQR;
             activeButtons.parentNode.insertBefore(frameGroup, activeButtons);
             const goToFrame = () => {
                 const tx = getTransmitter();
-                if (!tx || !tx.frames || !tx.frames.length) return;
+                if (!tx || !tx.initialized || !tx.frames || !tx.frames.length) return;
                 const value = Number.parseInt(frameInput.value, 10);
                 if (!Number.isFinite(value)) return;
                 setFrame(tx, value - 1);
