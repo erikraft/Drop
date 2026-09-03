@@ -239,7 +239,12 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "animated-qr-transfer-settings": "Transfer Settings",
+        "animated-qr-size-small": "Small",
+        "animated-qr-size-medium": "Medium",
+        "animated-qr-size-large": "Large",
+        "animated-qr-text-too-large": "Text too large. Limit: {{limit}}"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

@@ -3932,7 +3932,9 @@ class AnimatedQRSendDialog extends Dialog {
             const textSize = encoder.encode(txt).length;
             if (textSize > MAX_TEXT_SIZE) {
                 if (window.erikrafTdrop && window.erikrafTdrop.toast) {
-                    window.erikrafTdrop.toast.show(Localization.getTranslation('dialogs.animated-qr-text-too-large') || `Texto muito grande. Limite: ${Util.formatBytes(MAX_TEXT_SIZE)}`);
+                    const errorMsg = Localization.getTranslation('dialogs.animated-qr-text-too-large', { limit: Util.formatBytes(MAX_TEXT_SIZE) }) ||
+                        `Text too large. Limit: ${Util.formatBytes(MAX_TEXT_SIZE)}`;
+                    window.erikrafTdrop.toast.show(errorMsg);
                 }
                 return;
             }
