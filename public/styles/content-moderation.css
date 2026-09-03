@@ -1,3 +1,5 @@
+@import url('./animated-qr-spacing.css');
+
 .content-moderation-warning {
     position: fixed;
     top: 50%;
@@ -28,7 +30,7 @@
     animation: pulse 2s infinite;
 }
 
-/* Estilos específicos para cada tipo de conteúdo */
+/* Estilos específicos para cada tipo de contenido */
 .warning-icon[data-type="explicit"] {
     filter: drop-shadow(0 0 8px rgba(255, 221, 0, 0.4));
 }
