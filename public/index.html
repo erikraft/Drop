@@ -1598,14 +1598,26 @@
 
                 <!-- Composition View: Mode selection & input -->
                 <div id="qr-send-compose-view" class="row center p-3">
-                    <div class="column fw gap-4">
+                    <div class="column fw gap-3">
+                        <!-- Privacy note -->
+                        <div class="font-caption text-center text-secondary" data-i18n-key="dialogs.animated-qr-privacy-note">Nothing leaves your device until scanned with a receiver.</div>
+
+                        <!-- Mode selection -->
+                        <div class="row center gap-2 fw">
+                            <button id="qr-send-mode-file" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-send-file">Send File</button>
+                            <button id="qr-send-mode-text" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-send-text">Send Text</button>
+                        </div>
+
                         <!-- Text composition container -->
                         <div id="qr-send-text-container" class="column fw">
-                            <label for="qr-send-text-input" class="font-caption text-secondary mb-2" data-i18n-key="dialogs.animated-qr-enter-text">Digite ou cole o texto aqui:</label>
-                            <textarea id="qr-send-text-input" class="fw textarea erikraft-qr-textarea" rows="4" style="resize: vertical; min-height: 100px;" placeholder="Mensagem ou texto para transferir..."></textarea>
+                            <div class="row row-between font-caption text-secondary mb-1">
+                                <span data-i18n-key="dialogs.animated-qr-text-snippet">Text</span>
+                                <span data-i18n-key="dialogs.animated-qr-text-limit">up to 4 MB</span>
+                            </div>
+                            <textarea id="qr-send-text-input" class="fw textarea erikraft-qr-textarea" rows="4" style="resize: vertical; min-height: 100px;" data-i18n-placeholder="dialogs.animated-qr-text-placeholder" placeholder="Paste or type anything — a URL, a config, a wall of text…"></textarea>
                             <div class="row row-between font-caption text-secondary mt-2">
-                                <span id="qr-send-text-char-count">0 caracteres</span>
-                                <button id="qr-send-text-paste-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-paste-text">Colar</button>
+                                <span id="qr-send-text-char-count">0 characters</span>
+                                <button id="qr-send-text-paste-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-paste-text">Paste</button>
                             </div>
                         </div>
 
@@ -1613,12 +1625,17 @@
                         <div id="qr-send-file-container" class="column fw">
                             <input type="file" id="qr-send-file-input" style="display: none;">
 
+                            <div class="row row-between font-caption text-secondary mb-1">
+                                <span data-i18n-key="dialogs.animated-qr-any-file">Any file</span>
+                                <span data-i18n-key="dialogs.animated-qr-file-limit">up to 64 MB</span>
+                            </div>
+
                             <div id="qr-send-file-picker-wrapper" class="erikraft-qr-dropzone">
                                 <div class="erikraft-qr-dropzone-icon">
                                     <svg class="icon" style="width: 42px; height: 42px; fill: var(--primary-color, #15acbd);"><use xlink:href="#file"></use></svg>
                                 </div>
-                                <div class="font-body2 text-center text-secondary mb-2" data-i18n-key="dialogs.animated-qr-file-dropzone">Arraste um arquivo ou clique abaixo</div>
-                                <button id="qr-send-select-file-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-select-file">Selecionar Arquivo</button>
+                                <div class="font-body2 text-center text-secondary mb-2" data-i18n-key="dialogs.animated-qr-no-file-selected">No file selected</div>
+                                <button id="qr-send-select-file-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-select-file">Select File</button>
                             </div>
 
                             <div id="qr-send-file-selected-card" class="erikraft-qr-selected-card" hidden>
@@ -1627,14 +1644,14 @@
                                         <svg class="icon" style="width: 20px; height: 20px; fill: #ffffff;"><use xlink:href="#file"></use></svg>
                                     </div>
                                     <div class="column fw overflow-hidden">
-                                        <div class="font-caption text-secondary uppercase bold" data-i18n-key="dialogs.animated-qr-file-selected">Arquivo selecionado</div>
+                                        <div class="font-caption text-secondary uppercase bold" data-i18n-key="dialogs.animated-qr-file-selected">Selected file</div>
                                         <div id="qr-send-selected-filename" class="font-body1 bold erikraft-qr-filename">file.txt</div>
                                         <div id="qr-send-selected-filesize" class="font-caption text-secondary">0 KB</div>
                                     </div>
                                 </div>
                                 <div class="erikraft-qr-card-actions">
-                                    <button id="qr-send-change-file-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-change-file">Alterar Arquivo</button>
-                                    <button id="qr-send-remove-file-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-remove-file">Remover Arquivo</button>
+                                    <button id="qr-send-change-file-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-change-file">Change File</button>
+                                    <button id="qr-send-remove-file-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-remove-file">Remove File</button>
                                 </div>
                             </div>
                         </div>
@@ -1648,73 +1665,100 @@
 
                 <!-- Active Streaming View -->
                 <div id="qr-send-active-view" class="row center p-3" hidden>
-                    <div class="column fw gap-3">
+                    <div class="column fw gap-2">
+                        <!-- File/Text Info -->
                         <div id="qr-send-file-info" class="font-body2 text-center bold" style="color: var(--primary-color, #15acbd);"></div>
 
                         <!-- Large QR Container - Central and prominent with proper sizing -->
                         <div id="qr-send-canvas-container" class="erikraft-qr-canvas-box"></div>
 
-                        <div class="fw column gap-2">
+                        <!-- Statistics/Progress Section -->
+                        <div class="fw column gap-1 erikraft-qr-stats">
+                            <div class="row row-between font-caption text-secondary">
+                                <span id="qr-send-frames-count" data-i18n-key="dialogs.frames">Frames</span>
+                                <span id="qr-send-progress-pct" data-i18n-key="dialogs.animated-qr-progress">Progresso</span>
+                            </div>
                             <progress id="qr-send-progress-bar" value="0" max="100" class="fw erikraft-qr-progress"></progress>
                             <div class="row row-between font-caption text-secondary">
-                                <span id="qr-send-frames-count">Frames: 0/0</span>
-                                <span id="qr-send-fps-speed">Velocidade: 6 FPS</span>
+                                <span id="qr-send-tx-rate" data-i18n-key="dialogs.animated-qr-tx-rate">Taxa de tx</span>
+                                <span id="qr-send-frame-payload" data-i18n-key="dialogs.animated-qr-frame-payload">Payload do frame</span>
                             </div>
                         </div>
 
+                        <!-- Instruction -->
                         <div class="font-body2 text-center text-secondary" data-i18n-key="dialogs.animated-qr-instruction">Aponte a câmera do outro dispositivo para este QR Code.</div>
 
-                        <div class="row center gap-2 fw align-items-center">
-                            <label for="qr-send-fps-slider" class="font-caption" data-i18n-key="dialogs.animated-qr-speed-label">Velocidade (FPS):</label>
-                            <input type="range" id="qr-send-fps-slider" min="5" max="60" value="6" style="flex: 1;">
-                            <span id="qr-send-fps-val" class="font-caption bold">6 FPS</span>
+                        <!-- Seek Bar -->
+                        <div id="qr-send-frame-seek-wrapper" class="fw column gap-1">
+                            <div class="row row-between font-caption text-secondary">
+                                <span data-i18n-key="dialogs.animated-qr-frame">Frame</span>
+                                <span id="qr-send-frame-display">0 / 0</span>
+                            </div>
+                            <input type="range" id="qr-send-frame-seek" class="fw" style="width:100%;accent-color:#0d6efd;cursor:pointer;touch-action:pan-x;" aria-label="Posição do QR animado">
                         </div>
 
-                        <!-- Transfer Settings -->
-                        <div class="fw column gap-2 mt-3">
-                            <div class="font-body2 bold text-center" data-i18n-key="dialogs.animated-qr-transfer-settings">Configurações de Transferência</div>
-                            
-                            <div class="row center gap-2 fw align-items-center">
-                                <label for="qr-send-bytes-per-frame" class="font-caption">Bytes/frame:</label>
-                                <select id="qr-send-bytes-per-frame" class="btn btn-rounded btn-grey" style="flex: 1;">
-                                    <option value="1465">1465 (V27)</option>
-                                    <option value="2953" selected>2953 (V40)</option>
-                                </select>
-                            </div>
-
-                            <div class="row center gap-2 fw align-items-center">
-                                <label for="qr-send-ecc-level" class="font-caption">Correção de Erro:</label>
-                                <select id="qr-send-ecc-level" class="btn btn-rounded btn-grey" style="flex: 1;">
-                                    <option value="L" selected>L (Baixa)</option>
-                                    <option value="M">M (Média)</option>
-                                    <option value="Q">Q (Quartil)</option>
-                                    <option value="H">H (Alta)</option>
-                                </select>
-                            </div>
-
-                            <div class="row center gap-2 fw align-items-center">
-                                <label for="qr-send-layout" class="font-caption">Layout:</label>
-                                <select id="qr-send-layout" class="btn btn-rounded btn-grey" style="flex: 1;">
-                                    <option value="1" selected>1 código</option>
-                                    <option value="2" disabled>2 códigos (em breve)</option>
-                                    <option value="4" disabled>4 códigos (em breve)</option>
-                                </select>
-                            </div>
-
-                            <div class="row center gap-2 fw align-items-center">
-                                <label for="qr-send-display-size" class="font-caption">Tamanho:</label>
-                                <select id="qr-send-display-size" class="btn btn-rounded btn-grey" style="flex: 1;">
-                                    <option value="small" data-i18n-key="dialogs.animated-qr-size-small">Pequeno</option>
-                                    <option value="medium" selected data-i18n-key="dialogs.animated-qr-size-medium">Médio</option>
-                                    <option value="large" data-i18n-key="dialogs.animated-qr-size-large">Grande</option>
-                                </select>
-                            </div>
+                        <!-- Frame Input -->
+                        <div id="qr-send-frame-input-group" class="row center gap-2" style="justify-content:center;">
+                            <label for="qr-send-frame-input" class="font-caption" data-i18n-key="dialogs.animated-qr-frame">Frame</label>
+                            <input type="number" id="qr-send-frame-input" class="btn btn-rounded btn-grey" min="1" step="1" inputMode="numeric" style="width:min(90px,24vw);text-align:center;box-sizing:border-box;" aria-label="Número do QR">
+                            <button id="qr-send-frame-go-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-go">Ir</button>
                         </div>
+
+                        <!-- Transfer Settings (Collapsible) -->
+                        <details class="fw column gap-2 mt-2">
+                            <summary class="font-body2 bold text-center cursor-pointer" style="color: var(--primary-color, #15acbd);" data-i18n-key="dialogs.animated-qr-transfer-settings">Configurações de Transferência</summary>
+                            <div class="fw column gap-2">
+                                <div class="row center gap-2 fw align-items-center">
+                                    <label for="qr-send-fps-slider" class="font-caption" data-i18n-key="dialogs.animated-qr-tx-fps">tx fps</label>
+                                    <input type="range" id="qr-send-fps-slider" min="5" max="60" value="6" style="flex: 1;">
+                                    <span id="qr-send-fps-val" class="font-caption bold">6</span>
+                                </div>
+
+                                <div class="row center gap-2 fw align-items-center">
+                                    <label for="qr-send-bytes-per-frame" class="font-caption" data-i18n-key="dialogs.animated-qr-bytes-per-frame">bytes / frame</label>
+                                    <select id="qr-send-bytes-per-frame" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                        <option value="1465">1465 (V27)</option>
+                                        <option value="2953" selected>2953 (V40)</option>
+                                    </select>
+                                </div>
+
+                                <div class="row center gap-2 fw align-items-center">
+                                    <label for="qr-send-ecc-level" class="font-caption" data-i18n-key="dialogs.animated-qr-error-correction">correção de erro</label>
+                                    <select id="qr-send-ecc-level" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                        <option value="L" selected>L</option>
+                                        <option value="M">M</option>
+                                        <option value="Q">Q</option>
+                                        <option value="H">H</option>
+                                    </select>
+                                </div>
+
+                                <div class="row center gap-2 fw align-items-center">
+                                    <label for="qr-send-layout" class="font-caption" data-i18n-key="dialogs.animated-qr-layout">layout</label>
+                                    <select id="qr-send-layout" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                        <option value="1" selected>1 code</option>
+                                        <option value="2" disabled>2 codes (em breve)</option>
+                                        <option value="4" disabled>4 codes (em breve)</option>
+                                    </select>
+                                </div>
+
+                                <div class="row center gap-2 fw align-items-center">
+                                    <label for="qr-send-display-size" class="font-caption" data-i18n-key="dialogs.animated-qr-display-size">tamanho de exibição</label>
+                                    <select id="qr-send-display-size" class="btn btn-rounded btn-grey" style="flex: 1;">
+                                        <option value="small" data-i18n-key="dialogs.animated-qr-size-small">Pequeno</option>
+                                        <option value="medium" selected data-i18n-key="dialogs.animated-qr-size-medium">Médio</option>
+                                        <option value="large" data-i18n-key="dialogs.animated-qr-size-large">Grande</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
                     </div>
                 </div>
 
                 <div id="qr-send-active-buttons" class="btn-row row-reverse wrap erikraft-qr-btn-row" hidden>
-                    <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-pause">Pausar</button>
+                    <button id="qr-send-initialize-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-initialize">Inicializar</button>
+                    <button id="qr-send-previous-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-previous">Anterior</button>
+                    <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-play">Play</button>
+                    <button id="qr-send-next-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-next">Próximo</button>
                     <button id="qr-send-back-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-back">Voltar</button>
                     <button type="button" class="btn btn-rounded btn-grey" close data-i18n-key="dialogs.close">Fechar</button>
                 </div>

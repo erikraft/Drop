@@ -3980,14 +3980,29 @@ class AnimatedQRSendDialog extends Dialog {
                 if (fileInfoEl) {
                     fileInfoEl.textContent = `${p.fileName} (${Util.formatBytes(p.totalSize)})`;
                 }
+                // Update progress bar
                 if (this.$progressBar) {
                     this.$progressBar.value = p.progressPct;
                 }
-                if (this.$framesCount) {
-                    this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames') || 'Frames'}: ${p.currentIndex + 1}/${p.totalFrames}`;
+                // Update frame count
+                const framesCountEl = this.$activeView.querySelector('#qr-send-frames-count');
+                if (framesCountEl) {
+                    framesCountEl.textContent = `${Localization.getTranslation('dialogs.frames') || 'Frames'}: ${p.currentIndex + 1}/${p.totalFrames}`;
                 }
-                if (this.$fpsSpeed) {
-                    this.$fpsSpeed.textContent = `${Localization.getTranslation('dialogs.speed') || 'Velocidade'}: ${p.fps} FPS`;
+                // Update progress percentage
+                const progressPctEl = this.$activeView.querySelector('#qr-send-progress-pct');
+                if (progressPctEl) {
+                    progressPctEl.textContent = `${p.progressPct}%`;
+                }
+                // Update tx rate
+                const txRateEl = this.$activeView.querySelector('#qr-send-tx-rate');
+                if (txRateEl) {
+                    txRateEl.textContent = `${p.fps} FPS`;
+                }
+                // Update frame payload
+                const framePayloadEl = this.$activeView.querySelector('#qr-send-frame-payload');
+                if (framePayloadEl) {
+                    framePayloadEl.textContent = `${bytesPerFrame} bytes/frame`;
                 }
             }
         });
@@ -4022,6 +4037,17 @@ class AnimatedQRSendDialog extends Dialog {
 
     hide() {
         this.stopTransmitter();
+        // Clean up transmitter completely
+        if (this.transmitter) {
+            if (this.transmitter.timer) {
+                clearTimeout(this.transmitter.timer);
+                this.transmitter.timer = null;
+            }
+            if (this.transmitter.containerEl && window.ErikrafTDropQR?.destroy) {
+                window.ErikrafTDropQR.destroy(this.transmitter.containerEl);
+            }
+            this.transmitter = null;
+        }
         // Clean up UI elements
         if (this.$textInput) this.$textInput.value = '';
         if (this.$charCount) this.$charCount.textContent = `0 ${Localization.getTranslation('dialogs.characters') || 'characters'}`;
@@ -4033,6 +4059,23 @@ class AnimatedQRSendDialog extends Dialog {
         if (this.$filePickerWrapper) {
             this.$filePickerWrapper.removeAttribute('hidden');
             this.$filePickerWrapper.style.display = 'flex';
+        }
+        // Reset views
+        if (this.$composeView) {
+            this.$composeView.removeAttribute('hidden');
+            this.$composeView.style.display = 'flex';
+        }
+        if (this.$composeButtons) {
+            this.$composeButtons.removeAttribute('hidden');
+            this.$composeButtons.style.display = 'flex';
+        }
+        if (this.$activeView) {
+            this.$activeView.setAttribute('hidden', '');
+            this.$activeView.style.display = 'none';
+        }
+        if (this.$activeButtons) {
+            this.$activeButtons.setAttribute('hidden', '');
+            this.$activeButtons.style.display = 'none';
         }
         super.hide();
     }

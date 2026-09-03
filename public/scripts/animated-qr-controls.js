@@ -100,6 +100,21 @@
             input.value = String(tx.currentIndex + 1);
             input.disabled = !tx.initialized;
         }
+        const frameDisplay = document.getElementById('qr-send-frame-display');
+        if (frameDisplay) {
+            frameDisplay.textContent = `${tx.currentIndex + 1} / ${total}`;
+        }
+        // Update progress percentage
+        const progressPctEl = document.getElementById('qr-send-progress-pct');
+        if (progressPctEl) {
+            const pct = Math.round(((tx.currentIndex + 1) / total) * 100);
+            progressPctEl.textContent = `${pct}%`;
+        }
+        // Update frames count
+        const framesCountEl = document.getElementById('qr-send-frames-count');
+        if (framesCountEl) {
+            framesCountEl.textContent = `${Localization.getTranslation('dialogs.frames') || 'Frames'}: ${tx.currentIndex + 1}/${total}`;
+        }
         const init = document.getElementById(IDS.initialize);
         if (init) init.hidden = !!tx.initialized;
         const previous = document.getElementById(IDS.previous);
@@ -108,11 +123,16 @@
         if (next) next.disabled = !tx.initialized;
         const pause = document.getElementById(IDS.pause);
         if (pause) {
-            pause.textContent = tx.paused ? 'Play' : 'Pausar';
-            pause.removeAttribute('data-i18n-key');
+            // Use i18n for button text
+            const i18nKey = tx.paused ? 'dialogs.animated-qr-play' : 'dialogs.animated-qr-pause';
+            pause.setAttribute('data-i18n-key', i18nKey);
             pause.setAttribute('aria-label', tx.paused ? 'Reproduzir QR animado' : 'Pausar QR animado');
             pause.title = tx.paused ? 'Play' : 'Pausar';
             pause.disabled = !tx.initialized;
+            // Trigger translation update
+            if (window.Localization) {
+                pause.textContent = window.Localization.getTranslation(i18nKey) || (tx.paused ? 'Play' : 'Pausar');
+            }
         }
         const go = document.getElementById(IDS.frameGo);
         if (go) go.disabled = !tx.initialized;
@@ -193,8 +213,7 @@
         button = template.cloneNode(true);
         button.id = id;
         button.type = 'button';
-        button.removeAttribute('data-i18n-key');
-        button.textContent = text;
+        // Keep the i18n key for translation
         button.setAttribute('aria-label', label);
         button.title = label;
         button.onclick = handler;
