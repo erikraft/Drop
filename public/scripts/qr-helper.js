@@ -68,26 +68,183 @@ class ErikrafTDropQR {
 window.ErikrafTDropQR = ErikrafTDropQR;
 
 (function setupAnimatedQRPlaybackControls() {
+    const BUTTON_IDS = {
+        previous: 'qr-send-previous-btn',
+        play: 'qr-send-play-btn',
+        pause: 'qr-send-pause-btn',
+        next: 'qr-send-next-btn'
+    };
+
+    const getTransmitter = () => {
+        const dialog = window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog;
+        return dialog && dialog.transmitter;
+    };
+
+    const renderCurrentFrame = transmitter => {
+        if (!transmitter || !Array.isArray(transmitter.frames) || !transmitter.frames.length) return false;
+        const index = Math.max(0, Math.min(transmitter.currentIndex, transmitter.frames.length - 1));
+        transmitter.currentIndex = index;
+        if (typeof ErikrafTDropQR !== 'undefined' && transmitter.containerEl) {
+            ErikrafTDropQR.render(transmitter.containerEl, transmitter.frames[index], {
+                width: 300,
+                height: 300
+            });
+        }
+        if (typeof transmitter.onProgress === 'function') {
+            transmitter.onProgress({
+                currentIndex: index,
+                totalFrames: transmitter.frames.length,
+                numBaseChunks: transmitter.numBaseChunks,
+                fps: transmitter.fps,
+                totalSize: transmitter.totalSize,
+                fileName: transmitter.metadata ? transmitter.metadata.name : 'Data',
+                progressPct: Math.min(100, Math.round(((index + 1) / transmitter.frames.length) * 100))
+            });
+        }
+        return true;
+    };
+
+    const stopTimer = transmitter => {
+        if (transmitter && transmitter.timer) {
+            clearTimeout(transmitter.timer);
+            transmitter.timer = null;
+        }
+    };
+
+    const installTransmitterControls = transmitter => {
+        if (!transmitter || transmitter.__erikraftPlaybackControlsInstalled) return;
+        if (!Array.isArray(transmitter.frames)) return;
+
+        transmitter.__erikraftPlaybackControlsInstalled = true;
+
+        const originalStart = typeof transmitter.start === 'function' ? transmitter.start.bind(transmitter) : null;
+        const originalPause = typeof transmitter.pause === 'function' ? transmitter.pause.bind(transmitter) : null;
+        const originalResume = typeof transmitter.resume === 'function' ? transmitter.resume.bind(transmitter) : null;
+
+        transmitter.start = function () {
+            if (!this.frames || !this.frames.length) return;
+            stopTimer(this);
+            this.running = true;
+            this.paused = true;
+            this.currentIndex = 0;
+            renderCurrentFrame(this);
+        };
+
+        transmitter.pause = function () {
+            if (originalPause) originalPause();
+            else {
+                this.paused = true;
+                stopTimer(this);
+            }
+            this.paused = true;
+            stopTimer(this);
+            renderCurrentFrame(this);
+        };
+
+        transmitter.resume = function () {
+            if (!this.running || !this.frames || !this.frames.length) return;
+            stopTimer(this);
+            this.paused = false;
+            const tick = () => {
+                if (!this.running || this.paused || !this.frames.length) return;
+                renderCurrentFrame(this);
+                this.currentIndex = (this.currentIndex + 1) % this.frames.length;
+                this.timer = setTimeout(tick, 1000 / this.fps);
+            };
+            tick();
+        };
+
+        transmitter.previousFrame = function () {
+            if (!this.frames || !this.frames.length) return;
+            stopTimer(this);
+            this.running = true;
+            this.paused = true;
+            this.currentIndex = Math.max(0, this.currentIndex - 1);
+            renderCurrentFrame(this);
+        };
+
+        transmitter.nextFrame = function () {
+            if (!this.frames || !this.frames.length) return;
+            stopTimer(this);
+            this.running = true;
+            this.paused = true;
+            this.currentIndex = Math.min(this.frames.length - 1, this.currentIndex + 1);
+            renderCurrentFrame(this);
+        };
+
+        if (originalStart && !this.__erikraftOriginalStart) {
+            this.__erikraftOriginalStart = originalStart;
+        }
+        if (originalPause && !this.__erikraftOriginalPause) {
+            this.__erikraftOriginalPause = originalPause;
+        }
+        if (originalResume && !this.__erikraftOriginalResume) {
+            this.__erikraftOriginalResume = originalResume;
+        }
+
+        renderCurrentFrame(transmitter);
+    };
+
     const setup = () => {
         const activeButtons = document.getElementById('qr-send-active-buttons');
-        const pauseButton = document.getElementById('qr-send-pause-btn');
-        if (!activeButtons || !pauseButton || document.getElementById('qr-send-play-btn')) return;
-        const playButton = pauseButton.cloneNode(true);
-        playButton.id = 'qr-send-play-btn';
-        playButton.removeAttribute('data-i18n-key');
-        playButton.textContent = '▶ Play';
-        playButton.setAttribute('aria-label', 'Play animated QR transfer');
-        playButton.title = 'Play animated QR transfer';
-        playButton.addEventListener('click', () => {
-            const dialog = window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog;
-            const transmitter = dialog && dialog.transmitter;
-            if (transmitter && transmitter.running) transmitter.resume();
-        });
-        activeButtons.insertBefore(playButton, pauseButton);
+        const pauseButton = document.getElementById(BUTTON_IDS.pause);
+        if (!activeButtons || !pauseButton) return;
+
+        const transmitter = getTransmitter();
+        if (transmitter) installTransmitterControls(transmitter);
+
+        if (!document.getElementById(BUTTON_IDS.previous)) {
+            const previousButton = pauseButton.cloneNode(true);
+            previousButton.id = BUTTON_IDS.previous;
+            previousButton.removeAttribute('data-i18n-key');
+            previousButton.textContent = 'Anterior';
+            previousButton.setAttribute('aria-label', 'Mostrar QR anterior');
+            previousButton.title = 'Mostrar QR anterior';
+            previousButton.addEventListener('click', () => {
+                const current = getTransmitter();
+                if (current && typeof current.previousFrame === 'function') current.previousFrame();
+            });
+            activeButtons.insertBefore(previousButton, activeButtons.firstElementChild);
+        }
+
+        if (!document.getElementById(BUTTON_IDS.play)) {
+            const playButton = pauseButton.cloneNode(true);
+            playButton.id = BUTTON_IDS.play;
+            playButton.removeAttribute('data-i18n-key');
+            playButton.textContent = 'Play';
+            playButton.setAttribute('aria-label', 'Iniciar transferência de QR animado');
+            playButton.title = 'Iniciar transferência de QR animado';
+            playButton.addEventListener('click', () => {
+                const current = getTransmitter();
+                if (current && current.running && typeof current.resume === 'function') current.resume();
+            });
+            activeButtons.insertBefore(playButton, pauseButton);
+        }
+
+        if (!document.getElementById(BUTTON_IDS.next)) {
+            const nextButton = pauseButton.cloneNode(true);
+            nextButton.id = BUTTON_IDS.next;
+            nextButton.removeAttribute('data-i18n-key');
+            nextButton.textContent = 'Próximo';
+            nextButton.setAttribute('aria-label', 'Mostrar próximo QR');
+            nextButton.title = 'Mostrar próximo QR';
+            nextButton.addEventListener('click', () => {
+                const current = getTransmitter();
+                if (current && typeof current.nextFrame === 'function') current.nextFrame();
+            });
+            activeButtons.insertBefore(nextButton, pauseButton);
+        }
     };
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup, { once: true });
-    else setup();
-    new MutationObserver(setup).observe(document.documentElement, { childList: true, subtree: true });
+
+    const runSetup = () => {
+        setup();
+        const transmitter = getTransmitter();
+        if (transmitter) installTransmitterControls(transmitter);
+    };
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runSetup, { once: true });
+    else runSetup();
+    new MutationObserver(runSetup).observe(document.documentElement, { childList: true, subtree: true });
 })();
 
 (function setupQRScannerFixes() {
@@ -244,7 +401,6 @@ window.ErikrafTDropQR = ErikrafTDropQR;
                 #qr-scanner-dialog .row.center, #qr-scanner-confirm-dialog .row.center { gap: 10px; }
                 #qr-scanner-dialog #qr-scanner-main-video { min-height: 180px; border-radius: 10px; }
                 #qr-scanner-confirm-dialog #qr-scanner-confirm-url { padding: 12px; }
-                #qr-scanner-dialog .btn-row > button, #qr-scanner-confirm-dialog .btn-row > button { flex: 1 1 140px; }
             }
         `;
         document.head.appendChild(style);
