@@ -27,7 +27,7 @@
 #animated-qr-send-dialog #qr-send-active-view > .column { gap: 16px; min-width: 0; width: 100%; }
 #animated-qr-send-dialog #qr-send-active-view { min-width: 0; width: 100%; box-sizing: border-box; }
 #animated-qr-send-dialog #qr-send-file-info { line-height: 1.5; padding: 0 4px; overflow-wrap: anywhere; }
-#animated-qr-send-dialog #qr-send-canvas-container { width: min(300px, 80vw); height: min(300px, 80vw); min-width: 220px; min-height: 220px; margin: 2px auto 4px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; overflow: hidden; box-sizing: border-box; }
+#animated-qr-send-dialog #qr-send-canvas-container { width: min(300px, 85vw); height: min(300px, 85vw); min-width: 200px; min-height: 200px; margin: 2px auto 4px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; overflow: hidden; box-sizing: border-box; }
 #animated-qr-send-dialog #qr-send-canvas-container > svg,
 #animated-qr-send-dialog #qr-send-canvas-container > canvas { display: block; width: 100%; height: 100%; max-width: 300px; max-height: 300px; }
 #animated-qr-send-dialog #qr-send-active-view > .column > .fw.column { gap: 8px; min-width: 0; }
@@ -72,7 +72,7 @@
     #animated-qr-send-dialog #qr-send-fps-slider { width: 100%; }
     #animated-qr-send-dialog #qr-send-frame-input-group { flex-wrap: wrap; }
     #animated-qr-send-dialog #qr-send-frame-input { width: min(110px, 34vw); }
-    #animated-qr-send-dialog #qr-send-canvas-container { width: min(300px, 78vw); height: min(300px, 78vw); min-width: 0; min-height: 0; max-width: 300px; max-height: 300px; }
+    #animated-qr-send-dialog #qr-send-canvas-container { width: min(280px, 85vw); height: min(280px, 85vw); min-width: 180px; min-height: 180px; max-width: 280px; max-height: 280px; }
     #animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
     #animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons > .btn { flex: 1 1 100%; min-height: 44px; }
     #animated-qr-send-dialog #qr-send-text-container > .row > *, #animated-qr-send-dialog #qr-send-file-container > .row > * { min-width: 0; max-width: 100%; }
@@ -85,7 +85,7 @@
     #animated-qr-send-dialog #qr-send-active-view { overflow: visible; }
 }
 @media (max-width: 360px) {
-    #animated-qr-send-dialog #qr-send-canvas-container { width: min(260px, 72vw); height: min(260px, 72vw); }
+    #animated-qr-send-dialog #qr-send-canvas-container { width: min(240px, 80vw); height: min(240px, 80vw); min-width: 160px; min-height: 160px; }
     #animated-qr-send-dialog #qr-send-active-view > .column { gap: 10px; }
     #animated-qr-send-dialog #qr-send-file-info { font-size: 0.9rem; }
 }

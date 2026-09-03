@@ -203,7 +203,11 @@
     const setup = tx => {
         const buttons = document.getElementById(IDS.activeButtons);
         const pause = document.getElementById(IDS.pause);
-        if (!buttons || !pause || !tx) return false;
+        if (!buttons || !pause || !tx) {
+            console.warn('[Animated QR] Missing required elements:', { buttons: !!buttons, pause: !!pause, tx: !!tx });
+            return false;
+        }
+        console.log('[Animated QR] Setting up controls for transmitter with', tx.frames?.length, 'frames');
         install(tx);
         // Frames are prepared before playback. Make the complete control row
         // visible immediately; only actions that require initialization are disabled.
@@ -211,11 +215,23 @@
             buttons.hidden = false;
             buttons.removeAttribute('hidden');
         }
-        const init = makeButton(IDS.initialize, 'Inicializar', 'Inicializar QR animado', () => getTransmitter()?.initialize?.(), pause);
+        const init = makeButton(IDS.initialize, 'Inicializar', 'Inicializar QR animado', () => {
+            console.log('[Animated QR] Inicializar button clicked');
+            const current = getTransmitter();
+            if (current?.initialize) current.initialize();
+        }, pause);
         if (init && !init.parentNode) buttons.insertBefore(init, buttons.firstElementChild);
-        const prev = makeButton(IDS.previous, 'Anterior', 'Mostrar QR anterior', () => getTransmitter()?.previousFrame?.(), pause);
+        const prev = makeButton(IDS.previous, 'Anterior', 'Mostrar QR anterior', () => {
+            console.log('[Animated QR] Anterior button clicked');
+            const current = getTransmitter();
+            if (current?.previousFrame) current.previousFrame();
+        }, pause);
         if (prev && !prev.parentNode) buttons.insertBefore(prev, buttons.firstElementChild);
-        const next = makeButton(IDS.next, 'Próximo', 'Mostrar próximo QR', () => getTransmitter()?.nextFrame?.(), pause);
+        const next = makeButton(IDS.next, 'Próximo', 'Mostrar próximo QR', () => {
+            console.log('[Animated QR] Próximo button clicked');
+            const current = getTransmitter();
+            if (current?.nextFrame) current.nextFrame();
+        }, pause);
         if (next && !next.parentNode) buttons.insertBefore(next, pause.nextSibling);
         if (!pause.dataset.erikraftControlCapture) {
             pause.dataset.erikraftControlCapture = 'true';
@@ -223,6 +239,7 @@
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 const current = getTransmitter();
+                console.log('[Animated QR] Pause button clicked, initialized:', current?.initialized, 'paused:', current?.paused);
                 if (!current?.initialized) return;
                 current.paused ? current.resume() : current.pause();
                 sync(current);
@@ -239,7 +256,11 @@
             seek.className = 'fw';
             seek.style.cssText = 'width:100%;accent-color:#0d6efd;cursor:pointer;touch-action:pan-x;';
             seek.setAttribute('aria-label', 'Posição do QR animado');
-            seek.addEventListener('input', event => getTransmitter()?.seekFrame?.(Number(event.target.value)));
+            seek.addEventListener('input', event => {
+                console.log('[Animated QR] Seek to frame:', event.target.value);
+                const current = getTransmitter();
+                if (current?.seekFrame) current.seekFrame(Number(event.target.value));
+            });
             wrapper.appendChild(seek);
             buttons.parentNode.insertBefore(wrapper, buttons);
         }
@@ -266,7 +287,9 @@
             go.title = 'Ir para o QR informado';
             const goFrame = () => {
                 const value = Number.parseInt(input.value, 10);
-                if (Number.isFinite(value)) getTransmitter()?.seekFrame?.(value - 1);
+                console.log('[Animated QR] Go to frame:', value);
+                const current = getTransmitter();
+                if (Number.isFinite(value) && current?.seekFrame) current.seekFrame(value - 1);
             };
             go.onclick = goFrame;
             input.addEventListener('keydown', event => {
@@ -279,6 +302,7 @@
             buttons.parentNode.insertBefore(group, buttons);
         }
         sync(tx);
+        console.log('[Animated QR] Controls setup completed');
         return true;
     };
     const tryInstall = () => {

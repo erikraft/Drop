@@ -155,9 +155,11 @@ class ErikrafTQRTransmitter {
     constructor(containerEl, options = {}) {
         this.containerEl = containerEl;
         this.fps = options.fps || 6;
-        this.chunkSize = options.chunkSize || 180; // bytes per QR frame
+        this.chunkSize = options.chunkSize || options.bytesPerFrame || 2953; // bytes per QR frame (default V40)
+        this.eccLevel = options.eccLevel || 'L'; // Error correction level
         this.running = false;
         this.paused = false;
+        this.initialized = false;
         this.timer = null;
         this.currentIndex = 0;
         this.frames = [];
@@ -279,9 +281,9 @@ class ErikrafTQRTransmitter {
     start() {
         if (!this.frames.length) return;
         this.running = true;
-        this.paused = false;
+        this.paused = true; // Start paused - user must click Play to start animation
+        this.initialized = false; // User must click Inicializar to show first frame
         this.currentIndex = 0;
-        this._tick();
     }
 
     pause() {
