@@ -61,11 +61,11 @@
 .erikraft-qr-dialog .font-body2,
 .erikraft-qr-dialog .font-caption { overflow-wrap: anywhere; }
 @media (max-width: 480px) {
-    .erikraft-qr-dialog .erikraft-qr-paper { max-height: calc(100vh - 12px); max-width: 98vw; }
+    .erikraft-qr-dialog .erikraft-qr-paper { max-height: calc(100dvh - 12px); max-width: 98vw; width: 98vw; }
     .erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) { padding: 12px 14px; }
     .erikraft-qr-dialog .erikraft-qr-paper > .row.center.p-3 { padding: 12px; }
     .erikraft-qr-dialog .erikraft-qr-paper > .erikraft-qr-btn-row,
-    .erikraft-qr-dialog .erikraft-qr-paper > .btn-row { padding: 8px 12px 12px; gap: 8px; }
+    .erikraft-qr-dialog .erikraft-qr-paper > .btn-row { padding: 8px 12px max(12px, env(safe-area-inset-bottom)); gap: 8px; }
     #animated-qr-send-dialog #qr-send-compose-view > .column { gap: 16px; }
     #animated-qr-main-dialog .erikraft-qr-card-send > .row { width: 100%; flex-wrap: wrap; }
     #animated-qr-send-dialog #qr-send-text-input { min-height: 110px; font-size: 16px; }
@@ -78,5 +78,14 @@
     #animated-qr-send-dialog #qr-send-text-container > .row > *, #animated-qr-send-dialog #qr-send-file-container > .row > * { min-width: 0; max-width: 100%; }
 }
 @media (min-width: 481px) {
-    #animated-qr-send-dialog #qr-send-active-buttons { max-height: 40vh; overflow-y: auto; }
+    #animated-qr-send-dialog #qr-send-active-buttons { max-height: none; overflow: visible; }
+}
+@media (min-width: 481px) and (max-height: 760px) {
+    .erikraft-qr-dialog .erikraft-qr-paper { max-height: calc(100vh - 16px); }
+    #animated-qr-send-dialog #qr-send-active-view { overflow: visible; }
+}
+@media (max-width: 360px) {
+    #animated-qr-send-dialog #qr-send-canvas-container { width: min(260px, 72vw); height: min(260px, 72vw); }
+    #animated-qr-send-dialog #qr-send-active-view > .column { gap: 10px; }
+    #animated-qr-send-dialog #qr-send-file-info { font-size: 0.9rem; }
 }
