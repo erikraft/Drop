@@ -28,6 +28,14 @@
 #animated-qr-send-dialog #qr-send-active-view > .column > .fw.column { gap: 8px; }
 #animated-qr-send-dialog #qr-send-active-view .font-body2.text-center { line-height: 1.55; padding: 0 8px; }
 #animated-qr-send-dialog #qr-send-fps-slider { min-width: 0; }
+#animated-qr-send-dialog #qr-send-frame-seek-wrapper { width: 100%; box-sizing: border-box; margin: 8px 0 0; }
+#animated-qr-send-dialog #qr-send-frame-seek { display: block; width: 100%; height: 6px; margin: 0; accent-color: #0d6efd; cursor: pointer; }
+#animated-qr-send-dialog #qr-send-frame-seek:focus-visible { outline: 2px solid #0d6efd; outline-offset: 3px; }
+#animated-qr-send-dialog #qr-send-frame-input-group { width: 100%; box-sizing: border-box; justify-content: center; align-items: center; gap: 8px; }
+#animated-qr-send-dialog #qr-send-frame-input { width: min(90px, 24vw); min-height: 40px; box-sizing: border-box; text-align: center; }
+#animated-qr-send-dialog #qr-send-frame-go-btn { min-height: 40px; }
+#animated-qr-send-dialog #qr-send-initialize-btn { min-width: 120px; }
+#animated-qr-send-dialog #qr-send-play-btn { display: none !important; }
 #animated-qr-receive-dialog #qr-receive-scanner-view { gap: 14px; }
 #animated-qr-receive-dialog .erikraft-qr-camera-wrapper { margin-bottom: 2px; }
 #animated-qr-receive-dialog #qr-receive-state { line-height: 1.5; min-height: 18px; }
@@ -49,4 +57,6 @@
     #animated-qr-send-dialog #qr-send-compose-view > .column { gap: 18px; }
     #animated-qr-main-dialog .erikraft-qr-card-send > .row { width: 100%; }
     #animated-qr-send-dialog #qr-send-fps-slider { width: 100%; }
+    #animated-qr-send-dialog #qr-send-frame-input-group { flex-wrap: wrap; }
+    #animated-qr-send-dialog #qr-send-frame-input { width: min(110px, 34vw); }
 }
