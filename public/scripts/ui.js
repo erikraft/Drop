@@ -3639,6 +3639,10 @@ class AnimatedQRSendDialog extends Dialog {
         this.$fpsSpeed = this.$el.querySelector('#qr-send-fps-speed');
         this.$fpsSlider = this.$el.querySelector('#qr-send-fps-slider');
         this.$fpsVal = this.$el.querySelector('#qr-send-fps-val');
+        this.$bytesPerFrame = this.$el.querySelector('#qr-send-bytes-per-frame');
+        this.$eccLevel = this.$el.querySelector('#qr-send-ecc-level');
+        this.$layout = this.$el.querySelector('#qr-send-layout');
+        this.$displaySize = this.$el.querySelector('#qr-send-display-size');
         this.$pauseBtn = this.$el.querySelector('#qr-send-pause-btn');
         this.$backBtn = this.$el.querySelector('#qr-send-back-btn');
 
@@ -3768,16 +3772,9 @@ class AnimatedQRSendDialog extends Dialog {
         }
 
         if (this.$pauseBtn) {
-            this.$pauseBtn.addEventListener('click', () => {
-                if (!this.transmitter) return;
-                if (this.transmitter.paused) {
-                    this.transmitter.resume();
-                    this.$pauseBtn.textContent = Localization.getTranslation('dialogs.animated-qr-pause') || 'Pausar';
-                } else {
-                    this.transmitter.pause();
-                    this.$pauseBtn.textContent = Localization.getTranslation('dialogs.animated-qr-resume') || 'Retomar';
-                }
-            });
+            // Pause button is now handled by animated-qr-controls.js
+            // Remove this handler to avoid conflicts
+            // The runtime controls will handle Play/Pause toggle
         }
 
         if (this.$backBtn) {
@@ -3794,10 +3791,64 @@ class AnimatedQRSendDialog extends Dialog {
                 if (this.transmitter) this.transmitter.setFps(fps);
             });
         }
+
+        if (this.$bytesPerFrame) {
+            this.$bytesPerFrame.addEventListener('change', (e) => {
+                const bytes = parseInt(e.target.value, 10) || 2953;
+                if (this.transmitter) {
+                    this.transmitter.chunkSize = bytes;
+                    // Would need to re-prepare frames with new chunk size
+                    // For now, this will only affect new transfers
+                }
+            });
+        }
+
+        if (this.$eccLevel) {
+            this.$eccLevel.addEventListener('change', (e) => {
+                const ecc = e.target.value || 'L';
+                if (this.transmitter) {
+                    this.transmitter.eccLevel = ecc;
+                    // Would need to re-generate frames with new ECC level
+                    // For now, this will only affect new transfers
+                }
+            });
+        }
+
+        if (this.$displaySize) {
+            this.$displaySize.addEventListener('change', (e) => {
+                const size = e.target.value || 'medium';
+                const container = this.$container;
+                if (container) {
+                    // Update QR container size based on selection
+                    switch (size) {
+                        case 'small':
+                            container.style.maxWidth = '200px';
+                            container.style.maxHeight = '200px';
+                            break;
+                        case 'medium':
+                            container.style.maxWidth = '300px';
+                            container.style.maxHeight = '300px';
+                            break;
+                        case 'large':
+                            container.style.maxWidth = '400px';
+                            container.style.maxHeight = '400px';
+                            break;
+                    }
+                }
+            });
+        }
     }
 
     setSelectedFile(file) {
         if (!file) return;
+        // Validate file size (64MB limit)
+        const MAX_FILE_SIZE = 64 * 1024 * 1024; // 64MB
+        if (file.size > MAX_FILE_SIZE) {
+            if (window.erikrafTdrop && window.erikrafTdrop.toast) {
+                window.erikrafTdrop.toast.show(Localization.getTranslation('dialogs.animated-qr-file-too-large') || `Arquivo muito grande. Limite: ${Util.formatBytes(MAX_FILE_SIZE)}`);
+            }
+            return;
+        }
         this.selectedFile = file;
         this.mode = 'file';
         if (this.$selectedFilename) this.$selectedFilename.textContent = file.name;
@@ -3875,6 +3926,16 @@ class AnimatedQRSendDialog extends Dialog {
                 }
                 return;
             }
+            // Validate text size (4MB limit when encoded as UTF-8)
+            const MAX_TEXT_SIZE = 4 * 1024 * 1024; // 4MB
+            const encoder = new TextEncoder();
+            const textSize = encoder.encode(txt).length;
+            if (textSize > MAX_TEXT_SIZE) {
+                if (window.erikrafTdrop && window.erikrafTdrop.toast) {
+                    window.erikrafTdrop.toast.show(Localization.getTranslation('dialogs.animated-qr-text-too-large') || `Texto muito grande. Limite: ${Util.formatBytes(MAX_TEXT_SIZE)}`);
+                }
+                return;
+            }
             await this.send({ text: txt });
         }
     }
@@ -3929,6 +3990,8 @@ class AnimatedQRSendDialog extends Dialog {
         }
 
         this.show();
+        // start() now only initializes state, doesn't auto-play
+        // User must click "Inicializar" to show first frame, then "Play" to animate
         this.transmitter.start();
     }
 

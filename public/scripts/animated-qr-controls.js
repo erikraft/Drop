@@ -50,7 +50,8 @@
             qr.render(tx.containerEl, tx.frames[tx.currentIndex], {
                 width: 300,
                 height: 300,
-                animatedTransfer: true
+                animatedTransfer: true,
+                eccLevel: tx.eccLevel || 'L'
             });
         } catch (error) {
             console.error('[Animated QR] Frame render failed:', error);
