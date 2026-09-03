@@ -48,7 +48,7 @@ class ErikrafTDropQR {
 
     /**
      * Renders or updates a QR Code inside the provided container.
-     * QR appears immediately, logo loads asynchronously if available.
+     * Animated transfer QR codes intentionally never load or render a logo.
      *
      * @param {HTMLElement} container - The DOM element where the QR Code will render.
      * @param {string} data - The URL/data to encode.
@@ -61,8 +61,12 @@ class ErikrafTDropQR {
             return null;
         }
 
+        // Animated QR transfer frames are rendered without the logo so each frame
+        // can be generated as quickly as possible. Pairing/public-room QR codes
+        // keep the existing branded logo behaviour.
+        const isAnimatedTransfer = container.id === 'qr-send-canvas-container' || options.animatedTransfer === true;
         const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
-        if (!this._logoState.attempted) {
+        if (!isAnimatedTransfer && !this._logoState.attempted) {
             this._ensureLogoLoaded(logoPath);
         }
 
@@ -107,7 +111,7 @@ class ErikrafTDropQR {
             }
         };
 
-        if (this._logoState.available) {
+        if (!isAnimatedTransfer && this._logoState.available) {
             baseConfig.image = this._logoState.path;
             baseConfig.imageOptions = {
                 hideBackgroundDots: true,
@@ -143,3 +147,43 @@ class ErikrafTDropQR {
 
 // Make it globally accessible for our non-modular browser scripts
 window.ErikrafTDropQR = ErikrafTDropQR;
+
+// Animated QR transfer playback controls.
+// The existing Pause and Back controls are preserved; this adds a dedicated
+// Play button without changing the transfer protocol or QR frame generation.
+(function setupAnimatedQRPlaybackControls() {
+    const setup = () => {
+        const activeButtons = document.getElementById('qr-send-active-buttons');
+        const pauseButton = document.getElementById('qr-send-pause-btn');
+        if (!activeButtons || !pauseButton || document.getElementById('qr-send-play-btn')) return;
+
+        const playButton = pauseButton.cloneNode(true);
+        playButton.id = 'qr-send-play-btn';
+        playButton.removeAttribute('data-i18n-key');
+        playButton.textContent = '▶ Play';
+        playButton.setAttribute('aria-label', 'Play animated QR transfer');
+        playButton.title = 'Play animated QR transfer';
+
+        playButton.addEventListener('click', () => {
+            const dialog = window.erikrafTdrop && window.erikrafTdrop.animatedQRSendDialog;
+            const transmitter = dialog && dialog.transmitter;
+            if (!transmitter || !transmitter.running) return;
+            transmitter.resume();
+            pauseButton.textContent = typeof Localization !== 'undefined' && Localization.getTranslation
+                ? (Localization.getTranslation('dialogs.animated-qr-pause') || 'Pause')
+                : 'Pause';
+        });
+
+        activeButtons.insertBefore(playButton, pauseButton);
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setup, { once: true });
+    } else {
+        setup();
+    }
+
+    // The dialog may be instantiated after DOMContentLoaded.
+    const observer = new MutationObserver(setup);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+})();
