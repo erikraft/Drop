@@ -10,8 +10,10 @@
 .erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) { flex: 0 0 auto; padding: 14px 18px; margin: 0; }
 .erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) .dialog-title { margin: 0; text-align: center; line-height: 1.35; }
 .erikraft-qr-dialog .erikraft-qr-paper > .row.center.p-3 { box-sizing: border-box; width: 100%; padding: 18px; min-width: 0; }
-.erikraft-qr-dialog .erikraft-qr-paper > .erikraft-qr-btn-row { flex: 0 0 auto; width: 100%; box-sizing: border-box; padding: 10px 18px 18px; gap: 10px; }
-.erikraft-qr-dialog .erikraft-qr-btn-row .btn { margin: 0; }
+.erikraft-qr-dialog .erikraft-qr-paper > .erikraft-qr-btn-row,
+.erikraft-qr-dialog .erikraft-qr-paper > .btn-row { flex: 0 0 auto; width: 100%; box-sizing: border-box; padding: 10px 18px 18px; gap: 10px; }
+.erikraft-qr-dialog .erikraft-qr-btn-row .btn,
+.erikraft-qr-dialog .btn-row .btn { margin: 0; }
 #animated-qr-main-dialog .erikraft-qr-paper > .row.center.p-3 > .column { gap: 18px; }
 #animated-qr-main-dialog .erikraft-qr-card-send,
 #animated-qr-main-dialog .erikraft-qr-card-receive { width: 100%; box-sizing: border-box; gap: 10px; }
@@ -99,7 +101,8 @@
     .erikraft-qr-dialog .erikraft-qr-paper { max-height: calc(100vh - 12px); max-width: 98vw; }
     .erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) { padding: 12px 14px; }
     .erikraft-qr-dialog .erikraft-qr-paper > .row.center.p-3 { padding: 14px; }
-    .erikraft-qr-dialog .erikraft-qr-paper > .erikraft-qr-btn-row { padding: 8px 14px 14px; gap: 8px; }
+    .erikraft-qr-dialog .erikraft-qr-paper > .erikraft-qr-btn-row,
+    .erikraft-qr-dialog .erikraft-qr-paper > .btn-row { padding: 8px 14px 14px; gap: 8px; }
     #animated-qr-send-dialog #qr-send-compose-view > .column { gap: 18px; }
     #animated-qr-main-dialog .erikraft-qr-card-send > .row { width: 100%; }
     #animated-qr-send-dialog #qr-send-fps-slider { width: 100%; }
