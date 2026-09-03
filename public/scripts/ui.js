@@ -3645,6 +3645,9 @@ class AnimatedQRSendDialog extends Dialog {
         this.$displaySize = this.$el.querySelector('#qr-send-display-size');
         this.$pauseBtn = this.$el.querySelector('#qr-send-pause-btn');
         this.$backBtn = this.$el.querySelector('#qr-send-back-btn');
+        this.$initializeBtn = this.$el.querySelector('#qr-send-initialize-btn');
+        this.$previousBtn = this.$el.querySelector('#qr-send-previous-btn');
+        this.$nextBtn = this.$el.querySelector('#qr-send-next-btn');
 
         this.selectedFile = null;
         this.mode = 'file'; // 'text' or 'file'
@@ -3783,6 +3786,9 @@ class AnimatedQRSendDialog extends Dialog {
                 this.showComposeView();
             });
         }
+
+        // Initialize button - handled by animated-qr-controls.js
+        // Previous/Next buttons - handled by animated-qr-controls.js
 
         if (this.$fpsSlider) {
             this.$fpsSlider.addEventListener('input', (e) => {
@@ -4022,6 +4028,17 @@ class AnimatedQRSendDialog extends Dialog {
 
     hide() {
         this.stopTransmitter();
+        // Clean up transmitter completely
+        if (this.transmitter) {
+            if (this.transmitter.timer) {
+                clearTimeout(this.transmitter.timer);
+                this.transmitter.timer = null;
+            }
+            if (this.transmitter.containerEl && window.ErikrafTDropQR?.destroy) {
+                window.ErikrafTDropQR.destroy(this.transmitter.containerEl);
+            }
+            this.transmitter = null;
+        }
         // Clean up UI elements
         if (this.$textInput) this.$textInput.value = '';
         if (this.$charCount) this.$charCount.textContent = `0 ${Localization.getTranslation('dialogs.characters') || 'characters'}`;
@@ -4033,6 +4050,23 @@ class AnimatedQRSendDialog extends Dialog {
         if (this.$filePickerWrapper) {
             this.$filePickerWrapper.removeAttribute('hidden');
             this.$filePickerWrapper.style.display = 'flex';
+        }
+        // Reset views
+        if (this.$composeView) {
+            this.$composeView.removeAttribute('hidden');
+            this.$composeView.style.display = 'flex';
+        }
+        if (this.$composeButtons) {
+            this.$composeButtons.removeAttribute('hidden');
+            this.$composeButtons.style.display = 'flex';
+        }
+        if (this.$activeView) {
+            this.$activeView.setAttribute('hidden', '');
+            this.$activeView.style.display = 'none';
+        }
+        if (this.$activeButtons) {
+            this.$activeButtons.setAttribute('hidden', '');
+            this.$activeButtons.style.display = 'none';
         }
         super.hide();
     }

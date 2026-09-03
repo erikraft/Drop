@@ -1664,6 +1664,22 @@
 
                         <div class="font-body2 text-center text-secondary" data-i18n-key="dialogs.animated-qr-instruction">Aponte a câmera do outro dispositivo para este QR Code.</div>
 
+                        <!-- Seek Bar -->
+                        <div id="qr-send-frame-seek-wrapper" class="fw column gap-1">
+                            <div class="row row-between font-caption text-secondary">
+                                <span data-i18n-key="dialogs.animated-qr-frame">Frame</span>
+                                <span id="qr-send-frame-display">0 / 0</span>
+                            </div>
+                            <input type="range" id="qr-send-frame-seek" class="fw" style="width:100%;accent-color:#0d6efd;cursor:pointer;touch-action:pan-x;" aria-label="Posição do QR animado">
+                        </div>
+
+                        <!-- Frame Input -->
+                        <div id="qr-send-frame-input-group" class="row center gap-2" style="justify-content:center;">
+                            <label for="qr-send-frame-input" class="font-caption" data-i18n-key="dialogs.animated-qr-frame">Frame</label>
+                            <input type="number" id="qr-send-frame-input" class="btn btn-rounded btn-grey" min="1" step="1" inputMode="numeric" style="width:min(90px,24vw);text-align:center;box-sizing:border-box;" aria-label="Número do QR">
+                            <button id="qr-send-frame-go-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-go">Ir</button>
+                        </div>
+
                         <div class="row center gap-2 fw align-items-center">
                             <label for="qr-send-fps-slider" class="font-caption" data-i18n-key="dialogs.animated-qr-speed-label">Velocidade (FPS):</label>
                             <input type="range" id="qr-send-fps-slider" min="5" max="60" value="6" style="flex: 1;">
@@ -1714,7 +1730,10 @@
                 </div>
 
                 <div id="qr-send-active-buttons" class="btn-row row-reverse wrap erikraft-qr-btn-row" hidden>
-                    <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-pause">Pausar</button>
+                    <button id="qr-send-initialize-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-initialize">Inicializar</button>
+                    <button id="qr-send-previous-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-previous">Anterior</button>
+                    <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-primary" data-i18n-key="dialogs.animated-qr-play">Play</button>
+                    <button id="qr-send-next-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-next">Próximo</button>
                     <button id="qr-send-back-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-back">Voltar</button>
                     <button type="button" class="btn btn-rounded btn-grey" close data-i18n-key="dialogs.close">Fechar</button>
                 </div>

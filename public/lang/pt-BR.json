@@ -244,7 +244,13 @@
         "animated-qr-size-small": "Pequeno",
         "animated-qr-size-medium": "Médio",
         "animated-qr-size-large": "Grande",
-        "animated-qr-text-too-large": "Texto muito grande. Limite: {{limit}}"
+        "animated-qr-text-too-large": "Texto muito grande. Limite: {{limit}}",
+        "animated-qr-play": "Play",
+        "animated-qr-initialize": "Inicializar",
+        "animated-qr-previous": "Anterior",
+        "animated-qr-next": "Próximo",
+        "animated-qr-frame": "Frame",
+        "animated-qr-go": "Ir"
     },
     "about": {
         "close-about_aria-label": "Fechar Sobre o ErikrafT Drop™",

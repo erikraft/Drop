@@ -38,20 +38,37 @@
         if (canvas) canvas.hidden = false;
     };
     const render = tx => {
-        if (!tx?.initialized || !tx.frames?.length || !tx.containerEl) return false;
+        console.log('[Animated QR] Render called - initialized:', tx?.initialized, 'frames:', tx?.frames?.length, 'container:', !!tx?.containerEl);
+        if (!tx?.initialized || !tx.frames?.length || !tx.containerEl) {
+            console.warn('[Animated QR] Render aborted - missing requirements');
+            return false;
+        }
         const qr = window.ErikrafTDropQR;
         if (!qr || typeof qr.render !== 'function') {
             console.error('[Animated QR] ErikrafTDropQR renderer unavailable');
             return false;
         }
         tx.currentIndex = clamp(tx, tx.currentIndex);
+        console.log('[Animated QR] Rendering frame:', tx.currentIndex, 'of', tx.frames.length);
         showActive();
+        console.log('[Animated QR] Container visibility:', {
+            hidden: tx.containerEl.hidden,
+            display: window.getComputedStyle(tx.containerEl).display,
+            visibility: window.getComputedStyle(tx.containerEl).visibility,
+            opacity: window.getComputedStyle(tx.containerEl).opacity,
+            offsetWidth: tx.containerEl.offsetWidth,
+            offsetHeight: tx.containerEl.offsetHeight
+        });
         try {
             qr.render(tx.containerEl, tx.frames[tx.currentIndex], {
                 width: 300,
                 height: 300,
                 animatedTransfer: true
             });
+            console.log('[Animated QR] Render completed, checking container children:', tx.containerEl.children.length);
+            if (tx.containerEl.children.length > 0) {
+                console.log('[Animated QR] First child tag:', tx.containerEl.children[0].tagName, 'display:', window.getComputedStyle(tx.containerEl.children[0]).display);
+            }
         } catch (error) {
             console.error('[Animated QR] Frame render failed:', error);
             return false;
@@ -100,6 +117,10 @@
             input.value = String(tx.currentIndex + 1);
             input.disabled = !tx.initialized;
         }
+        const frameDisplay = document.getElementById('qr-send-frame-display');
+        if (frameDisplay) {
+            frameDisplay.textContent = `${tx.currentIndex + 1} / ${total}`;
+        }
         const init = document.getElementById(IDS.initialize);
         if (init) init.hidden = !!tx.initialized;
         const previous = document.getElementById(IDS.previous);
@@ -144,15 +165,24 @@
             sync(this);
         };
         tx.initialize = function () {
-            if (!this.frames?.length) return;
+            console.log('[Animated QR] Initialize called - frames:', this.frames?.length, 'container:', !!this.containerEl);
+            if (!this.frames?.length) {
+                console.warn('[Animated QR] Initialize aborted - no frames');
+                return;
+            }
             stopTimer(this);
             this.running = true;
             this.paused = true;
             this.initialized = true;
             this.currentIndex = clamp(this, this.currentIndex);
+            console.log('[Animated QR] Initialize - showing active view');
             showActive();
+            console.log('[Animated QR] Initialize - calling render');
             if (!render(this)) {
+                console.error('[Animated QR] Initialize - render failed, reverting initialized state');
                 this.initialized = false;
+            } else {
+                console.log('[Animated QR] Initialize - render succeeded');
             }
             sync(this);
         };
