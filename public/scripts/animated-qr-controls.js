@@ -15,6 +15,42 @@
     };
 
     const getTransmitter = () => window.erikrafTdrop?.animatedQRSendDialog?.transmitter || null;
+
+    // The current transfer format stores binary chunks inside base64 JSON payloads.
+    // 2953 raw bytes therefore cannot safely fit in a V40-L QR after base64 and
+    // metadata overhead. Keep the user-facing setting but clamp the actual chunk
+    // size to a conservative value that the existing QR encoder can render.
+    const getSafeChunkSize = (requested, ecc) => {
+        const limits = { L: 1800, M: 1400, Q: 1000, H: 700 };
+        const level = String(ecc || 'L').toUpperCase();
+        const requestedSize = Number.parseInt(requested, 10) || 1800;
+        return Math.max(256, Math.min(requestedSize, limits[level] || limits.L));
+    };
+
+    let transmitterPrototypePatched = false;
+    const patchTransmitterPreparation = () => {
+        const Transmitter = window.ErikrafTQRTransmitter;
+        if (!Transmitter?.prototype?.prepareBuffer || transmitterPrototypePatched) return;
+        const originalPrepareBuffer = Transmitter.prototype.prepareBuffer;
+        if (originalPrepareBuffer.__erikraftSafeChunkPatch) {
+            transmitterPrototypePatched = true;
+            return;
+        }
+        const patchedPrepareBuffer = async function(buffer, metadata) {
+            const requested = this.chunkSize;
+            const safe = getSafeChunkSize(requested, this.eccLevel);
+            if (safe !== requested) {
+                console.warn('[Animated QR] Adjusting bytes/frame for QR capacity:', { requested, safe, eccLevel: this.eccLevel });
+            }
+            this.chunkSize = safe;
+            return originalPrepareBuffer.call(this, buffer, metadata);
+        };
+        patchedPrepareBuffer.__erikraftSafeChunkPatch = true;
+        Transmitter.prototype.prepareBuffer = patchedPrepareBuffer;
+        transmitterPrototypePatched = true;
+        console.log('[Animated QR] Safe QR payload preparation patch installed');
+    };
+
     const stopTimer = tx => {
         if (!tx) return;
         if (tx.timer) clearTimeout(tx.timer);
@@ -30,12 +66,23 @@
         const view = document.getElementById('qr-send-active-view');
         const buttons = document.getElementById(IDS.activeButtons);
         const canvas = document.getElementById('qr-send-canvas-container');
-        if (view) view.hidden = false;
+        if (view) {
+            view.hidden = false;
+            view.removeAttribute('hidden');
+        }
         if (buttons) {
             buttons.hidden = false;
             buttons.removeAttribute('hidden');
         }
-        if (canvas) canvas.hidden = false;
+        if (canvas) {
+            canvas.hidden = false;
+            canvas.removeAttribute('hidden');
+        }
+    };
+    const getDisplaySize = () => {
+        const select = document.getElementById('qr-send-display-size');
+        const value = select?.value || 'medium';
+        return { small: 200, medium: 300, large: 400 }[value] || 300;
     };
     const render = tx => {
         if (!tx?.initialized || !tx.frames?.length || !tx.containerEl) return false;
@@ -46,14 +93,35 @@
         }
         tx.currentIndex = clamp(tx, tx.currentIndex);
         showActive();
+        const size = getDisplaySize();
         try {
-            qr.render(tx.containerEl, tx.frames[tx.currentIndex], {
-                width: 300,
-                height: 300,
+            const instance = qr.render(tx.containerEl, tx.frames[tx.currentIndex], {
+                width: size,
+                height: size,
+                eccLevel: tx.eccLevel,
                 animatedTransfer: true
             });
+            const renderedNode = tx.containerEl.querySelector('svg, canvas');
+            if (!renderedNode) {
+                console.error('[Animated QR] Renderer returned without creating SVG/canvas', {
+                    container: tx.containerEl,
+                    instance,
+                    frame: tx.currentIndex + 1
+                });
+                return false;
+            }
+            renderedNode.removeAttribute('hidden');
+            renderedNode.style.display = 'block';
+            renderedNode.style.maxWidth = '100%';
+            renderedNode.style.height = 'auto';
         } catch (error) {
-            console.error('[Animated QR] Frame render failed:', error);
+            console.error('[Animated QR] Frame render failed:', error, {
+                frame: tx.currentIndex + 1,
+                totalFrames: tx.frames.length,
+                eccLevel: tx.eccLevel,
+                chunkSize: tx.chunkSize,
+                dataLength: tx.frames[tx.currentIndex]?.length
+            });
             return false;
         }
         if (typeof tx.onProgress === 'function') {
@@ -129,8 +197,8 @@
     const install = tx => {
         if (!tx || !Array.isArray(tx.frames) || tx.__erikraftAnimatedControlsOwned) return;
         tx.__erikraftAnimatedControlsOwned = true;
-        // qr-helper.js has a legacy controller loaded before this file. Do not
-        // honor its marker: this controller is the final owner of playback.
+        // qr-helper.js has a legacy controller loaded before this file. This
+        // controller is the final owner of animated playback state.
         tx.__erikraftPlaybackControlsInstalled = true;
         tx.initialized = false;
         tx.start = function () {
@@ -209,8 +277,6 @@
         }
         console.log('[Animated QR] Setting up controls for transmitter with', tx.frames?.length, 'frames');
         install(tx);
-        // Frames are prepared before playback. Make the complete control row
-        // visible immediately; only actions that require initialization are disabled.
         if (tx.frames?.length) {
             buttons.hidden = false;
             buttons.removeAttribute('hidden');
@@ -257,7 +323,6 @@
             seek.style.cssText = 'width:100%;accent-color:#0d6efd;cursor:pointer;touch-action:pan-x;';
             seek.setAttribute('aria-label', 'Posição do QR animado');
             seek.addEventListener('input', event => {
-                console.log('[Animated QR] Seek to frame:', event.target.value);
                 const current = getTransmitter();
                 if (current?.seekFrame) current.seekFrame(Number(event.target.value));
             });
@@ -287,7 +352,6 @@
             go.title = 'Ir para o QR informado';
             const goFrame = () => {
                 const value = Number.parseInt(input.value, 10);
-                console.log('[Animated QR] Go to frame:', value);
                 const current = getTransmitter();
                 if (Number.isFinite(value) && current?.seekFrame) current.seekFrame(value - 1);
             };
@@ -306,6 +370,7 @@
         return true;
     };
     const tryInstall = () => {
+        patchTransmitterPreparation();
         const tx = getTransmitter();
         if (!tx) return false;
         setup(tx);
@@ -313,6 +378,7 @@
     };
     let attempts = 0;
     const timer = setInterval(() => {
+        patchTransmitterPreparation();
         if (tryInstall() || ++attempts >= 300) clearInterval(timer);
     }, 100);
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tryInstall, { once: true });
