@@ -224,7 +224,15 @@ window.ErikrafTDropQR = ErikrafTDropQR;
                 justify-content: center; align-items: center;
             }
             #qr-scanner-dialog .btn-row > button, #qr-scanner-confirm-dialog .btn-row > button {
+                flex: 1 1 0;
+                min-width: 0;
                 margin-left: 0; margin-right: 0;
+            }
+            #qr-scanner-dialog #qr-scanner-close,
+            #qr-scanner-dialog #qr-scanner-manual-submit {
+                flex: 1 1 0;
+                width: auto;
+                min-width: 0;
             }
             #qr-scanner-confirm-dialog #qr-scanner-confirm-url {
                 display: block; width: 100%; margin: 0; padding: 14px 16px; box-sizing: border-box;
@@ -245,6 +253,8 @@ window.ErikrafTDropQR = ErikrafTDropQR;
                 #qr-scanner-dialog #qr-scanner-main-video { min-height: 180px; border-radius: 10px; }
                 #qr-scanner-confirm-dialog #qr-scanner-confirm-url { padding: 12px; }
                 #qr-scanner-dialog .btn-row > button, #qr-scanner-confirm-dialog .btn-row > button { flex: 1 1 140px; }
+                #qr-scanner-dialog #qr-scanner-close,
+                #qr-scanner-dialog #qr-scanner-manual-submit { flex: 1 1 140px; }
             }
         `;
         document.head.appendChild(style);
