@@ -3965,27 +3965,6 @@ class AnimatedQRSendDialog extends Dialog {
         }
 
         const currentFps = this.$fpsSlider ? (parseInt(this.$fpsSlider.value, 10) || 6) : 6;
-        this.transmitter = new ErikrafTQRTransmitter(this.$container, {
-            fps: currentFps,
-            onProgress: (p) => {
-                // Update file info display
-                const fileInfoEl = this.$activeView.querySelector('#qr-send-file-info');
-                if (fileInfoEl) {
-                    fileInfoEl.textContent = `${p.fileName} (${Util.formatBytes(p.totalSize)})`;
-                }
-                if (this.$progressBar) {
-                    this.$progressBar.value = p.progressPct;
-                }
-                if (this.$framesCount) {
-                    this.$framesCount.textContent = `${Localization.getTranslation('dialogs.frames') || 'Frames'}: ${p.currentIndex + 1}/${p.totalFrames}`;
-                }
-                if (this.$fpsSpeed) {
-                    this.$fpsSpeed.textContent = `${Localization.getTranslation('dialogs.speed') || 'Velocidade'}: ${p.fps} FPS`;
-                }
-            }
-        });
-
-        const currentFps = this.$fpsSlider ? (parseInt(this.$fpsSlider.value, 10) || 6) : 6;
         const bytesPerFrame = this.$bytesPerFrame ? (parseInt(this.$bytesPerFrame.value, 10) || 2953) : 2953;
         const eccLevel = this.$eccLevel ? (this.$eccLevel.value || 'L') : 'L';
 
