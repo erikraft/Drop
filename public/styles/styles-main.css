@@ -1768,12 +1768,17 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     box-sizing: border-box;
 }
 
+/* Button row spacing for QR dialogs */
+.erikraft-qr-btn-row {
+    gap: 8px;
+}
+
 .erikraft-qr-card-send {
     background: rgba(21, 172, 189, 0.08);
     border-radius: 12px;
     border: 1px solid rgba(21, 172, 189, 0.3);
-    padding: 16px;
-    gap: 12px;
+    padding: 20px;
+    gap: 16px;
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
@@ -1781,8 +1786,8 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     background: rgba(0, 166, 156, 0.08);
     border-radius: 12px;
     border: 1px solid rgba(0, 166, 156, 0.3);
-    padding: 16px;
-    gap: 12px;
+    padding: 20px;
+    gap: 16px;
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
