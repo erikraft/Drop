@@ -162,9 +162,6 @@ window.ErikrafTDropQR = ErikrafTDropQR;
     };
     tryInstall();
 
-    // Capture manual input before the class's original click/keydown handlers.
-    // This guarantees `erikraft.com` and the ErikrafT onion host take the same path
-    // as camera-scanned values even when ui.js owns the lexical classifier.
     const handleManual = event => {
         const submit = event.target && event.target.closest && event.target.closest('#qr-scanner-manual-submit');
         const input = document.getElementById('qr-scanner-manual-input');
@@ -224,6 +221,10 @@ window.ErikrafTDropQR = ErikrafTDropQR;
             #qr-scanner-dialog #qr-scanner-manual-submit { min-height: 42px; }
             #qr-scanner-dialog .btn-row, #qr-scanner-confirm-dialog .btn-row {
                 display: flex; flex-wrap: wrap; gap: 10px; width: 100%; box-sizing: border-box;
+                justify-content: center; align-items: center;
+            }
+            #qr-scanner-dialog .btn-row > button, #qr-scanner-confirm-dialog .btn-row > button {
+                margin-left: 0; margin-right: 0;
             }
             #qr-scanner-confirm-dialog #qr-scanner-confirm-url {
                 display: block; width: 100%; margin: 0; padding: 14px 16px; box-sizing: border-box;
