@@ -29,8 +29,12 @@
 #animated-qr-send-dialog #qr-send-active-view,#animated-qr-send-dialog #qr-send-compose-view{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden;width:100%;box-sizing:border-box;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
 #animated-qr-send-dialog #qr-send-active-buttons,#animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--paper-color,var(--background-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
 #animated-qr-send-dialog #qr-send-active-view>.column{min-width:0;width:100%}
-#animated-qr-send-dialog #qr-send-canvas-container{width:min(300px,calc(100vw - 64px));height:min(300px,calc(100vw - 64px));min-width:160px;min-height:160px;max-width:300px;max-height:300px;margin:4px auto;flex:0 0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;box-sizing:border-box}
-#animated-qr-send-dialog #qr-send-canvas-container svg,#animated-qr-send-dialog #qr-send-canvas-container canvas{display:block;width:100%;height:100%;max-width:100%;max-height:100%}
+#animated-qr-send-dialog #qr-send-canvas-container{width:min(320px,calc(100vw - 64px));min-height:220px;margin:4px auto;flex:0 0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;box-sizing:border-box}
+#animated-qr-send-dialog #qr-send-canvas-container.layout-1{width:min(300px,calc(100vw - 64px));height:min(300px,calc(100vw - 64px))}
+#animated-qr-send-dialog #qr-send-canvas-container.layout-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:min(340px,calc(100vw - 32px));height:auto}
+#animated-qr-send-dialog #qr-send-canvas-container.layout-4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;width:min(340px,calc(100vw - 32px));height:auto}
+#animated-qr-send-dialog .qr-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;box-sizing:border-box;width:100%;background:#ffffff;padding:4px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.12)}
+#animated-qr-send-dialog .qr-tile svg,#animated-qr-send-dialog .qr-tile canvas,#animated-qr-send-dialog #qr-send-canvas-container>svg,#animated-qr-send-dialog #qr-send-canvas-container>canvas{display:block;width:100%!important;height:100%!important;max-width:100%;max-height:100%}
 #animated-qr-send-dialog #qr-send-active-buttons>.btn{flex:0 1 auto;min-width:120px;max-width:220px;margin:0}
 #animated-qr-send-dialog #qr-send-frame-seek-wrapper,#animated-qr-send-dialog #qr-send-frame-input-group{width:100%;box-sizing:border-box}
 #animated-qr-send-dialog #qr-send-frame-seek{width:100%;min-width:0;height:8px;touch-action:pan-x;accent-color:#0d6efd}
@@ -81,10 +85,27 @@
         const qr=window.ErikrafTDropQR;
         if(!qr||typeof qr.render!=='function'){console.error('[Animated QR] Renderer indisponível');return false;}
         tx.currentIndex=clamp(tx,tx.currentIndex); showActive();
-        const size={small:220,medium:280,large:320,fullscreen:480}[tx.displaySize]||280;
+        const layout=String(tx.layout||'1');
+        tx.containerEl.classList.remove('layout-1','layout-2','layout-4');
+        tx.containerEl.classList.add(`layout-${layout}`);
+
         try{
-            const instance=qr.render(tx.containerEl,tx.frames[tx.currentIndex],{width:size,height:size,animatedTransfer:true,eccLevel:tx.eccLevel||'L'});
-            if(!instance||!tx.containerEl.querySelector('svg,canvas')) throw new Error('O encoder não inseriu SVG/canvas no container.');
+            if(layout==='1'){
+                const size={small:220,medium:280,large:320,fullscreen:480}[tx.displaySize]||280;
+                const instance=qr.render(tx.containerEl,tx.frames[tx.currentIndex],{width:size,height:size,animatedTransfer:true,eccLevel:tx.eccLevel||'L'});
+                if(!instance||!tx.containerEl.querySelector('svg,canvas')) throw new Error('O encoder não inseriu SVG/canvas no container.');
+            }else{
+                const count=layout==='2'?2:4;
+                const tileSize=layout==='2'?150:130;
+                tx.containerEl.innerHTML='';
+                for(let i=0;i<count;i++){
+                    const frameIdx=(tx.currentIndex+i)%tx.frames.length;
+                    const tileEl=document.createElement('div');
+                    tileEl.className='qr-tile';
+                    tx.containerEl.appendChild(tileEl);
+                    qr.render(tileEl,tx.frames[frameIdx],{width:tileSize,height:tileSize,animatedTransfer:true,eccLevel:tx.eccLevel||'L'});
+                }
+            }
         }catch(error){console.error('[Animated QR] Falha ao renderizar frame',tx.currentIndex,error);return false;}
         if(typeof tx.onProgress==='function') tx.onProgress({currentIndex:tx.currentIndex,totalFrames:tx.frames.length,numBaseChunks:tx.numBaseChunks,fps:tx.fps,totalSize:tx.totalSize,fileName:tx.metadata?.name||'Data',progressPct:Math.min(100,Math.round(((tx.currentIndex+1)/tx.frames.length)*100))});
         return true;
@@ -117,12 +138,35 @@
     function setup(tx){
         const buttons=getEl(IDS.activeButtons),pause=getEl(IDS.pause);if(!buttons||!pause||!tx)return false;
         injectStyles();normalizeSettingsUI();installPreparationBridge();install(tx);buttons.hidden=false;buttons.removeAttribute('hidden');
-        const prev=makeButton(IDS.previous,'Anterior','Mostrar QR anterior',()=>getTransmitter()?.previousFrame?.(),pause);if(prev&&!prev.parentNode)buttons.insertBefore(prev,buttons.firstElementChild);
-        const next=makeButton(IDS.next,'Próximo','Mostrar próximo QR',()=>getTransmitter()?.nextFrame?.(),pause);if(next&&!next.parentNode)buttons.insertBefore(next,pause.nextSibling);
+        const nextBtn=getEl(IDS.next); if(nextBtn) nextBtn.onclick=()=>getTransmitter()?.nextFrame?.();
+        const prevBtn=getEl(IDS.previous); if(prevBtn) prevBtn.onclick=()=>getTransmitter()?.previousFrame?.();
+        const backBtn=getEl('qr-send-back-btn'); if(backBtn && !backBtn.dataset.boundBack){
+            backBtn.dataset.boundBack='true';
+            backBtn.onclick=(e)=>{
+                const t=getTransmitter(); if(t){ t.pause(); }
+                const comp=getEl('qr-send-compose-view'), act=getEl('qr-send-active-view'),
+                      compBtns=getEl('qr-send-compose-buttons'), actBtns=getEl(IDS.activeButtons);
+                if(act) act.hidden=true; if(actBtns) actBtns.hidden=true;
+                if(comp) comp.hidden=false; if(compBtns) compBtns.hidden=false;
+            };
+        }
         if(!pause.dataset.erikraftControlCapture){pause.dataset.erikraftControlCapture='true';pause.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();const current=getTransmitter();if(!current?.initialized)return;current.paused?current.resume():current.pause();sync(current);},true);}
-        if(!getEl(IDS.seek)){const w=document.createElement('div');w.id=IDS.seekWrapper;w.className='fw';const s=document.createElement('input');s.type='range';s.id=IDS.seek;s.className='fw';s.setAttribute('aria-label','Posição do QR animado');s.addEventListener('input',e=>getTransmitter()?.seekFrame?.(Number(e.target.value)));w.appendChild(s);buttons.parentNode.insertBefore(w,buttons);}
-        if(!getEl(IDS.frameInput)){const g=document.createElement('div');g.id=IDS.frameGroup;const i=document.createElement('input');i.type='number';i.id=IDS.frameInput;i.className='btn btn-rounded btn-grey';i.inputMode='numeric';const go=document.createElement('button');go.type='button';go.id=IDS.frameGo;go.className='btn btn-rounded btn-grey';go.textContent='Ir';const run=()=>{const rawStr=String(i.value||'').trim();if(!rawStr)return;const v=Number.parseInt(rawStr,10);const tx=getTransmitter();if(!tx?.frames?.length)return;if(!Number.isFinite(v)){i.value=String(tx.currentIndex+1);return;}const target=Math.max(1,Math.min(v,tx.frames.length));i.value=String(target);tx.seekFrame?.(target-1);};go.onclick=run;i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run();}});i.addEventListener('change',run);g.append(i,go);buttons.parentNode.insertBefore(g,buttons);}
+        const seekEl=getEl(IDS.seek); if(seekEl&&!seekEl.dataset.boundSeek){seekEl.dataset.boundSeek='true';seekEl.addEventListener('input',e=>getTransmitter()?.seekFrame?.(Number(e.target.value)));}
+        const frameInputEl=getEl(IDS.frameInput), frameGoEl=getEl(IDS.frameGo);
+        if(frameInputEl&&!frameInputEl.dataset.boundInput){
+            frameInputEl.dataset.boundInput='true';
+            const runFrameGo=()=>{
+                const rawStr=String(frameInputEl.value||'').trim();if(!rawStr)return;
+                const v=Number.parseInt(rawStr,10);const t=getTransmitter();if(!t?.frames?.length)return;
+                if(!Number.isFinite(v)){frameInputEl.value=String(t.currentIndex+1);return;}
+                const target=Math.max(1,Math.min(v,t.frames.length));frameInputEl.value=String(target);t.seekFrame?.(target-1);
+            };
+            if(frameGoEl) frameGoEl.onclick=runFrameGo;
+            frameInputEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runFrameGo();}});
+            frameInputEl.addEventListener('change',runFrameGo);
+        }
         getEl(IDS.ecc)?.addEventListener('change',async ()=>{normalizeSettingsUI();const t=getTransmitter();if(t){applySettings(t);if(typeof t.reprepare==='function')await t.reprepare();render(t);sync(t);}});
+        getEl(IDS.layout)?.addEventListener('change',()=>{const t=getTransmitter();if(t){t.layout=getEl(IDS.layout).value||'1';render(t);sync(t);}});
         getEl(IDS.bytes)?.addEventListener('change',async ()=>{normalizeSettingsUI();const t=getTransmitter();if(t){applySettings(t);if(typeof t.reprepare==='function')await t.reprepare();render(t);sync(t);}});
         getEl(IDS.fps)?.addEventListener('input',()=>{const t=getTransmitter(),f=Math.max(1,Math.min(30,Number.parseInt(getEl(IDS.fps).value,10)||6));getEl(IDS.fps).value=String(f);if(t){t.setFps(f);sync(t);}normalizeSettingsUI();});
         getEl(IDS.displaySize)?.addEventListener('change',()=>{const t=getTransmitter();if(t?.initialized){t.displaySize=getEl(IDS.displaySize).value;render(t);sync(t);}});

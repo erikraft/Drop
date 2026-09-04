@@ -1,10 +1,42 @@
-/* ErikrafT Drop™ — Animated QR dialog visual spacing refinement */
-.erikraft-qr-dialog .erikraft-qr-paper { overflow-x: hidden; overflow-y: auto; max-height: calc(100vh - 24px); max-width: min(96vw, 720px); min-height: 0; box-sizing: border-box; }
+/* ErikrafT Drop™ — Animated QR dialog visual spacing & theme refinement */
+.btn-red {
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    border: 1px solid #dc3545 !important;
+}
+.btn-red:hover, .btn-red:focus {
+    background-color: #bb2d3b !important;
+    color: #ffffff !important;
+    border-color: #b02a37 !important;
+}
+body.dark-theme .btn-red {
+    background-color: #c62828 !important;
+    color: #ffffff !important;
+    border: 1px solid #c62828 !important;
+}
+body.dark-theme .btn-red:hover, body.dark-theme .btn-red:focus {
+    background-color: #b71c1c !important;
+    color: #ffffff !important;
+    border-color: #a71d1d !important;
+}
+
+.erikraft-qr-dialog .erikraft-qr-paper {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    max-height: calc(100dvh - 24px);
+    max-width: min(96vw, 720px);
+    min-height: 0;
+    box-sizing: border-box;
+    background: var(--paper-color, #ffffff);
+    color: var(--text-color, #212529);
+}
 .erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) { flex: 0 0 auto; padding: 14px 18px; margin: 0; }
-.erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) .dialog-title { margin: 0; text-align: center; line-height: 1.35; }
-.erikraft-qr-dialog .erikraft-qr-paper > .row.center.p-3 { box-sizing: border-box; width: 100%; padding: 18px; min-width: 0; overflow-y: auto; max-height: calc(100vh - 150px); }
+.erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) .dialog-title { margin: 0; text-align: center; line-height: 1.35; color: var(--text-color); }
+.erikraft-qr-dialog .erikraft-qr-paper > .row.center.p-3 { box-sizing: border-box; width: 100%; padding: 18px; min-width: 0; flex: 1 1 auto; overflow-y: auto; max-height: none; }
 .erikraft-qr-dialog .erikraft-qr-paper > .erikraft-qr-btn-row,
-.erikraft-qr-dialog .erikraft-qr-paper > .btn-row { flex: 0 0 auto; width: 100%; box-sizing: border-box; padding: 10px 18px 18px; gap: 10px; }
+.erikraft-qr-dialog .erikraft-qr-paper > .btn-row { flex: 0 0 auto; width: 100%; box-sizing: border-box; padding: 10px 18px 18px; gap: 10px; background: var(--paper-color, #ffffff); border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent); }
 .erikraft-qr-dialog .erikraft-qr-btn-row .btn,
 .erikraft-qr-dialog .btn-row .btn { margin: 0; }
 #animated-qr-main-dialog .erikraft-qr-paper > .row.center.p-3 > .column { gap: 18px; }
@@ -45,9 +77,32 @@
 #animated-qr-send-dialog #qr-send-play-btn { display: none !important; }
 #animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons[hidden] { display: flex !important; }
 #animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons { flex-wrap: wrap; justify-content: center; align-items: center; width: 100%; box-sizing: border-box; }
-#animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons > .btn { flex: 1 1 140px; min-width: 0; }
-#animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons #qr-send-initialize-btn[hidden] { display: none !important; }
-#animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons .btn[close] { flex: 1 1 140px; }
+#animated-qr-send-dialog #qr-send-active-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+#animated-qr-send-dialog #qr-send-active-buttons > .btn {
+    flex: 1 1 calc(20% - 8px);
+    min-width: 90px;
+    margin: 0;
+}
+body.light-theme #animated-qr-send-dialog textarea,
+body.light-theme #animated-qr-send-dialog select,
+body.light-theme #animated-qr-send-dialog input[type="number"] {
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid #ced4da;
+}
+body.dark-theme #animated-qr-send-dialog textarea,
+body.dark-theme #animated-qr-send-dialog select,
+body.dark-theme #animated-qr-send-dialog input[type="number"] {
+    background-color: #2b3035;
+    color: #f8f9fa;
+    border: 1px solid #495057;
+}
 #animated-qr-receive-dialog #qr-receive-scanner-view { gap: 14px; min-width: 0; }
 #animated-qr-receive-dialog .erikraft-qr-camera-wrapper { margin-bottom: 2px; max-width: 100%; }
 #animated-qr-receive-dialog #qr-receive-state { line-height: 1.5; min-height: 18px; overflow-wrap: anywhere; }
