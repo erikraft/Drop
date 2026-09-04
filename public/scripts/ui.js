@@ -3610,7 +3610,7 @@ class AnimatedQRSendDialog extends Dialog {
         this.$composeView = this.$el.querySelector('#qr-send-compose-view');
         this.$composeButtons = this.$el.querySelector('#qr-send-compose-buttons');
         this.$activeView = this.$el.querySelector('#qr-send-active-view');
-        this.$activeButtons = this.$el.querySelector('#qr-send-active-buttons');
+        this.$activeButtons = this.$el.querySelector('#qr-send-controls-group');
 
         // Text composition elements
         this.$textContainer = this.$el.querySelector('#qr-send-text-container');

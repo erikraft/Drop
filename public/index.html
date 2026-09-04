@@ -1722,15 +1722,16 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div id="qr-send-active-buttons" class="btn-row wrap erikraft-qr-btn-row" hidden>
-                    <button id="qr-send-next-btn" type="button" class="btn btn-rounded btn-grey">Próximo</button>
-                    <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-pause">Pausar</button>
-                    <button id="qr-send-previous-btn" type="button" class="btn btn-rounded btn-grey">Anterior</button>
-                    <button id="qr-send-back-btn" type="button" class="btn btn-rounded btn-red" data-i18n-key="dialogs.animated-qr-back">Voltar</button>
-                    <button id="qr-send-close-btn" type="button" class="btn btn-rounded btn-red" close data-i18n-key="dialogs.close">Fechar</button>
+                        <!-- Controls inside column fw gap-3 -->
+                        <div id="qr-send-controls-group" class="fw column gap-2 mt-2">
+                            <button id="qr-send-next-btn" type="button" class="btn btn-rounded btn-grey fw">Próximo</button>
+                            <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-grey fw" data-i18n-key="dialogs.animated-qr-pause">Pausar</button>
+                            <button id="qr-send-previous-btn" type="button" class="btn btn-rounded btn-grey fw">Anterior</button>
+                            <button id="qr-send-back-btn" type="button" class="btn btn-rounded btn-red fw" data-i18n-key="dialogs.animated-qr-back">Voltar</button>
+                            <button id="qr-send-close-btn" type="button" class="btn btn-rounded btn-red fw" close data-i18n-key="dialogs.close">Fechar</button>
+                        </div>
+                    </div>
                 </div>
             </x-paper>
         </x-background>
