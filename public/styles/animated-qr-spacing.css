@@ -178,3 +178,95 @@ body.dark-theme #qr-scanner-dialog input {
     #animated-qr-send-dialog #qr-send-active-view > .column { gap: 10px; }
     #animated-qr-send-dialog #qr-send-file-info { font-size: 0.9rem; }
 }
+
+/* Mobile QR canvas visibility and dialog scrolling */
+#animated-qr-send-dialog #qr-send-active-view,
+#animated-qr-send-dialog #qr-send-compose-view {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+#animated-qr-send-dialog #qr-send-canvas-container {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex: 0 0 auto !important;
+    min-width: 0;
+    min-height: 180px;
+    max-width: calc(100% - 8px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#animated-qr-send-dialog #qr-send-canvas-container > svg,
+#animated-qr-send-dialog #qr-send-canvas-container > canvas {
+    flex: 0 0 auto;
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+/* Compose controls must inherit the dialog surface instead of forcing white */
+#animated-qr-send-dialog #qr-send-compose-buttons {
+    background: var(--paper-color, #ffffff) !important;
+    color: var(--text-color, #212529);
+    border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    box-sizing: border-box;
+}
+
+/* Reader and animated-receive action rows */
+#qr-scanner-dialog .btn-row.row-reverse.wrap.gap-2.p-2,
+#animated-qr-receive-dialog .btn-row.row-reverse.wrap.erikraft-qr-btn-row,
+#animated-qr-receive-dialog .erikraft-qr-btn-row,
+#qr-scanner-dialog .erikraft-qr-btn-row {
+    box-sizing: border-box;
+    width: 100%;
+    background: var(--paper-color, #ffffff) !important;
+    color: var(--text-color, #212529);
+}
+
+body.dark-theme #animated-qr-send-dialog #qr-send-compose-buttons,
+body.dark-theme #qr-scanner-dialog .btn-row.row-reverse.wrap.gap-2.p-2,
+body.dark-theme #animated-qr-receive-dialog .btn-row.row-reverse.wrap.erikraft-qr-btn-row,
+body.dark-theme #animated-qr-receive-dialog .erikraft-qr-btn-row,
+body.dark-theme #qr-scanner-dialog .erikraft-qr-btn-row {
+    background: #1e1e1e !important;
+    color: #f8f9fa;
+    border-top-color: rgba(255,255,255,0.12);
+}
+
+body.light-theme #animated-qr-send-dialog #qr-send-compose-buttons,
+body.light-theme #qr-scanner-dialog .btn-row.row-reverse.wrap.gap-2.p-2,
+body.light-theme #animated-qr-receive-dialog .btn-row.row-reverse.wrap.erikraft-qr-btn-row,
+body.light-theme #animated-qr-receive-dialog .erikraft-qr-btn-row,
+body.light-theme #qr-scanner-dialog .erikraft-qr-btn-row {
+    background: #ffffff !important;
+    color: #212529;
+    border-top-color: rgba(0,0,0,0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not(.light-theme):not(.dark-theme) #animated-qr-send-dialog #qr-send-compose-buttons,
+    body:not(.light-theme):not(.dark-theme) #qr-scanner-dialog .btn-row.row-reverse.wrap.gap-2.p-2,
+    body:not(.light-theme):not(.dark-theme) #animated-qr-receive-dialog .btn-row.row-reverse.wrap.erikraft-qr-btn-row,
+    body:not(.light-theme):not(.dark-theme) #animated-qr-receive-dialog .erikraft-qr-btn-row,
+    body:not(.light-theme):not(.dark-theme) #qr-scanner-dialog .erikraft-qr-btn-row {
+        background: #1e1e1e !important;
+        color: #f8f9fa;
+        border-top-color: rgba(255,255,255,0.12);
+    }
+}
+
+/* Never let mobile action rows become horizontally overflowing or cover content */
+@media (max-width: 480px) {
+    #animated-qr-send-dialog #qr-send-compose-buttons,
+    #qr-scanner-dialog .btn-row.row-reverse.wrap.gap-2.p-2,
+    #animated-qr-receive-dialog .erikraft-qr-btn-row {
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+        overflow: visible;
+    }
+}
