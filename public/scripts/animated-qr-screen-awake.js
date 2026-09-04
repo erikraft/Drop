@@ -1,0 +1,187 @@
+(function setupAnimatedQRScreenAwake() {
+    'use strict';
+
+    const DIALOG_IDS = ['animated-qr-main-dialog', 'animated-qr-send-dialog', 'animated-qr-receive-dialog'];
+    const BUTTON_ID = 'animated-qr-screen-awake-btn';
+    const STYLE_ID = 'animated-qr-screen-awake-style';
+    const ACTIVE_CLASS = 'erikraft-screen-awake-active';
+
+    let wakeLock = null;
+    let noSleep = null;
+    let requested = false;
+    let lastError = null;
+
+    const getDialog = id => document.getElementById(id);
+    const getButton = () => document.getElementById(BUTTON_ID);
+
+    function isSupported() {
+        return 'wakeLock' in navigator || typeof window.NoSleep === 'function';
+    }
+
+    function injectStyles() {
+        if (document.getElementById(STYLE_ID)) return;
+        const style = document.createElement('style');
+        style.id = STYLE_ID;
+        style.textContent = `
+#${BUTTON_ID}{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:8px auto 0;max-width:100%;box-sizing:border-box}
+#${BUTTON_ID}[hidden]{display:none!important}
+#${BUTTON_ID}.erikraft-screen-awake-active{font-weight:600}
+`;
+        document.head.appendChild(style);
+    }
+
+    function getLabel(active) {
+        return active ? 'Tela sempre ligada: Ativado' : 'Não desligar tela';
+    }
+
+    function updateButton() {
+        const button = getButton();
+        if (!button) return;
+        button.hidden = !isSupported();
+        button.setAttribute('aria-pressed', String(requested));
+        button.classList.toggle(ACTIVE_CLASS, requested);
+        button.textContent = getLabel(requested);
+        button.title = requested
+            ? 'Desativar o modo para manter a tela ligada'
+            : 'Manter a tela ligada enquanto o QR Code Animado estiver na tela';
+    }
+
+    function ensureNoSleep() {
+        if (noSleep || typeof window.NoSleep !== 'function') return noSleep;
+        try {
+            noSleep = new window.NoSleep();
+        } catch (error) {
+            console.warn('[Animated QR] NoSleep indisponível:', error);
+        }
+        return noSleep;
+    }
+
+    async function acquire() {
+        lastError = null;
+
+        if ('wakeLock' in navigator && typeof navigator.wakeLock?.request === 'function') {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => {
+                    wakeLock = null;
+                    if (requested && document.visibilityState === 'visible') {
+                        setTimeout(() => { if (requested) acquire().catch(() => {}); }, 250);
+                    }
+                }, { once: true });
+                return true;
+            } catch (error) {
+                lastError = error;
+            }
+        }
+
+        const fallback = ensureNoSleep();
+        if (fallback && typeof fallback.enable === 'function') {
+            try {
+                await fallback.enable();
+                return true;
+            } catch (error) {
+                lastError = error;
+            }
+        }
+
+        return false;
+    }
+
+    async function release() {
+        requested = false;
+        if (wakeLock) {
+            try { await wakeLock.release(); } catch (error) { console.warn('[Animated QR] Falha ao liberar Wake Lock:', error); }
+            wakeLock = null;
+        }
+        if (noSleep && typeof noSleep.disable === 'function') {
+            try { noSleep.disable(); } catch (error) { console.warn('[Animated QR] Falha ao desativar NoSleep:', error); }
+        }
+        updateButton();
+    }
+
+    async function toggle() {
+        if (requested) {
+            await release();
+            return;
+        }
+
+        requested = true;
+        const acquired = await acquire();
+        if (!acquired) {
+            requested = false;
+            console.warn('[Animated QR] O navegador/dispositivo não permite manter a tela ligada.', lastError);
+        }
+        updateButton();
+    }
+
+    function isDialogVisible(dialog) {
+        if (!dialog) return false;
+        if (dialog.hidden || dialog.getAttribute('aria-hidden') === 'true') return false;
+        const style = window.getComputedStyle(dialog);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+    }
+
+    function findInsertionPoint(dialog) {
+        if (!dialog) return null;
+        return dialog.querySelector('#qr-send-controls-group')
+            || dialog.querySelector('#qr-send-compose-buttons')
+            || dialog.querySelector('.dialog-buttons')
+            || dialog.querySelector('.buttons')
+            || dialog.querySelector('.erikraft-qr-paper');
+    }
+
+    function ensureButton() {
+        injectStyles();
+        const sendDialog = getDialog('animated-qr-send-dialog');
+        const receiveDialog = getDialog('animated-qr-receive-dialog');
+        const dialog = isDialogVisible(sendDialog) ? sendDialog : (isDialogVisible(receiveDialog) ? receiveDialog : null);
+        if (!dialog) {
+            if (requested) release();
+            return;
+        }
+
+        let button = getButton();
+        const insertionPoint = findInsertionPoint(dialog);
+        if (!button && insertionPoint) {
+            button = document.createElement('button');
+            button.id = BUTTON_ID;
+            button.type = 'button';
+            button.className = 'btn btn-rounded btn-dark';
+            button.addEventListener('click', toggle);
+            insertionPoint.appendChild(button);
+        } else if (button && button.parentElement !== insertionPoint && insertionPoint) {
+            insertionPoint.appendChild(button);
+        }
+        updateButton();
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!requested || document.visibilityState !== 'visible') return;
+        if (!wakeLock && 'wakeLock' in navigator) {
+            acquire().then(updateButton).catch(() => updateButton());
+        } else {
+            updateButton();
+        }
+    });
+
+    window.addEventListener('pagehide', () => {
+        if (noSleep && typeof noSleep.disable === 'function') {
+            try { noSleep.disable(); } catch (_) { /* best effort */ }
+        }
+        wakeLock = null;
+        requested = false;
+    });
+
+    const observer = new MutationObserver(() => ensureButton());
+    const start = () => {
+        if (!document.body) return;
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'aria-hidden', 'style', 'class'] });
+        ensureButton();
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start, { once: true });
+    } else {
+        start();
+    }
+})();
