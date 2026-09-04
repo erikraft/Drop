@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.15.0';
+const cacheVersion = 'v1.16.0';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 const relativePathsToCache = [
     './',
@@ -19,6 +19,7 @@ const relativePathsToCache = [
     'scripts/content-moderation.js',
     'scripts/pairdrop-adapter.js',
     'scripts/erikraft-qr.js',
+    'scripts/security-layer.js',
     'scripts/worker/canvas-worker.js',
     'scripts/libs/heic2any.min.js',
     'scripts/libs/jsQR.js',
@@ -146,7 +147,7 @@ const doNotCacheRequest = request => {
     return relativePathsNotToCache.indexOf(requestRelativePath) !== -1
 };
 
-// cache the current page to make it available for offline
+// cache the current page to make it available offline
 const updateCache = request => new Promise((resolve, reject) => {
     caches
         .open(cacheTitle)
