@@ -2,7 +2,7 @@
     'use strict';
 
     const IDS = {
-        activeButtons: 'qr-send-active-buttons', pause: 'qr-send-pause-btn', initialize: 'qr-send-initialize-btn',
+        activeButtons: 'qr-send-active-buttons', pause: 'qr-send-pause-btn',
         previous: 'qr-send-previous-btn', next: 'qr-send-next-btn', seek: 'qr-send-frame-seek',
         frameInput: 'qr-send-frame-input', frameGo: 'qr-send-frame-go-btn', frameGroup: 'qr-send-frame-input-group',
         seekWrapper: 'qr-send-frame-seek-wrapper', bytes: 'qr-send-bytes-per-frame', ecc: 'qr-send-ecc-level',
@@ -93,7 +93,7 @@
         if(!tx?.frames?.length)return; tx.currentIndex=clamp(tx,tx.currentIndex); const total=tx.frames.length;
         const seek=getEl(IDS.seek); if(seek){seek.min='0';seek.max=String(total-1);seek.value=String(tx.currentIndex);seek.disabled=!tx.initialized;seek.setAttribute('aria-valuenow',String(tx.currentIndex));}
         const input=getEl(IDS.frameInput); if(input){input.min='1';input.max=String(total);input.value=String(tx.currentIndex+1);input.disabled=!tx.initialized;}
-        const init=getEl(IDS.initialize);if(init)init.hidden=!!tx.initialized; const prev=getEl(IDS.previous);if(prev)prev.disabled=!tx.initialized;const next=getEl(IDS.next);if(next)next.disabled=!tx.initialized;
+        const prev=getEl(IDS.previous);if(prev)prev.disabled=!tx.initialized;const next=getEl(IDS.next);if(next)next.disabled=!tx.initialized;
         const pause=getEl(IDS.pause);if(pause){pause.textContent=tx.paused?'Play':'Pausar';pause.disabled=!tx.initialized;pause.setAttribute('aria-label',tx.paused?'Reproduzir QR animado':'Pausar QR animado');}
         const go=getEl(IDS.frameGo);if(go)go.disabled=!tx.initialized; const count=getEl('qr-send-frames-count');if(count)count.textContent=`Frames: ${tx.currentIndex+1}/${total}`; const speed=getEl(IDS.fpsSpeed);if(speed)speed.textContent=`Velocidade: ${tx.fps} FPS`;
     }
@@ -106,10 +106,9 @@
         if(!render(tx)){tx.paused=true;sync(tx);return;} sync(tx); if(wasPlaying)schedule(tx);
     }
     function install(tx){
-        if(!tx||!Array.isArray(tx.frames)||tx.__erikraftAnimatedControlsOwned)return;
-        tx.__erikraftAnimatedControlsOwned=true; tx.__erikraftPlaybackControlsInstalled=true; tx.initialized=false;tx.paused=true;applySettings(tx);
-        tx.start=function(){if(!this.frames?.length)return;stopTimer(this);this.running=true;this.paused=true;this.initialized=false;this.currentIndex=0;if(this.containerEl&&window.ErikrafTDropQR?.destroy)window.ErikrafTDropQR.destroy(this.containerEl);sync(this);};
-        tx.initialize=function(){if(!this.frames?.length)return;stopTimer(this);this.running=true;this.paused=true;this.initialized=true;this.currentIndex=0;if(!render(this))this.initialized=false;sync(this);};
+        if(!tx||!Array.isArray(tx.frames))return;
+        tx.__erikraftAnimatedControlsOwned=true; tx.__erikraftPlaybackControlsInstalled=true; tx.initialized=true;tx.paused=true;applySettings(tx);
+        tx.start=function(){if(!this.frames?.length)return;stopTimer(this);this.running=true;this.paused=true;this.initialized=true;this.currentIndex=0;render(this);sync(this);};
         tx.pause=function(){stopTimer(this);this.paused=true;this.running=!!this.frames?.length;sync(this);};
         tx.resume=function(){if(!this.running||!this.initialized||!this.frames?.length)return;this.paused=false;schedule(this);sync(this);};
         tx.previousFrame=function(){selectFrame(this,this.currentIndex-1,true);}; tx.nextFrame=function(){selectFrame(this,this.currentIndex+1,true);}; tx.seekFrame=function(index){selectFrame(this,index,true);}; sync(tx);
@@ -118,18 +117,24 @@
     function setup(tx){
         const buttons=getEl(IDS.activeButtons),pause=getEl(IDS.pause);if(!buttons||!pause||!tx)return false;
         injectStyles();normalizeSettingsUI();installPreparationBridge();install(tx);buttons.hidden=false;buttons.removeAttribute('hidden');
-        const init=makeButton(IDS.initialize,'Inicializar','Inicializar QR animado',()=>getTransmitter()?.initialize?.(),pause);if(init&&!init.parentNode)buttons.insertBefore(init,buttons.firstElementChild);
         const prev=makeButton(IDS.previous,'Anterior','Mostrar QR anterior',()=>getTransmitter()?.previousFrame?.(),pause);if(prev&&!prev.parentNode)buttons.insertBefore(prev,buttons.firstElementChild);
         const next=makeButton(IDS.next,'Próximo','Mostrar próximo QR',()=>getTransmitter()?.nextFrame?.(),pause);if(next&&!next.parentNode)buttons.insertBefore(next,pause.nextSibling);
         if(!pause.dataset.erikraftControlCapture){pause.dataset.erikraftControlCapture='true';pause.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();const current=getTransmitter();if(!current?.initialized)return;current.paused?current.resume():current.pause();sync(current);},true);}
         if(!getEl(IDS.seek)){const w=document.createElement('div');w.id=IDS.seekWrapper;w.className='fw';const s=document.createElement('input');s.type='range';s.id=IDS.seek;s.className='fw';s.setAttribute('aria-label','Posição do QR animado');s.addEventListener('input',e=>getTransmitter()?.seekFrame?.(Number(e.target.value)));w.appendChild(s);buttons.parentNode.insertBefore(w,buttons);}
-        if(!getEl(IDS.frameInput)){const g=document.createElement('div');g.id=IDS.frameGroup;const i=document.createElement('input');i.type='number';i.id=IDS.frameInput;i.className='btn btn-rounded btn-grey';i.inputMode='numeric';const go=document.createElement('button');go.type='button';go.id=IDS.frameGo;go.className='btn btn-rounded btn-grey';go.textContent='Ir';const run=()=>{const v=Number.parseInt(i.value,10);if(Number.isFinite(v))getTransmitter()?.seekFrame?.(v-1);};go.onclick=run;i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run();}});g.append(i,go);buttons.parentNode.insertBefore(g,buttons);}
-        getEl(IDS.ecc)?.addEventListener('change',()=>{normalizeSettingsUI();const t=getTransmitter();if(t)applySettings(t);});
-        getEl(IDS.bytes)?.addEventListener('change',()=>{normalizeSettingsUI();const t=getTransmitter();if(t&&!t.initialized)applySettings(t);});
+        if(!getEl(IDS.frameInput)){const g=document.createElement('div');g.id=IDS.frameGroup;const i=document.createElement('input');i.type='number';i.id=IDS.frameInput;i.className='btn btn-rounded btn-grey';i.inputMode='numeric';const go=document.createElement('button');go.type='button';go.id=IDS.frameGo;go.className='btn btn-rounded btn-grey';go.textContent='Ir';const run=()=>{const rawStr=String(i.value||'').trim();if(!rawStr)return;const v=Number.parseInt(rawStr,10);const tx=getTransmitter();if(!tx?.frames?.length)return;if(!Number.isFinite(v)){i.value=String(tx.currentIndex+1);return;}const target=Math.max(1,Math.min(v,tx.frames.length));i.value=String(target);tx.seekFrame?.(target-1);};go.onclick=run;i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run();}});i.addEventListener('change',run);g.append(i,go);buttons.parentNode.insertBefore(g,buttons);}
+        getEl(IDS.ecc)?.addEventListener('change',async ()=>{normalizeSettingsUI();const t=getTransmitter();if(t){applySettings(t);if(typeof t.reprepare==='function')await t.reprepare();render(t);sync(t);}});
+        getEl(IDS.bytes)?.addEventListener('change',async ()=>{normalizeSettingsUI();const t=getTransmitter();if(t){applySettings(t);if(typeof t.reprepare==='function')await t.reprepare();render(t);sync(t);}});
         getEl(IDS.fps)?.addEventListener('input',()=>{const t=getTransmitter(),f=Math.max(1,Math.min(30,Number.parseInt(getEl(IDS.fps).value,10)||6));getEl(IDS.fps).value=String(f);if(t){t.setFps(f);sync(t);}normalizeSettingsUI();});
         getEl(IDS.displaySize)?.addEventListener('change',()=>{const t=getTransmitter();if(t?.initialized){t.displaySize=getEl(IDS.displaySize).value;render(t);sync(t);}});
+        render(tx);
         sync(tx);return true;
     }
+    window.setupAnimatedQRRuntimeControls = function(tx) {
+        installPreparationBridge();
+        const transmitter = tx || getTransmitter();
+        if (transmitter) return setup(transmitter);
+        return false;
+    };
     const tryInstall=()=>{installPreparationBridge();const tx=getTransmitter();return tx?setup(tx):false;};
     let attempts=0;const watcher=setInterval(()=>{if(tryInstall()||++attempts>=300)clearInterval(watcher);},100);
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',tryInstall,{once:true});else tryInstall();

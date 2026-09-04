@@ -14,7 +14,9 @@
 #animated-qr-main-dialog .erikraft-qr-card-receive .font-body1 { margin-bottom: 2px; }
 #animated-qr-main-dialog .erikraft-qr-card-send .font-body2,
 #animated-qr-main-dialog .erikraft-qr-card-receive .font-body2 { max-width: 38em; margin: 0 0 4px; line-height: 1.55; }
-#animated-qr-main-dialog .erikraft-qr-card-send > .row { gap: 10px; }
+#animated-qr-main-dialog .erikraft-qr-card-send > .row { gap: 14px; flex-wrap: wrap; justify-content: center; width: 100%; box-sizing: border-box; }
+#animated-qr-main-dialog #animated-qr-send-file-btn,
+#animated-qr-main-dialog #animated-qr-send-text-btn { margin: 0; min-height: 42px; min-width: 130px; }
 #animated-qr-send-dialog #qr-send-compose-view > .column { gap: 22px; min-width: 0; width: 100%; }
 #animated-qr-send-dialog #qr-send-text-container,
 #animated-qr-send-dialog #qr-send-file-container { gap: 10px; width: 100%; min-width: 0; box-sizing: border-box; }
