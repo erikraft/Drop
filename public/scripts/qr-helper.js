@@ -29,17 +29,18 @@ class ErikrafTDropQR {
             return null;
         }
         const isAnimatedTransfer = container.id === 'qr-send-canvas-container' || options.animatedTransfer === true;
+        const fileInfo = document.getElementById('qr-send-file-info');
+        const isFileTransfer = isAnimatedTransfer && !!fileInfo && !!fileInfo.textContent.trim();
+        const effectiveMargin = Number.isFinite(options.margin) ? options.margin : (isFileTransfer ? 4 : 8);
         const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
         if (!isAnimatedTransfer && !this._logoState.attempted) this._ensureLogoLoaded(logoPath);
         if (container._qrInstance && typeof container._qrInstance.update === 'function') {
             try {
                 const updateOptions = { data };
-                // qr-code-styling's update() must receive width/height explicitly;
-                // otherwise an existing 280x280 instance keeps its original SVG
-                // background rect and ignores the animated transfer size control.
                 if (isAnimatedTransfer) {
                     if (Number.isFinite(options.width)) updateOptions.width = options.width;
                     if (Number.isFinite(options.height)) updateOptions.height = options.height;
+                    updateOptions.margin = effectiveMargin;
                 }
                 container._qrInstance.update(updateOptions);
                 return container._qrInstance;
@@ -47,11 +48,10 @@ class ErikrafTDropQR {
                 console.warn('[QR Helper] Direct instance update failed, recreating:', err);
             }
         }
-        // Use ECC level from options if provided, otherwise default to 'H' for static QR
         const eccLevel = options.eccLevel || (isAnimatedTransfer ? 'L' : 'H');
         const baseConfig = {
             width: options.width || 280, height: options.height || 280, type: 'svg', data,
-            margin: options.margin || 8,
+            margin: effectiveMargin,
             qrOptions: { typeNumber: 0, mode: 'Byte', errorCorrectionLevel: eccLevel },
             dotsOptions: { color: '#121212', type: 'rounded' },
             backgroundOptions: { color: '#ffffff' },
@@ -81,10 +81,10 @@ window.ErikrafTDropQR = ErikrafTDropQR;
     const ERIKRAFT_ONION_HOST = 'nozudb2e4jy4betognmnwoxvdu44wvjoqvmwios5ql7mxagqqpnn64ad.onion';
 
     const isHostname = value => {
-        const host = value.trim().replace(/^www\./i, '').toLowerCase();
+        const host = value.trim().replace(/^www\\./i, '').toLowerCase();
         if (!host || host.includes('@') || host.includes(' ')) return false;
         if (host === 'localhost' || host === '127.0.0.1' || host === ERIKRAFT_ONION_HOST) return true;
-        return /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i.test(host);
+        return /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}$/i.test(host);
     };
 
     const normalizeScannedUrl = raw => {
@@ -94,7 +94,7 @@ window.ErikrafTDropQR = ErikrafTDropQR;
             const parsed = new URL(value);
             if (parsed.protocol === 'http:' || parsed.protocol === 'https:' || parsed.protocol === 'mailto:') return parsed;
         } catch (err) {}
-        if (isHostname(value) || /^[a-z0-9.-]+\.(?:onion|[a-z]{2,63})(?::\d+)?(?:[/?#].*)?$/i.test(value)) {
+        if (isHostname(value) || /^[a-z0-9.-]+\\.(?:onion|[a-z]{2,63})(?::\\d+)?(?:[/?#].*)?$/i.test(value)) {
             try { return new URL(`https://${value}`); } catch (err) {}
         }
         return null;
@@ -106,7 +106,7 @@ window.ErikrafTDropQR = ErikrafTDropQR;
         const parsedUrl = normalizeScannedUrl(original);
         if (!parsedUrl) return { isUrl: false, isEcosystem: false, type: 'text', title: 'QR Code (Texto)', displayUrl: original, targetUrl: original, isExternal: false };
 
-        const host = parsedUrl.hostname.toLowerCase().replace(/^www\./, '');
+        const host = parsedUrl.hostname.toLowerCase().replace(/^www\\./, '');
         const searchParams = parsedUrl.searchParams;
         const isErikraftHost = host === 'erikraft.com' || host.endsWith('.erikraft.com');
         const isDropHost = host === 'drop.erikraft.com' || host === 'localhost' || host === '127.0.0.1';
