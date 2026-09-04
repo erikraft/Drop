@@ -19,6 +19,7 @@ class ErikrafTdrop {
             'scripts/qr-helper.js',
             'scripts/erikraft-qr.js',
             'scripts/animated-qr-controls.js',
+            'scripts/animated-qr-file-size.js',
             'scripts/network.js',
             'scripts/ui.js',
             'scripts/libs/heic2any.min.js',
@@ -309,7 +310,7 @@ class ErikrafTdrop {
         }
         else if (urlParams.has('base64text')) {
             const base64Text = urlParams.get('base64text');
-            await this.base64Dialog?.evaluateBase64Text(base64Text, hash);
+            await this.base64Dialog?.evaluateBase64Text(base64text, hash);
         }
         else if (urlParams.has('base64zip')) {
             const base64Zip = urlParams.get('base64zip');
