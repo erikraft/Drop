@@ -1,29 +1,12 @@
 {
     "name": "ErikrafT Drop™",
     "short_name": "ErikrafT Drop™",
+    "version": "1.16.0",
     "icons": [
-        {
-            "src": "images/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "images/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        },
-        {
-            "src": "images/android-chrome-192x192-maskable.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "images/android-chrome-512x512-maskable.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
-        }
+        {"src": "images/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png"},
+        {"src": "images/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png"},
+        {"src": "images/android-chrome-192x192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+        {"src": "images/android-chrome-512x512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
     ],
     "background_color": "#efefef",
     "start_url": "./",
@@ -43,13 +26,8 @@
             "title": "title",
             "text": "text",
             "url": "url",
-            "files": [{
-                "name": "allfiles",
-                "accept": ["*/*"]
-            }]
+            "files": [{"name": "allfiles", "accept": ["*/*"]}]
         }
     },
-    "launch_handler": {
-        "client_mode": "focus-existing"
-    }
+    "launch_handler": {"client_mode": "focus-existing"}
 }
