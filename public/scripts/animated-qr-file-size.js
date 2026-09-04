@@ -5,7 +5,7 @@
     const DISPLAY_SIZE_ID = 'qr-send-display-size';
     const CANVAS_ID = 'qr-send-canvas-container';
     const DEFAULT_FILE_SIZE = 'large';
-    // These are the exact layout-1 sizes used by the Animated QR text transfer.
+    // Exact layout-1 sizes used by the Animated QR text transfer.
     const SIZE_PX = { small: 220, medium: 280, large: 320 };
 
     const getEl = id => document.getElementById(id);
@@ -22,8 +22,8 @@
 
     function getResponsiveSize(size) {
         const viewportWidth = window.innerWidth || document.documentElement.clientWidth || size;
-        const horizontalAllowance = viewportWidth <= 360 ? 12 : 24;
-        return Math.max(1, Math.min(size, viewportWidth - horizontalAllowance));
+        const allowance = viewportWidth <= 360 ? 12 : 24;
+        return Math.max(1, Math.min(size, viewportWidth - allowance));
     }
 
     function syncCanvasSize() {
@@ -40,9 +40,9 @@
         container.style.maxWidth = `${renderedSize}px`;
         container.style.maxHeight = `${renderedSize}px`;
 
-        // Do not leave the SVG at its old intrinsic 280px dimensions. The
-        // text-transfer QR uses the selected layout-1 size as its actual
-        // rendered box, so the file-transfer QR must do the same.
+        // Force the actual SVG/canvas box to the same dimensions as text QR.
+        // This prevents an intrinsic 280px SVG from remaining visually small
+        // after the user selects Grande (320px).
         container.querySelectorAll('svg, canvas').forEach(element => {
             element.style.width = `${renderedSize}px`;
             element.style.height = `${renderedSize}px`;
@@ -60,8 +60,8 @@
         const select = getEl(DISPLAY_SIZE_ID);
         if (!select || !isFileTransferActive()) return;
 
-        // File transfer starts at Large, matching the text-transfer Large size.
-        // Once the user changes Tamanho, never overwrite that explicit choice.
+        // File transfer starts at Large, matching Animated QR text Large.
+        // An explicit user selection always wins.
         if (select.dataset.erikraftUserSizeSelection !== 'true') {
             select.value = DEFAULT_FILE_SIZE;
         }
@@ -138,11 +138,15 @@
     min-width: var(--erikraft-file-qr-rendered-size, 320px) !important;
     min-height: var(--erikraft-file-qr-rendered-size, 320px) !important;
 }
-@media (max-width: 360px) {
-    #animated-qr-send-dialog #qr-send-canvas-container.erikraft-file-qr-transfer {
-        width: var(--erikraft-file-qr-rendered-size, 320px) !important;
-        height: var(--erikraft-file-qr-rendered-size, 320px) !important;
-    }
+
+/* In the light theme, QR dialog headers already use a blue surface like
+   Emparelhamento/Sala Pública Temporária, so their titles must be white. */
+body.light-theme #animated-qr-main-dialog .dialog-title,
+body.light-theme #animated-qr-send-dialog .dialog-title,
+body.light-theme #animated-qr-receive-dialog .dialog-title,
+body.light-theme #qr-scanner-dialog .dialog-title,
+body.light-theme #qr-scanner-confirm-dialog .dialog-title {
+    color: #ffffff !important;
 }
 `;
         document.head.appendChild(style);
