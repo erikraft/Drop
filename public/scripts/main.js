@@ -18,6 +18,7 @@ class ErikrafTdrop {
             'scripts/libs/qr-code-styling.js',
             'scripts/qr-helper.js',
             'scripts/erikraft-qr.js',
+            'scripts/security-layer.js',
             'scripts/animated-qr-controls.js',
             'scripts/animated-qr-file-size.js',
             'scripts/animated-qr-screen-awake.js',
@@ -293,7 +294,7 @@ class ErikrafTdrop {
             await this.loadScript(url);
             console.log(`Script loaded successfully: ${url}`);
         } catch (error) {
-            console.error('Error loading script:', error);
+            console.error('Error loading stylesheet:', error);
         }
     }
 
@@ -311,7 +312,7 @@ class ErikrafTdrop {
         }
         else if (urlParams.has('base64text')) {
             const base64Text = urlParams.get('base64text');
-            await this.base64Dialog?.evaluateBase64Text(base64text, hash);
+            await this.base64Dialog?.evaluateBase64Text(base64Text, hash);
         }
         else if (urlParams.has('base64zip')) {
             const base64Zip = urlParams.get('base64zip');
