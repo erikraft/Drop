@@ -3990,9 +3990,10 @@ class AnimatedQRSendDialog extends Dialog {
         }
 
         this.show();
-        // start() now only initializes state, doesn't auto-play
-        // User must click "Inicializar" to show first frame, then "Play" to animate
         this.transmitter.start();
+        if (window.setupAnimatedQRRuntimeControls) {
+            window.setupAnimatedQRRuntimeControls(this.transmitter);
+        }
     }
 
     stopTransmitter() {

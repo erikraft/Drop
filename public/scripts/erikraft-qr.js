@@ -272,10 +272,23 @@ class ErikrafTQRTransmitter {
             this.frames.push(JSON.stringify(payload));
         }
 
+        this.rawBuffer = buffer;
         this.totalSize = totalSize;
         this.metadata = metadata;
         this.numBaseChunks = numChunks;
         this.totalFramesCount = this.frames.length;
+    }
+
+    async reprepare() {
+        if (!this.rawBuffer || !this.metadata) return;
+        const savedIndex = this.currentIndex;
+        const wasPaused = this.paused;
+        this.pause();
+        await this.prepareBuffer(this.rawBuffer, this.metadata);
+        this.currentIndex = Math.min(savedIndex, this.frames.length - 1);
+        if (!wasPaused) {
+            this.resume();
+        }
     }
 
     start() {
