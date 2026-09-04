@@ -51,6 +51,14 @@ ErikrafT Drop™ Community
 
 ---
 
+## 🌐 ErikrafT Drop™ Instances
+
+- [https://drop.erikraft.com](https://drop.erikraft.com)
+- [https://drop-fallback.erikraft.com](https://drop-fallback.erikraft.com)
+- [https://dropfallback.erikraft.com](https://dropfallback.erikraft.com)
+
+---
+
 🔮｜See possible old or future files that have not yet been released in the source code on Github or that have already been released in the past, which is on my computer in a 2nd public folder here on Mega <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
 
 ---
@@ -238,50 +246,3 @@ Connect to others in complex network situations, or over the Internet.
     <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="./public/images/badges/Firefox%20Browser%20ADD-ONS.png">
   </a>
 </div>
-
----
-
-## 🌐 Links
-
-[<img src="https://biodrop.erikraft.com/images/Logo.png" width="20px" style="display:inline;">｜biodrop.erikraft.com](https://biodrop.erikraft.com/)
-<br />
-[<img src="https://biodrop.erikraft.com/images/Logo.png" width="20px" style="display:inline;">｜drop.erikraft.com](https://drop.erikraft.com/)
-<br />
-[✍🏻｜Documentation](https://docsdrop.erikraft.com/)
-<br />
-[🛡️｜Privacy Policy](https://drop.erikraft.com/privacy-policy.html)
-<br />
-[🛡️｜Terms of Use](https://drop.erikraft.com/terms-of-use.html)
-<br />
-[🛡️｜License](https://github.com/erikraft/Drop/blob/master/LICENSE)
-<br />
-[🛡️｜Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
-<br />
-[<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop™ Android Github Repository](https://github.com/erikraft/Drop-Android)
-<br />
-
----
-
-## 💰 Support
-<a href="https://ko-fi.com/erikraft" target="_blank">
-<img src="./public/images/Donate With Ko-fi.png" width="150" alt="Donate"/>
-</a>
-<br />
-<br />
-
-ErikrafT Drop™ is libre, and always will be. \
-If you find it useful and want to support free and open-source software, please consider donating using the button above. \
-I footed the bill for the domain and the server, and you can help create and maintain great software by supporting me. \
-Thank you very much for your contribution!
-
----
-
-## 🙏 Thank you everyone's support :)
-
-<a href="https://www.star-history.com/#erikraft/Drop&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=erikraft/Drop&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=erikraft/Drop&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=erikraft/Drop&type=Date" />
- </picture>
-</a>
