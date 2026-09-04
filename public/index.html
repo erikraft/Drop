@@ -1662,6 +1662,18 @@
                             </div>
                         </div>
 
+                        <!-- Frame seek slider -->
+                        <div id="qr-send-frame-seek-wrapper" class="fw">
+                            <input type="range" id="qr-send-frame-seek" class="fw" min="0" value="0" aria-label="Posição do QR animado">
+                        </div>
+
+                        <!-- Jump to frame numeric input -->
+                        <div id="qr-send-frame-input-group" class="row center gap-2 fw align-items-center">
+                            <label for="qr-send-frame-input" class="font-caption text-secondary">Ir para frame:</label>
+                            <input type="number" id="qr-send-frame-input" class="btn btn-rounded btn-grey" inputmode="numeric" min="1" value="1" style="width: 90px; text-align: center;">
+                            <button id="qr-send-frame-go-btn" type="button" class="btn btn-rounded btn-grey">Ir</button>
+                        </div>
+
                         <div class="font-body2 text-center text-secondary" data-i18n-key="dialogs.animated-qr-instruction">Aponte a câmera do outro dispositivo para este QR Code.</div>
 
                         <div class="row center gap-2 fw align-items-center">
@@ -1696,8 +1708,8 @@
                                 <label for="qr-send-layout" class="font-caption">Layout:</label>
                                 <select id="qr-send-layout" class="btn btn-rounded btn-grey" style="flex: 1;">
                                     <option value="1" selected>1 código</option>
-                                    <option value="2" disabled>2 códigos (em breve)</option>
-                                    <option value="4" disabled>4 códigos (em breve)</option>
+                                    <option value="2">2 códigos</option>
+                                    <option value="4">4 códigos</option>
                                 </select>
                             </div>
 
@@ -1713,10 +1725,12 @@
                     </div>
                 </div>
 
-                <div id="qr-send-active-buttons" class="btn-row row-reverse wrap erikraft-qr-btn-row" hidden>
+                <div id="qr-send-active-buttons" class="btn-row wrap erikraft-qr-btn-row" hidden>
+                    <button id="qr-send-next-btn" type="button" class="btn btn-rounded btn-grey">Próximo</button>
                     <button id="qr-send-pause-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-pause">Pausar</button>
-                    <button id="qr-send-back-btn" type="button" class="btn btn-rounded btn-grey" data-i18n-key="dialogs.animated-qr-back">Voltar</button>
-                    <button type="button" class="btn btn-rounded btn-grey" close data-i18n-key="dialogs.close">Fechar</button>
+                    <button id="qr-send-previous-btn" type="button" class="btn btn-rounded btn-grey">Anterior</button>
+                    <button id="qr-send-back-btn" type="button" class="btn btn-rounded btn-red" data-i18n-key="dialogs.animated-qr-back">Voltar</button>
+                    <button id="qr-send-close-btn" type="button" class="btn btn-rounded btn-red" close data-i18n-key="dialogs.close">Fechar</button>
                 </div>
             </x-paper>
         </x-background>
