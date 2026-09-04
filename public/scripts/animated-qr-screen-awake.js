@@ -23,7 +23,7 @@
         const style = document.createElement('style');
         style.id = STYLE_ID;
         style.textContent = `
-#${BUTTON_ID}{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:8px auto 0;max-width:100%;box-sizing:border-box}
+#${BUTTON_ID}{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:0;max-width:100%;box-sizing:border-box}
 #${BUTTON_ID}[hidden]{display:none!important}
 #${BUTTON_ID}.erikraft-screen-awake-active{font-weight:600}
 `;
@@ -130,6 +130,28 @@
             || dialog.querySelector('.erikraft-qr-paper');
     }
 
+    function placeButton(button, insertionPoint) {
+        if (!button || !insertionPoint) return;
+
+        const previousButton = insertionPoint.querySelector('#qr-send-previous-btn');
+        const backButton = insertionPoint.querySelector('#qr-send-back-btn');
+
+        if (previousButton && previousButton !== button) {
+            const reference = previousButton.nextSibling;
+            if (reference !== button) insertionPoint.insertBefore(button, reference);
+            return;
+        }
+
+        if (backButton && backButton !== button) {
+            insertionPoint.insertBefore(button, backButton);
+            return;
+        }
+
+        if (button.parentElement !== insertionPoint) {
+            insertionPoint.appendChild(button);
+        }
+    }
+
     function ensureButton() {
         injectStyles();
         const sendDialog = getDialog('animated-qr-send-dialog');
@@ -148,10 +170,8 @@
             button.type = 'button';
             button.className = 'btn btn-rounded btn-dark';
             button.addEventListener('click', toggle);
-            insertionPoint.appendChild(button);
-        } else if (button && button.parentElement !== insertionPoint && insertionPoint) {
-            insertionPoint.appendChild(button);
         }
+        if (button && insertionPoint) placeButton(button, insertionPoint);
         updateButton();
     }
 
