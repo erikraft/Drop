@@ -29,6 +29,9 @@ class ErikrafTDropQR {
             return null;
         }
         const isAnimatedTransfer = container.id === 'qr-send-canvas-container' || options.animatedTransfer === true;
+        const fileInfo = document.getElementById('qr-send-file-info');
+        const isFileTransfer = isAnimatedTransfer && !!fileInfo && !!fileInfo.textContent.trim();
+        const effectiveMargin = Number.isFinite(options.margin) ? options.margin : (isFileTransfer ? 4 : 8);
         const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
         if (!isAnimatedTransfer && !this._logoState.attempted) this._ensureLogoLoaded(logoPath);
         if (container._qrInstance && typeof container._qrInstance.update === 'function') {
@@ -37,7 +40,7 @@ class ErikrafTDropQR {
                 if (isAnimatedTransfer) {
                     if (Number.isFinite(options.width)) updateOptions.width = options.width;
                     if (Number.isFinite(options.height)) updateOptions.height = options.height;
-                    if (Number.isFinite(options.margin)) updateOptions.margin = options.margin;
+                    updateOptions.margin = effectiveMargin;
                 }
                 container._qrInstance.update(updateOptions);
                 return container._qrInstance;
@@ -48,7 +51,7 @@ class ErikrafTDropQR {
         const eccLevel = options.eccLevel || (isAnimatedTransfer ? 'L' : 'H');
         const baseConfig = {
             width: options.width || 280, height: options.height || 280, type: 'svg', data,
-            margin: options.margin ?? 8,
+            margin: effectiveMargin,
             qrOptions: { typeNumber: 0, mode: 'Byte', errorCorrectionLevel: eccLevel },
             dotsOptions: { color: '#121212', type: 'rounded' },
             backgroundOptions: { color: '#ffffff' },
@@ -118,7 +121,7 @@ window.ErikrafTDropQR = ErikrafTDropQR;
         else if (searchParams.has('pair_key')) { title = 'ErikrafT Drop™ - Emparelhamento de Dispositivo'; type = 'drop-pair'; }
         else if (isDocsDrop) { title = 'DocsDrop - Documentação ErikrafT'; type = 'docsdrop'; }
         else if (isBioDrop) { title = 'BioDrop - Link Bio ErikrafT'; type = 'biodrop'; }
-        else if (isDropHost || isErikrafTOnion) { title = 'ErikrafT Drop™'; type = 'drop'; }
+        else if (isDropHost || isErikraftOnion) { title = 'ErikrafT Drop™'; type = 'drop'; }
         else if (isErikraftHost) { title = host === 'erikraft.com' ? 'ErikrafT' : 'ErikrafT Service'; type = 'erikraft-service'; }
 
         return { isUrl: true, isEcosystem, type, title, displayUrl: parsedUrl.href, targetUrl: parsedUrl.href, searchParams, isExternal: !isEcosystem };
