@@ -17,7 +17,7 @@ body.dark-theme .btn-red {
 body.dark-theme .btn-red:hover, body.dark-theme .btn-red:focus {
     background-color: #b71c1c !important;
     color: #ffffff !important;
-    border-color: #a71d1d !important;
+    border-color: #a71c1c !important;
 }
 
 .erikraft-qr-dialog .erikraft-qr-paper {
@@ -319,5 +319,36 @@ body.dark-theme #animated-qr-main-dialog .erikraft-qr-btn-row {
     }
     #animated-qr-main-dialog .erikraft-qr-paper > .row.center.p-3 {
         padding-bottom: 20px;
+    }
+}
+
+/* File-transfer QR must use the available canvas box without overriding size controls. */
+#animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container {
+    min-width: 0;
+    min-height: 0;
+    width: min(420px, calc(100vw - 40px));
+    height: min(420px, calc(100vw - 40px));
+    max-width: calc(100% - 8px);
+    max-height: none;
+}
+#animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container > svg,
+#animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container > canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain;
+}
+@media (max-width: 480px) {
+    #animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container {
+        width: min(360px, calc(100vw - 32px));
+        height: min(360px, calc(100vw - 32px));
+    }
+}
+@media (max-width: 360px) {
+    #animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container {
+        width: min(300px, calc(100vw - 24px));
+        height: min(300px, calc(100vw - 24px));
     }
 }
