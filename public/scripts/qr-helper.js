@@ -33,7 +33,15 @@ class ErikrafTDropQR {
         if (!isAnimatedTransfer && !this._logoState.attempted) this._ensureLogoLoaded(logoPath);
         if (container._qrInstance && typeof container._qrInstance.update === 'function') {
             try {
-                container._qrInstance.update({ data });
+                const updateOptions = { data };
+                // qr-code-styling's update() must receive width/height explicitly;
+                // otherwise an existing 280x280 instance keeps its original SVG
+                // background rect and ignores the animated transfer size control.
+                if (isAnimatedTransfer) {
+                    if (Number.isFinite(options.width)) updateOptions.width = options.width;
+                    if (Number.isFinite(options.height)) updateOptions.height = options.height;
+                }
+                container._qrInstance.update(updateOptions);
                 return container._qrInstance;
             } catch (err) {
                 console.warn('[QR Helper] Direct instance update failed, recreating:', err);
