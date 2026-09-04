@@ -139,11 +139,16 @@
     }
 
     function installAnimatedQrBoundary() {
-        if (typeof window.ErikrafTQRScanner !== 'function') {
+        // Classic scripts expose top-level class declarations as a global lexical
+        // binding rather than necessarily as a window property. Use both forms.
+        const Scanner = typeof ErikrafTQRScanner === 'function'
+            ? ErikrafTQRScanner
+            : (typeof window.ErikrafTQRScanner === 'function' ? window.ErikrafTQRScanner : null);
+
+        if (!Scanner) {
             return false;
         }
 
-        const Scanner = window.ErikrafTQRScanner;
         if (Scanner.prototype.__erikrafTSecurityWrapped) {
             return true;
         }
@@ -154,48 +159,52 @@
             return false;
         }
 
-        Scanner.prototype._finishReconstruction = async function (...args) {
+        Scanner.prototype._finishReconstruction = function (...args) {
             const originalOnComplete = this.onComplete;
-            let blocked = false;
 
-            this.onComplete = async (result, ...callbackArgs) => {
+            // Keep this wrapper synchronous so it remains installed for the exact
+            // duration in which _finishReconstruction invokes the callback. Async
+            // moderation continues from the callback without modifying EKQR state.
+            this.onComplete = (result, ...callbackArgs) => {
                 try {
                     if (typeof result === 'string') {
                         const validation = validateQrText(result);
                         if (!validation.allowed) {
-                            blocked = true;
                             notifyBlocked(validation.reason);
                             return;
                         }
-                    } else if (typeof File !== 'undefined' && result instanceof File) {
-                        // Reuse the application's existing received-file moderation
-                        // when available. Do not inspect EKQR frames or alter the protocol.
-                        if (typeof window.handleReceivedFile === 'function') {
-                            const moderated = await window.handleReceivedFile(result);
-                            if (!moderated) {
-                                blocked = true;
-                                return;
-                            }
-                            result = moderated;
-                        }
+
+                        return originalOnComplete?.call(this, result, ...callbackArgs);
+                    }
+
+                    if (typeof File !== 'undefined' && result instanceof File && typeof window.handleReceivedFile === 'function') {
+                        Promise.resolve(window.handleReceivedFile(result))
+                            .then(moderated => {
+                                if (moderated) {
+                                    originalOnComplete?.call(this, moderated, ...callbackArgs);
+                                } else {
+                                    console.info('[Security] Animated QR file withheld by content moderation.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('[Security] Animated QR file validation failed:', error);
+                                // Do not pass a failed security check through to the
+                                // original callback. The transfer protocol itself is
+                                // left untouched.
+                            });
+                        return;
                     }
 
                     return originalOnComplete?.call(this, result, ...callbackArgs);
                 } catch (error) {
                     console.error('[Security] Animated QR content validation failed:', error);
-                    // Fail closed only for the security boundary itself; never mutate
-                    // the underlying EKQR reconstruction state.
-                    blocked = true;
                 }
             };
 
             try {
-                return await originalFinish.apply(this, args);
+                return originalFinish.apply(this, args);
             } finally {
                 this.onComplete = originalOnComplete;
-                if (blocked) {
-                    console.info('[Security] Animated QR content was withheld after reconstruction.');
-                }
             }
         };
 
@@ -211,9 +220,9 @@
         validateQrText
     });
 
-    // erikraft-qr.js is loaded immediately before this module. Keep a tiny
-    // retry only for unusual script-loader timing; no polling loop is used.
-    if (!installAnimatedQrBoundary()) {
+    // erikraft-qr.js is loaded immediately before this module. Keep a single
+    // microtask retry for unusual script-loader timing; no polling loop is used.
+    if (!installAnimatedQrBoundary() && typeof queueMicrotask === 'function') {
         queueMicrotask(() => installAnimatedQrBoundary());
     }
 })();
