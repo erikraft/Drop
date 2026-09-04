@@ -70,14 +70,14 @@
         const style = document.createElement('style');
         style.id = 'erikraft-animated-qr-file-size-style';
         style.textContent = `
-#animated-qr-send-dialog #qr-send-canvas-container:has(+ *) {
+#animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container {
     width: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 32px)) !important;
     height: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 32px)) !important;
     max-width: calc(100vw - 32px) !important;
     max-height: calc(100vw - 32px) !important;
 }
 @media (max-width: 600px) {
-    #animated-qr-send-dialog #qr-send-canvas-container:has(+ *) {
+    #animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container {
         width: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 24px)) !important;
         height: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 24px)) !important;
         max-width: calc(100vw - 24px) !important;
@@ -85,7 +85,7 @@
     }
 }
 @media (max-width: 360px) {
-    #animated-qr-send-dialog #qr-send-canvas-container:has(+ *) {
+    #animated-qr-send-dialog #qr-send-file-info:not(:empty) ~ #qr-send-canvas-container {
         width: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 20px)) !important;
         height: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 20px)) !important;
         max-width: calc(100vw - 20px) !important;
