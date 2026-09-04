@@ -5,7 +5,7 @@
     const DISPLAY_SIZE_ID = 'qr-send-display-size';
     const CANVAS_ID = 'qr-send-canvas-container';
     const DEFAULT_FILE_SIZE = 'large';
-    // Keep the file-transfer QR dimensions identical to the text-transfer QR.
+    // These are the exact layout-1 sizes used by the Animated QR text transfer.
     const SIZE_PX = { small: 220, medium: 280, large: 320 };
 
     const getEl = id => document.getElementById(id);
@@ -20,24 +20,39 @@
         return SIZE_PX[select?.value] || SIZE_PX[DEFAULT_FILE_SIZE];
     }
 
-    function syncContainerSize() {
+    function getResponsiveSize(size) {
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth || size;
+        const horizontalAllowance = viewportWidth <= 360 ? 12 : 24;
+        return Math.max(1, Math.min(size, viewportWidth - horizontalAllowance));
+    }
+
+    function syncCanvasSize() {
         const container = getEl(CANVAS_ID);
         if (!container || !isFileTransferActive()) return;
 
-        const size = getSelectedSize();
+        const requestedSize = getSelectedSize();
+        const renderedSize = getResponsiveSize(requestedSize);
         container.classList.add('erikraft-file-qr-transfer');
-        container.style.setProperty('--erikraft-file-qr-size', `${size}px`);
-        container.style.width = `min(${size}px, calc(100vw - 24px))`;
-        container.style.height = `min(${size}px, calc(100vw - 24px))`;
-        container.style.maxWidth = 'calc(100vw - 24px)';
-        container.style.maxHeight = 'calc(100vw - 24px)';
+        container.style.setProperty('--erikraft-file-qr-size', `${requestedSize}px`);
+        container.style.setProperty('--erikraft-file-qr-rendered-size', `${renderedSize}px`);
+        container.style.width = `${renderedSize}px`;
+        container.style.height = `${renderedSize}px`;
+        container.style.maxWidth = `${renderedSize}px`;
+        container.style.maxHeight = `${renderedSize}px`;
 
+        // Do not leave the SVG at its old intrinsic 280px dimensions. The
+        // text-transfer QR uses the selected layout-1 size as its actual
+        // rendered box, so the file-transfer QR must do the same.
         container.querySelectorAll('svg, canvas').forEach(element => {
-            element.style.width = '100%';
-            element.style.height = '100%';
-            element.style.maxWidth = '100%';
-            element.style.maxHeight = '100%';
+            element.style.width = `${renderedSize}px`;
+            element.style.height = `${renderedSize}px`;
+            element.style.maxWidth = `${renderedSize}px`;
+            element.style.maxHeight = `${renderedSize}px`;
+            element.style.minWidth = `${renderedSize}px`;
+            element.style.minHeight = `${renderedSize}px`;
             element.style.display = 'block';
+            element.setAttribute('width', String(renderedSize));
+            element.setAttribute('height', String(renderedSize));
         });
     }
 
@@ -45,11 +60,12 @@
         const select = getEl(DISPLAY_SIZE_ID);
         if (!select || !isFileTransferActive()) return;
 
-        // Large is the file-transfer default, but an explicit user choice always wins.
+        // File transfer starts at Large, matching the text-transfer Large size.
+        // Once the user changes Tamanho, never overwrite that explicit choice.
         if (select.dataset.erikraftUserSizeSelection !== 'true') {
             select.value = DEFAULT_FILE_SIZE;
         }
-        syncContainerSize();
+        syncCanvasSize();
     }
 
     function bindSizeControl() {
@@ -59,7 +75,7 @@
         select.dataset.erikraftFileSizeBound = 'true';
         select.addEventListener('change', () => {
             select.dataset.erikraftUserSizeSelection = 'true';
-            syncContainerSize();
+            syncCanvasSize();
         });
     }
 
@@ -77,43 +93,13 @@
                 delete select.dataset.erikraftUserSizeSelection;
                 const container = getEl(CANVAS_ID);
                 container?.classList.remove('erikraft-file-qr-transfer');
-                container?.style.removeProperty('--erikraft-file-qr-size');
                 if (container) {
-                    container.style.removeProperty('width');
-                    container.style.removeProperty('height');
-                    container.style.removeProperty('max-width');
-                    container.style.removeProperty('max-height');
+                    ['--erikraft-file-qr-size', '--erikraft-file-qr-rendered-size'].forEach(property => container.style.removeProperty(property));
+                    ['width', 'height', 'max-width', 'max-height'].forEach(property => container.style.removeProperty(property));
                 }
             }
         });
         observer.observe(fileInfo, { childList: true, characterData: true, subtree: true });
-    }
-
-    function wrapQRRenderer() {
-        if (window.ErikrafTDropQR?.__erikraftFileSizeRendererWrapped) return;
-        const qr = window.ErikrafTDropQR;
-        if (!qr || typeof qr.render !== 'function') return;
-
-        const originalRender = qr.render.bind(qr);
-        qr.render = (container, data, options = {}) => {
-            const fileTransfer = container?.id === CANVAS_ID && isFileTransferActive();
-            if (!fileTransfer) return originalRender(container, data, options);
-
-            const size = getSelectedSize();
-            const fileOptions = {
-                ...options,
-                width: size,
-                height: size,
-                // Remove unnecessary SVG background/padding while retaining the
-                // same outer dimensions as the text-transfer QR.
-                margin: 0,
-                animatedTransfer: true
-            };
-            const result = originalRender(container, data, fileOptions);
-            syncContainerSize();
-            return result;
-        };
-        qr.__erikraftFileSizeRendererWrapped = true;
     }
 
     function observeCanvas() {
@@ -122,10 +108,8 @@
 
         container.dataset.erikraftFileCanvasObserver = 'true';
         const observer = new MutationObserver(() => {
-            if (isFileTransferActive()) syncContainerSize();
+            if (isFileTransferActive()) syncCanvasSize();
         });
-        // Observe only rendered children. Do not observe attributes because
-        // syncContainerSize intentionally updates inline sizing styles.
         observer.observe(container, { childList: true, subtree: true });
     }
 
@@ -135,36 +119,29 @@
         style.id = 'erikraft-animated-qr-file-size-style';
         style.textContent = `
 #animated-qr-send-dialog #qr-send-canvas-container.erikraft-file-qr-transfer {
-    width: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 24px)) !important;
-    height: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 24px)) !important;
-    max-width: calc(100vw - 24px) !important;
-    max-height: calc(100vw - 24px) !important;
+    width: var(--erikraft-file-qr-rendered-size, 320px) !important;
+    height: var(--erikraft-file-qr-rendered-size, 320px) !important;
+    max-width: var(--erikraft-file-qr-rendered-size, 320px) !important;
+    max-height: var(--erikraft-file-qr-rendered-size, 320px) !important;
     min-width: 0 !important;
     min-height: 0 !important;
     margin: 4px auto !important;
+    overflow: hidden !important;
 }
 #animated-qr-send-dialog #qr-send-canvas-container.erikraft-file-qr-transfer > svg,
 #animated-qr-send-dialog #qr-send-canvas-container.erikraft-file-qr-transfer > canvas {
     display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-}
-@media (max-width: 600px) {
-    #animated-qr-send-dialog #qr-send-canvas-container.erikraft-file-qr-transfer {
-        width: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 20px)) !important;
-        height: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 20px)) !important;
-        max-width: calc(100vw - 20px) !important;
-        max-height: calc(100vw - 20px) !important;
-    }
+    width: var(--erikraft-file-qr-rendered-size, 320px) !important;
+    height: var(--erikraft-file-qr-rendered-size, 320px) !important;
+    max-width: none !important;
+    max-height: none !important;
+    min-width: var(--erikraft-file-qr-rendered-size, 320px) !important;
+    min-height: var(--erikraft-file-qr-rendered-size, 320px) !important;
 }
 @media (max-width: 360px) {
     #animated-qr-send-dialog #qr-send-canvas-container.erikraft-file-qr-transfer {
-        width: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 12px)) !important;
-        height: min(var(--erikraft-file-qr-size, 320px), calc(100vw - 12px)) !important;
-        max-width: calc(100vw - 12px) !important;
-        max-height: calc(100vw - 12px) !important;
+        width: var(--erikraft-file-qr-rendered-size, 320px) !important;
+        height: var(--erikraft-file-qr-rendered-size, 320px) !important;
     }
 }
 `;
@@ -176,8 +153,10 @@
         bindSizeControl();
         resetWhenFileClears();
         observeCanvas();
-        wrapQRRenderer();
         applyFileDefault();
+        window.addEventListener('resize', () => {
+            if (isFileTransferActive()) syncCanvasSize();
+        }, { passive: true });
     }
 
     if (document.readyState === 'loading') {
