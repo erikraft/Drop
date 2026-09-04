@@ -26,6 +26,21 @@
 #${BUTTON_ID}{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:0;max-width:100%;box-sizing:border-box}
 #${BUTTON_ID}[hidden]{display:none!important}
 #${BUTTON_ID}.erikraft-screen-awake-active{font-weight:600}
+
+/* WebChat: keep the complete footer reachable on small screens. */
+x-dialog:has(#chat-send) x-background{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+x-dialog:has(#chat-send) x-paper{max-height:calc(100dvh - 24px);min-height:0}
+x-dialog:has(#chat-send) .chat-footer{min-width:0;box-sizing:border-box;flex-wrap:wrap}
+x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-sizing:border-box}
+
+/* WebChat send button: consistent, non-distorted icon sizing. */
+#chat-send{width:40px;height:40px;min-width:40px;min-height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center;flex:0 0 40px;box-sizing:border-box}
+#chat-send .icon,#chat-send svg{width:20px;height:20px;min-width:20px;min-height:20px;max-width:20px;max-height:20px;display:block;flex:0 0 20px}
+@media (max-width:600px){
+  x-dialog:has(#chat-send) x-paper{max-height:calc(100dvh - 12px)}
+  x-dialog:has(#chat-send) x-background{padding:6px 5px 12px}
+  x-dialog:has(#chat-send) .chat-footer{padding:10px 12px 14px}
+}
 `;
         document.head.appendChild(style);
     }
