@@ -1,6 +1,7 @@
 {
     "name": "ErikrafT Drop™",
     "short_name": "ErikrafT Drop™",
+    "version": "1.16.0",
     "icons": [
         {
             "src": "images/android-chrome-192x192.png",
