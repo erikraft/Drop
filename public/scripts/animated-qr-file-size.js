@@ -29,8 +29,8 @@
         container.style.setProperty('--erikraft-file-qr-size', `${size}px`);
         container.style.width = `min(${size}px, calc(100vw - 24px))`;
         container.style.height = `min(${size}px, calc(100vw - 24px))`;
-        container.style.maxWidth = `calc(100vw - 24px)`;
-        container.style.maxHeight = `calc(100vw - 24px)`;
+        container.style.maxWidth = 'calc(100vw - 24px)';
+        container.style.maxHeight = 'calc(100vw - 24px)';
 
         container.querySelectorAll('svg, canvas').forEach(element => {
             element.style.width = '100%';
@@ -104,6 +104,8 @@
                 ...options,
                 width: size,
                 height: size,
+                // Remove unnecessary SVG background/padding while retaining the
+                // same outer dimensions as the text-transfer QR.
                 margin: 0,
                 animatedTransfer: true
             };
@@ -122,7 +124,9 @@
         const observer = new MutationObserver(() => {
             if (isFileTransferActive()) syncContainerSize();
         });
-        observer.observe(container, { childList: true, subtree: true, attributes: true });
+        // Observe only rendered children. Do not observe attributes because
+        // syncContainerSize intentionally updates inline sizing styles.
+        observer.observe(container, { childList: true, subtree: true });
     }
 
     function injectResponsiveSizing() {
