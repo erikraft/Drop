@@ -75,33 +75,70 @@ body.dark-theme .btn-red:hover, body.dark-theme .btn-red:focus {
 #animated-qr-send-dialog #qr-send-frame-go-btn { min-height: 40px; }
 #animated-qr-send-dialog #qr-send-initialize-btn { min-width: 120px; }
 #animated-qr-send-dialog #qr-send-play-btn { display: none !important; }
-#animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons[hidden] { display: flex !important; }
-#animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons { flex-wrap: wrap; justify-content: center; align-items: center; width: 100%; box-sizing: border-box; }
-#animated-qr-send-dialog #qr-send-active-buttons {
+#animated-qr-send-dialog #qr-send-controls-group {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px;
 }
-#animated-qr-send-dialog #qr-send-active-buttons > .btn {
-    flex: 1 1 calc(20% - 8px);
-    min-width: 90px;
+#animated-qr-send-dialog #qr-send-controls-group > .btn {
+    width: 100%;
     margin: 0;
+    min-height: 44px;
 }
+
+/* Theme support for dialogs */
+body.light-theme .erikraft-qr-dialog .erikraft-qr-paper,
+body:not(.dark-theme) .erikraft-qr-dialog .erikraft-qr-paper {
+    background-color: #ffffff;
+    color: #212529;
+}
+
+body.dark-theme .erikraft-qr-dialog .erikraft-qr-paper {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not(.light-theme):not(.dark-theme) .erikraft-qr-dialog .erikraft-qr-paper {
+        background-color: #1e1e1e;
+        color: #f8f9fa;
+    }
+}
+
 body.light-theme #animated-qr-send-dialog textarea,
 body.light-theme #animated-qr-send-dialog select,
-body.light-theme #animated-qr-send-dialog input[type="number"] {
+body.light-theme #animated-qr-send-dialog input,
+body.light-theme #qr-scanner-dialog input,
+body:not(.dark-theme) #animated-qr-send-dialog textarea,
+body:not(.dark-theme) #animated-qr-send-dialog select,
+body:not(.dark-theme) #animated-qr-send-dialog input,
+body:not(.dark-theme) #qr-scanner-dialog input {
     background-color: #f8f9fa;
     color: #212529;
     border: 1px solid #ced4da;
 }
+
 body.dark-theme #animated-qr-send-dialog textarea,
 body.dark-theme #animated-qr-send-dialog select,
-body.dark-theme #animated-qr-send-dialog input[type="number"] {
+body.dark-theme #animated-qr-send-dialog input,
+body.dark-theme #qr-scanner-dialog input {
     background-color: #2b3035;
     color: #f8f9fa;
     border: 1px solid #495057;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not(.light-theme):not(.dark-theme) #animated-qr-send-dialog textarea,
+    body:not(.light-theme):not(.dark-theme) #animated-qr-send-dialog select,
+    body:not(.light-theme):not(.dark-theme) #animated-qr-send-dialog input,
+    body:not(.light-theme):not(.dark-theme) #qr-scanner-dialog input {
+        background-color: #2b3035;
+        color: #f8f9fa;
+        border: 1px solid #495057;
+    }
 }
 #animated-qr-receive-dialog #qr-receive-scanner-view { gap: 14px; min-width: 0; }
 #animated-qr-receive-dialog .erikraft-qr-camera-wrapper { margin-bottom: 2px; max-width: 100%; }
@@ -130,12 +167,7 @@ body.dark-theme #animated-qr-send-dialog input[type="number"] {
     #animated-qr-send-dialog #qr-send-frame-input-group { flex-wrap: wrap; }
     #animated-qr-send-dialog #qr-send-frame-input { width: min(110px, 34vw); }
     #animated-qr-send-dialog #qr-send-canvas-container { width: min(280px, 85vw); height: min(280px, 85vw); min-width: 180px; min-height: 180px; max-width: 280px; max-height: 280px; }
-    #animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
-    #animated-qr-send-dialog #qr-send-active-view:not([hidden]) ~ #qr-send-active-buttons > .btn { flex: 1 1 100%; min-height: 44px; }
     #animated-qr-send-dialog #qr-send-text-container > .row > *, #animated-qr-send-dialog #qr-send-file-container > .row > * { min-width: 0; max-width: 100%; }
-}
-@media (min-width: 481px) {
-    #animated-qr-send-dialog #qr-send-active-buttons { max-height: none; overflow: visible; }
 }
 @media (min-width: 481px) and (max-height: 760px) {
     .erikraft-qr-dialog .erikraft-qr-paper { max-height: calc(100vh - 16px); }

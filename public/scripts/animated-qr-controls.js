@@ -2,7 +2,7 @@
     'use strict';
 
     const IDS = {
-        activeButtons: 'qr-send-active-buttons', pause: 'qr-send-pause-btn',
+        activeButtons: 'qr-send-controls-group', pause: 'qr-send-pause-btn',
         previous: 'qr-send-previous-btn', next: 'qr-send-next-btn', seek: 'qr-send-frame-seek',
         frameInput: 'qr-send-frame-input', frameGo: 'qr-send-frame-go-btn', frameGroup: 'qr-send-frame-input-group',
         seekWrapper: 'qr-send-frame-seek-wrapper', bytes: 'qr-send-bytes-per-frame', ecc: 'qr-send-ecc-level',
@@ -27,7 +27,7 @@
         style.textContent = `
 #animated-qr-send-dialog .erikraft-qr-paper{display:flex;flex-direction:column;min-height:0;width:min(720px,calc(100vw - 20px));max-width:720px;max-height:calc(100dvh - 16px);overflow:hidden;box-sizing:border-box}
 #animated-qr-send-dialog #qr-send-active-view,#animated-qr-send-dialog #qr-send-compose-view{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden;width:100%;box-sizing:border-box;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
-#animated-qr-send-dialog #qr-send-active-buttons,#animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--paper-color,var(--background-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
+#animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--paper-color,var(--background-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
 #animated-qr-send-dialog #qr-send-active-view>.column{min-width:0;width:100%}
 #animated-qr-send-dialog #qr-send-canvas-container{width:min(320px,calc(100vw - 64px));min-height:220px;margin:4px auto;flex:0 0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;box-sizing:border-box}
 #animated-qr-send-dialog #qr-send-canvas-container.layout-1{width:min(300px,calc(100vw - 64px));height:min(300px,calc(100vw - 64px))}
@@ -35,15 +35,16 @@
 #animated-qr-send-dialog #qr-send-canvas-container.layout-4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;width:min(340px,calc(100vw - 32px));height:auto}
 #animated-qr-send-dialog .qr-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;box-sizing:border-box;width:100%;background:#ffffff;padding:4px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.12)}
 #animated-qr-send-dialog .qr-tile svg,#animated-qr-send-dialog .qr-tile canvas,#animated-qr-send-dialog #qr-send-canvas-container>svg,#animated-qr-send-dialog #qr-send-canvas-container>canvas{display:block;width:100%!important;height:100%!important;max-width:100%;max-height:100%}
-#animated-qr-send-dialog #qr-send-active-buttons>.btn{flex:0 1 auto;min-width:120px;max-width:220px;margin:0}
+#animated-qr-send-dialog #qr-send-controls-group{width:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:10px;margin-top:12px}
+#animated-qr-send-dialog #qr-send-controls-group > .btn{width:100%;margin:0;min-height:44px}
 #animated-qr-send-dialog #qr-send-frame-seek-wrapper,#animated-qr-send-dialog #qr-send-frame-input-group{width:100%;box-sizing:border-box}
 #animated-qr-send-dialog #qr-send-frame-seek{width:100%;min-width:0;height:8px;touch-action:pan-x;accent-color:#0d6efd}
 #animated-qr-send-dialog #qr-send-frame-input-group{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 #animated-qr-send-dialog #qr-send-frame-input{width:96px;min-height:40px;box-sizing:border-box;text-align:center}
 #animated-qr-send-dialog #qr-send-frame-go-btn{min-height:40px}
 #animated-qr-send-dialog #qr-send-bytes-per-frame,#animated-qr-send-dialog #qr-send-ecc-level,#animated-qr-send-dialog #qr-send-layout,#animated-qr-send-dialog #qr-send-display-size{min-width:0;max-width:100%;box-sizing:border-box}
-@media(max-width:600px){#animated-qr-send-dialog .erikraft-qr-paper{width:calc(100vw - 12px);max-height:calc(100dvh - 8px)}#animated-qr-send-dialog #qr-send-active-view,#animated-qr-send-dialog #qr-send-compose-view{padding:12px!important}#animated-qr-send-dialog #qr-send-active-buttons,#animated-qr-send-dialog #qr-send-compose-buttons{padding-left:10px;padding-right:10px;gap:8px}#animated-qr-send-dialog #qr-send-active-buttons>.btn,#animated-qr-send-dialog #qr-send-compose-buttons>.btn{flex:1 1 calc(50% - 8px);min-width:0;max-width:none;min-height:44px}#animated-qr-send-dialog #qr-send-canvas-container{width:min(280px,calc(100vw - 48px));height:min(280px,calc(100vw - 48px))}}
-@media(max-width:360px){#animated-qr-send-dialog #qr-send-active-buttons>.btn,#animated-qr-send-dialog #qr-send-compose-buttons>.btn{flex-basis:100%}#animated-qr-send-dialog #qr-send-canvas-container{width:min(240px,calc(100vw - 40px));height:min(240px,calc(100vw - 40px))}}
+@media(max-width:600px){#animated-qr-send-dialog .erikraft-qr-paper{width:calc(100vw - 12px);max-height:calc(100dvh - 8px)}#animated-qr-send-dialog #qr-send-active-view,#animated-qr-send-dialog #qr-send-compose-view{padding:12px!important}#animated-qr-send-dialog #qr-send-compose-buttons{padding-left:10px;padding-right:10px;gap:8px}#animated-qr-send-dialog #qr-send-compose-buttons>.btn{flex:1 1 calc(50% - 8px);min-width:0;max-width:none;min-height:44px}#animated-qr-send-dialog #qr-send-canvas-container{width:min(280px,calc(100vw - 48px));height:min(280px,calc(100vw - 48px))}}
+@media(max-width:360px){#animated-qr-send-dialog #qr-send-compose-buttons>.btn{flex-basis:100%}#animated-qr-send-dialog #qr-send-canvas-container{width:min(240px,calc(100vw - 40px));height:min(240px,calc(100vw - 40px))}}
         `;
         document.head.appendChild(style);
     }
@@ -145,8 +146,8 @@
             backBtn.onclick=(e)=>{
                 const t=getTransmitter(); if(t){ t.pause(); }
                 const comp=getEl('qr-send-compose-view'), act=getEl('qr-send-active-view'),
-                      compBtns=getEl('qr-send-compose-buttons'), actBtns=getEl(IDS.activeButtons);
-                if(act) act.hidden=true; if(actBtns) actBtns.hidden=true;
+                      compBtns=getEl('qr-send-compose-buttons');
+                if(act) act.hidden=true;
                 if(comp) comp.hidden=false; if(compBtns) compBtns.hidden=false;
             };
         }
