@@ -38,13 +38,10 @@ class Localization {
     }
 
     static getSupportedOrDefaultLocales(locales) {
-        // get generic locales not included in locales
-        // ["en-us", "de-CH", "fr"] --> ["en", "de"]
         let localesGeneric = locales
             .map(locale => locale.split("-")[0])
             .filter(locale => locales.indexOf(locale) === -1);
 
-        // If there is no perfect match for browser locales, try generic locales first before resorting to the default locale
         return locales.find(Localization.localeIsSupported)
             || localesGeneric.find(Localization.localeIsSupported)
             || Localization.defaultLocale;
@@ -69,7 +66,6 @@ class Localization {
         }
 
         Localization.$htmlRoot.setAttribute('lang', locale);
-
 
         console.log("Page successfully translated",
             `System language: ${Localization.systemLocale}`,
@@ -103,15 +99,32 @@ class Localization {
     }
 
     static async fetchTranslationsFor(newLocale) {
-        const response = await fetch(`lang/${newLocale}.json`, {
-            method: 'GET',
-            credentials: 'include',
-            mode: 'no-cors',
-        });
+        const controller = typeof AbortController === 'function' ? new AbortController() : null;
+        const timeoutId = controller
+            ? setTimeout(() => controller.abort(), 2500)
+            : null;
 
-        if (response.redirected === true || response.status !== 200) return false;
+        try {
+            const response = await fetch(`lang/${newLocale}.json`, {
+                method: 'GET',
+                credentials: 'include',
+                mode: 'no-cors',
+                signal: controller?.signal,
+            });
 
-        return await response.json();
+            if (response.redirected === true || response.status !== 200) return false;
+
+            return await response.json();
+        } catch (error) {
+            if (error?.name === 'AbortError') {
+                console.warn(`[Localization] Timed out loading ${newLocale}.json; continuing with application startup.`);
+            } else {
+                console.warn(`[Localization] Failed to load ${newLocale}.json; continuing with application startup.`, error);
+            }
+            return false;
+        } finally {
+            if (timeoutId) clearTimeout(timeoutId);
+        }
     }
 
     static async translatePage() {
@@ -143,7 +156,6 @@ class Localization {
             const keys = key.split(".");
 
             for (let i = 0; i < keys.length - 1; i++) {
-                // iterate into translation object until last layer
                 translationObj = translationObj[keys[i]]
             }
 
@@ -169,7 +181,6 @@ class Localization {
             if (!translation.includes(`{{${j}}}`)) {
                 throw new Error(`Translation misses data placeholder: ${j}`);
             }
-            // Add data to translation
             translation = translation.replace(`{{${j}}}`, data[j]);
         }
         return translation;
@@ -187,20 +198,15 @@ class Localization {
             translation = Localization.addDataToTranslation(translation, data);
         }
         catch (e) {
-            // Log warnings and help calls
             console.warn(e);
             Localization.logTranslationMissingOrBroken(key, attr, data, useDefault);
             Localization.logHelpCallKey(key, attr);
             Localization.logHelpCall();
 
             if (useDefault || Localization.currentLocaleIsDefault()) {
-                // Is default locale already
-                // Use key as translation fallback to keep UI stable and debuggable
                 translation = key;
             }
             else {
-                // Is not default locale yet
-                // Get translation for default language with same arguments
                 console.log(`Using default language ${Localization.defaultLocale.toUpperCase()} instead.`);
                 translation = this.getTranslation(key, attr, data, true);
             }
@@ -228,7 +234,7 @@ class Localization {
             ? key
             : `${key}_${attr}`;
 
-        console.warn(`Translate this string here: https://crowdin.com/project/erikraft-drop`);
+        console.warn("Translate this string here: https://crowdin.com/project/erikraft-drop");
     }
 
     static escapeHTML(unsafeText) {
