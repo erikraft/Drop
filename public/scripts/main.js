@@ -36,8 +36,15 @@ class ErikrafTdrop {
 
     static boot() {
         const start = () => {
-            window.erikrafTdrop = new ErikrafTdrop();
-            window.erikrafTdrop.initialize();
+            try {
+                window.erikrafTdrop = new ErikrafTdrop();
+                window.erikrafTdrop.initialize().catch(error => {
+                    console.error('[App] Fatal initialization error:', error);
+                    window.erikrafTdrop?.revealBaseUI();
+                });
+            } catch (error) {
+                console.error('[App] Failed to start application:', error);
+            }
         };
 
         if (document.readyState === 'loading') {
@@ -53,27 +60,58 @@ class ErikrafTdrop {
             await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
         }
 
+        // PWA is progressive enhancement: never wait for or depend on the SW.
         this.registerServiceWorker();
 
-        let startupError = null;
+        const startupSteps = [
+            ['loadAssets', () => this.loadAssets()],
+            ['hydrateUI', () => this.hydrateUI()],
+            ['bindEvents', () => this.bindEvents()]
+        ];
 
-        try {
-            await this.loadAssets();
-            await this.hydrateUI();
-            this.bindEvents();
-        } catch (error) {
-            startupError = error;
-            console.error('[App] Initialization flow failed before networking step:', error);
-        } finally {
-            // Peer discovery must always run, even if previous phases had recoverable failures.
-            await this.startPeerDiscovery();
-
-            if (startupError) {
-                console.warn('[App] App recovered partially. Networking started with reduced features.');
-            } else {
-                console.log('[App] Initialization completed successfully.');
+        let failedSteps = 0;
+        for (const [name, step] of startupSteps) {
+            try {
+                await step();
+            } catch (error) {
+                failedSteps++;
+                console.error(`[App] Startup step failed: ${name}`, error);
             }
         }
+
+        // If an optional startup operation failed before the normal fade-in,
+        // explicitly reveal the base shell instead of leaving a white/empty UI.
+        this.revealBaseUI();
+
+        try {
+            await this.startPeerDiscovery();
+        } catch (error) {
+            failedSteps++;
+            console.error('[App] Peer discovery initialization failed:', error);
+        }
+
+        if (failedSteps) {
+            console.warn(`[App] Initialization completed with ${failedSteps} recoverable step failure(s).`);
+        } else {
+            console.log('[App] Initialization completed successfully.');
+        }
+    }
+
+    revealBaseUI() {
+        const selectors = [
+            'header',
+            '#center',
+            'footer',
+            '#background-canvas',
+            '#background'
+        ];
+
+        selectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(element => {
+                element.classList.remove('opacity-0');
+                element.style.removeProperty('visibility');
+            });
+        });
     }
 
     async loadAssets() {
@@ -131,12 +169,23 @@ class ErikrafTdrop {
             }
         });
 
-        this.contentModeration = await this.createContentModeration();
+        try {
+            this.contentModeration = await this.createContentModeration();
+        } catch (error) {
+            this.contentModeration = null;
+            console.error('[Moderation] Initialization failed; continuing without moderation.', error);
+        }
     }
 
     bindEvents() {
-        Events.on('beforeinstallprompt', e => this.onPwaInstallable(e));
-        Events.on('ws-connected', () => this.evaluateUrlParams(), { once: true });
+        if (typeof Events !== 'undefined') {
+            Events.on('beforeinstallprompt', e => this.onPwaInstallable(e));
+            Events.on('ws-connected', () => this.evaluateUrlParams().catch(error => {
+                console.error('[App] URL parameter handling failed:', error);
+            }), { once: true });
+        } else {
+            console.warn('[App] Events system is unavailable.');
+        }
     }
 
     async startPeerDiscovery() {
@@ -177,17 +226,24 @@ class ErikrafTdrop {
 
     registerServiceWorker() {
         if (!('serviceWorker' in navigator)) {
-            return;
+            console.info('[PWA] Service Worker API unavailable; continuing without offline enhancement.');
+            return Promise.resolve(null);
         }
 
-        navigator.serviceWorker
-            .register('service-worker.js')
-            .then(serviceWorker => {
-                console.log('Service Worker registered');
-                window.serviceWorker = serviceWorker;
+        return navigator.serviceWorker
+            .register('./service-worker.js', {updateViaCache: 'none'})
+            .then(registration => {
+                console.log('[PWA] Service Worker registered.');
+                window.serviceWorker = registration;
+                return registration.update().catch(error => {
+                    console.warn('[PWA] Background Service Worker update failed:', error);
+                    return registration;
+                });
             })
             .catch(error => {
-                console.warn('Service Worker registration failed:', error);
+                // SW failure must never block the application shell.
+                console.warn('[PWA] Service Worker registration failed; using network mode:', error);
+                return null;
             });
     }
 
@@ -216,13 +272,18 @@ class ErikrafTdrop {
             }
         }
 
+        if (typeof PersistentStorage?.getAllRoomSecrets !== 'function') {
+            console.warn('[Storage] Room-secret storage API unavailable.');
+            return;
+        }
+
         const roomSecrets = await PersistentStorage.getAllRoomSecrets();
         if (!roomSecrets.length) {
             return;
         }
 
         this.$headerEditPairedDevicesBtn?.removeAttribute('hidden');
-        Events.fire('room-secrets', roomSecrets);
+        if (typeof Events !== 'undefined') Events.fire('room-secrets', roomSecrets);
     }
 
     async localizationSafeInit() {
@@ -274,7 +335,7 @@ class ErikrafTdrop {
             await this.loadStyleSheet(url);
             console.log(`Stylesheet loaded successfully: ${url}`);
         } catch (error) {
-            console.error('Error loading stylesheet:', error);
+            console.error('Error loading stylesheet:', url, error);
         }
     }
 
@@ -294,7 +355,7 @@ class ErikrafTdrop {
             await this.loadScript(url);
             console.log(`Script loaded successfully: ${url}`);
         } catch (error) {
-            console.error('Error loading stylesheet:', error);
+            console.error('Error loading script:', url, error);
         }
     }
 
