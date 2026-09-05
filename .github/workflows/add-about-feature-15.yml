@@ -1,0 +1,49 @@
+name: Add About Feature 15
+
+on:
+  push:
+    branches:
+      - feat/about-new-feature-15
+
+permissions:
+  contents: write
+
+jobs:
+  add-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Add Feature 15 to About page
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("public/index.html")
+          text = path.read_text(encoding="utf-8")
+
+          marker = "<!-- Feature 15 — Current Updates -->"
+          if marker in text:
+              print("Feature 15 already exists; nothing to change.")
+          else:
+              anchor = "        <x-background></x-background>\n    </x-about>"
+              if anchor not in text:
+                  raise SystemExit("Could not find the end of the About page; refusing to modify index.html.")
+
+              feature = '''        <!-- Feature 15 — Current Updates -->\n        <div class="column center p-2" aria-labelledby="about-current-updates-title">\n            <div class="font-subheading" id="about-current-updates-title">Current Updates</div>\n            <div class="font-body2 text-center" style="max-width: 720px;">\n                ErikrafT Drop™ is actively maintained with ongoing improvements to performance,\n                compatibility, reliability, and the Animated QR transfer experience.\n            </div>\n            <div class="font-caption text-center mt-1">\n                Current release: v1.16.4 · Animated QR up to 120 FPS · Improved startup reliability\n            </div>\n        </div>\n'''
+
+              text = text.replace(anchor, feature + anchor, 1)
+              path.write_text(text, encoding="utf-8", newline="\n")
+
+      - name: Commit About update and remove temporary workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/index.html .github/workflows/add-about-feature-15.yml
+          git rm .github/workflows/add-about-feature-15.yml
+          git commit -m "feat: add About Feature 15 current updates"
+          git push origin HEAD:feat/about-new-feature-15
