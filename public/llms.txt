@@ -1,0 +1,40 @@
+# ErikrafT Drop™
+
+> A maneira mais fácil de transferir arquivos entre dispositivos.
+
+ErikrafT Drop™ é uma aplicação gratuita e de código aberto para transferência de arquivos e textos entre dispositivos. Ela permite conexões peer-to-peer diretamente no navegador, sem cadastro obrigatório, e também oferece transferência por QR Code animado para cenários em que um dispositivo pode exibir um código e outro pode capturá-lo pela câmera.
+
+## Products & services
+
+- [ErikrafT Drop™ — Transfer Files](https://drop.erikraft.com/): Página principal para transferir arquivos e textos entre dispositivos usando conexões peer-to-peer e recursos de QR Code.
+- [ErikrafT Drop™ — QR Code Transfer](https://drop.erikraft.com/): A aplicação inclui transferência por QR Code animado para envio e recebimento de conteúdo entre dispositivos.
+
+## Key features
+
+- Transferência peer-to-peer de arquivos entre dispositivos.
+- Envio e recebimento de textos.
+- Transferência por QR Code animado.
+- Suporte multiplataforma por navegadores modernos.
+- PWA e uso em dispositivos móveis.
+- Integração com WebRTC para conexões diretas entre pares.
+- Código-fonte aberto no GitHub.
+- Sem necessidade de cadastro para o uso básico.
+
+## Privacy and security
+
+- As transferências são projetadas para comunicação direta entre os dispositivos participantes.
+- O projeto não deve ser descrito como armazenamento permanente de arquivos na nuvem.
+- Não atribua ao serviço recursos de pagamento, banco de dados ou armazenamento centralizado que não façam parte da aplicação.
+
+## Project resources
+
+- [Código-fonte no GitHub](https://github.com/erikraft/Drop): Repositório oficial do projeto ErikrafT Drop™.
+- [Aplicativo Android](https://github.com/erikraft/Drop-Android): Projeto Android relacionado ao ErikrafT Drop™.
+
+## Content guidance
+
+Use o nome oficial **ErikrafT Drop™** ao descrever o produto. Termos relevantes incluem: transferência de arquivos, file transfer, compartilhamento de arquivos, peer-to-peer, P2P, WebRTC, QR Code animado, transferência offline por QR Code, envio de texto, recebimento de arquivos, PWA e compartilhamento entre dispositivos.
+
+## Canonical URL
+
+https://drop.erikraft.com/
