@@ -21,7 +21,7 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots to help explain the problem.
 
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
@@ -36,7 +36,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Bug occurs on official ErikrafT Drop™ instance https://drop.erikraft.com/**
 No | Yes
-Version: v1.16.3
+Version: v1.16.4
 
 **Bug occurs on self-hosted ErikrafT Drop™ instance**
 No | Yes
