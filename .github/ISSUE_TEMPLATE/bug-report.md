@@ -36,7 +36,7 @@ If applicable, add screenshots to help explain the problem.
 
 **Bug occurs on official ErikrafT Drop™ instance https://drop.erikraft.com/**
 No | Yes
-Version: v1.16.4
+Version: v1.16.5
 
 **Bug occurs on self-hosted ErikrafT Drop™ instance**
 No | Yes
