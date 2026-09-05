@@ -1,0 +1,102 @@
+name: v1.16.4 Animated QR FPS and Version Sync
+
+on:
+  push:
+    branches:
+      - feat/animated-qr-fps-v1.16.4
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.actor == 'erikrafT'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply conservative FPS and version updates
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+
+          # Animated QR transmitter: allow high playback rates without touching
+          # EKQR framing, FEC, compression, CRC/SHA-256, or chunking.
+          p = root / 'public/scripts/erikraft-qr.js'
+          s = p.read_text(encoding='utf-8')
+          old = "this.fps = Math.max(1, Math.min(30, parseInt(newFps, 10) || 6));"
+          new = "this.fps = Math.max(1, Math.min(120, parseInt(newFps, 10) || 6));"
+          if old not in s:
+              raise SystemExit('Expected transmitter FPS clamp was not found; refusing unsafe edit.')
+          p.write_text(s.replace(old, new, 1), encoding='utf-8')
+
+          # Animated QR runtime controls: keep UI and runtime normalization in sync.
+          p = root / 'public/scripts/animated-qr-controls.js'
+          s = p.read_text(encoding='utf-8')
+          replacements = [
+              ("Math.max(1, Math.min(30, Number.parseInt(getEl(IDS.fps)?.value, 10) || 6))", "Math.max(1, Math.min(120, Number.parseInt(getEl(IDS.fps)?.value, 10) || 6))"),
+              ("fpsEl.min='1'; fpsEl.max='30'; fpsEl.value=String(Math.max(1,Math.min(30,Number.parseInt(fpsEl.value,10)||6)));", "fpsEl.min='1'; fpsEl.max='120'; fpsEl.value=String(Math.max(1,Math.min(120,Number.parseInt(fpsEl.value,10)||6)));"),
+          ]
+          for old, new in replacements:
+              if old not in s:
+                  raise SystemExit(f'Expected controls FPS expression was not found: {old}')
+              s = s.replace(old, new, 1)
+          p.write_text(s, encoding='utf-8')
+
+          # Release metadata: update every 1.16.3/v1.16.3 occurrence in the
+          # main index and the explicit official-instance bug-report version.
+          p = root / 'public/index.html'
+          s = p.read_text(encoding='utf-8')
+          count = s.count('1.16.3')
+          if count == 0:
+              raise SystemExit('No 1.16.3 version metadata found in public/index.html; refusing unsafe edit.')
+          s = s.replace('1.16.3', '1.16.4')
+          p.write_text(s, encoding='utf-8')
+
+          p = root / '.github/ISSUE_TEMPLATE/bug-report.md'
+          s = p.read_text(encoding='utf-8')
+          if 'Version: v1.16.3' not in s:
+              raise SystemExit('Expected official bug-report version v1.16.3 was not found.')
+          p.write_text(s.replace('Version: v1.16.3', 'Version: v1.16.4', 1), encoding='utf-8')
+
+          # Keep the release metadata/cache namespace aligned with the new release.
+          p = root / 'package.json'
+          s = p.read_text(encoding='utf-8')
+          if '"version": "1.16.3"' not in s:
+              raise SystemExit('Expected package version 1.16.3 was not found.')
+          p.write_text(s.replace('"version": "1.16.3"', '"version": "1.16.4"', 1), encoding='utf-8')
+
+          p = root / 'public/manifest.json'
+          s = p.read_text(encoding='utf-8')
+          if '"version": "1.16.3"' not in s:
+              raise SystemExit('Expected manifest version 1.16.3 was not found.')
+          p.write_text(s.replace('"version": "1.16.3"', '"version": "1.16.4"', 1), encoding='utf-8')
+
+          p = root / 'public/service-worker.js'
+          s = p.read_text(encoding='utf-8')
+          if "const cacheVersion = 'v1.16.3';" not in s:
+              raise SystemExit('Expected service-worker cache version v1.16.3 was not found.')
+          p.write_text(s.replace("const cacheVersion = 'v1.16.3';", "const cacheVersion = 'v1.16.4';", 1), encoding='utf-8')
+
+      - name: Validate changes
+        run: |
+          node --check public/scripts/erikraft-qr.js
+          node --check public/scripts/animated-qr-controls.js
+          node --check public/service-worker.js
+          node -e "const fs=require('fs'); for (const f of ['public/index.html','.github/ISSUE_TEMPLATE/bug-report.md','package.json','public/manifest.json','public/service-worker.js']) { const s=fs.readFileSync(f,'utf8'); if (s.includes('1.16.3') || s.includes('v1.16.3')) throw new Error('Stale v1.16.3 found in '+f); }"
+          node -e "const fs=require('fs'); const a=fs.readFileSync('public/scripts/erikraft-qr.js','utf8'); const b=fs.readFileSync('public/scripts/animated-qr-controls.js','utf8'); if (!a.includes('Math.min(120, parseInt(newFps')) || !b.includes("fpsEl.max='120'")) throw new Error('120 FPS support missing');"
+
+      - name: Commit synchronized release changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/scripts/erikraft-qr.js public/scripts/animated-qr-controls.js public/index.html .github/ISSUE_TEMPLATE/bug-report.md package.json public/manifest.json public/service-worker.js
+          git diff --cached --quiet && exit 0
+          git commit -m "feat: allow animated QR playback up to 120 FPS and bump to v1.16.4"
+          git push
