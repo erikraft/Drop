@@ -67,9 +67,23 @@
         if (!button && insertionPoint) { button = document.createElement('button'); button.id = BUTTON_ID; button.type = 'button'; button.className = 'btn btn-rounded btn-dark'; button.addEventListener('click', toggle); }
         if (button && insertionPoint) placeButton(button, insertionPoint); updateButton();
     }
+    function mutationAffectsScreenAwake(records) {
+        return records.some(record => {
+            if (record.type === 'attributes') {
+                return DIALOG_IDS.includes(record.target?.id);
+            }
+            const target = record.target;
+            if (target?.nodeType === Node.ELEMENT_NODE && (target.id === BUTTON_ID || target.closest?.(`#${BUTTON_ID}`))) {
+                return false;
+            }
+            return true;
+        });
+    }
     document.addEventListener('visibilitychange', () => { if (!requested || document.visibilityState !== 'visible') return; if (!wakeLock && 'wakeLock' in navigator) acquire().then(updateButton).catch(() => updateButton()); else updateButton(); });
     window.addEventListener('pagehide', () => { if (noSleep && typeof noSleep.disable === 'function') { try { noSleep.disable(); } catch (_) {} } wakeLock = null; requested = false; });
-    const observer = new MutationObserver(() => ensureButton());
+    const observer = new MutationObserver(records => {
+        if (mutationAffectsScreenAwake(records)) ensureButton();
+    });
     const start = () => { if (!document.body) return; observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'aria-hidden', 'style', 'class'] }); ensureButton(); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true }); else start();
 })();
