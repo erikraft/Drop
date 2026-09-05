@@ -219,4 +219,63 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
     } else {
         start();
     }
+
+    // Animated QR FPS compatibility bridge.
+    // Keep protocol generation untouched: this only raises the playback/configuration ceiling.
+    const MAX_ANIMATED_QR_FPS = 120;
+
+    function clampFps(value) {
+        const parsed = Number.parseInt(value, 10);
+        return Math.max(1, Math.min(MAX_ANIMATED_QR_FPS, Number.isFinite(parsed) ? parsed : 6));
+    }
+
+    function patchTransmitter() {
+        const proto = window.ErikrafTQRTransmitter?.prototype;
+        if (!proto || typeof proto.setFps !== 'function' || proto.__erikraftHighFpsPatched) return !!proto;
+        const originalSetFps = proto.setFps;
+        proto.setFps = function (value) {
+            return originalSetFps.call(this, clampFps(value));
+        };
+        proto.__erikraftHighFpsPatched = true;
+        if (typeof this?.fps === 'number') this.fps = clampFps(this.fps);
+        return true;
+    }
+
+    function patchFpsControl() {
+        const input = document.getElementById('qr-send-fps-slider');
+        if (!input || input.dataset.erikraftHighFpsPatched === 'true') return;
+
+        input.min = '1';
+        input.max = String(MAX_ANIMATED_QR_FPS);
+        input.value = String(clampFps(input.value));
+
+        input.addEventListener('input', event => {
+            const fps = clampFps(event.target.value);
+            event.target.value = String(fps);
+            const value = document.getElementById('qr-send-fps-val');
+            const speed = document.getElementById('qr-send-fps-speed');
+            if (value) value.textContent = `${fps} FPS`;
+            if (speed) speed.textContent = `Velocidade: ${fps} FPS`;
+            const tx = window.erikrafTdrop?.animatedQRSendDialog?.transmitter;
+            tx?.setFps?.(fps);
+        }, true);
+
+        input.dataset.erikraftHighFpsPatched = 'true';
+    }
+
+    const fpsObserver = new MutationObserver(() => {
+        patchTransmitter();
+        patchFpsControl();
+    });
+    const patchFps = () => {
+        patchTransmitter();
+        patchFpsControl();
+        if (document.body && !fpsObserver.__erikraftObserved) {
+            fpsObserver.observe(document.body, {childList: true, subtree: true});
+            fpsObserver.__erikraftObserved = true;
+        }
+    };
+
+    patchFps();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', patchFps, {once: true});
 })();
