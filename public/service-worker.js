@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.16.1';
+const cacheVersion = 'v1.16.2';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 
 // Keep this list limited to resources that are part of the current client shell.
