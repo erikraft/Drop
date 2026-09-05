@@ -79,6 +79,22 @@ export default class ErikrafTdropServer {
             next();
         });
 
+        // The application shell and non-hashed runtime assets must not be kept
+        // indefinitely by an intermediate CDN/browser HTTP cache. The Service
+        // Worker owns the versioned offline cache; HTTP delivery should remain
+        // revalidatable so a new deployment can reach clients reliably.
+        app.use((req, res, next) => {
+            const requestPath = req.path;
+            if (requestPath === '/' || requestPath === '/index.html' || requestPath === '/service-worker.js' || requestPath === '/manifest.json') {
+                res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+                res.setHeader('Pragma', 'no-cache');
+                res.setHeader('Expires', '0');
+            } else if (/\.(?:js|css|json)$/i.test(requestPath)) {
+                res.setHeader('Cache-Control', 'no-cache, must-revalidate, max-age=0');
+            }
+            next();
+        });
+
         const publicPathAbs = path.join(__dirname, '../public');
         app.use(express.static(publicPathAbs));
 
