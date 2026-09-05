@@ -103,15 +103,32 @@ class Localization {
     }
 
     static async fetchTranslationsFor(newLocale) {
-        const response = await fetch(`lang/${newLocale}.json`, {
-            method: 'GET',
-            credentials: 'include',
-            mode: 'no-cors',
-        });
+        const controller = typeof AbortController === 'function' ? new AbortController() : null;
+        const timeoutId = controller
+            ? setTimeout(() => controller.abort(), 2500)
+            : null;
 
-        if (response.redirected === true || response.status !== 200) return false;
+        try {
+            const response = await fetch(`lang/${newLocale}.json`, {
+                method: 'GET',
+                credentials: 'include',
+                mode: 'no-cors',
+                signal: controller?.signal,
+            });
 
-        return await response.json();
+            if (response.redirected === true || response.status !== 200) return false;
+
+            return await response.json();
+        } catch (error) {
+            if (error?.name === 'AbortError') {
+                console.warn(`[Localization] Timed out loading ${newLocale}.json; continuing with application startup.`);
+            } else {
+                console.warn(`[Localization] Failed to load ${newLocale}.json; continuing with application startup.`, error);
+            }
+            return false;
+        } finally {
+            if (timeoutId) clearTimeout(timeoutId);
+        }
     }
 
     static async translatePage() {
