@@ -1,0 +1,56 @@
+name: Sync index version
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  sync-version:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'fix/startup-loading-state-v1.16.3'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Update index release metadata
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('public/index.html')
+          text = path.read_text(encoding='utf-8')
+          replacements = {
+              'v1.16.2': 'v1.16.3',
+              'v1.13.0': 'v1.16.3',
+              '1.16.2': '1.16.3',
+              '1.13.0': '1.16.3',
+              '1.11.2': '1.16.3',
+          }
+          original = text
+          for old, new in replacements.items():
+              text = text.replace(old, new)
+          if text == original:
+              print('No index version metadata changes were necessary.')
+          else:
+              path.write_text(text, encoding='utf-8')
+              print('Updated public/index.html release metadata to v1.16.3.')
+          PY
+
+      - name: Commit index update
+        shell: bash
+        run: |
+          if git diff --quiet -- public/index.html; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/index.html
+          git commit -m 'fix: update index version metadata to v1.16.3'
+          git push origin HEAD:fix/startup-loading-state-v1.16.3
