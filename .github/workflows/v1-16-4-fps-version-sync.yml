@@ -4,24 +4,29 @@ on:
   push:
     branches:
       - feat/animated-qr-fps-v1.16.4
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - master
 
 permissions:
   contents: write
 
 jobs:
   sync:
+    if: github.head_ref == 'feat/animated-qr-fps-v1.16.4' || github.ref == 'refs/heads/feat/animated-qr-fps-v1.16.4'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
         uses: actions/checkout@v4
         with:
+          ref: feat/animated-qr-fps-v1.16.4
           fetch-depth: 0
 
       - name: Apply conservative FPS and version updates
         shell: python
         run: |
           from pathlib import Path
-
           root = Path('.')
 
           p = root / 'public/scripts/erikraft-qr.js'
@@ -37,6 +42,7 @@ jobs:
           replacements = [
               ("Math.max(1, Math.min(30, Number.parseInt(getEl(IDS.fps)?.value, 10) || 6))", "Math.max(1, Math.min(120, Number.parseInt(getEl(IDS.fps)?.value, 10) || 6))"),
               ("fpsEl.min='1'; fpsEl.max='30'; fpsEl.value=String(Math.max(1,Math.min(30,Number.parseInt(fpsEl.value,10)||6)));", "fpsEl.min='1'; fpsEl.max='120'; fpsEl.value=String(Math.max(1,Math.min(120,Number.parseInt(fpsEl.value,10)||6)));"),
+              ("const t=getTransmitter(),f=Math.max(1,Math.min(30,Number.parseInt(getEl(IDS.fps).value,10)||6));", "const t=getTransmitter(),f=Math.max(1,Math.min(120,Number.parseInt(getEl(IDS.fps).value,10)||6));"),
           ]
           for old, new in replacements:
               if old not in s:
@@ -80,7 +86,7 @@ jobs:
           node --check public/scripts/animated-qr-controls.js
           node --check public/service-worker.js
           node -e "const fs=require('fs'); for (const f of ['public/index.html','.github/ISSUE_TEMPLATE/bug-report.md','package.json','public/manifest.json','public/service-worker.js']) { const s=fs.readFileSync(f,'utf8'); if (s.includes('1.16.3') || s.includes('v1.16.3')) throw new Error('Stale v1.16.3 found in '+f); }"
-          node -e "const fs=require('fs'); const a=fs.readFileSync('public/scripts/erikraft-qr.js','utf8'); const b=fs.readFileSync('public/scripts/animated-qr-controls.js','utf8'); if (!a.includes('Math.min(120, parseInt(newFps')) || !b.includes(\"fpsEl.max='120'\")) throw new Error('120 FPS support missing');"
+          node -e "const fs=require('fs'); const a=fs.readFileSync('public/scripts/erikraft-qr.js','utf8'); const b=fs.readFileSync('public/scripts/animated-qr-controls.js','utf8'); if (!a.includes('Math.min(120, parseInt(newFps')) || !b.includes(\"fpsEl.max='120'\") || !b.includes('Math.min(120,Number.parseInt(getEl(IDS.fps).value')) ) throw new Error('120 FPS support missing');"
 
       - name: Commit synchronized release changes
         run: |
@@ -89,4 +95,4 @@ jobs:
           git add public/scripts/erikraft-qr.js public/scripts/animated-qr-controls.js public/index.html .github/ISSUE_TEMPLATE/bug-report.md package.json public/manifest.json public/service-worker.js
           git diff --cached --quiet && exit 0
           git commit -m "feat: allow animated QR playback up to 120 FPS and bump to v1.16.4"
-          git push
+          git push origin feat/animated-qr-fps-v1.16.4
