@@ -50,14 +50,14 @@
     }
 
     function readSettings() {
-        const fps = Math.max(1, Math.min(30, Number.parseInt(getEl(IDS.fps)?.value, 10) || 6));
+        const fps = Math.max(1, Math.min(120, Number.parseInt(getEl(IDS.fps)?.value, 10) || 6));
         const ecc = ['L','M','Q','H'].includes(getEl(IDS.ecc)?.value) ? getEl(IDS.ecc).value : 'L';
         const requested = Number.parseInt(getEl(IDS.bytes)?.value, 10) || 1465;
         return { fps, ecc, requested, bytes: Math.min(Math.max(256, requested), chunkLimit(ecc)) };
     }
     function normalizeSettingsUI() {
         const fpsEl = getEl(IDS.fps);
-        if (fpsEl) { fpsEl.min='1'; fpsEl.max='30'; fpsEl.value=String(Math.max(1,Math.min(30,Number.parseInt(fpsEl.value,10)||6))); }
+        if (fpsEl) { fpsEl.min='1'; fpsEl.max='120'; fpsEl.value=String(Math.max(1,Math.min(120,Number.parseInt(fpsEl.value,10)||6))); }
         const {ecc,bytes} = readSettings();
         const bytesEl = getEl(IDS.bytes);
         if (bytesEl) {
@@ -89,21 +89,15 @@
         const layout=String(tx.layout||'1');
         tx.containerEl.classList.remove('layout-1','layout-2','layout-4');
         tx.containerEl.classList.add(`layout-${layout}`);
-
         try{
             if(layout==='1'){
                 const size={small:220,medium:280,large:320,fullscreen:480}[tx.displaySize]||280;
                 const instance=qr.render(tx.containerEl,tx.frames[tx.currentIndex],{width:size,height:size,animatedTransfer:true,eccLevel:tx.eccLevel||'L'});
                 if(!instance||!tx.containerEl.querySelector('svg,canvas')) throw new Error('O encoder não inseriu SVG/canvas no container.');
             }else{
-                const count=layout==='2'?2:4;
-                const tileSize=layout==='2'?150:130;
-                tx.containerEl.innerHTML='';
+                const count=layout==='2'?2:4; const tileSize=layout==='2'?150:130; tx.containerEl.innerHTML='';
                 for(let i=0;i<count;i++){
-                    const frameIdx=(tx.currentIndex+i)%tx.frames.length;
-                    const tileEl=document.createElement('div');
-                    tileEl.className='qr-tile';
-                    tx.containerEl.appendChild(tileEl);
+                    const frameIdx=(tx.currentIndex+i)%tx.frames.length; const tileEl=document.createElement('div'); tileEl.className='qr-tile'; tx.containerEl.appendChild(tileEl);
                     qr.render(tileEl,tx.frames[frameIdx],{width:tileSize,height:tileSize,animatedTransfer:true,eccLevel:tx.eccLevel||'L'});
                 }
             }
@@ -145,10 +139,8 @@
             backBtn.dataset.boundBack='true';
             backBtn.onclick=(e)=>{
                 const t=getTransmitter(); if(t){ t.pause(); }
-                const comp=getEl('qr-send-compose-view'), act=getEl('qr-send-active-view'),
-                      compBtns=getEl('qr-send-compose-buttons');
-                if(act) act.hidden=true;
-                if(comp) comp.hidden=false; if(compBtns) compBtns.hidden=false;
+                const comp=getEl('qr-send-compose-view'), act=getEl('qr-send-active-view'), compBtns=getEl('qr-send-compose-buttons');
+                if(act) act.hidden=true; if(comp) comp.hidden=false; if(compBtns) compBtns.hidden=false;
             };
         }
         if(!pause.dataset.erikraftControlCapture){pause.dataset.erikraftControlCapture='true';pause.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();const current=getTransmitter();if(!current?.initialized)return;current.paused?current.resume():current.pause();sync(current);},true);}
@@ -156,20 +148,14 @@
         const frameInputEl=getEl(IDS.frameInput), frameGoEl=getEl(IDS.frameGo);
         if(frameInputEl&&!frameInputEl.dataset.boundInput){
             frameInputEl.dataset.boundInput='true';
-            const runFrameGo=()=>{
-                const rawStr=String(frameInputEl.value||'').trim();if(!rawStr)return;
-                const v=Number.parseInt(rawStr,10);const t=getTransmitter();if(!t?.frames?.length)return;
-                if(!Number.isFinite(v)){frameInputEl.value=String(t.currentIndex+1);return;}
-                const target=Math.max(1,Math.min(v,t.frames.length));frameInputEl.value=String(target);t.seekFrame?.(target-1);
-            };
+            const runFrameGo=()=>{const rawStr=String(frameInputEl.value||'').trim();if(!rawStr)return;const v=Number.parseInt(rawStr,10);const t=getTransmitter();if(!t?.frames?.length)return;if(!Number.isFinite(v)){frameInputEl.value=String(t.currentIndex+1);return;}const target=Math.max(1,Math.min(v,t.frames.length));frameInputEl.value=String(target);t.seekFrame?.(target-1);};
             if(frameGoEl) frameGoEl.onclick=runFrameGo;
-            frameInputEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runFrameGo();}});
-            frameInputEl.addEventListener('change',runFrameGo);
+            frameInputEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runFrameGo();}}); frameInputEl.addEventListener('change',runFrameGo);
         }
         getEl(IDS.ecc)?.addEventListener('change',async ()=>{normalizeSettingsUI();const t=getTransmitter();if(t){applySettings(t);if(typeof t.reprepare==='function')await t.reprepare();render(t);sync(t);}});
         getEl(IDS.layout)?.addEventListener('change',()=>{const t=getTransmitter();if(t){t.layout=getEl(IDS.layout).value||'1';render(t);sync(t);}});
         getEl(IDS.bytes)?.addEventListener('change',async ()=>{normalizeSettingsUI();const t=getTransmitter();if(t){applySettings(t);if(typeof t.reprepare==='function')await t.reprepare();render(t);sync(t);}});
-        getEl(IDS.fps)?.addEventListener('input',()=>{const t=getTransmitter(),f=Math.max(1,Math.min(30,Number.parseInt(getEl(IDS.fps).value,10)||6));getEl(IDS.fps).value=String(f);if(t){t.setFps(f);sync(t);}normalizeSettingsUI();});
+        getEl(IDS.fps)?.addEventListener('input',()=>{const t=getTransmitter(),f=Math.max(1,Math.min(120,Number.parseInt(getEl(IDS.fps).value,10)||6));getEl(IDS.fps).value=String(f);if(t){t.setFps(f);sync(t);}normalizeSettingsUI();});
         getEl(IDS.displaySize)?.addEventListener('change',()=>{const t=getTransmitter();if(t?.initialized){t.displaySize=getEl(IDS.displaySize).value;render(t);sync(t);}});
         render(tx);
         sync(tx);return true;
