@@ -1,6 +1,6 @@
 {
   "name": "erikraft-drop",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "type": "module",
   "description": "File sharing by ErikrafT",
   "main": "server/index.js",
@@ -12,7 +12,7 @@
     "package:windows": "npm run validate:linux-icon && electron-builder --win nsis --x64",
     "package:flatpak": "npm run validate:linux-icon && flatpak-builder --force-clean --repo=dist/flatpak-repo dist/flatpak flatpak/io.github.erikraft.Drop.yml",
     "validate:linux-icon": "node scripts/validate-linux-icon.js",
-    "test": "node test/isearch-cli.test.js && node test/erikraft-qr.test.js && node test/interoperability.test.js"
+    "test": "node test/isearch-cli.test.js && node test/erikraft-qr.test.js && node test/interoperability.test.js && node test/service-worker-cache.test.js"
   },
   "author": {
     "name": "ErikrafT",
