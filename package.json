@@ -1,6 +1,6 @@
 {
   "name": "erikraft-drop",
-  "version": "1.16.1",
+  "version": "1.16.2",
   "type": "module",
   "description": "File sharing by ErikrafT",
   "main": "server/index.js",
@@ -28,7 +28,6 @@
     "http-proxy-middleware": "^3.0.7",
     "qr-code-styling": "^1.9.2",
     "ua-parser-js": "^2.0.5",
-    "undici": "^6.27.0",
     "unique-names-generator": "^4.7.1",
     "ws": "^8.21.1"
   },
