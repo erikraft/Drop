@@ -1,0 +1,71 @@
+name: Add Website About Feature 15
+
+on:
+  push:
+    branches:
+      - feat/website-about-new-feature-15
+
+permissions:
+  contents: write
+
+jobs:
+  add-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Add Feature 15 to Website About NEW
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("Website About/NEW/index.html")
+          text = path.read_text(encoding="utf-8")
+
+          if "<!-- Feature 15 — Current Updates -->" in text:
+              raise SystemExit("Feature 15 already exists; no change required.")
+
+          marker = "<!-- Feature 14 -->"
+          start = text.find(marker)
+          if start == -1:
+              raise SystemExit("Feature 14 marker not found in Website About/NEW/index.html")
+
+          grid_end = text.find("         </div>\n      </div>\n   </section>", start)
+          if grid_end == -1:
+              raise SystemExit("Features grid closing marker not found")
+
+          feature = '''            <!-- Feature 15 — Current Updates -->
+            <div class="glass-card p-8 rounded-2xl" data-lordicon-hover-card>
+               <div class="w-14 h-14 bg-sky-500/10 rounded-xl flex items-center justify-center mb-6 border border-sky-500/20">
+                  <i class="fa-solid fa-arrows-rotate text-sky-400 text-2xl"></i>
+               </div>
+               <h3 class="text-xl font-bold text-white mb-3">Current Updates</h3>
+               <p class="text-gray-400 leading-relaxed">
+                  Stay up to date with the latest improvements, new features, fixes, performance updates, and compatibility enhancements in ErikrafT Drop™.
+                  Follow the <a href="https://github.com/erikraft/Drop/commits/master/" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:underline">latest changes on GitHub</a> to see what is new.
+               </p>
+            </div>
+
+'''
+
+          text = text[:grid_end] + feature + text[grid_end:]
+          path.write_text(text, encoding="utf-8")
+
+      - name: Validate Feature 15
+        shell: bash
+        run: |
+          grep -q '<!-- Feature 15 — Current Updates -->' 'Website About/NEW/index.html'
+          grep -q 'Current Updates' 'Website About/NEW/index.html'
+          grep -q 'latest changes on GitHub' 'Website About/NEW/index.html'
+
+      - name: Commit About update and remove temporary workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add 'Website About/NEW/index.html'
+          git commit -m "feat: add About NEW Feature 15 Current Updates"
+          git rm '.github/workflows/add-website-about-feature-15.yml'
+          git commit -m "chore: remove temporary Feature 15 workflow"
+          git push
