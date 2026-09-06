@@ -1,277 +1,266 @@
+---
+title: "Frequently Asked Questions"
+icon: "circle-question"
+---
+
 # Frequently Asked Questions
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Help! I can't install the PWA!
-</summary>
+### Instructions / Discussions
 
-<br>
+- [ErikrafT Drop™](https://drop.erikraft.com) — official web instance
+- [ErikrafT Drop™ on GitHub](https://github.com/erikraft/Drop)
+- [ErikrafT Drop™ Android](https://github.com/erikraft/Drop-Android)
+- [PairDrop](https://github.com/schlagmichdoch/PairDrop) — upstream project that inspired parts of the project
+- [Snapdrop](https://github.com/RobinLinus/snapdrop) — original project this ecosystem was historically based on
 
-Here is a good guide on how to install PWAs on different platforms: \
-https://www.cdc.gov/niosh/mining/tools/installpwa.html
+### Help! I can't install the PWA!
 
+If you are using a Chromium-based browser such as Chrome, Edge, Brave, Vivaldi, or another supported browser, you can install ErikrafT Drop™ as a PWA when the browser provides an installation option.
 
-**Chromium-based browser on Desktop (Chrome, Edge, BrowserOS, Vivaldi, Brave, etc.)** \
-Easily install ErikrafT Drop™ PWA on your desktop by clicking the install-button in the top-right corner while on [drop.erikraft.com](https://drop.erikraft.com).
+If the installation option does not appear, make sure that:
 
-<img width="400" src="pwa-install.png" alt="Example on how to install a pwa with Edge">
+- You are using a supported browser.
+- The ErikrafT Drop™ instance is loaded over HTTPS.
+- The browser can access the PWA manifest and required resources.
 
-**Desktop Firefox** \
-On Firefox, PWAs are installable via [this browser extensions](https://addons.mozilla.org/de/firefox/addon/pwas-for-firefox/)
+#### Desktop
 
-**Android** \
-PWAs are installable only by using Google Chrome or Samsung Browser:
-1. Visit [drop.erikraft.com](https://drop.erikraft.com)
-2. Click _Install_ on the installation pop-up or use the three-dot-menu and click on _Add to Home screen_
-3. Click _Add_ on the pop-up
+On desktop, Chromium-based browsers such as Chrome, Edge, Brave, and Vivaldi can offer an **Install** option when the ErikrafT Drop™ PWA is installable.
 
-**iOS** \
-PWAs are installable only by using Safari:
-1. Visit [drop.erikraft.com](https://drop.erikraft.com)
-2. Click on the share icon
-3. Click _Add to Home Screen_
-4. Click _Add_ in the top right corner
+Firefox Desktop can also support PWA installation through compatible extensions.
 
-<br>
+#### Android
 
-**Self-Hosted Instance?** \
-To be able to install the PWA from a self-hosted instance, the connection needs to be [established through HTTPS](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Installable_PWAs).
-See [this host your own section](https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md#testing-pwa-related-features) for more info.
+On Android, open ErikrafT Drop™ in a supported browser and use the browser's **Install** or **Add to Home screen** option when available.
 
-<br>
+#### iOS and iPadOS
 
-</details>
+On iPhone and iPad, open ErikrafT Drop™ in a browser that supports adding web apps to the Home Screen.
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Shortcuts?
-</summary>
+The usual installation process is:
 
-<br>
+1. Open an official ErikrafT Drop™ instance.
+2. Open the browser's share menu.
+3. Select **Add to Home Screen**.
+4. Confirm by selecting **Add**.
+
+PWA installation capabilities depend on the installed iOS or iPadOS version and the browser being used.
+
+Older iOS versions had more restrictive PWA installation support. Newer iOS and iPadOS versions provide broader support for adding web apps from supported browsers.
+
+### Self-Hosted PWA
+
+If you are hosting your own ErikrafT Drop™ instance, the connection needs to be [established through HTTPS](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Installable_PWAs) for PWA-related features.
+
+See the [Host Your Own documentation](host-your-own.md#testing-pwa-related-features) for more information.
+
+### Shortcuts?
 
 Available shortcuts:
+
 - Send a message with `CTRL + ENTER`
-- Close all "Send" and "Pair" dialogs by pressing `Esc`.
-- Copy a received message to the clipboard with `CTRL/⌘ + C`.
-- Accept file-transfer requests with `Enter` and decline with `Esc`.
-<br>
+- Close all "Send" and "Pair" dialogs by pressing `Esc`
+- Copy a received message to the clipboard with `CTRL/⌘ + C`
+- Accept file-transfer requests with `Enter`
+- Decline file-transfer requests with `Esc`
 
-</details>
+### How to save images directly to the gallery on iOS?
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    How to save images directly to the gallery on iOS?
-</summary>
+Older iOS versions had issues with saving images shared from websites directly to the gallery.
 
-<br>
+This issue was fixed in newer iOS versions. See [WebKit pull request #13111](https://github.com/WebKit/WebKit/pull/13111).
 
-~~Apparently, iOS does not allow images shared from a website to be saved to the gallery directly.~~
-~~It simply does not offer that option for images shared from a website.~~
+If you are using an older affected iOS version, the original ErikrafT Drop™ shortcut is still available:
 
-~~iOS Shortcuts saves the day:~~ \
-I created a simple iOS shortcut that takes your photos and saves them to your gallery:
-- https://routinehub.co/shortcut/24753/
-- https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7
-- https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut
+- [ErikrafT Drop™ iOS Shortcut on RoutineHub](https://routinehub.co/shortcut/24753/)
+- [ErikrafT Drop™ iOS Shortcut on iCloud](https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7)
+- [ErikrafT Drop™ iOS Shortcut from GitHub](https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut)
 
-Update: \
-Apparently, this was only a bug that is fixed in recent iOS version (https://github.com/WebKit/WebKit/pull/13111). \
-If you use an older affected iOS version this might still be of use. \
-Luckily, you can now simply use `Save Image`/`Save X Images` 🎉
+On newer supported iOS versions, you can use the native **Save Image** or **Save X Images** options.
 
-<br>
-
-</details>
-
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Is it possible to send files or text directly from the "Context" or "Share" menu?
-</summary>
-
-<br>
-
-Yes, it finally is.
-* [Send files directly from the "Context" menu on Windows](/docs/how-to.md#send-files-directly-from-context-menu-on-windows)
-* [Send directly from the "Share" menu on iOS](/docs/how-to.md#send-directly-from-share-menu-on-ios)
-* [Send directly from the "Share" menu on Android](/docs/how-to.md#send-directly-from-share-menu-on-android)
-
-<br>
-
-</details>
-
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Is it possible to send files or text directly via CLI?
-</summary>
-
-<br>
+### Is it possible to send files or text directly from the "Context" or "Share" menu?
 
 Yes.
 
-* [Send directly from a command-line interface](/docs/how-to.md#send-directly-via-command-line-interface)
+- [Send files directly from the "Context" menu on Windows](/docs/how-to.md#send-files-directly-from-context-menu-on-windows)
+- [Send directly from the "Share" menu on iOS](/docs/how-to.md#send-directly-from-share-menu-on-ios)
+- [Send directly from the "Share" menu on Android](/docs/how-to.md#send-directly-from-share-menu-on-android)
 
-<br>
+### Is it possible to send files or text directly via CLI?
 
-</details>
+Yes.
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Are there any third-party Apps?
-</summary>
+- [Send directly from a command-line interface](/docs/how-to.md#send-directly-via-command-line-interface)
 
-<br>
+### Are there any third-party Apps?
 
-These third-party apps are compatible with ErikrafT Drop™:
+These third-party applications are compatible with ErikrafT Drop™:
 
 1. [ErikrafT Drop™ Android App](https://github.com/erikraft/Drop-Android)
-2. [ErikrafT Drop™ for Firefox (Addon)](https://addons.mozilla.org/en-US/firefox/addon/erikraft-drop/)
-3. Feel free to make one :)
+2. [ErikrafT Drop™ for Firefox](https://addons.mozilla.org/en-US/firefox/addon/erikraft-drop/)
+3. Feel free to create another compatible application.
 
-<br>
+Third-party applications are not necessarily maintained by the ErikrafT Drop™ web project.
 
-</details>
+### What about the connection? Is it a P2P connection directly from device to device or is there any third-party server?
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    What about the connection? Is it a P2P connection directly from device to device or is there any third-party-server?
-</summary>
+ErikrafT Drop™ uses a WebRTC peer-to-peer connection.
 
-<br>
+A signaling server is used to help peers discover each other and establish the connection.
 
-It uses a WebRTC peer-to-peer connection.
-WebRTC needs a signaling server that is only used to establish a connection.
-The server is not involved in the file transfer.
+The signaling server is not used as normal file storage.
 
-If the devices are on the same network,
-none of your files are ever sent to any server.
+When devices can establish a direct WebRTC connection, file data is transferred directly between the peers.
 
-If your devices are paired and behind a NAT,
-the ErikrafT Drop™ TURN Server is used to route your files and messages.
-See the [Technical Documentation](technical-documentation.md#encryption-webrtc-stun-and-turn)
-to learn more about STUN, TURN and WebRTC.
+If the devices are on the same network, files can be transferred directly between the devices without using a remote relay.
 
-If you host your own instance
-and want to support devices that do not support WebRTC,
-you can [start the ErikrafT Drop™ instance with an activated WebSocket fallback](https://github.com/erikraft/Drop/blob/master/docs/host-your-own.md#websocket-fallback-for-vpn).
+If the devices are behind different NATs and a direct connection cannot be established, the ErikrafT Drop™ TURN Server can be used to route the connection.
 
-<br>
+See the [Technical Documentation](technical-documentation.md#encryption-webrtc-stun-and-turn) for more information about STUN, TURN, and WebRTC.
 
-</details>
+If you host your own instance and want to support devices that do not support WebRTC, you can [enable the WebSocket fallback](host-your-own.md#websocket-fallback-for-vpn).
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    What about privacy? Will files be saved on third-party servers?
-</summary>
+### What about privacy? Will files be saved on third-party servers?
 
-<br>
+ErikrafT Drop™ is designed around peer-to-peer file transfer.
 
-Files are sent directly between peers.
-ErikrafT Drop™ doesn't even use a database.
-If curious, study [the signaling server](https://github.com/erikraft/Drop/blob/master/server/ws-server.js).
-WebRTC encrypts the files in transit.
+Files are not uploaded to a normal file-storage database on the ErikrafT Drop™ signaling service.
 
-If the devices are on the same network,
-none of your files are ever sent to any server.
+ErikrafT Drop™ does not use a database for storing transferred files.
 
-If your devices are paired and behind a NAT,
-the ErikrafT Drop™ TURN Server is used to route your files and messages.
-See the [Technical Documentation](technical-documentation.md#encryption-webrtc-stun-and-turn)
-to learn more about STUN, TURN and WebRTC.
+You can inspect the [signaling server source code](https://github.com/erikraft/Drop/blob/master/server/ws-server.js).
 
-<br>
+When a direct WebRTC connection cannot be established and a TURN server is required, the TURN server can relay the encrypted WebRTC traffic.
 
-</details>
+See the [Technical Documentation](technical-documentation.md#encryption-webrtc-stun-and-turn) for more information.
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    What about security? Are my files encrypted while sent between the computers?
-</summary>
+Users should still use trusted instances and consider the security and privacy practices of any self-hosted or third-party instance.
 
-<br>
+### What about security? Are my files encrypted while being sent between the computers?
 
-Yes. Your files are sent using WebRTC, encrypting them in transit.
-Still you have to trust the ErikrafT Drop™ server. To ensure the connection is secure and there is no [MITM](https://en.m.wikipedia.org/wiki/Man-in-the-middle_attack) there is a plan to make ErikrafT Drop™
-zero trust by encrypting the signaling and implementing a verification process. See [issue #180](https://github.com/schlagmichdoch/PairDrop/issues/180) to keep updated.
+Yes.
 
-<br>
+Files transferred through WebRTC are encrypted in transit by the WebRTC transport.
 
-</details>
+The signaling connection is also protected when using a secure HTTPS/WSS deployment.
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Transferring many files with paired devices takes too long
-</summary>
+As with any P2P application, users should verify that they are connected to the intended device before accepting a transfer.
 
-<br>
+You should also use an official or trusted ErikrafT Drop™ instance when transferring sensitive information.
 
-Naturally, if traffic needs to be routed through the TURN server
-because your devices are behind different NATs, transfer speed decreases.
+For more information about the security architecture, see the [Technical Documentation](technical-documentation.md).
 
-You can open a hotspot on one of your devices to bridge the connection,
-which omits the need of the TURN server.
+### Transferring many files with paired devices takes too long
+
+If traffic needs to be routed through the TURN server because your devices are behind different NATs, transfer speed can decrease.
+
+One way to avoid unnecessary TURN routing is to connect the devices through the same local network or use a hotspot to bridge the connection.
+
+Examples:
 
 - [How to open a hotspot on Windows](https://support.microsoft.com/en-us/windows/use-your-windows-pc-as-a-mobile-hotspot-c89b0fad-72d5-41e8-f7ea-406ad9036b85#WindowsVersion=Windows_11)
-- [How to open a hotspot on macOS](https://support.apple.com/guide/mac-help/share-internet-connection-mac-network-users-mchlp1540/mac)
-- [Library to open a hotspot on Linux](https://github.com/lakinduakash/linux-wifi-hotspot)
+- [How to share an Internet connection on macOS](https://support.apple.com/guide/mac-help/share-internet-connection-mac-network-users-mchlp1540/mac)
+- [Linux Wi-Fi Hotspot](https://github.com/lakinduakash/linux-wifi-hotspot)
 
-You can also use mobile hotspots on phones to do that.
-Then, all data should be sent directly between devices and not use your data plan.
+You can also use a mobile hotspot on a phone to establish a local connection between devices.
 
-<br>
+## Official ErikrafT Drop™ Instances
 
-</details>
+Use these instances for the current official ErikrafT Drop™ service:
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    Why don't you implement feature xyz?
-</summary>
+- [https://drop.erikraft.com](https://drop.erikraft.com)
+- [https://drop-fallback.erikraft.com](https://drop-fallback.erikraft.com)
+- [https://dropfallback.erikraft.com](https://dropfallback.erikraft.com)
 
-<br>
+These instances are maintained for the ErikrafT Drop™ project.
 
-Snapdrop, PairDrop and ErikrafT Drop™ are a study in radical simplicity.
-The user interface is insanely simple.
-Features are chosen very carefully because complexity grows quadratically
-since every feature potentially interferes with each other feature.
-We focus very narrowly on a single use case: instant file transfer.
-Not facilitating optimal edge-cases means better flow for average users.
-Don't be sad. We may decline your feature request for the sake of simplicity.
+### Can I host my own ErikrafT Drop™ server?
 
-Read *Insanely Simple: The Obsession that Drives Apple's Success*,
-and/or *Thinking, Fast and Slow* to learn more.
+Yes.
 
-<br>
+ErikrafT Drop™ is open source and can be self-hosted.
 
-</details>
+If you use a self-hosted or third-party instance, verify its source code, configuration, security, and privacy practices before transferring sensitive data.
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    ErikrafT Drop™ is awesome. How can I support it?
-</summary>
+See the [Host Your Own documentation](host-your-own.md) for installation and configuration information.
 
-<br>
+### What happened to Snapdrop?
 
-* [ko-fi.com/erikraft](https://ko-fi.com/erikraft) to pay for the domain and the server, and support libre software.
-* [File bugs, give feedback, submit suggestions](https://github.com/erikraft/Drop/issues)
-* Share ErikrafT Drop™ on social media.
-* Fix bugs and create a pull request.
-* Do some security analysis and make suggestions.
-* Participate in [active discussions](https://github.com/erikraft/Drop/discussions)
+ErikrafT Drop™ is the current project and service represented by this repository and its official instances.
 
-<br>
+Snapdrop is listed as a historical reference because ErikrafT Drop™ belongs to the same broader ecosystem of browser-based peer-to-peer file-transfer projects.
 
-</details>
+Snapdrop is **not** an official ErikrafT Drop™ instance.
 
-<details>
-<summary style="font-size:1.25em;margin-top: 24px; margin-bottom: 16px; font-weight: var(--base-text-weight-semibold, 600); line-height: 1.25;">
-    How does it work?
-</summary>
+The ErikrafT Drop™ Android app no longer uses `snapdrop.net` as an official server.
 
-<br>
+If you need an official ErikrafT Drop™ service, use one of the instances listed in the official instances section above.
 
-[See here for info about the technical implementation](/docs/technical-documentation.md)
+### Why don't you implement feature xyz?
 
-<br>
+ErikrafT Drop™ aims to remain simple, reliable, and focused on fast file and text transfer.
 
-</details>
+Features are evaluated carefully because additional complexity can interfere with existing functionality, compatibility, performance, and the user experience.
 
-[< Back](/README.md)
+We prefer changes that provide clear value without unnecessarily making the core transfer experience harder to use or maintain.
+
+The project focuses on doing file and text transfer well instead of trying to become a general-purpose communication platform.
+
+### ErikrafT Drop™ is awesome! How can I support it?
+
+- [Report bugs or give feedback](https://github.com/erikraft/Drop/issues)
+- Submit improvements through a pull request.
+- Share ErikrafT Drop™ with other people.
+- Review the code and report security issues responsibly.
+- Participate in [GitHub Discussions](https://github.com/erikraft/Drop/discussions)
+- Support the project through the official support options shown on the project website.
+- [Support ErikrafT Drop™ on Ko-fi](https://ko-fi.com/erikraft)
+
+### How does it work?
+
+ErikrafT Drop™ uses browser technologies including:
+
+- WebRTC for peer-to-peer communication
+- WebSockets for signaling
+- HTTPS/TLS for secure web communication
+- STUN for discovering possible network paths
+- TURN as a relay when a direct WebRTC connection cannot be established
+
+See the [Technical Documentation](technical-documentation.md) for detailed information about the implementation.
+
+## “Unofficial” / Legacy Snapdrop Instances
+
+The following names are retained for historical/reference purposes only.
+
+They are **not operated, maintained, endorsed, or verified by ErikrafT Drop™**:
+
+- [https://snapdrop.net/](https://snapdrop.net/)
+- [https://pairdrop.net/](https://pairdrop.net/)
+- [https://snapdrop.k26.ch/](https://snapdrop.k26.ch/)
+- [https://snapdrop.9pfs.repl.co/](https://snapdrop.9pfs.repl.co/)
+- [https://filedrop.codext.de/](https://filedrop.codext.de/)
+- [https://s.hoothin.com/](https://s.hoothin.com/)
+- [https://www.wulingate.com/](https://www.wulingate.com/)
+- [https://snapdrop.fairysoft.net/](https://snapdrop.fairysoft.net/)
+- [https://airtransferer.web.app/](https://airtransferer.web.app/)
+- [https://drop.wuyuan.dev](https://drop.wuyuan.dev)
+- [https://share.jck.cx](https://share.jck.cx)
+
+**DISCLAIMER: WE ARE NOT IN ANY WAY AFFILIATED WITH THE PEOPLE WHO RUN THESE INSTANCES. WE DO NOT KNOW THEM. WE CANNOT VERIFY THE CODE THEY ARE RUNNING.**
+
+## Third-Party / Legacy Snapdrop Apps
+
+These applications are retained as historical references to the Snapdrop ecosystem.
+
+They are not official ErikrafT Drop™ applications and are not maintained by this project:
+
+1. [Snapdrop Desktop App](https://github.com/alextwothousand/snapdrop-desktop) — built on top of Electron.
+2. [Snapdrop Android App](https://github.com/fm-sys/snapdrop-android) — allows sharing files from other apps via the Android share action.
+3. [Snapdrop Flutter App](https://github.com/congnguyendinh0/snapdrop_flutter)
+4. [Snapdrop iOS App](https://github.com/CDsigma/Snapdrop-iOS-App)
+5. [Snapdrop Node App](https://github.com/Bellisario/node-snapdrop)
+6. [SnapDrop VSCode Extension](https://github.com/Yash-Garg/snapdrop-vsc)
+
+Feel free to create compatible third-party software, but clearly identify it as third-party software and do not imply that it is an official ErikrafT Drop™ application.
+
+[\< Back](/README.md)
