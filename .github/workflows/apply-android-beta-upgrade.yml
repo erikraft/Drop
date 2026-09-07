@@ -1,0 +1,35 @@
+name: Apply ErikrafT Drop beta upgrade
+
+on:
+  push:
+    branches:
+      - feat/webtorrent-onion-android-beta
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply WebTorrent, About and documentation changes
+        run: python3 .github/workflows/fix_and_apply4.py
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check public/scripts/webtorrent-transfer.js
+          node -e "const p=require('./package.json'); if(p.version!=='1.17.0') process.exit(1)"
+
+      - name: Commit generated changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json public/index.html public/scripts/webtorrent-transfer.js docs Website\ About/NEW .github/workflows/apply_drop_upgrade.py
+          git diff --cached --quiet || git commit -m 'feat: add WebTorrent transfer mode and refresh About page'
+          git push
