@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Apply WebTorrent, About and documentation changes
-        run: python3 .github/workflows/fix_and_apply.py
+        run: python3 .github/workflows/fix_and_apply2.py
 
       - name: Validate JavaScript syntax
         run: |
