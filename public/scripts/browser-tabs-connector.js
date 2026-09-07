@@ -53,7 +53,6 @@ class BrowserTabsConnector {
         return peerId;
     }
 
-
     static async removeOtherPeerIdsFromLocalStorage() {
         const peerId = sessionStorage.getItem('peer_id');
         if (!peerId) return false;
@@ -67,3 +66,23 @@ class BrowserTabsConnector {
         return peerIdsBrowser;
     }
 }
+
+// ErikrafT Drop™ WebTorrent (Beta) is loaded through the existing deferred
+// script pipeline so the main HTML bootstrap does not need another <script> tag.
+(function loadWebTorrentBeta() {
+    const load = () => {
+        if (document.querySelector('script[data-erikraft-webtorrent="true"]')) return;
+        const script = document.createElement('script');
+        script.src = 'scripts/webtorrent-transfer.js';
+        script.defer = true;
+        script.dataset.erikraftWebtorrent = 'true';
+        script.onerror = error => console.warn('[WebTorrent] Beta module failed to load:', error);
+        document.head.appendChild(script);
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', load, { once: true });
+    } else {
+        load();
+    }
+}());
