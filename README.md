@@ -8,7 +8,7 @@
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
     Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.<br>
-    Fork of ErikrafT Drop™.
+    Fork of PairDrop.
   </p>
 
 [![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)&nbsp;
@@ -18,7 +18,6 @@
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/erikraft/Drop)&nbsp;
 [![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)&nbsp;
 ![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)&nbsp;
-
 
 [🤝🏻 Form a Partnership](PARTNERSHIP.md)
 
@@ -33,16 +32,16 @@
 <br>
 
 <p align="center">
- 	  Minecraft Community<br>
- 	  <a href="https://discord.gg/8ErMwRy4aj"><img src="https://img.shields.io/discord/1121464803941171270?label=discord&style=flat-square&color=5a66f6"></a>
-	  &nbsp;
+  Minecraft Community<br>
+  <a href="https://discord.gg/8ErMwRy4aj"><img src="https://img.shields.io/discord/1121464803941171270?label=discord&style=flat-square&color=5a66f6"></a>
+  &nbsp;
 <br>
 <br>
 <br>
 ErikrafT Drop™ Community
 <br>
- 	  <a href="https://discord.gg/KWvqwRxjnA"><img src="https://img.shields.io/discord/1372342747494613032?label=discord&style=flat-square&color=5a66f6"></a>
-	  &nbsp;
+  <a href="https://discord.gg/KWvqwRxjnA"><img src="https://img.shields.io/discord/1372342747494613032?label=discord&style=flat-square&color=5a66f6"></a>
+  &nbsp;
 <br>
 
 </p>
@@ -78,7 +77,6 @@ File sharing on your local network that works on all platforms.
 
   - Linux (.deb)
     - https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
-
 
 - **Extensions**
   - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
@@ -127,6 +125,8 @@ Join our community of translators and help bring ErikrafT Drop™ to users aroun
 ## 🔀 Differences to the [Snapdrop](https://github.com/RobinLinus/snapdrop) it is based on
 <details><summary>👀｜View all differences</summary>
 
+> **Scope:** This section describes the historical/architectural differences inherited by ErikrafT Drop™ from the PairDrop base relative to Snapdrop. It is **not** the list of differences between ErikrafT Drop™ and PairDrop.
+
 ### 📶 Paired Devices and Public Rooms — Internet Transfer
 * Transfer files over the Internet between paired devices or by entering temporary public rooms.
 * Connect to devices in complex network environments (public Wi-Fi, company network, iCloud Private Relay, VPN, etc.).
@@ -150,7 +150,7 @@ Connect to others in complex network situations, or over the Internet.
 * Enter a public room via a 5-letter code or a QR-code.
 * Enter a public room to temporarily connect to devices outside your local network.
 * All devices in the same public room see each other.
-* Public rooms are temporary. Closing ErikrafT Drop™  leaves all rooms.
+* Public rooms are temporary. Closing ErikrafT Drop™ leaves all rooms.
 
 ### ✨ [Improved UI for Sending/Receiving Files](https://github.com/RobinLinus/snapdrop/issues/560)
 * Files are transferred after a request is accepted. Files are auto-downloaded upon completing a transfer, if possible.
@@ -165,22 +165,159 @@ Connect to others in complex network situations, or over the Internet.
 * [Send directly from the "Share" menu on Android](docs/how-to.md#send-directly-from-share-menu-on-android)
 * [Send directly via the command-line interface](docs/how-to.md#send-directly-via-command-line-interface)
 
-### 🌱 Other Changes
-* Change your display name to easily differentiate your devices.
-* [Paste files/text and choose the recipient afterwards ](https://github.com/RobinLinus/snapdrop/pull/534)
-* [Prevent devices from sleeping on file transfer](https://github.com/RobinLinus/snapdrop/pull/413)
-* Warn user before ErikrafT Drop™ is closed on file transfer
-* Open ErikrafT Drop™ on multiple tabs simultaneously (Thanks [@willstott101](https://github.com/willstott101))
-* [Video and audio preview](https://github.com/RobinLinus/snapdrop/pull/455) (Thanks [@victorwads](https://github.com/victorwads))
-* Switch theme back to auto/system after dark or light mode is on
-* Node-only implementation (Thanks [@Bellisario](https://github.com/Bellisario))
-* Auto-restart on error (Thanks [@KaKi87](https://github.com/KaKi87))
-* Lots of stability fixes (Thanks [@MWY001](https://github.com/MWY001) [@skiby7](https://github.com/skiby7) and [@willstott101](https://github.com/willstott101))
-* To host ErikrafT Drop™ on your local network (e.g. on Raspberry Pi): [All peers connected with private IPs are discoverable by each other](https://github.com/RobinLinus/snapdrop/pull/558)
-* When hosting ErikrafT Drop™ yourself, you can [set your own STUN/TURN servers](docs/host-your-own.md#specify-stunturn-servers)
-* Translations.
+### 🌱 ErikrafT Drop™ Features & Improvements
+
+The old PairDrop list has intentionally been removed from this section. Features such as display-name changes, paste/send flow improvements, wake-lock behavior, multi-tab support, media previews, Node-only operation, auto-restart, general stability fixes, local-network discovery, custom STUN/TURN configuration, and translations are not automatically ErikrafT Drop™-specific simply because they are present in the current fork.
+
+Historical PairDrop contributors remain credited by the upstream PairDrop project and history. They are not presented here as contributors to ErikrafT Drop™-specific work.
 
 </details>
+
+---
+
+## 🧬 Project Origin and Base
+
+ErikrafT Drop™ is a **fork of PairDrop**. PairDrop itself is a **fork of Snapdrop**. The relationship is:
+
+```text
+Snapdrop
+   ↓
+PairDrop
+   ↓
+ErikrafT Drop™
+```
+
+The **Differences to Snapdrop** section above explains changes introduced by PairDrop relative to Snapdrop. It should not be interpreted as a list of ErikrafT Drop™-specific features.
+
+ErikrafT Drop™ extends and adapts the PairDrop foundation with additional code, integrations, documentation, branding, and transfer modes developed for the ErikrafT ecosystem.
+
+## ✨ What makes ErikrafT Drop™ different from PairDrop?
+
+This section lists only differences identifiable in the current ErikrafT Drop™ repository or its pinned Android submodule. Shared PairDrop functionality is intentionally excluded.
+
+### 📡 ERIKRAFT-QR Animated Optical Transfer
+
+ErikrafT Drop™ contains an implemented animated QR transfer engine in `public/scripts/erikraft-qr.js` and associated UI/control code.
+
+- Transfers **files or text** as a sequence of animated QR frames.
+- The transfer is designed to work without WebRTC, WebSockets, or network connectivity once the application is loaded.
+- Frames use the `EKQR` protocol header and contain transfer metadata, chunk indexes, Base64 payload data, CRC32 checksums, and a final SHA-256 digest.
+- The current implementation uses **XOR-based parity recovery**, not a general Fountain/Luby Transform implementation. Parity frames combine pairs of base chunks and can recover one missing chunk when the corresponding other chunk and parity frame are available.
+- The receiver accepts duplicate and out-of-order frames and performs CRC32 validation before storing payload data.
+- Completed transfers are reassembled and verified with SHA-256 before being delivered to the user.
+
+See [`ERIKRAFT-QR.md`](ERIKRAFT-QR.md) for the protocol documentation.
+
+### 📷 QR Scanner as a Separate Feature
+
+ErikrafT Drop™ also has an ecosystem QR scanner. It is separate from Animated QR Transfer:
+
+- **QR Scanner:** scans static QR codes/URLs and can recognize ErikrafT ecosystem links and pairing/room URLs.
+- **Animated QR Transfer:** continuously renders or captures a stream of QR frames carrying file/text payload data.
+
+These two functions must not be documented as the same feature.
+
+### 📴 Offline Optical Transfer and PWA Integration
+
+The service worker precaches the QR transfer code, scanner dependencies, localization assets, and other client-shell resources. The Animated QR system is designed to continue after the application has been loaded, without network requests during the optical transfer itself.
+
+This should **not** be described as "all ErikrafT Drop™ file transfer works offline". Normal WebRTC/WebSocket transfers still depend on their networking/signaling environment.
+
+### 🌐 ErikrafT-Specific Ecosystem Integrations
+
+The repository contains integrations that are not part of the standard PairDrop README feature set, including:
+
+- Discord bot integration and a Discord Activity for launching/using ErikrafT Drop™.
+- iOS Share Menu integration through a dedicated Shortcut.
+- Browser extensions and IDE integrations maintained under `Extensions/`.
+- A dedicated command-line client under `erikraftdrop-cli/`.
+- An Android application maintained as the `Android/` submodule.
+- ErikrafT-specific branding, logos, domains, UI assets, and documentation.
+
+These are ecosystem integrations, not claims that the underlying PairDrop transfer protocol was replaced.
+
+### 🧪 WebTorrent Transfer — Beta
+
+The repository also contains an explicitly documented **WebTorrent transfer mode**. It is experimental/beta and uses magnet-based peer discovery and WebRTC between compatible peers. It should therefore be described as a beta transfer option rather than as the normal ErikrafT Drop™ transfer mechanism.
+
+See [`docs/features/webtorrent-beta.md`](docs/features/webtorrent-beta.md).
+
+## 🇧🇷 O que diferencia o ErikrafT Drop™ do PairDrop?
+
+Esta seção resume as diferenças verificáveis no repositório atual. Recursos compartilhados com o PairDrop não são tratados como diferenciais exclusivos.
+
+### 📡 Transferência Óptica por QR Animado
+
+O ErikrafT Drop™ possui um sistema implementado de transferência por QR Codes animados. Arquivos ou textos são divididos em quadros QR e transmitidos visualmente entre tela e câmera.
+
+A implementação atual usa o protocolo `EKQR`, CRC32 por quadro, SHA-256 para verificação final e **recuperação por paridade baseada em XOR**. Ela não deve ser chamada de Fountain Coding/Luby Transform sem uma implementação real desses algoritmos.
+
+### 📷 Leitor de QR Code
+
+O projeto possui um leitor de QR Code separado da transferência óptica. O leitor pode processar QR Codes estáticos e URLs do ecossistema ErikrafT, enquanto o modo de QR animado trata uma sequência de quadros que representa uma transferência.
+
+### 📴 Transferência Óptica Offline
+
+Depois que a aplicação necessária estiver carregada, o modo de QR animado foi implementado para funcionar sem WebRTC, WebSocket ou conexão de rede durante a transferência óptica. Isso é diferente de afirmar que todo o ErikrafT Drop™ funciona offline.
+
+### 🌐 Ecossistema ErikrafT
+
+O repositório adiciona integrações próprias, incluindo Discord, Shortcut de compartilhamento do iOS, extensões, cliente CLI, aplicativo Android e identidade visual/branding próprios.
+
+### 🧪 WebTorrent em Beta
+
+Existe também um modo WebTorrent documentado como **Beta**. Ele é experimental e não deve ser confundido com o modo normal de transferência do ErikrafT Drop™.
+
+## 🔗 Shared and Inherited Features
+
+The following should be understood as part of the PairDrop/Snapdrop-derived foundation rather than as ErikrafT Drop™-exclusive functionality unless the ErikrafT Drop™ implementation has been materially changed:
+
+- WebRTC/WebSocket-based peer-to-peer transfers.
+- Local-network device discovery.
+- Persistent device pairing and temporary public rooms.
+- Six-digit pairing keys and QR-based pairing links.
+- ZIP downloads for multiple files.
+- Wake-lock/display-sleep prevention during transfers.
+- Theme and display-name behavior inherited or adapted from the upstream client.
+- Configurable STUN/TURN infrastructure for self-hosted deployments.
+- General browser-based file/text transfer behavior.
+
+The purpose of this section is to prevent shared upstream capabilities from being mistaken for unique ErikrafT Drop™ inventions.
+
+## 📊 Feature Comparison
+
+The following comparison is intentionally conservative. `✓` means the feature is present in the project; `—` means it is not a documented/core feature of that project; `Experimental` means the project contains the feature but it is explicitly beta/experimental.
+
+| Feature | Snapdrop | PairDrop | ErikrafT Drop™ |
+|---|---:|---:|---:|
+| WebRTC transfer | ✓ | ✓ | ✓ |
+| WebSocket signaling/fallback | ✓ | ✓ | ✓ |
+| PWA | ✓ | ✓ | ✓ |
+| Persistent device pairing | — | ✓ | ✓ |
+| Temporary public rooms | — | ✓ | ✓ |
+| Static QR pairing/scanning | — | ✓ | ✓ |
+| Animated QR optical file/text transfer | — | — | ✓ |
+| XOR-based QR parity recovery | — | — | ✓ |
+| Offline optical transfer | — | — | ✓ |
+| Android integration | — | — | ✓ |
+| Discord integration | — | — | ✓ |
+| iOS Share Menu integration | — | ✓ | ✓ |
+| WebTorrent transfer | — | — | Experimental |
+| ErikrafT-specific branding/ecosystem | — | — | ✓ |
+
+> This table does not claim that every implementation detail is absent from upstream projects. It distinguishes the documented/core capabilities relevant to this repository from the ErikrafT Drop™-specific additions.
+
+## 🌍 Internationalization
+
+ErikrafT Drop™ maintains a localization system using locale JSON files under `public/lang/`, with English and Brazilian Portuguese among the maintained locale files. The application also contains localization-specific client code and a Crowdin integration for translation work.
+
+Translation coverage can vary by locale and should not be interpreted as every string being equally translated in every language.
+
+## 👥 Upstream Attribution
+
+ErikrafT Drop™ preserves the project's PairDrop/Snapdrop lineage and the existing license/attribution files. Contributors credited by PairDrop for upstream features are not reclassified as contributors to ErikrafT Drop™-specific changes by this documentation update.
+
+The `LICENSE` file and third-party license files remain part of the repository and are not removed by this documentation change.
 
 ---
 
@@ -192,8 +329,8 @@ Connect to others in complex network situations, or over the Internet.
 * [IndexedDB API](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) storage handling
 * [zip.js](https://gildas-lormeau.github.io/zip.js/) library
 * [cyrb53](https://github.com/bryc/code/blob/master/jshash/experimental/cyrb53.js) super-fast hash function
-* [NoSleep](https://github.com/richtr/NoSleep.js) display sleep, add wake lock ([MIT](licenses/MIT-NoSleep))
-* [heic2any](https://github.com/alexcorvi/heic2any) HEIC/HEIF to PNG/GIF/JPEG ([MIT](licenses/MIT-heic2any))
+* [NoSleep](https://github.com/richtr/NoSleep.js) display sleep, add wake lock ([MIT licenses/MIT-NoSleep])
+* [heic2any](https://github.com/alexcorvi/heic2any) HEIC/HEIF to PNG/GIF/JPEG ([MIT licenses/MIT-heic2any])
 * [Crowdin](https://crowdin.com/) web-based localization tool
 * [BrowserStack](https://www.browserstack.com/) This project is tested with BrowserStack
 
