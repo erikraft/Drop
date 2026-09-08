@@ -68,10 +68,8 @@ class BrowserTabsConnector {
     const cleanupAbout = () => {
         const about = document.getElementById('about');
         if (!about || about.dataset.web10UiApplied !== 'true') return;
-
         const style = document.querySelector('style[data-web10-about="true"]');
         if (style) style.remove();
-
         if (originalAboutHTML !== null) {
             about.innerHTML = originalAboutHTML;
             if (originalAboutClass === null) about.removeAttribute('class');
@@ -79,7 +77,6 @@ class BrowserTabsConnector {
             if (originalAboutStyle === null) about.removeAttribute('style');
             else about.setAttribute('style', originalAboutStyle);
         }
-
         delete about.dataset.web10UiApplied;
         originalAboutHTML = null;
         originalAboutClass = null;
@@ -90,13 +87,12 @@ class BrowserTabsConnector {
         if (window.location.hash !== '#about') return;
         const about = document.getElementById('about');
         if (!about || about.dataset.web10UiApplied === 'true') return;
-
         originalAboutHTML = about.innerHTML;
         originalAboutClass = about.getAttribute('class');
         originalAboutStyle = about.getAttribute('style');
 
         const footerLogo = document.querySelector('footer svg.icon.logo');
-        let logo = footerLogo ? footerLogo.cloneNode(true) : null;
+        const logo = footerLogo ? footerLogo.cloneNode(true) : null;
         if (logo) {
             logo.removeAttribute('class');
             logo.removeAttribute('style');
@@ -105,16 +101,15 @@ class BrowserTabsConnector {
             logo.setAttribute('aria-hidden', 'true');
             logo.setAttribute('focusable', 'false');
             logo.classList.add('about-logo-runtime');
-            logo.style.setProperty('display', 'block', 'important');
-            logo.style.setProperty('width', '89px', 'important');
-            logo.style.setProperty('height', '96px', 'important');
-            logo.style.setProperty('color', '#fff', 'important');
-            logo.style.setProperty('fill', '#fff', 'important');
+            logo.setAttribute('fill', '#fff');
+            logo.setAttribute('color', '#fff');
+            logo.setAttribute('stroke', '#fff');
             logo.querySelectorAll('*').forEach(node => {
                 node.removeAttribute('class');
-                node.style.setProperty('color', '#fff', 'important');
-                node.style.setProperty('fill', '#fff', 'important');
-                node.style.setProperty('stroke', '#fff', 'important');
+                node.removeAttribute('style');
+                node.setAttribute('fill', '#fff');
+                node.setAttribute('color', '#fff');
+                node.setAttribute('stroke', '#fff');
             });
         }
 
@@ -157,7 +152,8 @@ class BrowserTabsConnector {
         style.textContent = `
             #about .about-content-runtime { box-sizing:border-box; width:min(920px,calc(100% - 32px)); max-width:920px; max-height:calc(100vh - 72px); margin:0 auto; padding:16px 0 28px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:18px; overflow-x:hidden; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
             #about .about-branding-runtime { width:100%; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:10px; text-align:center; flex:0 0 auto; }
-            #about .about-logo-runtime { flex:0 0 auto !important; object-fit:contain; }
+            #about .about-logo-runtime { flex:0 0 auto !important; object-fit:contain; color:#fff !important; fill:#fff !important; stroke:#fff !important; }
+            #about .about-logo-runtime * { color:#fff !important; fill:#fff !important; stroke:#fff !important; }
             #about .about-title-runtime { width:100%; margin:0; padding:0; display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; }
             #about .about-title-runtime h1 { margin:0; line-height:1.15; }
             #about .about-subtitle-runtime,#about .about-note-runtime { width:min(760px,100%); margin:0; text-align:center; line-height:1.5; }
@@ -205,7 +201,6 @@ class BrowserTabsConnector {
             }, 0);
             return;
         }
-
         const closeButton = event.target.closest('#about a.close');
         if (closeButton) {
             setTimeout(() => {
