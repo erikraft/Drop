@@ -127,7 +127,7 @@ class BrowserTabsConnector {
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://github.com/erikraft/Drop" title="GitHub" aria-label="GitHub"><svg class="icon"><use xlink:href="#github"></use></svg></a>
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://github.com/erikraft/Drop-Android" title="Android" aria-label="Android"><i class="fa-brands fa-android" aria-hidden="true"></i></a>
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://discord.gg/KWvqwRxjnA" title="Discord" aria-label="Discord"><svg class="icon"><use xlink:href="#icon-discord"></use></svg></a>
-                <a class="icon-button" target="_blank" rel="noreferrer" href="https://www.instagram.com/erikraft.yt/" title="Instagram" aria-label="Instagram"><svg class="icon"><use xlink:href="#instagram"></use></svg></a>
+                <a class="icon-button" target="_blank" rel="noreferrer" href="https://www.instagram.com/erikraft_drop" title="Instagram" aria-label="Instagram"><svg class="icon"><use xlink:href="#instagram"></use></svg></a>
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://ko-fi.com/erikraft" title="Apoiar" aria-label="Apoiar"><svg class="icon"><use xlink:href="#donation"></use></svg></a>
             </div>
             <p class="about-note-runtime">WebTorrent e recursos relacionados estão em Beta e podem depender do suporte do navegador e da conectividade entre peers.</p>`;
