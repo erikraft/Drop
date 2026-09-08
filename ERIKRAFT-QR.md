@@ -1,357 +1,262 @@
-# ERIKRAFT-QR Optical Transfer Specification (v2.1)
+# ERIKRAFT-QR Optical Transfer Specification
 
-This document defines the official **ERIKRAFT-QR** specification for offline, high-speed, air-gapped optical data transmission across **ErikrafT Drop™ Web**, **ErikrafT Drop™ PWA**, and **ErikrafT Drop™ Android**.
+ERIKRAFT-QR is ErikrafT Drop™'s protocol for **animated QR optical transfer**. It is designed for transferring text and files from a screen to a camera without relying on WebRTC, WebSockets, Tor, or a transfer server during the optical transfer itself.
 
----
-
-## 1. Overview & Guiding Philosophy
-
-**ERIKRAFT-QR** is a networkless, peer-to-peer optical communication protocol. It enables devices to transfer text or files directly through visual light (**Screen ➔ Camera ➔ Bytes**) without requiring Wi-Fi, Cellular Data, Bluetooth, WebRTC, WebSockets, Tor, or intermediate signaling/relay servers.
-
-### Key Characteristics
-* **100% Air-Gapped & Offline:** Operates entirely client-side inside the browser/PWA/Android app using WebCam APIs and HTML5 Canvas.
-* **Serverless & Networkless Isolation:** When transferring via Animated QR, no WebRTC, WebSocket fallback, or server requests are made.
-* **Erasure Coding / Fountain Redundancy:** Uses XOR parity combination chunks (LT/fountain principles) to recover lost, skipped, or out-of-order frames caused by camera motion or frame drops.
-* **Dual-Layer Integrity Checking:** Per-frame CRC32 validation prevents corrupted chunks from entering the reassembly pool. SHA-256 validation on the complete reassembled byte stream guarantees exact file integrity.
-* **Bi-directional Cross-Platform Support:** Works seamlessly across Chrome, Firefox, Safari, Tor Browser, Android WebView, and PWA environments.
-* **Smart Compression:** Intelligent compression that analyzes data entropy and file types to avoid compression on already-compressed data.
-* **Enhanced FEC:** Improved XOR parity combinations with 20% overhead (reduced from 25%) for better efficiency while maintaining robust recovery.
+> **Implementation note:** The current Web implementation uses simple pairwise XOR parity recovery. It does **not** implement a general Fountain Code, Luby Transform, LT Code, or RaptorQ decoder. Do not describe the current FEC as Fountain Coding.
 
 ---
 
-## 2. System Architecture & Data Pipeline
+## 1. Transfer modes
 
-```text
-               +----------------------------------------+
-               |        SENDER (File / Text Input)       |
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               | 1. Entropy Analysis & Intelligent     |
-               |    Compression (Optional Deflate)       |
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               | 2. Chunking & Enhanced FEC Encoding    |
-               |    (Base Chunks + Optimized XOR Parity)|
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               | 3. Frame Serializer & CRC32 Builder    |
-               |    (JSON Payload with Header "EKQR")   |
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               | 4. Animated QR Renderer (Canvas API)   |
-               |    (ErikrafT Drop™ Styled QR Stream)   |
-               +----------------------------------------+
-                                   |
-                                   |  [Optical Light Link]
-                                   v  (Screen ➔ Camera)
-               +----------------------------------------+
-               | 5. Optical Capture & QR Frame Detector |
-               |    (BarcodeDetector API / jsQR)        |
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               | 6. Per-Frame CRC32 Verification &      |
-               |    Deduplication / Order Independent Pool|
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               | 7. Enhanced Erasure Decoding &         |
-               |    Fountain Parity Recovery Engine     |
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               | 8. Full Byte Stream SHA-256 Hash Check |
-               +----------------------------------------+
-                                   |
-                                   v
-               +----------------------------------------+
-               |       RECEIVER (Reassembled File/Text)  |
-               +----------------------------------------+
-```
+ERIKRAFT-QR is separate from the project's normal network transfer and from the ecosystem QR scanner.
+
+### Animated QR Transfer
+
+The sender renders a sequence of QR frames. The receiver scans those frames with a camera and reconstructs the original text or file.
+
+### Ecosystem QR Scanner
+
+The normal QR scanner handles static QR codes and URLs such as pairing, room, and ErikrafT ecosystem links. It is not the same protocol as Animated QR Transfer.
 
 ---
 
-## 3. Protocol Header & Frame Schema
+## 2. Current Web implementation
 
-Each frame displayed as a QR code contains a JSON-encoded string representing structural metadata, chunk indexing, parity information, and payload.
+The main implementation is in:
 
-### JSON Frame Payload Schema
+- `public/scripts/erikraft-qr.js`
+- `public/scripts/animated-qr-controls.js`
+- `public/scripts/animated-qr-file-size.js`
+- `public/scripts/animated-qr-screen-awake.js`
+- `public/scripts/qr-helper.js`
+- QR-related tests under `test/`
+
+The transmitter exposes `ErikrafTQRTransmitter`; the receiver exposes `ErikrafTQRScanner`.
+
+---
+
+## 3. Protocol frame
+
+Each animated frame is a JSON payload encoded into a QR code. The Web implementation identifies frames with the `EKQR` header.
+
+A normal data frame contains fields equivalent to:
+
 ```json
 {
-  "h": "EKQR",          // Magic Header (4 bytes string)
-  "v": 1,               // Protocol Version (integer)
-  "id": "A1B2C3D4",     // Unique Transfer ID (8 alphanumeric chars)
-  "t": "file",          // Transfer Type: "text" | "file"
-  "name": "doc.pdf",    // Filename (for files)
-  "mime": "app/pdf",    // MIME Type (for files)
-  "sz": 10240,          // Total Payload Size in bytes
-  "i": 12,              // Current Symbol / Chunk Index (0-based)
-  "n": 50,              // Total Base Chunks required
-  "fec": [10, 11],      // (Optional) XOR Parity Chunk indices combined
-  "c": 1,               // (Optional) Compression Flag (1 = Deflate, 0 = Uncompressed)
-  "crc": 305419896,     // CRC32 Checksum of base64 data payload chunk 'd'
-  "sha": "e3b0c442...",  // SHA-256 Checksum of complete reassembled original payload
-  "d": "a1b2c3..."     // Base64-encoded Data Payload Chunk
+  "h": "EKQR",
+  "v": 1,
+  "id": "A1B2C3D4",
+  "t": "file",
+  "name": "document.pdf",
+  "mime": "application/pdf",
+  "sz": 10240,
+  "i": 0,
+  "n": 4,
+  "c": 0,
+  "crc": 305419896,
+  "sha": "...sha256...",
+  "d": "...base64..."
 }
 ```
 
-### Schema Field Descriptions
-* `h`: Protocol magic identifier, must be `"EKQR"`.
-* `v`: Integer version indicator (`1`).
-* `id`: Random 8-character string unique to the transmission session.
-* `t`: Content type (`"text"` or `"file"`).
-* `name`: Name of file or default identifier.
-* `mime`: Standard MIME type (`text/plain`, `image/png`, `application/pdf`, etc.).
-* `sz`: Complete uncompressed payload size in bytes.
-* `i`: Frame chunk index ($0 \le i < N$ for base chunks, $i \ge N$ for parity chunks).
-* `n`: Total number $N$ of base chunks required to reconstruct the full payload.
-* `fec`: Array of chunk indices XORed together when $i \ge N$.
-* `c`: Integer flag indicating payload compression.
-* `crc`: 32-bit unsigned Integer representing CRC32 checksum of string `d`.
-* `sha`: 64-character hex string representing the SHA-256 digest of the entire uncompressed file/text buffer.
-* `d`: Base64 string of the raw byte slice.
+Where:
+
+- `h` — protocol magic header (`EKQR`).
+- `v` — protocol version.
+- `id` — transfer/session identifier.
+- `t` — transfer type (`text` or `file`).
+- `name` — file name or text identifier.
+- `mime` — MIME type.
+- `sz` — original uncompressed payload size.
+- `i` — frame/chunk index.
+- `n` — number of base chunks required for reconstruction.
+- `c` — compression flag.
+- `crc` — CRC32 checksum of the Base64 data field.
+- `sha` — SHA-256 digest of the complete original payload.
+- `d` — Base64-encoded chunk data.
+
+Parity frames additionally contain a `fec` array identifying the two base chunks that were XORed.
 
 ---
 
-## 4. Chunking, Intelligent Compression & Enhanced FEC Coding
+## 4. Compression
 
-### 4.1 Entropy Analysis & Smart Compression
-1. **Entropy-Based Decision:**
-   - Calculate Shannon entropy of the data before compression.
-   - Skip compression for high-entropy data (> 7.5 bits/byte) which is likely already compressed.
-   - Skip compression for small files (< 1KB) where overhead outweighs benefits.
+The Web implementation performs a lightweight entropy check before compression.
 
-2. **Compression Threshold:**
-   - Only use compression if it reduces size by at least 5%.
-   - This prevents compression from increasing size for already-compressed formats.
+- Payloads smaller than 1,000 bytes are not compressed.
+- High-entropy payloads are skipped because they are likely already compressed.
+- Deflate-raw compression is used when the browser provides `CompressionStream`.
+- Compression is kept only when it reduces the payload by at least 5%.
+- The receiver uses `DecompressionStream` when the compression flag is set.
 
-3. **Supported Formats:**
-   - Text files, documents, and uncompressed media benefit most.
-   - Already-compressed formats (ZIP, MP3, MP4, JPG, PNG) are automatically skipped.
-
-### 4.2 Base Chunks Split
-- Payload is segmented into equal base chunks of length $S$ (default 180-256 bytes per frame for high-speed camera scanning).
-- Chunk size is optimized for QR code density and camera readability.
-
-### 4.3 Enhanced Fountain XOR Parity Generation
-1. **Optimized Redundancy:**
-   - For a payload of $N$ base chunks, $M$ fountain parity chunks ($M = \lceil 0.2 \times N \rceil$ minimum) are generated.
-   - Reduced from 25% to 20% overhead for better efficiency while maintaining robust recovery.
-
-2. **Improved XOR Combinations:**
-   - Parity frame $P_k$ is computed by XORing base chunks $B_x$ and $B_y$:
-     $$P_k[b] = B_x[b] \oplus B_y[b]$$
-   - Chunks are paired using the formula: `idx1 = (p * 2) % numChunks`, `idx2 = (p * 2 + 1) % numChunks`
-   - This pairing strategy ensures chunks are combined in a way that improves recovery when frames are lost in sequence.
-
-3. **Recovery Process:**
-   - When a receiver misses base chunk $B_y$ but captures $B_x$ and parity $P_k$, $B_y$ is immediately recovered:
-     $$B_y[b] = B_x[b] \oplus P_k[b]$$
-   - Iterative XOR cascade decoding is applied upon receiving every new parity frame.
+Compression is an optimization; it is not required for the protocol itself.
 
 ---
 
-## 5. Deduplication, Order Independence & Integrity Validation
+## 5. Chunking and XOR-based parity recovery
 
-* **Order Independence:** The receiver registers frames by chunk index $i$. Frames can arrive in any sequence, with gaps or duplicates.
-* **Deduplication:** Chunks already present in the receiver pool are discarded immediately.
-* **Per-Frame Integrity (CRC32):**
-  - Before parsing frame data, `crc32(payload.d)` is computed.
-  - If `crc32` does not equal `payload.crc`, the frame is dropped silently to prevent buffer corruption.
-* **Final Reassembly & SHA-256 Verification:**
-  - Once $N$ unique base chunks are collected (or recovered via FEC), chunks are joined in ascending order $i = 0 \dots N-1$.
-  - Decompression is applied if flag `c === 1`.
-  - Subtle Crypto API computes `SHA-256(reassembledBuffer)`.
-  - Reassembly succeeds **only** if calculated SHA-256 strictly equals `payload.sha`. Otherwise, the transfer fails integrity check.
+The current Web transmitter splits the payload into base chunks and then creates additional parity frames.
 
----
+For each parity frame:
 
-## 6. Camera Stream Lifecycle & Scanner Isolation
+```text
+P = Bx XOR By
+```
 
-To ensure stability across desktop, mobile browsers, Android WebViews, and Tor Browser:
+The frame records the two source indexes in `fec: [x, y]`.
 
-### Camera Request & Initialization
-1. Video element attributes MUST include `playsinline="true"`, `autoplay="true"`, `muted=true`, and `controls=false`.
-2. Initial stream acquisition requests `{ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } }`.
-3. If environment camera fails or is unavailable, automatic fallback requests generic camera with resolution preferences.
-4. Video stream playback is started via `video.play()` after waiting for `onloadedmetadata` event.
-5. Timeout fallback (3 seconds) ensures the stream doesn't hang indefinitely.
+During reception:
 
-### Lifecycle Cleanup
-Upon dialog closure or transfer completion:
-1. Scanning loops are canceled immediately.
-2. All `MediaStreamTrack` tracks in `stream.getTracks()` are explicitly stopped (`track.stop()`).
-3. `video.srcObject` is set to `null`.
-4. Video element event listeners are cleaned up.
+- If both base chunks are present, the parity frame is unnecessary.
+- If exactly one of the two base chunks is present, the missing chunk can be recovered with XOR.
+- Recovery can be applied repeatedly as additional parity frames arrive.
+- The current implementation therefore provides **pairwise XOR erasure recovery**.
+
+### What this is not
+
+The current implementation is **not** a general fountain-code system. It does not implement random-degree symbol generation, LT decoding, Luby Transform decoding, or Raptor/RaptorQ decoding.
+
+Future work may investigate stronger erasure codes, but those should not be documented as implemented until the code actually contains them.
 
 ---
 
-## 7. Ecosystem QR Scanner vs. Animated QR Transfer System
+## 6. Frame integrity and final integrity
 
-ErikrafT Drop™ differentiates between two distinct QR functionalities:
+Two levels of integrity checking are implemented.
 
-1. **Animated QR Transfer (`#animated-qr-btn`):**
-   - Handles offline file and text payload transmission over animated QR code streams.
-   - Independent of network, WebRTC, WebSocket, and servers.
-   - Features Send/Receive interface with file selection and text input.
-   - Supports files up to 64MB and text up to 4MB.
-   - Real-time progress tracking with integrity verification.
+### CRC32
 
-2. **Ecosystem QR Scanner (`#openQRScanner`):**
-   - Scans static QR codes and URLs.
-   - Supports URL classification and auto-discovery for ErikrafT services:
-     - `https://drop.erikraft.com/?room_id=...`
-     - `https://drop.erikraft.com/?pair_key=...`
-     - `https://docsdrop.erikraft.com/`
-     - `https://biodrop.erikraft.com/`
-   - Provides security confirmation prompts before navigating to external URLs.
-   - Includes manual input fallback ("Cole o conteúdo do QR Code manualmente") when cameras are unavailable or permissions are denied.
+The receiver calculates CRC32 over each frame's Base64 payload. A frame with a mismatching CRC is discarded.
+
+### SHA-256
+
+After all required base chunks have been received or recovered, the receiver reassembles the payload, decompresses it when necessary, and calculates SHA-256 over the reconstructed original bytes.
+
+The transfer is completed only when the calculated digest matches the SHA-256 value carried by the transfer metadata.
 
 ---
 
-## 8. Offline Functionality & PWA Support
+## 7. Out-of-order frames and duplicates
 
-### 8.1 Offline Operation
-- The Animated QR system operates completely offline once the page is loaded.
-- No network requests are made during QR transfer.
-- Camera access and QR encoding/decoding work without internet connectivity.
+The receiver stores chunks by index rather than assuming that frames arrive sequentially.
 
-### 8.2 PWA Integration
-- Service Worker version v1.15.0 ensures proper caching of QR-related assets.
-- Critical assets for QR functionality are precached:
-  - `scripts/erikraft-qr.js`
-  - `scripts/qr-helper.js`
-  - `scripts/libs/jsQR.js`
-  - `scripts/libs/qr-code-styling.js`
-- The PWA can initiate QR transfers even when offline (after initial installation).
+This allows:
+
+- out-of-order frame reception;
+- duplicate-frame suppression;
+- missing-frame recovery when a matching XOR parity frame is available;
+- reconstruction after the required base chunks have been collected or recovered.
 
 ---
 
-## 9. Android & Mobile Considerations
+## 8. Camera and scanner lifecycle
 
-### 9.1 Android WebView Support
-- The QR system is designed to work in Android WebView environments.
-- Camera handling respects mobile-specific constraints (facingMode, permissions).
-- Touch-optimized UI for mobile devices.
+The Web scanner uses the browser camera APIs and prefers the rear/environment camera on mobile devices.
 
-### 9.2 Mobile Camera Handling
-- Prioritizes rear-facing camera (`facingMode: 'environment'`) on mobile devices.
-- Falls back to front camera if rear camera unavailable.
-- Resolution preferences balance quality and performance on mobile hardware.
+The implementation includes:
 
----
+- `playsinline` video handling;
+- automatic camera fallback when the preferred camera configuration fails;
+- `BarcodeDetector` when available;
+- `jsQR` as a fallback;
+- explicit MediaStream track cleanup when scanning stops;
+- localized scanner states and errors.
 
-## 10. Size Limits & Performance
-
-### 10.1 Supported Sizes
-- **Files:** Up to 64MB (configurable based on device capabilities)
-- **Text:** Up to 4MB (larger texts may be chunked)
-- These limits are enforced to ensure reasonable transfer times and memory usage.
-
-### 10.2 Performance Characteristics
-- **Chunk Size:** 180-256 bytes per frame (optimized for QR density)
-- **FPS:** Configurable 1-20 FPS (default 6 FPS for stability)
-- **FEC Overhead:** 20% parity frames (reduced from 25%)
-- **Throughput:** Dependent on camera quality and distance; typically 100-400 KB/s
+The scanner does not keep the camera stream alive after the transfer/dialog has been stopped.
 
 ---
 
-## 11. Security & Privacy
+## 9. Offline behavior
 
-### 11.1 Data Privacy
-- All processing happens client-side; no data is sent to servers.
-- SHA-256 verification ensures data integrity.
-- CRC32 per-frame checking prevents corruption accumulation.
+Animated QR Transfer is an **optical, network-independent transfer mode after the required application assets have been loaded**.
 
-### 11.2 External URL Handling
-- QR Scanner provides confirmation dialogs for external URLs.
-- ErikrafT ecosystem URLs are recognized and handled appropriately.
-- External URLs require explicit user confirmation before opening.
+The transfer itself does not need:
+
+- WebRTC;
+- WebSockets;
+- a signaling server;
+- a TURN server;
+- Wi-Fi or cellular connectivity;
+- Bluetooth;
+- an intermediate file-storage server.
+
+This does **not** mean that every ErikrafT Drop™ transfer mode is offline. Normal WebRTC/WebSocket transfers still require their respective networking/signaling environment.
+
+---
+
+## 10. PWA support
+
+The service worker precaches the Animated QR implementation and its supporting client assets, including QR rendering/decoding libraries and localization resources.
+
+This allows the QR transfer interface to remain usable offline after the required application resources have been installed/cached.
+
+Offline **application availability** and offline **optical transfer** are separate concepts; neither should be generalized into "all ErikrafT Drop™ transfers work offline."
+
+---
+
+## 11. Android status
+
+The main repository includes an `Android/` Git submodule pointing to the ErikrafT Drop™ Android project.
+
+The pinned Android revision contains a QR transfer activity and an Android-side QR protocol implementation. However, the audited Web and Android implementations are **not currently identical protocol implementations**: the Android code at the pinned revision uses a different frame magic/schema (`EKQR1` and Android-specific fields) from the Web implementation's `EKQR` schema.
+
+Therefore this document does **not** claim that Web ↔ Android Animated QR Transfer interoperability is currently proven. Android QR functionality should be treated as an implementation/integration that requires explicit interoperability testing before being documented as fully cross-platform.
 
 ---
 
 ## 12. Internationalization
 
-The QR system supports full internationalization:
-- All UI strings are translatable via the i18n system.
-- PT-BR translations are provided for all QR-related strings.
-- The system handles UTF-8 text correctly, including emojis and special characters.
+The Web QR implementation obtains user-facing scanner states through the project's localization system. QR-related strings are therefore intended to follow the application's existing i18n mechanism rather than being hard-coded into a separate language system.
+
+The repository contains locale files including English and Brazilian Portuguese, among other languages.
 
 ---
 
-## 13. Future Enhancements (Based on Reference Analysis)
+## 13. Security and privacy properties
 
-Potential improvements identified from reference project analysis:
+ERIKRAFT-QR is designed so that the optical transfer payload is processed locally by the sender and receiver.
 
-### 13.1 Protocol Enhancements
-- **Base45 Encoding:** Could replace Base64 for ~15% efficiency gain
-- **Binary Frame Protocol:** Could reduce JSON overhead
-- **True LT Codes:** Could reduce overhead from 20% to 15%
-- **RaptorQ FEC:** Systematic fountain codes for better recovery
+The implementation provides:
 
-### 13.2 Compression Improvements
-- **Zstd Compression:** Better compression ratios for certain file types
-- **Format-Specific Compression:** Tailored strategies for different file types
+- per-frame CRC32 validation;
+- final SHA-256 verification;
+- file-name sanitization during reconstruction;
+- bounded metadata/chunk indexes;
+- bounded reconstruction sizes;
+- explicit camera permission handling;
+- no network dependency for the optical payload transfer itself.
 
-### 13.3 Performance Optimizations
-- **Adaptive Frame Rate:** Automatic FPS adjustment based on camera performance
-- **Shakycam Detection:** Discard in-between frames during camera movement
-- **Camera Bottleneck Analysis:** Optimize based on device capabilities
+QR transfer should not be described as providing encryption. Integrity verification is not the same as confidentiality.
 
 ---
 
-## 14. Implementation Status
+## 14. Current limitations
 
-### Current Implementation (v2.1)
-- ✅ Animated QR Transfer with Send/Receive interface
-- ✅ Smart compression with entropy analysis
-- ✅ Enhanced FEC with 20% overhead
-- ✅ Camera handling with improved video initialization
-- ✅ SHA-256 integrity verification
-- ✅ Offline functionality
-- ✅ PWA support with Service Worker v1.15.0
-- ✅ PT-BR internationalization
-- ✅ Ecosystem QR Scanner for URLs
-- ✅ WebRTC race condition handling
-- ✅ Legacy NSFWJS removal
+The current implementation has several deliberate limitations:
 
-### Known Limitations
-- Current implementation uses JSON frames (could be optimized to binary)
-- Uses simple XOR parity (true LT codes would be more efficient)
-- Base64 encoding (Base45 would be more efficient)
-- No adaptive frame rate based on camera performance
+- Pairwise XOR parity is less powerful than a true fountain/erasure-code implementation.
+- Parity recovery depends on receiving one member of each XOR pair plus the corresponding parity frame.
+- QR payloads are JSON + Base64, which adds overhead.
+- Camera quality, distance, lighting, focus, QR error-correction level, and frame rate affect throughput and reliability.
+- The Web implementation and the pinned Android implementation currently use different protocol schemas, so cross-platform QR interoperability must not be assumed.
 
 ---
 
-## 15. Testing Recommendations
+## 15. Testing expectations
 
-### 15.1 Automated Tests
-- UTF-8 text handling (including emojis and special characters)
-- Small and large file transfers
-- Binary file integrity (PNG, JPG, ZIP, PDF)
-- Compressed vs uncompressed data
-- Frame loss simulation
-- Duplicate frame handling
-- Out-of-order frame recovery
-- SHA-256 verification
-- Memory usage for large files
+Before documenting a new QR capability as stable, test at least:
 
-### 15.2 Manual Testing Scenarios
-- Chrome → Chrome (desktop to desktop)
-- Chrome → Android (desktop to mobile)
-- Android → Chrome (mobile to desktop)
-- Android → Android (mobile to mobile)
-- Online and offline scenarios
-- Different camera qualities and distances
-- Dark and light environments
+- Web sender → Web receiver;
+- text transfer with UTF-8 and emoji;
+- binary files such as PNG, ZIP, and PDF;
+- duplicate frames;
+- out-of-order frames;
+- recoverable frame loss using XOR parity;
+- corrupted frames rejected by CRC32;
+- final SHA-256 verification;
+- offline transfer after the application is loaded/cached;
+- camera permission denial and cleanup;
+- mobile camera scanning;
+- Web → Android and Android → Web interoperability separately, if the protocol schemas are intentionally aligned in the future.
+
+The current documentation deliberately avoids claiming Android interoperability until the implementations actually use a compatible protocol and that path has been tested.
