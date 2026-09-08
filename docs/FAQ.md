@@ -12,6 +12,14 @@ If you are using a Chromium-based browser (Chrome, Edge, Brave, etc.), you can i
 
 If the install option does not appear, make sure you are using a supported Chromium-based browser and that the current site is loaded over HTTPS.
 
+### What is WebTorrent (Beta)?
+WebTorrent is an additional peer-to-peer transfer mode available in compatible modern browsers. It uses WebRTC-capable peers and WebTorrent trackers to help peers discover each other. Transfer data is exchanged between peers rather than stored by ErikrafT Drop™ as a normal cloud-storage operation.
+
+WebTorrent is currently **Beta**. Browser support, NAT/firewall configuration, network restrictions and peer availability can affect whether a transfer can be established or completed.
+
+### Is WebTorrent the same as local network discovery?
+No. Local discovery helps compatible devices find each other on the same network. WebTorrent uses a magnet-based peer discovery flow and can connect compatible peers beyond the same local network when the browser and network allow it.
+
 ### What about the connection? Is it a P2P-connection directly from device to device or is there any third-party-server?
 ErikrafT Drop™ uses a P2P connection when WebRTC is supported by the browser. A signaling server is used to help peers discover and establish the connection, but it is not used to carry the file data after the WebRTC connection has been established.
 
