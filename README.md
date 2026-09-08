@@ -301,7 +301,7 @@ The purpose of this section is to prevent shared upstream capabilities from bein
 | Animated QR optical file/text transfer | — | — | ✓ |
 | XOR-based QR parity recovery | — | — | ✓ |
 | Offline optical transfer | — | — | ✓ |
-| Android integration | — | ✓ | ✓ |
+| Android integration | — | [✓](https://github.com/fm-sys/pairdrop-android) | [✓](https://github.com/erikraft/Drop-Android) |
 | Discord integration | — | — | ✓ |
 | iOS Share Menu integration | — | ✓ | ✓ |
 | WebTorrent transfer | — | — | Experimental |
