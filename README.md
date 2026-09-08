@@ -7,8 +7,8 @@
 
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
-    Inspired by Apple's AirDrop and Schlagmichdoch's PairDrop.<br>
-    Fork of PairDrop.
+    Inspired by Apple's AirDrop and [Schlagmichdoch's](https://github.com/schlagmichdoch) [PairDrop](https://github.com/schlagmichdoch/pairdrop).<br>
+    Fork of [PairDrop](https://github.com/schlagmichdoch/pairdrop).
   </p>
 
 [![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)&nbsp;
@@ -286,24 +286,28 @@ The purpose of this section is to prevent shared upstream capabilities from bein
 
 ## 📊 Feature Comparison
 
-The following comparison is intentionally conservative. `✓` means the feature is present in the project; `—` means it is not a documented/core feature of that project; `Experimental` means the project contains the feature but it is explicitly beta/experimental.
+> **About Snapdrop's current status:** The original Snapdrop project was acquired by LimeWire. The `SnapDrop/snapdrop` repository remains available as the classic open-source implementation and can still be self-hosted. The repository continues to contain the original WebRTC, WebSocket signaling, and PWA implementation. However, the current public `snapdrop.net` service is no longer equivalent to the classic self-hosted implementation. The comparison below therefore distinguishes the classic open-source repository from the current public service where relevant.
+>
+> The following comparison is intentionally conservative. `✓` means the feature is present in the referenced project or implementation; `—` means it was not identified as a documented/core feature of that project; `✕` means the feature was removed; `✕*` means the feature existed in the original Snapdrop implementation but is no longer provided by the current public Snapdrop/LimeWire service; `✓*` means the feature remains present in the classic open-source repository, but its availability in the current public service may differ; `Experimental` means the feature exists but is explicitly beta/experimental.
 
-| Feature | Snapdrop | PairDrop | ErikrafT Drop™ |
+| Feature | [Snapdrop](https://github.com/SnapDrop/snapdrop) | [PairDrop](https://github.com/schlagmichdoch/PairDrop) | [ErikrafT Drop™](https://github.com/erikraft/Drop) |
 |---|---:|---:|---:|
-| WebRTC transfer | ✓ | ✓ | ✓ |
-| WebSocket signaling/fallback | ✓ | ✓ | ✓ |
-| PWA | ✓ | ✓ | ✓ |
+| WebRTC transfer | ✕* | ✓ | ✓ |
+| WebSocket signaling | ✕* | ✓ | ✓ |
+| PWA | ✓* | ✓ | ✓ |
 | Persistent device pairing | — | ✓ | ✓ |
 | Temporary public rooms | — | ✓ | ✓ |
 | Static QR pairing/scanning | — | ✓ | ✓ |
 | Animated QR optical file/text transfer | — | — | ✓ |
 | XOR-based QR parity recovery | — | — | ✓ |
 | Offline optical transfer | — | — | ✓ |
-| Android integration | — | — | ✓ |
+| Android integration | — | ✓ | ✓ |
 | Discord integration | — | — | ✓ |
 | iOS Share Menu integration | — | ✓ | ✓ |
 | WebTorrent transfer | — | — | Experimental |
 | ErikrafT-specific branding/ecosystem | — | — | ✓ |
+
+> **Snapdrop notation:** `✕*` for WebRTC and WebSocket signaling refers to the current public Snapdrop/LimeWire service, not the classic `SnapDrop/snapdrop` repository. The classic repository still contains the original WebRTC/WebSocket implementation. `✓*` for PWA indicates that the PWA implementation remains present in the classic open-source repository; this does not necessarily represent the behavior or availability of the current public service.
 
 > This table does not claim that every implementation detail is absent from upstream projects. It distinguishes the documented/core capabilities relevant to this repository from the ErikrafT Drop™-specific additions.
 
