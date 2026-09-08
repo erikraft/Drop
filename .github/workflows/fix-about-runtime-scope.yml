@@ -1,0 +1,67 @@
+name: Fix About runtime scope
+
+on:
+  push:
+    branches:
+      - feat/drop-10.1.0-webtorrent-ui-docs
+    paths:
+      - public/scripts/browser-tabs-connector.js
+      - .github/workflows/fix-about-runtime-scope.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: "!contains(github.event.head_commit.message, 'fix: scope About runtime UI to About opening')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/drop-10.1.0-webtorrent-ui-docs
+
+      - name: Scope About UI initialization to #about
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('public/scripts/browser-tabs-connector.js')
+          text = path.read_text(encoding='utf-8')
+
+          old = """    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, { once: true });
+          else apply();
+      }());"""
+
+          new = """    const openAbout = () => {
+          if (window.location.hash !== '#about') return;
+          requestAnimationFrame(() => {
+              if (window.location.hash === '#about') apply();
+          });
+      };
+
+      if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', openAbout, { once: true });
+      } else {
+          openAbout();
+      }
+
+      window.addEventListener('hashchange', openAbout);
+      document.addEventListener('click', event => {
+          const trigger = event.target.closest('a[href="#about"]');
+          if (trigger) setTimeout(openAbout, 0);
+      });
+      }());"""
+
+          if old not in text:
+              raise SystemExit('Expected About initialization block was not found; nothing changed.')
+
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/scripts/browser-tabs-connector.js
+          git commit -m "fix: scope About runtime UI to About opening"
+          git push origin feat/drop-10.1.0-webtorrent-ui-docs
