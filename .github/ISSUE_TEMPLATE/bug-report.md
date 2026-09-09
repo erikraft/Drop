@@ -36,7 +36,7 @@ If applicable, add screenshots to help explain the problem.
 
 **Bug occurs on official ErikrafT Drop™ instance https://drop.erikraft.com/**
 No | Yes
-Version: v1.16.6
+Version: v10.1.1
 
 **Bug occurs on self-hosted ErikrafT Drop™ instance**
 No | Yes
@@ -44,7 +44,7 @@ No | Yes
 **Self-Hosted Setup**
 Proxy: Nginx | Apache2
 Deployment: docker run | docker compose | npm run start:prod
-Version: v1.12.4
+Version: v10.1.1
 
 **Additional context**
 Add any other context about the problem here.
