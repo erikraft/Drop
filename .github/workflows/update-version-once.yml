@@ -1,0 +1,57 @@
+name: Update version references
+
+on:
+  push:
+    branches:
+      - chore/update-version-10.1.1
+
+permissions:
+  contents: write
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update version references
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          files = [
+              Path("public/index.html"),
+              Path(".github/ISSUE_TEMPLATE/bug-report.md"),
+          ]
+
+          replacements = {
+              "1.16.3": "10.1.1",
+              "1.16.6": "10.1.1",
+              "1.12.4": "10.1.1",
+          }
+
+          for path in files:
+              text = path.read_text(encoding="utf-8")
+              original = text
+              for old, new in replacements.items():
+                  text = text.replace(old, new)
+              if text != original:
+                  path.write_text(text, encoding="utf-8")
+                  print(f"Updated {path}")
+              else:
+                  print(f"No changes needed in {path}")
+          PY
+
+      - name: Commit changes and remove temporary workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/update-version-once.yml
+          git add public/index.html .github/ISSUE_TEMPLATE/bug-report.md
+          if git diff --cached --quiet; then
+            echo "No version changes found."
+            exit 0
+          fi
+          git commit -m "chore: update version references to 10.1.1"
+          git push
