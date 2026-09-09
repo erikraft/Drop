@@ -1,4 +1,4 @@
-const cacheVersion = 'v1.16.5';
+const cacheVersion = 'v10.1.2';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 
 // Keep this list limited to resources that are part of the current client shell.
@@ -10,7 +10,6 @@ const relativePathsToCache = [
     'ads.html',
     'styles/styles-main.css',
     'styles/styles-deferred.css',
-    'styles/content-moderation.css',
     'scripts/browser-tabs-connector.js',
     'scripts/localization.js',
     'scripts/main.js',
@@ -19,7 +18,6 @@ const relativePathsToCache = [
     'scripts/ui.js',
     'scripts/ui-main.js',
     'scripts/util.js',
-    'scripts/content-moderation.js',
     'scripts/pairdrop-adapter.js',
     'scripts/erikraft-qr.js',
     'scripts/security-layer.js',
