@@ -1,13 +1,6 @@
 # This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# GitHub recommends pinning actions to a commit SHA.
-# To get a newer version, you will need to update the SHA.
-# You can also reference a tag or branch, but the action may change without warning.
-
-# Create a new zip file from pairdrop-cli whenever a new version tag is pushed
+# They are provided by third-party projects and are governed by their
+# respective terms of service, privacy policies, and support documentation.
 
 name: Zip Release
 
@@ -22,15 +15,20 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
       - name: Archive Release
         uses: thedoctor0/zip-release@b57d897cb5d60cb78b51a507f63fa184cfe35554 # v0.7.6
         with:
           filename: 'erikraftdrop-cli.zip'
           directory: 'erikraftdrop-cli'
           exclusions: '*.git* /*node_modules/* .editorconfig'
+
       - name: Upload Release
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
         with:
           artifacts: "erikraftdrop-cli/erikraftdrop-cli.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          replacesArtifacts: true
