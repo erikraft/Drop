@@ -37,11 +37,22 @@ jobs:
           from pathlib import Path
           path = Path('public/index.html')
           text = path.read_text(encoding='utf-8')
-          old = '<link rel="stylesheet" type="text/css" href="styles/content-moderation.css">\n'
-          text = text.replace(old, '')
+          text = text.replace('<link rel="stylesheet" type="text/css" href="styles/content-moderation.css">\n', '')
           text = text.replace('"softwareVersion": "10.1.1"', '"softwareVersion": "10.1.3"')
           path.write_text(text, encoding='utf-8')
           PY
+
+      - name: Commit generated maintenance changes
+        run: |
+          if git diff --quiet -- package-lock.json public/index.html; then
+            echo 'No generated maintenance changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json public/index.html
+          git commit -m 'chore: regenerate lockfile and finish 10.1.3 metadata cleanup'
+          git push
 
       - name: Validate active release metadata
         run: |
@@ -70,15 +81,3 @@ jobs:
 
       - name: Run web tests
         run: npm test
-
-      - name: Commit generated maintenance changes
-        run: |
-          if git diff --quiet -- package-lock.json public/index.html; then
-            echo 'No generated maintenance changes to commit.'
-            exit 0
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json public/index.html
-          git commit -m 'chore: regenerate lockfile and finish 10.1.3 metadata cleanup'
-          git push
