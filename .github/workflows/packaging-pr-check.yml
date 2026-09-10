@@ -1,0 +1,64 @@
+name: Packaging PR Check
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'electron-builder.yml'
+      - 'flatpak/**'
+      - '.github/workflows/**'
+      - 'public/torrent.*'
+      - 'packaging/**'
+      - 'scripts/**'
+
+permissions:
+  contents: read
+
+jobs:
+  linux-deb:
+    name: Validate Linux .deb
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+          cache: npm
+      - run: npm ci
+      - run: npm run package:linux
+      - run: |
+          test -s dist/desktop/erikraft-drop-linux-amd64.deb
+          dpkg-deb --info dist/desktop/erikraft-drop-linux-amd64.deb >/dev/null
+
+  windows-exe:
+    name: Validate Windows .exe
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+          cache: npm
+      - run: npm ci
+      - run: npm run package:windows
+      - shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Path dist/desktop -Filter *.exe | Select-Object -First 1
+          if (-not $exe -or $exe.Length -le 0) { throw 'Windows installer was not generated.' }
+          Write-Host "Generated: $($exe.FullName)"
+
+  torrent-static-check:
+    name: Validate Torrent surface
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+      - run: |
+          test -s public/torrent.html
+          test -s public/torrent.js
+          grep -q 'webtorrent@3.0.21' public/torrent.js
+          grep -q 'client.seed' public/torrent.js
+          grep -q 'client.add' public/torrent.js
