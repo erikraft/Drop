@@ -41,15 +41,7 @@ jobs:
       - name: Validate Linux package artifact
         run: |
           DEB_FILE="dist/desktop/erikraft-drop-linux-amd64.deb"
-          if [ ! -f "$DEB_FILE" ]; then
-            echo "Error: Debian package file not found at $DEB_FILE"
-            exit 1
-          fi
-          if [ ! -s "$DEB_FILE" ]; then
-            echo "Error: Debian package file $DEB_FILE is empty"
-            exit 1
-          fi
-          echo "Linux package generated successfully:"
+          test -s "$DEB_FILE"
           ls -lh "$DEB_FILE"
 
       - name: Upload Linux artifact
@@ -106,15 +98,7 @@ jobs:
       - name: Validate Flatpak artifact
         run: |
           FLATPAK_FILE="dist/desktop/io.github.erikraft.Drop.flatpak"
-          if [ ! -f "$FLATPAK_FILE" ]; then
-            echo "Error: Flatpak bundle file not found at $FLATPAK_FILE"
-            exit 1
-          fi
-          if [ ! -s "$FLATPAK_FILE" ]; then
-            echo "Error: Flatpak bundle file $FLATPAK_FILE is empty"
-            exit 1
-          fi
-          echo "Flatpak bundle generated successfully:"
+          test -s "$FLATPAK_FILE"
           ls -lh "$FLATPAK_FILE"
 
       - name: Upload Flatpak artifact
@@ -133,83 +117,39 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Create artifacts directory
-        run: |
-          mkdir -p artifacts/linux artifacts/flatpak
-
+        run: mkdir -p artifacts/linux artifacts/flatpak
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         if: ${{ needs.build-linux.result == 'success' }}
         with:
           name: linux-packages
           path: artifacts/linux
-
       - name: Download Flatpak artifact
         uses: actions/download-artifact@v4
         if: ${{ needs.build-flatpak.result == 'success' }}
         with:
           name: flatpak-package
           path: artifacts/flatpak
-
       - name: Process Checksums and Verify Jobs
         run: |
           LINUX_INPUT="${{ inputs.build_linux }}"
           FLATPAK_INPUT="${{ inputs.build_flatpak }}"
           LINUX_RESULT="${{ needs.build-linux.result }}"
           FLATPAK_RESULT="${{ needs.build-flatpak.result }}"
-
-          if [ "$LINUX_INPUT" = "true" ] && [ "$LINUX_RESULT" != "success" ]; then
-            echo "Linux build was requested but failed ($LINUX_RESULT)."
-            LINUX_STATUS="FAILED"
-          elif [ "$LINUX_INPUT" = "true" ]; then
-            LINUX_STATUS="SUCCESS"
-          else
-            LINUX_STATUS="SKIPPED"
-          fi
-
-          if [ "$FLATPAK_INPUT" = "true" ] && [ "$FLATPAK_RESULT" != "success" ]; then
-            echo "Flatpak build was requested but failed ($FLATPAK_RESULT)."
-            FLATPAK_STATUS="FAILED"
-          elif [ "$FLATPAK_INPUT" = "true" ]; then
-            FLATPAK_STATUS="SUCCESS"
-          else
-            FLATPAK_STATUS="SKIPPED"
-          fi
-
+          LINUX_STATUS="SKIPPED"
+          FLATPAK_STATUS="SKIPPED"
+          if [ "$LINUX_INPUT" = "true" ]; then [ "$LINUX_RESULT" = "success" ] && LINUX_STATUS="SUCCESS" || LINUX_STATUS="FAILED"; fi
+          if [ "$FLATPAK_INPUT" = "true" ]; then [ "$FLATPAK_RESULT" = "success" ] && FLATPAK_STATUS="SUCCESS" || FLATPAK_STATUS="FAILED"; fi
           cd artifacts
-          rm -f SHA256SUMS.txt
-
           find . -type f \( -name "*.deb" -o -name "*.flatpak" \) -exec sha256sum {} + | sed 's|^\([a-f0-9]*\)  \./.*/|\1  |' > SHA256SUMS.txt || true
-
-          echo "=== SHA256SUMS.txt ==="
           cat SHA256SUMS.txt
-
-          echo "ErikrafT Drop™ Linux Packaging" >> $GITHUB_STEP_SUMMARY
-          echo "──────────────────────────────" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Linux build:    $LINUX_STATUS" >> $GITHUB_STEP_SUMMARY
-          echo "Flatpak build:  $FLATPAK_STATUS" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Artifacts:" >> $GITHUB_STEP_SUMMARY
-
-          if [ -f "linux/erikraft-drop-linux-amd64.deb" ]; then
-            echo "✓ Linux packages" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [ -f "flatpak/io.github.erikraft.Drop.flatpak" ]; then
-            echo "✓ Flatpak package" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [ -s "SHA256SUMS.txt" ]; then
-            echo "✓ SHA256SUMS.txt" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [ "$LINUX_STATUS" = "FAILED" ] || [ "$FLATPAK_STATUS" = "FAILED" ]; then
-            echo "One or more requested builds failed."
-            exit 1
-          fi
-
+          {
+            echo "ErikrafT Drop™ Linux Packaging"
+            echo "Linux build: $LINUX_STATUS"
+            echo "Flatpak build: $FLATPAK_STATUS"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$LINUX_STATUS" = "FAILED" ] || [ "$FLATPAK_STATUS" = "FAILED" ]; then exit 1; fi
       - name: Upload Checksums artifact
         uses: actions/upload-artifact@v4
         if: ${{ hashFiles('artifacts/SHA256SUMS.txt') != '' }}

@@ -31,6 +31,7 @@ const relativePathsToCache = [
     'scripts/libs/qr-code-styling.js',
     'scripts/qr-helper.js',
     'scripts/libs/zip.min.js',
+    'scripts/webtorrent-transfer.js',
     'sounds/blop.mp3',
     'sounds/blop.ogg',
     'sounds/ads.mp3',
@@ -64,25 +65,37 @@ const relativePathsToCache = [
 
 const relativePathsNotToCache = ['config'];
 const criticalExtensions = new Set(['.html', '.js', '.css', '.json']);
-
 const rootUrl = new URL('./', self.location.href).href;
-
 const isSameOrigin = request => new URL(request.url).origin === self.location.origin;
-
 const isNavigationRequest = request => request.mode === 'navigate' ||
     (request.destination === 'document' && request.method === 'GET');
-
 const isCriticalRequest = request => {
     const url = new URL(request.url);
     return isNavigationRequest(request) || criticalExtensions.has(url.pathname.slice(url.pathname.lastIndexOf('.')));
 };
-
 const doNotCacheRequest = request => {
     const url = new URL(request.url);
     const requestRelativePath = request.url.substring(rootUrl.length);
     if (url.pathname.startsWith('/api/')) return true;
     return relativePathsNotToCache.includes(requestRelativePath);
 };
+
+const createManifestFallback = () => new Response(JSON.stringify({
+    name: 'ErikrafT Drop™',
+    short_name: 'ErikrafT Drop™',
+    version: '10.1.3',
+    icons: [
+        {src: 'images/android-chrome-192x192.png', sizes: '192x192', type: 'image/png'},
+        {src: 'images/android-chrome-512x512.png', sizes: '512x512', type: 'image/png'},
+        {src: 'images/android-chrome-192x192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable'},
+        {src: 'images/android-chrome-512x512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable'}
+    ],
+    background_color: '#efefef',
+    start_url: './',
+    display: 'standalone',
+    theme_color: '#3367d6',
+    launch_handler: {client_mode: 'focus-existing'}
+}), {status: 200, headers: {'Content-Type': 'application/manifest+json'}});
 
 const cacheResponseIfValid = async (request, response) => {
     if (!response || !response.ok || response.type === 'opaque' || doNotCacheRequest(request)) return;
@@ -97,6 +110,13 @@ const cacheResponseIfValid = async (request, response) => {
 const fetchNetwork = async request => {
     const response = await fetch(request, {cache: 'no-store'});
     if (!response.ok) throw new Error(`Network response ${response.status} for ${request.url}`);
+
+    // Vercel preview deployments can redirect protected assets to vercel.com/sso-api.
+    // Do not allow that cross-origin redirect to break the application shell.
+    if (response.redirected && new URL(response.url).origin !== self.location.origin) {
+        throw new Error(`Cross-origin redirect for ${request.url}`);
+    }
+
     await cacheResponseIfValid(request, response);
     return response;
 };
@@ -105,10 +125,20 @@ const fetchCritical = async request => {
     try {
         return await fetchNetwork(request);
     } catch (error) {
-        console.warn('[SW] Network unavailable, trying versioned cache:', request.url, error);
+        const requestUrl = new URL(request.url);
         const cache = await caches.open(cacheTitle);
         const cached = await cache.match(request);
         if (cached) return cached;
+
+        // The app can operate normally without a PWA manifest. Returning the same
+        // local shell manifest also prevents a protected Vercel preview from
+        // turning a harmless SSO redirect into a CORS console failure.
+        if (requestUrl.pathname.endsWith('/manifest.json')) {
+            console.info('[SW] Using local manifest fallback:', error.message);
+            return createManifestFallback();
+        }
+
+        console.warn('[SW] Network unavailable, trying versioned cache:', request.url, error);
         throw error;
     }
 };
@@ -131,8 +161,9 @@ self.addEventListener('install', event => {
         const results = await Promise.allSettled(relativePathsToCache.map(async path => {
             try {
                 const response = await fetch(new URL(path, rootUrl), {cache: 'no-store'});
-                if (!response.ok || response.type === 'opaque') {
-                    throw new Error(`HTTP ${response.status} for ${path}`);
+                if (!response.ok || response.type === 'opaque' ||
+                    (response.redirected && new URL(response.url).origin !== self.location.origin)) {
+                    throw new Error(`HTTP ${response.status} or cross-origin redirect for ${path}`);
                 }
                 await cache.put(new Request(new URL(path, rootUrl).href), response);
                 return path;
