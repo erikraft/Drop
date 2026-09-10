@@ -24,7 +24,8 @@ class ErikrafTdrop {
             'scripts/ui.js',
             'scripts/libs/heic2any.min.js',
             'scripts/libs/no-sleep.min.js',
-            'scripts/libs/zip.min.js'
+            'scripts/libs/zip.min.js',
+            'scripts/webtorrent-transfer.js'
         ];
 
         this.server = null;
