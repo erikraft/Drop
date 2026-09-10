@@ -68,9 +68,5 @@ jobs:
           set -euo pipefail
           ! git ls-tree -r --name-only HEAD | grep -Fxq 'public/torrent.html'
           ! git ls-tree -r --name-only HEAD | grep -Fxq 'public/torrent.js'
-          test -s public/scripts/webtorrent-transfer.js
-          grep -Fq "webtorrent@3.0.21" public/scripts/webtorrent-transfer.js
-          grep -Fq "client.seed" public/scripts/webtorrent-transfer.js
-          grep -Fq "client.add" public/scripts/webtorrent-transfer.js
-          grep -Fq "webtorrent-transfer.js" public/scripts/main.js
-          grep -Fq "manifest fallback" public/service-worker.js
+          node test/webtorrent-transfer.test.js
+          node test/service-worker-cache.test.js

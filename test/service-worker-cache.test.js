@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const publicDir = path.join(root, 'public');
 const serviceWorker = fs.readFileSync(path.join(publicDir, 'service-worker.js'), 'utf8');
+const main = fs.readFileSync(path.join(publicDir, 'scripts', 'main.js'), 'utf8');
 
 const match = serviceWorker.match(/const relativePathsToCache = \[([\s\S]*?)\n\];/);
 assert.ok(match, 'Service Worker cache manifest must be present.');
@@ -31,6 +32,12 @@ for (const required of [
 
 assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.3';/);
 assert.match(serviceWorker, /Promise\.allSettled\(/, 'Service Worker installation must tolerate individual cache failures.');
-assert.match(serviceWorker, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
+assert.match(main, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
+assert.match(serviceWorker, /const createManifestFallback = \(\) => new Response\(/,
+    'Service Worker must provide a valid local manifest when a same-origin manifest cannot be fetched.');
+assert.match(serviceWorker, /'Content-Type': 'application\/manifest\+json'/,
+    'Manifest fallback must retain the manifest MIME type.');
+assert.match(serviceWorker, /requestUrl\.pathname\.endsWith\('\/manifest\.json'\)/,
+    'Manifest fallback must apply only to manifest requests.');
 
 console.log(`Service Worker cache manifest OK: ${paths.length} resources verified.`);
