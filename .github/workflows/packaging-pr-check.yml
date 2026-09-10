@@ -62,6 +62,6 @@ jobs:
           test -s public/scripts/webtorrent-transfer.js
           grep -q "webtorrent@3.0.21" public/scripts/webtorrent-transfer.js
           grep -q "client.seed" public/scripts/webtorrent-transfer.js
-          grep -q "torrentClient.add" public/scripts/webtorrent-transfer.js
+          grep -q "client.add" public/scripts/webtorrent-transfer.js
           grep -q "webtorrent-transfer.js" public/scripts/main.js
           grep -q "manifest fallback" public/service-worker.js
