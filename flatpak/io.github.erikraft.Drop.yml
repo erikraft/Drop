@@ -17,9 +17,9 @@ modules:
   - name: erikraft-drop
     buildsystem: simple
     build-commands:
-      - npm ci
+      - test -x node_modules/.bin/electron-builder
       - npm run validate:linux-icon
-      - npx electron-builder --linux dir --x64 --config electron-builder.yml
+      - node_modules/.bin/electron-builder --linux dir --x64 --publish never --config electron-builder.yml
       - install -Dm755 flatpak/erikraft-drop-flatpak.sh /app/bin/erikraft-drop
       - mkdir -p /app/erikraft-drop
       - cp -a dist/desktop/linux-unpacked/. /app/erikraft-drop/
