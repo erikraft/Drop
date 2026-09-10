@@ -25,12 +25,14 @@ for (const required of [
     'scripts/network.js',
     'scripts/animated-qr-controls.js',
     'scripts/animated-qr-file-size.js',
-    'scripts/animated-qr-screen-awake.js'
+    'scripts/animated-qr-screen-awake.js',
+    'scripts/optical-matrix.js',
+    'scripts/github-folder-zip.js'
 ]) {
     assert.ok(paths.includes(required), `Critical runtime resource is not pre-cached: ${required}`);
 }
 
-assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.3';/);
+assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.4';/);
 assert.match(serviceWorker, /Promise\.allSettled\(/, 'Service Worker installation must tolerate individual cache failures.');
 assert.match(main, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
 assert.match(serviceWorker, /const createManifestFallback = \(\) => new Response\(/,

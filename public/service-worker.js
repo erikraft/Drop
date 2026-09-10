@@ -1,4 +1,4 @@
-const cacheVersion = 'v10.1.3';
+const cacheVersion = 'v10.1.4';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 
 // Keep this list limited to resources that are part of the current client shell.
@@ -20,6 +20,9 @@ const relativePathsToCache = [
     'scripts/util.js',
     'scripts/pairdrop-adapter.js',
     'scripts/erikraft-qr.js',
+    'scripts/optical-matrix.js',
+    'scripts/optical-matrix-ui.js',
+    'scripts/github-folder-zip.js',
     'scripts/security-layer.js',
     'scripts/animated-qr-controls.js',
     'scripts/animated-qr-file-size.js',

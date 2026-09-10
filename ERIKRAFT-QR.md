@@ -1,5 +1,36 @@
 # ERIKRAFT-QR Optical Transfer Specification
 
+## Optical-transfer modes
+
+**QR Animado — Legacy/Compatibility** is the existing `EKQR` protocol
+documented below. It has not been renamed, replaced, or changed by the
+experimental **ErikrafT Optical Matrix** option.
+
+Optical Matrix (`EOM/1`) is a separate, browser-native coloured-symbol matrix.
+Every tile carries six bits: four by one of sixteen polygon symbols and two by
+one of four deliberately high-contrast colours. It includes an integrity
+header and CRC32 and can encode/decode a same-geometry canvas locally. It is
+an experimental single-frame codec, not a transport replacement: it currently
+has no camera/perspective detector, stream framing, Reed-Solomon/interleaving,
+or fountain recovery. Consequently it must not be described as Cimbar or CFC
+compatible. Cimbar's documented 700px+ in-focus, colour-corrected capture
+guidance does not validate this independent implementation.
+
+The UI labels this distinction explicitly so existing QR users keep selecting
+the compatibility protocol. Future camera support must prove real round trips
+before compatibility claims are added.
+
+## GitHub directory ZIP
+
+`ErikrafTGitHubFolderZip` accepts a public URL in the form
+`https://github.com/OWNER/REPOSITORY/tree/REF/path`, recursively lists it via
+the GitHub Contents API, and builds a ZIP in the browser with the already
+bundled zip.js library. No GitHub token is requested, saved, or sent by this
+feature. Private repositories, a 403 rate-limit response, missing refs, and
+empty directories produce explicit errors. A 100 MiB declared-size safety cap
+protects browser and WebView memory; users needing private access should use a
+locally authenticated GitHub client rather than expose a token to this UI.
+
 ERIKRAFT-QR is ErikrafT Drop™'s protocol for **animated QR optical transfer**. It is designed for transferring text and files from a screen to a camera without relying on WebRTC, WebSockets, Tor, or a transfer server during the optical transfer itself.
 
 > **Implementation note:** The current Web implementation uses simple pairwise XOR parity recovery. It does **not** implement a general Fountain Code, Luby Transform, LT Code, or RaptorQ decoder. Do not describe the current FEC as Fountain Coding.
