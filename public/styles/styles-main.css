@@ -394,6 +394,15 @@ x-noscript {
 
 /* Animations */
 
+/* Optical Matrix keeps its recognisable high-contrast palette instead of inheriting the app theme. */
+.optical-matrix-dialog { width: min(640px, calc(100vw - 24px)); border: 0; border-radius: 16px; padding: 20px; color: var(--text-color, #202124); background: var(--paper-color, #fff); box-shadow: 0 12px 48px rgba(0,0,0,.35); }
+.optical-matrix-dialog::backdrop { background: rgba(0,0,0,.55); }
+.optical-matrix-dialog h2 { margin-top: 0; }
+.optical-matrix-dialog h2 small { font-size: .55em; font-weight: normal; }
+.optical-matrix-dialog textarea { box-sizing: border-box; display: block; width: 100%; margin-top: 6px; }
+.optical-matrix-dialog canvas { display: block; width: min(100%, 500px); height: auto; margin: 12px auto; image-rendering: pixelated; }
+.optical-matrix-dialog menu { display: flex; justify-content: flex-end; gap: 8px; padding: 0; margin: 12px 0 0; }
+
 /* Opacity for elements at keyframe 100% is set on element (default 1) */
 @keyframes fade-in {
     0% {
