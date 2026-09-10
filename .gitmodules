@@ -123,3 +123,30 @@
 	path = References/cimbar
 	url = https://github.com/sz3/cimbar.git
 	branch = master
+
+
+# Reference — download-directory.github.io
+# https://github.com/download-directory/download-directory.github.io
+# Referência para download de diretórios de repositórios GitHub.
+[submodule "References/download-directory"]
+	path = References/download-directory
+	url = https://github.com/download-directory/download-directory.github.io.git
+	branch = main
+
+
+# Reference — OnionShare Android
+# https://github.com/onionshare/onionshare-android
+# Referência para transferência/compartilhamento usando serviços Onion no Android.
+[submodule "References/onionshare-android"]
+	path = References/onionshare-android
+	url = https://github.com/onionshare/onionshare-android.git
+	branch = main
+
+
+# Reference — InviZible
+# https://github.com/Gedsh/InviZible
+# Referência para Tor, DNSCrypt e Purple I2P em Android.
+[submodule "References/invizible"]
+	path = References/invizible
+	url = https://github.com/Gedsh/InviZible.git
+	branch = master

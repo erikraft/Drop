@@ -10,7 +10,7 @@ const serviceWorker = fs.readFileSync(path.join(publicDir, 'service-worker.js'),
 const match = serviceWorker.match(/const relativePathsToCache = \[([\s\S]*?)\n\];/);
 assert.ok(match, 'Service Worker cache manifest must be present.');
 
-const paths = [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map(result => result[1]);
+const paths = [...match[1].matchAll(/[\'\"]([^\'\"]+)[\'\"]/g)].map(result => result[1]);
 assert.ok(paths.length > 0, 'Service Worker cache manifest must contain resources.');
 
 for (const resource of paths) {
@@ -29,7 +29,7 @@ for (const required of [
     assert.ok(paths.includes(required), `Critical runtime resource is not pre-cached: ${required}`);
 }
 
-assert.match(serviceWorker, /const cacheVersion = 'v1\.16\.1';/);
+assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.3';/);
 assert.match(serviceWorker, /Promise\.allSettled\(/, 'Service Worker installation must tolerate individual cache failures.');
 assert.match(serviceWorker, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
 
