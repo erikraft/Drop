@@ -1,4 +1,4 @@
-const cacheVersion = 'v10.1.2';
+const cacheVersion = 'v10.1.3';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 
 // Keep this list limited to resources that are part of the current client shell.
@@ -103,8 +103,6 @@ const fetchNetwork = async request => {
 
 const fetchCritical = async request => {
     try {
-        // HTML/CSS/JS/JSON must prefer the network so a new shell cannot be
-        // combined with an old shell merely because an old cache entry exists.
         return await fetchNetwork(request);
     } catch (error) {
         console.warn('[SW] Network unavailable, trying versioned cache:', request.url, error);
@@ -146,8 +144,6 @@ self.addEventListener('install', event => {
 
         const cachedCount = results.filter(result => result.status === 'fulfilled' && result.value).length;
         console.log(`[SW] Pre-cache completed: ${cachedCount}/${relativePathsToCache.length} resources available.`);
-
-        // The SW is an enhancement. Never block activation on a pre-cache miss.
         await self.skipWaiting();
     })());
 });
