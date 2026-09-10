@@ -8,7 +8,7 @@ on:
       - 'electron-builder.yml'
       - 'flatpak/**'
       - '.github/workflows/**'
-      - 'public/torrent.*'
+      - 'public/**'
       - 'packaging/**'
       - 'scripts/**'
 
@@ -49,7 +49,7 @@ jobs:
           Write-Host "Generated: $($exe.FullName)"
 
   torrent-static-check:
-    name: Validate Torrent surface
+    name: Validate embedded Torrent surface
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,8 +57,11 @@ jobs:
         with:
           node-version: 22.23.2
       - run: |
-          test -s public/torrent.html
-          test -s public/torrent.js
-          grep -q 'webtorrent@3.0.21' public/torrent.js
-          grep -q 'client.seed' public/torrent.js
-          grep -q 'client.add' public/torrent.js
+          test ! -e public/torrent.html
+          test ! -e public/torrent.js
+          test -s public/scripts/webtorrent-transfer.js
+          grep -q "webtorrent@3.0.21" public/scripts/webtorrent-transfer.js
+          grep -q "client.seed" public/scripts/webtorrent-transfer.js
+          grep -q "torrentClient.add" public/scripts/webtorrent-transfer.js
+          grep -q "webtorrent-transfer.js" public/scripts/main.js
+          grep -q "manifest fallback" public/service-worker.js
