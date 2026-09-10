@@ -63,9 +63,11 @@ jobs:
         with:
           node-version: 22.23.2
       - name: Validate source tree
+        shell: bash
         run: |
-          test ! -e public/torrent.html
-          test ! -e public/torrent.js
+          set -euo pipefail
+          ! git ls-tree -r --name-only HEAD | grep -Fxq 'public/torrent.html'
+          ! git ls-tree -r --name-only HEAD | grep -Fxq 'public/torrent.js'
           test -s public/scripts/webtorrent-transfer.js
           grep -Fq "webtorrent@3.0.21" public/scripts/webtorrent-transfer.js
           grep -Fq "client.seed" public/scripts/webtorrent-transfer.js
