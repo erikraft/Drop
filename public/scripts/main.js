@@ -9,8 +9,6 @@ class ErikrafTdrop {
             'styles/styles-deferred.css'
         ];
 
-        // IMPORTANT: content-moderation.js is loaded in index.html before main.js
-        // to guarantee ContentModeration is defined before this file executes.
         this.deferredScripts = [
             'scripts/browser-tabs-connector.js',
             'scripts/util.js',
@@ -31,7 +29,6 @@ class ErikrafTdrop {
 
         this.server = null;
         this.peers = null;
-        this.contentModeration = null;
     }
 
     static boot() {
@@ -60,7 +57,6 @@ class ErikrafTdrop {
             await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
         }
 
-        // PWA is progressive enhancement: never wait for or depend on the SW.
         this.registerServiceWorker();
 
         const startupSteps = [
@@ -79,8 +75,6 @@ class ErikrafTdrop {
             }
         }
 
-        // If an optional startup operation failed before the normal fade-in,
-        // explicitly reveal the base shell instead of leaving a white/empty UI.
         this.revealBaseUI();
 
         try {
@@ -168,13 +162,6 @@ class ErikrafTdrop {
                 console.error(`[App] Failed to initialize ${key}.`, error);
             }
         });
-
-        try {
-            this.contentModeration = await this.createContentModeration();
-        } catch (error) {
-            this.contentModeration = null;
-            console.error('[Moderation] Initialization failed; continuing without moderation.', error);
-        }
     }
 
     bindEvents() {
@@ -203,27 +190,6 @@ class ErikrafTdrop {
         console.log('[App] Peer discovery initialized.');
     }
 
-    async createContentModeration() {
-        if (typeof window.ContentModeration !== 'function') {
-            console.warn('[Moderation] ContentModeration is unavailable. Moderation features disabled.');
-            return null;
-        }
-
-        const moderation = new window.ContentModeration();
-        if (moderation.modelLoading) {
-            console.log('[Moderation] Model loading started in background.');
-        }
-
-        return moderation;
-    }
-
-    getContentModeration() {
-        if (!this.contentModeration) {
-            console.warn('[Moderation] Requested before initialization or unavailable.');
-        }
-        return this.contentModeration;
-    }
-
     registerServiceWorker() {
         if (!('serviceWorker' in navigator)) {
             console.info('[PWA] Service Worker API unavailable; continuing without offline enhancement.');
@@ -241,7 +207,6 @@ class ErikrafTdrop {
                 });
             })
             .catch(error => {
-                // SW failure must never block the application shell.
                 console.warn('[PWA] Service Worker registration failed; using network mode:', error);
                 return null;
             });
@@ -407,93 +372,8 @@ class ErikrafTdrop {
     }
 }
 
-async function handleReceivedFile(file) {
-    const app = window.erikrafTdrop;
-    const moderation = app?.getContentModeration?.();
-
-    if (!moderation) {
-        return file;
-    }
-
-    if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
-        const nsfwResult = await moderation.checkNSFW(file);
-        if (nsfwResult?.isNSFW) {
-            const shouldView = await moderation.showWarningDialog(file, 'explicit');
-            if (!shouldView) return null;
-        }
-    }
-
-    const spamCheck = moderation.isSpam(file.name);
-    const hasOffensiveWords = moderation.hasBlockedWordsWithSubstitutions(file.name);
-
-    if (spamCheck.isSpam || hasOffensiveWords) {
-        const shouldView = await moderation.showWarningDialog(file, spamCheck.contentType || 'spam');
-        if (!shouldView) return null;
-    }
-
-    if (file.type === 'text/plain') {
-        const text = await file.text();
-        const urls = text.match(/https?:\/\/[^\s]+/g) || [];
-
-        for (const url of urls) {
-            const isSuspicious = await moderation.checkUrl(url);
-            if (isSuspicious) {
-                const shouldView = await moderation.showWarningDialog(file, 'scam');
-                if (!shouldView) return null;
-            }
-        }
-    }
-
+function handleReceivedFile(file) {
     return file;
-}
-
-function interceptWebRTC() {
-    const originalPeerConnection = window.RTCPeerConnection;
-    if (!originalPeerConnection) {
-        console.warn('[WebRTC] RTCPeerConnection is unavailable.');
-        return;
-    }
-
-    window.RTCPeerConnection = function (...args) {
-        const pc = new originalPeerConnection(...args);
-
-        if (typeof pc.send !== 'function') {
-            return pc;
-        }
-
-        const originalSend = pc.send;
-        pc.send = async function (data) {
-            if (!(data instanceof Blob || data instanceof File)) {
-                return originalSend.call(this, data);
-            }
-
-            const moderation = window.erikrafTdrop?.getContentModeration?.();
-            if (!moderation) {
-                return originalSend.call(this, data);
-            }
-
-            const result = await moderation.checkNSFW(data);
-            if (result?.isNSFW) {
-                if (localStorage.getItem('blockExplicitContent') === 'true') {
-                    throw new Error('Content blocked by user settings');
-                }
-
-                const userResponse = await moderation.showFrameWarningDialog(
-                    data,
-                    result.blurredMedia,
-                    result.contentType
-                );
-
-                if (!userResponse) {
-                    throw new Error('Sending canceled by user');
-                }
-            }
-
-            return originalSend.call(this, data);
-        };
-
-        return pc;
-    };
 }
 
 function handleReceivedMessage(message) {
@@ -504,17 +384,11 @@ function handleReceivedMessage(message) {
 }
 
 function handlePushNotification(notification) {
-    const moderation = window.erikrafTdrop?.getContentModeration?.();
-    if (!moderation || typeof moderation.processPushNotification !== 'function') {
-        return notification;
-    }
-
-    return moderation.processPushNotification(notification);
+    return notification;
 }
 
 window.handleReceivedFile = handleReceivedFile;
 window.handleReceivedMessage = handleReceivedMessage;
 window.handlePushNotification = handlePushNotification;
 
-interceptWebRTC();
 ErikrafTdrop.boot();
