@@ -1,0 +1,74 @@
+name: Packaging PR Check
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'electron-builder.yml'
+      - 'flatpak/**'
+      - '.github/workflows/**'
+      - 'public/**'
+      - 'packaging/**'
+      - 'scripts/**'
+
+permissions:
+  contents: read
+
+jobs:
+  linux-deb:
+    name: Validate Linux .deb
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+          cache: npm
+      - run: npm ci
+      - run: npm run package:linux
+      - run: |
+          test -s dist/desktop/erikraft-drop-linux-amd64.deb
+          dpkg-deb --info dist/desktop/erikraft-drop-linux-amd64.deb >/dev/null
+
+  windows-exe:
+    name: Validate Windows .exe
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+          cache: npm
+      - run: npm ci
+      - run: npm run package:windows
+      - shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Path dist/desktop -Filter *.exe | Select-Object -First 1
+          if (-not $exe -or $exe.Length -le 0) { throw 'Windows installer was not generated.' }
+          Write-Host "Generated: $($exe.FullName)"
+
+  torrent-static-check:
+    name: Validate embedded Torrent surface
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+      - name: Validate source tree
+        run: |
+          test ! -e public/torrent.html
+          test ! -e public/torrent.js
+          test -s public/scripts/webtorrent-transfer.js
+          grep -Fq "webtorrent@3.0.21" public/scripts/webtorrent-transfer.js
+          grep -Fq "client.seed" public/scripts/webtorrent-transfer.js
+          grep -Fq "client.add" public/scripts/webtorrent-transfer.js
+          grep -Fq "webtorrent-transfer.js" public/scripts/main.js
+          grep -Fq "manifest fallback" public/service-worker.js
