@@ -125,13 +125,19 @@ function addTorrent(source) {
 }
 
 downloadMagnet.addEventListener('click', () => addTorrent(magnet.value.trim()))
-downloadFile.addEventListener('click', () => {
+downloadFile.addEventListener('click', async () => {
   const file = torrentFile.files[0]
   if (!file) {
     setStatus('Select a .torrent file first.')
     return
   }
-  addTorrent(file)
+  try {
+    setStatus('Reading .torrent metadata…')
+    const bytes = new Uint8Array(await file.arrayBuffer())
+    addTorrent(bytes)
+  } catch (error) {
+    setStatus(`Unable to read .torrent file: ${error.message}`)
+  }
 })
 
 window.addEventListener('beforeunload', () => {
