@@ -7,8 +7,8 @@
 
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
-    Inspired by Apple's AirDrop and [Schlagmichdoch's PairDrop](https://github.com/schlagmichdoch/PairDrop).<br>
-    Fork of [PairDrop](https://github.com/schlagmichdoch/PairDrop).
+    Inspired by Apple's AirDrop and <a href="https://github.com/schlagmichdoch/PairDrop">Schlagmichdoch's PairDrop</a>.<br>
+    Fork of <a href="https://github.com/schlagmichdoch/PairDrop">PairDrop</a>.
   </p>
 
 [![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)&nbsp;
