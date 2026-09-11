@@ -7,8 +7,8 @@
 
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
-    Inspired by Apple's AirDrop and [Schlagmichdoch's](https://github.com/schlagmichdoch) [PairDrop](https://github.com/schlagmichdoch/pairdrop).<br>
-    Fork of [PairDrop](https://github.com/schlagmichdoch/pairdrop).
+    Inspired by Apple's AirDrop and [Schlagmichdoch's PairDrop](https://github.com/schlagmichdoch/PairDrop).<br>
+    Fork of [PairDrop](https://github.com/schlagmichdoch/PairDrop).
   </p>
 
 [![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)&nbsp;
@@ -161,8 +161,8 @@ Connect to others in complex network situations, or over the Internet.
 ### 💬 Send Files or Text Directly From Share Menu, Context Menu or CLI
 * [Send files directly from context menu on Ubuntu (using Nautilus)](docs/how-to.md#send-multiple-files-and-directories-directly-from-context-menu-on-ubuntu-using-nautilus)
 * [Send files directly from the context menu on Windows](docs/how-to.md#send-files-directly-from-the-context-menu-on-windows)
-* [Send directly from the "Share" menu on iOS](docs/how-to.md#send-directly-from-share-menu-on-ios)
-* [Send directly from the "Share" menu on Android](docs/how-to.md#send-directly-from-share-menu-on-android)
+* [Send directly from the "Share" menu on iOS](docs/how-to.md#send-directly-from-the-share-menu-on-ios)
+* [Send directly from the "Share" menu on Android](docs/how-to.md#send-directly-from-the-share-menu-on-android)
 * [Send directly via the command-line interface](docs/how-to.md#send-directly-via-command-line-interface)
 
 ### 🌱 ErikrafT Drop™ Features & Improvements
