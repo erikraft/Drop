@@ -36,6 +36,14 @@ WebTorrent availability is **not** a prerequisite for normal ErikrafT Drop™ tr
 
 WebTorrent is a peer-to-peer transfer mechanism. ErikrafT Drop™ does **not** upload the transferred file to a central file-storage database for this mode.
 
+### Dynamically loaded WebTorrent code and trust boundary
+
+The WebTorrent browser client is currently loaded **dynamically from `esm.sh`** when the WebTorrent feature is used. This external module is therefore part of the WebTorrent mode's trust boundary and is not code bundled and integrity-verified by the ErikrafT Drop™ repository itself.
+
+The dynamically loaded WebTorrent code runs in the same browser context as the WebTorrent UI. Because the sender's selected files are passed to the WebTorrent client before they are seeded, code supplied by that dependency can potentially read, process, or exfiltrate the selected file contents. Users should therefore trust the external module source and the specific version used by this feature before using WebTorrent with sensitive files.
+
+This trust boundary is limited to the optional WebTorrent path. The normal ErikrafT Drop™ WebRTC/WebSocket transfer path does not dynamically load the WebTorrent client. If the dependency is later replaced with a repository-controlled bundle, it should be pinned and integrity-verified before being treated as an equivalent trust model.
+
 WebTorrent trackers participate in peer discovery. The magnet URI and tracker/peer-discovery traffic are therefore part of establishing the connection. Users should understand and trust the tracker infrastructure used by their client/network.
 
 The two transfer paths are separate:
