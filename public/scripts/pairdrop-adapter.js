@@ -97,10 +97,10 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = { PairDropAdapter };
 }
 
-/* Android WebView compatibility: keep the legacy PairDrop global and allow
- * core peer discovery to start as soon as the WebRTC/WebSocket classes load.
- * Drop-Android injects its compatibility layer after the document finishes
- * loading, while Drop loads these core classes as deferred assets. */
+/* Android WebView compatibility: expose the legacy PairDrop global without
+ * starting networking from this adapter. The application starts peer discovery
+ * only after the core UI has subscribed to the WebSocket events, matching the
+ * upstream PairDrop startup contract and avoiding a startup event race. */
 if (typeof window !== 'undefined') {
     try {
         if (!Object.prototype.hasOwnProperty.call(window, 'pairDrop')) {
@@ -115,29 +115,4 @@ if (typeof window !== 'undefined') {
     } catch (e) {
         console.warn('[Android WebView] Could not install pairDrop compatibility alias.', e);
     }
-
-    const startCoreWhenReady = () => {
-        const app = window.erikrafTdrop;
-        if (!app || typeof app.startPeerDiscovery !== 'function') return false;
-        if (typeof ServerConnection !== 'function' || typeof PeersManager !== 'function') return false;
-
-        try {
-            const result = app.startPeerDiscovery();
-            if (result && typeof result.catch === 'function') {
-                result.catch(error => console.warn('[Android WebView] Core peer discovery startup failed.', error));
-            }
-            return true;
-        } catch (e) {
-            console.warn('[Android WebView] Core peer discovery startup failed.', e);
-            return false;
-        }
-    };
-
-    const compatibilityTimer = window.setInterval(() => {
-        if (startCoreWhenReady()) {
-            window.clearInterval(compatibilityTimer);
-        }
-    }, 25);
-
-    window.setTimeout(() => window.clearInterval(compatibilityTimer), 30000);
 }
