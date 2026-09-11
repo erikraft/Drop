@@ -1,32 +1,64 @@
 # WebTorrent (Beta)
 
-ErikrafT Drop™ provides an optional WebTorrent transfer mode for compatible modern browsers.
+ErikrafT Drop™ includes an optional **WebTorrent transfer mode (Beta)** for compatible modern browsers. It is an additional transfer path and does not replace the normal PairDrop-derived WebRTC/WebSocket transfer architecture.
 
 ## How it works
 
-- The sender selects a file and creates a WebTorrent transfer.
-- ErikrafT Drop™ generates a **magnet URI** for the transfer.
-- The magnet URI can be shared with the receiving device.
-- Compatible peers connect using WebRTC.
-- WebTorrent trackers are used for peer discovery.
-- File data is transferred between peers instead of being stored as a normal cloud upload.
+1. The sender selects a file in the WebTorrent panel.
+2. ErikrafT Drop™ loads the WebTorrent browser client **on demand**.
+3. The current browser client is WebTorrent `3.0.21`, loaded dynamically from `esm.sh` when the feature is used.
+4. The selected file is published as a WebTorrent torrent and a **magnet URI** is generated.
+5. The magnet URI can be copied or shared with the receiving device.
+6. The receiver adds the magnet URI and discovers the torrent through the configured WebSocket trackers.
+7. File pieces are transferred directly between compatible peers using WebRTC.
+
+The configured WebSocket trackers are:
+
+- `wss://tracker.openwebtorrent.com`
+- `wss://tracker.fastcast.nz`
+
+The WebTorrent client is not loaded during normal ErikrafT Drop™ startup. This keeps the optional beta feature separate from the standard P2P/WebRTC/WebSocket initialization path.
 
 ## Beta limitations
 
-WebTorrent support is experimental. Transfers can be affected by:
+WebTorrent support is experimental. A transfer can fail or remain waiting for peers because of:
 
 - Browser WebRTC/WebTorrent compatibility.
-- NAT and firewall restrictions.
-- Network policies that restrict WebRTC traffic.
-- Tracker availability.
-- Whether compatible peers are online and reachable.
+- NAT, firewall, or restrictive network policies.
+- Tracker availability or tracker connection failures.
+- No compatible peer being online and reachable.
+- Browser/WebView restrictions affecting dynamic JavaScript module loading, WebRTC, networking, or generated downloads.
+- Large-file memory or storage constraints in the browser or embedded WebView.
 
-## Privacy
+WebTorrent availability is **not** a prerequisite for normal ErikrafT Drop™ transfers.
 
-The WebTorrent mode is designed for peer-to-peer transfer. ErikrafT Drop™ does not use a central file-storage database for these transfers.
+## Privacy and architecture
 
-Tracker services can participate in peer discovery. Users should use trusted peers and understand that tracker infrastructure is part of the connection-establishment process.
+WebTorrent is a peer-to-peer transfer mechanism. ErikrafT Drop™ does **not** upload the transferred file to a central file-storage database for this mode.
+
+### Dynamically loaded WebTorrent code and trust boundary
+
+The WebTorrent browser client is currently loaded **dynamically from `esm.sh`** when the WebTorrent feature is used. This external module is therefore part of the WebTorrent mode's trust boundary and is not code bundled and integrity-verified by the ErikrafT Drop™ repository itself.
+
+The dynamically loaded WebTorrent code runs in the same browser context as the WebTorrent UI. Because the sender's selected files are passed to the WebTorrent client before they are seeded, code supplied by that dependency can potentially read, process, or exfiltrate the selected file contents. Users should therefore trust the external module source and the specific version used by this feature before using WebTorrent with sensitive files.
+
+This trust boundary is limited to the optional WebTorrent path. The normal ErikrafT Drop™ WebRTC/WebSocket transfer path does not dynamically load the WebTorrent client. If the dependency is later replaced with a repository-controlled bundle, it should be pinned and integrity-verified before being treated as an equivalent trust model.
+
+WebTorrent trackers participate in peer discovery. The magnet URI and tracker/peer-discovery traffic are therefore part of establishing the connection. Users should understand and trust the tracker infrastructure used by their client/network.
+
+The two transfer paths are separate:
+
+- **Normal transfer:** PairDrop-derived signaling over WebSocket/WebSocket fallback establishes WebRTC peers; file data then travels over the WebRTC connection, directly or through the configured TURN infrastructure when required.
+- **WebTorrent Beta:** magnet-based torrent discovery uses the configured WebTorrent trackers, with file pieces transferred between WebRTC peers.
+
+## Android WebView compatibility
+
+The Android application may use WebTorrent when its Advanced WebView provides the required WebRTC, JavaScript module, network, and download capabilities. ErikrafT Drop™'s Android WebView integration can route generated `blob:`/`data:` downloads through the native bridge when necessary.
+
+WebTorrent is **not** required for Android-to-Web transfers or for the normal WebRTC/WebSocket transfer flow. If WebTorrent cannot load in a particular WebView, the standard ErikrafT Drop™ transfer path should remain available.
 
 ## Relationship with local discovery
 
-WebTorrent is different from the normal local-network discovery experience. Local discovery helps compatible devices find each other on the same network, while WebTorrent uses magnet-based peer discovery and can connect compatible peers beyond the local network when browser and network conditions permit.
+WebTorrent is different from the normal local-network discovery experience. Local discovery, pairing, and public-room features use the PairDrop-derived signaling architecture, while WebTorrent uses magnet-based peer discovery through its trackers.
+
+WebTorrent should therefore be considered an optional experimental transfer mode, not a replacement for ErikrafT Drop™'s standard P2P transfer architecture.

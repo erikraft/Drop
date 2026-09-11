@@ -7,8 +7,8 @@
 
   <p>
     Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
-    Inspired by Apple's AirDrop and [Schlagmichdoch's](https://github.com/schlagmichdoch) [PairDrop](https://github.com/schlagmichdoch/pairdrop).<br>
-    Fork of [PairDrop](https://github.com/schlagmichdoch/pairdrop).
+    Inspired by Apple's AirDrop and [Schlagmichdoch's PairDrop](https://github.com/schlagmichdoch/PairDrop).<br>
+    Fork of [PairDrop](https://github.com/schlagmichdoch/PairDrop).
   </p>
 
 [![Documentation](https://custom-icon-badges.demolab.com/badge/Documentation-4287f5?style=for-the-badge&logo=erikraft-drop&logoColor=FFFFFF)](https://docsdrop.erikraft.com/)&nbsp;
@@ -160,9 +160,9 @@ Connect to others in complex network situations, or over the Internet.
 
 ### 💬 Send Files or Text Directly From Share Menu, Context Menu or CLI
 * [Send files directly from context menu on Ubuntu (using Nautilus)](docs/how-to.md#send-multiple-files-and-directories-directly-from-context-menu-on-ubuntu-using-nautilus)
-* [Send files directly from the context menu on Windows](docs/how-to.md#send-files-directly-from-context-menu-on-windows)
-* [Send directly from the "Share" menu on iOS](docs/how-to.md#send-directly-from-share-menu-on-ios)
-* [Send directly from the "Share" menu on Android](docs/how-to.md#send-directly-from-share-menu-on-android)
+* [Send files directly from the context menu on Windows](docs/how-to.md#send-multiple-files-and-directories-directly-from-context-menu-on-windows)
+* [Send directly from the "Share" menu on iOS](docs/how-to.md#send-directly-from-the-share-menu-on-ios)
+* [Send directly from the "Share" menu on Android](docs/how-to.md#send-directly-from-the-share-menu-on-android)
 * [Send directly via the command-line interface](docs/how-to.md#send-directly-via-command-line-interface)
 
 ### 🌱 ErikrafT Drop™ Features & Improvements
@@ -241,32 +241,6 @@ These are ecosystem integrations, not claims that the underlying PairDrop transf
 The repository also contains an explicitly documented **WebTorrent transfer mode**. It is experimental/beta and uses magnet-based peer discovery and WebRTC between compatible peers. It should therefore be described as a beta transfer option rather than as the normal ErikrafT Drop™ transfer mechanism.
 
 See [`docs/features/webtorrent-beta.md`](docs/features/webtorrent-beta.md).
-
-## 🇧🇷 O que diferencia o ErikrafT Drop™ do PairDrop?
-
-Esta seção resume as diferenças verificáveis no repositório atual. Recursos compartilhados com o PairDrop não são tratados como diferenciais exclusivos.
-
-### 📡 Transferência Óptica por QR Animado
-
-O ErikrafT Drop™ possui um sistema implementado de transferência por QR Codes animados. Arquivos ou textos são divididos em quadros QR e transmitidos visualmente entre tela e câmera.
-
-A implementação atual usa o protocolo `EKQR`, CRC32 por quadro, SHA-256 para verificação final e **recuperação por paridade baseada em XOR**. Ela não deve ser chamada de Fountain Coding/Luby Transform sem uma implementação real desses algoritmos.
-
-### 📷 Leitor de QR Code
-
-O projeto possui um leitor de QR Code separado da transferência óptica. O leitor pode processar QR Codes estáticos e URLs do ecossistema ErikrafT, enquanto o modo de QR animado trata uma sequência de quadros que representa uma transferência.
-
-### 📴 Transferência Óptica Offline
-
-Depois que a aplicação necessária estiver carregada, o modo de QR animado foi implementado para funcionar sem WebRTC, WebSocket ou conexão de rede durante a transferência óptica. Isso é diferente de afirmar que todo o ErikrafT Drop™ funciona offline.
-
-### 🌐 Ecossistema ErikrafT
-
-O repositório adiciona integrações próprias, incluindo Discord, Shortcut de compartilhamento do iOS, extensões, cliente CLI, aplicativo Android e identidade visual/branding próprios.
-
-### 🧪 WebTorrent em Beta
-
-Existe também um modo WebTorrent documentado como **Beta**. Ele é experimental e não deve ser confundido com o modo normal de transferência do ErikrafT Drop™.
 
 ## 🔗 Shared and Inherited Features
 
