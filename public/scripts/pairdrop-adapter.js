@@ -116,3 +116,43 @@ if (typeof window !== 'undefined') {
         console.warn('[Android WebView] Could not install pairDrop compatibility alias.', e);
     }
 }
+
+/*
+ * Startup recovery: keep the last server-assigned display name available even
+ * if a WebView restores the page from a cached shell or another startup hook
+ * consumes the event before FooterUI is fully hydrated. This does not create
+ * networking and does not replace the normal FooterUI listener.
+ */
+if (typeof window !== 'undefined') {
+    try {
+        const applyDisplayName = displayName => {
+            if (!displayName || typeof displayName !== 'string') return;
+            window.erikrafTDisplayName = displayName;
+
+            const displayNameNode = document.getElementById('display-name');
+            if (displayNameNode && !displayNameNode.textContent.trim()) {
+                displayNameNode.setAttribute('placeholder', displayName);
+            }
+        };
+
+        if (typeof Events !== 'undefined' && typeof Events.on === 'function') {
+            Events.on('display-name', event => {
+                applyDisplayName(event?.detail?.displayName);
+            });
+        }
+
+        const restoreDisplayName = () => {
+            if (window.erikrafTDisplayName) {
+                applyDisplayName(window.erikrafTDisplayName);
+            }
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', restoreDisplayName, { once: true });
+        } else {
+            restoreDisplayName();
+        }
+    } catch (e) {
+        console.warn('[Android WebView] Could not install display-name startup recovery.', e);
+    }
+}
