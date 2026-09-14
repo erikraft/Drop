@@ -15,6 +15,10 @@ on:
 permissions:
   contents: read
 
+env:
+  ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+  ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+
 jobs:
   linux-deb:
     name: Validate Linux .deb
@@ -27,7 +31,29 @@ jobs:
         with:
           node-version: 22.23.2
           cache: npm
-      - run: npm ci
+      - name: Cache Electron downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/electron
+            .cache/electron-builder
+          key: ${{ runner.os }}-electron-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            if npm ci; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "npm ci failed (attempt $attempt/3); retrying after a short delay..."
+              sleep $((attempt * 10))
+            fi
+          done
+          exit 1
       - run: npm run package:linux
       - run: |
           test -s dist/desktop/erikraft-drop-linux-amd64.deb
@@ -44,7 +70,28 @@ jobs:
         with:
           node-version: 22.23.2
           cache: npm
-      - run: npm ci
+      - name: Cache Electron downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/electron
+            .cache/electron-builder
+          key: ${{ runner.os }}-electron-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          for ($attempt = 1; $attempt -le 3; $attempt++) {
+            npm ci
+            if ($LASTEXITCODE -eq 0) { exit 0 }
+            if ($attempt -lt 3) {
+              Write-Host "npm ci failed (attempt $attempt/3); retrying after a short delay..."
+              Start-Sleep -Seconds ($attempt * 10)
+            }
+          }
+          exit 1
       - run: npm run package:windows
       - shell: pwsh
         run: |
