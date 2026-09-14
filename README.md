@@ -327,7 +327,7 @@ The `LICENSE` file and third-party license files remain part of the repository a
 <a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb" target="_blank">
   <img alt="Download for Linux (.deb)" style="height: 80px;" src="./public/images/badges/BadgeLinux.png">
 </a>
-<a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.3-win-x64.exe" target="_blank">
+<a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.4-win-x64.exe" target="_blank">
   <img alt="Download for Windows (.exe)" style="height: 80px;" src="./public/images/badges/winbadge.png">
 </a>
   <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
