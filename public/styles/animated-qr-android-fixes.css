@@ -1,22 +1,25 @@
-/* Animated QR dialogs: keep titles, file information, QR canvas, settings and actions visually separated. */
+/* Animated QR dialogs: keep titles, file information, QR canvas, cards and actions visually separated. */
 
 #animated-qr-main-dialog x-paper,
 #animated-qr-send-dialog x-paper,
 #animated-qr-receive-dialog x-paper {
+    width: min(450px, calc(100vw - 20px));
+    max-width: 450px;
+    max-height: calc(100dvh - 28px);
     margin: 14px auto !important;
-    max-width: min(450px, calc(100vw - 20px));
     box-sizing: border-box;
+    overflow: hidden;
 }
 
-/* Only title rows receive spacing. Empty .row.center placeholders stay untouched. */
+/* Only real title rows receive spacing. Empty .row.center placeholders stay untouched. */
 #animated-qr-main-dialog x-paper > .row.center:has(.dialog-title),
 #animated-qr-send-dialog x-paper > .row.center:has(.dialog-title),
 #animated-qr-receive-dialog x-paper > .row.center:has(.dialog-title) {
     flex: 0 0 auto;
-    margin: 0 0 16px !important;
+    margin: 0 0 14px !important;
     padding: 0 14px;
-    box-sizing: border-box;
     min-height: 0;
+    box-sizing: border-box;
 }
 
 #animated-qr-main-dialog .dialog-title,
@@ -25,21 +28,37 @@
     display: block;
     width: 100%;
     margin: 0 !important;
-    padding: 14px 0;
+    padding: 12px 0;
     box-sizing: border-box;
+    color: var(--primary-color);
     line-height: 1.3;
     text-align: center;
     overflow-wrap: anywhere;
     word-break: break-word;
 }
 
+/* Keep dialog content inside the available paper height. */
+#animated-qr-main-dialog .erikraft-qr-paper > .column,
+#animated-qr-receive-dialog .erikraft-qr-paper > .column,
+#animated-qr-send-dialog .erikraft-qr-paper > .column {
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+#animated-qr-main-dialog .erikraft-qr-paper > .column,
+#animated-qr-receive-dialog .erikraft-qr-paper > .column {
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    padding: 0 14px 14px;
+}
+
 #animated-qr-send-dialog .erikraft-qr-paper {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    max-height: calc(100dvh - 28px);
-    overflow: hidden;
-    box-sizing: border-box;
 }
 
 #animated-qr-send-dialog #qr-send-active-view,
@@ -52,23 +71,26 @@
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     box-sizing: border-box;
-    padding-top: 2px;
+    padding: 2px 14px 14px;
 }
 
+/* File information must stay above the QR canvas instead of being covered by the title. */
 #animated-qr-send-dialog #qr-send-file-info {
     position: relative;
     z-index: 2;
     display: block;
     width: 100%;
     box-sizing: border-box;
-    margin: 10px 0 16px !important;
-    padding: 0 10px;
+    margin: 8px 0 16px !important;
+    padding: 0 8px;
+    color: var(--primary-color);
     line-height: 1.4;
     overflow-wrap: anywhere;
     word-break: break-word;
     flex: 0 0 auto;
 }
 
+/* QR canvas gets its own breathing room and never exceeds the dialog width. */
 #animated-qr-send-dialog #qr-send-canvas-container {
     position: relative;
     z-index: 1;
@@ -77,9 +99,10 @@
     justify-content: center;
     width: 100%;
     max-width: 100%;
+    min-height: 0;
     box-sizing: border-box;
     margin: 0 auto 20px !important;
-    padding: 6px;
+    padding: 8px;
     flex: 0 0 auto;
     overflow: hidden;
 }
@@ -87,13 +110,15 @@
 #animated-qr-send-dialog #qr-send-canvas-container canvas,
 #animated-qr-send-dialog #qr-send-canvas-container svg,
 #animated-qr-send-dialog #qr-send-canvas-container img {
+    display: block;
     max-width: 100%;
     height: auto;
     box-sizing: border-box;
 }
 
+/* Send settings/actions are separated from the QR canvas. */
 #animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 {
-    margin-top: 20px !important;
+    margin-top: 18px !important;
     padding-top: 4px;
     gap: 12px !important;
 }
@@ -109,57 +134,151 @@
 
 #animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 select {
     min-height: 40px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 #animated-qr-send-dialog #qr-send-close-btn {
-    margin-top: 6px !important;
-    margin-bottom: 12px !important;
+    margin-top: 8px !important;
+    margin-bottom: 10px !important;
+}
+
+/* Compose cards: spacing, readable surfaces and automatic light/dark theme colors. */
+#animated-qr-send-dialog .erikraft-qr-paper .column.fw.gap-4 {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    gap: 14px !important;
+}
+
+#animated-qr-send-dialog .erikraft-qr-card-send,
+#animated-qr-send-dialog .erikraft-qr-card-receive {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 16px;
+    gap: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    background-color: var(--paper-color, rgb(var(--bg-color)));
+    color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+#animated-qr-send-dialog .erikraft-qr-card-send .font-body2,
+#animated-qr-send-dialog .erikraft-qr-card-receive .font-body2 {
+    max-width: 42em;
+    margin-bottom: 4px !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+#animated-qr-send-dialog .erikraft-qr-card-send .row,
+#animated-qr-send-dialog .erikraft-qr-card-receive .row {
+    width: 100%;
+    gap: 10px !important;
+    margin: 0 !important;
+}
+
+#animated-qr-send-dialog .erikraft-qr-card-send .btn,
+#animated-qr-send-dialog .erikraft-qr-card-receive .btn {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Compose action row follows the current theme instead of forcing a dark surface. */
+#animated-qr-send-dialog #qr-send-compose-buttons {
+    width: 100%;
+    box-sizing: border-box;
+    gap: 10px !important;
+    margin: 16px 0 4px !important;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    background-color: var(--paper-color, rgb(var(--bg-color)));
+}
+
+#animated-qr-send-dialog #qr-send-compose-buttons .btn {
+    min-height: 40px;
+    box-sizing: border-box;
+}
+
+#animated-qr-send-dialog #qr-send-compose-buttons .btn-grey {
+    background-color: rgb(var(--bg-color));
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
 }
 
 @media (max-width: 600px) {
     #animated-qr-main-dialog x-paper,
     #animated-qr-send-dialog x-paper,
     #animated-qr-receive-dialog x-paper {
-        margin: 8px auto !important;
+        width: calc(100vw - 12px);
         max-width: calc(100vw - 12px);
+        max-height: calc(100dvh - 16px);
+        margin: 8px auto !important;
     }
 
     #animated-qr-main-dialog x-paper > .row.center:has(.dialog-title),
     #animated-qr-send-dialog x-paper > .row.center:has(.dialog-title),
     #animated-qr-receive-dialog x-paper > .row.center:has(.dialog-title) {
-        margin-bottom: 14px !important;
+        margin-bottom: 12px !important;
         padding: 0 10px;
     }
 
     #animated-qr-main-dialog .dialog-title,
     #animated-qr-send-dialog .dialog-title,
     #animated-qr-receive-dialog .dialog-title {
-        padding: 12px 0;
+        padding: 10px 0;
         line-height: 1.25;
     }
 
-    #animated-qr-send-dialog .erikraft-qr-paper {
-        max-height: calc(100dvh - 16px);
+    #animated-qr-main-dialog .erikraft-qr-paper > .column,
+    #animated-qr-receive-dialog .erikraft-qr-paper > .column {
+        padding: 0 10px 12px;
     }
 
     #animated-qr-send-dialog #qr-send-active-view,
     #animated-qr-send-dialog #qr-send-compose-view {
-        padding: 8px 12px 12px !important;
+        padding: 6px 10px 12px !important;
     }
 
     #animated-qr-send-dialog #qr-send-file-info {
-        margin-top: 8px !important;
-        margin-bottom: 16px !important;
+        margin-top: 6px !important;
+        margin-bottom: 14px !important;
         padding: 0 4px;
     }
 
     #animated-qr-send-dialog #qr-send-canvas-container {
-        margin-bottom: 20px !important;
+        margin-bottom: 18px !important;
         padding: 4px;
     }
 
+    #animated-qr-send-dialog .erikraft-qr-paper .column.fw.gap-4 {
+        gap: 12px !important;
+    }
+
+    #animated-qr-send-dialog .erikraft-qr-card-send,
+    #animated-qr-send-dialog .erikraft-qr-card-receive {
+        padding: 14px 12px;
+        border-radius: 16px;
+    }
+
+    #animated-qr-send-dialog #qr-send-compose-buttons {
+        gap: 8px !important;
+        margin-top: 14px !important;
+        padding: 10px;
+        border-radius: 14px;
+    }
+
+    #animated-qr-send-dialog #qr-send-compose-buttons .btn {
+        flex: 1 1 auto;
+        min-width: 120px;
+    }
+
     #animated-qr-send-dialog #qr-send-close-btn {
-        margin-bottom: 10px !important;
+        margin-bottom: 8px !important;
     }
 }
 
@@ -167,8 +286,15 @@
     #animated-qr-main-dialog x-paper,
     #animated-qr-send-dialog x-paper,
     #animated-qr-receive-dialog x-paper {
-        margin: 6px auto !important;
+        width: calc(100vw - 8px);
         max-width: calc(100vw - 8px);
+        margin: 6px auto !important;
+    }
+
+    #animated-qr-main-dialog .dialog-title,
+    #animated-qr-send-dialog .dialog-title,
+    #animated-qr-receive-dialog .dialog-title {
+        font-size: 18px;
     }
 
     #animated-qr-send-dialog #qr-send-active-view,
@@ -177,7 +303,13 @@
         padding-right: 8px !important;
     }
 
-    #animated-qr-send-dialog .dialog-title {
-        font-size: 18px;
+    #animated-qr-send-dialog .erikraft-qr-card-send,
+    #animated-qr-send-dialog .erikraft-qr-card-receive {
+        padding: 12px 10px;
+    }
+
+    #animated-qr-send-dialog #qr-send-compose-buttons .btn {
+        min-width: 0;
+        width: 100%;
     }
 }
