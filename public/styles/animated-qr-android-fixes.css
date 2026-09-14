@@ -80,12 +80,14 @@
     z-index: 2;
     display: block;
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
     margin: 8px 0 16px !important;
     padding: 0 8px;
     line-height: 1.4;
     overflow-wrap: anywhere;
     word-break: break-word;
+    white-space: normal;
     flex: 0 0 auto;
 }
 
@@ -110,9 +112,28 @@
 #animated-qr-send-dialog #qr-send-canvas-container svg,
 #animated-qr-send-dialog #qr-send-canvas-container img {
     display: block;
-    max-width: 100%;
-    height: auto;
+    width: min(320px, 100%) !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
     box-sizing: border-box;
+}
+
+/* The generated QR element has inline 320px min/max dimensions; override those only when the dialog is narrower. */
+@media (max-width: 390px) {
+    #animated-qr-send-dialog #qr-send-canvas-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 4px;
+    }
+
+    #animated-qr-send-dialog #qr-send-canvas-container canvas,
+    #animated-qr-send-dialog #qr-send-canvas-container svg,
+    #animated-qr-send-dialog #qr-send-canvas-container img {
+        width: min(320px, calc(100vw - 48px)) !important;
+        max-width: calc(100vw - 48px) !important;
+    }
 }
 
 /* Send settings/actions are separated from the QR canvas. */
@@ -181,18 +202,58 @@
     box-sizing: border-box;
 }
 
-/* Compose actions: preserve the existing btn-row, button colors, borders and theme. */
+/* Compose actions: follow the application's real theme variables. Do not create a separate dark-only surface. */
 #animated-qr-send-dialog #qr-send-compose-buttons {
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 10px !important;
     margin: 16px 0 4px !important;
     padding: 0;
+    background: transparent !important;
+    color: rgb(var(--text-color));
 }
 
 #animated-qr-send-dialog #qr-send-compose-buttons .btn {
     min-height: 40px;
     box-sizing: border-box;
+}
+
+#animated-qr-send-dialog #qr-send-compose-buttons .btn.btn-grey {
+    background-color: var(--bg-color-secondary) !important;
+    color: rgb(var(--text-color)) !important;
+    border-color: var(--border-color) !important;
+}
+
+#animated-qr-send-dialog #qr-send-compose-buttons .btn.btn-primary {
+    color: #fff;
+}
+
+/* The label, textarea and Paste button form one predictable vertical group. */
+#animated-qr-send-dialog #qr-send-text-input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 6px 0 0 !important;
+}
+
+#animated-qr-send-dialog label[for="qr-send-text-input"] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0;
+    line-height: 1.4;
+}
+
+#animated-qr-send-dialog #qr-send-text-paste-btn {
+    align-self: flex-start;
+    margin: 8px 0 0 !important;
+    flex: 0 0 auto;
 }
 
 @media (max-width: 600px) {
@@ -263,6 +324,10 @@
     #animated-qr-send-dialog #qr-send-close-btn {
         margin-bottom: 8px !important;
     }
+
+    #animated-qr-send-dialog #qr-send-text-paste-btn {
+        margin-top: 8px !important;
+    }
 }
 
 @media (max-width: 390px) {
@@ -294,5 +359,17 @@
     #animated-qr-send-dialog #qr-send-compose-buttons .btn {
         min-width: 0;
         width: 100%;
+    }
+
+    #animated-qr-send-dialog #qr-send-file-info {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #animated-qr-send-dialog #qr-send-text-paste-btn {
+        width: auto;
+        max-width: 100%;
     }
 }
