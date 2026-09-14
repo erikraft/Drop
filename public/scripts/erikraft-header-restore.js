@@ -15,16 +15,19 @@
         if (anchor?.parentNode) anchor.parentNode.insertBefore(button, anchor);
     }
 
-    function removePredeclaredTorrentButton() {
-        // The WebTorrent runtime creates the button and binds its dialog listener.
-        // Remove the static placeholder so the runtime can use its original UI.
-        const button = document.getElementById('webtorrent-btn');
-        if (button) button.remove();
+    function removeTorrentButton() {
+        document.getElementById('webtorrent-btn')?.remove();
     }
 
     function initialize() {
         restoreAnimatedQRButton();
-        removePredeclaredTorrentButton();
+        removeTorrentButton();
+
+        // webtorrent-transfer.js may create its legacy header button after this script.
+        // Keep the Torrent transfer implementation available without restoring the unwanted header control.
+        const observer = new MutationObserver(removeTorrentButton);
+        observer.observe(document.body, { childList: true, subtree: true });
+        setTimeout(() => observer.disconnect(), 5000);
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize, { once: true });
