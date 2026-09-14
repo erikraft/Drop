@@ -13,9 +13,7 @@
     const objectUrls = new Set();
 
     const icon = (viewBox, path) => `<svg class="webtorrent-icon" viewBox="${viewBox}" aria-hidden="true" focusable="false"><path d="${path}"></path></svg>`;
-    const officialBrandIcon = '<img class="webtorrent-icon webtorrent-official-icon" src="images/icons/webtorrent-official.svg" alt="WebTorrent">';
     const icons = {
-        brand: officialBrandIcon,
         upload: icon('0 0 640 512', 'M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128l-368 0zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24l0-134.1 39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z'),
         magnet: icon('0 0 448 512', 'M0 160l0 96C0 379.7 100.3 480 224 480s224-100.3 224-224l0-96-128 0 0 96c0 53-43 96-96 96s-96-43-96-96l0-96L0 160zm0-32l128 0 0-64c0-17.7-14.3-32-32-32L32 32C14.3 32 0 46.3 0 64l0 64zm320 0l128 0 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64z'),
         download: icon('0 0 512 512', 'M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 242.7-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7 288 32zM64 352c-35.3 0-64 28.7-64 64l0 32c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-32c0-35.3-28.7-64-64-64l-101.5 0-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352 64 352zm368 56a24 24 0 1 1 0 48 24 24 0 0 1 0-48z'),
@@ -32,12 +30,10 @@
             #webtorrent-btn .webtorrent-icon { width:20px; height:20px; }
             #webtorrent-dialog { border:0; padding:0; width:min(760px,calc(100vw - 28px)); max-width:760px; background:transparent; color:inherit; }
             #webtorrent-dialog::backdrop { background:rgba(0,0,0,.68); backdrop-filter:blur(6px); }
-            #webtorrent-dialog[open] { display:block; }
             .webtorrent-panel { overflow:hidden; border:1px solid rgba(118,184,63,.42); border-radius:22px; background:linear-gradient(145deg,#171a15,#10120f 70%); box-shadow:0 28px 90px rgba(0,0,0,.48); }
             .webtorrent-head { display:flex; align-items:center; gap:13px; padding:20px 22px; border-bottom:1px solid rgba(255,255,255,.08); background:linear-gradient(90deg,rgba(118,184,63,.17),transparent); }
             .webtorrent-brand { display:grid; place-items:center; width:42px; height:42px; border-radius:13px; background:${UTORRENT_GREEN}; color:#fff; box-shadow:0 8px 24px rgba(118,184,63,.24); }
-            .webtorrent-brand .webtorrent-icon { width:22px; height:22px; object-fit:contain; }
-            #webtorrent-btn .webtorrent-official-icon { width:20px; height:20px; object-fit:contain; display:block; }
+            .webtorrent-brand .webtorrent-icon { width:22px; height:22px; }
             .webtorrent-title { margin:0; font-size:20px; font-weight:750; }
             .webtorrent-subtitle { margin:3px 0 0; color:rgba(255,255,255,.62); font-size:13px; }
             .webtorrent-close { margin-left:auto; width:40px; height:40px; padding:0; border:1px solid rgba(255,255,255,.1); border-radius:12px; background:transparent; color:rgba(255,255,255,.72); cursor:pointer; }
@@ -291,7 +287,7 @@
         button.className = 'icon-button';
         button.title = 'Torrent (Beta)';
         button.setAttribute('aria-label', 'Abrir transferência Torrent (Beta)');
-        button.innerHTML = icons.brand;
+        button.innerHTML = icons.magnet;
         header.insertBefore(button, header.firstElementChild);
 
         const dialog = document.createElement('dialog');
@@ -332,9 +328,10 @@
             </div>`;
         document.body.appendChild(dialog);
 
-        const close = () => { try { if (typeof dialog.close === 'function' && dialog.open) dialog.close(); else dialog.removeAttribute('open'); } catch (_) { dialog.removeAttribute('open'); } };
+        const close = () => dialog.close();
         button.addEventListener('click', () => {
-            try { if (typeof dialog.showModal === 'function' && !dialog.open) dialog.showModal(); else dialog.setAttribute('open', ''); } catch (_) { dialog.setAttribute('open', ''); }
+            if (typeof dialog.showModal === 'function') dialog.showModal();
+            else dialog.setAttribute('open', '');
         });
         dialog.querySelector('#webtorrent-close').addEventListener('click', close);
         dialog.querySelector('#webtorrent-close-footer').addEventListener('click', close);
