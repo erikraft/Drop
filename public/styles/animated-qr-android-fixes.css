@@ -1,4 +1,4 @@
-/* Animated QR dialogs: keep titles, file information, QR canvas, cards and actions visually separated. */
+/* Animated QR dialogs: layout and spacing only. Preserve the application's existing theme, colors and button styles. */
 
 #animated-qr-main-dialog x-paper,
 #animated-qr-send-dialog x-paper,
@@ -22,6 +22,7 @@
     box-sizing: border-box;
 }
 
+/* Keep the existing application title color; only fix wrapping and spacing. */
 #animated-qr-main-dialog .dialog-title,
 #animated-qr-send-dialog .dialog-title,
 #animated-qr-receive-dialog .dialog-title {
@@ -30,7 +31,6 @@
     margin: 0 !important;
     padding: 12px 0;
     box-sizing: border-box;
-    color: var(--primary-color);
     line-height: 1.3;
     text-align: center;
     overflow-wrap: anywhere;
@@ -83,7 +83,6 @@
     box-sizing: border-box;
     margin: 8px 0 16px !important;
     padding: 0 8px;
-    color: var(--primary-color);
     line-height: 1.4;
     overflow-wrap: anywhere;
     word-break: break-word;
@@ -143,7 +142,7 @@
     margin-bottom: 10px !important;
 }
 
-/* Compose cards: spacing, readable surfaces and automatic light/dark theme colors. */
+/* Compose cards: spacing only. Their existing application theme remains untouched. */
 #animated-qr-send-dialog .erikraft-qr-paper .column.fw.gap-4 {
     width: 100%;
     max-width: 100%;
@@ -159,11 +158,6 @@
     margin: 0 !important;
     padding: 16px;
     gap: 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 18px;
-    background-color: var(--paper-color, rgb(var(--bg-color)));
-    color: var(--primary-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 #animated-qr-send-dialog .erikraft-qr-card-send .font-body2,
@@ -187,27 +181,18 @@
     box-sizing: border-box;
 }
 
-/* Compose action row follows the current theme instead of forcing a dark surface. */
+/* Compose actions: preserve the existing btn-row, button colors, borders and theme. */
 #animated-qr-send-dialog #qr-send-compose-buttons {
     width: 100%;
     box-sizing: border-box;
     gap: 10px !important;
     margin: 16px 0 4px !important;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    background-color: var(--paper-color, rgb(var(--bg-color)));
+    padding: 0;
 }
 
 #animated-qr-send-dialog #qr-send-compose-buttons .btn {
     min-height: 40px;
     box-sizing: border-box;
-}
-
-#animated-qr-send-dialog #qr-send-compose-buttons .btn-grey {
-    background-color: rgb(var(--bg-color));
-    color: var(--primary-color);
-    border: 1px solid var(--border-color);
 }
 
 @media (max-width: 600px) {
@@ -262,14 +247,12 @@
     #animated-qr-send-dialog .erikraft-qr-card-send,
     #animated-qr-send-dialog .erikraft-qr-card-receive {
         padding: 14px 12px;
-        border-radius: 16px;
     }
 
     #animated-qr-send-dialog #qr-send-compose-buttons {
         gap: 8px !important;
         margin-top: 14px !important;
-        padding: 10px;
-        border-radius: 14px;
+        padding: 0;
     }
 
     #animated-qr-send-dialog #qr-send-compose-buttons .btn {
