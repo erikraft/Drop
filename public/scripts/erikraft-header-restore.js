@@ -1,6 +1,15 @@
 (function restoreErikrafTHeaderActions() {
     'use strict';
 
+    function loadVisualFixes() {
+        if (document.getElementById('erikraft-animated-qr-visual-fixes')) return;
+        const link = document.createElement('link');
+        link.id = 'erikraft-animated-qr-visual-fixes';
+        link.rel = 'stylesheet';
+        link.href = 'styles/animated-qr-android-fixes.css';
+        document.head.appendChild(link);
+    }
+
     function restoreAnimatedQRButton() {
         if (document.getElementById('animated-qr-btn')) return;
         const button = document.createElement('div');
@@ -20,6 +29,7 @@
     }
 
     function initialize() {
+        loadVisualFixes();
         restoreAnimatedQRButton();
         removeTorrentButton();
 
