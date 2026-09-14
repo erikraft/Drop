@@ -1,0 +1,83 @@
+/* Animated QR dialog: keep file info, QR canvas, settings and actions visually separated. */
+#animated-qr-send-dialog .erikraft-qr-paper {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: calc(100dvh - 16px);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#animated-qr-send-dialog #qr-send-active-view,
+#animated-qr-send-dialog #qr-send-compose-view {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    box-sizing: border-box;
+}
+
+#animated-qr-send-dialog #qr-send-file-info {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 8px 0 14px !important;
+    padding: 0 8px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+#animated-qr-send-dialog #qr-send-canvas-container {
+    position: relative;
+    z-index: 1;
+    margin: 0 auto 18px !important;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+#animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 {
+    margin-top: 20px !important;
+    padding-top: 4px;
+    gap: 12px !important;
+}
+
+#animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 > .font-body2.bold.text-center {
+    margin-bottom: 2px;
+}
+
+#animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 .row {
+    margin: 0 !important;
+}
+
+#animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 select {
+    min-height: 40px;
+}
+
+#animated-qr-send-dialog #qr-send-close-btn {
+    margin-top: 4px !important;
+    margin-bottom: 10px !important;
+}
+
+@media (max-width: 600px) {
+    #animated-qr-send-dialog .erikraft-qr-paper {
+        max-height: calc(100dvh - 8px);
+    }
+
+    #animated-qr-send-dialog #qr-send-active-view,
+    #animated-qr-send-dialog #qr-send-compose-view {
+        padding: 12px !important;
+    }
+
+    #animated-qr-send-dialog #qr-send-file-info {
+        margin-bottom: 14px !important;
+    }
+
+    #animated-qr-send-dialog #qr-send-canvas-container {
+        margin-bottom: 18px !important;
+    }
+}
