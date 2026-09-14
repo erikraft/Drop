@@ -23,6 +23,7 @@ class ErikrafTdrop {
             'scripts/animated-qr-controls.js',
             'scripts/animated-qr-file-size.js',
             'scripts/animated-qr-screen-awake.js',
+            'scripts/erikraft-header-restore.js',
             'scripts/network.js',
             'scripts/ui.js',
             'scripts/libs/heic2any.min.js',
@@ -280,7 +281,7 @@ class ErikrafTdrop {
     loadDeferredAssets() {
         const stylePromises = this.deferredStyles.map(url => this.loadAndApplyStylesheet(url));
         const scriptPromises = this.deferredScripts.map(url => this.loadAndApplyScript(url));
-        return Promise.all([...stylePromises, ...scriptPromises]);
+        return Promise.allSettled([...stylePromises, ...scriptPromises]);
     }
 
     loadStyleSheet(url) {
