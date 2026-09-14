@@ -29,13 +29,17 @@ async function createWindow() {
     callback(false);
   });
 
+  const windowIcon = process.platform === 'win32'
+    ? path.join(app.getAppPath(), 'desktop', 'assets', 'icon.ico')
+    : path.join(app.getAppPath(), 'public', 'images', 'icon-drop.svg');
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 900,
     minHeight: 600,
     title: 'ErikrafT Drop™',
-    icon: path.join(app.getAppPath(), 'public', 'images', 'icon-drop.svg'),
+    icon: windowIcon,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
