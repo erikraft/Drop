@@ -23,6 +23,7 @@ class ErikrafTdrop {
             'scripts/animated-qr-controls.js',
             'scripts/animated-qr-file-size.js',
             'scripts/animated-qr-screen-awake.js',
+            'scripts/erikraft-header-restore.js',
             'scripts/network.js',
             'scripts/ui.js',
             'scripts/libs/heic2any.min.js',
