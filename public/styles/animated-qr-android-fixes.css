@@ -1,9 +1,44 @@
-/* Animated QR dialog: keep file info, QR canvas, settings and actions visually separated. */
+/* Animated QR dialogs: keep titles, file information, QR canvas, settings and actions visually separated. */
+
+#animated-qr-main-dialog x-paper,
+#animated-qr-send-dialog x-paper,
+#animated-qr-receive-dialog x-paper {
+    margin: 14px auto !important;
+    max-width: min(450px, calc(100vw - 20px));
+    box-sizing: border-box;
+}
+
+/* Only title rows receive spacing. Empty .row.center placeholders stay untouched. */
+#animated-qr-main-dialog x-paper > .row.center:has(.dialog-title),
+#animated-qr-send-dialog x-paper > .row.center:has(.dialog-title),
+#animated-qr-receive-dialog x-paper > .row.center:has(.dialog-title) {
+    flex: 0 0 auto;
+    margin: 0 0 16px !important;
+    padding: 0 14px;
+    box-sizing: border-box;
+    min-height: 0;
+}
+
+#animated-qr-main-dialog .dialog-title,
+#animated-qr-send-dialog .dialog-title,
+#animated-qr-receive-dialog .dialog-title {
+    display: block;
+    width: 100%;
+    margin: 0 !important;
+    padding: 14px 0;
+    box-sizing: border-box;
+    line-height: 1.3;
+    text-align: center;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* Never allow the QR content to overlap the title/header row. */
 #animated-qr-send-dialog .erikraft-qr-paper {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    max-height: calc(100dvh - 16px);
+    max-height: calc(100dvh - 28px);
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -18,25 +53,43 @@
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     box-sizing: border-box;
+    padding-top: 2px;
 }
 
 #animated-qr-send-dialog #qr-send-file-info {
     position: relative;
     z-index: 2;
+    display: block;
     width: 100%;
     box-sizing: border-box;
-    margin: 8px 0 14px !important;
-    padding: 0 8px;
-    line-height: 1.35;
+    margin: 10px 0 16px !important;
+    padding: 0 10px;
+    line-height: 1.4;
     overflow-wrap: anywhere;
     word-break: break-word;
+    flex: 0 0 auto;
 }
 
 #animated-qr-send-dialog #qr-send-canvas-container {
     position: relative;
     z-index: 1;
-    margin: 0 auto 18px !important;
-    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto 20px !important;
+    padding: 6px;
+    flex: 0 0 auto;
+    overflow: hidden;
+}
+
+#animated-qr-send-dialog #qr-send-canvas-container canvas,
+#animated-qr-send-dialog #qr-send-canvas-container svg,
+#animated-qr-send-dialog #qr-send-canvas-container img {
+    max-width: 100%;
+    height: auto;
     box-sizing: border-box;
 }
 
@@ -47,7 +100,8 @@
 }
 
 #animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 > .font-body2.bold.text-center {
-    margin-bottom: 2px;
+    margin: 0 0 4px !important;
+    line-height: 1.35;
 }
 
 #animated-qr-send-dialog #qr-send-active-view .fw.column.gap-2.mt-3 .row {
@@ -59,25 +113,72 @@
 }
 
 #animated-qr-send-dialog #qr-send-close-btn {
-    margin-top: 4px !important;
-    margin-bottom: 10px !important;
+    margin-top: 6px !important;
+    margin-bottom: 12px !important;
 }
 
 @media (max-width: 600px) {
+    #animated-qr-main-dialog x-paper,
+    #animated-qr-send-dialog x-paper,
+    #animated-qr-receive-dialog x-paper {
+        margin: 8px auto !important;
+        max-width: calc(100vw - 12px);
+    }
+
+    #animated-qr-main-dialog x-paper > .row.center:has(.dialog-title),
+    #animated-qr-send-dialog x-paper > .row.center:has(.dialog-title),
+    #animated-qr-receive-dialog x-paper > .row.center:has(.dialog-title) {
+        margin-bottom: 14px !important;
+        padding: 0 10px;
+    }
+
+    #animated-qr-main-dialog .dialog-title,
+    #animated-qr-send-dialog .dialog-title,
+    #animated-qr-receive-dialog .dialog-title {
+        padding: 12px 0;
+        line-height: 1.25;
+    }
+
     #animated-qr-send-dialog .erikraft-qr-paper {
-        max-height: calc(100dvh - 8px);
+        max-height: calc(100dvh - 16px);
     }
 
     #animated-qr-send-dialog #qr-send-active-view,
     #animated-qr-send-dialog #qr-send-compose-view {
-        padding: 12px !important;
+        padding: 8px 12px 12px !important;
     }
 
     #animated-qr-send-dialog #qr-send-file-info {
-        margin-bottom: 14px !important;
+        margin-top: 8px !important;
+        margin-bottom: 16px !important;
+        padding: 0 4px;
     }
 
     #animated-qr-send-dialog #qr-send-canvas-container {
-        margin-bottom: 18px !important;
+        margin-bottom: 20px !important;
+        padding: 4px;
+    }
+
+    #animated-qr-send-dialog #qr-send-close-btn {
+        margin-bottom: 10px !important;
+    }
+}
+
+@media (max-width: 390px) {
+    #animated-qr-main-dialog x-paper,
+    #animated-qr-send-dialog x-paper,
+    #animated-qr-receive-dialog x-paper {
+        margin: 6px auto !important;
+        max-width: calc(100vw - 8px);
+    }
+
+    #animated-qr-send-dialog #qr-send-active-view,
+    #animated-qr-send-dialog #qr-send-compose-view {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    #animated-qr-send-dialog .dialog-title {
+        font-size: 18px;
     }
 }
