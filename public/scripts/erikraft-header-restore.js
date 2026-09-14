@@ -10,6 +10,15 @@
         document.head.appendChild(link);
     }
 
+    function loadDialogBridge() {
+        if (document.getElementById('erikraft-dialog-scroll-bridge')) return;
+        const script = document.createElement('script');
+        script.id = 'erikraft-dialog-scroll-bridge';
+        script.src = 'scripts/android-dialog-scroll-bridge.js';
+        script.async = false;
+        document.body.appendChild(script);
+    }
+
     function restoreAnimatedQRButton() {
         if (document.getElementById('animated-qr-btn')) return;
         const button = document.createElement('div');
@@ -30,6 +39,7 @@
 
     function initialize() {
         loadVisualFixes();
+        loadDialogBridge();
         restoreAnimatedQRButton();
         removeTorrentButton();
 
