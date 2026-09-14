@@ -96,6 +96,10 @@ export default class ErikrafTdropServer {
         });
 
         const publicPathAbs = path.join(__dirname, '../public');
+        const assetLinksPath = path.join(publicPathAbs, '.well-known', 'assetlinks.json');
+        app.get('/.well-known/assetlinks.json', (req, res) => {
+            res.type('application/json').sendFile(assetLinksPath);
+        });
         app.use(express.static(publicPathAbs));
 
         if (conf.debugMode && conf.rateLimit) {

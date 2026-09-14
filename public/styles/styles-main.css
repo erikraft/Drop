@@ -172,7 +172,6 @@ header>.icon-button {
     /* Herdará a cor do texto pai, se adaptando ao tema */
 }
 
-
 header * {
     transition: all 300ms;
 }
@@ -353,7 +352,6 @@ x-noscript {
     z-index: 2;
 }
 
-
 /* Icons */
 
 .icon {
@@ -361,8 +359,6 @@ x-noscript {
     height: var(--icon-size);
     fill: currentColor;
 }
-
-
 
 /* Shadows */
 
@@ -390,7 +386,6 @@ x-noscript {
     background-size: 100% 60px, 100% 60px, 100% 24px, 100% 24px;
     background-attachment: local, local, scroll, scroll;
 }
-
 
 /* Animations */
 
@@ -421,7 +416,6 @@ x-noscript {
     overflow-y: scroll;
     overscroll-behavior-x: none;
 }
-
 
 /* Peers  */
 
@@ -671,7 +665,6 @@ x-dialog:not([show]) x-background {
     color: var(--btn-disabled-color);
     cursor: not-allowed;
 }
-
 
 .btn,
 .icon-button {
@@ -1017,7 +1010,6 @@ body.chat-open {
     }
 }
 
-
 .btn-round {
     border-radius: 50%;
 }
@@ -1046,7 +1038,6 @@ body.chat-open {
 button::-moz-focus-inner {
     border: 0;
 }
-
 
 /* Icon Button */
 .icon-button {
@@ -1183,7 +1174,6 @@ html:not([dir="rtl"]) #about x-background {
 html[dir="rtl"] #about x-background {
     left: calc(36px - var(--size-half));
 }
-
 
 /* Hack such that initial scale(0) isn't animated */
 #about x-background {
@@ -1403,7 +1393,6 @@ x-instructions[drop-bg]:not([drop-peer]):before {
     content: attr(data-drop-bg);
 }
 
-
 x-peers:empty,
 x-peers:empty~x-instructions {
     display: none;
@@ -1559,7 +1548,6 @@ body.dark-theme {
         --shadow-color-dialog-cover-rgb: var(--dt-shadow-color-dialog-cover-rgb);
     }
 
-
     /* Override dark mode with light mode styles if the user decides to swap */
     body.light-theme {
         --text-color: var(--lt-text-color);
@@ -1598,7 +1586,6 @@ body {
 #primaryGradient .stop-color {
     stop-color: var(--primary-color);
 }
-
 
 /*
     Edge specific styles

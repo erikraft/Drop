@@ -242,14 +242,24 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
         requested = false;
     });
 
-    const observer = new MutationObserver(records => {
-        if (mutationAffectsRuntime(records)) {
+    let runtimeSyncFrame = 0;
+    let runtimeSyncPending = false;
+    const scheduleRuntimeSync = () => {
+        if (runtimeSyncFrame) return;
+        runtimeSyncFrame = requestAnimationFrame(() => {
+            runtimeSyncFrame = 0;
+            if (!runtimeSyncPending) return;
+            runtimeSyncPending = false;
             ensureButton();
             fillAnimatedQrTextFromClipboard();
             removeDuplicateCopyButtons();
-            normalizeVisibleBranding();
             syncNativeDialogLock();
-        }
+        });
+    };
+    const observer = new MutationObserver(records => {
+        if (!mutationAffectsRuntime(records)) return;
+        runtimeSyncPending = true;
+        scheduleRuntimeSync();
     });
 
     const start = () => {
@@ -258,7 +268,7 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
         ensureButton();
         fillAnimatedQrTextFromClipboard();
         removeDuplicateCopyButtons();
-        normalizeVisibleBranding();
+        requestAnimationFrame(() => normalizeVisibleBranding());
         syncNativeDialogLock();
     };
 
