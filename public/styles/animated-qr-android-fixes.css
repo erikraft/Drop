@@ -33,7 +33,6 @@
     word-break: break-word;
 }
 
-/* Never allow the QR content to overlap the title/header row. */
 #animated-qr-send-dialog .erikraft-qr-paper {
     display: flex;
     flex-direction: column;
