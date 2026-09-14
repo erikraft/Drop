@@ -1,0 +1,40 @@
+name: apply-10-1-4-cleanup
+on:
+  push:
+    branches: [fix/drop-10.1.4-stability-cleanup]
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix remaining issues
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, subprocess
+          root=Path('.')
+          p=root/'public/index.html'; s=p.read_text()
+          s=re.sub(r'\s*<div\s+id="animated-qr-btn"\b.*?</div>\s*','\n',s,flags=re.S|re.I)
+          p.write_text(s)
+          p=root/'public/scripts/main.js'; s=p.read_text().replace('return Promise.all([...stylePromises, ...scriptPromises]);','return Promise.allSettled([...stylePromises, ...scriptPromises]);'); p.write_text(s)
+          p=root/'public/service-worker.js'; s=p.read_text().replace("version: '10.1.3'","version: '10.1.4'")
+          helper="""const isValidCacheResponse = (request, response) => {\n    if (!response || !response.ok || response.type === 'opaque') return false;\n    const url = new URL(request.url); const path = url.pathname.toLowerCase(); const type = (response.headers.get('content-type') || '').toLowerCase();\n    if (path.endsWith('.js')) return type.includes('javascript') || type.includes('ecmascript');\n    if (path.endsWith('.css')) return type.includes('text/css');\n    if (path.endsWith('.json')) return type.includes('json') || type.includes('text/plain');\n    if (path.endsWith('.html') || request.mode === 'navigate') return type.includes('text/html');\n    return true;\n};\n\n"""
+          if 'const isValidCacheResponse' not in s: s=s.replace('const createManifestFallback = () =>',helper+'const createManifestFallback = () =>',1)
+          s=s.replace("if (!response || !response.ok || response.type === 'opaque' || doNotCacheRequest(request)) return;","if (!isValidCacheResponse(request, response) || doNotCacheRequest(request)) return;")
+          s=s.replace("if (!response.ok || response.type === 'opaque' ||","if (!isValidCacheResponse(new Request(new URL(path, rootUrl).href), response) ||",1)
+          p.write_text(s)
+          p=root/'server/server.js'; s=p.read_text()
+          if "app.get('/.well-known/assetlinks.json'" not in s:
+            needle="        const publicPathAbs = path.join(__dirname, '../public');\n        app.use(express.static(publicPathAbs));"
+            repl="        const publicPathAbs = path.join(__dirname, '../public');\n        const assetLinksPath = path.join(publicPathAbs, '.well-known', 'assetlinks.json');\n        app.get('/.well-known/assetlinks.json', (req, res) => {\n            res.type('application/json').sendFile(assetLinksPath);\n        });\n        app.use(express.static(publicPathAbs));"
+            s=s.replace(needle,repl,1)
+          p.write_text(s)
+          trig=root/'.finalize-trigger-10.1.4'
+          if trig.exists(): trig.unlink()
+          subprocess.run(['git','config','user.name','github-actions[bot]']); subprocess.run(['git','config','user.email','41898282+github-actions[bot]@users.noreply.github.com'])
+          subprocess.run(['git','add','-A']); subprocess.run(['git','commit','-m','fix: finish startup and legacy cleanup'],check=False)
+          wf=root/'.github/workflows/apply-10-1-4-cleanup.yml'; wf.unlink(missing_ok=True)
+          subprocess.run(['git','add','-A']); subprocess.run(['git','commit','-m','chore: remove temporary cleanup workflow'],check=False); subprocess.run(['git','push'])
+          PY
