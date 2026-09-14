@@ -45,7 +45,8 @@ deb:
 win:
   target:
     - nsis
-  icon: public/images/android-chrome-512x512.png
+  # Use the repository's existing real ICO instead of asking electron-builder to convert the Android PNG.
+  icon: Website About/OLD/assets/images/favicon.ico
 nsis:
   oneClick: false
   perMachine: false
