@@ -17,7 +17,7 @@
         }
         try { if (typeof dialog.showModal === 'function' && !dialog.open) dialog.showModal(); else dialog.setAttribute('open', ''); } catch (error) { dialog.setAttribute('open', ''); }
     }
-    const bind = () => document.getElementById('optical-matrix-info-btn')?.addEventListener('click', open, { once: true });
+    const bind = () => document.getElementById('optical-matrix-info-btn')?.addEventListener('click', open);
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
     else bind();
 })();
