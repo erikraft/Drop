@@ -280,7 +280,7 @@ class ErikrafTdrop {
     loadDeferredAssets() {
         const stylePromises = this.deferredStyles.map(url => this.loadAndApplyStylesheet(url));
         const scriptPromises = this.deferredScripts.map(url => this.loadAndApplyScript(url));
-        return Promise.all([...stylePromises, ...scriptPromises]);
+        return Promise.allSettled([...stylePromises, ...scriptPromises]);
     }
 
     loadStyleSheet(url) {

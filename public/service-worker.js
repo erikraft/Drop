@@ -83,10 +83,22 @@ const doNotCacheRequest = request => {
     return relativePathsNotToCache.includes(requestRelativePath);
 };
 
+const isValidCacheResponse = (request, response) => {
+    if (!response || !response.ok || response.type === 'opaque') return false;
+    const url = new URL(request.url);
+    const path = url.pathname.toLowerCase();
+    const contentType = (response.headers.get('content-type') || '').toLowerCase();
+    if (path.endsWith('.js')) return contentType.includes('javascript') || contentType.includes('ecmascript');
+    if (path.endsWith('.css')) return contentType.includes('text/css');
+    if (path.endsWith('.json')) return contentType.includes('json') || contentType.includes('text/plain');
+    if (path.endsWith('.html') || request.mode === 'navigate') return contentType.includes('text/html');
+    return true;
+};
+
 const createManifestFallback = () => new Response(JSON.stringify({
     name: 'ErikrafT Drop™',
     short_name: 'ErikrafT Drop™',
-    version: '10.1.3',
+    version: '10.1.4',
     icons: [
         {src: 'images/android-chrome-192x192.png', sizes: '192x192', type: 'image/png'},
         {src: 'images/android-chrome-512x512.png', sizes: '512x512', type: 'image/png'},
@@ -101,7 +113,7 @@ const createManifestFallback = () => new Response(JSON.stringify({
 }), {status: 200, headers: {'Content-Type': 'application/manifest+json'}});
 
 const cacheResponseIfValid = async (request, response) => {
-    if (!response || !response.ok || response.type === 'opaque' || doNotCacheRequest(request)) return;
+    if (!isValidCacheResponse(request, response) || doNotCacheRequest(request)) return;
     try {
         const cache = await caches.open(cacheTitle);
         await cache.put(request, response.clone());
@@ -164,7 +176,7 @@ self.addEventListener('install', event => {
         const results = await Promise.allSettled(relativePathsToCache.map(async path => {
             try {
                 const response = await fetch(new URL(path, rootUrl), {cache: 'no-store'});
-                if (!response.ok || response.type === 'opaque' ||
+                if (!isValidCacheResponse(new Request(new URL(path, rootUrl).href), response) ||
                     (response.redirected && new URL(response.url).origin !== self.location.origin)) {
                     throw new Error(`HTTP ${response.status} or cross-origin redirect for ${path}`);
                 }
