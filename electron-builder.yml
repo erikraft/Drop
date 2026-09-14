@@ -17,7 +17,9 @@ linux:
       arch:
         - x64
   category: Network;Utility;
-  icon: packaging/linux/icons/icon-drop.svg
+  # Keep the repository's Linux icon assets available for manual customization.
+  # When no linux.icon is set, electron-builder generates the Linux icon set from
+  # the official Windows ICO configured below, keeping one official source icon.
   desktop:
     entry:
       Name: ErikrafT Drop™
@@ -30,10 +32,6 @@ linux:
 deb:
   artifactName: erikraft-drop-linux-amd64.deb
   maintainer: ErikrafT <contact+app@erikraft.com>
-  fpm:
-    - packaging/linux/icons/icon-drop.svg=/usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
-    - packaging/linux/icons/android-chrome-512x512.png=/usr/share/icons/hicolor/512x512/apps/erikraft-drop.png
-    - packaging/linux/icons/android-chrome-512x512-maskable.png=/usr/share/icons/hicolor/512x512/apps/erikraft-drop-maskable.png
   packageName: erikraft-drop
   depends:
     - libgtk-3-0
@@ -45,8 +43,8 @@ deb:
 win:
   target:
     - nsis
-  # Use the repository's existing real ICO instead of asking electron-builder to convert the Android PNG.
-  icon: Website About/OLD/assets/images/favicon.ico
+  # Official Windows application/installer icon.
+  icon: desktop/assets/icon.ico
 nsis:
   oneClick: false
   perMachine: false
@@ -54,3 +52,5 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: ErikrafT Drop™
+  installerIcon: desktop/assets/icon.ico
+  uninstallerIcon: desktop/assets/icon.ico
