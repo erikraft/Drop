@@ -19,6 +19,8 @@
 [![Crowdin](https://badges.crowdin.net/erikraft-drop/localized.svg)](https://crowdin.com/project/erikraft-drop)&nbsp;
 ![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/erikraft/Drop?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)&nbsp;
 
+<a href="https://www.producthunt.com/products/erikraft-drop?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-erikraft-drop" target="_blank" rel="noopener noreferrer"><img alt="ErikrafT Drop™ - Fast, secure file transfer for web, extension &amp; app | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1265004&amp;theme=dark&amp;t=1790724510256"></a>
+
 [🤝🏻 Form a Partnership](PARTNERSHIP.md)
 
 <br>
