@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 
 const source=fs.readFileSync(new URL('../public/scripts/received-media-metadata.js',import.meta.url),'utf8');
 const context={
-  console,crypto:{subtle:crypto.webcrypto.subtle},File,Blob,URL,
+  console,crypto:{subtle:crypto.webcrypto.subtle,randomUUID:crypto.randomUUID.bind(crypto)},TextEncoder,TextDecoder,File,Blob,URL,
   window:{},document:{readyState:'complete',getElementById:()=>null,createElement:()=>({}),head:{appendChild(){}}},matchMedia:()=>({matches:false}),
   addEventListener(){},setTimeout,performance:{now:()=>0}
 };
@@ -35,6 +35,12 @@ const trak=atom('trak',new Uint8Array([1,2,3]));
 const udta=atom('udta',new TextEncoder().encode('GPS-PRIVATE'));
 const moov=atom('moov',concat(trak,udta));
 const mp4=new File([moov],'video.mov',{type:'video/quicktime'});
+const motionVideo=new File([new TextEncoder().encode('MP4DATA')],'motion.mp4',{type:'video/mp4'});
+const motion=await api.createMotionPhoto(jf,motionVideo);
+const motionBytes=new Uint8Array(await motion.arrayBuffer());
+assert.equal(motion.name,'photo.MP.jpg');
+assert.equal(new TextDecoder().decode(motionBytes).includes('MotionPhoto'),true);
+assert.equal(new TextDecoder().decode(motionBytes.slice(-7)),'MP4DATA');
 const qs=await api.sanitize(mp4,'all');
 assert.equal(new TextDecoder().decode(await qs.arrayBuffer()).includes('GPS-PRIVATE'),false);
 console.log('received-media-metadata: PASS');
