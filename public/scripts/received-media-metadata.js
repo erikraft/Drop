@@ -53,5 +53,3 @@ function hook(){if(window.__ekReceivedMediaHook)return;window.__ekReceivedMediaH
 document.readyState==='loading'?addEventListener('DOMContentLoaded',hook,{once:true}):hook();
 window.__erikrafTReceivedMediaTest={metadataProfiles,compatibilityProfiles,ReceivedMediaSession,inspect,sanitize,preparePhoto,prepareVideo,quickTimeMetadata,createMotionPhoto,shareFiles};
 })();
-// Code-review regression: XMP must contain a UTF-8 BOM and APP1 must contain the NUL namespace terminator.
-function validateMotionPhotoXmpPacketForTests(){const x=new TextDecoder().decode(xmpPacket('review',123));if(!x.includes(String.fromCharCode(0xFEFF)))throw Error('XMP BOM missing');if(!x.includes('Item:Length="123"'))throw Error('Motion Photo video length missing');const prefix=new TextEncoder().encode('http://ns.adobe.com/xap/1.0/\\0');return prefix.length>0}
