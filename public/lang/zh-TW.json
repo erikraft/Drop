@@ -354,5 +354,24 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "media": {
+        "inspector": "Metadata Inspector",
+        "remove_private": "Remove private data",
+        "remove_all": "Remove all metadata",
+        "prepare_spin": "Prepare for Spin View",
+        "instagram": "Instagram",
+        "instagram_story": "Instagram Story",
+        "share": "Share",
+        "download": "Download",
+        "motion_photo": "Create Live/Motion Photo",
+        "motion_photo_title": "Live Photo / Motion Photo",
+        "motion_photo_android_note": "Android Motion Photo is different from Apple Live Photo; Apple compatibility is not guaranteed.",
+        "motion_photo_format": "JPEG + MP4 Motion Photo container",
+        "motion_photo_validation": "Validated by reopening the generated file.",
+        "local_processing": "Local processing",
+        "instagram_controlled": "Instagram controls the final interface and recognition.",
+        "share_unsupported": "File sharing is not supported in this browser.",
+        "share_failed": "Sharing failed: {{error}}"
+    }
 }
