@@ -248,9 +248,7 @@
         "spam-content-detected": "Possível Spam/Golpe Detectado",
         "offensive-content-detected": "Conteúdo Ofensivo Detectado",
         "publish-instagram": "Publicar no Instagram",
-        "publish-youtube": "Publicar no YouTube",
-        "animated-qr-file-selected": "Arquivo selecionado",
-        "animated-qr-change-file": "Alterar Arquivo"
+        "publish-youtube": "Publicar no YouTube"
     },
     "about": {
         "close-about_aria-label": "Fechar Sobre o ErikrafT Drop™",
@@ -363,5 +361,24 @@
     "share_title": "Compartilhar",
     "share_aria-label": "Compartilhar",
     "download": "Baixar",
-    "title-file": "Arquivo"
+    "title-file": "Arquivo",
+    "media": {
+        "inspector": "Visualizar Metadados",
+        "remove_private": "Remover dados privados",
+        "remove_all": "Remover todos os metadados",
+        "prepare_spin": "Preparar para Spin View",
+        "instagram": "Instagram",
+        "instagram_story": "Instagram Story",
+        "share": "Compartilhar",
+        "download": "Baixar",
+        "motion_photo": "Criar Live/Motion Photo",
+        "motion_photo_title": "Live Photo / Motion Photo",
+        "motion_photo_android_note": "O Motion Photo do Android é diferente do Live Photo da Apple; a compatibilidade com a Apple não é garantida.",
+        "motion_photo_format": "Contêiner Motion Photo com JPEG + MP4",
+        "motion_photo_validation": "Validado reabrindo o arquivo gerado.",
+        "local_processing": "Processamento local",
+        "instagram_controlled": "O Instagram controla a interface e o reconhecimento finais.",
+        "share_unsupported": "O compartilhamento de arquivos não é suportado neste navegador.",
+        "share_failed": "Falha no compartilhamento: {{error}}"
+    }
 }
