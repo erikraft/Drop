@@ -1,6 +1,6 @@
 {
   "name": "erikraft-drop",
-  "version": "10.1.4",
+  "version": "10.1.5",
   "type": "module",
   "description": "File sharing by ErikrafT",
   "main": "server/index.js",
