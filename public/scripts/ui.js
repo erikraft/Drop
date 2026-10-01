@@ -1753,7 +1753,26 @@ class PairDeviceDialog extends Dialog {
         return String(value || '').replace(/[^\p{L}\p{N}_-]/gu, '');
     }
 
+    _syncMentionPeers() {
+        const peersUI = window.erikrafTdrop?.peersUI;
+        const peers = peersUI?.peers;
+        if (peers && typeof peers === 'object') {
+            Object.values(peers).forEach(peer => {
+                if (!peer?.id) return;
+                const displayName = peer.name?.displayName || peer.displayName || peer.id;
+                this._peerNames.set(peer.id, displayName);
+            });
+        }
+
+        this.$panel?.querySelectorAll('x-peer[id]').forEach(node => {
+            const peerId = node.id;
+            const displayName = node.querySelector('.name')?.textContent?.trim();
+            if (peerId && displayName) this._peerNames.set(peerId, displayName);
+        });
+    }
+
     _mentionCandidates(query) {
+        this._syncMentionPeers();
         const normalizedQuery = String(query || '').toLocaleLowerCase();
         const candidates = [];
         this._peerNames.forEach((displayName, peerId) => {
@@ -4902,6 +4921,8 @@ class ChatUI {
         this.$roomSelect.addEventListener('change', _ => this._onRoomSelected());
         this.$form.addEventListener('submit', e => this._onSubmit(e));
         this.$input.addEventListener('input', () => this._updateMentionSuggestions());
+        this.$input.addEventListener('click', () => this._updateMentionSuggestions());
+        this.$input.addEventListener('keyup', () => this._updateMentionSuggestions());
         this.$input.addEventListener('keydown', e => this._onMentionKeyDown(e));
         this.$input.addEventListener('blur', () => {
             window.setTimeout(() => this._hideMentionSuggestions(), 120);
@@ -4939,6 +4960,7 @@ class ChatUI {
         this._syncChatHeaderHeight();
         document.body.classList.add('chat-open');
         this.$toggle.classList.remove('has-unread');
+        this._syncMentionPeers();
         if (this._currentRoomKey) {
             this._renderRoom(this._currentRoomKey);
         }
