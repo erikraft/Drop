@@ -1162,6 +1162,14 @@ html[lang="ar"] .chat-panel {
         padding-right: 12px;
     }
 
+    html[lang="ar"] body.chat-open {
+        padding-left: 0;
+    }
+
+    html[lang="ar"] body.chat-open > header {
+        padding-left: 12px;
+    }
+
     .chat-panel {
         top: var(--chat-header-height, 56px);
         width: 100vw;
@@ -1173,9 +1181,6 @@ html[lang="ar"] .chat-panel {
     }
 
     .chat-input {
-        gap: 6px;
-        padding-inline: 10px;
-    }
 
     .chat-input .erikraft-page-agent-ai,
     .chat-input .erikraft-page-agent-ai > button,
