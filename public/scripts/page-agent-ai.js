@@ -115,7 +115,7 @@
 
         const brand = document.createElement('div');
         brand.className = 'erikraft-page-agent-dialog__brand';
-        brand.innerHTML = '<img src="https://raw.githubusercontent.com/alibaba/page-agent/main/packages/extension/public/assets/page-agent-64.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
+        brand.innerHTML = '<img src="images/Page_Agent_Ext.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
 
         const heading = document.createElement('h2');
         heading.className = 'erikraft-page-agent-dialog__title';
@@ -633,7 +633,7 @@
         if (host.closest('#send-text-dialog')) wrapper.dataset.context = 'send-text';
         toggle.title = t('ai.page-agent-title', 'Page Agent Ext');
         toggle.setAttribute('aria-label', t('ai.page-agent-title', 'Page Agent Ext'));
-        toggle.innerHTML = '<img src="https://raw.githubusercontent.com/alibaba/page-agent/main/packages/extension/public/assets/page-agent-64.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
+        toggle.innerHTML = '<img src="images/Page_Agent_Ext.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
 
         const menu = document.createElement('div');
         menu.className = 'erikraft-page-agent-menu';
@@ -710,9 +710,6 @@
             };
 
             button.addEventListener('click', run);
-            button.addEventListener('keydown', event => {
-                if (event.key === 'Enter' || event.key === ' ') run(event);
-            });
         });
     };
 
