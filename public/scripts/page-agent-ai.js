@@ -224,7 +224,7 @@
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('viewBox', '0 0 24 24');
         svg.setAttribute('aria-hidden', 'true');
-        svg.innerHTML = '<path fill="currentColor" d="M5 4h14v4H9v3h7v4H9v5H5V4Zm9 12h5v4h-5v-4Z"/>';
+        svg.innerHTML = '<image href="https://raw.githubusercontent.com/alibaba/page-agent/main/packages/extension/public/assets/page-agent-64.png" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/>';
         return svg;
     };
 
