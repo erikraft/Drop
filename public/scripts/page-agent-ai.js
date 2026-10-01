@@ -194,6 +194,20 @@
         return input;
     };
 
+    const ensureIntegrationStyles = () => {
+        if (document.getElementById('erikraft-page-agent-integration-style')) return;
+        const style = document.createElement('style');
+        style.id = 'erikraft-page-agent-integration-style';
+        style.textContent = `
+            .erikraft-page-agent-dialog__integration { display:grid; gap:12px; margin-top:16px; }
+            .erikraft-page-agent-dialog__integration-card { display:grid; gap:10px; padding:12px; border:1px solid rgba(var(--text-color),.14); border-radius:14px; background:rgba(var(--bg-color),.28); }
+            .erikraft-page-agent-dialog__integration-code { display:block; max-height:96px; overflow:auto; padding:10px; border-radius:10px; white-space:pre-wrap; overflow-wrap:anywhere; font:12px/1.45 monospace; background:rgba(var(--text-color),.06); }
+            .erikraft-page-agent-dialog__integration-actions { display:flex; flex-wrap:wrap; gap:8px; }
+            @media (max-width:600px) { .erikraft-page-agent-dialog__integration-actions > button { flex:1 1 140px; } }
+        `;
+        document.head.appendChild(style);
+    };
+
     const customInstructionDialog = target => {
         const dialog = createDialog({
             title: t('ai.custom', 'Instrução personalizada')
@@ -289,6 +303,8 @@
             makeBookmarklet(t('ai.bookmarklet-cdn', 'Bookmarklet CDN'), CDN_BOOKMARKLET),
             makeBookmarklet(t('ai.bookmarklet-mirror', 'Bookmarklet Mirror'), MIRROR_BOOKMARKLET)
         );
+
+        ensureIntegrationStyles();
 
         const integration = document.createElement('div');
         integration.className = 'erikraft-page-agent-dialog__integration';
