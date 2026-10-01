@@ -376,19 +376,28 @@
     },
     "ai": {
         "page-agent-title": "Page Agent Ext",
-        "improve": "Improve text",
-        "correct": "Correct text",
-        "polish": "Polish text",
-        "code": "Fix/review code",
         "custom": "Custom instruction",
         "settings": "Configure LLM and authorization",
         "stop": "Stop current task",
         "download": "Download Page Agent Ext",
-        "cdn-jsdelivr": "Page Agent — jsDelivr",
-        "cdn-npmmirror": "Page Agent — npmmirror",
-        "credits": "Page Agent — credits and documentation",
+        "execute": "Run instruction",
+        "dialog-close": "Close",
+        "settings-description": "Configure the LLM endpoint, model and Page Agent Ext authorization without browser pop-ups.",
+        "endpoint": "LLM endpoint",
+        "model": "Model",
+        "api-key": "API key",
+        "api-key-placeholder": "Optional for Ollama/LM Studio",
+        "auth-token": "Page Agent Ext authorization token",
+        "auth-token-placeholder": "Paste the token copied from the extension",
+        "save": "Save configuration",
+        "settings-required": "Enter the LLM endpoint and model.",
+        "settings-saved": "Page Agent configuration saved.",
+        "custom-description": "Describe exactly what Page Agent should do only with the text/code field. The task will not send the message automatically.",
+        "custom-placeholder": "Example: make the text more professional while preserving its meaning.",
+        "custom-hint": "Page Agent is restricted to the field marked by ErikrafT Drop™.",
         "completed": "AI applied to the text.",
         "desktop-only": "Page Agent AI is available on desktop only.",
-        "install-required": "Install and authorize Page Agent Ext to use AI text actions."
+        "install-required": "Install and authorize Page Agent Ext to use AI.",
+        "failed": "Page Agent could not complete the task."
     }
-}
+}\n
