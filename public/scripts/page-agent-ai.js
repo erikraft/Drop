@@ -267,11 +267,6 @@
             title: t('ai.custom', 'Instrução personalizada')
         });
 
-        const textarea = document.createElement('textarea');
-        textarea.className = 'erikraft-page-agent-dialog__textarea';
-        textarea.rows = 7;
-        dialog.body.appendChild(textarea);
-
         const tools = document.createElement('div');
         tools.className = 'erikraft-page-agent-dialog__tools';
 
@@ -293,41 +288,40 @@
             'Para mostrar a barra de favoritos: Windows/Linux Ctrl+Shift+B · macOS ⌘+Shift+B. Depois, arraste o botão de cada opção para a barra.'
         );
 
-        const executeBookmarklet = (value, button) => {
-            loadPageAgent(value === MIRROR_BOOKMARKLET ? 'mirror' : 'cdn', button);
-        };
-
         const quickRun = document.createElement('div');
         quickRun.className = 'erikraft-page-agent-dialog__quick-run';
 
         const quickRunCopy = document.createElement('div');
         quickRunCopy.className = 'erikraft-page-agent-dialog__quick-run-copy';
+
         const quickRunTitle = document.createElement('strong');
         quickRunTitle.textContent = t('ai.quick-run-title', 'Executar Page Agent 1.12.4');
+
         const quickRunDescription = document.createElement('span');
         quickRunDescription.textContent = t(
             'ai.quick-run-description',
             'Atalho de 1 clique para carregar o Page Agent diretamente nesta página.'
         );
+
         quickRunCopy.append(quickRunTitle, quickRunDescription);
 
         const quickRunButtons = document.createElement('div');
         quickRunButtons.className = 'erikraft-page-agent-dialog__quick-run-buttons';
+
         const quickMirror = document.createElement('button');
         quickMirror.type = 'button';
         quickMirror.className = 'erikraft-page-agent-dialog__quick-run-button';
         quickMirror.textContent = t('ai.quick-run-mirror', 'Executar · npm Mirror');
-        quickMirror.title = t('ai.quick-run-mirror-title', 'Executar agora usando o npm Mirror');
-        quickMirror.addEventListener('click', () => executeBookmarklet(MIRROR_BOOKMARKLET, quickMirror));
+        quickMirror.addEventListener('click', () => loadPageAgent('mirror', quickMirror));
+
         const quickCdn = document.createElement('button');
         quickCdn.type = 'button';
         quickCdn.className = 'erikraft-page-agent-dialog__quick-run-button';
         quickCdn.textContent = t('ai.quick-run-cdn', 'Executar · jsDelivr');
-        quickCdn.title = t('ai.quick-run-cdn-title', 'Executar agora usando o jsDelivr');
-        quickCdn.addEventListener('click', () => executeBookmarklet(CDN_BOOKMARKLET, quickCdn));
+        quickCdn.addEventListener('click', () => loadPageAgent('cdn', quickCdn));
+
         quickRunButtons.append(quickMirror, quickCdn);
         quickRun.append(quickRunCopy, quickRunButtons);
-        dialog.body.appendChild(quickRun);
 
         const makeBookmarklet = (label, value) => {
             const row = document.createElement('div');
@@ -359,6 +353,7 @@
             toolsTitle,
             toolsDescription,
             bookmarkHelp,
+            quickRun,
             makeBookmarklet(t('ai.bookmarklet-cdn', 'Bookmarklet CDN'), CDN_BOOKMARKLET),
             makeBookmarklet(t('ai.bookmarklet-mirror', 'Bookmarklet Mirror'), MIRROR_BOOKMARKLET)
         );
@@ -374,29 +369,15 @@
         download.rel = 'noopener noreferrer';
         download.textContent = t('ai.download', 'Baixar Page Agent Ext');
 
-        const cancel = document.createElement('button');
-        cancel.type = 'button';
-        cancel.className = 'btn btn-rounded btn-grey';
-        cancel.textContent = t('dialogs.cancel', 'Cancelar');
-        cancel.addEventListener('click', dialog.close);
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'btn btn-rounded btn-grey';
+        close.textContent = t('ai.dialog-close', 'Fechar');
+        close.setAttribute('aria-label', t('ai.dialog-close', 'Fechar'));
+        close.addEventListener('click', dialog.close);
 
-        const execute = document.createElement('button');
-        execute.type = 'button';
-        execute.className = 'erikraft-page-agent-dialog__primary';
-        execute.textContent = t('ai.execute', 'Executar instrução');
-        execute.addEventListener('click', async () => {
-            const instruction = textarea.value.trim();
-            if (!instruction) {
-                textarea.focus();
-                return;
-            }
-            dialog.close();
-            await run(target, 'custom', instruction);
-        });
-
-        actions.append(download, cancel, execute);
+        actions.append(download, close);
         dialog.body.appendChild(actions);
-        textarea.focus();
         return dialog;
     };
 
