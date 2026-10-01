@@ -4476,7 +4476,10 @@ class Notifications {
         // duplicate notifications and to keep notification behavior native in the app.
         if (window.ErikrafTdropAndroid && typeof window.ErikrafTdropAndroid.notifyMention === 'function') {
             try {
-                window.ErikrafTdropAndroid.notifyMention(senderName, body);
+                window.ErikrafTdropAndroid.notifyMention(
+                    Localization.getTranslation('notifications.mention-received', null, { name: senderName }),
+                    body
+                );
                 return;
             } catch (error) {
                 console.warn('[Notifications] Android mention bridge failed; falling back to Web Notification.', error);
