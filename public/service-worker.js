@@ -35,7 +35,6 @@ const relativePathsToCache = [
     'scripts/libs/qr-code-styling.js',
     'scripts/qr-helper.js',
     'scripts/libs/zip.min.js',
-    'scripts/webtorrent-transfer.js',
     'sounds/blop.mp3',
     'sounds/blop.ogg',
     'sounds/ads.mp3',
