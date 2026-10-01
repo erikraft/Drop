@@ -36,7 +36,8 @@ for (const required of [
 
 assert.match(serviceWorker, /const cacheVersion = 'v10\\.1\\.5';/);
 assert.match(serviceWorker, /Promise\.allSettled\(/, 'Service Worker installation must tolerate individual cache failures.');
-assert.match(pageAgent, /PAGE_AGENT_EXT\\.execute/);\nassert.match(main, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
+assert.match(pageAgent, /PAGE_AGENT_EXT\.execute/);
+assert.match(main, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
 assert.match(serviceWorker, /const createManifestFallback = \(\) => new Response\(/,
     'Service Worker must provide a valid local manifest when a same-origin manifest cannot be fetched.');
 assert.match(serviceWorker, /'Content-Type': 'application\/manifest\+json'/,
