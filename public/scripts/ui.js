@@ -1190,135 +1190,20 @@ class ReceiveFileDialog extends ReceiveDialog {
                 }
             }
 
-            // Metadata EXIF: view raw APP1 EXIF segment and offer remove (re-encode)
+            // Metadata Inspector: use the unified received-media metadata engine.
             if (this.$metadataBtn) {
                 if ((mime || '').startsWith('image/') || (mime || '').startsWith('video/')) {
                     this.$metadataBtn.removeAttribute('hidden');
-                    this.$metadataBtn.onclick = async _ => {
+                    this.$metadataBtn.onclick = async () => {
                         try {
-                            let info = '';
-                            let title = 'Metadata';
-
-                            if ((mime || '').startsWith('image/')) {
-                                const ab = await primary.arrayBuffer();
-                                const view = new Uint8Array(ab);
-
-                                // search for APP1 marker 0xFF 0xE1
-                                let found = -1;
-                                for (let i = 0; i < view.length - 1; i++) {
-                                    if (view[i] === 0xFF && view[i + 1] === 0xE1) {
-                                        found = i;
-                                        break;
-                                    }
-                                }
-
-                                if (found === -1) {
-                                    info = 'No EXIF APP1 segment found.';
-                                } else {
-                                    const len = (view[found + 2] << 8) + view[found + 3];
-                                    const start = found + 4;
-                                    const end = Math.min(start + len - 2, view.length);
-
-                                    const segment = view.slice(start, end);
-
-                                    // Complete EXIF (no limit)
-                                    const hex = Array.prototype.map
-                                        .call(segment, b => ('0' + b.toString(16)).slice(-2))
-                                        .join(' ');
-
-                                    info =
-                                        'EXIF APP1 segment (complete hexdump):\n\n' +
-                                        hex +
-                                        '\n\nTotal size: ' + segment.length + ' bytes';
-                                }
-                                title = 'EXIF Metadata';
-                            } else if ((mime || '').startsWith('video/')) {
-                                const ab = await primary.arrayBuffer();
-                                const view = new Uint8Array(ab);
-
-                                // For MP4, search for 'moov' box (metadata container)
-                                let found = -1;
-                                const moov = [0x6D, 0x6F, 0x6F, 0x76]; // 'moov'
-                                for (let i = 0; i < view.length - 7; i++) {
-                                    if (view[i + 4] === moov[0] && view[i + 5] === moov[1] && view[i + 6] === moov[2] && view[i + 7] === moov[3]) {
-                                        found = i;
-                                        break;
-                                    }
-                                }
-
-                                if (found === -1) {
-                                    info = 'No MP4 moov box found. This may not be an MP4 file or metadata is embedded differently.';
-                                } else {
-                                    const size = (view[found] << 24) + (view[found + 1] << 16) + (view[found + 2] << 8) + view[found + 3];
-                                    const start = found;
-                                    const end = Math.min(start + size, view.length);
-
-                                    const segment = view.slice(start, end);
-
-                                    const hex = Array.prototype.map
-                                        .call(segment, b => ('0' + b.toString(16)).slice(-2))
-                                        .join(' ');
-
-                                    info =
-                                        'MP4 moov box (metadata container, complete hexdump):\n\n' +
-                                        hex +
-                                        '\n\nTotal size: ' + segment.length + ' bytes';
-                                }
+                            const inspector = window.__erikrafTReceivedMediaTest?.inspector;
+                            if (typeof inspector !== 'function') {
+                                throw new Error('Metadata Inspector ainda não foi carregado.');
                             }
-
-                            let canRemove = false;
-                            let onRemove = null;
-
-                            if ((mime || '').startsWith('image/')) {
-                                const ab = await primary.arrayBuffer();
-                                const view = new Uint8Array(ab);
-                                let foundExif = -1;
-                                for (let i = 0; i < view.length - 1; i++) {
-                                    if (view[i] === 0xFF && view[i + 1] === 0xE1) {
-                                        foundExif = i;
-                                        break;
-                                    }
-                                }
-                                if (foundExif !== -1) {
-                                    canRemove = true;
-                                    onRemove = () => {
-                                        try {
-                                            const img = document.createElement('img');
-                                            img.src = URL.createObjectURL(primary);
-
-                                            img.onload = async () => {
-                                                const canvas = document.createElement('canvas');
-                                                canvas.width = img.naturalWidth;
-                                                canvas.height = img.naturalHeight;
-
-                                                const ctx = canvas.getContext('2d');
-                                                ctx.drawImage(img, 0, 0);
-
-                                                canvas.toBlob(blob => {
-                                                    const a = document.createElement('a');
-                                                    a.href = URL.createObjectURL(blob);
-
-                                                    const name = primary.name || 'image';
-                                                    a.download = name.replace(/(\.[a-zA-Z0-9_-]+)?$/, '') + '-noexif.jpg';
-
-                                                    a.click();
-
-                                                    Events.fire('notify-user', Localization.getTranslation('notifications.metadata-removed'));
-                                                }, 'image/jpeg', 0.92);
-                                            };
-                                        } catch (err) {
-                                            console.error('Remove EXIF failed', err);
-                                        }
-                                    };
-                                }
-                            }
-
-                            if (window.erikrafTdrop && window.erikrafTdrop.exifDialog) {
-                                window.erikrafTdrop.exifDialog.displayExif(info, canRemove, onRemove);
-                            }
+                            await inspector(primary);
                         } catch (err) {
-                            console.error('Read metadata failed', err);
-                            Events.fire('notify-user', Localization.getTranslation('notifications.copied-to-clipboard-error'));
+                            console.error('[Metadata] Inspector failed', err);
+                            Events.fire('notify-user', err?.message || Localization.getTranslation('notifications.copied-to-clipboard-error'));
                         }
                     };
                 } else {
@@ -4622,25 +4507,45 @@ class Notifications {
         this.$headerNotificationButton = $('notification');
         this.$downloadBtn = $('download-btn');
 
-        this.$headerNotificationButton.addEventListener('click', _ => this._requestPermission());
+        this.$headerNotificationButton?.addEventListener('click', _ => this._requestPermission());
 
+        this._markAttention = () => {
+            if (Notification.permission !== 'granted') {
+                this.$headerNotificationButton?.classList.add('notification-attention');
+            }
+        };
 
-        Events.on('text-received', e => this._messageNotification(e.detail.text, e.detail.peerId));
-        Events.on('chat-message-received', e => this._chatMessageNotification(e.detail.message));
-        Events.on('files-received', e => this._downloadNotification(e.detail.files));
-        Events.on('files-transfer-request', e => this._requestNotification(e.detail.request, e.detail.peerId));
+        Events.on('text-received', e => {
+            this._markAttention();
+            this._messageNotification(e.detail.text, e.detail.peerId);
+        });
+        Events.on('chat-message-received', e => {
+            this._markAttention();
+            this._chatMessageNotification(e.detail.message);
+        });
+        Events.on('files-received', e => {
+            this._markAttention();
+            this._downloadNotification(e.detail.files);
+        });
+        Events.on('files-transfer-request', e => {
+            this._markAttention();
+            this._requestNotification(e.detail.request, e.detail.peerId);
+        });
     }
 
     async _requestPermission() {
-        await Notification.
-            requestPermission(permission => {
-                if (permission !== 'granted') {
-                    Events.fire('notify-user', Localization.getTranslation("notifications.notifications-permissions-error"));
-                    return;
-                }
-                Events.fire('notify-user', Localization.getTranslation("notifications.notifications-enabled"));
-                this.$headerNotificationButton.setAttribute('hidden', true);
-            });
+        try {
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+                Events.fire('notify-user', Localization.getTranslation("notifications.notifications-permissions-error"));
+                return;
+            }
+            Events.fire('notify-user', Localization.getTranslation("notifications.notifications-enabled"));
+            this.$headerNotificationButton?.classList.remove('notification-attention');
+            this.$headerNotificationButton?.setAttribute('hidden', true);
+        } catch (error) {
+            console.error('[Notifications] Permission request failed:', error);
+        }
     }
 
     _notify(title, body) {
