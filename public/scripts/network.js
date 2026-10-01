@@ -1115,6 +1115,7 @@ class Peer {
                 timestamp: timestamp,
                 senderId: senderId,
                 senderName: senderName,
+                mentions: mentions,
                 peerId: this._peerId
             }
         });
@@ -1636,6 +1637,7 @@ class PeersManager {
         const timestamp = detail.timestamp || Date.now();
         const senderId = detail.senderId || sessionStorage.getItem('peer_id');
         const senderName = detail.senderName || this._displayName;
+        const mentions = Array.isArray(detail.mentions) ? detail.mentions : [];
 
         const peersInRoom = this._getPeerIdsFromRoom(roomType, roomId);
         if (!peersInRoom.length) {
@@ -1655,7 +1657,8 @@ class PeersManager {
                 roomId: roomId,
                 senderName: senderName,
                 senderId: senderId,
-                timestamp: timestamp
+                timestamp: timestamp,
+                mentions: mentions
             }, { roomType, roomId, timestamp, senderId, senderName });
             if (result.error) {
                 failedPeers.push(peerId);
