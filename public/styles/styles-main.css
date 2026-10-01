@@ -446,6 +446,12 @@ x-noscript {
 }
 
 
+@supports (width: max(1px, 1px)) {
+    #about x-background {
+        --size: max(max(230vw, 230vh), calc(150vh + 150vw));
+    }
+}
+
 @supports (width: min(100vw, 100vw)) {
     .optical-matrix-dialog { width: min(640px, calc(100vw - 24px)); }
     .optical-matrix-dialog canvas { width: min(100%, 500px); }
@@ -1360,8 +1366,6 @@ button::-moz-focus-inner {
 #about x-background {
     position: absolute;
     --size: 230vw;
-    /* Modern viewport-aware size is an enhancement. */
-    --size: 230vh;
     --size-half: calc(var(--size)/2);
     top: calc(28px - var(--size-half));
     width: var(--size);
