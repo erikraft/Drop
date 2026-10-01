@@ -41,10 +41,13 @@
         model: config.model
     }));
 
-    const getApiKey = () => sessionStorage.getItem(SESSION_KEY) || '';
-    const setApiKey = value => value
-        ? sessionStorage.setItem(SESSION_KEY, value)
-        : sessionStorage.removeItem(SESSION_KEY);
+    // API keys are intentionally kept only in memory for this page session.
+    // Do not persist them in localStorage/sessionStorage or prefill them into the DOM.
+    let sessionApiKey = '';
+    const getApiKey = () => sessionApiKey;
+    const setApiKey = value => {
+        sessionApiKey = value || '';
+    };
 
     const getAuthToken = () => localStorage.getItem('PageAgentExtUserAuthToken') || '';
     const setAuthToken = value => value
@@ -145,9 +148,10 @@
         });
         const apiKey = addField(dialog.body, {
             label: t('ai.api-key', 'API key'),
-            value: getApiKey(),
             type: 'password',
-            placeholder: t('ai.api-key-placeholder', 'Opcional para Ollama/LM Studio'),
+            placeholder: getApiKey()
+                ? t('ai.api-key-placeholder-configured', 'Deixe em branco para manter a chave desta sessão')
+                : t('ai.api-key-placeholder', 'Opcional para Ollama/LM Studio'),
             autocomplete: 'off'
         });
         const token = addField(dialog.body, {
@@ -178,7 +182,8 @@
                 return;
             }
             saveConfig({ baseURL, model: selectedModel });
-            setApiKey(apiKey.value.trim());
+            const enteredApiKey = apiKey.value.trim();
+            if (enteredApiKey) setApiKey(enteredApiKey);
             setAuthToken(token.value.trim());
             dialog.close();
             notify(t('ai.settings-saved', 'Configuração do Page Agent salva.'));
