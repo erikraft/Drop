@@ -4969,6 +4969,23 @@ class ChatUI {
         this._defaultTitle = 'ErikrafT Drop™ | Transfer Files Cross-Platform. No Setup, No Signup.';
         this._mentionMatches = [];
         this._mentionIndex = -1;
+        this._headerResizeObserver = null;
+        this._syncChatHeaderHeight = () => {
+            const header = document.querySelector('body > header');
+            if (!header) return;
+            const height = Math.ceil(header.getBoundingClientRect().height);
+            document.documentElement.style.setProperty('--chat-header-height', height + 'px');
+        };
+
+        this._syncChatHeaderHeight();
+        if (typeof ResizeObserver === 'function') {
+            const header = document.querySelector('body > header');
+            if (header) {
+                this._headerResizeObserver = new ResizeObserver(() => this._syncChatHeaderHeight());
+                this._headerResizeObserver.observe(header);
+            }
+        }
+        window.addEventListener('resize', this._syncChatHeaderHeight, { passive: true });
 
         this.$toggle.addEventListener('click', _ => {
             console.debug('[ChatUI] WebChat toggle clicked.');
@@ -5014,6 +5031,7 @@ class ChatUI {
 
     show() {
         this.$panel.hidden = false;
+        this._syncChatHeaderHeight();
         document.body.classList.add('chat-open');
         this.$toggle.classList.remove('has-unread');
         if (this._currentRoomKey) {
