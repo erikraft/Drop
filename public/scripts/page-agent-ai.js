@@ -80,11 +80,23 @@
         heading.className = 'erikraft-page-agent-dialog__title';
         heading.textContent = title;
 
+        const headerActions = document.createElement('div');
+        headerActions.className = 'erikraft-page-agent-dialog__header-actions';
+
+        const fullscreen = document.createElement('button');
+        fullscreen.type = 'button';
+        fullscreen.className = 'erikraft-page-agent-dialog__fullscreen';
+        fullscreen.setAttribute('aria-label', t('ai.fullscreen', 'Ver tudo'));
+        fullscreen.setAttribute('aria-expanded', 'false');
+        fullscreen.textContent = '⛶';
+
         const close = document.createElement('button');
         close.type = 'button';
         close.className = 'erikraft-page-agent-dialog__close';
-        close.setAttribute('aria-label', t('ai.dialog-close', 'Close'));
+        close.setAttribute('aria-label', t('ai.dialog-close', 'Fechar'));
         close.textContent = '×';
+
+        headerActions.append(fullscreen, close);
 
         const body = document.createElement('div');
         body.className = 'erikraft-page-agent-dialog__body';
@@ -96,19 +108,34 @@
             body.appendChild(desc);
         }
 
-        header.append(brand, heading, close);
+        header.append(brand, heading, headerActions);
         panel.append(header, body);
         overlay.appendChild(panel);
         document.body.appendChild(overlay);
         document.documentElement.classList.add('erikraft-page-agent-dialog-open');
 
         const closeAll = () => closeDialog(overlay);
+        const setFullscreen = enabled => {
+            panel.classList.toggle('is-fullscreen', enabled);
+            fullscreen.setAttribute('aria-expanded', String(enabled));
+            fullscreen.setAttribute(
+                'aria-label',
+                enabled
+                    ? t('ai.exit-fullscreen', 'Sair de Ver tudo')
+                    : t('ai.fullscreen', 'Ver tudo')
+            );
+            fullscreen.textContent = enabled ? '⛶' : '⛶';
+        };
+
+        fullscreen.addEventListener('click', () => {
+            setFullscreen(!panel.classList.contains('is-fullscreen'));
+        });
         close.addEventListener('click', closeAll);
         overlay.addEventListener('click', event => {
             if (event.target === overlay) closeAll();
         });
 
-        return { overlay, panel, body, close: closeAll };
+        return { overlay, panel, body, close: closeAll, setFullscreen };
     };
 
     const addField = (body, { label, value = '', type = 'text', placeholder = '', autocomplete = 'off' }) => {
@@ -363,12 +390,17 @@
             .erikraft-page-agent-menu .label { padding:7px 11px; font-size:11px; opacity:.62; }
             .erikraft-page-agent-dialog { position:fixed; inset:0; z-index:2147481000; display:grid; place-items:center; padding:18px; box-sizing:border-box; background:rgba(8,8,14,.64); backdrop-filter:blur(7px); overflow:auto; }
             .erikraft-page-agent-dialog__panel { width:min(var(--page-agent-dialog-width),calc(100vw - 28px)); max-height:min(760px,calc(100vh - 28px)); display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(123,105,255,.36); border-radius:18px; background:var(--background-color,#181818); color:inherit; box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 35px rgba(88,185,255,.10); }
-            .erikraft-page-agent-dialog__header { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background:linear-gradient(120deg,rgba(123,105,255,.13),rgba(88,185,255,.08)); }
+            .erikraft-page-agent-dialog__header { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background:linear-gradient(120deg,rgba(123,105,255,.13),rgba(88,185,255,.08)); }
             .erikraft-page-agent-dialog__brand { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:700; white-space:nowrap; }
             .erikraft-page-agent-dialog__brand img { width:24px; height:24px; border-radius:7px; }
-            .erikraft-page-agent-dialog__title { margin:0; min-width:0; font-size:17px; line-height:1.25; }
-            .erikraft-page-agent-dialog__close { width:34px; height:34px; border:0; border-radius:9px; background:transparent; color:inherit; font-size:25px; cursor:pointer; }
-            .erikraft-page-agent-dialog__close:hover { background:rgba(127,127,127,.13); }
+            .erikraft-page-agent-dialog__title { margin:0; min-width:0; font-size:17px; line-height:1.25; overflow-wrap:anywhere; }
+            .erikraft-page-agent-dialog__header-actions { display:flex; align-items:center; gap:4px; }
+            .erikraft-page-agent-dialog__fullscreen,.erikraft-page-agent-dialog__close { width:34px; height:34px; border:0; border-radius:9px; background:transparent; color:inherit; cursor:pointer; }
+            .erikraft-page-agent-dialog__fullscreen { font-size:20px; line-height:1; }
+            .erikraft-page-agent-dialog__close { font-size:25px; line-height:1; }
+            .erikraft-page-agent-dialog__fullscreen:hover,.erikraft-page-agent-dialog__close:hover { background:rgba(127,127,127,.13); }
+            .erikraft-page-agent-dialog__panel.is-fullscreen { width:100%; height:100%; max-width:none; max-height:none; border-radius:14px; }
+            .erikraft-page-agent-dialog__panel.is-fullscreen .erikraft-page-agent-dialog__body { padding:18px clamp(16px,4vw,42px); }
             .erikraft-page-agent-dialog__body { min-height:0; overflow:auto; padding:16px; }
             .erikraft-page-agent-dialog__description,.erikraft-page-agent-dialog__hint { margin:0 0 14px; opacity:.76; line-height:1.5; font-size:13px; }
             .erikraft-page-agent-dialog__field { display:block; margin:0 0 12px; }
@@ -384,8 +416,9 @@
                 .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
                 .erikraft-page-agent-dialog { padding:10px; place-items:center; }
                 .erikraft-page-agent-dialog__panel { width:calc(100vw - 20px); max-height:calc(100vh - 20px); border-radius:15px; }
-                .erikraft-page-agent-dialog__header { grid-template-columns:auto 1fr auto; padding:12px; }
+                .erikraft-page-agent-dialog__header { grid-template-columns:auto minmax(0,1fr) auto; padding:12px; }
                 .erikraft-page-agent-dialog__brand span { display:none; }
+                .erikraft-page-agent-dialog__panel.is-fullscreen { width:100%; height:100%; border-radius:10px; }
                 .erikraft-page-agent-dialog__body { padding:12px; }
                 .erikraft-page-agent-dialog__actions > * { flex:1 1 145px; }
             }

@@ -382,6 +382,8 @@
         "download": "Download Page Agent Ext",
         "execute": "Run instruction",
         "dialog-close": "Close",
+        "fullscreen": "View all",
+        "exit-fullscreen": "Exit full view",
         "settings-description": "Configure the LLM endpoint, model and Page Agent Ext authorization without browser pop-ups.",
         "endpoint": "LLM endpoint",
         "model": "Model",
@@ -400,4 +402,4 @@
         "install-required": "Install and authorize Page Agent Ext to use AI.",
         "failed": "Page Agent could not complete the task."
     }
-}\n
+}
