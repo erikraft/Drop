@@ -1181,6 +1181,9 @@ html[lang="ar"] .chat-panel {
     }
 
     .chat-input {
+        gap: 6px;
+        padding-inline: 10px;
+    }
 
     .chat-input .erikraft-page-agent-ai,
     .chat-input .erikraft-page-agent-ai > button,
