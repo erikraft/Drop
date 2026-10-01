@@ -25,9 +25,40 @@
         const style = document.createElement('style');
         style.id = STYLE_ID;
         style.textContent = `
-#${BUTTON_ID}{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:0;max-width:100%;box-sizing:border-box}
+#${BUTTON_ID}{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:42px;
+    min-width:min(220px,100%);
+    max-width:100%;
+    margin:0;
+    padding:9px 14px;
+    box-sizing:border-box;
+    border:1px solid color-mix(in srgb, rgb(var(--text-color)) 18%, transparent);
+    border-radius:12px;
+    color:rgb(var(--text-color));
+    background:rgb(var(--bg-color-secondary));
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
+    transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .15s ease;
+}
+#${BUTTON_ID}:hover{background:color-mix(in srgb,rgb(var(--bg-color-secondary)) 86%,rgb(var(--text-color)));box-shadow:0 2px 8px rgba(0,0,0,.16)}
+#${BUTTON_ID}:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}
+#${BUTTON_ID}:active{transform:translateY(1px)}
 #${BUTTON_ID}[hidden]{display:none!important}
-#${BUTTON_ID}.erikraft-screen-awake-active{font-weight:600}
+#${BUTTON_ID}.erikraft-screen-awake-active{
+    font-weight:700;
+    color:#fff;
+    background:var(--primary-color);
+    border-color:var(--primary-color);
+}
+@media(prefers-color-scheme:dark){
+    body:not(.light-theme) #${BUTTON_ID}{box-shadow:0 1px 4px rgba(0,0,0,.35)}
+}
+@media(max-width:600px){
+    #${BUTTON_ID}{width:100%;min-height:44px}
+}
 x-dialog#animated-qr-main-dialog x-background,
 x-dialog#animated-qr-send-dialog x-background,
 x-dialog#animated-qr-receive-dialog x-background,
