@@ -56,5 +56,10 @@ assert.doesNotMatch(customDialog, /erikraft-page-agent-dialog__textarea/);
 assert.doesNotMatch(customDialog, /Executar instrução/);
 assert.match(customDialog, /textContent = t\('ai\.dialog-close', 'Fechar'\)/);
 assert.match(customDialog, /actions\.append\(download, close\)/);
+assert.match(pageAgent, /event\.key === 'Escape'/);
+assert.match(pageAgent, /dialog\._pageAgentEscapeHandler/);
+assert.match(pageAgent, /let wrapper = host\.querySelector\('\.erikraft-page-agent-ai'\)/);
+assert.match(pageAgent, /if \(wrapper\.dataset\.pageAgentBound === 'true'\) return;/);
+assert.match(pageAgent, /toggle\.addEventListener\('click', openMenu\)/);
 
 console.log('WebChat/Page Agent layout, peer mentions, plain-text dialog, and Live Photo static checks passed.');
