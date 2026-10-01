@@ -1035,6 +1035,20 @@ body.chat-open {
     color: rgb(var(--bg-color));
 }
 
+/* Share-mode text editing follows PairDrop's primary blue action styling. */
+.shr-panel .edit-btn {
+    background: var(--primary-color);
+    color: #fff !important;
+    border: 1px solid var(--primary-color);
+}
+.shr-panel .edit-btn:hover {
+    filter: brightness(1.06);
+}
+.shr-panel .edit-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 button::-moz-focus-inner {
     border: 0;
 }
