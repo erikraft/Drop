@@ -194,74 +194,6 @@
         return input;
     };
 
-    const promptConfig = () => {
-        if (!isDesktop()) return null;
-
-        const current = getConfig();
-        const dialog = createDialog({
-            title: t('ai.settings', 'Configurar LLM e autorização'),
-            description: t('ai.settings-description', 'Configure o endpoint LLM, o modelo e a autorização do Page Agent Ext sem usar pop-ups do navegador.')
-        });
-
-        const endpoint = addField(dialog.body, {
-            label: t('ai.endpoint', 'Endpoint LLM'),
-            value: current.baseURL || '',
-            placeholder: 'https://api.openai.com/v1'
-        });
-        const model = addField(dialog.body, {
-            label: t('ai.model', 'Modelo'),
-            value: current.model || '',
-            placeholder: 'gpt-5.2'
-        });
-        const apiKey = addField(dialog.body, {
-            label: t('ai.api-key', 'API key'),
-            type: 'password',
-            placeholder: getApiKey()
-                ? t('ai.api-key-placeholder-configured', 'Deixe em branco para manter a chave desta sessão')
-                : t('ai.api-key-placeholder', 'Opcional para Ollama/LM Studio'),
-            autocomplete: 'off'
-        });
-        const token = addField(dialog.body, {
-            label: t('ai.auth-token', 'Token de autorização do Page Agent Ext'),
-            value: getAuthToken(),
-            type: 'password',
-            placeholder: t('ai.auth-token-placeholder', 'Cole o token copiado da extensão'),
-            autocomplete: 'off'
-        });
-
-        const actions = document.createElement('div');
-        actions.className = 'erikraft-page-agent-dialog__actions';
-        const cancel = document.createElement('button');
-        cancel.type = 'button';
-        cancel.className = 'btn btn-rounded btn-grey';
-        cancel.textContent = t('dialogs.cancel', 'Cancelar');
-        cancel.addEventListener('click', dialog.close);
-
-        const save = document.createElement('button');
-        save.type = 'button';
-        save.className = 'erikraft-page-agent-dialog__primary';
-        save.textContent = t('ai.save', 'Salvar configuração');
-        save.addEventListener('click', () => {
-            const baseURL = endpoint.value.trim();
-            const selectedModel = model.value.trim();
-            if (!baseURL || !selectedModel) {
-                notify(t('ai.settings-required', 'Informe o endpoint LLM e o modelo.'));
-                return;
-            }
-            saveConfig({ baseURL, model: selectedModel });
-            const enteredApiKey = apiKey.value.trim();
-            if (enteredApiKey) setApiKey(enteredApiKey);
-            setAuthToken(token.value.trim());
-            dialog.close();
-            notify(t('ai.settings-saved', 'Configuração do Page Agent salva.'));
-        });
-
-        actions.append(cancel, save);
-        dialog.body.appendChild(actions);
-        endpoint.focus();
-        return { dialog, submit: () => save.click() };
-    };
-
     const customInstructionDialog = target => {
         const dialog = createDialog({
             title: t('ai.custom', 'Instrução personalizada')
@@ -381,19 +313,6 @@
         return dialog;
     };
 
-    const ensureConfig = () => {
-        const config = getConfig();
-        if (!config.baseURL || !config.model || !getAuthToken()) {
-            promptConfig();
-            return null;
-        }
-        return {
-            baseURL: config.baseURL,
-            model: config.model,
-            apiKey: getApiKey()
-        };
-    };
-
     const waitForExtension = async (timeout = 1200) => {
         const started = Date.now();
         while (Date.now() - started < timeout) {
@@ -443,18 +362,12 @@
             return false;
         }
 
-        const config = ensureConfig();
-        if (!config) return false;
-
         const before = snapshotTarget(target);
         target.setAttribute(TARGET_ATTR, 'true');
         target.focus();
 
         try {
             const result = await window.PAGE_AGENT_EXT.execute(buildTask(action, instruction), {
-                baseURL: config.baseURL,
-                model: config.model,
-                ...(config.apiKey ? { apiKey: config.apiKey } : {}),
                 includeInitialTab: true
             });
 
@@ -625,7 +538,6 @@
         };
 
         addAction(t('ai.custom', 'Instrução personalizada'), () => customInstructionDialog(target));
-        addAction(t('ai.settings', 'Configurar LLM e autorização'), () => promptConfig());
 
         const openMenu = event => {
             event.stopPropagation();
