@@ -2041,6 +2041,9 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     position: relative;
     width: 100%;
     max-width: 440px;
+    /* Legacy fallback for browsers without aspect-ratio. */
+    height: 330px;
+    max-height: 75vw;
     aspect-ratio: 4 / 3;
     border-radius: 16px;
     overflow: hidden;
@@ -2055,6 +2058,14 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     object-fit: cover;
     display: block;
 }
+
+@supports (aspect-ratio: 4 / 3) {
+    .erikraft-qr-camera-wrapper {
+        height: auto;
+        max-height: none;
+    }
+}
+
 
 .erikraft-qr-scan-frame {
     position: absolute;
