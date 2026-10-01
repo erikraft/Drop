@@ -655,10 +655,20 @@
                             <use xlink:href="#clip"></use>
                         </svg>
                     </button>
-                    <input id="chat-upload-input" type="file" accept="image/*" multiple hidden>
+                    <input id="chat-upload-input" type="file"
+                        accept="image/*,image/heic,image/heif,.heic,.heif,.mov,video/quicktime,video/*"
+                        multiple hidden>
                     <input id="chat-input" type="text" autocomplete="off" spellcheck="true"
                         data-i18n-key="dialogs.message" data-i18n-attrs="title placeholder"
                         title="Insira a mensagem a ser enviada" placeholder="Texto">
+                    <div class="erikraft-page-agent-ai" data-context="chat">
+                        <button type="button" class="btn btn-rounded btn-grey" title="Page Agent Ext"
+                            aria-label="Page Agent Ext">
+                            <img src="images/Page_Agent_Ext.png" alt="" aria-hidden="true">
+                            <span>Page Agent Ext</span>
+                        </button>
+                    </div>
+                    <div id="chat-mention-menu" class="chat-mention-menu" hidden></div>
                     <button id="chat-send" type="submit" class="btn btn-rounded"
                         data-i18n-key="dialogs.send" data-i18n-attrs="title aria-label">
                         <svg width="20" height="20" aria-hidden="true">
