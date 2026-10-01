@@ -96,6 +96,10 @@
 
     const closeDialog = dialog => {
         if (!dialog) return;
+        if (dialog._pageAgentEscapeHandler) {
+            document.removeEventListener('keydown', dialog._pageAgentEscapeHandler);
+            dialog._pageAgentEscapeHandler = null;
+        }
         dialog.remove();
         document.documentElement.classList.remove('erikraft-page-agent-dialog-open');
     };
@@ -156,6 +160,14 @@
         document.documentElement.classList.add('erikraft-page-agent-dialog-open');
 
         const closeAll = () => closeDialog(overlay);
+        const onKeyDown = event => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeAll();
+            }
+        };
+        overlay._pageAgentEscapeHandler = onKeyDown;
+        document.addEventListener('keydown', onKeyDown);
         const setFullscreen = enabled => {
             panel.classList.toggle('is-fullscreen', enabled);
             fullscreen.setAttribute('aria-expanded', String(enabled));
@@ -598,36 +610,61 @@
     };
 
     const createMenu = (target, host) => {
-        if (!target || !host || host.querySelector('.erikraft-page-agent-ai')) return;
-        const wrapper = document.createElement('div');
-        wrapper.className = 'erikraft-page-agent-ai';
+        if (!target || !host) return;
 
-        const toggle = document.createElement('button');
+        // Reuse the static WebChat control when it is already present in index.html.
+        // The previous implementation returned early in that case, leaving the
+        // existing button without a click handler or menu.
+        let wrapper = host.querySelector('.erikraft-page-agent-ai');
+        let toggle = wrapper?.querySelector('button');
+        let menu = wrapper?.querySelector('.erikraft-page-agent-menu');
+
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'erikraft-page-agent-ai';
+            if (host.closest('#send-text-dialog')) wrapper.dataset.context = 'send-text';
+            host.insertBefore(wrapper, host.id === 'chat-form' ? (host.querySelector('#chat-send') || null) : null);
+        }
+
+        if (!toggle) {
+            toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.className = 'btn btn-rounded btn-grey';
+            toggle.title = t('ai.page-agent-title', 'Page Agent Ext');
+            toggle.setAttribute('aria-label', t('ai.page-agent-title', 'Page Agent Ext'));
+            toggle.innerHTML = '<img src="images/Page_Agent_Ext.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
+            wrapper.appendChild(toggle);
+        }
+
+        if (!menu) {
+            menu = document.createElement('div');
+            menu.className = 'erikraft-page-agent-menu';
+            menu.hidden = true;
+
+            const addAction = (label, action) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = label;
+                button.addEventListener('click', () => {
+                    menu.hidden = true;
+                    action();
+                });
+                menu.appendChild(button);
+            };
+
+            addAction(t('ai.custom', 'Instrução personalizada'), () => customInstructionDialog(target));
+            wrapper.appendChild(menu);
+        }
+
+        if (wrapper.dataset.pageAgentBound === 'true') return;
+        wrapper.dataset.pageAgentBound = 'true';
+
         toggle.type = 'button';
-        toggle.className = 'btn btn-rounded btn-grey';
-        if (host.closest('#send-text-dialog')) wrapper.dataset.context = 'send-text';
         toggle.title = t('ai.page-agent-title', 'Page Agent Ext');
         toggle.setAttribute('aria-label', t('ai.page-agent-title', 'Page Agent Ext'));
-        toggle.innerHTML = '<img src="images/Page_Agent_Ext.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
-
-        const menu = document.createElement('div');
-        menu.className = 'erikraft-page-agent-menu';
-        menu.hidden = true;
-
-        const addAction = (label, action) => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.textContent = label;
-            button.addEventListener('click', () => {
-                menu.hidden = true;
-                action();
-            });
-            menu.appendChild(button);
-        };
-
-        addAction(t('ai.custom', 'Instrução personalizada'), () => customInstructionDialog(target));
 
         const openMenu = event => {
+            event.preventDefault();
             event.stopPropagation();
             menu.hidden = !menu.hidden;
             if (!menu.hidden) {
@@ -646,14 +683,9 @@
         document.addEventListener('click', event => {
             if (!wrapper.contains(event.target) && event.target !== menu) menu.hidden = true;
         });
-
-        wrapper.appendChild(toggle);
-        if (host.id === 'chat-form') {
-            const sendButton = host.querySelector('#chat-send');
-            host.insertBefore(wrapper, sendButton || null);
-        } else {
-            host.appendChild(wrapper);
-        }
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') menu.hidden = true;
+        });
     };
 
     const attachHeaderShortcuts = () => {
