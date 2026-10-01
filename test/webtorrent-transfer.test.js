@@ -19,9 +19,7 @@ for (const tracker of [
     'wss://tracker.fastcast.nz',
     'wss://tracker.btorrent.xyz'
 ]) {
-    assert.match(transfer, new RegExp(tracker.replace(/[.*+?^${}()|[\\]\\]/g, '\\assert.match(transfer, /const TRACKERS = \[[\s\S]*wss:\/\/tracker\./,
-    'WebTorrent must use WebSocket trackers for browser peer discovery.');')),
-        `Configured WebRTC tracker is missing: ${tracker}`);
+    assert.ok(transfer.includes(tracker), `Configured WebRTC tracker is missing: ${tracker}`);
 }
 assert.match(transfer, /torrentClient\.seed\(Array\.from\(input\.files\), \{ announce: TRACKERS \}/,
     'Sender flow must seed the selected files with the configured trackers.');
