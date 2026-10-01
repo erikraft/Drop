@@ -4743,6 +4743,7 @@ class ChatUI {
         this._mentionMatches = [];
         this._mentionIndex = -1;
         this._headerResizeObserver = null;
+        this._notificationBridge = typeof window.ErikrafTdropAndroid !== 'undefined' ? window.ErikrafTdropAndroid : null;
         this._syncChatHeaderHeight = () => {
             const header = document.querySelector('body > header');
             if (!header) return;
@@ -5111,6 +5112,34 @@ class ChatUI {
         this._renderRoom(this._currentRoomKey);
     }
 
+    _extractMentions(text) {
+        this._syncMentionPeers();
+        const mentions = [];
+        const seen = new Set();
+        const normalizedText = String(text || '').toLocaleLowerCase();
+
+        this._peerNames.forEach((displayName, peerId) => {
+            const tokens = [this._mentionToken(displayName), this._mentionToken(peerId)].filter(Boolean);
+            if (tokens.some(token => normalizedText.includes(`@${token.toLocaleLowerCase()}`)) && !seen.has(peerId)) {
+                seen.add(peerId);
+                mentions.push({ peerId, displayName: displayName || peerId });
+            }
+        });
+
+        return mentions;
+    }
+
+    _isMentioned(message) {
+        if (!message || !Array.isArray(message.mentions)) return false;
+        const selfId = sessionStorage.getItem('peer_id') || '';
+        const selfName = this._mentionToken(this._selfDisplayName).toLocaleLowerCase();
+        return message.mentions.some(mention => {
+            const peerId = String(mention?.peerId || '');
+            const displayName = this._mentionToken(mention?.displayName).toLocaleLowerCase();
+            return (selfId && peerId === selfId) || (selfName && displayName === selfName);
+        });
+    }
+
     _onSubmit(e) {
         e.preventDefault();
         const text = this.$input.value.trim();
@@ -5122,6 +5151,7 @@ class ChatUI {
         const timestamp = Date.now();
         const senderId = sessionStorage.getItem('peer_id') || 'self';
         const senderName = this._selfDisplayName || senderId;
+        const mentions = this._extractMentions(text);
 
         const message = {
             id: messageId,
@@ -5131,6 +5161,7 @@ class ChatUI {
             timestamp,
             senderId,
             senderName,
+            mentions,
             direction: 'out',
             status: room.peers.size ? 'sent' : 'failed',
             pending: new Set(room.peers)
@@ -5148,7 +5179,8 @@ class ChatUI {
             messageId: messageId,
             timestamp: timestamp,
             senderId: senderId,
-            senderName: senderName
+            senderName: senderName,
+            mentions: mentions
         });
 
         this.$input.value = '';
@@ -5356,12 +5388,17 @@ class ChatUI {
             timestamp: message.timestamp || Date.now(),
             senderId: message.senderId,
             senderName: senderName,
+            mentions: Array.isArray(message.mentions) ? message.mentions : [],
             direction: 'in',
             unread: isUnread
         };
 
         this._messageIndex.set(messageId, entry);
         room.messages.push(entry);
+
+        if (this._isMentioned(entry)) {
+            Events.fire('chat-mention-received', { message: entry });
+        }
 
         if (this._currentRoomKey === room.key && !this.$panel.hidden) {
             this._appendMessageNode(entry);
