@@ -44,7 +44,7 @@ assert.match(sendTextDialog, /class="fw textarea"[^>]*contenteditable/);
 assert.doesNotMatch(sendTextDialog, /chat-mention-menu/);
 
 const customStart = pageAgent.indexOf('const customInstructionDialog');
-const customEnd = pageAgent.indexOf('const ensureConfig', customStart);
+const customEnd = pageAgent.indexOf('const waitForExtension', customStart);
 assert.ok(customStart >= 0 && customEnd > customStart, 'Custom Page Agent dialog must exist');
 const customDialog = pageAgent.slice(customStart, customEnd);
 assert.doesNotMatch(customDialog, /erikraft-page-agent-dialog__textarea/);
