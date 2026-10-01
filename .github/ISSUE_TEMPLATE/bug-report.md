@@ -1,6 +1,6 @@
 ---
-name: Bug Report
-about: Create a report to help us improve. Please check the FAQ first.
+name: Reportar Bug
+about: Reporte um bug do ErikrafT Drop™ para ajudar a melhorar o projeto. Consulte o FAQ primeiro.
 title: '[Bug] '
 labels: 'bug'
 assignees: ''
@@ -36,7 +36,7 @@ If applicable, add screenshots to help explain the problem.
 
 **Bug occurs on official ErikrafT Drop™ instance https://drop.erikraft.com/**
 No | Yes
-Version: v10.1.4
+Version: v10.1.5
 
 **Bug occurs on self-hosted ErikrafT Drop™ instance**
 No | Yes
@@ -44,7 +44,7 @@ No | Yes
 **Self-Hosted Setup**
 Proxy: Nginx | Apache2
 Deployment: docker run | docker compose | npm run start:prod
-Version: v10.1.4
+Version: v10.1.5
 
 **Additional context**
 Add any other context about the problem here.
