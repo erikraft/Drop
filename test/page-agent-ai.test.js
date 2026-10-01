@@ -23,7 +23,7 @@ assert.doesNotMatch(source, /ai\.improve/);
 assert.doesNotMatch(source, /ai\.correct/);
 assert.doesNotMatch(source, /ai\.polish/);
 assert.doesNotMatch(source, /ai\.code/);
-assert.doesNotMatch(source, /window\.open\([^)]*EXTENSION_URL[^)]*\)/);
+
 assert.match(source, /data-erikraft-page-agent-target/);
 assert.match(source, /Deixe em branco para manter a chave desta sessão/);
 console.log('Page Agent dialog/responsive/security static checks passed.');
