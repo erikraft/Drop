@@ -751,6 +751,18 @@ body.chat-open > header {
     box-sizing: border-box;
 }
 
+/* Arabic is RTL: keep WebChat on the visual start side (left) while
+   preserving the existing right-side placement for every other locale. */
+html[lang="ar"] body.chat-open {
+    padding-right: 0;
+    padding-left: var(--chat-sidebar-width);
+}
+
+html[lang="ar"] body.chat-open > header {
+    padding-right: 12px;
+    padding-left: calc(var(--chat-sidebar-width) + 12px);
+}
+
 .chat-panel {
     position: fixed;
     top: var(--chat-header-height, 56px);
@@ -770,6 +782,14 @@ body.chat-open > header {
     background: linear-gradient(180deg,
             rgba(var(--shadow-color-dialog-cover-rgb, 255, 255, 255), 0.18) 0%,
             rgba(var(--shadow-color-dialog-cover-rgb, 255, 255, 255), 0.06) 100%);
+}
+
+/* Arabic WebChat: mirror the sidebar itself, not the whole application. */
+html[lang="ar"] .chat-panel {
+    right: auto;
+    left: 0;
+    border-left: 0;
+    border-right: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.18);
 }
 
 .chat-panel[hidden] {
