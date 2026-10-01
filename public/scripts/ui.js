@@ -4391,6 +4391,10 @@ class Notifications {
             this._markAttention();
             this._chatMessageNotification(e.detail.message);
         });
+        Events.on('chat-mention-received', e => {
+            this._markAttention();
+            this._mentionNotification(e.detail.message);
+        });
         Events.on('files-received', e => {
             this._markAttention();
             this._downloadNotification(e.detail.files);
@@ -4459,6 +4463,31 @@ class Notifications {
                 this._bind(notification, _ => this._copyText(message, notification));
             }
         }
+    }
+
+    _mentionNotification(message) {
+        if (!this._shouldNotify()) return;
+        if (!message) return;
+
+        const senderName = message.senderName || message.senderId || 'Usuário';
+        const body = message.text || Localization.getTranslation('notifications.message-received', null, { name: senderName });
+
+        // The Android WebView has a native notification bridge. Use it to avoid
+        // duplicate notifications and to keep notification behavior native in the app.
+        if (window.ErikrafTdropAndroid && typeof window.ErikrafTdropAndroid.notifyMention === 'function') {
+            try {
+                window.ErikrafTdropAndroid.notifyMention(senderName, body);
+                return;
+            } catch (error) {
+                console.warn('[Notifications] Android mention bridge failed; falling back to Web Notification.', error);
+            }
+        }
+
+        const notification = this._notify(
+            Localization.getTranslation('notifications.mention-received', null, { name: senderName }),
+            body
+        );
+        this._bind(notification, _ => window.focus());
     }
 
     _chatMessageNotification(message) {
