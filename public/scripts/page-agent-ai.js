@@ -354,9 +354,9 @@
             drag.className = 'erikraft-page-agent-dialog__bookmarklet-link';
             drag.href = value;
             drag.draggable = true;
-            drag.textContent = t('ai.drag-to-bookmarks', 'Arraste para favoritos');
-            drag.setAttribute('aria-label', label + ': ' + t('ai.drag-to-bookmarks', 'Arraste para favoritos'));
-            drag.title = t('ai.drag-to-bookmarks-title', 'Arraste este atalho para a barra de favoritos');
+            drag.textContent = '✨PageAgent';
+            drag.setAttribute('aria-label', label + ': ✨PageAgent');
+            drag.title = '✨PageAgent';
 
             row.append(info, use, drag);
             return row;
@@ -509,7 +509,7 @@
         node.id = 'erikraft-page-agent-ai-style';
         node.textContent = `
             :root.erikraft-page-agent-dialog-open { overflow:hidden; }
-            .erikraft-page-agent-header-shortcut { position:relative; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; margin:0; cursor:pointer; }
+            .erikraft-page-agent-header-shortcut { position:relative; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; margin:0; cursor:pointer; appearance:none; -webkit-appearance:none; border:0; background:transparent; color:inherit; font:inherit; line-height:normal; box-shadow:none; }
             .erikraft-page-agent-header-shortcut img { width:24px; height:24px; border-radius:6px; display:block; object-fit:contain; }
             .erikraft-page-agent-header-shortcut::after { content:""; position:absolute; right:5px; bottom:5px; width:6px; height:6px; border-radius:50%; background:var(--primary-color); box-shadow:0 0 0 2px var(--bg-color); }
             .erikraft-page-agent-header-shortcut[data-page-agent-loading="true"] img { animation:erikraft-page-agent-pulse .8s ease-in-out infinite; }
@@ -571,7 +571,7 @@
             .erikraft-page-agent-dialog__quick-run-button { min-height:42px; padding:0 13px; border:1px solid rgba(123,105,255,.75); border-radius:11px; background:linear-gradient(120deg,#7b69ff,#58b9ff); color:#fff; font:inherit; font-weight:750; cursor:pointer; white-space:nowrap; box-shadow:0 4px 14px rgba(88,185,255,.2); }
             .erikraft-page-agent-dialog__quick-run-button:hover { filter:brightness(1.06); transform:translateY(-1px); }
             .erikraft-page-agent-dialog__quick-run-button:focus-visible { outline:2px solid #58b9ff; outline-offset:2px; }
-            .erikraft-page-agent-dialog__secondary { border:1px solid var(--border-color); background-color:var(--bg-color-secondary); color:rgb(var(--text-color)); }
+            .erikraft-page-agent-dialog__secondary { border:1px solid transparent; background-color:var(--bg-color-secondary); color:var(--accent-color); font-family:"Open Sans",-apple-system,BlinkMacSystemFont,sans-serif; padding:8px 16px !important; font-size:14px; line-height:1.2 !important; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; min-height:40px; border-radius:12px; box-sizing:border-box; overflow:hidden; }
             @media (max-width:760px) {
                 .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
                 .erikraft-page-agent-dialog { padding:10px; place-items:center; }
