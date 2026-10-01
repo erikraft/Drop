@@ -374,7 +374,8 @@
         "share_unsupported": "File sharing is not supported in this browser.",
         "share_failed": "Sharing failed: {{error}}",
         "motion_photo_needs_video": "To create a real Motion Photo, also send a compatible video; the video's audio will be preserved.",
-        "motion_photo_audio": "When the source is a video, the original audio is preserved."
+        "motion_photo_audio": "When the source is a video, the original audio is preserved.",
+        "motion_photo_mp4_unsupported": "This browser cannot generate the MP4 video required for a Motion Photo."
     },
     "ai": {
         "page-agent-title": "Page Agent Ext",
