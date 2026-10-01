@@ -3,8 +3,10 @@
     'use strict';
 
     const TRACKERS = [
+        'wss://tracker.webtorrent.dev',
         'wss://tracker.openwebtorrent.com',
-        'wss://tracker.fastcast.nz'
+        'wss://tracker.fastcast.nz',
+        'wss://tracker.btorrent.xyz'
     ];
     const WEBTORRENT_VERSION = '3.0.21';
     const UTORRENT_GREEN = '#76B83F';
@@ -106,7 +108,7 @@
     async function loadWebTorrent() {
         if (window.WebTorrent) return window.WebTorrent;
         if (!loadingClient) {
-            loadingClient = import(`https://esm.sh/webtorrent@${WEBTORRENT_VERSION}`).then(module => {
+            loadingClient = import(`https://esm.sh/webtorrent@${WEBTORRENT_VERSION}/dist/webtorrent.min.js`).then(module => {
                 const Ctor = module.default || module.WebTorrent;
                 if (!Ctor) throw new Error('WebTorrent não pôde ser carregado.');
                 window.WebTorrent = Ctor;
@@ -122,6 +124,10 @@
         if (!client) {
             client = new WebTorrent();
             client.on('error', error => setStatus(`WebTorrent: ${error.message}`, 'error'));
+            client.on('warning', warning => {
+                const message = warning && warning.message ? warning.message : String(warning);
+                setStatus(`WebTorrent warning: ${message}`);
+            });
         }
         return client;
     }
@@ -237,7 +243,11 @@
             const torrentClient = await getClient();
             const torrent = torrentClient.add(magnet, { announce: TRACKERS });
             createTorrentCard(torrent, 'download');
-            torrent.once('metadata', () => setStatus(`Torrent encontrado: ${torrent.name}`));
+            torrent.once('metadata', () => setStatus(`Torrent encontrado: ${torrent.name}`, 'success'));
+            torrent.on('wire', wire => setStatus(`Peer WebRTC conectado (${torrent.numPeers || 1}).`, 'success'));
+            torrent.on('noPeers', announceType => {
+                if (!torrent.numPeers) setStatus(`Nenhum peer WebRTC encontrado ainda (${announceType || 'discovery'}).`);
+            });
         } catch (error) {
             setStatus(`Não foi possível iniciar o download: ${error.message}`, 'error');
         } finally {
