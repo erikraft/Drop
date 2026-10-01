@@ -43,4 +43,15 @@ assert.equal(new TextDecoder().decode(motionBytes).includes('MotionPhoto'),true)
 assert.equal(new TextDecoder().decode(motionBytes.slice(-7)),'MP4DATA');
 const qs=await api.sanitize(mp4,'all');
 assert.equal(new TextDecoder().decode(await qs.arrayBuffer()).includes('GPS-PRIVATE'),false);
+
+assert.match(source,/getSupportedVideoMimeType/);
+assert.match(source,/const mimeType=preferredMimeType/);
+assert.match(source,/injectLivePhotoMakerNote/);
+assert.match(source,/com\.apple\.quicktime\.content\.identifier/);
+assert.match(source,/video\\/quicktime/);
+assert.match(source,/Criar Live\\/Motion Photo/);
+assert.match(source,/id=\\"ek-close\\"/);
+assert.match(source,/id=\\"ek-actions\\"/);
+assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id=\\"metadata-btn\\"/);
+
 console.log('received-media-metadata: PASS');
