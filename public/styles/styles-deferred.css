@@ -24,6 +24,11 @@
 
 /* Peers */
 
+/* Baseline: older browsers keep the default peer density from styles-main.css. */
+/* The :has()-based density tuning is an optional enhancement. */
+@supports selector(x-peers:has(x-peer)) {
+
+
 x-peers:has(> x-peer) {
     --peers-per-row: 10;
 }
@@ -98,6 +103,8 @@ screen and (min-height: 631px) and (min-width: 426px) {
     }
 }
 
+
+}
 /* Peer */
 
 x-peer {
@@ -132,7 +139,7 @@ x-peer .icon-wrapper {
     padding: 12px;
     border-radius: 50%;
     background: var(--accent-color);
-    background-image: linear-gradient(45deg, var(--accent-color) 40%, color-mix(in srgb, var(--accent-color) 70%, white) 100%);
+    background-image: linear-gradient(45deg, var(--accent-color), var(--accent-color));
     color: white;
     display: flex;
 }
@@ -144,6 +151,17 @@ x-peer.type-secret .icon-wrapper {
 x-peer:not(.type-ip):not(.type-secret).type-public-id .icon-wrapper {
     --accent-color: var(--public-room-color);
 }
+
+@supports (background-image: linear-gradient(45deg, color-mix(in srgb, black 50%, white), black)) {
+    x-peer .icon-wrapper {
+        background-image: linear-gradient(45deg, var(--accent-color) 40%, color-mix(in srgb, var(--accent-color) 70%, white) 100%);
+    }
+
+    .highlight {
+        background-image: linear-gradient(180deg, var(--highlight-color) 0%, color-mix(in srgb, var(--highlight-color) 90%, black));
+    }
+}
+
 
 .highlight-wrapper {
     align-self: center;
@@ -160,7 +178,7 @@ x-peer:not(.type-ip):not(.type-secret).type-public-id .icon-wrapper {
     margin-right: 1px;
     --highlight-color: var(--badge-color);
     background-color: var(--highlight-color);
-    background-image: linear-gradient(180deg, var(--highlight-color) 0%, color-mix(in srgb, var(--highlight-color) 90%, black));
+    background-image: linear-gradient(180deg, var(--highlight-color), var(--highlight-color));
 }
 
 .highlight-room-ip {
