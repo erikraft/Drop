@@ -389,17 +389,24 @@
         "model": "Modelo",
         "api-key": "API key",
         "api-key-placeholder": "Opcional para Ollama/LM Studio",
+        "api-key-placeholder-configured": "Deixe em branco para manter a chave desta sessão",
         "auth-token": "Token de autorização do Page Agent Ext",
         "auth-token-placeholder": "Cole o token copiado da extensão",
         "save": "Salvar configuração",
         "settings-required": "Informe o endpoint LLM e o modelo.",
         "settings-saved": "Configuração do Page Agent salva.",
-        "custom-description": "Descreva exatamente o que o Page Agent deve fazer somente com o campo de texto/código. A tarefa não enviará a mensagem automaticamente.",
+        "custom-description": "Descreva exatamente o que o Page Agent deve fazer somente com o texto/código selecionado. A tarefa não enviará a mensagem automaticamente.",
         "custom-placeholder": "Ex.: deixe o texto mais profissional, mas preserve o significado.",
         "custom-hint": "O Page Agent ficará limitado ao campo marcado pelo ErikrafT Drop™.",
         "completed": "IA aplicada ao texto.",
         "desktop-only": "A IA do Page Agent está disponível apenas no desktop.",
         "install-required": "Instale e autorize o Page Agent Ext para usar a IA.",
-        "failed": "O Page Agent não conseguiu concluir a tarefa."
+        "failed": "O Page Agent não conseguiu concluir a tarefa.",
+        "bookmarklets-title": "Usar o Page Agent sem extensão",
+        "bookmarklets-description": "Copie um bookmarklet e salve-o nos favoritos do navegador para executar o Page Agent na página atual.",
+        "bookmarklet-cdn": "Bookmarklet CDN",
+        "bookmarklet-mirror": "Bookmarklet Mirror",
+        "copy": "Copiar",
+        "copied": "Copiado"
     }
 }

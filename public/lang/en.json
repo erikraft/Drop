@@ -389,17 +389,24 @@
         "model": "Model",
         "api-key": "API key",
         "api-key-placeholder": "Optional for Ollama/LM Studio",
+        "api-key-placeholder-configured": "Leave blank to keep this session's key",
         "auth-token": "Page Agent Ext authorization token",
         "auth-token-placeholder": "Paste the token copied from the extension",
         "save": "Save configuration",
         "settings-required": "Enter the LLM endpoint and model.",
         "settings-saved": "Page Agent configuration saved.",
-        "custom-description": "Describe exactly what Page Agent should do only with the text/code field. The task will not send the message automatically.",
+        "custom-description": "Describe exactly what Page Agent should do only with the selected text/code. The task will not send the message automatically.",
         "custom-placeholder": "Example: make the text more professional while preserving its meaning.",
-        "custom-hint": "Page Agent is restricted to the field marked by ErikrafT Drop™.",
+        "custom-hint": "Page Agent will be limited to the field marked by ErikrafT Drop™.",
         "completed": "AI applied to the text.",
         "desktop-only": "Page Agent AI is available on desktop only.",
         "install-required": "Install and authorize Page Agent Ext to use AI.",
-        "failed": "Page Agent could not complete the task."
+        "failed": "Page Agent could not complete the task.",
+        "bookmarklets-title": "Use Page Agent without the extension",
+        "bookmarklets-description": "Copy a bookmarklet and save it as a browser bookmark to run Page Agent on the current page.",
+        "bookmarklet-cdn": "CDN bookmarklet",
+        "bookmarklet-mirror": "Mirror bookmarklet",
+        "copy": "Copy",
+        "copied": "Copied"
     }
 }

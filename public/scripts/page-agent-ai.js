@@ -8,6 +8,8 @@
     const REPOSITORY_URL = 'https://github.com/alibaba/page-agent';
     const CDN_URL = 'https://cdn.jsdelivr.net/npm/page-agent@1.12.4/dist/iife/page-agent.demo.js';
     const MIRROR_URL = 'https://registry.npmmirror.com/page-agent/1.12.4/files/dist/iife/page-agent.demo.js';
+    const CDN_BOOKMARKLET = 'javascript:(function()%7Bvar%20s=document.createElement(%27script%27);s.src=%60https://cdn.jsdelivr.net/npm/page-agent@1.12.4/dist/iife/page-agent.demo.js?lang=en-US&t=$%7BMath.random()%7D%60;s.setAttribute(%27crossorigin%27,%20true);s.type=%22text/javascript%22;s.onload=()=%3Econsole.log(%27PageAgent%20script%20loaded!%27);document.body.appendChild(s);%7D)();';
+    const MIRROR_BOOKMARKLET = 'javascript:(function()%7Bvar%20s=document.createElement(%27script%27);s.src=%60https://registry.npmmirror.com/page-agent/1.12.4/files/dist/iife/page-agent.demo.js?lang=en-US&t=$%7BMath.random()%7D%60;s.setAttribute(%27crossorigin%27,%20true);s.type=%22text/javascript%22;s.onload=()=%3Econsole.log(%27PageAgent%20script%20loaded!%27);document.body.appendChild(s);%7D)();'
 
     const isDesktop = () => {
         if (window.isMobile === true) return false;
@@ -238,6 +240,47 @@
         hint.textContent = t('ai.custom-hint', 'O Page Agent será limitado ao campo marcado no ErikrafT Drop™.');
         dialog.body.appendChild(hint);
 
+        const tools = document.createElement('div');
+        tools.className = 'erikraft-page-agent-dialog__tools';
+        const toolsTitle = document.createElement('h3');
+        toolsTitle.className = 'erikraft-page-agent-dialog__tools-title';
+        toolsTitle.textContent = t('ai.bookmarklets-title', 'Usar o Page Agent sem extensão');
+        const toolsDescription = document.createElement('p');
+        toolsDescription.className = 'erikraft-page-agent-dialog__tools-description';
+        toolsDescription.textContent = t('ai.bookmarklets-description', 'Copie um bookmarklet e salve-o nos favoritos do navegador para executar o Page Agent na página atual.');
+        const makeBookmarklet = (label, value) => {
+            const row = document.createElement('div');
+            row.className = 'erikraft-page-agent-dialog__bookmarklet';
+            const code = document.createElement('input');
+            code.type = 'text';
+            code.readOnly = true;
+            code.value = value;
+            code.setAttribute('aria-label', label);
+            const copy = document.createElement('button');
+            copy.type = 'button';
+            copy.className = 'erikraft-page-agent-dialog__secondary';
+            copy.textContent = t('ai.copy', 'Copiar');
+            copy.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(value);
+                    copy.textContent = t('ai.copied', 'Copiado');
+                    setTimeout(() => { copy.textContent = t('ai.copy', 'Copiar'); }, 1400);
+                } catch {
+                    code.focus();
+                    code.select();
+                }
+            });
+            row.append(code, copy);
+            return row;
+        };
+        tools.append(
+            toolsTitle,
+            toolsDescription,
+            makeBookmarklet(t('ai.bookmarklet-cdn', 'Bookmarklet CDN'), CDN_BOOKMARKLET),
+            makeBookmarklet(t('ai.bookmarklet-mirror', 'Bookmarklet Mirror'), MIRROR_BOOKMARKLET)
+        );
+        dialog.body.appendChild(tools);
+
         const actions = document.createElement('div');
         actions.className = 'erikraft-page-agent-dialog__actions';
 
@@ -379,6 +422,7 @@
             .erikraft-page-agent-ai { position:relative; display:inline-flex; flex:0 0 auto; min-width:0; }
             .erikraft-page-agent-ai > button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:42px; max-width:140px; height:40px; padding:0 10px; box-sizing:border-box; overflow:hidden; }
             .erikraft-page-agent-ai > button span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+            .erikraft-page-agent-ai[data-context="send-text"] > button span { display:none; }
             .erikraft-page-agent-ai img { width:18px; height:18px; flex:0 0 18px; border-radius:5px; }
             #chat-form .erikraft-page-agent-ai { margin-inline-start:4px; }
             #chat-form .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
@@ -388,8 +432,8 @@
             .erikraft-page-agent-menu button { width:100%; display:flex; align-items:center; min-height:42px; padding:9px 11px; border:0; border-radius:10px; background:transparent; color:inherit; text-align:left; cursor:pointer; }
             .erikraft-page-agent-menu button:hover { background:linear-gradient(90deg,rgba(123,105,255,.16),rgba(88,185,255,.12)); }
             .erikraft-page-agent-menu .label { padding:7px 11px; font-size:11px; opacity:.62; }
-            .erikraft-page-agent-dialog { position:fixed; inset:0; z-index:2147481000; display:grid; place-items:center; padding:18px; box-sizing:border-box; background:rgba(8,8,14,.64); backdrop-filter:blur(7px); overflow:auto; }
-            .erikraft-page-agent-dialog__panel { width:min(var(--page-agent-dialog-width),calc(100vw - 28px)); max-height:min(760px,calc(100vh - 28px)); display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(123,105,255,.36); border-radius:18px; background:var(--background-color,#181818); color:inherit; box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 35px rgba(88,185,255,.10); }
+            .erikraft-page-agent-dialog { position:fixed; inset:0; z-index:2147481000; display:grid; place-items:center; padding:18px; box-sizing:border-box; background:rgba(8,8,14,.64); backdrop-filter:blur(7px); overflow:auto; color:rgb(var(--text-color)); }
+            .erikraft-page-agent-dialog__panel { width:min(var(--page-agent-dialog-width),calc(100vw - 28px)); max-height:min(760px,calc(100vh - 28px)); display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(123,105,255,.36); border-radius:18px; background:rgb(var(--dialog-bg-color)); color:rgb(var(--text-color)); box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 35px rgba(88,185,255,.10); }
             .erikraft-page-agent-dialog__header { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background:linear-gradient(120deg,rgba(123,105,255,.13),rgba(88,185,255,.08)); }
             .erikraft-page-agent-dialog__brand { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:700; white-space:nowrap; }
             .erikraft-page-agent-dialog__brand img { width:24px; height:24px; border-radius:7px; }
@@ -405,13 +449,19 @@
             .erikraft-page-agent-dialog__description,.erikraft-page-agent-dialog__hint { margin:0 0 14px; opacity:.76; line-height:1.5; font-size:13px; }
             .erikraft-page-agent-dialog__field { display:block; margin:0 0 12px; }
             .erikraft-page-agent-dialog__field span { display:block; margin:0 0 6px; font-size:12px; font-weight:650; }
-            .erikraft-page-agent-dialog__field input,.erikraft-page-agent-dialog__textarea { width:100%; box-sizing:border-box; border:1px solid rgba(127,127,127,.28); border-radius:11px; background:rgba(127,127,127,.07); color:inherit; outline:none; padding:10px 11px; font:inherit; }
+            .erikraft-page-agent-dialog__field input,.erikraft-page-agent-dialog__textarea { width:100%; box-sizing:border-box; border:1px solid rgba(127,127,127,.32); border-radius:11px; background:rgb(var(--bg-color-secondary)); color:rgb(var(--text-color)); caret-color:rgb(var(--text-color)); outline:none; padding:10px 11px; font:inherit; }
+            .erikraft-page-agent-dialog__field input::placeholder,.erikraft-page-agent-dialog__textarea::placeholder { color:rgb(var(--text-color)); opacity:.58; }
+            .erikraft-page-agent-dialog__tools { margin-top:16px; padding:13px; border:1px solid rgba(123,105,255,.24); border-radius:13px; background:linear-gradient(135deg,rgba(123,105,255,.08),rgba(88,185,255,.06)); }
+            .erikraft-page-agent-dialog__tools-title { margin:0 0 5px; font-size:13px; }
+            .erikraft-page-agent-dialog__tools-description { margin:0 0 10px; font-size:12px; line-height:1.45; opacity:.72; }
+            .erikraft-page-agent-dialog__bookmarklet { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; margin-top:8px; }
+            .erikraft-page-agent-dialog__bookmarklet input { width:100%; min-width:0; box-sizing:border-box; border:1px solid rgba(127,127,127,.25); border-radius:9px; background:rgb(var(--bg-color)); color:rgb(var(--text-color)); padding:8px 9px; font:11px ui-monospace,SFMono-Regular,Menlo,monospace; }
             .erikraft-page-agent-dialog__field input:focus,.erikraft-page-agent-dialog__textarea:focus { border-color:rgba(123,105,255,.72); box-shadow:0 0 0 3px rgba(88,185,255,.10); }
             .erikraft-page-agent-dialog__textarea { min-height:150px; resize:vertical; line-height:1.45; }
             .erikraft-page-agent-dialog__actions { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid rgba(127,127,127,.16); }
             .erikraft-page-agent-dialog__primary,.erikraft-page-agent-dialog__secondary { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 13px; border-radius:10px; box-sizing:border-box; text-decoration:none; cursor:pointer; font:inherit; }
             .erikraft-page-agent-dialog__primary { border:1px solid rgba(123,105,255,.72); background:linear-gradient(120deg,#7b69ff,#58b9ff); color:#fff; }
-            .erikraft-page-agent-dialog__secondary { border:1px solid rgba(88,185,255,.34); background:rgba(88,185,255,.08); color:inherit; }
+            .erikraft-page-agent-dialog__secondary { border:1px solid rgba(88,185,255,.34); background:rgba(88,185,255,.08); color:rgb(var(--text-color)); }
             @media (max-width:760px) {
                 .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
                 .erikraft-page-agent-dialog { padding:10px; place-items:center; }
@@ -421,6 +471,12 @@
                 .erikraft-page-agent-dialog__panel.is-fullscreen { width:100%; height:100%; border-radius:10px; }
                 .erikraft-page-agent-dialog__body { padding:12px; }
                 .erikraft-page-agent-dialog__actions > * { flex:1 1 145px; }
+            }
+            @media (prefers-color-scheme: light) {
+                body:not(.dark-theme) .erikraft-page-agent-dialog { color:rgb(var(--lt-text-color)); }
+            }
+            @media (prefers-color-scheme: dark) {
+                body:not(.light-theme) .erikraft-page-agent-dialog { color:rgb(var(--dt-text-color)); }
             }
             @media (max-height:620px) and (min-width:761px) {
                 .erikraft-page-agent-dialog__panel { max-height:calc(100vh - 18px); }
@@ -461,6 +517,7 @@
         const toggle = document.createElement('button');
         toggle.type = 'button';
         toggle.className = 'btn btn-rounded btn-grey';
+        if (host.closest('#send-text-dialog')) wrapper.dataset.context = 'send-text';
         toggle.title = t('ai.page-agent-title', 'Page Agent Ext');
         toggle.setAttribute('aria-label', t('ai.page-agent-title', 'Page Agent Ext'));
         toggle.innerHTML = '<img src="https://raw.githubusercontent.com/alibaba/page-agent/main/packages/extension/public/assets/page-agent-64.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
