@@ -278,6 +278,38 @@
             document.body.appendChild(script);
         };
 
+        const quickRun = document.createElement('div');
+        quickRun.className = 'erikraft-page-agent-dialog__quick-run';
+
+        const quickRunCopy = document.createElement('div');
+        quickRunCopy.className = 'erikraft-page-agent-dialog__quick-run-copy';
+        const quickRunTitle = document.createElement('strong');
+        quickRunTitle.textContent = t('ai.quick-run-title', 'Executar Page Agent 1.12.4');
+        const quickRunDescription = document.createElement('span');
+        quickRunDescription.textContent = t(
+            'ai.quick-run-description',
+            'Atalho de 1 clique para carregar o Page Agent diretamente nesta página.'
+        );
+        quickRunCopy.append(quickRunTitle, quickRunDescription);
+
+        const quickRunButtons = document.createElement('div');
+        quickRunButtons.className = 'erikraft-page-agent-dialog__quick-run-buttons';
+        const quickMirror = document.createElement('button');
+        quickMirror.type = 'button';
+        quickMirror.className = 'erikraft-page-agent-dialog__quick-run-button';
+        quickMirror.textContent = t('ai.quick-run-mirror', 'Executar · npm Mirror');
+        quickMirror.title = t('ai.quick-run-mirror-title', 'Executar agora usando o npm Mirror');
+        quickMirror.addEventListener('click', () => executeBookmarklet(MIRROR_BOOKMARKLET, quickMirror));
+        const quickCdn = document.createElement('button');
+        quickCdn.type = 'button';
+        quickCdn.className = 'erikraft-page-agent-dialog__quick-run-button';
+        quickCdn.textContent = t('ai.quick-run-cdn', 'Executar · jsDelivr');
+        quickCdn.title = t('ai.quick-run-cdn-title', 'Executar agora usando o jsDelivr');
+        quickCdn.addEventListener('click', () => executeBookmarklet(CDN_BOOKMARKLET, quickCdn));
+        quickRunButtons.append(quickMirror, quickCdn);
+        quickRun.append(quickRunCopy, quickRunButtons);
+        dialog.body.appendChild(quickRun);
+
         const makeBookmarklet = (label, value) => {
             const row = document.createElement('div');
             row.className = 'erikraft-page-agent-dialog__bookmarklet';
@@ -496,6 +528,15 @@
             .erikraft-page-agent-dialog__actions { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid rgba(127,127,127,.16); }
             .erikraft-page-agent-dialog__primary,.erikraft-page-agent-dialog__secondary { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 13px; border-radius:10px; box-sizing:border-box; text-decoration:none; cursor:pointer; font:inherit; }
             .erikraft-page-agent-dialog__primary { border:1px solid rgba(123,105,255,.72); background:linear-gradient(120deg,#7b69ff,#58b9ff); color:#fff; }
+            .erikraft-page-agent-dialog__bookmarklet-use { min-width:112px; font-weight:750; box-shadow:0 3px 12px rgba(88,185,255,.18); }
+            .erikraft-page-agent-dialog__quick-run { display:flex; align-items:center; justify-content:space-between; gap:14px; margin:14px 0 16px; padding:14px; border:1px solid rgba(88,185,255,.42); border-radius:14px; background:linear-gradient(135deg,rgba(123,105,255,.12),rgba(88,185,255,.14)); }
+            .erikraft-page-agent-dialog__quick-run-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
+            .erikraft-page-agent-dialog__quick-run-copy strong { font-size:14px; }
+            .erikraft-page-agent-dialog__quick-run-copy span { font-size:12px; line-height:1.4; opacity:.78; }
+            .erikraft-page-agent-dialog__quick-run-buttons { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+            .erikraft-page-agent-dialog__quick-run-button { min-height:42px; padding:0 13px; border:1px solid rgba(123,105,255,.75); border-radius:11px; background:linear-gradient(120deg,#7b69ff,#58b9ff); color:#fff; font:inherit; font-weight:750; cursor:pointer; white-space:nowrap; box-shadow:0 4px 14px rgba(88,185,255,.2); }
+            .erikraft-page-agent-dialog__quick-run-button:hover { filter:brightness(1.06); transform:translateY(-1px); }
+            .erikraft-page-agent-dialog__quick-run-button:focus-visible { outline:2px solid #58b9ff; outline-offset:2px; }
             .erikraft-page-agent-dialog__secondary { border:1px solid var(--border-color); background-color:var(--bg-color-secondary); color:rgb(var(--text-color)); }
             @media (max-width:760px) {
                 .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
@@ -507,6 +548,9 @@
                 .erikraft-page-agent-dialog__body { padding:12px; }
                 .erikraft-page-agent-dialog__actions > * { flex:1 1 145px; }
                 .erikraft-page-agent-dialog__bookmarklet { grid-template-columns:1fr; }
+                .erikraft-page-agent-dialog__quick-run { flex-direction:column; align-items:stretch; }
+                .erikraft-page-agent-dialog__quick-run-buttons { justify-content:stretch; }
+                .erikraft-page-agent-dialog__quick-run-button { flex:1 1 160px; }
                 .erikraft-page-agent-dialog__bookmarklet > * { width:100%; }
             }
             .erikraft-page-agent-dialog__panel,

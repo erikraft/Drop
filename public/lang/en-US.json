@@ -414,6 +414,12 @@
         "bookmarklet-failed": "Page Agent could not be loaded on this page.",
         "bookmarklets-help": "Show the bookmarks bar: Windows/Linux Ctrl+Shift+B · macOS ⌘+Shift+B. Then drag each option to the bar.",
         "drag-to-bookmarks": "Drag to bookmarks",
-        "drag-to-bookmarks-title": "Drag this shortcut to the bookmarks bar"
+        "drag-to-bookmarks-title": "Drag this shortcut to the bookmarks bar",
+        "quick-run-title": "Run Page Agent 1.12.4",
+        "quick-run-description": "One-click shortcut to load Page Agent directly on this page.",
+        "quick-run-mirror": "Run · npm Mirror",
+        "quick-run-cdn": "Run · jsDelivr",
+        "quick-run-mirror-title": "Run now using the npm Mirror",
+        "quick-run-cdn-title": "Run now using jsDelivr"
     }
 }
