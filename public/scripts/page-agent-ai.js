@@ -289,6 +289,78 @@
             makeBookmarklet(t('ai.bookmarklet-cdn', 'Bookmarklet CDN'), CDN_BOOKMARKLET),
             makeBookmarklet(t('ai.bookmarklet-mirror', 'Bookmarklet Mirror'), MIRROR_BOOKMARKLET)
         );
+
+        const integration = document.createElement('div');
+        integration.className = 'erikraft-page-agent-dialog__integration';
+
+        const integrationTitle = document.createElement('h3');
+        integrationTitle.className = 'erikraft-page-agent-dialog__tools-title';
+        integrationTitle.textContent = t('ai.integration-title', 'Navegador e IDE');
+
+        const integrationDescription = document.createElement('p');
+        integrationDescription.className = 'erikraft-page-agent-dialog__tools-description';
+        integrationDescription.textContent = t(
+            'ai.integration-description',
+            'Copie o código para uma extensão de navegador, DevTools ou navegador integrado da sua IDE.'
+        );
+
+        const makeIntegration = (label, value, provider) => {
+            const card = document.createElement('div');
+            card.className = 'erikraft-page-agent-dialog__integration-card';
+            card.dataset.pageAgentProvider = provider;
+
+            const name = document.createElement('strong');
+            name.textContent = label;
+
+            const code = document.createElement('code');
+            code.className = 'erikraft-page-agent-dialog__integration-code';
+            code.textContent = value;
+
+            const actions = document.createElement('div');
+            actions.className = 'erikraft-page-agent-dialog__integration-actions';
+
+            const copy = document.createElement('button');
+            copy.type = 'button';
+            copy.className = 'btn btn-rounded btn-grey';
+            copy.textContent = t('ai.copy-code', 'Copiar código');
+            copy.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(value);
+                } catch {
+                    const area = document.createElement('textarea');
+                    area.value = value;
+                    area.setAttribute('readonly', '');
+                    area.style.position = 'fixed';
+                    area.style.opacity = '0';
+                    document.body.appendChild(area);
+                    area.select();
+                    document.execCommand('copy');
+                    area.remove();
+                }
+                copy.textContent = t('ai.copied-code', 'Código copiado');
+                window.setTimeout(() => {
+                    copy.textContent = t('ai.copy-code', 'Copiar código');
+                }, 1400);
+            });
+
+            const run = document.createElement('button');
+            run.type = 'button';
+            run.className = 'btn btn-rounded btn-grey';
+            run.textContent = t('ai.run-code', 'Executar nesta página');
+            run.addEventListener('click', () => executeBookmarklet(value, run));
+
+            actions.append(copy, run);
+            card.append(name, code, actions);
+            return card;
+        };
+
+        integration.append(
+            integrationTitle,
+            integrationDescription,
+            makeIntegration(t('ai.integration-cdn', 'jsDelivr · Navegador / IDE'), CDN_BOOKMARKLET, 'cdn'),
+            makeIntegration(t('ai.integration-mirror', 'npm Mirror · Navegador / IDE'), MIRROR_BOOKMARKLET, 'mirror')
+        );
+        tools.append(integration);
         dialog.body.appendChild(tools);
 
         const actions = document.createElement('div');
