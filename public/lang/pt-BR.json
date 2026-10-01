@@ -307,7 +307,8 @@
         "unfinished-transfers-warning": "Há transferências não concluídas. Tem certeza de que deseja fechar o ErikrafT Drop™?",
         "rate-limit-join-key": "Limite de taxa atingido. Aguarde 10 segundos e tente novamente.",
         "selected-peer-left": "Par selecionado saiu",
-        "processing": "Processando…"
+        "processing": "Processando…",
+        "mention-received": "Você foi mencionado por {{name}}"
     },
     "document-titles": {
         "file-received": "Arquivo recebido",
