@@ -262,13 +262,20 @@
         );
 
         const executeBookmarklet = (value, button) => {
-            const scriptSource = decodeURIComponent(value.replace(/^javascript:/, ''));
+            const isMirror = value === MIRROR_BOOKMARKLET;
             const script = document.createElement('script');
-            script.textContent = scriptSource;
+            script.src = (isMirror ? MIRROR_URL : CDN_URL) + '?lang=en-US&t=' + Math.random();
+            script.setAttribute('crossorigin', 'true');
+            script.type = 'text/javascript';
+            script.onload = () => {
+                button.textContent = t('ai.used', 'Usado');
+                setTimeout(() => { button.textContent = t('ai.use', 'Executar'); }, 1400);
+                notify(t('ai.bookmarklet-loaded', 'Page Agent carregado na página atual.'));
+            };
+            script.onerror = () => {
+                notify(t('ai.bookmarklet-failed', 'Não foi possível carregar o Page Agent nesta página.'));
+            };
             document.body.appendChild(script);
-            script.remove();
-            button.textContent = t('ai.used', 'Usado');
-            setTimeout(() => { button.textContent = t('ai.use', 'Executar'); }, 1400);
         };
 
         const makeBookmarklet = (label, value) => {
