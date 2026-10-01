@@ -130,7 +130,7 @@ class BrowserTabsConnector {
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://www.instagram.com/erikraft_drop" title="Instagram" aria-label="Instagram"><svg class="icon"><use xlink:href="#instagram"></use></svg></a>
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://ko-fi.com/erikraft" title="Apoiar" aria-label="Apoiar"><svg class="icon"><use xlink:href="#donation"></use></svg></a>
             </div>
-            <p class="about-note-runtime">WebTorrent e recursos relacionados estão em Beta e podem depender do suporte do navegador e da conectividade entre peers.</p>`;
+            <p class="about-note-runtime">WebTorrent e recursos relacionados estão em Beta e podem depender do suporte do navegador e da conectividade entre peers.</p><p class="about-note-runtime">IA opcional com <a href="https://alibaba.github.io/page-agent/" target="_blank" rel="noopener noreferrer">Page Agent</a>, por Alibaba, sob licença MIT.</p>`;
 
         const branding = content.querySelector('.about-branding-runtime');
         if (logo) branding.appendChild(logo);
