@@ -403,14 +403,17 @@
         "install-required": "Install and authorize Page Agent Ext to use AI.",
         "failed": "Page Agent could not complete the task.",
         "bookmarklets-title": "Use Page Agent without the extension",
-        "bookmarklets-description": "Copy a bookmarklet and save it as a browser bookmark to run Page Agent on the current page.",
+        "bookmarklets-description": "Run Page Agent on this page or drag the shortcut to your browser bookmarks bar.",
         "bookmarklet-cdn": "CDN bookmarklet",
         "bookmarklet-mirror": "Mirror bookmarklet",
         "copy": "Copy",
         "copied": "Copied",
-        "use": "Use",
-        "used": "Used",
+        "use": "Run",
+        "used": "Executed",
         "bookmarklet-loaded": "Page Agent loaded on the current page.",
-        "bookmarklet-failed": "Page Agent could not be loaded on this page."
+        "bookmarklet-failed": "Page Agent could not be loaded on this page.",
+        "bookmarklets-help": "Show the bookmarks bar: Windows/Linux Ctrl+Shift+B · macOS ⌘+Shift+B. Then drag each option to the bar.",
+        "drag-to-bookmarks": "Drag to bookmarks",
+        "drag-to-bookmarks-title": "Drag this shortcut to the bookmarks bar"
     }
 }
