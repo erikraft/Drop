@@ -12,7 +12,6 @@ ErikrafT Drop™ is a study in radical simplicity. The user interface is intenti
 This is an existing application. Every human contributor and automated agent/model must inspect the current implementation before changing it.
 
 Follow this order:
-
 1. **Search** for the existing implementation.
 2. **Understand** its architecture, behavior, tests and integrations.
 3. **Reuse** working components, functions, services and UI.
@@ -24,6 +23,23 @@ Follow this order:
 A different framework, library, model or personal preference is not sufficient reason to replace working code. Avoid speculative changes, duplicate dependencies, unrelated cleanup and silent scope expansion.
 
 Before implementation, identify what works, what is broken, which files are involved, what must change and what must remain untouched.
+
+# Progressive Enhancement and compatibility
+
+ErikrafT Drop™ uses one progressively enhanced implementation.
+
+- HTML structure is the foundation.
+- Compatible CSS must preserve layout, position, spacing and legibility.
+- Modern CSS is an enhancement, not the only source of structure.
+- JavaScript must degrade safely when optional APIs are unavailable.
+- Prefer feature detection over user-agent detection.
+- Add legacy fallbacks only for verified compatibility gaps.
+- Do not remove WebRTC, WebSocket, PWA, Service Worker, WebView or existing transfer architecture merely to support older environments.
+- Decorative effects and motion must never be required for basic usability.
+- Service Worker support is optional for the basic web application.
+- When no safe fallback exists, isolate the unsupported capability and keep unrelated functionality working.
+
+See `docs/compatibility-progressive-enhancement.md` for the maintained compatibility policy.
 
 # Issues and pull requests
 
@@ -46,7 +62,9 @@ Audit existing logs, error reporting, lint, tests and CI before adding tools. Im
 
 For a bug, reproduce or identify the incorrect behavior, fix the existing implementation, add or update focused regression coverage, and run relevant tests and checks.
 
-Consider desktop, mobile, supported browsers, accessibility, performance, loading/error/offline states and asynchronous behavior. Do not break unrelated functionality. Record out-of-scope findings as separate Issues.
+Consider desktop, mobile, supported browsers, accessibility, performance, loading/error/offline states and asynchronous behavior. For legacy environments that cannot be executed directly, use feature simulation and static compatibility checks. Never claim a browser was tested if it was not actually executed.
+
+Do not break unrelated functionality. Record out-of-scope findings as separate Issues.
 
 # Completion criteria
 
