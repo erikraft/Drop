@@ -414,6 +414,12 @@
         "bookmarklet-failed": "Não foi possível carregar o Page Agent nesta página.",
         "bookmarklets-help": "Para mostrar a barra de favoritos: Windows/Linux Ctrl+Shift+B · macOS ⌘+Shift+B. Depois, arraste o botão de cada opção para a barra.",
         "drag-to-bookmarks": "Arraste para favoritos",
-        "drag-to-bookmarks-title": "Arraste este atalho para a barra de favoritos"
+        "drag-to-bookmarks-title": "Arraste este atalho para a barra de favoritos",
+        "quick-run-title": "Executar Page Agent 1.12.4",
+        "quick-run-description": "Atalho de 1 clique para carregar o Page Agent diretamente nesta página.",
+        "quick-run-mirror": "Executar · npm Mirror",
+        "quick-run-cdn": "Executar · jsDelivr",
+        "quick-run-mirror-title": "Executar agora usando o npm Mirror",
+        "quick-run-cdn-title": "Executar agora usando o jsDelivr"
     }
 }
