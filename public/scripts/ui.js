@@ -1864,6 +1864,138 @@ class PairDeviceDialog extends Dialog {
             })
     }
 
+    _mentionToken(value) {
+        return String(value || '').replace(/[^\p{L}\p{N}_-]/gu, '');
+    }
+
+    _mentionCandidates(query) {
+        const normalizedQuery = String(query || '').toLocaleLowerCase();
+        const candidates = [];
+        this._peerNames.forEach((displayName, peerId) => {
+            const nameToken = this._mentionToken(displayName);
+            const usernameToken = this._mentionToken(peerId);
+            if (!nameToken && !usernameToken) return;
+
+            const nameMatch = nameToken.toLocaleLowerCase().startsWith(normalizedQuery);
+            const usernameMatch = usernameToken.toLocaleLowerCase().startsWith(normalizedQuery);
+            if (!query || nameMatch || usernameMatch) {
+                candidates.push({
+                    peerId,
+                    displayName: displayName || peerId,
+                    nameToken,
+                    usernameToken
+                });
+            }
+        });
+        return candidates.slice(0, 8);
+    }
+
+    _updateMentionSuggestions() {
+        if (!this.$mentionMenu) return;
+        const value = this.$input.value;
+        const caret = this.$input.selectionStart ?? value.length;
+        const beforeCaret = value.slice(0, caret);
+        const match = beforeCaret.match(/(?:^|\s)@([\p{L}\p{N}_-]*)$/u);
+
+        if (!match) {
+            this._hideMentionSuggestions();
+            return;
+        }
+
+        const query = match[1];
+        const candidates = this._mentionCandidates(query);
+        this._mentionMatches = candidates;
+        this._mentionIndex = -1;
+        this.$mentionMenu.innerHTML = '';
+
+        if (!candidates.length) {
+            this._hideMentionSuggestions();
+            return;
+        }
+
+        candidates.forEach((candidate, index) => {
+            const option = document.createElement('button');
+            option.type = 'button';
+            option.className = 'chat-mention-option';
+            option.dataset.index = String(index);
+
+            const name = document.createElement('span');
+            name.className = 'chat-mention-option__name';
+            name.textContent = `@${candidate.nameToken || candidate.usernameToken}`;
+
+            const username = document.createElement('span');
+            username.className = 'chat-mention-option__username';
+            username.textContent = `@${candidate.usernameToken || candidate.nameToken}`;
+
+            option.append(name, username);
+            option.addEventListener('mousedown', event => {
+                event.preventDefault();
+                this._insertMention(candidate);
+            });
+            this.$mentionMenu.appendChild(option);
+        });
+
+        this.$mentionMenu.hidden = false;
+    }
+
+    _hideMentionSuggestions() {
+        if (!this.$mentionMenu) return;
+        this.$mentionMenu.hidden = true;
+        this._mentionMatches = [];
+        this._mentionIndex = -1;
+    }
+
+    _onMentionKeyDown(event) {
+        if (!this.$mentionMenu || this.$mentionMenu.hidden || !this._mentionMatches.length) return;
+
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            this._mentionIndex = (this._mentionIndex + 1) % this._mentionMatches.length;
+            this._highlightMention();
+        }
+        else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            this._mentionIndex = this._mentionIndex <= 0
+                ? this._mentionMatches.length - 1
+                : this._mentionIndex - 1;
+            this._highlightMention();
+        }
+        else if (event.key === 'Enter' && this._mentionIndex >= 0) {
+            event.preventDefault();
+            this._insertMention(this._mentionMatches[this._mentionIndex]);
+        }
+        else if (event.key === 'Escape') {
+            event.preventDefault();
+            this._hideMentionSuggestions();
+        }
+    }
+
+    _highlightMention() {
+        const options = this.$mentionMenu.querySelectorAll('.chat-mention-option');
+        options.forEach((option, index) => {
+            option.toggleAttribute('data-selected', index === this._mentionIndex);
+        });
+        const selected = options[this._mentionIndex];
+        selected?.scrollIntoView({ block: 'nearest' });
+    }
+
+    _insertMention(candidate) {
+        const value = this.$input.value;
+        const caret = this.$input.selectionStart ?? value.length;
+        const beforeCaret = value.slice(0, caret);
+        const match = beforeCaret.match(/(?:^|\s)@([\p{L}\p{N}_-]*)$/u);
+        if (!match) return;
+
+        const start = caret - match[1].length - 1;
+        const token = candidate.nameToken || candidate.usernameToken;
+        const replacement = `@${token} `;
+        this.$input.value = value.slice(0, start) + replacement + value.slice(caret);
+        const nextCaret = start + replacement.length;
+        this.$input.setSelectionRange(nextCaret, nextCaret);
+        this.$input.focus();
+        this._hideMentionSuggestions();
+    }
+
     _onSubmit(e) {
         e.preventDefault();
         this._submit();
@@ -4809,6 +4941,7 @@ class ChatUI {
         this.$input = $('chat-input');
         this.$uploadBtn = $('chat-upload');
         this.$uploadInput = $('chat-upload-input');
+        this.$mentionMenu = $('chat-mention-menu');
         this.$status = $('chat-room-status');
         this.$footer = null;
         this.$footerBadgeLocal = null;
@@ -4834,6 +4967,8 @@ class ChatUI {
         this._currentRoomKey = null;
         this._selfDisplayName = '';
         this._defaultTitle = 'ErikrafT Drop™ | Transfer Files Cross-Platform. No Setup, No Signup.';
+        this._mentionMatches = [];
+        this._mentionIndex = -1;
 
         this.$toggle.addEventListener('click', _ => {
             console.debug('[ChatUI] WebChat toggle clicked.');
@@ -4844,6 +4979,11 @@ class ChatUI {
         }
         this.$roomSelect.addEventListener('change', _ => this._onRoomSelected());
         this.$form.addEventListener('submit', e => this._onSubmit(e));
+        this.$input.addEventListener('input', () => this._updateMentionSuggestions());
+        this.$input.addEventListener('keydown', e => this._onMentionKeyDown(e));
+        this.$input.addEventListener('blur', () => {
+            window.setTimeout(() => this._hideMentionSuggestions(), 120);
+        });
         if (this.$uploadBtn && this.$uploadInput) {
             this.$uploadBtn.addEventListener('click', _ => this.$uploadInput.click());
             this.$uploadInput.addEventListener('change', e => this._onUploadSelected(e));
@@ -5092,18 +5232,114 @@ class ChatUI {
             return;
         }
 
-        const validFiles = files.filter(file => file.type.startsWith('image/'));
-        if (!validFiles.length) {
-            Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
-            if (this.$uploadInput) this.$uploadInput.value = '';
-            return;
+        const imageFiles = files.filter(file => this._isImageFile(file));
+        const livePhotoMovies = files.filter(file => this._isLivePhotoMovie(file));
+        const consumed = new Set();
+
+        for (const photo of imageFiles) {
+            const movie = livePhotoMovies.find(candidate =>
+                !consumed.has(candidate) && this._sameLivePhotoAsset(photo, candidate)
+            );
+
+            if (movie) {
+                consumed.add(movie);
+                await this._sendLivePhoto(photo, movie, room);
+            }
+            else {
+                await this._sendAttachment(photo, room);
+            }
         }
 
-        for (const file of validFiles) {
-            await this._sendAttachment(file, room);
+        if (!imageFiles.length && !livePhotoMovies.length) {
+            Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
+        }
+        else if (livePhotoMovies.some(movie => !consumed.has(movie))) {
+            Events.fire('notify-user', Localization.getTranslation('notifications.files-incorrect'));
         }
 
         if (this.$uploadInput) this.$uploadInput.value = '';
+    }
+
+    _isImageFile(file) {
+        return file.type.startsWith('image/')
+            || /\.(?:jpe?g|png|gif|webp|heic|heif|avif)$/i.test(file.name || '');
+    }
+
+    _isLivePhotoMovie(file) {
+        return file.type === 'video/quicktime'
+            || /\.mov$/i.test(file.name || '');
+    }
+
+    _livePhotoStem(name) {
+        return String(name || '')
+            .replace(/\.(?:jpe?g|png|gif|webp|heic|heif|avif|mov)$/i, '')
+            .toLowerCase()
+            .replace(/[-_ ]?(?:photo|image|livephoto|live)$/i, '');
+    }
+
+    _sameLivePhotoAsset(photo, movie) {
+        const photoStem = this._livePhotoStem(photo.name);
+        const movieStem = this._livePhotoStem(movie.name);
+        return !!photoStem && photoStem === movieStem;
+    }
+
+    _sendMessageMetadata(room, messageId, timestamp, attachment) {
+        const senderId = sessionStorage.getItem('peer_id') || 'self';
+        const senderName = this._selfDisplayName || senderId;
+        const message = {
+            id: messageId,
+            text: '',
+            attachment,
+            roomType: room.roomType,
+            roomId: room.roomId,
+            timestamp,
+            senderId,
+            senderName,
+            direction: 'out',
+            status: room.peers.size ? 'sent' : 'failed',
+            pending: new Set(room.peers)
+        };
+
+        room.messages.push(message);
+        this._messageIndex.set(messageId, message);
+        if (this._currentRoomKey === room.key) {
+            this._appendMessageNode(message);
+            this._scrollToBottom();
+        }
+
+        Events.fire('chat-send', {
+            roomType: room.roomType,
+            roomId: room.roomId,
+            text: '',
+            attachment,
+            messageId,
+            timestamp,
+            senderId,
+            senderName
+        });
+    }
+
+    async _sendLivePhoto(photo, movie, room) {
+        const [photoDataUrl, movieDataUrl] = await Promise.all([
+            this._readFileAsDataUrl(photo),
+            this._readFileAsDataUrl(movie)
+        ]);
+        if (!photoDataUrl || !movieDataUrl) return;
+
+        const attachment = {
+            name: photo.name,
+            movieName: movie.name,
+            type: photo.type || 'image/heic',
+            movieType: movie.type || 'video/quicktime',
+            size: photo.size + movie.size,
+            kind: 'live-photo',
+            dataUrl: photoDataUrl,
+            photoDataUrl,
+            videoDataUrl: movieDataUrl
+        };
+
+        const messageId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        this._sendMessageMetadata(room, messageId, Date.now(), attachment);
     }
 
     async _sendAttachment(file, room) {
@@ -5281,20 +5517,35 @@ class ChatUI {
         const type = attachment.type || '';
         const kind = attachment.kind || (type.startsWith('video/') ? 'video' : 'image');
 
-        let media;
-        if (kind === 'video') {
-            media = document.createElement('video');
-            media.controls = true;
-            media.playsInline = true;
-            media.src = attachment.dataUrl;
+        if (kind === 'live-photo') {
+            const photo = document.createElement('img');
+            photo.src = attachment.photoDataUrl || attachment.dataUrl;
+            photo.alt = attachment.name || Localization.getTranslation('dialogs.title-file');
+            wrapper.appendChild(photo);
+
+            const movie = document.createElement('video');
+            movie.controls = true;
+            movie.playsInline = true;
+            movie.src = attachment.videoDataUrl;
+            movie.setAttribute('aria-label', attachment.movieName || 'Live Photo motion');
+            wrapper.appendChild(movie);
         }
         else {
-            media = document.createElement('img');
-            media.src = attachment.dataUrl;
-            media.alt = attachment.name || Localization.getTranslation('dialogs.title-file');
-        }
+            let media;
+            if (kind === 'video') {
+                media = document.createElement('video');
+                media.controls = true;
+                media.playsInline = true;
+                media.src = attachment.dataUrl;
+            }
+            else {
+                media = document.createElement('img');
+                media.src = attachment.dataUrl;
+                media.alt = attachment.name || Localization.getTranslation('dialogs.title-file');
+            }
 
-        wrapper.appendChild(media);
+            wrapper.appendChild(media);
+        }
 
         const meta = document.createElement('div');
         meta.className = 'chat-attachment-meta';
