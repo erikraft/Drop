@@ -239,6 +239,7 @@ class ErikrafTdrop {
         if ('Notification' in window && Notification.permission !== 'granted') {
             if (this.$headerNotificationBtn) {
                 this.$headerNotificationBtn.removeAttribute('hidden');
+                this.$headerNotificationBtn.classList.remove('notification-attention');
             } else {
                 console.warn('[UI] Notification button not found.');
             }
