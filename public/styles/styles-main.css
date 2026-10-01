@@ -872,6 +872,7 @@ body.chat-open > header {
 
 .chat-input {
     position: relative;
+    width: 100%;
     display: flex;
     width: 100%;
     align-items: center;
