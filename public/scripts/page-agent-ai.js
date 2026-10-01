@@ -16,10 +16,16 @@
     };
 
     const notify = message => {
-        if (typeof Events !== 'undefined') {
-            Events.fire('notify-user', message);
-        }
+        if (typeof Events !== 'undefined') Events.fire('notify-user', message);
         console.info('[Page Agent]', message);
+    };
+
+    const t = (key, fallback) => {
+        try {
+            return typeof Localization !== 'undefined' ? Localization.getTranslation(key) : fallback;
+        } catch {
+            return fallback;
+        }
     };
 
     const getConfig = () => {
@@ -30,77 +36,219 @@
         }
     };
 
-    const saveConfig = config => {
-        localStorage.setItem(STORE_KEY, JSON.stringify({
-            baseURL: config.baseURL,
-            model: config.model
-        }));
-    };
+    const saveConfig = config => localStorage.setItem(STORE_KEY, JSON.stringify({
+        baseURL: config.baseURL,
+        model: config.model
+    }));
 
     const getApiKey = () => sessionStorage.getItem(SESSION_KEY) || '';
+    const setApiKey = value => value
+        ? sessionStorage.setItem(SESSION_KEY, value)
+        : sessionStorage.removeItem(SESSION_KEY);
 
-    const setApiKey = value => {
-        if (value) sessionStorage.setItem(SESSION_KEY, value);
-        else sessionStorage.removeItem(SESSION_KEY);
+    const getAuthToken = () => localStorage.getItem('PageAgentExtUserAuthToken') || '';
+    const setAuthToken = value => value
+        ? localStorage.setItem('PageAgentExtUserAuthToken', value)
+        : localStorage.removeItem('PageAgentExtUserAuthToken');
+
+    const closeDialog = dialog => {
+        if (!dialog) return;
+        dialog.remove();
+        document.documentElement.classList.remove('erikraft-page-agent-dialog-open');
     };
 
-    const getTranslation = (key, fallback) => {
-        try {
-            return typeof Localization !== 'undefined'
-                ? Localization.getTranslation(key)
-                : fallback;
-        } catch {
-            return fallback;
+    const createDialog = ({ title, description = '', width = 560 }) => {
+        const overlay = document.createElement('div');
+        overlay.className = 'erikraft-page-agent-dialog';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+
+        const panel = document.createElement('section');
+        panel.className = 'erikraft-page-agent-dialog__panel';
+        panel.style.setProperty('--page-agent-dialog-width', width + 'px');
+
+        const header = document.createElement('header');
+        header.className = 'erikraft-page-agent-dialog__header';
+
+        const brand = document.createElement('div');
+        brand.className = 'erikraft-page-agent-dialog__brand';
+        brand.innerHTML = '<img src="https://raw.githubusercontent.com/alibaba/page-agent/main/packages/extension/public/assets/page-agent-64.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
+
+        const heading = document.createElement('h2');
+        heading.className = 'erikraft-page-agent-dialog__title';
+        heading.textContent = title;
+
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'erikraft-page-agent-dialog__close';
+        close.setAttribute('aria-label', t('ai.dialog-close', 'Close'));
+        close.textContent = '×';
+
+        const body = document.createElement('div');
+        body.className = 'erikraft-page-agent-dialog__body';
+
+        if (description) {
+            const desc = document.createElement('p');
+            desc.className = 'erikraft-page-agent-dialog__description';
+            desc.textContent = description;
+            body.appendChild(desc);
         }
+
+        header.append(brand, heading, close);
+        panel.append(header, body);
+        overlay.appendChild(panel);
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('erikraft-page-agent-dialog-open');
+
+        const closeAll = () => closeDialog(overlay);
+        close.addEventListener('click', closeAll);
+        overlay.addEventListener('click', event => {
+            if (event.target === overlay) closeAll();
+        });
+
+        return { overlay, panel, body, close: closeAll };
+    };
+
+    const addField = (body, { label, value = '', type = 'text', placeholder = '', autocomplete = 'off' }) => {
+        const wrapper = document.createElement('label');
+        wrapper.className = 'erikraft-page-agent-dialog__field';
+        const caption = document.createElement('span');
+        caption.textContent = label;
+        const input = document.createElement('input');
+        input.type = type;
+        input.value = value;
+        input.placeholder = placeholder;
+        input.autocomplete = autocomplete;
+        wrapper.append(caption, input);
+        body.appendChild(wrapper);
+        return input;
     };
 
     const promptConfig = () => {
+        if (!isDesktop()) return null;
+
         const current = getConfig();
-        const baseURL = window.prompt(
-            'Endpoint LLM compatível com OpenAI (ex.: http://localhost:11434/v1):',
-            current.baseURL || ''
-        );
-        if (!baseURL) return null;
+        const dialog = createDialog({
+            title: t('ai.settings', 'Configurar LLM e autorização'),
+            description: t('ai.settings-description', 'Configure o endpoint LLM, o modelo e a autorização do Page Agent Ext sem usar pop-ups do navegador.')
+        });
 
-        const model = window.prompt(
-            'Modelo com suporte a tool calls:',
-            current.model || ''
-        );
-        if (!model) return null;
+        const endpoint = addField(dialog.body, {
+            label: t('ai.endpoint', 'Endpoint LLM'),
+            value: current.baseURL || '',
+            placeholder: 'https://api.openai.com/v1'
+        });
+        const model = addField(dialog.body, {
+            label: t('ai.model', 'Modelo'),
+            value: current.model || '',
+            placeholder: 'gpt-5.2'
+        });
+        const apiKey = addField(dialog.body, {
+            label: t('ai.api-key', 'API key'),
+            value: getApiKey(),
+            type: 'password',
+            placeholder: t('ai.api-key-placeholder', 'Opcional para Ollama/LM Studio'),
+            autocomplete: 'off'
+        });
+        const token = addField(dialog.body, {
+            label: t('ai.auth-token', 'Token de autorização do Page Agent Ext'),
+            value: getAuthToken(),
+            type: 'password',
+            placeholder: t('ai.auth-token-placeholder', 'Cole o token copiado da extensão'),
+            autocomplete: 'off'
+        });
 
-        const currentKey = getApiKey();
-        const apiKey = window.prompt(
-            'API key (opcional para Ollama/LM Studio; ficará apenas nesta sessão):',
-            currentKey
-        );
+        const actions = document.createElement('div');
+        actions.className = 'erikraft-page-agent-dialog__actions';
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'btn btn-rounded btn-grey';
+        cancel.textContent = t('dialogs.cancel', 'Cancelar');
+        cancel.addEventListener('click', dialog.close);
 
-        saveConfig({ baseURL: baseURL.trim(), model: model.trim() });
-        setApiKey((apiKey || '').trim());
-
-        const token = window.localStorage.getItem('PageAgentExtUserAuthToken');
-        if (!token) {
-            const authToken = window.prompt(
-                'Token do Page Agent Ext (copiado do painel da extensão):',
-                ''
-            );
-            if (authToken) {
-                window.localStorage.setItem('PageAgentExtUserAuthToken', authToken.trim());
+        const save = document.createElement('button');
+        save.type = 'button';
+        save.className = 'erikraft-page-agent-dialog__primary';
+        save.textContent = t('ai.save', 'Salvar configuração');
+        save.addEventListener('click', () => {
+            const baseURL = endpoint.value.trim();
+            const selectedModel = model.value.trim();
+            if (!baseURL || !selectedModel) {
+                notify(t('ai.settings-required', 'Informe o endpoint LLM e o modelo.'));
+                return;
             }
-        }
+            saveConfig({ baseURL, model: selectedModel });
+            setApiKey(apiKey.value.trim());
+            setAuthToken(token.value.trim());
+            dialog.close();
+            notify(t('ai.settings-saved', 'Configuração do Page Agent salva.'));
+        });
 
-        return {
-            baseURL: baseURL.trim(),
-            model: model.trim(),
-            apiKey: (apiKey || '').trim()
-        };
+        actions.append(cancel, save);
+        dialog.body.appendChild(actions);
+        endpoint.focus();
+        return { dialog, submit: () => save.click() };
+    };
+
+    const customInstructionDialog = target => {
+        const dialog = createDialog({
+            title: t('ai.custom', 'Instrução personalizada'),
+            description: t('ai.custom-description', 'Descreva exatamente o que o Page Agent deve fazer somente com o texto/código selecionado. A tarefa não enviará a mensagem automaticamente.')
+        });
+
+        const textarea = document.createElement('textarea');
+        textarea.className = 'erikraft-page-agent-dialog__textarea';
+        textarea.rows = 7;
+        textarea.placeholder = t('ai.custom-placeholder', 'Ex.: deixe o texto mais profissional, mas preserve o significado.');
+        dialog.body.appendChild(textarea);
+
+        const hint = document.createElement('p');
+        hint.className = 'erikraft-page-agent-dialog__hint';
+        hint.textContent = t('ai.custom-hint', 'O Page Agent será limitado ao campo marcado no ErikrafT Drop™.');
+        dialog.body.appendChild(hint);
+
+        const actions = document.createElement('div');
+        actions.className = 'erikraft-page-agent-dialog__actions';
+
+        const download = document.createElement('a');
+        download.className = 'erikraft-page-agent-dialog__secondary';
+        download.href = EXTENSION_URL;
+        download.target = '_blank';
+        download.rel = 'noopener noreferrer';
+        download.textContent = t('ai.download', 'Baixar Page Agent Ext');
+
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'btn btn-rounded btn-grey';
+        cancel.textContent = t('dialogs.cancel', 'Cancelar');
+        cancel.addEventListener('click', dialog.close);
+
+        const execute = document.createElement('button');
+        execute.type = 'button';
+        execute.className = 'erikraft-page-agent-dialog__primary';
+        execute.textContent = t('ai.execute', 'Executar instrução');
+        execute.addEventListener('click', async () => {
+            const instruction = textarea.value.trim();
+            if (!instruction) {
+                textarea.focus();
+                return;
+            }
+            dialog.close();
+            await run(target, 'custom', instruction);
+        });
+
+        actions.append(download, cancel, execute);
+        dialog.body.appendChild(actions);
+        textarea.focus();
+        return dialog;
     };
 
     const ensureConfig = () => {
         const config = getConfig();
-        if (!config.baseURL || !config.model) {
-            return promptConfig();
+        if (!config.baseURL || !config.model || !getAuthToken()) {
+            promptConfig();
+            return null;
         }
-
         return {
             baseURL: config.baseURL,
             model: config.model,
@@ -111,9 +259,7 @@
     const waitForExtension = async (timeout = 1200) => {
         const started = Date.now();
         while (Date.now() - started < timeout) {
-            if (window.PAGE_AGENT_EXT && typeof window.PAGE_AGENT_EXT.execute === 'function') {
-                return true;
-            }
+            if (window.PAGE_AGENT_EXT && typeof window.PAGE_AGENT_EXT.execute === 'function') return true;
             await new Promise(resolve => setTimeout(resolve, 100));
         }
         return false;
@@ -131,14 +277,9 @@
     };
 
     const buildTask = (action, instruction = '') => {
-        const actions = {
-            improve: 'Melhore clareza, naturalidade e organização do texto, preservando o significado.',
-            correct: 'Corrija gramática, ortografia, pontuação e concordância, preservando o significado.',
-            polish: 'Ajuste o texto para ficar mais profissional, objetivo e fácil de entender, sem inventar informações.',
-            code: 'Revise o código quanto a erros de sintaxe, lógica e problemas óbvios. Corrija apenas o necessário e preserve a linguagem e a intenção do código.'
-        };
-
-        const task = actions[action] || instruction.trim();
+        const task = action === 'custom'
+            ? instruction.trim()
+            : instruction.trim();
         return [
             'Você está operando dentro do ErikrafT Drop™.',
             'Existe exatamente um elemento marcado com data-erikraft-page-agent-target="true".',
@@ -153,15 +294,14 @@
 
     const run = async (target, action, instruction = '') => {
         if (!isDesktop()) {
-            notify(getTranslation('ai.desktop-only', 'Page Agent AI is available on desktop only.'));
+            notify(t('ai.desktop-only', 'Page Agent AI is available on desktop only.'));
             return false;
         }
         if (!target) return false;
 
         const available = await waitForExtension();
         if (!available) {
-            notify(getTranslation('ai.install-required', 'Install and authorize Page Agent Ext to use AI text actions.'));
-            window.open(EXTENSION_URL, '_blank', 'noopener,noreferrer');
+            notify(t('ai.install-required', 'Instale e autorize o Page Agent Ext para usar a IA.'));
             return false;
         }
 
@@ -173,59 +313,30 @@
         target.focus();
 
         try {
-            const result = await window.PAGE_AGENT_EXT.execute(
-                buildTask(action, instruction),
-                {
-                    baseURL: config.baseURL,
-                    model: config.model,
-                    ...(config.apiKey ? { apiKey: config.apiKey } : {}),
-                    includeInitialTab: true
-                }
-            );
+            const result = await window.PAGE_AGENT_EXT.execute(buildTask(action, instruction), {
+                baseURL: config.baseURL,
+                model: config.model,
+                ...(config.apiKey ? { apiKey: config.apiKey } : {}),
+                includeInitialTab: true
+            });
 
             if (!result?.success) {
                 restoreTarget(target, before);
-                notify(result?.data || 'O Page Agent não conseguiu concluir a tarefa.');
+                notify(result?.data || t('ai.failed', 'O Page Agent não conseguiu concluir a tarefa.'));
                 return false;
             }
 
             target.dispatchEvent(new Event('input', { bubbles: true }));
-            notify(getTranslation('ai.completed', 'AI applied to the text.'));
+            notify(t('ai.completed', 'IA aplicada ao texto.'));
             return true;
         } catch (error) {
             restoreTarget(target, before);
             console.error('[Page Agent] execution failed:', error);
-            notify(error?.message || 'Falha ao executar o Page Agent.');
+            notify(error?.message || t('ai.failed', 'Falha ao executar o Page Agent.'));
             return false;
         } finally {
             target.removeAttribute(TARGET_ATTR);
         }
-    };
-
-    const loadDemo = src => {
-        if (!isDesktop()) return;
-        const existing = document.querySelector('script[data-erikraft-page-agent-demo]');
-        if (existing) {
-            notify('Page Agent demo já está carregado.');
-            return;
-        }
-
-        const script = document.createElement('script');
-        script.src = src + '?lang=en-US&t=' + Math.random();
-        script.crossOrigin = 'anonymous';
-        script.type = 'text/javascript';
-        script.dataset.erikraftPageAgentDemo = 'true';
-        script.onload = () => notify('Page Agent carregado para avaliação técnica.');
-        script.onerror = () => notify('Não foi possível carregar o Page Agent.');
-        document.body.appendChild(script);
-    };
-
-    const createLogo = () => {
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('viewBox', '0 0 24 24');
-        svg.setAttribute('aria-hidden', 'true');
-        svg.innerHTML = '<image href="https://raw.githubusercontent.com/alibaba/page-agent/main/packages/extension/public/assets/page-agent-64.png" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/>';
-        return svg;
     };
 
     const style = () => {
@@ -233,131 +344,166 @@
         const node = document.createElement('style');
         node.id = 'erikraft-page-agent-ai-style';
         node.textContent = `
-            .erikraft-page-agent-ai { position:relative; display:inline-flex; }
-            .erikraft-page-agent-ai > button { display:inline-flex; align-items:center; justify-content:center; gap:7px; }
-            .erikraft-page-agent-ai svg { width:18px; height:18px; flex:0 0 18px; }
-            .erikraft-page-agent-menu { position:absolute; z-index:10050; right:0; bottom:calc(100% + 8px); min-width:230px; max-width:min(320px,calc(100vw - 24px)); padding:8px; border:1px solid rgba(127,127,127,.25); border-radius:14px; background:var(--background-color,#181818); box-shadow:0 14px 40px rgba(0,0,0,.3); }
-            .erikraft-page-agent-menu button,.erikraft-page-agent-menu a { width:100%; display:flex; align-items:center; gap:8px; box-sizing:border-box; padding:9px 10px; border:0; border-radius:9px; background:transparent; color:inherit; text-align:left; text-decoration:none; cursor:pointer; }
-            .erikraft-page-agent-menu button:hover,.erikraft-page-agent-menu a:hover { background:rgba(127,127,127,.12); }
-            .erikraft-page-agent-menu .label { padding:6px 10px; font-size:11px; opacity:.65; }
-            .erikraft-page-agent-ai-target { outline:1px solid rgba(134,125,108,.55); }
+            :root.erikraft-page-agent-dialog-open { overflow:hidden; }
+            .erikraft-page-agent-ai { position:relative; display:inline-flex; flex:0 0 auto; min-width:0; }
+            .erikraft-page-agent-ai > button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:42px; max-width:140px; height:40px; padding:0 10px; box-sizing:border-box; overflow:hidden; }
+            .erikraft-page-agent-ai > button span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+            .erikraft-page-agent-ai img { width:18px; height:18px; flex:0 0 18px; border-radius:5px; }
+            #chat-form .erikraft-page-agent-ai { margin-inline-start:4px; }
+            #chat-form .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
             #send-text-dialog .erikraft-page-agent-ai { margin-inline-end:auto; }
+            .erikraft-page-agent-menu { position:fixed; z-index:2147482000; width:min(330px,calc(100vw - 24px)); max-height:min(70vh,520px); overflow:auto; overscroll-behavior:contain; padding:8px; box-sizing:border-box; border:1px solid rgba(123,105,255,.32); border-radius:16px; background:var(--background-color,#181818); box-shadow:0 18px 55px rgba(0,0,0,.42),0 0 0 1px rgba(88,185,255,.08); scrollbar-width:thin; }
+            .erikraft-page-agent-menu[hidden] { display:none; }
+            .erikraft-page-agent-menu button { width:100%; display:flex; align-items:center; min-height:42px; padding:9px 11px; border:0; border-radius:10px; background:transparent; color:inherit; text-align:left; cursor:pointer; }
+            .erikraft-page-agent-menu button:hover { background:linear-gradient(90deg,rgba(123,105,255,.16),rgba(88,185,255,.12)); }
+            .erikraft-page-agent-menu .label { padding:7px 11px; font-size:11px; opacity:.62; }
+            .erikraft-page-agent-dialog { position:fixed; inset:0; z-index:2147481000; display:grid; place-items:center; padding:18px; box-sizing:border-box; background:rgba(8,8,14,.64); backdrop-filter:blur(7px); overflow:auto; }
+            .erikraft-page-agent-dialog__panel { width:min(var(--page-agent-dialog-width),calc(100vw - 28px)); max-height:min(760px,calc(100vh - 28px)); display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(123,105,255,.36); border-radius:18px; background:var(--background-color,#181818); color:inherit; box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 35px rgba(88,185,255,.10); }
+            .erikraft-page-agent-dialog__header { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background:linear-gradient(120deg,rgba(123,105,255,.13),rgba(88,185,255,.08)); }
+            .erikraft-page-agent-dialog__brand { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:700; white-space:nowrap; }
+            .erikraft-page-agent-dialog__brand img { width:24px; height:24px; border-radius:7px; }
+            .erikraft-page-agent-dialog__title { margin:0; min-width:0; font-size:17px; line-height:1.25; }
+            .erikraft-page-agent-dialog__close { width:34px; height:34px; border:0; border-radius:9px; background:transparent; color:inherit; font-size:25px; cursor:pointer; }
+            .erikraft-page-agent-dialog__close:hover { background:rgba(127,127,127,.13); }
+            .erikraft-page-agent-dialog__body { min-height:0; overflow:auto; padding:16px; }
+            .erikraft-page-agent-dialog__description,.erikraft-page-agent-dialog__hint { margin:0 0 14px; opacity:.76; line-height:1.5; font-size:13px; }
+            .erikraft-page-agent-dialog__field { display:block; margin:0 0 12px; }
+            .erikraft-page-agent-dialog__field span { display:block; margin:0 0 6px; font-size:12px; font-weight:650; }
+            .erikraft-page-agent-dialog__field input,.erikraft-page-agent-dialog__textarea { width:100%; box-sizing:border-box; border:1px solid rgba(127,127,127,.28); border-radius:11px; background:rgba(127,127,127,.07); color:inherit; outline:none; padding:10px 11px; font:inherit; }
+            .erikraft-page-agent-dialog__field input:focus,.erikraft-page-agent-dialog__textarea:focus { border-color:rgba(123,105,255,.72); box-shadow:0 0 0 3px rgba(88,185,255,.10); }
+            .erikraft-page-agent-dialog__textarea { min-height:150px; resize:vertical; line-height:1.45; }
+            .erikraft-page-agent-dialog__actions { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid rgba(127,127,127,.16); }
+            .erikraft-page-agent-dialog__primary,.erikraft-page-agent-dialog__secondary { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 13px; border-radius:10px; box-sizing:border-box; text-decoration:none; cursor:pointer; font:inherit; }
+            .erikraft-page-agent-dialog__primary { border:1px solid rgba(123,105,255,.72); background:linear-gradient(120deg,#7b69ff,#58b9ff); color:#fff; }
+            .erikraft-page-agent-dialog__secondary { border:1px solid rgba(88,185,255,.34); background:rgba(88,185,255,.08); color:inherit; }
+            @media (max-width:760px) {
+                .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
+                .erikraft-page-agent-dialog { padding:10px; place-items:center; }
+                .erikraft-page-agent-dialog__panel { width:calc(100vw - 20px); max-height:calc(100vh - 20px); border-radius:15px; }
+                .erikraft-page-agent-dialog__header { grid-template-columns:auto 1fr auto; padding:12px; }
+                .erikraft-page-agent-dialog__brand span { display:none; }
+                .erikraft-page-agent-dialog__body { padding:12px; }
+                .erikraft-page-agent-dialog__actions > * { flex:1 1 145px; }
+            }
+            @media (max-height:620px) and (min-width:761px) {
+                .erikraft-page-agent-dialog__panel { max-height:calc(100vh - 18px); }
+                .erikraft-page-agent-dialog__body { padding:12px 14px; }
+                .erikraft-page-agent-dialog__textarea { min-height:105px; }
+            }
         `;
         document.head.appendChild(node);
     };
 
-    const menuButton = (label, action) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = label;
-        button.addEventListener('click', action);
-        return button;
+    const positionMenu = (menu, toggle) => {
+        const rect = toggle.getBoundingClientRect();
+        const gap = 8;
+        const width = Math.min(330, window.innerWidth - 24);
+        const height = Math.min(520, Math.max(160, window.innerHeight * 0.7));
+        const spaceAbove = rect.top - gap - 8;
+        const spaceBelow = window.innerHeight - rect.bottom - gap - 8;
+        const openAbove = spaceAbove >= Math.min(height, 320) || spaceAbove > spaceBelow;
+        const maxHeight = Math.max(120, Math.min(height, openAbove ? spaceAbove : spaceBelow));
+
+        menu.style.width = width + 'px';
+        menu.style.maxHeight = maxHeight + 'px';
+        menu.style.left = Math.max(12, Math.min(rect.right - width, window.innerWidth - width - 12)) + 'px';
+        if (openAbove) {
+            menu.style.bottom = (window.innerHeight - rect.top + gap) + 'px';
+            menu.style.top = 'auto';
+        } else {
+            menu.style.top = (rect.bottom + gap) + 'px';
+            menu.style.bottom = 'auto';
+        }
     };
 
     const createMenu = (target, host) => {
+        if (!target || !host || host.querySelector('.erikraft-page-agent-ai')) return;
         const wrapper = document.createElement('div');
         wrapper.className = 'erikraft-page-agent-ai';
 
         const toggle = document.createElement('button');
         toggle.type = 'button';
         toggle.className = 'btn btn-rounded btn-grey';
-        toggle.title = getTranslation('ai.page-agent-title', 'Page Agent Ext');
-        toggle.setAttribute('aria-label', getTranslation('ai.page-agent-title', 'Page Agent Ext'));
-        toggle.appendChild(createLogo());
+        toggle.title = t('ai.page-agent-title', 'Page Agent Ext');
+        toggle.setAttribute('aria-label', t('ai.page-agent-title', 'Page Agent Ext'));
+        toggle.innerHTML = '<img src="https://raw.githubusercontent.com/alibaba/page-agent/main/packages/extension/public/assets/page-agent-64.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
 
         const menu = document.createElement('div');
         menu.className = 'erikraft-page-agent-menu';
         menu.hidden = true;
 
-        const label = document.createElement('div');
-        label.className = 'label';
-        label.textContent = getTranslation('ai.page-agent-title', 'Page Agent Ext');
-        menu.appendChild(label);
+        const addAction = (label, action) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = label;
+            button.addEventListener('click', () => {
+                menu.hidden = true;
+                action();
+            });
+            menu.appendChild(button);
+        };
 
-        const actions = [
-            [getTranslation('ai.improve', 'Improve text'), () => run(target, 'improve')],
-            [getTranslation('ai.correct', 'Correct text'), () => run(target, 'correct')],
-            [getTranslation('ai.polish', 'Polish text'), () => run(target, 'polish')],
-            [getTranslation('ai.code', 'Fix/review code'), () => run(target, 'code')],
-            [getTranslation('ai.custom', 'Custom instruction'), () => {
-                const instruction = window.prompt('O que você quer que a IA faça com o texto/código?');
-                if (instruction) run(target, 'custom', instruction);
-            }]
-        ];
-        actions.forEach(([labelText, action]) => menu.appendChild(menuButton(labelText, action)));
+        addAction(t('ai.custom', 'Instrução personalizada'), () => customInstructionDialog(target));
+        addAction(t('ai.settings', 'Configurar LLM e autorização'), () => promptConfig());
+        addAction(t('ai.stop', 'Parar tarefa atual'), () => window.PAGE_AGENT_EXT?.stop?.());
 
-        const separator = document.createElement('div');
-        separator.className = 'label';
-        separator.textContent = 'Configuração / ferramentas';
-        menu.appendChild(separator);
-
-        menu.appendChild(menuButton(getTranslation('ai.settings', 'Configure LLM and authorization'), () => promptConfig()));
-        menu.appendChild(menuButton(getTranslation('ai.stop', 'Stop current task'), () => window.PAGE_AGENT_EXT?.stop?.()));
-        menu.appendChild(menuButton(getTranslation('ai.download', 'Download Page Agent Ext'), () => window.open(EXTENSION_URL, '_blank', 'noopener,noreferrer')));
-        menu.appendChild(menuButton(getTranslation('ai.cdn-jsdelivr', 'Page Agent — jsDelivr'), () => loadDemo(CDN_URL)));
-        menu.appendChild(menuButton(getTranslation('ai.cdn-npmmirror', 'Page Agent — npmmirror'), () => loadDemo(MIRROR_URL)));
-
-        const credits = document.createElement('a');
-        credits.href = OFFICIAL_URL;
-        credits.target = '_blank';
-        credits.rel = 'noopener noreferrer';
-        credits.textContent = getTranslation('ai.credits', 'Page Agent — credits and documentation');
-        menu.appendChild(credits);
-
-        toggle.addEventListener('click', event => {
+        const openMenu = event => {
             event.stopPropagation();
             menu.hidden = !menu.hidden;
+            if (!menu.hidden) {
+                if (menu.parentElement !== document.body) document.body.appendChild(menu);
+                positionMenu(menu, toggle);
+            }
+        };
+
+        toggle.addEventListener('click', openMenu);
+        window.addEventListener('resize', () => {
+            if (!menu.hidden) positionMenu(menu, toggle);
         });
-
-        wrapper.append(toggle, menu);
-        host.appendChild(wrapper);
-
+        window.addEventListener('scroll', () => {
+            if (!menu.hidden) positionMenu(menu, toggle);
+        }, true);
         document.addEventListener('click', event => {
-            if (!wrapper.contains(event.target)) menu.hidden = true;
+            if (!wrapper.contains(event.target) && event.target !== menu) menu.hidden = true;
         });
+
+        wrapper.appendChild(toggle);
+        if (host.id === 'chat-form') {
+            const sendButton = host.querySelector('#chat-send');
+            host.insertBefore(wrapper, sendButton || null);
+        } else {
+            host.appendChild(wrapper);
+        }
     };
 
     const attach = (target, host) => {
-        if (!target || !host || !isDesktop() || host.querySelector('.erikraft-page-agent-ai')) return;
+        if (!target || !host || !isDesktop()) return;
         createMenu(target, host);
     };
 
     const init = () => {
         if (!isDesktop()) return;
         style();
-
-        const chatInput = document.getElementById('chat-input');
-        const chatHost = document.getElementById('chat-form');
-        attach(chatInput, chatHost);
-
-        const sendText = document.querySelector('#send-text-dialog .textarea');
-        const sendHost = document.querySelector('#send-text-dialog .btn-row');
-        attach(sendText, sendHost);
+        attach(document.getElementById('chat-input'), document.getElementById('chat-form'));
+        attach(document.querySelector('#send-text-dialog .textarea'), document.querySelector('#send-text-dialog .btn-row'));
 
         const observer = new MutationObserver(() => {
-            const input = document.getElementById('chat-input');
-            const form = document.getElementById('chat-form');
-            const dialogText = document.querySelector('#send-text-dialog .textarea');
-            const dialogHost = document.querySelector('#send-text-dialog .btn-row');
-            attach(input, form);
-            attach(dialogText, dialogHost);
+            attach(document.getElementById('chat-input'), document.getElementById('chat-form'));
+            attach(document.querySelector('#send-text-dialog .textarea'), document.querySelector('#send-text-dialog .btn-row'));
         });
         observer.observe(document.body, { childList: true, subtree: true });
     };
 
     window.ErikrafTPageAgentAI = Object.freeze({
         buildTask,
-        loadDemo,
         run,
         openExtension: () => window.open(EXTENSION_URL, '_blank', 'noopener,noreferrer'),
         officialUrl: OFFICIAL_URL,
         repositoryUrl: REPOSITORY_URL,
-        extensionUrl: EXTENSION_URL
+        extensionUrl: EXTENSION_URL,
+        demoUrls: { CDN_URL, MIRROR_URL }
     });
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init, { once: true });
-    } else {
-        init();
-    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+    else init();
 })();
