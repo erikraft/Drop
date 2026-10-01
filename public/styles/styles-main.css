@@ -1142,11 +1142,11 @@ body.chat-open > header {
     }
 
     .chat-panel {
-        top: 56px;
+        top: var(--chat-header-height, 56px);
         width: 100vw;
         max-width: 100vw;
-        height: calc(100vh - 56px);
-        max-height: calc(100vh - 56px);
+        height: calc(100vh - var(--chat-header-height, 56px));
+        max-height: calc(100vh - var(--chat-header-height, 56px));
         min-width: 0;
         resize: none;
     }
