@@ -407,6 +407,10 @@
         "bookmarklet-cdn": "CDN bookmarklet",
         "bookmarklet-mirror": "Mirror bookmarklet",
         "copy": "Copy",
-        "copied": "Copied"
+        "copied": "Copied",
+        "use": "Use",
+        "used": "Used",
+        "bookmarklet-loaded": "Page Agent loaded on the current page.",
+        "bookmarklet-failed": "Page Agent could not be loaded on this page."
     }
 }

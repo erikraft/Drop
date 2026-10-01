@@ -407,6 +407,10 @@
         "bookmarklet-cdn": "Bookmarklet CDN",
         "bookmarklet-mirror": "Bookmarklet Mirror",
         "copy": "Copiar",
-        "copied": "Copiado"
+        "copied": "Copiado",
+        "use": "Usar",
+        "used": "Usado",
+        "bookmarklet-loaded": "Page Agent carregado na página atual.",
+        "bookmarklet-failed": "Não foi possível carregar o Page Agent nesta página."
     }
 }
