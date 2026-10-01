@@ -8,12 +8,20 @@ const publicDir = path.join(root, 'public');
 const pageAgent = fs.readFileSync(path.join(publicDir, 'scripts', 'page-agent-ai.js'), 'utf8');
 const serviceWorker = fs.readFileSync(path.join(publicDir, 'service-worker.js'), 'utf8');
 const main = fs.readFileSync(path.join(publicDir, 'scripts', 'main.js'), 'utf8');
+const index = fs.readFileSync(path.join(publicDir, 'index.html'), 'utf8');
+const enTranslations = fs.readFileSync(path.join(publicDir, 'lang', 'en.json'), 'utf8');
+const ptBrTranslations = fs.readFileSync(path.join(publicDir, 'lang', 'pt-BR.json'), 'utf8');
 
 const match = serviceWorker.match(/const relativePathsToCache = \[([\s\S]*?)\n\];/);
 assert.ok(match, 'Service Worker cache manifest must be present.');
 
 const paths = [...match[1].matchAll(/[\'\"]([^\'\"]+)[\'\"]/g)].map(result => result[1]);
 assert.ok(paths.length > 0, 'Service Worker cache manifest must contain resources.');
+
+assert.doesNotThrow(() => JSON.parse(enTranslations), 'English translations must be valid JSON.');
+assert.doesNotThrow(() => JSON.parse(ptBrTranslations), 'Brazilian Portuguese translations must be valid JSON.');
+assert.doesNotMatch(index, /scripts\/content-moderation\.js/,
+    'Index must not load the removed content moderation script.');
 
 for (const resource of paths) {
     const absolutePath = path.join(publicDir, resource);
