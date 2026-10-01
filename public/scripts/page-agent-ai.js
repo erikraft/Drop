@@ -153,14 +153,14 @@
 
     const run = async (target, action, instruction = '') => {
         if (!isDesktop()) {
-            notify('A IA do Page Agent está disponível apenas no desktop.');
+            notify(getTranslation('ai.desktop-only', 'Page Agent AI is available on desktop only.'));
             return false;
         }
         if (!target) return false;
 
         const available = await waitForExtension();
         if (!available) {
-            notify('Instale e autorize o Page Agent Ext para usar os ajustes de IA.');
+            notify(getTranslation('ai.install-required', 'Install and authorize Page Agent Ext to use AI text actions.'));
             window.open(EXTENSION_URL, '_blank', 'noopener,noreferrer');
             return false;
         }
@@ -190,7 +190,7 @@
             }
 
             target.dispatchEvent(new Event('input', { bubbles: true }));
-            notify(getTranslation('ai.page-agent-completed', 'IA aplicada ao texto.'));
+            notify(getTranslation('ai.completed', 'AI applied to the text.'));
             return true;
         } catch (error) {
             restoreTarget(target, before);
@@ -261,8 +261,8 @@
         const toggle = document.createElement('button');
         toggle.type = 'button';
         toggle.className = 'btn btn-rounded btn-grey';
-        toggle.title = 'Page Agent Ext';
-        toggle.setAttribute('aria-label', 'Page Agent Ext');
+        toggle.title = getTranslation('ai.page-agent-title', 'Page Agent Ext');
+        toggle.setAttribute('aria-label', getTranslation('ai.page-agent-title', 'Page Agent Ext'));
         toggle.appendChild(createLogo());
 
         const menu = document.createElement('div');
@@ -271,15 +271,15 @@
 
         const label = document.createElement('div');
         label.className = 'label';
-        label.textContent = 'Page Agent Ext';
+        label.textContent = getTranslation('ai.page-agent-title', 'Page Agent Ext');
         menu.appendChild(label);
 
         const actions = [
-            ['Melhorar texto', () => run(target, 'improve')],
-            ['Corrigir texto', () => run(target, 'correct')],
-            ['Ajustar texto', () => run(target, 'polish')],
-            ['Corrigir/revisar código', () => run(target, 'code')],
-            ['Instrução personalizada', () => {
+            [getTranslation('ai.improve', 'Improve text'), () => run(target, 'improve')],
+            [getTranslation('ai.correct', 'Correct text'), () => run(target, 'correct')],
+            [getTranslation('ai.polish', 'Polish text'), () => run(target, 'polish')],
+            [getTranslation('ai.code', 'Fix/review code'), () => run(target, 'code')],
+            [getTranslation('ai.custom', 'Custom instruction'), () => {
                 const instruction = window.prompt('O que você quer que a IA faça com o texto/código?');
                 if (instruction) run(target, 'custom', instruction);
             }]
@@ -291,17 +291,17 @@
         separator.textContent = 'Configuração / ferramentas';
         menu.appendChild(separator);
 
-        menu.appendChild(menuButton('Configurar LLM e autorização', () => promptConfig()));
-        menu.appendChild(menuButton('Parar tarefa atual', () => window.PAGE_AGENT_EXT?.stop?.()));
-        menu.appendChild(menuButton('Baixar Page Agent Ext', () => window.open(EXTENSION_URL, '_blank', 'noopener,noreferrer')));
-        menu.appendChild(menuButton('Page Agent — jsDelivr', () => loadDemo(CDN_URL)));
-        menu.appendChild(menuButton('Page Agent — npmmirror', () => loadDemo(MIRROR_URL)));
+        menu.appendChild(menuButton(getTranslation('ai.settings', 'Configure LLM and authorization'), () => promptConfig()));
+        menu.appendChild(menuButton(getTranslation('ai.stop', 'Stop current task'), () => window.PAGE_AGENT_EXT?.stop?.()));
+        menu.appendChild(menuButton(getTranslation('ai.download', 'Download Page Agent Ext'), () => window.open(EXTENSION_URL, '_blank', 'noopener,noreferrer')));
+        menu.appendChild(menuButton(getTranslation('ai.cdn-jsdelivr', 'Page Agent — jsDelivr'), () => loadDemo(CDN_URL)));
+        menu.appendChild(menuButton(getTranslation('ai.cdn-npmmirror', 'Page Agent — npmmirror'), () => loadDemo(MIRROR_URL)));
 
         const credits = document.createElement('a');
         credits.href = OFFICIAL_URL;
         credits.target = '_blank';
         credits.rel = 'noopener noreferrer';
-        credits.textContent = 'Page Agent — créditos e documentação';
+        credits.textContent = getTranslation('ai.credits', 'Page Agent — credits and documentation');
         menu.appendChild(credits);
 
         toggle.addEventListener('click', event => {
