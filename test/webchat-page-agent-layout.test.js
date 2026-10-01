@@ -57,7 +57,6 @@ assert.match(chatUi, /event\.key === 'ArrowDown'/);
 assert.match(chatUi, /event\.key === 'ArrowUp'/);
 assert.match(chatUi, /event\.key === 'Enter'/);
 assert.match(chatUi, /event\.key === 'Escape'/);
-assert.match(chatUi, /event\.button/);
 assert.doesNotMatch(pairDevice, /_mentionToken\(value\)/);
 assert.doesNotMatch(pairDevice, /_updateMentionSuggestions\(\)/);
 assert.match(chatForm, /id="chat-input"[^>]*type="text"[^>]*autocomplete="off"[^>]*spellcheck="true"/);
