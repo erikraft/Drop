@@ -1749,157 +1749,6 @@ class PairDeviceDialog extends Dialog {
             })
     }
 
-    _mentionToken(value) {
-        return String(value || '').replace(/[^\p{L}\p{N}_-]/gu, '');
-    }
-
-    _syncMentionPeers() {
-        const peersUI = window.erikrafTdrop?.peersUI;
-        const peers = peersUI?.peers;
-        if (peers && typeof peers === 'object') {
-            Object.values(peers).forEach(peer => {
-                if (!peer?.id) return;
-                const displayName = peer.name?.displayName || peer.displayName || peer.id;
-                this._peerNames.set(peer.id, displayName);
-            });
-        }
-
-        this.$panel?.querySelectorAll('x-peer[id]').forEach(node => {
-            const peerId = node.id;
-            const displayName = node.querySelector('.name')?.textContent?.trim();
-            if (peerId && displayName) this._peerNames.set(peerId, displayName);
-        });
-    }
-
-    _mentionCandidates(query) {
-        this._syncMentionPeers();
-        const normalizedQuery = String(query || '').toLocaleLowerCase();
-        const candidates = [];
-        this._peerNames.forEach((displayName, peerId) => {
-            const nameToken = this._mentionToken(displayName);
-            const usernameToken = this._mentionToken(peerId);
-            if (!nameToken && !usernameToken) return;
-
-            const nameMatch = nameToken.toLocaleLowerCase().startsWith(normalizedQuery);
-            const usernameMatch = usernameToken.toLocaleLowerCase().startsWith(normalizedQuery);
-            if (!query || nameMatch || usernameMatch) {
-                candidates.push({
-                    peerId,
-                    displayName: displayName || peerId,
-                    nameToken,
-                    usernameToken
-                });
-            }
-        });
-        return candidates.slice(0, 8);
-    }
-
-    _updateMentionSuggestions() {
-        if (!this.$mentionMenu) return;
-        const value = this.$input.value;
-        const caret = this.$input.selectionStart ?? value.length;
-        const beforeCaret = value.slice(0, caret);
-        const match = beforeCaret.match(/(?:^|\s)@([\p{L}\p{N}_-]*)$/u);
-
-        if (!match) {
-            this._hideMentionSuggestions();
-            return;
-        }
-
-        const query = match[1];
-        const candidates = this._mentionCandidates(query);
-        this._mentionMatches = candidates;
-        this._mentionIndex = -1;
-        this.$mentionMenu.innerHTML = '';
-
-        if (!candidates.length) {
-            this._hideMentionSuggestions();
-            return;
-        }
-
-        candidates.forEach((candidate, index) => {
-            const option = document.createElement('button');
-            option.type = 'button';
-            option.className = 'chat-mention-option';
-            option.dataset.index = String(index);
-
-            const name = document.createElement('span');
-            name.className = 'chat-mention-option__name';
-            name.textContent = `@${candidate.nameToken || candidate.usernameToken}`;
-
-            const username = document.createElement('span');
-            username.className = 'chat-mention-option__username';
-            username.textContent = `@${candidate.usernameToken || candidate.nameToken}`;
-
-            option.append(name, username);
-            option.addEventListener('mousedown', event => {
-                event.preventDefault();
-                this._insertMention(candidate);
-            });
-            this.$mentionMenu.appendChild(option);
-        });
-
-        this.$mentionMenu.hidden = false;
-    }
-
-    _hideMentionSuggestions() {
-        if (!this.$mentionMenu) return;
-        this.$mentionMenu.hidden = true;
-        this._mentionMatches = [];
-        this._mentionIndex = -1;
-    }
-
-    _onMentionKeyDown(event) {
-        if (!this.$mentionMenu || this.$mentionMenu.hidden || !this._mentionMatches.length) return;
-
-        if (event.key === 'ArrowDown') {
-            event.preventDefault();
-            this._mentionIndex = (this._mentionIndex + 1) % this._mentionMatches.length;
-            this._highlightMention();
-        }
-        else if (event.key === 'ArrowUp') {
-            event.preventDefault();
-            this._mentionIndex = this._mentionIndex <= 0
-                ? this._mentionMatches.length - 1
-                : this._mentionIndex - 1;
-            this._highlightMention();
-        }
-        else if (event.key === 'Enter' && this._mentionIndex >= 0) {
-            event.preventDefault();
-            this._insertMention(this._mentionMatches[this._mentionIndex]);
-        }
-        else if (event.key === 'Escape') {
-            event.preventDefault();
-            this._hideMentionSuggestions();
-        }
-    }
-
-    _highlightMention() {
-        const options = this.$mentionMenu.querySelectorAll('.chat-mention-option');
-        options.forEach((option, index) => {
-            option.toggleAttribute('data-selected', index === this._mentionIndex);
-        });
-        const selected = options[this._mentionIndex];
-        selected?.scrollIntoView({ block: 'nearest' });
-    }
-
-    _insertMention(candidate) {
-        const value = this.$input.value;
-        const caret = this.$input.selectionStart ?? value.length;
-        const beforeCaret = value.slice(0, caret);
-        const match = beforeCaret.match(/(?:^|\s)@([\p{L}\p{N}_-]*)$/u);
-        if (!match) return;
-
-        const start = caret - match[1].length - 1;
-        const token = candidate.nameToken || candidate.usernameToken;
-        const replacement = `@${token} `;
-        this.$input.value = value.slice(0, start) + replacement + value.slice(caret);
-        const nextCaret = start + replacement.length;
-        this.$input.setSelectionRange(nextCaret, nextCaret);
-        this.$input.focus();
-        this._hideMentionSuggestions();
-    }
-
     _onSubmit(e) {
         e.preventDefault();
         this._submit();
@@ -5103,6 +4952,147 @@ class ChatUI {
         const clampedWidth = Math.min(width, maxWidth);
         document.documentElement.style.setProperty('--chat-sidebar-width', `${clampedWidth}px`);
     }
+    _mentionToken(value) {
+        return String(value || '').replace(/[^\p{L}\p{N}_-]/gu, '');
+    }
+
+    _syncMentionPeers() {
+        this.$panel?.querySelectorAll('x-peer[id]').forEach(node => {
+            const peerId = node.id;
+            const displayName = node.querySelector('.name')?.textContent?.trim();
+            if (peerId && displayName) this._peerNames.set(peerId, displayName);
+        });
+    }
+
+    _mentionCandidates(query) {
+        this._syncMentionPeers();
+        const normalizedQuery = String(query || '').toLocaleLowerCase();
+        const candidates = [];
+        this._peerNames.forEach((displayName, peerId) => {
+            const nameToken = this._mentionToken(displayName);
+            const usernameToken = this._mentionToken(peerId);
+            if (!nameToken && !usernameToken) return;
+
+            const nameMatch = nameToken.toLocaleLowerCase().startsWith(normalizedQuery);
+            const usernameMatch = usernameToken.toLocaleLowerCase().startsWith(normalizedQuery);
+            if (!query || nameMatch || usernameMatch) {
+                candidates.push({
+                    peerId,
+                    displayName: displayName || peerId,
+                    nameToken,
+                    usernameToken
+                });
+            }
+        });
+        return candidates.slice(0, 8);
+    }
+
+    _updateMentionSuggestions() {
+        if (!this.$mentionMenu) return;
+        const value = this.$input.value;
+        const caret = this.$input.selectionStart ?? value.length;
+        const beforeCaret = value.slice(0, caret);
+        const match = beforeCaret.match(/(?:^|\s)@([\p{L}\p{N}_-]*)$/u);
+
+        if (!match) {
+            this._hideMentionSuggestions();
+            return;
+        }
+
+        const query = match[1];
+        const candidates = this._mentionCandidates(query);
+        this._mentionMatches = candidates;
+        this._mentionIndex = -1;
+        this.$mentionMenu.innerHTML = '';
+
+        if (!candidates.length) {
+            this._hideMentionSuggestions();
+            return;
+        }
+
+        candidates.forEach((candidate, index) => {
+            const option = document.createElement('button');
+            option.type = 'button';
+            option.className = 'chat-mention-option';
+            option.dataset.index = String(index);
+
+            const name = document.createElement('span');
+            name.className = 'chat-mention-option__name';
+            name.textContent = `@${candidate.nameToken || candidate.usernameToken}`;
+
+            const username = document.createElement('span');
+            username.className = 'chat-mention-option__username';
+            username.textContent = `@${candidate.usernameToken || candidate.nameToken}`;
+
+            option.append(name, username);
+            option.addEventListener('mousedown', event => {
+                event.preventDefault();
+                this._insertMention(candidate);
+            });
+            this.$mentionMenu.appendChild(option);
+        });
+
+        this.$mentionMenu.hidden = false;
+    }
+
+    _hideMentionSuggestions() {
+        if (!this.$mentionMenu) return;
+        this.$mentionMenu.hidden = true;
+        this._mentionMatches = [];
+        this._mentionIndex = -1;
+    }
+
+    _onMentionKeyDown(event) {
+        if (!this.$mentionMenu || this.$mentionMenu.hidden || !this._mentionMatches.length) return;
+
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            this._mentionIndex = (this._mentionIndex + 1) % this._mentionMatches.length;
+            this._highlightMention();
+        }
+        else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            this._mentionIndex = this._mentionIndex <= 0
+                ? this._mentionMatches.length - 1
+                : this._mentionIndex - 1;
+            this._highlightMention();
+        }
+        else if (event.key === 'Enter' && this._mentionIndex >= 0) {
+            event.preventDefault();
+            this._insertMention(this._mentionMatches[this._mentionIndex]);
+        }
+        else if (event.key === 'Escape') {
+            event.preventDefault();
+            this._hideMentionSuggestions();
+        }
+    }
+
+    _highlightMention() {
+        const options = this.$mentionMenu.querySelectorAll('.chat-mention-option');
+        options.forEach((option, index) => {
+            option.toggleAttribute('data-selected', index === this._mentionIndex);
+        });
+        const selected = options[this._mentionIndex];
+        selected?.scrollIntoView({ block: 'nearest' });
+    }
+
+    _insertMention(candidate) {
+        const value = this.$input.value;
+        const caret = this.$input.selectionStart ?? value.length;
+        const beforeCaret = value.slice(0, caret);
+        const match = beforeCaret.match(/(?:^|\s)@([\p{L}\p{N}_-]*)$/u);
+        if (!match) return;
+
+        const start = caret - match[1].length - 1;
+        const token = candidate.nameToken || candidate.usernameToken;
+        const replacement = `@${token} `;
+        this.$input.value = value.slice(0, start) + replacement + value.slice(caret);
+        const nextCaret = start + replacement.length;
+        this.$input.setSelectionRange(nextCaret, nextCaret);
+        this.$input.focus();
+        this._hideMentionSuggestions();
+    }
+
 
     _evaluateChatFooter() {
         if (!this.$footerDiscovery) return;
