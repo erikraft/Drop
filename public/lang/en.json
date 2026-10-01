@@ -366,13 +366,15 @@
         "download": "Download",
         "motion_photo": "Create Live/Motion Photo",
         "motion_photo_title": "Live Photo / Motion Photo",
-        "motion_photo_android_note": "Android Motion Photo is different from Apple Live Photo; Apple compatibility is not guaranteed.",
+        "motion_photo_android_note": "Android Motion Photo differs from Apple Live Photo; Apple compatibility is not guaranteed.",
         "motion_photo_format": "JPEG + MP4 Motion Photo container",
         "motion_photo_validation": "Validated by reopening the generated file.",
         "local_processing": "Local processing",
         "instagram_controlled": "Instagram controls the final interface and recognition.",
         "share_unsupported": "File sharing is not supported in this browser.",
-        "share_failed": "Sharing failed: {{error}}"
+        "share_failed": "Sharing failed: {{error}}",
+        "motion_photo_needs_video": "To create a real Motion Photo, also send a compatible video; the video's audio will be preserved.",
+        "motion_photo_audio": "When the source is a video, the original audio is preserved."
     },
     "ai": {
         "page-agent-title": "Page Agent Ext",
