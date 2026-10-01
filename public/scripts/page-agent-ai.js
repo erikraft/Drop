@@ -449,7 +449,7 @@
             #chat-form .erikraft-page-agent-ai { margin-inline-start:4px; }
             #chat-form .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
             #send-text-dialog .erikraft-page-agent-ai { margin-inline-end:auto; }
-            .erikraft-page-agent-menu { position:fixed; z-index:2147482000; width:min(330px,calc(100vw - 24px)); max-height:min(70vh,520px); overflow:auto; overscroll-behavior:contain; padding:8px; box-sizing:border-box; border:1px solid rgba(123,105,255,.32); border-radius:16px; background:var(--background-color,#181818); box-shadow:0 18px 55px rgba(0,0,0,.42),0 0 0 1px rgba(88,185,255,.08); scrollbar-width:thin; }
+            .erikraft-page-agent-menu { position:fixed; z-index:2147482000; width:min(330px,calc(100vw - 24px)); max-height:min(70vh,520px); overflow:auto; overscroll-behavior:contain; padding:8px; box-sizing:border-box; border:1px solid rgba(123,105,255,.32); border-radius:16px; background:var(--dialog-bg-color); color:rgb(var(--text-color)); box-shadow:0 18px 55px rgba(0,0,0,.42),0 0 0 1px rgba(88,185,255,.08); scrollbar-width:thin; }
             .erikraft-page-agent-menu[hidden] { display:none; }
             .erikraft-page-agent-menu button { width:100%; display:flex; align-items:center; min-height:42px; padding:9px 11px; border:0; border-radius:10px; background:transparent; color:inherit; text-align:left; cursor:pointer; }
             .erikraft-page-agent-menu button:hover { background:linear-gradient(90deg,rgba(123,105,255,.16),rgba(88,185,255,.12)); }
