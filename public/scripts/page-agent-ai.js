@@ -350,6 +350,7 @@
             .erikraft-page-agent-ai > button span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
             .erikraft-page-agent-ai img { width:18px; height:18px; flex:0 0 18px; border-radius:5px; }
             #chat-form .erikraft-page-agent-ai { margin-inline-start:4px; }
+            #chat-form .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
             #send-text-dialog .erikraft-page-agent-ai { margin-inline-end:auto; }
             .erikraft-page-agent-menu { position:fixed; z-index:2147482000; width:min(330px,calc(100vw - 24px)); max-height:min(70vh,520px); overflow:auto; overscroll-behavior:contain; padding:8px; box-sizing:border-box; border:1px solid rgba(123,105,255,.32); border-radius:16px; background:var(--background-color,#181818); box-shadow:0 18px 55px rgba(0,0,0,.42),0 0 0 1px rgba(88,185,255,.08); scrollbar-width:thin; }
             .erikraft-page-agent-menu[hidden] { display:none; }
@@ -467,7 +468,12 @@
         });
 
         wrapper.appendChild(toggle);
-        host.appendChild(wrapper);
+        if (host.id === 'chat-form') {
+            const sendButton = host.querySelector('#chat-send');
+            host.insertBefore(wrapper, sendButton || null);
+        } else {
+            host.appendChild(wrapper);
+        }
     };
 
     const attach = (target, host) => {
