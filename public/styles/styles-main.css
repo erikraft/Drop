@@ -726,17 +726,24 @@ body.chat-open {
     box-sizing: border-box;
 }
 
+body.chat-open > header {
+    position: relative;
+    z-index: 70;
+    padding-right: calc(var(--chat-sidebar-width) + 12px);
+}
+
 .chat-panel {
     position: fixed;
-    top: 0;
+    top: 56px;
     right: 0;
     width: var(--chat-sidebar-width);
-    height: 100vh;
+    height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px);
     min-width: 260px;
     max-width: 90vw;
     border-left: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.18);
     border-radius: 0;
-    z-index: 60;
+    z-index: 15;
     display: flex;
     flex-direction: column;
     resize: horizontal;
@@ -845,10 +852,44 @@ body.chat-open {
 }
 
 .chat-input {
+    position: relative;
     display: flex;
+    align-items: center;
     gap: 8px;
     padding: 12px 16px 16px;
     border-top: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.12);
+    min-width: 0;
+}
+
+.chat-input #chat-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 0;
+}
+
+.chat-input .erikraft-page-agent-ai {
+    flex: 0 0 40px;
+    min-width: 40px;
+    margin: 0;
+}
+
+.chat-input .erikraft-page-agent-ai > button,
+.chat-input #chat-send,
+.chat-input #chat-upload {
+    flex: 0 0 36px;
+    width: 36px;
+    min-width: 36px;
+    max-width: 36px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.chat-input .erikraft-page-agent-ai > button {
+    height: 36px;
+}
+
+.chat-input .erikraft-page-agent-ai > button span {
+    display: none;
 }
 
 .chat-input .chat-upload {
@@ -889,6 +930,75 @@ body.chat-open {
 
 #chat-send:hover {
     background: rgba(66, 133, 244, 0.28);
+}
+
+.chat-mention-menu {
+    position: absolute;
+    left: 52px;
+    right: 52px;
+    bottom: calc(100% - 4px);
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 6px;
+    border: 1px solid rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.18);
+    border-radius: 12px;
+    background: var(--dialog-bg-color);
+    color: rgb(var(--text-color));
+    box-shadow: 0 12px 32px rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.28);
+}
+
+.chat-mention-menu[hidden] {
+    display: none !important;
+}
+
+.chat-mention-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    width: 100%;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.chat-mention-option:hover,
+.chat-mention-option:focus-visible {
+    background: rgba(var(--shadow-color-dialog-rgb, 0, 0, 0), 0.08);
+    outline: none;
+}
+
+.chat-mention-option__name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.chat-mention-option__username {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    opacity: 0.68;
+}
+
+@media (max-width: 768px) {
+    .chat-mention-menu {
+        left: 10px;
+        right: 10px;
+    }
 }
 
 .chat-message--unread {
@@ -1002,11 +1112,33 @@ body.chat-open {
         padding-right: 0;
     }
 
+    body.chat-open > header {
+        padding-right: 12px;
+    }
+
     .chat-panel {
+        top: 56px;
         width: 100vw;
         max-width: 100vw;
+        height: calc(100vh - 56px);
+        max-height: calc(100vh - 56px);
         min-width: 0;
         resize: none;
+    }
+
+    .chat-input {
+        gap: 6px;
+        padding-inline: 10px;
+    }
+
+    .chat-input .erikraft-page-agent-ai,
+    .chat-input .erikraft-page-agent-ai > button,
+    .chat-input #chat-send,
+    .chat-input #chat-upload {
+        flex-basis: 36px;
+        width: 36px;
+        min-width: 36px;
+        max-width: 36px;
     }
 }
 
