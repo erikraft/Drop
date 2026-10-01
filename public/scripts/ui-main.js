@@ -637,7 +637,9 @@ class HeaderUI {
         this.$header = $$('header');
         this.$expandBtn = $('expand');
         Events.on("resize", _ => this.evaluateOverflowing());
-        this.$expandBtn.addEventListener('click', _ => this.onExpandBtnClick());
+        if (this.$expandBtn) {
+            this.$expandBtn.addEventListener('click', _ => this.onExpandBtnClick());
+        }
     }
 
     async fadeIn() {
@@ -645,6 +647,12 @@ class HeaderUI {
     }
 
     async evaluateOverflowing() {
+        // The expand control is intentionally disabled/absent in the current header.
+        // Keep HeaderUI initialization safe so the remaining startup pipeline can load.
+        if (!this.$expandBtn) {
+            return;
+        }
+
         // remove bracket icon before evaluating
         this.$expandBtn.setAttribute('hidden', true);
         // reset bracket icon rotation and header overflow
