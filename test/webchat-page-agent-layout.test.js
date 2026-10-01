@@ -21,6 +21,11 @@ assert.match(styles, /z-index: 70/);
 assert.match(styles, /\.chat-panel \{[\s\S]*?top: var\(--chat-header-height, 56px\)/);
 assert.match(styles, /height: calc\(100vh - var\(--chat-header-height, 56px\)\)/);
 assert.match(styles, /\.chat-input #chat-input \{[\s\S]*?min-width: 0/);
+assert.match(styles, /html\[lang="ar"\] body\.chat-open \{[\s\S]*?padding-left: var\(--chat-sidebar-width\)/);
+assert.match(styles, /html\[lang="ar"\] body\.chat-open > header \{[\s\S]*?padding-left: calc\(var\(--chat-sidebar-width\) \+ 12px\)/);
+assert.match(styles, /html\[lang="ar"\] \.chat-panel \{[\s\S]*?right: auto;[\s\S]*?left: 0;[\s\S]*?border-left: 0;[\s\S]*?border-right:/);
+assert.match(styles, /@media \(max-width: 768px\) \{[\s\S]*?html\[lang="ar"\] body\.chat-open \{[\s\S]*?padding-left: 0;[\s\S]*?html\[lang="ar"\] body\.chat-open > header \{[\s\S]*?padding-left: 12px;/);
+
 assert.match(styles, /\.chat-input #chat-send,[\s\S]*?flex: 0 0 36px/);
 assert.match(styles, /\.chat-input \.erikraft-page-agent-ai \{[\s\S]*?flex: 0 0 40px[\s\S]*?max-width: 40px/);
 
