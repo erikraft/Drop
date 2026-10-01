@@ -18,12 +18,14 @@ assert.match(chatForm, /accept="image\/\*,image\/heic,image\/heif,\.heic,\.heif,
 
 assert.match(styles, /body\.chat-open > header/);
 assert.match(styles, /z-index: 70/);
-assert.match(styles, /\.chat-panel \{[\s\S]*?top: 56px/);
-assert.match(styles, /height: calc\(100vh - 56px\)/);
+assert.match(styles, /\.chat-panel \{[\s\S]*?top: var\(--chat-header-height, 56px\)/);
+assert.match(styles, /height: calc\(100vh - var\(--chat-header-height, 56px\)\)/);
 assert.match(styles, /\.chat-input #chat-input \{[\s\S]*?min-width: 0/);
 assert.match(styles, /\.chat-input #chat-send,[\s\S]*?flex: 0 0 36px/);
-assert.match(styles, /\.chat-input \.erikraft-page-agent-ai \{[\s\S]*?flex: 0 0 40px/);
+assert.match(styles, /\.chat-input \.erikraft-page-agent-ai \{[\s\S]*?flex: 0 0 40px[\s\S]*?max-width: 40px/);
 
+assert.match(ui, /_syncChatHeaderHeight/);
+assert.match(ui, /ResizeObserver/);
 assert.match(ui, /_updateMentionSuggestions/);
 assert.match(ui, /_insertMention/);
 assert.match(ui, /_mentionCandidates/);
@@ -42,7 +44,7 @@ assert.match(sendTextDialog, /class="fw textarea"[^>]*contenteditable/);
 assert.doesNotMatch(sendTextDialog, /chat-mention-menu/);
 
 const customStart = pageAgent.indexOf('const customInstructionDialog');
-const customEnd = pageAgent.indexOf('const ensureConfig', customStart);
+const customEnd = pageAgent.indexOf('const waitForExtension', customStart);
 assert.ok(customStart >= 0 && customEnd > customStart, 'Custom Page Agent dialog must exist');
 const customDialog = pageAgent.slice(customStart, customEnd);
 assert.doesNotMatch(customDialog, /erikraft-page-agent-dialog__textarea/);
