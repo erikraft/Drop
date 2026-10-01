@@ -9,7 +9,7 @@ assert.match(source, /customInstructionDialog/);
 assert.match(source, /promptConfig/);
 assert.match(source, /PageAgentExtUserAuthToken/);
 assert.match(source, /sessionApiKey/);
-assert.doesNotMatch(source, /sessionStorage\\.getItem\\(SESSION_KEY\\)/);
+assert.doesNotMatch(source, /sessionStorage\.getItem\(SESSION_KEY\)/);
 assert.doesNotMatch(source, /sessionStorage\\.setItem\\(SESSION_KEY/);
 assert.doesNotMatch(source, /value: getApiKey\(\)/);
 assert.match(source, /chromewebstore\.google\.com\/detail\/page-agent-ext/);
