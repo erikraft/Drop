@@ -2,7 +2,6 @@
     'use strict';
 
     const STORE_KEY = 'erikraft-drop-page-agent-ai';
-    const SESSION_KEY = 'erikraft-drop-page-agent-ai-key';
     const TARGET_ATTR = 'data-erikraft-page-agent-target';
     const EXTENSION_URL = 'https://chromewebstore.google.com/detail/page-agent-ext/akldabonmimlicnjlflnapfeklbfemhj';
     const OFFICIAL_URL = 'https://alibaba.github.io/page-agent/';
