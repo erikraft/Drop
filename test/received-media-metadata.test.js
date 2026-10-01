@@ -50,8 +50,8 @@ assert.match(source,/injectLivePhotoMakerNote/);
 assert.match(source,/com\.apple\.quicktime\.content\.identifier/);
 assert.match(source,/video\\/quicktime/);
 assert.match(source,/Criar Live\\/Motion Photo/);
-assert.match(source,/id=\\"ek-close\\"/);
-assert.match(source,/id=\\"ek-actions\\"/);
-assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id=\\"metadata-btn\\"/);
+assert.match(source,/id="ek-close"/);
+assert.match(source,/id="ek-actions"/);
+assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
