@@ -382,6 +382,8 @@
         "download": "Baixar Page Agent Ext",
         "execute": "Executar instrução",
         "dialog-close": "Fechar",
+        "fullscreen": "Ver tudo",
+        "exit-fullscreen": "Sair de Ver tudo",
         "settings-description": "Configure o endpoint LLM, o modelo e a autorização do Page Agent Ext sem usar pop-ups do navegador.",
         "endpoint": "Endpoint LLM",
         "model": "Modelo",
