@@ -423,6 +423,13 @@
         "quick-run-mirror": "Executar · npm Mirror",
         "quick-run-cdn": "Executar · jsDelivr",
         "quick-run-mirror-title": "Executar agora usando o npm Mirror",
-        "quick-run-cdn-title": "Executar agora usando o jsDelivr"
+        "quick-run-cdn-title": "Executar agora usando o jsDelivr",
+        "integration-title": "Navegador e IDE",
+        "integration-description": "Copie o código para uma extensão de navegador, DevTools ou navegador integrado da sua IDE.",
+        "integration-cdn": "jsDelivr · Navegador / IDE",
+        "integration-mirror": "npm Mirror · Navegador / IDE",
+        "copy-code": "Copiar código",
+        "copied-code": "Código copiado",
+        "run-code": "Executar nesta página"
     }
 }
