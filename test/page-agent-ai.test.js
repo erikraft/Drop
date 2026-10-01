@@ -29,6 +29,11 @@ assert.match(source, /Deixe em branco para manter a chave desta sessão/);
 console.log('Page Agent dialog/responsive/security static checks passed.');
 
 assert.match(source, /CDN_BOOKMARKLET/);
+assert.match(source, /drag-to-bookmarks/);
+assert.match(source, /draggable = true/);
+assert.match(source, /background-color:var\\(--dialog-bg-color\\)/);
+assert.doesNotMatch(source, /navigator\\.clipboard\\.writeText/);
+assert.doesNotMatch(source, /ai\\.copy/);
 assert.match(source, /MIRROR_BOOKMARKLET/);
 assert.match(source, /data-context="send-text"/);
 assert.match(source, /prefers-color-scheme/);

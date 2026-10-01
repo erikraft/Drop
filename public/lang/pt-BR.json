@@ -403,14 +403,17 @@
         "install-required": "Instale e autorize o Page Agent Ext para usar a IA.",
         "failed": "O Page Agent não conseguiu concluir a tarefa.",
         "bookmarklets-title": "Usar o Page Agent sem extensão",
-        "bookmarklets-description": "Copie um bookmarklet e salve-o nos favoritos do navegador para executar o Page Agent na página atual.",
+        "bookmarklets-description": "Execute o Page Agent nesta página ou arraste o atalho para a barra de favoritos do navegador.",
         "bookmarklet-cdn": "Bookmarklet CDN",
         "bookmarklet-mirror": "Bookmarklet Mirror",
         "copy": "Copiar",
         "copied": "Copiado",
-        "use": "Usar",
-        "used": "Usado",
+        "use": "Executar",
+        "used": "Executado",
         "bookmarklet-loaded": "Page Agent carregado na página atual.",
-        "bookmarklet-failed": "Não foi possível carregar o Page Agent nesta página."
+        "bookmarklet-failed": "Não foi possível carregar o Page Agent nesta página.",
+        "bookmarklets-help": "Para mostrar a barra de favoritos: Windows/Linux Ctrl+Shift+B · macOS ⌘+Shift+B. Depois, arraste o botão de cada opção para a barra.",
+        "drag-to-bookmarks": "Arraste para favoritos",
+        "drag-to-bookmarks-title": "Arraste este atalho para a barra de favoritos"
     }
 }
