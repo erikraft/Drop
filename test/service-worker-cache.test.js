@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const publicDir = path.join(root, 'public');
+const pageAgent = fs.readFileSync(path.join(publicDir, 'scripts', 'page-agent-ai.js'), 'utf8');
 const serviceWorker = fs.readFileSync(path.join(publicDir, 'service-worker.js'), 'utf8');
 const main = fs.readFileSync(path.join(publicDir, 'scripts', 'main.js'), 'utf8');
 
@@ -23,6 +24,7 @@ for (const required of [
     'index.html',
     'scripts/main.js',
     'scripts/network.js',
+    'scripts/page-agent-ai.js',
     'scripts/animated-qr-controls.js',
     'scripts/animated-qr-file-size.js',
     'scripts/animated-qr-screen-awake.js',
@@ -32,8 +34,9 @@ for (const required of [
     assert.ok(paths.includes(required), `Critical runtime resource is not pre-cached: ${required}`);
 }
 
-assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.4';/);
+assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.5';/);
 assert.match(serviceWorker, /Promise\.allSettled\(/, 'Service Worker installation must tolerate individual cache failures.');
+assert.match(pageAgent, /PAGE_AGENT_EXT\.execute/);
 assert.match(main, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
 assert.match(serviceWorker, /const createManifestFallback = \(\) => new Response\(/,
     'Service Worker must provide a valid local manifest when a same-origin manifest cannot be fetched.');

@@ -373,5 +373,22 @@
         "instagram_controlled": "Instagram controls the final interface and recognition.",
         "share_unsupported": "File sharing is not supported in this browser.",
         "share_failed": "Sharing failed: {{error}}"
+    },
+    "ai": {
+        "page-agent-title": "Page Agent Ext",
+        "improve": "Improve text",
+        "correct": "Correct text",
+        "polish": "Polish text",
+        "code": "Fix/review code",
+        "custom": "Custom instruction",
+        "settings": "Configure LLM and authorization",
+        "stop": "Stop current task",
+        "download": "Download Page Agent Ext",
+        "cdn-jsdelivr": "Page Agent — jsDelivr",
+        "cdn-npmmirror": "Page Agent — npmmirror",
+        "credits": "Page Agent — credits and documentation",
+        "completed": "AI applied to the text.",
+        "desktop-only": "Page Agent AI is available on desktop only.",
+        "install-required": "Install and authorize Page Agent Ext to use AI text actions."
     }
 }

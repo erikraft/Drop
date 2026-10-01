@@ -11,10 +11,16 @@ const main = read('public/scripts/main.js');
 assert.ok(transfer.length > 0, 'Embedded WebTorrent transfer module must not be empty.');
 assert.match(transfer, /const WEBTORRENT_VERSION = '3\.0\.21';/,
     'The embedded transfer must pin the tested WebTorrent version.');
-assert.match(transfer, /import\(`https:\/\/esm\.sh\/webtorrent@\$\{WEBTORRENT_VERSION\}`\)/,
+assert.match(transfer, /import\(`https:\/\/esm\.sh\/webtorrent@\$\{WEBTORRENT_VERSION\}\/dist\/webtorrent\.min\.js`\)/,
     'The WebTorrent constructor must be loaded from the pinned version.');
-assert.match(transfer, /const TRACKERS = \[[\s\S]*wss:\/\/tracker\./,
-    'WebTorrent must use WebSocket trackers for browser peer discovery.');
+for (const tracker of [
+    'wss://tracker.webtorrent.dev',
+    'wss://tracker.openwebtorrent.com',
+    'wss://tracker.fastcast.nz',
+    'wss://tracker.btorrent.xyz'
+]) {
+    assert.ok(transfer.includes(tracker), `Configured WebRTC tracker is missing: ${tracker}`);
+}
 assert.match(transfer, /torrentClient\.seed\(Array\.from\(input\.files\), \{ announce: TRACKERS \}/,
     'Sender flow must seed the selected files with the configured trackers.');
 assert.match(transfer, /torrentClient\.add\(magnet, \{ announce: TRACKERS \}\)/,

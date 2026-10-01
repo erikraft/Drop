@@ -25,6 +25,7 @@ class ErikrafTdrop {
             'scripts/animated-qr-screen-awake.js',
             'scripts/erikraft-header-restore.js',
             'scripts/network.js',
+            'scripts/page-agent-ai.js',
             'scripts/ui.js',
             'scripts/libs/heic2any.min.js',
             'scripts/libs/no-sleep.min.js',
