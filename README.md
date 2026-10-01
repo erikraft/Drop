@@ -70,6 +70,16 @@ ErikrafT Drop™ Community
 
 <br>
 
+## 🤖 AI — Page Agent
+
+ErikrafT Drop™ includes an optional desktop AI integration based on **Page Agent / Page Agent Ext** by Alibaba. Page Agent is MIT-licensed.
+
+- Official project: https://alibaba.github.io/page-agent/
+- Repository: https://github.com/alibaba/page-agent
+- Page Agent Ext: https://chromewebstore.google.com/detail/page-agent-ext/akldabonmimlicnjlflnapfeklbfemhj
+
+The integration is optional, desktop-only, BYOK/configurable, and does not automatically send messages after AI editing. See [`docs/page-agent.md`](docs/page-agent.md) for privacy, configuration and evaluation-API notes.
+
 ## ⚙️ Features
 File sharing on your local network that works on all platforms.
 
