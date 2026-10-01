@@ -30,7 +30,6 @@ class ErikrafTdrop {
             'scripts/libs/heic2any.min.js',
             'scripts/libs/no-sleep.min.js',
             'scripts/libs/zip.min.js',
-            'scripts/webtorrent-transfer.js',
             'scripts/received-media-metadata.js'
         ];
 
