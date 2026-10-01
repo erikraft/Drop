@@ -48,3 +48,18 @@ assert.match(source, /useBookmarklet/);
 assert.match(source, /ai\\.use/);
 assert.match(source, /ai\\.bookmarklet-loaded/);
 console.log('Page Agent bookmarklet/theme/send-dialog checks passed.');
+
+const indexSource = fs.readFileSync('public/index.html', 'utf8');
+assert.match(indexSource, /id="page-agent-ext-mirror-toggle"/);
+assert.match(indexSource, /id="page-agent-ext-cdn-toggle"/);
+assert.match(indexSource, /page-agent-64\.png/);
+assert.match(indexSource, /id="chat-toggle"/);
+assert.match(indexSource, /<!--\s*<div id="expand"/);
+assert.match(source, /const loadPageAgent = \(provider, button = null\)/);
+assert.match(source, /loadPageAgent\(provider, button\)/);
+assert.match(source, /MIRROR_URL/);
+assert.match(source, /CDN_URL/);
+assert.match(source, /page-agent-ext-mirror-toggle/);
+assert.match(source, /page-agent-ext-cdn-toggle/);
+assert.match(source, /@media \(max-width:768px\)/);
+console.log('Page Agent header shortcut/commented expand checks passed.');

@@ -29,6 +29,45 @@
         }
     };
 
+    const loadPageAgent = (provider, button = null) => {
+        if (!isDesktop()) {
+            notify(t('ai.desktop-only', 'Page Agent AI is available on desktop only.'));
+            return false;
+        }
+
+        const script = document.createElement('script');
+        const isMirror = provider === 'mirror';
+        script.src = (isMirror ? MIRROR_URL : CDN_URL) + '?lang=en-US&t=' + Math.random();
+        script.setAttribute('crossorigin', 'true');
+        script.type = 'text/javascript';
+
+        if (button) {
+            button.setAttribute('aria-busy', 'true');
+            button.dataset.pageAgentLoading = 'true';
+        }
+
+        script.onload = () => {
+            if (button) {
+                button.removeAttribute('aria-busy');
+                delete button.dataset.pageAgentLoading;
+                button.classList.add('is-loaded');
+                window.setTimeout(() => button.classList.remove('is-loaded'), 1400);
+            }
+            notify(t('ai.bookmarklet-loaded', 'Page Agent carregado na página atual.'));
+        };
+
+        script.onerror = () => {
+            if (button) {
+                button.removeAttribute('aria-busy');
+                delete button.dataset.pageAgentLoading;
+            }
+            notify(t('ai.bookmarklet-failed', 'Não foi possível carregar o Page Agent nesta página.'));
+        };
+
+        document.body.appendChild(script);
+        return true;
+    };
+
     const getConfig = () => {
         try {
             return JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
@@ -262,20 +301,7 @@
         );
 
         const executeBookmarklet = (value, button) => {
-            const isMirror = value === MIRROR_BOOKMARKLET;
-            const script = document.createElement('script');
-            script.src = (isMirror ? MIRROR_URL : CDN_URL) + '?lang=en-US&t=' + Math.random();
-            script.setAttribute('crossorigin', 'true');
-            script.type = 'text/javascript';
-            script.onload = () => {
-                button.textContent = t('ai.used', 'Usado');
-                setTimeout(() => { button.textContent = t('ai.use', 'Executar'); }, 1400);
-                notify(t('ai.bookmarklet-loaded', 'Page Agent carregado na página atual.'));
-            };
-            script.onerror = () => {
-                notify(t('ai.bookmarklet-failed', 'Não foi possível carregar o Page Agent nesta página.'));
-            };
-            document.body.appendChild(script);
+            loadPageAgent(value === MIRROR_BOOKMARKLET ? 'mirror' : 'cdn', button);
         };
 
         const quickRun = document.createElement('div');
@@ -483,6 +509,14 @@
         node.id = 'erikraft-page-agent-ai-style';
         node.textContent = `
             :root.erikraft-page-agent-dialog-open { overflow:hidden; }
+            .erikraft-page-agent-header-shortcut { position:relative; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; margin:0; cursor:pointer; }
+            .erikraft-page-agent-header-shortcut img { width:24px; height:24px; border-radius:6px; display:block; object-fit:contain; }
+            .erikraft-page-agent-header-shortcut::after { content:""; position:absolute; right:5px; bottom:5px; width:6px; height:6px; border-radius:50%; background:var(--primary-color); box-shadow:0 0 0 2px var(--bg-color); }
+            .erikraft-page-agent-header-shortcut[data-page-agent-loading="true"] img { animation:erikraft-page-agent-pulse .8s ease-in-out infinite; }
+            .erikraft-page-agent-header-shortcut.is-loaded { outline:2px solid var(--primary-color); outline-offset:-2px; }
+            @keyframes erikraft-page-agent-pulse { 50% { opacity:.45; transform:scale(.88); } }
+            @media (max-width:768px) { .erikraft-page-agent-header-shortcut { display:none !important; } }
+
             .erikraft-page-agent-ai { position:relative; display:inline-flex; flex:0 0 auto; min-width:0; }
             .erikraft-page-agent-ai > button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:42px; max-width:140px; height:40px; padding:0 10px; box-sizing:border-box; overflow:hidden; }
             .erikraft-page-agent-ai > button span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -649,6 +683,39 @@
         }
     };
 
+    const attachHeaderShortcuts = () => {
+        if (!isDesktop()) return;
+
+        const chatToggle = document.getElementById('chat-toggle');
+        if (!chatToggle) return;
+
+        const buttons = [
+            { id: 'page-agent-ext-mirror-toggle', provider: 'mirror', title: 'Page Agent Ext · npm Mirror' },
+            { id: 'page-agent-ext-cdn-toggle', provider: 'cdn', title: 'Page Agent Ext · jsDelivr' }
+        ];
+
+        buttons.forEach(({ id, provider, title }) => {
+            const button = document.getElementById(id);
+            if (!button || button.dataset.pageAgentBound === 'true') return;
+
+            button.dataset.pageAgentBound = 'true';
+            button.title = title;
+            button.setAttribute('aria-label', title);
+            button.hidden = false;
+
+            const run = event => {
+                event.preventDefault();
+                event.stopPropagation();
+                loadPageAgent(provider, button);
+            };
+
+            button.addEventListener('click', run);
+            button.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') run(event);
+            });
+        });
+    };
+
     const attach = (target, host) => {
         if (!target || !host || !isDesktop()) return;
         createMenu(target, host);
@@ -657,6 +724,7 @@
     const init = () => {
         if (!isDesktop()) return;
         style();
+        attachHeaderShortcuts();
         attach(document.getElementById('chat-input'), document.getElementById('chat-form'));
         attach(document.querySelector('#send-text-dialog .textarea'), document.querySelector('#send-text-dialog .btn-row'));
 
