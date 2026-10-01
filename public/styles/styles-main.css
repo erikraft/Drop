@@ -241,6 +241,24 @@ header * {
     transition: transform 150ms ease-out;
 }
 
+#notification.notification-attention {
+    position: relative;
+}
+
+#notification.notification-attention::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #e53935;
+    border: 2px solid var(--dialog-bg-color);
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
 html:not([dir="rtl"]) #expand.flipped>.icon {
     transform: rotate(-90deg);
 }
