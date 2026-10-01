@@ -29,7 +29,10 @@ assert.match(source, /Deixe em branco para manter a chave desta sessão/);
 console.log('Page Agent dialog/responsive/security static checks passed.');
 
 assert.match(source, /CDN_BOOKMARKLET/);
-assert.match(source, /drag-to-bookmarks/);
+assert.doesNotMatch(source, /Descreva exatamente o que o Page Agent deve fazer/);
+assert.doesNotMatch(source, /Ex\.: deixe o texto mais profissional, mas preserve o significado\./);
+assert.doesNotMatch(source, /O Page Agent será limitado ao campo marcado no ErikrafT Drop™\./);
+assert.doesNotMatch(source, /Parar tarefa atual/);
 assert.match(source, /drag\.textContent = '✨PageAgent'/);
 assert.match(source, /drag\.setAttribute\('aria-label', label \+ ': ✨PageAgent'\)/);
 assert.match(source, /drag\.title = '✨PageAgent'/);
