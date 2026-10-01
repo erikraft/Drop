@@ -29,6 +29,11 @@ assert.match(ui, /ResizeObserver/);
 assert.match(ui, /_updateMentionSuggestions/);
 assert.match(ui, /_insertMention/);
 assert.match(ui, /_mentionCandidates/);
+assert.match(ui, /_syncMentionPeers/);
+assert.match(ui, /peersUI\?\.peers/);
+assert.match(ui, /querySelectorAll\('x-peer\[id\]'\)/);
+assert.match(ui, /this\.\$input\.addEventListener\('click'/);
+assert.match(ui, /this\.\$input\.addEventListener\('keyup'/);
 assert.match(ui, /data-selected/);
 assert.match(ui, /kind: 'live-photo'/);
 assert.match(ui, /_sameLivePhotoAsset/);
@@ -52,4 +57,4 @@ assert.doesNotMatch(customDialog, /Executar instrução/);
 assert.match(customDialog, /textContent = t\('ai\.dialog-close', 'Fechar'\)/);
 assert.match(customDialog, /actions\.append\(download, close\)/);
 
-console.log('WebChat/Page Agent layout, mentions, plain-text dialog, and Live Photo static checks passed.');
+console.log('WebChat/Page Agent layout, peer mentions, plain-text dialog, and Live Photo static checks passed.');
