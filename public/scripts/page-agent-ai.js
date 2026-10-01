@@ -264,20 +264,13 @@
 
     const customInstructionDialog = target => {
         const dialog = createDialog({
-            title: t('ai.custom', 'Instrução personalizada'),
-            description: t('ai.custom-description', 'Descreva exatamente o que o Page Agent deve fazer somente com o texto/código selecionado. A tarefa não enviará a mensagem automaticamente.')
+            title: t('ai.custom', 'Instrução personalizada')
         });
 
         const textarea = document.createElement('textarea');
         textarea.className = 'erikraft-page-agent-dialog__textarea';
         textarea.rows = 7;
-        textarea.placeholder = t('ai.custom-placeholder', 'Ex.: deixe o texto mais profissional, mas preserve o significado.');
         dialog.body.appendChild(textarea);
-
-        const hint = document.createElement('p');
-        hint.className = 'erikraft-page-agent-dialog__hint';
-        hint.textContent = t('ai.custom-hint', 'O Page Agent será limitado ao campo marcado no ErikrafT Drop™.');
-        dialog.body.appendChild(hint);
 
         const tools = document.createElement('div');
         tools.className = 'erikraft-page-agent-dialog__tools';
@@ -652,7 +645,6 @@
 
         addAction(t('ai.custom', 'Instrução personalizada'), () => customInstructionDialog(target));
         addAction(t('ai.settings', 'Configurar LLM e autorização'), () => promptConfig());
-        addAction(t('ai.stop', 'Parar tarefa atual'), () => window.PAGE_AGENT_EXT?.stop?.());
 
         const openMenu = event => {
             event.stopPropagation();
