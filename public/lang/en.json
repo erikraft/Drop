@@ -307,7 +307,8 @@
         "unfinished-transfers-warning": "There are unfinished transfers. Are you sure you want to close ErikrafT Drop™?",
         "rate-limit-join-key": "Rate limit reached. Wait 10 seconds and try again.",
         "selected-peer-left": "Selected peer left",
-        "processing": "Processing…"
+        "processing": "Processing…",
+        "mention-received": "You were mentioned by {{name}}"
     },
     "document-titles": {
         "file-received": "File Received",
