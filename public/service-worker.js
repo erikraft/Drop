@@ -1,4 +1,4 @@
-const cacheVersion = 'v10.1.5';
+const cacheVersion = 'v10.1.6';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 
 // Keep this list limited to resources that are part of the current client shell.
@@ -99,7 +99,7 @@ const isValidCacheResponse = (request, response) => {
 const createManifestFallback = () => new Response(JSON.stringify({
     name: 'ErikrafT Drop™',
     short_name: 'ErikrafT Drop™',
-    version: '10.1.5',
+    version: '10.1.6',
     icons: [
         {src: 'images/android-chrome-192x192.png', sizes: '192x192', type: 'image/png'},
         {src: 'images/android-chrome-512x512.png', sizes: '512x512', type: 'image/png'},
