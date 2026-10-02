@@ -150,7 +150,8 @@
             body.appendChild(desc);
         }
 
-        header.append(logo, headerActions);
+        header.innerHTML = '<img class="erikraft-page-agent-dialog__logo" src="images/page_agent_js_horizontal_logo.png" alt="Page Agent Ext"><div class="erikraft-page-agent-dialog__header-actions"></div>';
+        header.querySelector('.erikraft-page-agent-dialog__header-actions').append(fullscreen, close);
         panel.append(header, body);
         overlay.appendChild(panel);
         document.body.appendChild(overlay);
@@ -516,11 +517,9 @@
             .erikraft-page-agent-menu .label { padding:7px 11px; font-size:11px; opacity:.62; }
             .erikraft-page-agent-dialog { position:fixed; inset:0; z-index:2147481000; display:grid; place-items:center; padding:18px; box-sizing:border-box; background:rgba(0,0,0,.55); overflow:auto; color:rgb(var(--text-color)); }
             .erikraft-page-agent-dialog__panel { width:min(var(--page-agent-dialog-width),calc(100vw - 28px)); max-height:min(760px,calc(100vh - 28px)); display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border-color); border-radius:16px; background-color:var(--dialog-bg-color); background-image:none; color:rgb(var(--text-color)); box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 35px rgba(88,185,255,.10); }
-            .erikraft-page-agent-dialog__header { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background-color:var(--dialog-bg-color); background-image:linear-gradient(120deg,rgba(123,105,255,.08),rgba(88,185,255,.04)); }
-            .erikraft-page-agent-dialog__brand { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:700; white-space:nowrap; }
-            .erikraft-page-agent-dialog__brand img { width:24px; height:24px; border-radius:7px; }
-            .erikraft-page-agent-dialog__title { margin:0; min-width:0; font-size:17px; line-height:1.25; overflow-wrap:anywhere; }
-            .erikraft-page-agent-dialog__header-actions { display:flex; align-items:center; gap:4px; }
+            .erikraft-page-agent-dialog__header { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background-color:var(--dialog-bg-color); background-image:linear-gradient(120deg,rgba(123,105,255,.08),rgba(88,185,255,.04)); }
+            .erikraft-page-agent-dialog__logo { display:block; width:auto; max-width:min(220px,70%); height:28px; object-fit:contain; object-position:left center; }
+            .erikraft-page-agent-dialog__header-actions { display:flex; align-items:center; gap:4px; flex:0 0 auto; }
             .erikraft-page-agent-dialog__fullscreen,.erikraft-page-agent-dialog__close { width:34px; height:34px; border:0; border-radius:9px; background:transparent; color:inherit; cursor:pointer; }
             .erikraft-page-agent-dialog__fullscreen { font-size:20px; line-height:1; }
             .erikraft-page-agent-dialog__close { font-size:25px; line-height:1; }
@@ -560,8 +559,8 @@
                 .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
                 .erikraft-page-agent-dialog { padding:10px; place-items:center; }
                 .erikraft-page-agent-dialog__panel { width:calc(100vw - 20px); max-height:calc(100vh - 20px); border-radius:15px; }
-                .erikraft-page-agent-dialog__header { grid-template-columns:auto minmax(0,1fr) auto; padding:12px; }
-                .erikraft-page-agent-dialog__brand span { display:none; }
+                .erikraft-page-agent-dialog__header { padding:12px; }
+                .erikraft-page-agent-dialog__logo { max-width:calc(100% - 82px); height:24px; }
                 .erikraft-page-agent-dialog__panel.is-fullscreen { width:100%; height:100%; border-radius:10px; }
                 .erikraft-page-agent-dialog__body { padding:12px; }
                 .erikraft-page-agent-dialog__actions > * { flex:1 1 145px; }
