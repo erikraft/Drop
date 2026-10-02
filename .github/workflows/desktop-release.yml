@@ -71,6 +71,82 @@ jobs:
           name: erikraft-drop-windows-exe
           path: dist/desktop/*.exe
           if-no-files-found: error
+      - name: Generate signed WinSparkle appcast
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          WINSPARKLE_ED25519_PRIVATE_KEY: ${{ secrets.WINSPARKLE_ED25519_PRIVATE_KEY }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ([string]::IsNullOrWhiteSpace($env:WINSPARKLE_ED25519_PRIVATE_KEY)) {
+            throw 'Missing WINSPARKLE_ED25519_PRIVATE_KEY repository secret.'
+          }
+
+          $temp = Join-Path $env:RUNNER_TEMP 'winsparkle'
+          $zip = Join-Path $temp 'WinSparkle-0.9.4.zip'
+          $extract = Join-Path $temp 'extracted'
+          $key = Join-Path $temp 'private.key'
+          New-Item -ItemType Directory -Force -Path $temp,$extract | Out-Null
+
+          Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/vslavik/winsparkle/releases/download/v0.9.4/WinSparkle-0.9.4.zip' -OutFile $zip
+          $hash = (Get-FileHash -Algorithm SHA256 $zip).Hash.ToLower()
+          if ($hash -ne '6037df37fc263bd1650a1c4949681a9d40ffe991d01f35892a406cb5d103c976') {
+            throw "WinSparkle archive SHA-256 mismatch: $hash"
+          }
+
+          Expand-Archive -LiteralPath $zip -DestinationPath $extract -Force
+          $tool = Get-ChildItem -Path $extract -Recurse -Filter 'winsparkle-tool.exe' | Select-Object -First 1
+          if (-not $tool) { throw 'winsparkle-tool.exe was not found.' }
+
+          $env:WINSPARKLE_ED25519_PRIVATE_KEY | Set-Content -Path $key -NoNewline
+          $exe = Get-ChildItem -Path dist/desktop -Filter '*-win-x64.exe' | Select-Object -First 1
+          if (-not $exe) { throw 'Windows installer was not found.' }
+
+          $signature = & $tool.FullName sign --private-key-file $key $exe.FullName | Out-String
+          if ($LASTEXITCODE -ne 0 -or $signature -notmatch 'sparkle:edSignature="([^"]+)"\s+length=(\d+)') {
+            throw "WinSparkle signing failed: $signature"
+          }
+
+          $edSignature = $Matches[1]
+          $length = $Matches[2]
+          $version = '${{ github.ref_name }}'.TrimStart('v')
+          $installerUrl = "https://github.com/erikraft/Drop/releases/download/v$version/$($exe.Name)"
+          $releaseUrl = "https://github.com/erikraft/Drop/releases/tag/v$version"
+          $pubDate = (Get-Date).ToUniversalTime().ToString('ddd, dd MMM yyyy HH:mm:ss +0000', [Globalization.CultureInfo]::InvariantCulture)
+
+          @"
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+            <channel>
+              <title>ErikrafT Drop™ Windows Updates</title>
+              <description>Signed Windows updates for ErikrafT Drop™ desktop.</description>
+              <language>en</language>
+              <item>
+                <title>Version $version</title>
+                <link>$releaseUrl</link>
+                <sparkle:version>$version</sparkle:version>
+                <sparkle:releaseNotesLink>$releaseUrl</sparkle:releaseNotesLink>
+                <pubDate>$pubDate</pubDate>
+                <enclosure
+                  url="$installerUrl"
+                  sparkle:os="windows-x64"
+                  sparkle:edSignature="$edSignature"
+                  sparkle:installerArguments="/S"
+                  length="$length"
+                  type="application/octet-stream" />
+              </item>
+            </channel>
+          </rss>
+          "@ | Set-Content -Path dist/desktop/winsparkle-appcast.xml -Encoding UTF8
+
+      - name: Attach signed WinSparkle appcast to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/desktop/winsparkle-appcast.xml
+          fail_on_unmatched_files: true
+          overwrite_files: true
+
       - name: Attach Windows installer to release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
