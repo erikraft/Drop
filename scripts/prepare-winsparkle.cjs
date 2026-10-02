@@ -26,14 +26,20 @@ try {
   if (process.platform === 'win32') {
     const psPath = zipPath.replace(/'/g, "''");
     const extractPath = extractDir.replace(/'/g, "''");
-    const ps = [
-      "$ErrorActionPreference = 'Stop'",
-      "Invoke-WebRequest -UseBasicParsing -Uri '" + ZIP_URL + "' -OutFile '" + psPath + "'",
-      "$hash = (Get-FileHash -Algorithm SHA256 '" + psPath + "').Hash.ToLower()",
-      "if ($hash -ne '" + ZIP_SHA256 + "') { throw 'WinSparkle archive SHA-256 mismatch: ' + $hash }",
-      "Expand-Archive -LiteralPath '" + psPath + "' -DestinationPath '" + extractPath + "' -Force"
-    ].join('; ');
-    run('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', ps]);
+    run('powershell.exe', [
+      '-NoProfile',
+      '-NonInteractive',
+      '-Command',
+      "$ErrorActionPreference = 'Stop'; Invoke-WebRequest -UseBasicParsing -Uri '" + ZIP_URL + "' -OutFile '" + psPath + "'"
+    ]);
+    const digest = crypto.createHash('sha256').update(fs.readFileSync(zipPath)).digest('hex');
+    if (digest !== ZIP_SHA256) throw new Error('WinSparkle archive SHA-256 mismatch: ' + digest);
+    run('powershell.exe', [
+      '-NoProfile',
+      '-NonInteractive',
+      '-Command',
+      "$ErrorActionPreference = 'Stop'; Expand-Archive -LiteralPath '" + psPath + "' -DestinationPath '" + extractPath + "' -Force"
+    ]);
   } else {
     run('curl', ['-fsSL', '--retry', '3', '-o', zipPath, ZIP_URL]);
     const digest = crypto.createHash('sha256').update(fs.readFileSync(zipPath)).digest('hex');
