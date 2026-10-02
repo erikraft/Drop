@@ -13,7 +13,8 @@
     "package:flatpak": "npm run validate:linux-icon && flatpak-builder --force-clean --repo=dist/flatpak-repo dist/flatpak flatpak/io.github.erikraft.Drop.yml",
     "validate:linux-icon": "node scripts/validate-linux-icon.js",
     "test": "node test/isearch-cli.test.js && node test/erikraft-qr.test.js && node test/animated-qr-responsive-theme.test.js && node test/optical-matrix.test.js && node test/interoperability.test.js && node test/service-worker-cache.test.js && node test/webtorrent-transfer.test.js && node test/received-media-metadata.test.js && node test/desktop-startup-regressions.test.js && node test/page-agent-ai.test.js && node test/page-agent-browser-ide.test.js && node test/webchat-page-agent-layout.test.js && node test/metadata-media-notifications.test.js && npm run test:desktop-version",
-    "test:desktop-version": "node -e \"const p=require('./package.json'); if(p.version!=='10.1.5') throw new Error('Expected desktop version 10.1.6, got '+p.version); console.log('Desktop version:',p.version)\""
+    "test:desktop-version": "node -e \"const p=require('./package.json'); if(p.version!=='10.1.5') throw new Error('Expected desktop version 10.1.6, got '+p.version); console.log('Desktop version:',p.version)\"",
+    "test:desktop-update": "node --test test/desktop-update.test.js"
   },
   "author": {
     "name": "ErikrafT",
