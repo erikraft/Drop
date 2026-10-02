@@ -938,6 +938,12 @@ html[lang="ar"] .chat-panel {
     display: none;
 }
 
+@media (max-width: 768px) {
+    .chat-input .erikraft-page-agent-ai {
+        display: none !important;
+    }
+}
+
 .chat-input .chat-upload {
     width: 36px;
     height: 36px;
