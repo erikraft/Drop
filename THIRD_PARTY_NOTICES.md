@@ -25,3 +25,13 @@ from download-directory. The examined reference commit
 
 `public/scripts/libs/zip.min.js` remains subject to its existing BSD-3-Clause
 notice in `licenses/BSD_3-Clause-zip-js`.
+
+## WinSparkle
+
+The Windows desktop updater bundles the official **WinSparkle 0.9.4** DLL at build time. WinSparkle is MIT licensed:
+https://github.com/vslavik/winsparkle
+
+## Koffi
+
+The desktop Electron main process uses **Koffi 2.16.1** as a dynamic C FFI binding for the WinSparkle C API. Koffi is MIT licensed:
+https://koffi.dev/
