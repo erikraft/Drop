@@ -266,6 +266,9 @@ class ServerConnection {
                     });
             });
 
+        if (typeof window !== 'undefined' && typeof msg.displayName === 'string') {
+            window.erikrafTDisplayName = msg.displayName;
+        }
         Events.fire('display-name', msg);
     }
 

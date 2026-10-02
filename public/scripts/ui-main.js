@@ -748,6 +748,13 @@ class FooterUI {
 
         // Listen for profile photo updates from other devices
         Events.on('profile-photo-updated', e => this._onProfilePhotoUpdated(e.detail));
+
+        // The desktop client can receive the server display-name message before
+        // FooterUI is constructed because its local WebSocket starts very quickly.
+        // Reuse the existing global startup state instead of creating another path.
+        if (typeof window !== 'undefined' && typeof window.erikrafTDisplayName === 'string') {
+            this._onDisplayName(window.erikrafTDisplayName);
+        }
     }
 
     async showLoading() {
