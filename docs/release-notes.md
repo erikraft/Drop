@@ -1,3 +1,27 @@
+## 🚀 Release Notes — Desktop 10.1.6
+
+**Version:** v10.1.6
+**Date:** 2026-10-02
+
+### ✨ New
+
+* Windows desktop updates now use native **WinSparkle** instead of the web/CSS update popup.
+* WinSparkle checks a signed release appcast and installs the published Windows installer through its native update flow.
+* Windows desktop builds bundle the official WinSparkle 0.9.4 runtime DLL.
+
+### 🛠 Improvements
+
+* The desktop update feed is tied to the published GitHub Release, so update metadata cannot point to a version that has not been published as an installer.
+* Added a pinned WinSparkle download step with SHA-256 verification for reproducible Windows packaging.
+* Updated desktop bug-report/version documentation to v10.1.6.
+
+### 🧪 Testing
+
+* Unit coverage verifies the 10.1.6 version metadata and WinSparkle integration points.
+* A full production updater test still requires a signed v10.1.6 Windows release and a second Windows build to exercise the real install/relaunch path.
+
+---
+
 ## 🚀 Release Notes — Chat Notifications & Media Upload Improvements
 
 **Version:** v1.12.4
