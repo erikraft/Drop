@@ -203,8 +203,16 @@ class ErikrafTdrop {
             return Promise.resolve(null);
         }
 
+        const applicationVersion = document
+            .querySelector('meta[name="application-version"]')
+            ?.getAttribute('content')
+            ?.trim();
+        const serviceWorkerUrl = applicationVersion
+            ? `./service-worker.js?v=${encodeURIComponent(applicationVersion)}`
+            : './service-worker.js';
+
         return navigator.serviceWorker
-            .register('./service-worker.js', {updateViaCache: 'none'})
+            .register(serviceWorkerUrl, {updateViaCache: 'none'})
             .then(registration => {
                 console.log('[PWA] Service Worker registered.');
                 window.serviceWorker = registration;

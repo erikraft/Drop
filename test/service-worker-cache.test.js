@@ -42,7 +42,16 @@ for (const required of [
     assert.ok(paths.includes(required), `Critical runtime resource is not pre-cached: ${required}`);
 }
 
-assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.6';/);
+const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+const applicationVersion = index.match(/<meta name="application-version" content="([^"]+)"/)?.[1];
+const manifest = JSON.parse(fs.readFileSync(path.join(publicDir, 'manifest.json'), 'utf8'));
+
+assert.equal(packageJson.version, '10.1.6');
+assert.equal(applicationVersion, packageJson.version, 'Index application version must match package.json.');
+assert.equal(manifest.version, packageJson.version, 'Manifest version must match package.json.');
+assert.match(serviceWorker, new RegExp(`const cacheVersion = 'v${packageJson.version.replaceAll('.', '\\.')}'`));
+assert.match(main, /service-worker\.js\?v=\$\{encodeURIComponent\(applicationVersion\)\}/,
+    'Service Worker registration must include the published application version.');
 assert.match(serviceWorker, /Promise\.allSettled\(/, 'Service Worker installation must tolerate individual cache failures.');
 assert.match(pageAgent, /PAGE_AGENT_EXT\.execute/);
 assert.match(main, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
