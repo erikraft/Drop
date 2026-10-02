@@ -103,12 +103,14 @@ jobs:
           if (-not $exe) { throw 'Windows installer was not found.' }
 
           $signature = & $tool.FullName sign --private-key-file $key $exe.FullName | Out-String
-          if ($LASTEXITCODE -ne 0 -or $signature -notmatch 'sparkle:edSignature="([^"]+)"\s+length=(\d+)') {
+          if ($LASTEXITCODE -ne 0 -or $signature -notmatch 'sparkle:edSignature="([^"]+)"') {
             throw "WinSparkle signing failed: $signature"
           }
-
           $edSignature = $Matches[1]
-          $length = $Matches[2]
+          if ($signature -notmatch 'length="(\d+)"') {
+            throw "WinSparkle signing output did not contain the installer length: $signature"
+          }
+          $length = $Matches[1]
           $version = '${{ github.ref_name }}'.TrimStart('v')
           $installerUrl = "https://github.com/erikraft/Drop/releases/download/v$version/$($exe.Name)"
           $releaseUrl = "https://github.com/erikraft/Drop/releases/tag/v$version"
