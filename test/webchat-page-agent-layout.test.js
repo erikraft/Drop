@@ -28,6 +28,7 @@ assert.match(styles, /@media \(max-width: 768px\) \{[\s\S]*?html\[lang="ar"\] bo
 
 assert.match(styles, /\.chat-input #chat-send,[\s\S]*?flex: 0 0 36px/);
 assert.match(styles, /\.chat-input \.erikraft-page-agent-ai \{[\s\S]*?flex: 0 0 40px[\s\S]*?max-width: 40px/);
+assert.match(styles, /@media \(max-width: 768px\) \{[\s\S]*?\.chat-input \.erikraft-page-agent-ai \{[\s\S]*?display: none !important/);
 
 assert.match(ui, /_syncChatHeaderHeight/);
 assert.match(ui, /ResizeObserver/);
