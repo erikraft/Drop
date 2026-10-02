@@ -39,6 +39,8 @@
         "discord_title": "Discord",
         "torrent": "Torrent",
         "torrent_aria-label": "Torrent",
+        "torrent": "Torrent",
+        "torrent_aria-label": "Torrent",
         "limewire_title": "LimeWire"
     },
     "instructions": {
@@ -96,6 +98,10 @@
         "tor-unavailable-title": "Onion address unavailable",
         "tor-unavailable-desc": "Tor service is not available yet. Please try again in a moment.",
         "tor-refresh": "Refresh",
+        "optical-matrix-title": "ErikrafT Optical Matrix",
+        "optical-matrix-experimental": "Experimental",
+        "optical-matrix-description": "A high-density colour-and-symbol optical matrix. It is separate from Animated QR — Legacy/Compatibility.",
+        "optical-matrix-open": "Open Optical Matrix",
         "optical-matrix-title": "ErikrafT Optical Matrix",
         "optical-matrix-experimental": "Experimental",
         "optical-matrix-description": "A high-density colour-and-symbol optical matrix. It is separate from Animated QR — Legacy/Compatibility.",
