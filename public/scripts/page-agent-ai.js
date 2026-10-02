@@ -117,8 +117,6 @@
         const header = document.createElement('header');
         header.className = 'erikraft-page-agent-dialog__header';
 
-        const brand = document.createElement('div');
-        brand.className = 'erikraft-page-agent-dialog__brand';
         const logo = document.createElement('img');
         logo.className = 'erikraft-page-agent-dialog__logo';
         logo.src = 'images/page_agent_js_horizontal_logo.png';
