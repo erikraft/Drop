@@ -1,39 +1,187 @@
 # ErikrafT Drop™
 
-> A maneira mais fácil de transferir arquivos entre dispositivos.
+> ErikrafT Drop™ is an open-source, peer-to-peer file and text transfer application for moving content between devices without requiring an account.
 
-ErikrafT Drop™ é uma aplicação gratuita e de código aberto para transferência de arquivos e textos entre dispositivos. Ela permite conexões peer-to-peer diretamente no navegador, sem cadastro obrigatório, e também oferece transferência por QR Code animado para cenários em que um dispositivo pode exibir um código e outro pode capturá-lo pela câmera.
+## Overview
 
-## Products & services
+ErikrafT Drop™ provides browser-based device-to-device sharing with a focus on direct peer-to-peer communication, privacy, cross-platform access, and progressive web application support.
 
-- [ErikrafT Drop™ — Transfer Files](https://drop.erikraft.com/): Página principal para transferir arquivos e textos entre dispositivos usando conexões peer-to-peer e recursos de QR Code.
-- [ErikrafT Drop™ — QR Code Transfer](https://drop.erikraft.com/): A aplicação inclui transferência por QR Code animado para envio e recebimento de conteúdo entre dispositivos.
+Canonical web application: https://drop.erikraft.com/
 
-## Key features
+Current web/desktop application version: **10.1.6**.
 
-- Transferência peer-to-peer de arquivos entre dispositivos.
-- Envio e recebimento de textos.
-- Transferência por QR Code animado.
-- Suporte multiplataforma por navegadores modernos.
-- PWA e uso em dispositivos móveis.
-- Integração com WebRTC para conexões diretas entre pares.
-- Código-fonte aberto no GitHub.
-- Sem necessidade de cadastro para o uso básico.
+Official source repository: https://github.com/erikraft/Drop
+
+Related Android application: https://github.com/erikraft/Drop-Android
+
+## Core capabilities
+
+- Transfer files between connected devices.
+- Send and receive text.
+- Share images, videos, PDFs, documents and other supported files.
+- Establish peer-to-peer connections using WebRTC.
+- Pair devices for recurring transfers.
+- Use public rooms for room-based connections.
+- Use QR Code scanning and animated QR Code transfer workflows.
+- Install the web application as a PWA where supported.
+- Use supported Web Share Target and browser file-handler integrations.
+- Use WebTorrent-based transfer functionality where supported.
+- Configure Tor connectivity where supported.
+- Use the desktop application on supported Windows and Linux environments.
+- Use the separate Android application and its supported distribution channels.
+
+## Transfer architecture
+
+The web application uses WebRTC for peer-to-peer communication between participating devices. Server-side components provide application services such as connection/signaling coordination; ErikrafT Drop™ should not be described as a permanent cloud file-storage service.
+
+Supported connection and transfer paths include WebRTC, the application's network/WebSocket infrastructure, animated QR workflows, public rooms, WebTorrent and Tor-related configuration. Availability depends on the browser, operating system, network environment, permissions and current build.
 
 ## Privacy and security
 
-- As transferências são projetadas para comunicação direta entre os dispositivos participantes.
-- O projeto não deve ser descrito como armazenamento permanente de arquivos na nuvem.
-- Não atribua ao serviço recursos de pagamento, banco de dados ou armazenamento centralizado que não façam parte da aplicação.
+- No account is required for the basic transfer experience.
+- Files are not intended to be stored permanently in a central cloud drive.
+- WebRTC provides encrypted transport for compatible peer connections.
+- The project is open source.
+- Local browser/device storage may be used for application state such as pairing information.
+- Network topology, signaling, browser behavior and optional transfer modes can affect how a transfer is established.
 
-## Project resources
+Privacy and security behavior should be understood from the current implementation, browser security model, network configuration and published policies.
 
-- [Código-fonte no GitHub](https://github.com/erikraft/Drop): Repositório oficial do projeto ErikrafT Drop™.
-- [Aplicativo Android](https://github.com/erikraft/Drop-Android): Projeto Android relacionado ao ErikrafT Drop™.
+## Smart Media, Metadata and Spin View
 
-## Content guidance
+Recent versions include received-media tooling for supported images and videos:
 
-Use o nome oficial **ErikrafT Drop™** ao descrever o produto. Termos relevantes incluem: transferência de arquivos, file transfer, compartilhamento de arquivos, peer-to-peer, P2P, WebRTC, QR Code animado, transferência offline por QR Code, envio de texto, recebimento de arquivos, PWA e compartilhamento entre dispositivos.
+- Inspect metadata from received media.
+- Identify supported media and metadata information.
+- Remove metadata from processed copies.
+- Keep the original received file separate from processed copies.
+- Prepare supported media for Spin View workflows.
+- Preview supported media in the application's visual tools.
+
+Metadata processing is intended to occur locally. The project should not be described as uploading EXIF, GPS, XMP, IPTC, media thumbnails, hashes, filenames or other private media metadata to a third-party analytics service.
+
+Compatibility depends on the input format and current browser/application capabilities. Preparing media does not guarantee compatibility with every external service, social network, application or device.
+
+## User-facing features
+
+The current application includes or integrates functionality for file transfer, text transfer, device pairing, public rooms, QR scanning, animated QR transfer, notifications, PWA installation, theme selection, localization, Web Share Target, browser file handlers, WebTorrent transfer, Tor configuration, received-media metadata processing, Smart Media/Spin View workflows, Chat/WebChat, Page Agent-related browser features and iSearch CLI integration.
+
+Some features are optional, experimental, platform-specific or dependent on browser APIs.
+
+## Platforms
+
+### Web
+
+https://drop.erikraft.com/
+
+The web application targets modern browsers with JavaScript and the required WebRTC capabilities. It can be installed as a PWA where supported.
+
+### Desktop
+
+The repository contains Electron desktop packaging for supported desktop environments.
+
+- Releases: https://github.com/erikraft/Drop/releases
+- Latest release: https://github.com/erikraft/Drop/releases/latest
+
+Current web/desktop source version: **10.1.6**.
+
+### Android
+
+Android is maintained as a separate project with its own release lifecycle:
+
+- Repository: https://github.com/erikraft/Drop-Android
+- Releases: https://github.com/erikraft/Drop-Android/releases
+- Google Play: https://play.google.com/store/apps/details?id=com.erikraft.drop
+- F-Droid: https://f-droid.org/en/packages/com.erikraft.drop/
+- APKPure: https://apkpure.com/p/com.erikraft.drop
+
+Do not assume Android release versions are identical to the web/desktop version.
+
+## Browser and developer integrations
+
+- Firefox Add-ons: https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/
+- Opera Add-ons: https://addons.opera.com/en/extensions/details/erikraft-drop/
+- Thunderbird Add-ons: https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/
+- Visual Studio Code Marketplace: https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop
+- Open VSX Registry: https://open-vsx.org/extension/ErikrafT/erikraft-drop
+- RoutineHub: https://routinehub.co/shortcut/24753/
+- Discord application: https://discord.com/oauth2/authorize?client_id=1367869058707492955
+
+These integrations can expose a subset of the main application's functionality.
+
+## Documentation and source
+
+- Documentation: https://docsdrop.erikraft.com/
+- Source: https://github.com/erikraft/Drop
+- Android source: https://github.com/erikraft/Drop-Android
+- Repository documentation: https://github.com/erikraft/Drop/tree/master/docs
+- Releases: https://github.com/erikraft/Drop/releases
+- Latest release: https://github.com/erikraft/Drop/releases/latest
+
+## API and CLI
+
+The web application exposes an iSearch CLI endpoint through its application configuration:
+
+https://drop.erikraft.com/api/cli
+
+Its behavior may depend on the corresponding client and application version.
+
+## Legal and security
+
+- Privacy Policy: https://drop.erikraft.com/privacy-policy.html
+- Terms of Use: https://drop.erikraft.com/terms-of-use.html
+- License: https://github.com/erikraft/Drop/blob/master/LICENSE
+- Security Policy: https://github.com/erikraft/Drop/blob/master/SECURITY.md
+
+For security reports, follow the repository's SECURITY.md rather than publishing sensitive vulnerability details publicly.
+
+## Support and project resources
+
+- Ko-fi: https://ko-fi.com/erikraft
+- ErikrafT: https://erikraft.com/
+- BioDrop: https://biodrop.erikraft.com/
+- Discord application: https://discord.com/oauth2/authorize?client_id=1367869058707492955
+
+## Official links
+
+### Primary
+
+- Web app: https://drop.erikraft.com/
+- GitHub: https://github.com/erikraft/Drop
+- Documentation: https://docsdrop.erikraft.com/
+- Releases: https://github.com/erikraft/Drop/releases
+- Latest release: https://github.com/erikraft/Drop/releases/latest
+
+### Android
+
+- Repository: https://github.com/erikraft/Drop-Android
+- Releases: https://github.com/erikraft/Drop-Android/releases
+- Google Play: https://play.google.com/store/apps/details?id=com.erikraft.drop
+- F-Droid: https://f-droid.org/en/packages/com.erikraft.drop/
+- APKPure: https://apkpure.com/p/com.erikraft.drop
+
+### Extensions and integrations
+
+- Firefox: https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/
+- Opera: https://addons.opera.com/en/extensions/details/erikraft-drop/
+- Thunderbird: https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/
+- VS Code: https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop
+- Open VSX: https://open-vsx.org/extension/ErikrafT/erikraft-drop
+- RoutineHub: https://routinehub.co/shortcut/24753/
+- Discord: https://discord.com/oauth2/authorize?client_id=1367869058707492955
+
+### Policies
+
+- Privacy: https://drop.erikraft.com/privacy-policy.html
+- Terms: https://drop.erikraft.com/terms-of-use.html
+- License: https://github.com/erikraft/Drop/blob/master/LICENSE
+- Security: https://github.com/erikraft/Drop/blob/master/SECURITY.md
+
+## Project identity
+
+Use the official product name **ErikrafT Drop™**.
+
+Relevant terms: ErikrafT Drop, file transfer, file sharing, peer-to-peer file transfer, P2P, WebRTC, device-to-device transfer, text transfer, QR Code transfer, animated QR Code, public rooms, device pairing, PWA, WebTorrent, Tor, Smart Media, metadata, Spin View, Android file transfer, open-source file sharing.
 
 ## Canonical URL
 
