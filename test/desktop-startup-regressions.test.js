@@ -13,7 +13,7 @@ assert.match(uiMain,/this\._onDisplayName\(window\.erikrafTDisplayName\)/);
 assert.match(index,/lang\/en\.json" as="fetch" crossorigin="use-credentials"/);
 
 for (const translations of [en,pt]) {
-    assert.match(translations,/"torrent":/);
+    assert.match(translations,/"torrent_title":/);
     assert.match(translations,/"torrent_aria-label":/);
     assert.match(translations,/"optical-matrix-title":/);
     assert.match(translations,/"optical-matrix-experimental":/);
