@@ -72,7 +72,7 @@ ErikrafT Drop™ Community
 
 ## <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;">｜AI — Page Agent
 
-ErikrafT Drop™ includes an optional desktop AI integration based on <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> **Page Agent / Page Agent Ext** by Alibaba. <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> Page Agent is MIT-licensed.
+ErikrafT Drop™ includes an optional desktop AI integration based on **Page Agent / Page Agent Ext** by Alibaba. Page Agent is MIT-licensed.
 
 - <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> Official project: https://alibaba.github.io/page-agent/
 - <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> Repository: https://github.com/alibaba/page-agent
