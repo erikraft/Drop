@@ -11,6 +11,11 @@ files:
   - package.json
 extraMetadata:
   main: desktop/main.cjs
+extraResources:
+  - from: desktop/WinSparkle
+    to: WinSparkle
+    filter:
+      - WinSparkle.dll
 linux:
   target:
     - target: deb
