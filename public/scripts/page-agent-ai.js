@@ -119,11 +119,10 @@
 
         const brand = document.createElement('div');
         brand.className = 'erikraft-page-agent-dialog__brand';
-        brand.innerHTML = '<img src="images/Page_Agent_Ext.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
-
-        const heading = document.createElement('h2');
-        heading.className = 'erikraft-page-agent-dialog__title';
-        heading.textContent = title;
+        const logo = document.createElement('img');
+        logo.className = 'erikraft-page-agent-dialog__logo';
+        logo.src = 'images/page_agent_js_horizontal_logo.png';
+        logo.alt = 'Page Agent Ext';
 
         const headerActions = document.createElement('div');
         headerActions.className = 'erikraft-page-agent-dialog__header-actions';
@@ -153,7 +152,7 @@
             body.appendChild(desc);
         }
 
-        header.append(brand, heading, headerActions);
+        header.append(logo, headerActions);
         panel.append(header, body);
         overlay.appendChild(panel);
         document.body.appendChild(overlay);
