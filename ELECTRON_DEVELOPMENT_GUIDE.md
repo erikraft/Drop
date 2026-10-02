@@ -41,13 +41,13 @@ WS_FALLBACK=true npx electron desktop/main.cjs
 npm run package:linux
 ```
 
-**Saída**: `dist/desktop/erikraft-drop-1.12.4-linux-amd64.deb` (97 MB aprox)
+**Saída**: `dist/desktop/erikraft-drop-linux-amd64.deb` (97 MB aprox)
 
 ### Testar o Pacote DEB Localmente
 
 ```bash
 # Instalar o pacote gerado
-sudo dpkg -i dist/desktop/erikraft-drop-1.12.4-linux-amd64.deb
+sudo dpkg -i dist/desktop/erikraft-drop-linux-amd64.deb
 
 # Iniciar o aplicativo
 erikraft-drop
@@ -85,7 +85,7 @@ npm install
 npm run package:windows
 ```
 
-**Saída**: `dist/desktop/erikraft-drop-1.12.4-win-x64.exe`
+**Saída**: `dist/desktop/erikraft-drop-10.1.6-win-x64.exe`
 
 **O instalador NSIS incluirá**:
 - ✅ Atalho na Área de Trabalho
@@ -258,7 +258,7 @@ flatpak build-bundle --architecture=x86_64 dist/flatpak-repo dist/desktop/io.git
 1. **Versionar**:
    ```bash
    # Atualizar package.json
-   "version": "1.13.0"
+   "version": "10.1.6"
    ```
 
 2. **Build Multi-plataforma**:
@@ -362,7 +362,7 @@ const { startBundledServer } = await import('./server-loader.js');
 
 ---
 
-**Última Atualização**: 2026-06-05
-**Versão**: 1.12.4
+**Última Atualização**: 2026-10-02
+**Versão**: 10.1.6
 **Plataformas**: Linux, Windows
 **Status**: ✅ Pronto para Produção

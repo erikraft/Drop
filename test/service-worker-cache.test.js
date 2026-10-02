@@ -42,7 +42,7 @@ for (const required of [
     assert.ok(paths.includes(required), `Critical runtime resource is not pre-cached: ${required}`);
 }
 
-assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.5';/);
+assert.match(serviceWorker, /const cacheVersion = 'v10\.1\.6';/);
 assert.match(serviceWorker, /Promise\.allSettled\(/, 'Service Worker installation must tolerate individual cache failures.');
 assert.match(pageAgent, /PAGE_AGENT_EXT\.execute/);
 assert.match(main, /updateViaCache: 'none'/, 'Client registration should bypass the HTTP cache for SW updates.');
