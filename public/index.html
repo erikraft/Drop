@@ -14,6 +14,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ErikrafT Drop™">
     <meta name="application-name" content="ErikrafT Drop™">
+    <meta name="application-version" content="10.1.6">
     <meta name="iSearch-cli" content="true">
     <meta name="iSearch-cli-version" content="1">
     <meta name="iSearch-cli-endpoint" content="https://drop.erikraft.com/api/cli">
@@ -52,6 +53,68 @@
     <link rel="stylesheet" type="text/css" href="styles/styles-main.css">
         <link rel="manifest" href="manifest.json">
     <style>
+    <style>
+        #desktop-update-popup {
+            position: fixed;
+            z-index: 2147483647;
+            top: 80px;
+            right: 16px;
+            width: min(420px, calc(100vw - 32px));
+            box-sizing: border-box;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 14px;
+            background: rgba(28, 28, 30, 0.96);
+            color: #fff;
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+            font-family: inherit;
+        }
+
+        #desktop-update-popup-title {
+            margin-bottom: 8px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        #desktop-update-popup-text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #desktop-update-popup-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        #desktop-update-popup button {
+            min-height: 36px;
+            padding: 8px 14px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        #desktop-update-button {
+            background: #fff;
+            color: #111;
+        }
+
+        #desktop-update-dismiss {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+
+        @media (max-width: 768px) {
+            #desktop-update-popup {
+                display: none;
+            }
+        }
+
         @keyframes slideInUp {
             from {
                 opacity: 0;
@@ -332,6 +395,116 @@
 
             window.erikraftClientType = clientType;
         })();
+
+        (function () {
+            'use strict';
+
+            var CURRENT_DESKTOP_VERSION = '10.1.6';
+            var RELEASES_URL = 'https://github.com/erikraft/Drop/releases/latest';
+            var VERSION_URL = 'https://raw.githubusercontent.com/erikraft/Drop/master/package.json';
+
+            function parseVersion(value) {
+                var match = String(value || '').match(/(\\d+)\\.(\\d+)\\.(\\d+)/);
+                return match ? [Number(match[1]), Number(match[2]), Number(match[3])] : null;
+            }
+
+            function isNewerVersion(candidate, current) {
+                var next = parseVersion(candidate);
+                var installed = parseVersion(current);
+                if (!next || !installed) {
+                    return false;
+                }
+
+                for (var i = 0; i < 3; i += 1) {
+                    if (next[i] !== installed[i]) {
+                        return next[i] > installed[i];
+                    }
+                }
+
+                return false;
+            }
+
+            function showDesktopUpdate(latestVersion) {
+                if (document.getElementById('desktop-update-popup')) {
+                    return;
+                }
+
+                var isPortuguese = /^pt(?:-|$)/i.test(document.documentElement.lang || '');
+                var popup = document.createElement('div');
+                popup.id = 'desktop-update-popup';
+                popup.setAttribute('role', 'alertdialog');
+                popup.setAttribute('aria-live', 'assertive');
+                popup.innerHTML =
+                    '<div id="desktop-update-popup-title">' +
+                        (isPortuguese ? 'Atualização disponível' : 'Update available') +
+                    '</div>' +
+                    '<div id="desktop-update-popup-text">' +
+                        (isPortuguese
+                            ? 'O ErikrafT Drop™ instalado está desatualizado.'
+                            : 'The installed ErikrafT Drop™ desktop app is out of date.') +
+                        '<br><strong>' +
+                        (isPortuguese ? 'Versão instalada:' : 'Installed version:') +
+                        ' ' + CURRENT_DESKTOP_VERSION + ' · ' +
+                        (isPortuguese ? 'Nova versão:' : 'New version:') +
+                        ' ' + latestVersion +
+                        '</strong>' +
+                    '</div>' +
+                    '<div id="desktop-update-popup-actions">' +
+                        '<button type="button" id="desktop-update-button">' +
+                            (isPortuguese ? 'Atualizar software' : 'Update Software') +
+                        '</button>' +
+                        '<button type="button" id="desktop-update-dismiss">' +
+                            (isPortuguese ? 'Depois' : 'Later') +
+                        '</button>' +
+                    '</div>';
+
+                document.body.appendChild(popup);
+
+                document.getElementById('desktop-update-button').addEventListener('click', function () {
+                    window.open(RELEASES_URL, '_blank', 'noopener,noreferrer');
+                });
+
+                document.getElementById('desktop-update-dismiss').addEventListener('click', function () {
+                    popup.remove();
+                });
+            }
+
+            function checkForDesktopUpdate() {
+                if (!/Electron\\//i.test(navigator.userAgent || '')) {
+                    return;
+                }
+
+                if (typeof fetch !== 'function') {
+                    return;
+                }
+
+                fetch(VERSION_URL, {
+                    cache: 'no-store',
+                    credentials: 'omit'
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('Version check failed: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(function (releaseManifest) {
+                        var latestVersion = releaseManifest && releaseManifest.version;
+                        if (isNewerVersion(latestVersion, CURRENT_DESKTOP_VERSION)) {
+                            showDesktopUpdate(latestVersion);
+                        }
+                    })
+                    .catch(function () {
+                        // Update checks are optional and must never block startup.
+                    });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', checkForDesktopUpdate, { once: true });
+            } else {
+                checkForDesktopUpdate();
+            }
+        })();
     </script>
    <!-- SEO / Schema.org -->
    <script type="application/ld+json">
@@ -378,7 +551,7 @@
          "applicationCategory": "UtilitiesApplication",
          "operatingSystem": "Windows, Linux, macOS, Android, iOS, ChromeOS",
          "browserRequirements": "Requires JavaScript and a modern WebRTC-compatible browser",
-         "softwareVersion": "10.1.5",
+         "softwareVersion": "10.1.6",
          "image": "https://drop.erikraft.com/images/logo_transparent_512x512.png",
          "description": "Open source WebRTC-based file sharing platform with peer-to-peer encrypted transfers and no registration required.",
          "downloadUrl": "https://play.google.com/store/apps/details?id=com.erikraft.drop",
@@ -1744,7 +1917,7 @@
             </svg>
             <div class="title-wrapper" dir="ltr">
                 <h1>ErikrafT Drop™</h1>
-                <div class="font-subheading">v10.1.5</div>
+                <div class="font-subheading">v10.1.6</div>
             </div>
             <div class="font-subheading" data-i18n-key="about.claim" data-i18n-attrs="text">
                 A maneira mais fácil de transferir arquivos entre dispositivos
