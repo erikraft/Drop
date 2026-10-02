@@ -13,13 +13,13 @@ test('desktop/web release version is 10.1.6', () => {
   assert.match(serviceWorker, /cacheVersion = 'v10\.1\.6'/);
   assert.match(serviceWorker, /version: '10\.1\.6'/);
   assert.match(indexHtml, /"softwareVersion": "10\.1\.6"/);
-  assert.match(indexHtml, /class="font-subheading">v10\.1\.6<\\/div>/);
+  assert.ok(indexHtml.includes('class="font-subheading">v10.1.6</div>'));
 });
 
 test('desktop startup exposes an optional update check', () => {
   assert.match(indexHtml, /CURRENT_DESKTOP_VERSION = '10\.1\.6'/);
   assert.match(indexHtml, /raw\.githubusercontent\.com\/erikraft\/Drop\/master\/package\.json/);
   assert.match(indexHtml, /Update Software/);
-  assert.match(indexHtml, /Electron\\\\\\//);
+  assert.ok(indexHtml.includes("if (!/Electron\\\\//i.test"));
   assert.match(indexHtml, /Update checks are optional and must never block startup/);
 });
