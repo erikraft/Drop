@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/erikraft/Drop">
-    <img src="https://biodrop.erikraft.com/images/Logo.png" alt="Logo" width="150" height="150">
+    <img src="./Website About/NEW/images/Logo.png" alt="Logo" width="150" height="150">
   </a>
 
   <h1><em>Send it</em>, with <a href="https://drop.erikraft.com/">ErikrafT Drop™</a></h1>
@@ -52,11 +52,11 @@ ErikrafT Drop™ Community
 
 ---
 
-## 🌐 ErikrafT Drop™ Instances
+## <img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> ErikrafT Drop™ Instances
 
-- [https://drop.erikraft.com](https://drop.erikraft.com)
-- [https://drop-fallback.erikraft.com](https://drop-fallback.erikraft.com)
-- [https://dropfallback.erikraft.com](https://dropfallback.erikraft.com)
+- <img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> [https://drop.erikraft.com](https://drop.erikraft.com)
+- <img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> [https://drop-fallback.erikraft.com](https://drop-fallback.erikraft.com)
+- <img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> [https://dropfallback.erikraft.com](https://dropfallback.erikraft.com)
 
 ---
 
@@ -70,13 +70,13 @@ ErikrafT Drop™ Community
 
 <br>
 
-## 🤖 AI — Page Agent
+## <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;">｜AI — Page Agent
 
-ErikrafT Drop™ includes an optional desktop AI integration based on **Page Agent / Page Agent Ext** by Alibaba. Page Agent is MIT-licensed.
+ErikrafT Drop™ includes an optional desktop AI integration based on <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> **Page Agent / Page Agent Ext** by Alibaba. <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> Page Agent is MIT-licensed.
 
-- Official project: https://alibaba.github.io/page-agent/
-- Repository: https://github.com/alibaba/page-agent
-- Page Agent Ext: https://chromewebstore.google.com/detail/page-agent-ext/akldabonmimlicnjlflnapfeklbfemhj
+- <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> Official project: https://alibaba.github.io/page-agent/
+- <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> Repository: https://github.com/alibaba/page-agent
+- <img src="./public/images/Page_Agent_Ext.png" width="20px" style="display:inline;"> Page Agent Ext: https://chromewebstore.google.com/detail/page-agent-ext/akldabonmimlicnjlflnapfeklbfemhj
 
 The integration is optional, desktop-only, BYOK/configurable, and does not automatically send messages after AI editing. See [`docs/page-agent.md`](docs/page-agent.md) for privacy, configuration and evaluation-API notes.
 
@@ -87,15 +87,15 @@ File sharing on your local network that works on all platforms.
 
 - Desktop Applications
 
-  - Linux (.deb)
-    - https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
+  - <img src="./public/images/Tux_Linux.svg" width="20px" style="display:inline;"> Linux (.deb)
+    - <img src="./public/images/Tux_Linux.svg" width="20px" style="display:inline;"> https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
 
 - **Extensions**
-  - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
-  - [Open VSX Registry](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
-  - [Opera Add-ons](https://addons.opera.com/en/extensions/details/erikraft-drop/)
-  - [Thunderbird Add-ons](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
-  - [Firefox Browser Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
+  - <img src="./public/images/VS_Code_Logo.svg" width="20px" style="display:inline;"> [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
+  - <img src="./public/images/Open_VSX_Registry_Logo.png" width="20px" style="display:inline;"> [Open VSX Registry](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
+  - <img src="./public/images/Opera_Logo.webp" width="20px" style="display:inline;"> [Opera Add-ons](https://addons.opera.com/en/extensions/details/erikraft-drop/)
+  - <img src="./public/images/Thunderbird_Logo.svg" width="20px" style="display:inline;"> [Thunderbird Add-ons](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
+  - <img src="./public/images/Firefox_Logo.svg" width="20px" style="display:inline;"> [Firefox Browser Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
 
 - **A multi-platform AirDrop-like solution that works.**
   - Send images, documents or text via peer-to-peer connection to devices on the same local network.
