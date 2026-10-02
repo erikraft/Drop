@@ -6,15 +6,12 @@ ErikrafT Drop™ follows a rolling security-support policy. The **latest release
 
 | Version | Support Status |
 | --- | --- |
-| **1.16.x** | ✅ Supported |
-| 1.15.x | ⚠️ Upgrade recommended |
-| 1.14.x | ⚠️ Upgrade recommended |
-| 1.13.x | ⚠️ Upgrade recommended |
-| 1.12.x and older | ❌ Not supported |
+| **10.1.x** | ✅ Supported |
+| 10.0.x and older | ⚠️ Upgrade recommended / not guaranteed |
 
-> **Current site version:** `1.16.0`
+> **Current release:** `v10.1.5`
 >
-> Security fixes may require users to update to the latest version. Older releases are not guaranteed to receive backported fixes.
+> Security fixes may require users to update to the latest release. Older releases are not guaranteed to receive backported fixes.
 
 ## Reporting a Vulnerability
 
@@ -32,7 +29,7 @@ Please use the email channel whenever the report contains sensitive technical de
 When possible, include:
 
 - A clear description of the vulnerability.
-- The affected version, browser, operating system, and device information when relevant.
+- The affected ErikrafT Drop™ version, browser, operating system, and device information when relevant.
 - Steps to reproduce the issue.
 - The expected and actual behavior.
 - The potential security impact and attack scenario.
@@ -50,16 +47,20 @@ We do not require a specific disclosure format, and reports will be evaluated ba
 
 ## Scope and Security Considerations
 
-ErikrafT Drop™ is designed for peer-to-peer file and data transfer. Security reports involving the following areas are especially valuable:
+ErikrafT Drop™ provides peer-to-peer file and data transfer through the web application and companion clients. Security reports involving the following areas are especially valuable:
 
 - Cross-site scripting (XSS), HTML injection, or unsafe rendering of peer-supplied content.
 - URL, redirect, phishing, or protocol-bypass vulnerabilities.
 - Malicious or unsafe file handling.
-- QR-code scanning, QR payload validation, or Animated QR transfer integrity.
+- QR-code scanning, QR payload validation, or transfer integrity.
 - Authentication, pairing, discovery, or unauthorized peer interaction.
 - WebChat message and attachment handling.
 - Service Worker, PWA, caching, or offline-security issues.
 - Client-side security controls that can be bypassed to execute unintended actions.
+- Security-sensitive WebView or native-bridge interactions in the Android client.
+- Native Android file handling, storage access, intents, notifications, and background services.
+- FTP/FTPS server configuration or unauthorized access issues in the Android client.
+- Tor/.onion connectivity or proxy handling when a vulnerability can affect confidentiality, integrity, or authorization.
 
 ### Out of scope
 
