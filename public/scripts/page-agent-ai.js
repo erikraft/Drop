@@ -503,9 +503,11 @@
         node.textContent = `
             :root.erikraft-page-agent-dialog-open { overflow:hidden; }
             .erikraft-page-agent-header-shortcut { position:relative; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; margin:0; cursor:pointer; appearance:none; -webkit-appearance:none; border:0; background:transparent; color:inherit; font:inherit; line-height:normal; box-shadow:none; }
-            .erikraft-page-agent-header-shortcut img { width:24px; height:24px; border-radius:6px; display:block; object-fit:contain; }
+            .erikraft-page-agent-header-shortcut .erikraft-page-agent-logo { width:24px; height:24px; border-radius:6px; display:block; }
+            .erikraft-page-agent-logo--mirror { background-image:url('images/Page_Agent_Ext_NPMmirror.png'); }
+            .erikraft-page-agent-logo--cdn { background-image:url('images/Page_Agent_Ext_jsdelivr.png'); }
             .erikraft-page-agent-header-shortcut::after { content:""; position:absolute; right:5px; bottom:5px; width:6px; height:6px; border-radius:50%; background:var(--primary-color); box-shadow:0 0 0 2px var(--bg-color); }
-            .erikraft-page-agent-header-shortcut[data-page-agent-loading="true"] img { animation:erikraft-page-agent-pulse .8s ease-in-out infinite; }
+            .erikraft-page-agent-header-shortcut[data-page-agent-loading="true"] .erikraft-page-agent-logo { animation:erikraft-page-agent-pulse .8s ease-in-out infinite; }
             .erikraft-page-agent-header-shortcut.is-loaded { outline:2px solid var(--primary-color); outline-offset:-2px; }
             @keyframes erikraft-page-agent-pulse { 50% { opacity:.45; transform:scale(.88); } }
             @media (max-width:768px) { .erikraft-page-agent-header-shortcut { display:none !important; } }
@@ -714,6 +716,12 @@
             button.title = title;
             button.setAttribute('aria-label', title);
             button.hidden = false;
+
+            const logo = button.querySelector('.erikraft-page-agent-logo');
+            if (logo && logo.dataset.pageAgentProtected !== 'true') {
+                logo.dataset.pageAgentProtected = 'true';
+                logo.addEventListener('contextmenu', event => event.preventDefault());
+            }
 
             const run = event => {
                 event.preventDefault();
