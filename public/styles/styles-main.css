@@ -1,3 +1,12 @@
+/* Page Agent Ext logo protection: keep logos from being selected or dragged. */
+img[src*="Page_Agent_Ext.png"],
+img[src*="page_agent_js_horizontal_logo.png"] {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
 /* All styles in this sheet are needed on page load */
 
 /* Layout */
