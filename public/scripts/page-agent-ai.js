@@ -11,6 +11,21 @@
     const CDN_BOOKMARKLET = 'javascript:(function()%7Bvar%20s=document.createElement(%27script%27);s.src=%60https://cdn.jsdelivr.net/npm/page-agent@1.12.4/dist/iife/page-agent.demo.js?lang=en-US&t=$%7BMath.random()%7D%60;s.setAttribute(%27crossorigin%27,%20true);s.type=%22text/javascript%22;s.onload=()=%3Econsole.log(%27PageAgent%20script%20loaded!%27);document.body.appendChild(s);%7D)();';
     const MIRROR_BOOKMARKLET = 'javascript:(function()%7Bvar%20s=document.createElement(%27script%27);s.src=%60https://registry.npmmirror.com/page-agent/1.12.4/files/dist/iife/page-agent.demo.js?lang=en-US&t=$%7BMath.random()%7D%60;s.setAttribute(%27crossorigin%27,%20true);s.type=%22text/javascript%22;s.onload=()=%3Econsole.log(%27PageAgent%20script%20loaded!%27);document.body.appendChild(s);%7D)();'
 
+    const isPageAgentLogo = target => target instanceof HTMLImageElement
+        && /(?:^|\\/)(?:Page_Agent_Ext|page_agent_js_horizontal_logo)\\.png(?:$|\\?)/i.test(target.src);
+
+    const protectPageAgentLogos = () => {
+        const blockLogoInteraction = event => {
+            if (!isPageAgentLogo(event.target)) return;
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
+        document.addEventListener('contextmenu', blockLogoInteraction, true);
+        document.addEventListener('dragstart', blockLogoInteraction, true);
+        document.addEventListener('selectstart', blockLogoInteraction, true);
+    };
+
     const isDesktop = () => {
         if (window.isMobile === true) return false;
         return window.matchMedia ? window.matchMedia('(pointer: fine)').matches : true;
