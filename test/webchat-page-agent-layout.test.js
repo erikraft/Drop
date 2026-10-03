@@ -16,7 +16,9 @@ assert.match(chatForm, /images\/Page_Agent_Ext\.png/);
 assert.ok(chatForm.indexOf('erikraft-page-agent-ai') < chatForm.indexOf('id="chat-send"'), 'Page Agent Ext must stay before Send');
 assert.match(chatForm, /accept="image\/\*,image\/heic,image\/heif,\.heic,\.heif,\.mov,video\/quicktime,video\/\*"/);
 
+assert.match(styles, /body\.chat-open \{[\\s\\S]*?padding-right: 0/);
 assert.match(styles, /body\.chat-open > header/);
+assert.match(styles, /body\.chat-open > header \{[\\s\\S]*?padding-right: 12px/);
 assert.match(styles, /z-index: 70/);
 assert.match(styles, /\.chat-panel \{[\s\S]*?top: var\(--chat-header-height, 56px\)/);
 assert.match(styles, /height: calc\(100vh - var\(--chat-header-height, 56px\)\)/);
