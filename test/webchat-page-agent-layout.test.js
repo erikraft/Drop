@@ -102,5 +102,9 @@ assert.doesNotMatch(pageAgent, /<img[^>]+Page_Agent_Ext\.png/);
 assert.match(pageAgent, /\.erikraft-page-agent-logo \{[\s\S]*?user-select:none[\s\S]*?-webkit-user-drag:none[\s\S]*?pointer-events:none/);
 assert.match(pageAgent, /\.erikraft-page-agent-logo--icon \{[\s\S]*?Page_Agent_Ext\.png/);
 assert.match(pageAgent, /\.erikraft-page-agent-logo--horizontal \{[\s\S]*?page_agent_js_horizontal_logo\.png/);
+assert.match(pageAgent, /\.erikraft-page-agent-logo--mirror \{[\s\S]*?Page_Agent_Ext_NPMmirror\.png/);
+assert.match(pageAgent, /\.erikraft-page-agent-logo--cdn \{[\s\S]*?Page_Agent_Ext_jsdelivr\.png/);
+assert.match(pageAgent, /button\.querySelector\('\.erikraft-page-agent-logo'\)/);
+assert.doesNotMatch(index, /<img[^>]+Page_Agent_Ext_(NPMmirror|jsdelivr)\.png/);
 
 console.log('WebChat/Page Agent layout, peer mentions, plain-text dialog, and Live Photo static checks passed.');
