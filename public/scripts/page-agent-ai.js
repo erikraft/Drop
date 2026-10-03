@@ -16,6 +16,16 @@
         return window.matchMedia ? window.matchMedia('(pointer: fine)').matches : true;
     };
 
+    const createProtectedLogo = (variant, label = '') => {
+        const logo = document.createElement('span');
+        logo.className = 'erikraft-page-agent-logo erikraft-page-agent-logo--' + variant;
+        logo.setAttribute('role', 'img');
+        logo.setAttribute('aria-label', label || 'Page Agent Ext');
+        logo.setAttribute('aria-hidden', 'true');
+        logo.addEventListener('contextmenu', event => event.preventDefault());
+        return logo;
+    };
+
     const notify = message => {
         if (typeof Events !== 'undefined') Events.fire('notify-user', message);
         console.info('[Page Agent]', message);
@@ -117,10 +127,7 @@
         const header = document.createElement('header');
         header.className = 'erikraft-page-agent-dialog__header';
 
-        const logo = document.createElement('img');
-        logo.className = 'erikraft-page-agent-dialog__logo';
-        logo.src = 'images/page_agent_js_horizontal_logo.png';
-        logo.alt = 'Page Agent Ext';
+        const logo = createProtectedLogo('horizontal', 'Page Agent Ext');
 
         const headerActions = document.createElement('div');
         headerActions.className = 'erikraft-page-agent-dialog__header-actions';
@@ -150,7 +157,8 @@
             body.appendChild(desc);
         }
 
-        header.innerHTML = '<img class="erikraft-page-agent-dialog__logo" src="images/page_agent_js_horizontal_logo.png" alt="Page Agent Ext"><div class="erikraft-page-agent-dialog__header-actions"></div>';
+        header.innerHTML = '<div class="erikraft-page-agent-dialog__header-actions"></div>';
+        header.insertBefore(logo, header.firstChild);
         header.querySelector('.erikraft-page-agent-dialog__header-actions').append(fullscreen, close);
         panel.append(header, body);
         overlay.appendChild(panel);
@@ -234,7 +242,7 @@
         toolsDescription.className = 'erikraft-page-agent-dialog__tools-description';
         toolsDescription.textContent = t(
             'ai.bookmarklets-description',
-            'Execute o Page Agent nesta página ou arraste o atalho para a barra de favoritos do navegador.'
+            'Copie o código para uma integração ou arraste o atalho para a barra de favoritos do navegador.'
         );
 
         const bookmarkHelp = document.createElement('p');
@@ -287,12 +295,6 @@
             info.className = 'erikraft-page-agent-dialog__bookmarklet-label';
             info.textContent = label;
 
-            const use = document.createElement('button');
-            use.type = 'button';
-            use.className = 'erikraft-page-agent-dialog__primary erikraft-page-agent-dialog__bookmarklet-use';
-            use.textContent = t('ai.use', 'Executar');
-            use.addEventListener('click', () => executeBookmarklet(value, use));
-
             const drag = document.createElement('a');
             drag.className = 'erikraft-page-agent-dialog__bookmarklet-link';
             drag.href = value;
@@ -301,7 +303,7 @@
             drag.setAttribute('aria-label', label + ': ✨PageAgent');
             drag.title = '✨PageAgent';
 
-            row.append(info, use, drag);
+            row.append(info, drag);
             return row;
         };
 
@@ -369,13 +371,7 @@
                 }, 1400);
             });
 
-            const run = document.createElement('button');
-            run.type = 'button';
-            run.className = 'btn btn-rounded btn-grey';
-            run.textContent = t('ai.run-code', 'Executar nesta página');
-            run.addEventListener('click', () => executeBookmarklet(value, run));
-
-            actions.append(copy, run);
+            actions.append(copy);
             card.append(name, code, actions);
             return card;
         };
@@ -495,9 +491,11 @@
         node.textContent = `
             :root.erikraft-page-agent-dialog-open { overflow:hidden; }
             .erikraft-page-agent-header-shortcut { position:relative; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; margin:0; cursor:pointer; appearance:none; -webkit-appearance:none; border:0; background:transparent; color:inherit; font:inherit; line-height:normal; box-shadow:none; }
-            .erikraft-page-agent-header-shortcut img { width:24px; height:24px; border-radius:6px; display:block; object-fit:contain; }
+            .erikraft-page-agent-header-shortcut .erikraft-page-agent-logo { width:24px; height:24px; border-radius:6px; display:block; }
+            .erikraft-page-agent-logo--mirror { background-image:url('/images/Page_Agent_Ext_NPMmirror.png'); }
+            .erikraft-page-agent-logo--cdn { background-image:url('/images/Page_Agent_Ext_jsdelivr.png'); }
             .erikraft-page-agent-header-shortcut::after { content:""; position:absolute; right:5px; bottom:5px; width:6px; height:6px; border-radius:50%; background:var(--primary-color); box-shadow:0 0 0 2px var(--bg-color); }
-            .erikraft-page-agent-header-shortcut[data-page-agent-loading="true"] img { animation:erikraft-page-agent-pulse .8s ease-in-out infinite; }
+            .erikraft-page-agent-header-shortcut[data-page-agent-loading="true"] .erikraft-page-agent-logo { animation:erikraft-page-agent-pulse .8s ease-in-out infinite; }
             .erikraft-page-agent-header-shortcut.is-loaded { outline:2px solid var(--primary-color); outline-offset:-2px; }
             @keyframes erikraft-page-agent-pulse { 50% { opacity:.45; transform:scale(.88); } }
             @media (max-width:768px) { .erikraft-page-agent-header-shortcut { display:none !important; } }
@@ -518,7 +516,9 @@
             .erikraft-page-agent-dialog { position:fixed; inset:0; z-index:2147481000; display:grid; place-items:center; padding:18px; box-sizing:border-box; background:rgba(0,0,0,.55); overflow:auto; color:rgb(var(--text-color)); }
             .erikraft-page-agent-dialog__panel { width:min(var(--page-agent-dialog-width),calc(100vw - 28px)); max-height:min(760px,calc(100vh - 28px)); display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border-color); border-radius:16px; background-color:var(--dialog-bg-color); background-image:none; color:rgb(var(--text-color)); box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 35px rgba(88,185,255,.10); }
             .erikraft-page-agent-dialog__header { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background-color:var(--dialog-bg-color); background-image:linear-gradient(120deg,rgba(123,105,255,.08),rgba(88,185,255,.04)); }
-            .erikraft-page-agent-dialog__logo { display:block; width:auto; max-width:min(220px,70%); height:28px; object-fit:contain; object-position:left center; }
+            .erikraft-page-agent-logo { display:inline-block; flex:0 0 auto; background-repeat:no-repeat; background-position:center; background-size:contain; user-select:none; -webkit-user-select:none; -webkit-user-drag:none; pointer-events:none; }
+             .erikraft-page-agent-logo--icon { width:24px; height:24px; background-image:url('/images/Page_Agent_Ext.png'); }
+             .erikraft-page-agent-logo--horizontal { width:min(220px,70%); height:28px; background-image:url('/images/page_agent_js_horizontal_logo.png'); background-position:left center; }
             .erikraft-page-agent-dialog__header-actions { display:flex; align-items:center; gap:4px; flex:0 0 auto; }
             .erikraft-page-agent-dialog__fullscreen,.erikraft-page-agent-dialog__close { width:34px; height:34px; border:0; border-radius:9px; background:transparent; color:inherit; cursor:pointer; }
             .erikraft-page-agent-dialog__fullscreen { font-size:20px; line-height:1; }
@@ -545,7 +545,6 @@
             .erikraft-page-agent-dialog__actions { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid rgba(127,127,127,.16); }
             .erikraft-page-agent-dialog__primary,.erikraft-page-agent-dialog__secondary { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 13px; border-radius:10px; box-sizing:border-box; text-decoration:none; cursor:pointer; font:inherit; }
             .erikraft-page-agent-dialog__primary { border:1px solid rgba(123,105,255,.72); background:linear-gradient(120deg,#7b69ff,#58b9ff); color:#fff; }
-            .erikraft-page-agent-dialog__bookmarklet-use { min-width:112px; font-weight:750; box-shadow:0 3px 12px rgba(88,185,255,.18); }
             .erikraft-page-agent-dialog__quick-run { display:flex; align-items:center; justify-content:space-between; gap:14px; margin:14px 0 16px; padding:14px; border:1px solid rgba(88,185,255,.42); border-radius:14px; background:linear-gradient(135deg,rgba(123,105,255,.12),rgba(88,185,255,.14)); }
             .erikraft-page-agent-dialog__quick-run-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
             .erikraft-page-agent-dialog__quick-run-copy strong { font-size:14px; }
@@ -560,7 +559,7 @@
                 .erikraft-page-agent-dialog { padding:10px; place-items:center; }
                 .erikraft-page-agent-dialog__panel { width:calc(100vw - 20px); max-height:calc(100vh - 20px); border-radius:15px; }
                 .erikraft-page-agent-dialog__header { padding:12px; }
-                .erikraft-page-agent-dialog__logo { max-width:calc(100% - 82px); height:24px; }
+                .erikraft-page-agent-logo--horizontal { width:calc(100% - 82px); height:24px; }
                 .erikraft-page-agent-dialog__panel.is-fullscreen { width:100%; height:100%; border-radius:10px; }
                 .erikraft-page-agent-dialog__body { padding:12px; }
                 .erikraft-page-agent-dialog__actions > * { flex:1 1 145px; }
@@ -628,7 +627,8 @@
             toggle.className = 'btn btn-rounded btn-grey';
             toggle.title = t('ai.page-agent-title', 'Page Agent Ext');
             toggle.setAttribute('aria-label', t('ai.page-agent-title', 'Page Agent Ext'));
-            toggle.innerHTML = '<img src="images/Page_Agent_Ext.png" alt="" aria-hidden="true"><span>Page Agent Ext</span>';
+            toggle.innerHTML = '<span class="erikraft-page-agent-logo erikraft-page-agent-logo--icon" role="img" aria-hidden="true"></span><span>Page Agent Ext</span>';
+            toggle.querySelector('.erikraft-page-agent-logo').addEventListener('contextmenu', event => event.preventDefault());
             wrapper.appendChild(toggle);
         }
 
@@ -703,6 +703,12 @@
             button.title = title;
             button.setAttribute('aria-label', title);
             button.hidden = false;
+
+            const logo = button.querySelector('.erikraft-page-agent-logo');
+            if (logo && logo.dataset.pageAgentProtected !== 'true') {
+                logo.dataset.pageAgentProtected = 'true';
+                logo.addEventListener('contextmenu', event => event.preventDefault());
+            }
 
             const run = event => {
                 event.preventDefault();

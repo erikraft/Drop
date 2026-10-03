@@ -890,6 +890,43 @@ html[lang="ar"] .chat-panel {
     letter-spacing: 0.08em;
 }
 
+.erikraft-page-agent-logo {
+    display: inline-block;
+    flex: 0 0 auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+.erikraft-page-agent-logo--icon {
+    width: 24px;
+    height: 24px;
+    background-image: url('../images/Page_Agent_Ext.png');
+}
+
+.erikraft-page-agent-logo--horizontal {
+    width: min(220px, 70%);
+    height: 28px;
+    background-image: url('../images/page_agent_js_horizontal_logo.png');
+    background-position: left center;
+}
+
+.erikraft-page-agent-logo--mirror {
+    width: 24px;
+    height: 24px;
+    background-image: url('../images/Page_Agent_Ext_NPMmirror.png');
+}
+
+.erikraft-page-agent-logo--cdn {
+    width: 24px;
+    height: 24px;
+    background-image: url('../images/Page_Agent_Ext_jsdelivr.png');
+}
+
 .chat-input {
     position: relative;
     width: 100%;
@@ -936,6 +973,10 @@ html[lang="ar"] .chat-panel {
 
 .chat-input .erikraft-page-agent-ai > button span {
     display: none;
+}
+
+.chat-input .erikraft-page-agent-ai > button .erikraft-page-agent-logo {
+    display: inline-block;
 }
 
 @media (max-width: 768px) {

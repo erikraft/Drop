@@ -12,7 +12,8 @@ assert.ok(chatFormStart >= 0 && chatFormEnd > chatFormStart, 'WebChat form must 
 const chatForm = index.slice(chatFormStart, chatFormEnd);
 
 assert.match(chatForm, /class="erikraft-page-agent-ai" data-context="chat"/);
-assert.match(chatForm, /images\/Page_Agent_Ext\.png/);
+assert.match(chatForm, /erikraft-page-agent-logo erikraft-page-agent-logo--icon/);
+assert.doesNotMatch(chatForm, /<img[^>]+Page_Agent_Ext\.png/);
 assert.ok(chatForm.indexOf('erikraft-page-agent-ai') < chatForm.indexOf('id="chat-send"'), 'Page Agent Ext must stay before Send');
 assert.match(chatForm, /accept="image\/\*,image\/heic,image\/heif,\.heic,\.heif,\.mov,video\/quicktime,video\/\*"/);
 
@@ -88,10 +89,27 @@ assert.doesNotMatch(customDialog, /erikraft-page-agent-dialog__textarea/);
 assert.doesNotMatch(customDialog, /Executar instrução/);
 assert.match(customDialog, /textContent = t\('ai\.dialog-close', 'Fechar'\)/);
 assert.match(customDialog, /actions\.append\(download, close\)/);
+assert.doesNotMatch(customDialog, /erikraft-page-agent-dialog__bookmarklet-use/);
+assert.doesNotMatch(customDialog, /Executar nesta página/);
+assert.match(customDialog, /actions\.append\(copy\);/);
+assert.match(styles, /\.chat-input \.erikraft-page-agent-ai > button \.erikraft-page-agent-logo \{[\s\S]*?display: inline-block/);
+
 assert.match(pageAgent, /event\.key === 'Escape'/);
 assert.match(pageAgent, /dialog\._pageAgentEscapeHandler/);
 assert.match(pageAgent, /let wrapper = host\.querySelector\('\.erikraft-page-agent-ai'\)/);
 assert.match(pageAgent, /if \(wrapper\.dataset\.pageAgentBound === 'true'\) return;/);
 assert.match(pageAgent, /toggle\.addEventListener\('click', openMenu\)/);
+assert.match(pageAgent, /createProtectedLogo\('horizontal'/);
+assert.match(pageAgent, /erikraft-page-agent-logo--icon/);
+assert.match(pageAgent, /contextmenu.*preventDefault/);
+assert.doesNotMatch(pageAgent, /<img[^>]+page_agent_js_horizontal_logo\.png/);
+assert.doesNotMatch(pageAgent, /<img[^>]+Page_Agent_Ext\.png/);
+assert.match(pageAgent, /\.erikraft-page-agent-logo \{[\s\S]*?user-select:none[\s\S]*?-webkit-user-drag:none[\s\S]*?pointer-events:none/);
+assert.match(pageAgent, /\.erikraft-page-agent-logo--icon \{[\s\S]*?Page_Agent_Ext\.png/);
+assert.match(pageAgent, /\.erikraft-page-agent-logo--horizontal \{[\s\S]*?page_agent_js_horizontal_logo\.png/);
+assert.match(pageAgent, /\.erikraft-page-agent-logo--mirror \{[\s\S]*?Page_Agent_Ext_NPMmirror\.png/);
+assert.match(pageAgent, /\.erikraft-page-agent-logo--cdn \{[\s\S]*?Page_Agent_Ext_jsdelivr\.png/);
+assert.match(pageAgent, /button\.querySelector\('\.erikraft-page-agent-logo'\)/);
+assert.doesNotMatch(index, /<img[^>]+Page_Agent_Ext_(NPMmirror|jsdelivr)\.png/);
 
 console.log('WebChat/Page Agent layout, peer mentions, plain-text dialog, and Live Photo static checks passed.');
