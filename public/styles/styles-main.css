@@ -740,14 +740,14 @@ x-dialog:not([show]) x-background {
 }
 
 body.chat-open {
-    padding-right: var(--chat-sidebar-width);
+    padding-right: 0;
     box-sizing: border-box;
 }
 
 body.chat-open > header {
     position: relative;
     z-index: 70;
-    padding-right: calc(var(--chat-sidebar-width) + 12px);
+    padding-right: 12px;
     box-sizing: border-box;
 }
 
@@ -755,12 +755,12 @@ body.chat-open > header {
    preserving the existing right-side placement for every other locale. */
 html[lang="ar"] body.chat-open {
     padding-right: 0;
-    padding-left: var(--chat-sidebar-width);
+    padding-left: 0;
 }
 
 html[lang="ar"] body.chat-open > header {
     padding-right: 12px;
-    padding-left: calc(var(--chat-sidebar-width) + 12px);
+    padding-left: 12px;
 }
 
 .chat-panel {
