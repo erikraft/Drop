@@ -295,12 +295,6 @@
             info.className = 'erikraft-page-agent-dialog__bookmarklet-label';
             info.textContent = label;
 
-            const use = document.createElement('button');
-            use.type = 'button';
-            use.className = 'erikraft-page-agent-dialog__primary erikraft-page-agent-dialog__bookmarklet-use';
-            use.textContent = t('ai.use', 'Executar');
-            use.addEventListener('click', () => executeBookmarklet(value, use));
-
             const drag = document.createElement('a');
             drag.className = 'erikraft-page-agent-dialog__bookmarklet-link';
             drag.href = value;
@@ -309,7 +303,7 @@
             drag.setAttribute('aria-label', label + ': ✨PageAgent');
             drag.title = '✨PageAgent';
 
-            row.append(info, use, drag);
+            row.append(info, drag);
             return row;
         };
 
@@ -377,13 +371,7 @@
                 }, 1400);
             });
 
-            const run = document.createElement('button');
-            run.type = 'button';
-            run.className = 'btn btn-rounded btn-grey';
-            run.textContent = t('ai.run-code', 'Executar nesta página');
-            run.addEventListener('click', () => executeBookmarklet(value, run));
-
-            actions.append(copy, run);
+            actions.append(copy);
             card.append(name, code, actions);
             return card;
         };
