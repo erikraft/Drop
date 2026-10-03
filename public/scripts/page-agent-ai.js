@@ -735,6 +735,7 @@
     };
 
     const init = () => {
+        protectPageAgentLogos();
         if (!isDesktop()) return;
         style();
         attachHeaderShortcuts();
