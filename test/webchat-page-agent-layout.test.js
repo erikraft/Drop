@@ -89,6 +89,13 @@ assert.doesNotMatch(customDialog, /Executar instrução/);
 assert.match(customDialog, /textContent = t\('ai\.dialog-close', 'Fechar'\)/);
 assert.match(customDialog, /actions\.append\(download, close\)/);
 assert.match(pageAgent, /event\.key === 'Escape'/);
+assert.match(styles, /img\[src\*="Page_Agent_Ext\\.png"\][\\s\\S]*?user-select: none/);
+assert.match(styles, /img\[src\*="page_agent_js_horizontal_logo\\.png"\][\\s\\S]*?-webkit-user-drag: none/);
+assert.match(pageAgent, /const isPageAgentLogo = target =>/);
+assert.match(pageAgent, /addEventListener\('contextmenu', blockLogoInteraction, true\)/);
+assert.match(pageAgent, /addEventListener\('dragstart', blockLogoInteraction, true\)/);
+assert.match(pageAgent, /addEventListener\('selectstart', blockLogoInteraction, true\)/);
+
 assert.match(pageAgent, /dialog\._pageAgentEscapeHandler/);
 assert.match(pageAgent, /let wrapper = host\.querySelector\('\.erikraft-page-agent-ai'\)/);
 assert.match(pageAgent, /if \(wrapper\.dataset\.pageAgentBound === 'true'\) return;/);
