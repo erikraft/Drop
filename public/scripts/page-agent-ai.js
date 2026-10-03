@@ -242,7 +242,7 @@
         toolsDescription.className = 'erikraft-page-agent-dialog__tools-description';
         toolsDescription.textContent = t(
             'ai.bookmarklets-description',
-            'Execute o Page Agent nesta página ou arraste o atalho para a barra de favoritos do navegador.'
+            'Copie o código para uma integração ou arraste o atalho para a barra de favoritos do navegador.'
         );
 
         const bookmarkHelp = document.createElement('p');
@@ -545,7 +545,6 @@
             .erikraft-page-agent-dialog__actions { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid rgba(127,127,127,.16); }
             .erikraft-page-agent-dialog__primary,.erikraft-page-agent-dialog__secondary { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 13px; border-radius:10px; box-sizing:border-box; text-decoration:none; cursor:pointer; font:inherit; }
             .erikraft-page-agent-dialog__primary { border:1px solid rgba(123,105,255,.72); background:linear-gradient(120deg,#7b69ff,#58b9ff); color:#fff; }
-            .erikraft-page-agent-dialog__bookmarklet-use { min-width:112px; font-weight:750; box-shadow:0 3px 12px rgba(88,185,255,.18); }
             .erikraft-page-agent-dialog__quick-run { display:flex; align-items:center; justify-content:space-between; gap:14px; margin:14px 0 16px; padding:14px; border:1px solid rgba(88,185,255,.42); border-radius:14px; background:linear-gradient(135deg,rgba(123,105,255,.12),rgba(88,185,255,.14)); }
             .erikraft-page-agent-dialog__quick-run-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
             .erikraft-page-agent-dialog__quick-run-copy strong { font-size:14px; }
