@@ -975,6 +975,10 @@ html[lang="ar"] .chat-panel {
     display: none;
 }
 
+.chat-input .erikraft-page-agent-ai > button .erikraft-page-agent-logo {
+    display: inline-block;
+}
+
 @media (max-width: 768px) {
     .chat-input .erikraft-page-agent-ai {
         display: none !important;
