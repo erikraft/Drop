@@ -504,8 +504,8 @@
             :root.erikraft-page-agent-dialog-open { overflow:hidden; }
             .erikraft-page-agent-header-shortcut { position:relative; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; margin:0; cursor:pointer; appearance:none; -webkit-appearance:none; border:0; background:transparent; color:inherit; font:inherit; line-height:normal; box-shadow:none; }
             .erikraft-page-agent-header-shortcut .erikraft-page-agent-logo { width:24px; height:24px; border-radius:6px; display:block; }
-            .erikraft-page-agent-logo--mirror { background-image:url('images/Page_Agent_Ext_NPMmirror.png'); }
-            .erikraft-page-agent-logo--cdn { background-image:url('images/Page_Agent_Ext_jsdelivr.png'); }
+            .erikraft-page-agent-logo--mirror { background-image:url('/images/Page_Agent_Ext_NPMmirror.png'); }
+            .erikraft-page-agent-logo--cdn { background-image:url('/images/Page_Agent_Ext_jsdelivr.png'); }
             .erikraft-page-agent-header-shortcut::after { content:""; position:absolute; right:5px; bottom:5px; width:6px; height:6px; border-radius:50%; background:var(--primary-color); box-shadow:0 0 0 2px var(--bg-color); }
             .erikraft-page-agent-header-shortcut[data-page-agent-loading="true"] .erikraft-page-agent-logo { animation:erikraft-page-agent-pulse .8s ease-in-out infinite; }
             .erikraft-page-agent-header-shortcut.is-loaded { outline:2px solid var(--primary-color); outline-offset:-2px; }
@@ -529,8 +529,8 @@
             .erikraft-page-agent-dialog__panel { width:min(var(--page-agent-dialog-width),calc(100vw - 28px)); max-height:min(760px,calc(100vh - 28px)); display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border-color); border-radius:16px; background-color:var(--dialog-bg-color); background-image:none; color:rgb(var(--text-color)); box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 35px rgba(88,185,255,.10); }
             .erikraft-page-agent-dialog__header { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px 12px; border-bottom:1px solid rgba(127,127,127,.18); background-color:var(--dialog-bg-color); background-image:linear-gradient(120deg,rgba(123,105,255,.08),rgba(88,185,255,.04)); }
             .erikraft-page-agent-logo { display:inline-block; flex:0 0 auto; background-repeat:no-repeat; background-position:center; background-size:contain; user-select:none; -webkit-user-select:none; -webkit-user-drag:none; pointer-events:none; }
-             .erikraft-page-agent-logo--icon { width:24px; height:24px; background-image:url('images/Page_Agent_Ext.png'); }
-             .erikraft-page-agent-logo--horizontal { width:min(220px,70%); height:28px; background-image:url('images/page_agent_js_horizontal_logo.png'); background-position:left center; }
+             .erikraft-page-agent-logo--icon { width:24px; height:24px; background-image:url('/images/Page_Agent_Ext.png'); }
+             .erikraft-page-agent-logo--horizontal { width:min(220px,70%); height:28px; background-image:url('/images/page_agent_js_horizontal_logo.png'); background-position:left center; }
             .erikraft-page-agent-dialog__header-actions { display:flex; align-items:center; gap:4px; flex:0 0 auto; }
             .erikraft-page-agent-dialog__fullscreen,.erikraft-page-agent-dialog__close { width:34px; height:34px; border:0; border-radius:9px; background:transparent; color:inherit; cursor:pointer; }
             .erikraft-page-agent-dialog__fullscreen { font-size:20px; line-height:1; }
