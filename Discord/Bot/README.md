@@ -108,7 +108,7 @@ The `/drop` command supports the following options:
 
 To keep the bot online 24/7 for free, we recommend the following free hosting platforms:
 
-- <img src="https://portfolio.erikraft.com/Images/Languages_and_Technologies/Databases/ShardCloud.png" width="20" /> [Shard Cloud](https://shardcloud.app) 7-day free trial _(Last checked on October 4, 2026, at 2:00 PM Brasília Time, GMT-03:00)_ [View Plans](https://shardcloud.app/#pricing)
-- <img src="https://portfolio.erikraft.com/Images/Languages_and_Technologies/Databases/discloud_logo.ico" width="20" /> [Discloud](https://discloud.com) ([View Plans - Free plan available](https://discloud.com/plans)
+- <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Databases/ShardCloud.png" width="20px" style="display:inline;"> [Shard Cloud](https://shardcloud.app) 7-day free trial _(Last checked on October 4, 2026, at 2:00 PM Brasília Time, GMT-03:00)_ [View Plans](https://shardcloud.app/#pricing)
+- <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Databases/discloud_logo.ico" width="20px" style="display:inline;"> [Discloud](https://discloud.com) ([View Plans - Free plan available](https://discloud.com/plans)
 
 Use this as a base to customize automations or upload flows for your Discord server!
