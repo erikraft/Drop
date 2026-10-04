@@ -23,11 +23,11 @@ This directory contains information and resources for various extensions includi
 </a>
 
 ### Extension Platforms
-- **VS Code Marketplace**: [ErikrafT.erikraft-drop](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
-- **Open VSX Registry**: [ErikrafT/erikraft-drop](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
-- **Opera Add-ons**: [ErikrafT Drop™](https://addons.opera.com/en/extensions/details/erikraft-drop/)
-- **Thunderbird Add-ons**: [ErikrafT Drop™](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
-- **Firefox Browser ADD-ONS**: [ErikrafT Drop™](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/VS_Code_Logo.svg" width="20px" style="display:inline;"> **VS Code Marketplace**: [ErikrafT.erikraft-drop](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/Open_VSX_Registry_Logo.png" width="20px" style="display:inline;"> **Open VSX Registry**: [ErikrafT/erikraft-drop](https://open-vsx.org/extension/ErikrafT/erikraft-drop)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/Opera_Logo.webp" width="20px" style="display:inline;"> **Opera Add-ons**: [ErikrafT Drop™](https://addons.opera.com/en/extensions/details/erikraft-drop/)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/Thunderbird_Logo.svg" width="20px" style="display:inline;"> **Thunderbird Add-ons**: [ErikrafT Drop™](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/Firefox_Logo.svg" width="20px" style="display:inline;"> **Firefox Browser ADD-ONS**: [ErikrafT Drop™](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
 
 ## Browser Extensions
 
