@@ -2,7 +2,7 @@
 
 ![Official client logo](docs/client.png)
 
-<p>OFFICIAL "client"</p>
+**Note:** They did not make a partnership, but the Creator of ErikrafT Drop™ adapted this for those types of clients.
 
 <br>
 <br>
