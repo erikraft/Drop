@@ -6,9 +6,9 @@ Send images, files, folders, URLs, or text directly from the iOS share menu usin
 
 Choose one of the following download links:
 
-- **RoutineHub**: [https://routinehub.co/shortcut/24753/](https://routinehub.co/shortcut/24753/)
-- **iCloud**: [https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7](https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7)
-- **GitHub (Direct)**: [https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut](https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/Website%20About/NEW/images/Shortcuts_iOS.png" width="20px" style="display:inline;"> **RoutineHub**: [https://routinehub.co/shortcut/24753/](https://routinehub.co/shortcut/24753/)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/Website%20About/NEW/images/Shortcuts_iOS.png" width="20px" style="display:inline;"> **iCloud**: [https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7](https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7)
+- <img src="https://raw.githubusercontent.com/erikraft/Drop/master/Website%20About/NEW/images/Shortcuts_iOS.png" width="20px" style="display:inline;"> **GitHub (Direct)**: [https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut](https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut)
 
 <a href="https://routinehub.co/shortcut/24753/" target="_blank">
   <img alt="Get it on Shortcut" style="height: 60px;" src="https://raw.githubusercontent.com/erikraft/Drop/master/public/images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut">
