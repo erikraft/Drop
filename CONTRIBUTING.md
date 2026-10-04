@@ -52,4 +52,4 @@ Consider desktop, mobile, supported browsers, accessibility, performance, loadin
 
 A task is complete only after the existing implementation has been audited, the smallest safe change has been applied, unrelated behavior has been preserved, tests and relevant checks pass, documentation is updated, and the Issue and PR are linked.
 
-**PROCURE → ENTENDA → REUTILIZE → CORRIJA → ESTENDA → SÓ ENTÃO CRIE.**
+**SEARCH → UNDERSTAND → REUSE → FIX → EXTEND → ONLY THEN CREATE.**
