@@ -66,7 +66,7 @@ ErikrafT Drop™ Community
 
 <br>
 
-<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop™ Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
+<img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;">｜ErikrafT Drop™ Available for Android: [CLICK HERE](https://github.com/erikraft/Drop-Android)
 
 <br>
 
@@ -96,14 +96,13 @@ File sharing on your local network that works on all platforms.
   - <img src="./public/images/Opera_Logo.webp" width="20px" style="display:inline;"> [Opera Add-ons](https://addons.opera.com/en/extensions/details/erikraft-drop/)
   - <img src="./public/images/Thunderbird_Logo.svg" width="20px" style="display:inline;"> [Thunderbird Add-ons](https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/)
   - <img src="./public/images/Firefox_Logo.svg" width="20px" style="display:inline;"> [Firefox Browser Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/)
-
 - **A multi-platform AirDrop-like solution that works.**
   - Send images, documents or text via peer-to-peer connection to devices on the same local network.
 - **Internet transfers**
   - Join temporary public rooms to transfer files easily over the Internet.
-- **Web-app**
+- <img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> **Web-app**
   - Works on all devices with a modern web-browser.
-- **Discord integrations**
+- <img src="./public/images/Discord_Logo_Icon.svg" width="20px" style="display:inline;"> **Discord integrations**
   - Send files directly from Discord using the example bot located at [`Discord/Bot`](Discord/Bot/README.md). The device appears on the website with a Discord icon, and transfers occur in real time using the official WebSocket fallback.
   - Publish a custom activity from [`Discord/Activities`](Discord/Atividades/README.md) to embed ErikrafT Drop™ directly inside Discord with automatic device identification.
 
@@ -111,9 +110,9 @@ File sharing on your local network that works on all platforms.
   - Send images, files, folders, URLs, or text directly from the iOS share menu using a custom Shortcut.
 
   **Download the shortcut:**
-  - https://routinehub.co/shortcut/24753/
-  - https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7
-  - https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut
+  - <img src="./Website About/NEW/images/Shortcuts_iOS.png" width="20px" style="display:inline;"> https://routinehub.co/shortcut/24753/
+  - <img src="./Website About/NEW/images/Shortcuts_iOS.png" width="20px" style="display:inline;"> https://www.icloud.com/shortcuts/f81dbac00823445e8feefd0f834b40e7
+  - <img src="./Website About/NEW/images/Shortcuts_iOS.png" width="20px" style="display:inline;"> https://github.com/erikraft/Drop/raw/refs/heads/master/Shortcut/ErikrafT%20Drop.shortcut
 
 Send a file from your phone to your laptop?
 <br>Share photos in original quality with friends using Android and iOS?
@@ -395,7 +394,7 @@ The `LICENSE` file and third-party license files remain part of the repository a
 <br />
 [🛡️｜Security](https://github.com/erikraft/Drop/blob/master/SECURITY.md)
 <br />
-[<img src="https://developer.android.com/static/images/robot-tiny.png" width="20px" style="display:inline;">｜ErikrafT Drop™ Android Github Repository](https://github.com/erikraft/Drop-Android)
+[<img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;">｜ErikrafT Drop™ Android Github Repository](https://github.com/erikraft/Drop-Android)
 <br />
 
 ---
