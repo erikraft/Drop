@@ -28,7 +28,6 @@
     "dotenv": "^16.6.1",
     "express": "^5.2.1",
     "express-rate-limit": "^7.5.1",
-    "http-proxy-middleware": "^3.0.7",
     "qr-code-styling": "^1.9.2",
     "ua-parser-js": "^2.0.5",
     "unique-names-generator": "^4.7.1",
@@ -37,8 +36,7 @@
   },
   "devDependencies": {
     "electron": "^41.10.5",
-    "electron-builder": "^26.15.3",
-    "nodemon": "^3.1.10"
+    "electron-builder": "^26.15.3"
   },
   "engines": {
     "node": ">=22.12.0"
