@@ -7,7 +7,7 @@ const PORT = process.env.ERIKRAFT_DROP_DESKTOP_PORT || '33571';
 let mainWindow;
 
 const WINSPARKLE_APPCAST_URL = 'https://github.com/erikraft/Drop/releases/latest/download/winsparkle-appcast.xml';
-const WINSPARKLE_PUBLIC_KEY = 'I1hkOS5ZuDcGcQFu6OGxdKW+bwwUIaUTJheD0bNy4VQ=';
+const WINSPARKLE_PUBLIC_KEY = 'qviSQDE3gE0r4NBLiLlBRMkPWQ7MbNnSZGnP4zlD4XI=';
 let winSparkle;
 
 function initializeWinSparkle() {
