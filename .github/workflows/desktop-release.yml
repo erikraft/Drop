@@ -112,15 +112,20 @@ jobs:
             $exe = Get-ChildItem -Path dist/desktop -Filter '*-win-x64.exe' | Select-Object -First 1
             if (-not $exe) { throw 'Windows installer was not found.' }
 
-            $signature = & $tool.FullName sign --private-key-file $key $exe.FullName | Out-String
-            if ($LASTEXITCODE -ne 0 -or $signature -notmatch 'sparkle:edSignature="([^"]+)"') {
-              throw "WinSparkle signing failed: $signature"
+            $signatureOutput = (& $tool.FullName sign --private-key-file $key $exe.FullName | Out-String).Trim()
+            if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($signatureOutput)) {
+              throw "WinSparkle signing failed: $signatureOutput"
             }
-            $edSignature = $Matches[1]
-            if ($signature -notmatch 'length="(\d+)"') {
-              throw "WinSparkle signing output did not contain the installer length: $signature"
+            if ($signatureOutput -match 'sparkle:edSignature="([^"]+)"') {
+              $edSignature = $Matches[1]
             }
-            $length = $Matches[1]
+            elseif ($signatureOutput -match '^[A-Za-z0-9+/=]+$') {
+              $edSignature = $signatureOutput
+            }
+            else {
+              throw "WinSparkle signing output was not recognized: $signatureOutput"
+            }
+            $length = $exe.Length
             $version = '${{ github.ref_name }}'.TrimStart('v')
             $installerUrl = "https://github.com/erikraft/Drop/releases/download/v$version/$($exe.Name)"
             $releaseUrl = "https://github.com/erikraft/Drop/releases/tag/v$version"
