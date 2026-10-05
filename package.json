@@ -8,8 +8,8 @@
     "start": "node server/index.js",
     "start:prod": "node server/index.js --rate-limit --auto-restart",
     "build": "echo 'Build step complete'",
-    "package:linux": "npm run validate:linux-icon && electron-builder --linux deb --x64 --publish never",
-    "package:windows": "npm run prepare:winsparkle && npm run validate:linux-icon && electron-builder --win nsis --x64 --publish never",
+    "package:linux": "npm run validate:linux-icon && npx --yes electron-builder@27.0.0-alpha.9 --linux deb --x64 --publish never",
+    "package:windows": "npm run prepare:winsparkle && npm run validate:linux-icon && npx --yes electron-builder@27.0.0-alpha.9 --win nsis --x64 --publish never",
     "package:flatpak": "npm run validate:linux-icon && flatpak-builder --force-clean --repo=dist/flatpak-repo dist/flatpak flatpak/io.github.erikraft.Drop.yml",
     "validate:linux-icon": "node scripts/validate-linux-icon.js",
     "test": "node test/isearch-cli.test.js && node test/erikraft-qr.test.js && node test/animated-qr-responsive-theme.test.js && node test/optical-matrix.test.js && node test/interoperability.test.js && node test/service-worker-cache.test.js && node test/webtorrent-transfer.test.js && node test/received-media-metadata.test.js && node test/desktop-startup-regressions.test.js && node test/page-agent-ai.test.js && node test/page-agent-browser-ide.test.js && node test/webchat-page-agent-layout.test.js && node test/metadata-media-notifications.test.js && npm run test:desktop-version && npm run test:desktop-update",
@@ -35,8 +35,7 @@
     "koffi": "2.16.3"
   },
   "devDependencies": {
-    "electron": "^41.10.5",
-    "electron-builder": "^26.15.3"
+    "electron": "^41.10.5"
   },
   "engines": {
     "node": ">=22.12.0"
