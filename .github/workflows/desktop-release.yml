@@ -57,6 +57,18 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Validate WinSparkle signing secret
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          WINSPARKLE_ED25519_PRIVATE_KEY: ${{ secrets.WINSPARKLE_ED25519_PRIVATE_KEY }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ([string]::IsNullOrWhiteSpace($env:WINSPARKLE_ED25519_PRIVATE_KEY)) {
+            throw 'Missing required repository Actions secret WINSPARKLE_ED25519_PRIVATE_KEY. Add the existing WinSparkle Ed25519 private key in Settings > Secrets and variables > Actions before creating a release tag. A new key must not be generated for an existing release signing key.'
+          }
+          Write-Host 'WinSparkle signing secret is configured.'
+
       - name: Build Windows installer
         run: npm run package:windows
       - name: Validate Windows installer
@@ -71,18 +83,6 @@ jobs:
           name: erikraft-drop-windows-exe
           path: dist/desktop/*.exe
           if-no-files-found: error
-
-      - name: Validate WinSparkle signing secret
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: pwsh
-        env:
-          WINSPARKLE_ED25519_PRIVATE_KEY: ${{ secrets.WINSPARKLE_ED25519_PRIVATE_KEY }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          if ([string]::IsNullOrWhiteSpace($env:WINSPARKLE_ED25519_PRIVATE_KEY)) {
-            throw 'Missing required repository Actions secret WINSPARKLE_ED25519_PRIVATE_KEY. Add the existing WinSparkle Ed25519 private key in Settings > Secrets and variables > Actions before creating a release tag. A new key must not be generated for an existing release signing key.'
-          }
-          Write-Host 'WinSparkle signing secret is configured.'
 
       - name: Generate signed WinSparkle appcast
         if: startsWith(github.ref, 'refs/tags/')
