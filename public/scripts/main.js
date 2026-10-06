@@ -21,6 +21,7 @@ class ErikrafTdrop {
             'scripts/animated-qr-controls.js',
             'scripts/animated-qr-file-size.js',
             'scripts/animated-qr-screen-awake.js',
+            'scripts/android-app-shortcuts.js',
             'scripts/erikraft-header-restore.js',
             'scripts/network.js',
             ...(window.erikraftClientType === 'android' ? [] : ['scripts/page-agent-ai.js']),

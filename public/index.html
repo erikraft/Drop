@@ -460,7 +460,7 @@
      ]
    }
    </script>
-</head>
+<style>.erikraft-android-only-shortcut[hidden],.erikraft-android-only-dialog[hidden]{display:none!important}.erikraft-android-shortcuts-content{display:flex;flex-direction:column;gap:10px;padding:16px}#android-protocols-dialog x-paper{max-width:520px}#android-protocols-close{margin-left:auto}</style></head>
 
 <body translate="no">
     <header class="row-reverse wrap opacity-0">
@@ -541,10 +541,11 @@
                 <use xlink:href="#public-room-icon"></use>
             </svg>
         </div>
-        <div id="webtorrent-btn" class="icon-button" data-i18n-key="header.torrent" data-i18n-attrs="title aria-label" title="Torrent" aria-label="Torrent">
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#torrent-icon"></use>
-            </svg>
+        <div id="android-onion-shortcut" class="icon-button erikraft-android-only-shortcut" hidden aria-hidden="true" tabindex="-1">
+            <svg class="icon" aria-hidden="true"><use xlink:href="#tor-icon"></use></svg>
+        </div>
+        <div id="android-protocols-shortcut" class="icon-button erikraft-android-only-shortcut" hidden aria-hidden="true" tabindex="-1">
+            <svg class="icon" aria-hidden="true"><use xlink:href="#folder-icon"></use></svg>
         </div>
         <div id="tor-config-btn" class="icon-button" data-i18n-key="footer.use-tor" data-i18n-attrs="title">
             <svg class="icon">
@@ -582,6 +583,16 @@
     </header>
 
     <!-- Center -->
+    <x-dialog id="android-protocols-dialog" class="erikraft-android-only-dialog" hidden>
+        <x-background><x-paper>
+            <div class="dialog-header row center"><h2 id="android-protocols-title"></h2><button id="android-protocols-close" class="icon-button" type="button">×</button></div>
+            <div class="erikraft-android-shortcuts-content"><p id="android-protocols-description"></p>
+                <button id="android-ftp-shortcut" class="btn btn-rounded btn-dark" type="button"></button>
+                <button id="android-sftp-shortcut" class="btn btn-rounded btn-dark" type="button"></button>
+            </div>
+        </x-paper></x-background>
+    </x-dialog>
+
     <div id="center" class="opacity-0">
         <!-- Peers -->
         <x-peers class="center grow-5"></x-peers>
@@ -2060,10 +2071,7 @@
                 d="M18.5 0h-14C3.12 0 2 1.12 2 2.5v19C2 22.88 3.12 24 4.5 24h14c1.38 0 2.5-1.12 2.5-2.5v-19C21 1.12 19.88 0 18.5 0zm-7 23c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm7.5-4H4V3h15v16z">
             </path>
         </symbol>
-        <symbol id="torrent-icon" viewBox="0 0 24 24" aria-label="Torrent">
-            <!-- BitTorrent brand mark; source: bittorrent.com brand assets. -->
-            <path d="M12.0002.0014C5.3735.0004.001 5.3718 0 11.9984a11.9986 11.9986 0 0 0 1.7006 6.1593.132.132 0 0 0 .1128.0384c.0288 0 .048-.0696.048-.1104a.739.739 0 0 0-.0336-.1296 22.14 22.14 0 0 1-.4224-2.2941 9.8389 9.8389 0 0 1 .4272-3.866c1.1014-3.3956 3.3332-5.6993 6.664-6.9376a10.302 10.302 0 0 1 3.398-.5951.7823.7823 0 0 1 .8567.763c0 .4488-.3431.7368-.8495.7656a12.853 12.853 0 0 0-1.6078.1656 8.6918 8.6918 0 0 0-4.8642 2.6397C3.3332 10.8169 2.55 13.4566 3.03 16.4539a8.6846 8.6846 0 0 0 2.4454 4.785 8.9414 8.9414 0 0 0 6.3688 2.7597h.156a11.9507 11.9507 0 0 0 5.613-1.3918h-5.5938a8.3988 8.3988 0 0 1-1.4086-.1296c-4.1387-.7468-6.915-4.673-6.2393-8.8238.5627-3.5271 3.4722-6.2073 7.0336-6.4793a7.6407 7.6407 0 0 1 2.1597.1368.7487.7487 0 0 1 .6168.876.7847.7847 0 0 1-.96.6023c-1.5988-.9125-3.6346-.356-4.547 1.2428a3.3332 3.3332 0 0 0-.3964 2.1792c.2433 1.6186 1.6388 2.8127 3.2756 2.8029 3.3596.0336 6.7193 0 10.0789 0a.4224.4224 0 0 0 .2807-.144c3.3584-5.7126 1.45-13.0661-4.2626-16.4245a11.9986 11.9986 0 0 0-6.0802-1.655z" fill="currentColor"/>
-        </symbol>
+
         <symbol id="info-outline" viewBox="0 0 24 24">
             <path
                 d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z">
@@ -2170,6 +2178,7 @@
             <path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48L0 80zM64 96l0 64 64 0 0-64-64 0zM0 336c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM256 80c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM256 288l32 0 0 32-32 0 0-32zm32 32l32 0 0 32-32 0 0-32zm-32 32l32 0 0 32-32 0 0-32zm64-64l32 0 0 32-32 0 0-32zm32 32l32 0 0 32-32 0 0-32zm-32 32l32 0 0 32-32 0 0-32zm32 32l32 0 0 32-32 0 0-32zm32-96l32 0 0 32-32 0 0-32zm0 64l32 0 0 32-32 0 0-32zm0 64l32 0 0 32-32 0 0-32z" />
         </symbol>
 
+        <symbol id="folder-icon" viewBox="0 0 512 512" aria-label="Folder"><path d="M0 64C0 28.7 28.7 0 64 0H224c17 0 33.3 6.7 45.3 18.7L301.3 50.7c12 12 28.3 18.7 45.3 18.7H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z"/></symbol>
         <symbol id="tor-icon" viewBox="64 64 512 512">
             <!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
             <path d="M320.5 529.4L320.5 498.4C418.8 498.1 498.4 418.4 498.4 320C498.4 221.6 418.8 141.9 320.5 141.6L320.5 110.6C436 110.8 529.4 204.5 529.4 320C529.4 435.5 436 529.2 320.5 529.4zM320.5 420.8C375.9 420.5 420.8 375.5 420.8 320C420.8 264.5 376 219.5 320.5 219.2L320.5 188.2C393.1 188.5 451.9 247.4 451.9 320C451.9 392.6 393.1 451.6 320.5 451.8L320.5 420.8zM320.5 265.7C350.2 266 374.3 290.2 374.3 320C374.3 349.8 350.3 374 320.5 374.3L320.5 265.7zM64 320C64 461.4 178.6 576 320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320z"/>
