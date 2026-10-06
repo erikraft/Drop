@@ -16,8 +16,6 @@ class ErikrafTdrop {
             'scripts/libs/qr-code-styling.js',
             'scripts/qr-helper.js',
             'scripts/erikraft-qr.js',
-            'scripts/optical-matrix.js',
-            'scripts/optical-matrix-ui.js',
             'scripts/github-folder-zip.js',
             'scripts/security-layer.js',
             'scripts/animated-qr-controls.js',

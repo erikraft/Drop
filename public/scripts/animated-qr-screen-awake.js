@@ -79,7 +79,53 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
         document.head.appendChild(style);
     }
 
-    function getLabel(active) { return active ? 'Tela sempre ligada: Ativado' : 'Não desligar tela'; }
+    const LABELS = {
+        ar: { off: 'عدم إيقاف تشغيل الشاشة (انقر هنا)', on: 'الشاشة مضاءة دائمًا: مفعّل' },
+        be: { off: 'Не выключаць экран (націсніце тут)', on: 'Экран заўсёды ўключаны: актывавана' },
+        bg: { off: 'Не изключвай екрана (кликнете тук)', on: 'Екранът е винаги включен: Активирано' },
+        ca: { off: 'No apagar la pantalla (fes clic aquí)', on: 'Pantalla sempre encesa: activat' },
+        cs: { off: 'Nevypínat obrazovku (klikněte sem)', on: 'Obrazovka je vždy zapnutá: Aktivováno' },
+        da: { off: 'Sluk ikke skærmen (klik her)', on: 'Skærm altid tændt: Aktiveret' },
+        de: { off: 'Bildschirm nicht ausschalten (Hier klicken)', on: 'Bildschirm immer an: Aktiviert' },
+        en: { off: "Don't turn off screen (Click here)", on: 'Screen always on: Enabled' },
+        es: { off: 'No apagar la pantalla (Haz clic aquí)', on: 'Pantalla siempre encendida: Activado' },
+        et: { off: 'Ära lülita ekraani välja (klõpsa siia)', on: 'Ekraan alati sees: Aktiveeritud' },
+        eu: { off: 'Ez itzali pantaila (egin klik hemen)', on: 'Pantaila beti piztuta: Aktibatuta' },
+        fa: { off: 'صفحه‌نمایش را خاموش نکنید (اینجا کلیک کنید)', on: 'صفحه‌نمایش همیشه روشن: فعال' },
+        fr: { off: "Ne pas éteindre l’écran (cliquez ici)", on: 'Écran toujours allumé : activé' },
+        he: { off: 'אל תכבה את המסך (לחץ כאן)', on: 'המסך תמיד דולק: מופעל' },
+        hu: { off: 'Ne kapcsold ki a képernyőt (kattints ide)', on: 'Képernyő mindig bekapcsolva: Engedélyezve' },
+        id: { off: 'Jangan matikan layar (Klik di sini)', on: 'Layar selalu menyala: Aktif' },
+        it: { off: 'Non spegnere lo schermo (fai clic qui)', on: 'Schermo sempre acceso: Attivato' },
+        ja: { off: '画面を消さない（ここをクリック）', on: '画面を常にオン：有効' },
+        kn: { off: 'ಪರದೆಯನ್ನು ಆಫ್ ಮಾಡಬೇಡಿ (ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ)', on: 'ಪರದೆ ಯಾವಾಗಲೂ ಆನ್: ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ' },
+        ko: { off: '화면 끄지 않기 (여기를 클릭)', on: '화면 항상 켜짐: 활성화됨' },
+        nb: { off: 'Ikke slå av skjermen (klikk her)', on: 'Skjermen alltid på: Aktivert' },
+        nl: { off: 'Scherm niet uitschakelen (klik hier)', on: 'Scherm altijd aan: Ingeschakeld' },
+        nn: { off: 'Ikkje slå av skjermen (klikk her)', on: 'Skjermen alltid på: Aktivert' },
+        pl: { off: 'Nie wyłączaj ekranu (kliknij tutaj)', on: 'Ekran zawsze włączony: Włączono' },
+        'pt-BR': { off: 'Não desligar Tela (Clique aqui)', on: 'Tela sempre ligada: Ativado' },
+        ro: { off: 'Nu opri ecranul (faceți clic aici)', on: 'Ecran mereu pornit: Activat' },
+        ru: { off: 'Не выключать экран (нажмите здесь)', on: 'Экран всегда включён: Включено' },
+        sk: { off: 'Nevypínať obrazovku (kliknite sem)', on: 'Obrazovka je stále zapnutá: Aktivované' },
+        ta: { off: 'திரையை அணைக்க வேண்டாம் (இங்கே கிளிக் செய்யவும்)', on: 'திரை எப்போதும் இயக்கத்தில்: இயக்கப்பட்டது' },
+        tr: { off: 'Ekranı kapatma (buraya tıklayın)', on: 'Ekran her zaman açık: Etkin' },
+        uk: { off: 'Не вимикати екран (натисніть тут)', on: 'Екран завжди увімкнений: Увімкнено' },
+        'zh-CN': { off: '不要关闭屏幕（点击此处）', on: '屏幕始终开启：已启用' },
+        'zh-HK': { off: '不要關閉螢幕（按此處）', on: '螢幕一直開啟：已啟用' },
+        'zh-TW': { off: '不要關閉螢幕（點擊此處）', on: '螢幕始終開啟：已啟用' }
+    };
+
+    function getLabel(active) {
+        const locale = window.Localization?.getLocale?.() || document.documentElement.lang || navigator.language || 'en';
+        const labels = LABELS[locale] || LABELS[locale.split('-')[0]] || LABELS.en;
+        return labels[active ? 'on' : 'off'];
+    }
+
+    function syncNativePreference() {
+        if (!android()?.isKeepScreenOnEnabled) return;
+        try { requested = !!android().isKeepScreenOnEnabled(); } catch (_) {}
+    }
 
     function updateButton() {
         const button = getButton();
@@ -88,7 +134,8 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
         button.setAttribute('aria-pressed', String(requested));
         button.classList.toggle(ACTIVE_CLASS, requested);
         button.textContent = getLabel(requested);
-        button.title = requested ? 'Desativar o modo para manter a tela ligada' : 'Manter a tela ligada enquanto o QR Code Animado estiver na tela';
+        button.title = requested ? getLabel(true) : getLabel(false);
+        button.setAttribute('aria-label', button.textContent);
     }
 
     function ensureNoSleep() {
@@ -119,8 +166,8 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
             }
         }
         if (android()?.setKeepScreenOn) {
-            try { android().setKeepScreenOn(acquired || requested); acquired = true; }
-            catch (error) { console.warn('[Animated QR] Android screen-awake bridge failed:', error); }
+            try { android().setKeepScreenOn(true); acquired = true; }
+            catch (error) { lastError = error; }
         }
         return acquired;
     }
@@ -191,6 +238,7 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
         const receiveDialog = getDialog('animated-qr-receive-dialog');
         const dialog = isDialogVisible(sendDialog) ? sendDialog : (isDialogVisible(receiveDialog) ? receiveDialog : null);
         if (!dialog) { if (requested) release(); return; }
+        syncNativePreference();
         let button = getButton();
         const insertionPoint = findInsertionPoint(dialog);
         if (!button && insertionPoint) {
