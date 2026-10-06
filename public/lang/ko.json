@@ -239,7 +239,7 @@
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™에 대하여 닫기",
-        "claim": "기기 간 파일을 주고받는 가장 쉬운 방법",
+        "claim": undefined,
         "github_title": "GitHub의 ErikrafT Drop™",
         "buy-me-a-coffee_title": "Buy me a coffee!",
         "tweet_title": "ErikrafT Drop™에 대해 트윗하기",
