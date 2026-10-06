@@ -239,7 +239,7 @@
     },
     "about": {
         "close-about_aria-label": "Az ErikrafT Drop™-ról bezárása",
-        "claim": "Az eszközök közötti fájlátvitel legegyszerűbb módja",
+        "claim": undefined,
         "github_title": "ErikrafT Drop™ a GitHub-on",
         "buy-me-a-coffee_title": "Vegyél nekem egy kávét!",
         "tweet_title": "Tweetelj az ErikrafT Drop™-ról",
