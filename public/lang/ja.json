@@ -239,7 +239,7 @@
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™についてを閉じる",
-        "claim": "デバイス間でかんたんファイル共有",
+        "claim": undefined,
         "github_title": "GitHub上のErikrafT Drop™プロジェクト",
         "buy-me-a-coffee_title": "コーヒーを一杯おごってください！",
         "tweet_title": "ErikrafT Drop™についてポスト",
