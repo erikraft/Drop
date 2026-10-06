@@ -23,12 +23,6 @@
 # de uso.
 # ==============================================================================
 
-
-# ------------------------------------------------------------------------------
-# OFFICIAL — ErikrafT Drop™ Android
-# ------------------------------------------------------------------------------
-# Repositório oficial do aplicativo Android do ErikrafT Drop™.
-# Mantido pelo projeto ErikrafT Drop™.
 [submodule "Android"]
 	path = Android
 	url = https://github.com/erikraft/Drop-Android.git
