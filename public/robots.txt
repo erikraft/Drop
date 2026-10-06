@@ -1,2 +1,10 @@
 User-agent: *
 Disallow:
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+Sitemap: https://drop.erikraft.com/sitemap.xml
