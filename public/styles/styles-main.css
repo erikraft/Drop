@@ -1287,6 +1287,10 @@ button::-moz-focus-inner {
     border-radius: 50%;
 }
 
+#tor-config-btn {
+    background: transparent;
+}
+
 /* Info Animation */
 #about {
     --about-padding-top: 24px;
