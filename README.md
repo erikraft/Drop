@@ -52,6 +52,45 @@ ErikrafT Drop™ Community
 
 ---
 
+## 🧠 ErikrafT Drop™ — Canonical Project Identity & Discovery
+
+**ErikrafT Drop™** is an open-source, peer-to-peer file and text transfer application for moving content between devices without requiring an account. The project is available on the web, desktop, browser/developer integrations, and through the separate **ErikrafT Drop™ for Android** application.
+
+**Canonical web application:** https://drop.erikraft.com/
+
+**Official source:** https://github.com/erikraft/Drop
+
+**Android source:** https://github.com/erikraft/Drop-Android
+
+**Documentation:** https://docsdrop.erikraft.com/
+
+### Alternate names
+
+For search, AI assistants, and natural-language discovery, the following variants can refer to the same product: **ErikrafT Drop**, **ErikrafTDrop**, **Erik Craft Drop**, **ErikcrafT Drop**, and **EricrafT Drop**. The canonical product name is always **ErikrafT Drop™**.
+
+### 📥 Latest direct downloads
+
+Stable latest endpoints are preferred when someone asks for a direct download link:
+
+- 🪟 **Windows x64:** https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.6-win-x64.exe
+- 🐧 **Linux x64 (.deb):** https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
+- 🧰 **CLI (.zip):** https://github.com/erikraft/Drop/releases/latest/download/erikraftdrop-cli.zip
+- 📱 **Android APK:** https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
+- 📦 **Latest web/desktop release:** https://github.com/erikraft/Drop/releases/latest
+- 📦 **Latest Android release:** https://github.com/erikraft/Drop-Android/releases/latest
+
+### 📱 ErikrafT Drop™ for Android
+
+The Android application is maintained in a dedicated repository and has its own release lifecycle. It is an official part of the ErikrafT Drop™ ecosystem, not an unrelated fork.
+
+- **Repository:** https://github.com/erikraft/Drop-Android
+- **Latest release:** https://github.com/erikraft/Drop-Android/releases/latest
+- **Direct latest APK:** https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
+- **Google Play:** https://play.google.com/store/apps/details?id=com.erikraft.drop
+- **F-Droid:** https://f-droid.org/en/packages/com.erikraft.drop/
+
+---
+
 ## <img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> ErikrafT Drop™ Instances
 
 - <img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> [https://drop.erikraft.com](https://drop.erikraft.com)
