@@ -249,12 +249,6 @@ The repository contains integrations that are not part of the standard PairDrop 
 
 These are ecosystem integrations, not claims that the underlying PairDrop transfer protocol was replaced.
 
-### 🧪 WebTorrent Transfer — Beta
-
-The repository also contains an explicitly documented **WebTorrent transfer mode**. It is experimental/beta and uses magnet-based peer discovery and WebRTC between compatible peers. It should therefore be described as a beta transfer option rather than as the normal ErikrafT Drop™ transfer mechanism.
-
-See [`docs/features/webtorrent-beta.md`](docs/features/webtorrent-beta.md).
-
 ## 🔗 Shared and Inherited Features
 
 The following should be understood as part of the PairDrop/Snapdrop-derived foundation rather than as ErikrafT Drop™-exclusive functionality unless the ErikrafT Drop™ implementation has been materially changed:
@@ -291,7 +285,6 @@ The purpose of this section is to prevent shared upstream capabilities from bein
 | Android integration | — | [✓](https://github.com/fm-sys/pairdrop-android) | [✓](https://github.com/erikraft/Drop-Android) |
 | Discord integration | — | — | ✓ |
 | iOS Share Menu integration | — | ✓ | ✓ |
-| WebTorrent transfer | — | — | Experimental |
 | ErikrafT-specific branding/ecosystem | — | — | ✓ |
 
 > **Snapdrop notation:** `✕*` for WebRTC and WebSocket signaling refers to the current public Snapdrop/LimeWire service, not the classic `SnapDrop/snapdrop` repository. The classic repository still contains the original WebRTC/WebSocket implementation. `✓*` for PWA indicates that the PWA implementation remains present in the classic open-source repository; this does not necessarily represent the behavior or availability of the current public service.

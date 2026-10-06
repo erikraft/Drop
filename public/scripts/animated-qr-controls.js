@@ -41,7 +41,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:hidden;
+    overflow:visible;
     box-sizing:border-box;
     aspect-ratio:1;
     background:#fff;
@@ -60,6 +60,7 @@
     min-height:0!important;
     max-width:100%!important;
     max-height:100%!important;
+    overflow:visible!important;
     flex:0 0 auto;
 }
 @media(max-width:600px){
