@@ -13,7 +13,7 @@
 # Créditos e direitos autorais permanecem com os respectivos autores e
 # mantenedores de cada projeto.
 # ==============================================================================
- 
+
 [submodule "Android"]
 	path = Android
 	url = https://github.com/erikraft/Drop-Android.git
