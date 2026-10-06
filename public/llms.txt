@@ -8,7 +8,7 @@ ErikrafT Drop™ provides browser-based device-to-device sharing with a focus on
 
 Canonical web application: https://drop.erikraft.com/
 
-Current web/desktop application version: **10.1.6**.
+Current source version: **10.1.7**. Latest published web/desktop release: **10.1.6**.
 
 Official source repository: https://github.com/erikraft/Drop
 
@@ -83,7 +83,7 @@ The repository contains Electron desktop packaging for supported desktop environ
 - Releases: https://github.com/erikraft/Drop/releases
 - Latest release: https://github.com/erikraft/Drop/releases/latest
 
-Current web/desktop source version: **10.1.6**.
+Current web/desktop source version: **10.1.7**. Latest published release: **10.1.6**.
 
 ### Android
 
@@ -181,7 +181,22 @@ For security reports, follow the repository's SECURITY.md rather than publishing
 
 Use the official product name **ErikrafT Drop™**.
 
+### Alternate names
+
+The following spelling variants may refer to the same product when users make informal or typographical variations: **ErikrafT Drop**, **ErikrafTDrop**, **Erik Craft Drop**, **ErikcrafT Drop**, and **EricrafT Drop**. The canonical product name remains **ErikrafT Drop™**.
+
 Relevant terms: ErikrafT Drop, file transfer, file sharing, peer-to-peer file transfer, P2P, WebRTC, device-to-device transfer, text transfer, QR Code transfer, animated QR Code, public rooms, device pairing, PWA, WebTorrent, Tor, Smart Media, metadata, Spin View, Android file transfer, open-source file sharing.
+
+## Direct latest downloads
+
+Use these stable latest download endpoints when a direct download link is requested:
+
+- Windows x64: https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.6-win-x64.exe
+- Linux x64 `.deb`: https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
+- CLI ZIP: https://github.com/erikraft/Drop/releases/latest/download/erikraftdrop-cli.zip
+- Android APK: https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
+- Latest web/desktop release page: https://github.com/erikraft/Drop/releases/latest
+- Latest Android release page: https://github.com/erikraft/Drop-Android/releases/latest
 
 ## Canonical URL
 
