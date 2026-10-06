@@ -89,6 +89,8 @@ File sharing on your local network that works on all platforms.
 
   - <img src="./public/images/Tux_Linux.svg" width="20px" style="display:inline;"> Linux (.deb)
     - <img src="./public/images/Tux_Linux.svg" width="20px" style="display:inline;"> https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
+  - <img src="./public/images/Windows.png" width="20px" style="display:inline;"> Windows (.exe)
+    - <img src="./public/images/Windows.png" width="20px" style="display:inline;"> https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.6-win-x64.exe
 
 - **Extensions**
   - <img src="./public/images/VS_Code_Logo.svg" width="20px" style="display:inline;"> [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop)
