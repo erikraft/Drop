@@ -239,7 +239,7 @@
     },
     "about": {
         "close-about_aria-label": "Zatvoriť \"O službe ErikrafT Drop™\"",
-        "claim": "Jednoduchý spôsob posielania súborov medzi zariadeniami",
+        "claim": undefined,
         "github_title": "ErikrafT Drop™ na GitHube",
         "buy-me-a-coffee_title": "Kúp mi kávičku!",
         "tweet_title": "Tweetuj o ErikrafT Drop™",
