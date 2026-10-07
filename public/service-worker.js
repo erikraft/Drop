@@ -1,4 +1,4 @@
-const cacheVersion = 'v10.1.6';
+const cacheVersion = 'v10.1.7';
 const cacheTitle = `erikraftdrop-cache-${cacheVersion}`;
 
 // Keep this list limited to resources that are part of the current client shell.
@@ -21,10 +21,9 @@ const relativePathsToCache = [
     'scripts/util.js',
     'scripts/pairdrop-adapter.js',
     'scripts/erikraft-qr.js',
-    'scripts/optical-matrix.js',
-    'scripts/optical-matrix-ui.js',
     'scripts/github-folder-zip.js',
     'scripts/security-layer.js',
+    'scripts/android-app-shortcuts.js',
     'scripts/animated-qr-controls.js',
     'scripts/animated-qr-file-size.js',
     'scripts/animated-qr-screen-awake.js',
@@ -35,7 +34,6 @@ const relativePathsToCache = [
     'scripts/libs/qr-code-styling.js',
     'scripts/qr-helper.js',
     'scripts/libs/zip.min.js',
-    'scripts/webtorrent-transfer.js',
     'sounds/blop.mp3',
     'sounds/blop.ogg',
     'sounds/ads.mp3',
@@ -99,7 +97,7 @@ const isValidCacheResponse = (request, response) => {
 const createManifestFallback = () => new Response(JSON.stringify({
     name: 'ErikrafT Drop™',
     short_name: 'ErikrafT Drop™',
-    version: '10.1.6',
+    version: '10.1.7',
     icons: [
         {src: 'images/android-chrome-192x192.png', sizes: '192x192', type: 'image/png'},
         {src: 'images/android-chrome-512x512.png', sizes: '512x512', type: 'image/png'},
