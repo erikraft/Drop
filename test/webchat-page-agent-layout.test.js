@@ -17,15 +17,15 @@ assert.doesNotMatch(chatForm, /<img[^>]+Page_Agent_Ext\.png/);
 assert.ok(chatForm.indexOf('erikraft-page-agent-ai') < chatForm.indexOf('id="chat-send"'), 'Page Agent Ext must stay before Send');
 assert.match(chatForm, /accept="image\/\*,image\/heic,image\/heif,\.heic,\.heif,\.mov,video\/quicktime,video\/\*"/);
 
-assert.match(styles, /body\.chat-open \{[\\s\\S]*?padding-right: 0/);
+assert.match(styles, /body\.chat-open \{[\s\S]*?padding-right: 0/);
 assert.match(styles, /body\.chat-open > header/);
-assert.match(styles, /body\.chat-open > header \{[\\s\\S]*?padding-right: 12px/);
+assert.match(styles, /body\.chat-open > header \{[\s\S]*?padding-right: 12px/);
 assert.match(styles, /z-index: 70/);
 assert.match(styles, /\.chat-panel \{[\s\S]*?top: var\(--chat-header-height, 56px\)/);
 assert.match(styles, /height: calc\(100vh - var\(--chat-header-height, 56px\)\)/);
 assert.match(styles, /\.chat-input #chat-input \{[\s\S]*?min-width: 0/);
-assert.match(styles, /html\[lang="ar"\] body\.chat-open \{[\s\S]*?padding-left: var\(--chat-sidebar-width\)/);
-assert.match(styles, /html\[lang="ar"\] body\.chat-open > header \{[\s\S]*?padding-left: calc\(var\(--chat-sidebar-width\) \+ 12px\)/);
+assert.match(styles, /html\[lang="ar"\] body\.chat-open \{[\s\S]*?padding-left: 0/);
+assert.match(styles, /html\[lang="ar"\] body\.chat-open > header \{[\s\S]*?padding-left: 12px/);
 assert.match(styles, /html\[lang="ar"\] \.chat-panel \{[\s\S]*?right: auto;[\s\S]*?left: 0;[\s\S]*?border-left: 0;[\s\S]*?border-right:/);
 assert.match(styles, /@media \(max-width: 768px\) \{[\s\S]*?html\[lang="ar"\] body\.chat-open \{[\s\S]*?padding-left: 0;[\s\S]*?html\[lang="ar"\] body\.chat-open > header \{[\s\S]*?padding-left: 12px;/);
 
@@ -47,8 +47,9 @@ assert.match(ui, /kind: 'live-photo'/);
 assert.match(ui, /_sameLivePhotoAsset/);
 
 const chatUiStart = ui.indexOf('class ChatUI');
-const chatUiEnd = ui.indexOf('class ', chatUiStart + 'class ChatUI'.length);
-const pairDeviceStart = ui.indexOf('class PairDevice');
+const nextClass = ui.indexOf('class ', chatUiStart + 'class ChatUI'.length);
+const chatUiEnd = nextClass >= 0 ? nextClass : ui.length;
+const pairDeviceStart = ui.indexOf('class PairDeviceDialog');
 assert.ok(chatUiStart >= 0 && chatUiEnd > chatUiStart, 'ChatUI class must exist');
 assert.ok(pairDeviceStart >= 0 && pairDeviceStart < chatUiStart, 'PairDevice must remain before ChatUI');
 const chatUi = ui.slice(chatUiStart, chatUiEnd);

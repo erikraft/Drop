@@ -16,7 +16,7 @@ assert.match(script, /integration-cdn/);
 assert.match(script, /integration-mirror/);
 assert.match(script, /navigator\.clipboard\.writeText/);
 assert.match(script, /DevTools/);
-assert.match(script, /data-page-agent-provider/);
+assert.match(script, /pageAgentProvider/);
 for (const lang of [en, pt]) {
     for (const key of ['integration-title','integration-description','integration-cdn','integration-mirror','copy-code','copied-code','run-code']) {
         assert.equal(typeof lang.ai?.[key], 'string');

@@ -96,6 +96,10 @@
         "tor-unavailable-title": "Onion address unavailable",
         "tor-unavailable-desc": "Tor service is not available yet. Please try again in a moment.",
         "tor-refresh": "Refresh",
+        "optical-matrix-title": "ErikrafT Optical Matrix",
+        "optical-matrix-experimental": "Experimental",
+        "optical-matrix-description": "A high-density colour-and-symbol optical matrix. It is separate from Animated QR — Legacy/Compatibility.",
+        "optical-matrix-open": "Open Optical Matrix",
 
         "pair-devices-title": "Pair Devices Permanently",
         "input-key-on-this-device": "Input this key on another device",
