@@ -50,6 +50,8 @@ ErikrafT Drop™ Community
 
 <br>
 
+🔮｜See possible old or future files that have not yet been released in the source code on Github or that have already been released in the past, which is on my computer in a 2nd public folder here on Mega <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
+
 ---
 
 ## 🧠 ErikrafT Drop™ — Canonical Project Identity & Discovery
