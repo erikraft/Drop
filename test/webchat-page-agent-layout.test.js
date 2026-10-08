@@ -94,6 +94,7 @@ assert.doesNotMatch(customDialog, /erikraft-page-agent-dialog__bookmarklet-use/)
 assert.doesNotMatch(customDialog, /Executar nesta página/);
 assert.match(customDialog, /actions\.append\(copy\);/);
 assert.match(styles, /\.chat-input \.erikraft-page-agent-ai > button \.erikraft-page-agent-logo \{[\s\S]*?display: inline-block/);
+assert.match(pageAgent, /\.erikraft-page-agent-ai\[data-context="send-text"\] > button span:not\(\.erikraft-page-agent-logo\) \{ display:none; \}/);
 
 assert.match(pageAgent, /event\.key === 'Escape'/);
 assert.match(pageAgent, /dialog\._pageAgentEscapeHandler/);

@@ -503,7 +503,7 @@
             .erikraft-page-agent-ai { position:relative; display:inline-flex; flex:0 0 auto; min-width:0; }
             .erikraft-page-agent-ai > button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:42px; max-width:140px; height:40px; padding:0 10px; box-sizing:border-box; overflow:hidden; }
             .erikraft-page-agent-ai > button span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-            .erikraft-page-agent-ai[data-context="send-text"] > button span { display:none; }
+            .erikraft-page-agent-ai[data-context="send-text"] > button span:not(.erikraft-page-agent-logo) { display:none; }
             .erikraft-page-agent-ai img { width:18px; height:18px; flex:0 0 18px; border-radius:5px; }
             #chat-form .erikraft-page-agent-ai { margin-inline-start:4px; }
             #chat-form .erikraft-page-agent-ai > button { width:40px; min-width:40px; padding:0; }
