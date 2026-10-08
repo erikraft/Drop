@@ -6,7 +6,7 @@
   <h1><em>Send it</em>, with <a href="https://drop.erikraft.com/">ErikrafT Drop™</a></h1>
 
   <p>
-    Local file sharing <a href="https://drop.erikraft.com/"> <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
+    Local file sharing <a href="https://drop.erikraft.com/"> <img src="./Website About/NEW/images/Logo.png" width="14px" style="display:inline;"> <strong>in your web browser</strong></a>.<br>
     Inspired by Apple's AirDrop and <a href="https://github.com/schlagmichdoch/PairDrop">Schlagmichdoch's PairDrop</a>.<br>
     Fork of <a href="https://github.com/schlagmichdoch/PairDrop">PairDrop</a>.
   </p>
@@ -26,8 +26,8 @@
 <br>
 
   <p>
-    <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Report a bug</a><br />
-    <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Request feature</a>
+    <img src="./Website About/NEW/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Report a bug</a><br />
+    <img src="./Website About/NEW/images/Logo.png" width="14px" style="display:inline;"> <a href="https://github.com/erikraft/Drop/issues">Request feature</a>
   </p>
 </div>
 
@@ -50,7 +50,7 @@ ErikrafT Drop™ Community
 
 <br>
 
-🔮｜See possible old or future files that have not yet been released in the source code on Github or that have already been released in the past, which is on my computer in a 2nd public folder here on Mega <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
+🔮｜See possible old or future files that have not yet been released in the source code on Github or that have already been released in the past, which is on my computer in a 2nd public folder here on Mega <img src="./Website About/NEW/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
 
 ---
 
@@ -58,13 +58,13 @@ ErikrafT Drop™ Community
 
 **ErikrafT Drop™** is an open-source, peer-to-peer file and text transfer application for moving content between devices without requiring an account. The project is available on the web, desktop, browser/developer integrations, and through the separate **ErikrafT Drop™ for Android** application.
 
-<img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> **Canonical web application:** https://drop.erikraft.com/
+<img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> **Canonical web application:** https://drop.erikraft.com/
 
 <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Official source:** https://github.com/erikraft/Drop
 
 <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Android source:** https://github.com/erikraft/Drop-Android
 
-<img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> **Documentation:** https://docsdrop.erikraft.com/
+<img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;"> **Documentation:** https://docsdrop.erikraft.com/
 
 ### Alternate names
 
@@ -76,7 +76,7 @@ Stable latest endpoints are preferred when someone asks for a direct download li
 
 - <img src="./public/images/Windows.png" width="20px" style="display:inline;"> **Windows x64:** https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.6-win-x64.exe
 - <img src="./public/images/Tux_Linux.svg" width="20px" style="display:inline;"> **Linux x64 (.deb):** https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
-- 📦 **CLI (.zip):** https://github.com/erikraft/Drop/releases/latest/download/erikraftdrop-cli.zip
+- <img src="./public/images/CLI_Icon.png" width="20px" style="display:inline;"> **CLI (.zip):** https://github.com/erikraft/Drop/releases/latest/download/erikraftdrop-cli.zip
 - <img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;"> **Android APK:** https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
 - <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Latest web/desktop release:** https://github.com/erikraft/Drop/releases/latest
 - <img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;"> **Latest Android release:** https://github.com/erikraft/Drop-Android/releases/latest
@@ -101,7 +101,7 @@ The Android application is maintained in a dedicated repository and has its own 
 
 ---
 
-🔮｜See possible old or future files that have not yet been released in the source code on Github or that have already been released in the past, which is on my computer in a 2nd public folder here on Mega <img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
+🔮｜See possible old or future files that have not yet been released in the source code on Github or that have already been released in the past, which is on my computer in a 2nd public folder here on Mega <img src="./Website About/NEW/images/Logo.png" width="14px" style="display:inline;"> [CLICK HERE](https://mega.nz/folder/kgJj2DTQ#uov-pmvrn3ebMdQkLvtdPQ)
 
 ---
 
@@ -149,7 +149,7 @@ File sharing on your local network that works on all platforms.
   - Send files directly from Discord using the example bot located at [`Discord/Bot`](Discord/Bot/README.md). The device appears on the website with a Discord icon, and transfers occur in real time using the official WebSocket fallback.
   - Publish a custom activity from [`Discord/Activities`](Discord/Atividades/README.md) to embed ErikrafT Drop™ directly inside Discord with automatic device identification.
 
-- **iOS Share Menu integration**
+- <img src="./public/images/Apple_Logo_Icon.webp" width="20px" style="display:inline;"> **iOS Share Menu integration**
   - Send images, files, folders, URLs, or text directly from the iOS share menu using a custom Shortcut.
 
   **Download the shortcut:**
@@ -376,11 +376,11 @@ The `LICENSE` file and third-party license files remain part of the repository a
 
 ---
 
-## 🌐 Links
+## 🔗 Links
 
-[<img src="https://biodrop.erikraft.com/images/Logo.png" width="20px" style="display:inline;">｜biodrop.erikraft.com](https://biodrop.erikraft.com/)
+[<img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;">｜biodrop.erikraft.com](https://biodrop.erikraft.com/)
 <br />
-[<img src="https://biodrop.erikraft.com/images/Logo.png" width="20px" style="display:inline;">｜drop.erikraft.com](https://drop.erikraft.com/)
+[<img src="./Website About/NEW/images/Logo.png" width="20px" style="display:inline;">｜drop.erikraft.com](https://drop.erikraft.com/)
 <br />
 [✍🏻｜Documentation](https://docsdrop.erikraft.com/)
 <br />
