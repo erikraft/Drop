@@ -30,18 +30,21 @@
 #animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--paper-color,var(--background-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
 #animated-qr-send-dialog #qr-send-active-view>.column{min-width:0;width:100%}
 #animated-qr-send-dialog #qr-send-canvas-container{
+    position:relative;
+    z-index:3;
+    isolation:isolate;
     width:min(360px,calc(100% - 16px),calc(100vw - 48px),calc(100dvh - 300px))!important;
     height:min(360px,calc(100% - 16px),calc(100vw - 48px),calc(100dvh - 300px))!important;
     min-width:0!important;
     min-height:0!important;
     max-width:100%!important;
     max-height:100%!important;
-    margin:8px auto;
+    margin:8px auto 16px;
     flex:0 0 auto;
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:visible;
+    overflow:visible!important;
     box-sizing:border-box;
     aspect-ratio:1;
     background:#fff;
@@ -55,11 +58,13 @@
 #animated-qr-send-dialog .qr-tile svg,#animated-qr-send-dialog .qr-tile canvas,#animated-qr-send-dialog #qr-send-canvas-container>svg,#animated-qr-send-dialog #qr-send-canvas-container>canvas{
     display:block!important;
     width:100%!important;
-    height:100%!important;
+    height:auto!important;
+    aspect-ratio:1 / 1;
     min-width:0!important;
     min-height:0!important;
     max-width:100%!important;
     max-height:100%!important;
+    object-fit:contain;
     overflow:visible!important;
     flex:0 0 auto;
 }
