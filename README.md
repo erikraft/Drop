@@ -58,13 +58,13 @@ ErikrafT Drop™ Community
 
 **ErikrafT Drop™** is an open-source, peer-to-peer file and text transfer application for moving content between devices without requiring an account. The project is available on the web, desktop, browser/developer integrations, and through the separate **ErikrafT Drop™ for Android** application.
 
-**Canonical web application:** https://drop.erikraft.com/
+<img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> **Canonical web application:** https://drop.erikraft.com/
 
-**Official source:** https://github.com/erikraft/Drop
+<img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Official source:** https://github.com/erikraft/Drop
 
-**Android source:** https://github.com/erikraft/Drop-Android
+<img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Android source:** https://github.com/erikraft/Drop-Android
 
-**Documentation:** https://docsdrop.erikraft.com/
+<img src="https://biodrop.erikraft.com/images/Logo.png" width="14px" style="display:inline;"> **Documentation:** https://docsdrop.erikraft.com/
 
 ### Alternate names
 
@@ -85,11 +85,11 @@ Stable latest endpoints are preferred when someone asks for a direct download li
 
 The Android application is maintained in a dedicated repository and has its own release lifecycle. It is an official part of the ErikrafT Drop™ ecosystem, not an unrelated fork.
 
-- **Repository:** https://github.com/erikraft/Drop-Android
-- **Latest release:** https://github.com/erikraft/Drop-Android/releases/latest
-- **Direct latest APK:** https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
-- **Google Play:** https://play.google.com/store/apps/details?id=com.erikraft.drop
-- **F-Droid:** https://f-droid.org/en/packages/com.erikraft.drop/
+- <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Repository:** https://github.com/erikraft/Drop-Android
+- <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Latest release:** https://github.com/erikraft/Drop-Android/releases/latest
+- <img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;"> **Direct latest APK:** https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
+- <img src="./public/images/Google_Play_Icon_Logo.svg" width="20px" style="display:inline;"> **Google Play:** https://play.google.com/store/apps/details?id=com.erikraft.drop
+- <img src="./public/images/F-Droid_Logo_Icon_Logo.svg" width="20px" style="display:inline;"> **F-Droid:** https://f-droid.org/en/packages/com.erikraft.drop/
 
 ---
 
