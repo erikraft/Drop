@@ -12,8 +12,10 @@ assert.match(controls, /min-width:0!important/);
 assert.match(controls, /min-width:0!important;\s*min-height:0!important/);
 assert.match(controls, /@media\(max-width:600px\)/);
 assert.match(controls, /@media\(max-height:700px\)/);
-assert.match(controls, /position:relative;\s*z-index:3;\s*isolation:isolate/);\nassert.match(controls, /overflow:visible!important/);
-assert.match(controls, /height:auto!important/);\nassert.match(controls, /aspect-ratio:1 \/ 1/);
+assert.match(controls, /position:relative;\s*z-index:3;\s*isolation:isolate/);
+assert.match(controls, /overflow:visible!important/);
+assert.match(controls, /height:auto!important/);
+assert.match(controls, /aspect-ratio:1 \/ 1/);
 assert.match(controls, /overflow:visible!important/);
 
 assert.match(awake, /--text-color/);
