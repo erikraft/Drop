@@ -365,50 +365,12 @@ The `LICENSE` file and third-party license files remain part of the repository a
 
 ## ⏬ Getting ErikrafT Drop™
 
-<div align="center" style="display: inline_block; gap: 10px;"><br>
-  <a href="https://drop.erikraft.com/" target="_blank">
-    <img alt="Open the Web App" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20WEB.png">
-  </a>
-<a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb" target="_blank">
-  <img alt="Download for Linux (.deb)" style="height: 80px;" src="./public/images/badges/BadgeLinux.png">
-</a>
-<a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.6-win-x64.exe" target="_blank">
-  <img alt="Download for Windows (.exe)" style="height: 80px;" src="./public/images/badges/winbadge.png">
-</a>
-  <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank">
-    <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
-  </a>
-  <a href="https://f-droid.org/en/packages/com.erikraft.drop/" target="_blank">
-    <img alt="Get it on F-Droid" height="80" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png">
-  </a>
-  <a href="https://apkpure.com/p/com.erikraft.drop" target="_blank">
-    <img alt="Get it on APKPure" style="height: 60px;" src="./public/images/badges/Get_it_on_APKPure_English.png">
-  </a>
-  <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank">
-    <img alt="Download the APK" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20APK.png">
-  </a>
-  <a href="https://routinehub.co/shortcut/24753/" target="_blank">
-    <img alt="Get it on Shortcut" style="height: 60px;" src="./public/images/badges/Get_it_on_Shortcuts_English.png" alt="Get it on Shortcut">
-  </a>
-  <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank">
-    <img alt="Get it on Discord" style="height: 80px;" src="./public/images/badges/Get it on Discord.png" alt="Get it on Discord">
-  </a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank">
-    <img alt="Get it on VS Code Marketplace" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20VS%20CODE.png">
-  </a>
-  <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank">
-    <img alt="Get it on Open VSX Registry" style="height: 80px;" src="./public/images/badges/Get%20it%20on%20Open%20VSX%20Registry.png">
-  </a>
-  <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank">
-    <img alt="Opera Add-ons" style="height: 80px;" src="./public/images/badges/Get-it-from-Opera-Addons.png">
-  </a>
-  <a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank">
-    <img alt="Thunderbird Add-ons" style="height: 60px;" src="./public/images/badges/Get_the_add-on_Thunderbird.png">
-  </a>
-  <a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank">
-    <img alt="Firefox Browser ADD-ONS" style="height: 80px;" src="./public/images/badges/Firefox%20Browser%20ADD-ONS.png">
-  </a>
-</div>
+| | | | |
+|:---:|:---:|:---:|:---:|
+| <a href="https://drop.erikraft.com/" target="_blank"><img alt="Open the Web App" height="80" src="./public/images/badges/Get%20it%20on%20WEB.png"></a> | <a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb" target="_blank"><img alt="Download for Linux (.deb)" height="80" src="./public/images/badges/BadgeLinux.png"></a> | <a href="https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.6-win-x64.exe" target="_blank"><img alt="Download for Windows (.exe)" height="80" src="./public/images/badges/winbadge.png"></a> | <a href="https://play.google.com/store/apps/details?id=com.erikraft.drop" target="_blank"><img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"></a> |
+| <a href="https://f-droid.org/en/packages/com.erikraft.drop/" target="_blank"><img alt="Get it on F-Droid" height="80" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"></a> | <a href="https://apkpure.com/p/com.erikraft.drop" target="_blank"><img alt="Get it on APKPure" height="60" src="./public/images/badges/Get_it_on_APKPure_English.png"></a> | <a href="https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk" target="_blank"><img alt="Download the APK" height="80" src="./public/images/badges/Get%20it%20on%20APK.png"></a> | <a href="https://routinehub.co/shortcut/24753/" target="_blank"><img alt="Get it on Shortcuts" height="60" src="./public/images/badges/Get_it_on_Shortcuts_English.png"></a> |
+| <a href="https://discord.com/oauth2/authorize?client_id=1367869058707492955" target="_blank"><img alt="Get it on Discord" height="80" src="./public/images/badges/Get it on Discord.png"></a> | <a href="https://marketplace.visualstudio.com/items?itemName=ErikrafT.erikraft-drop" target="_blank"><img alt="Get it on VS Code Marketplace" height="80" src="./public/images/badges/Get%20it%20on%20VS%20CODE.png"></a> | <a href="https://open-vsx.org/extension/ErikrafT/erikraft-drop" target="_blank"><img alt="Get it on Open VSX Registry" height="80" src="./public/images/badges/Get%20it%20on%20Open%20VSX%20Registry.png"></a> | <a href="https://addons.opera.com/en/extensions/details/erikraft-drop/" target="_blank"><img alt="Get it from Opera Add-ons" height="80" src="./public/images/badges/Get-it-from-Opera-Addons.png"></a> |
+| <a href="https://addons.thunderbird.net/pt-BR/thunderbird/addon/erikraft-drop/" target="_blank"><img alt="Get the add-on for Thunderbird" height="60" src="./public/images/badges/Get_the_add-on_Thunderbird.png"></a> | <a href="https://addons.mozilla.org/pt-BR/firefox/addon/erikraft-drop/" target="_blank"><img alt="Get it on Firefox Add-ons" height="80" src="./public/images/badges/Firefox%20Browser%20ADD-ONS.png"></a> | | |
 
 ---
 
