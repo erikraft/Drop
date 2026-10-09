@@ -39,11 +39,11 @@
     border:1px solid color-mix(in srgb, rgb(var(--text-color)) 18%, transparent);
     border-radius:12px;
     color:rgb(var(--text-color));
-    background:rgb(var(--bg-color-secondary));
+    background:var(--bg-color-secondary);
     box-shadow:0 1px 3px rgba(0,0,0,.12);
     transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .15s ease;
 }
-#${BUTTON_ID}:hover{background:color-mix(in srgb,rgb(var(--bg-color-secondary)) 86%,rgb(var(--text-color)));box-shadow:0 2px 8px rgba(0,0,0,.16)}
+#${BUTTON_ID}:hover{background:color-mix(in srgb,var(--bg-color-secondary) 86%,rgb(var(--text-color)));box-shadow:0 2px 8px rgba(0,0,0,.16)}
 #${BUTTON_ID}:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}
 #${BUTTON_ID}:active{transform:translateY(1px)}
 #${BUTTON_ID}[hidden]{display:none!important}
@@ -130,13 +130,28 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
     function updateButton() {
         const button = getButton();
         if (!button) return;
-        // Android owns this preference natively; do not show a browser control in its WebView.
-        button.hidden = !!android() || !isSupported();
-        button.setAttribute('aria-pressed', String(requested));
-        button.classList.toggle(ACTIVE_CLASS, requested);
-        button.textContent = getLabel(requested);
-        button.title = requested ? getLabel(true) : getLabel(false);
-        button.setAttribute('aria-label', button.textContent);
+
+        // Avoid redundant DOM writes: the mutation observer also watches this dialog.
+        const hidden = !!android() || !isSupported();
+        if (button.hidden !== hidden) button.hidden = hidden;
+
+        const pressed = String(requested);
+        if (button.getAttribute('aria-pressed') !== pressed) {
+            button.setAttribute('aria-pressed', pressed);
+        }
+
+        if (button.classList.contains(ACTIVE_CLASS) !== requested) {
+            button.classList.toggle(ACTIVE_CLASS, requested);
+        }
+
+        const label = getLabel(requested);
+        if (button.textContent !== label) button.textContent = label;
+
+        // The visible label already explains the action; a title duplicates it as a tooltip.
+        if (button.hasAttribute('title')) button.removeAttribute('title');
+        if (button.getAttribute('aria-label') !== label) {
+            button.setAttribute('aria-label', label);
+        }
     }
 
     function ensureNoSleep() {
@@ -310,8 +325,18 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
 
     function mutationAffectsRuntime(records) {
         return records.some(record => {
-            if (record.type === 'attributes') return DIALOG_IDS.includes(record.target?.id) || record.target?.id === BUTTON_ID;
-            return true;
+            if (record.type === 'attributes') {
+                // Button state and accessible-label updates are our own mutations.
+                return DIALOG_IDS.includes(record.target?.id);
+            }
+            if (record.type === 'childList') {
+                const target = record.target?.nodeType === Node.ELEMENT_NODE
+                    ? record.target
+                    : record.target?.parentElement;
+                // Ignore text/attribute synchronization inside the screen-awake button.
+                return !target?.closest?.('#' + BUTTON_ID);
+            }
+            return false;
         });
     }
 
