@@ -130,7 +130,8 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
     function updateButton() {
         const button = getButton();
         if (!button) return;
-        button.hidden = !isSupported();
+        // Android owns this preference natively; do not show a browser control in its WebView.
+        button.hidden = !!android() || !isSupported();
         button.setAttribute('aria-pressed', String(requested));
         button.classList.toggle(ACTIVE_CLASS, requested);
         button.textContent = getLabel(requested);
@@ -237,6 +238,12 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
         const sendDialog = getDialog('animated-qr-send-dialog');
         const receiveDialog = getDialog('animated-qr-receive-dialog');
         const dialog = isDialogVisible(sendDialog) ? sendDialog : (isDialogVisible(receiveDialog) ? receiveDialog : null);
+        if (android()) {
+            const androidButton = getButton();
+            if (androidButton) androidButton.remove();
+            if (requested) release();
+            return;
+        }
         if (!dialog) { if (requested) release(); return; }
         syncNativePreference();
         let button = getButton();

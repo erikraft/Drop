@@ -46,7 +46,7 @@ const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 
 const applicationVersion = index.match(/<meta name="application-version" content="([^"]+)"/)?.[1];
 const manifest = JSON.parse(fs.readFileSync(path.join(publicDir, 'manifest.json'), 'utf8'));
 
-assert.equal(packageJson.version, '10.1.7');
+assert.equal(packageJson.version, '10.1.9');
 assert.equal(applicationVersion, packageJson.version, 'Index application version must match package.json.');
 assert.equal(manifest.version, packageJson.version, 'Manifest version must match package.json.');
 assert.match(serviceWorker, new RegExp(`const cacheVersion = 'v${packageJson.version.replaceAll('.', '\\.')}'`));

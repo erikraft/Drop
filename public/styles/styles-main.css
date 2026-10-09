@@ -2328,3 +2328,13 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     word-break: break-word;
     padding: 12px;
 }
+
+
+/* Ensure the Page Agent Ext logo remains visible in the send-text dialog. */
+.erikraft-page-agent-ai[data-context="send-text"] { display: inline-flex; align-items: center; flex: 0 0 auto; min-width: 0; }
+.erikraft-page-agent-ai[data-context="send-text"] > button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 40px; }
+.erikraft-page-agent-ai[data-context="send-text"] > button .erikraft-page-agent-logo--icon {
+    display: inline-block !important; flex: 0 0 24px; width: 24px; height: 24px;
+    visibility: visible !important; opacity: 1 !important;
+}
+.erikraft-page-agent-ai[data-context="send-text"] > button span:not(.erikraft-page-agent-logo) { display: inline; }

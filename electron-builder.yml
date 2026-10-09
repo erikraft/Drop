@@ -23,8 +23,8 @@ linux:
       arch:
         - x64
   category: Network;Utility;
-  # Intentionally leave linux.icon unset: electron-builder generates Linux icon sizes
-  # from the same desktop/assets/icon.ico used by the Windows build.
+  # Dedicated Linux desktop icon requested for Linux Mint.
+  icon: packaging/linux/icons/ErikrafT_Drop_Linux.ico
   desktop:
     entry:
       Name: ErikrafT Drop™
