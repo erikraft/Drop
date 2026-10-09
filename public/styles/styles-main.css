@@ -2338,3 +2338,34 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     visibility: visible !important; opacity: 1 !important;
 }
 .erikraft-page-agent-ai[data-context="send-text"] > button span:not(.erikraft-page-agent-logo) { display: inline; }
+
+
+/* Keep animated QR send/receive choice cards inside the modal paper. */
+#animated-qr-main-dialog .erikraft-qr-paper > .row.center.p-3 {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+#animated-qr-main-dialog .erikraft-qr-paper > .row.center.p-3 > .column {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    align-items: stretch;
+}
+#animated-qr-main-dialog .erikraft-qr-card-send,
+#animated-qr-main-dialog .erikraft-qr-card-receive {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    flex: 0 1 auto;
+}
+#animated-qr-main-dialog .erikraft-qr-card-send > .row {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
