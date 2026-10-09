@@ -48,6 +48,8 @@ assert.match(mainCss, /padding:\s*16px clamp\(16px, 4vw, 24px\)/);
 assert.match(mainCss, /\.erikraft-qr-card-send > \.row\.gap-2\.fw\.center\.wrap > \.btn[\s\S]*?flex:\s*1 1 130px/);
 assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center \{[\s\S]*?color:\s*rgb\(var\(--text-color\)\)/);
 assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\)[\s\S]*?background-color:\s*var\(--dialog-bg-color\)/);
+assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \.dialog-title \{[\s\S]*?color:\s*rgb\(var\(--text-color\)\)/);
+assert.doesNotMatch(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \.dialog-title \{[^}]*color:\s*white/i);
 assert.match(deferredCss, /\.hr-note > div \{[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;/);
 assert.doesNotMatch(index, /optical-matrix/);
 
