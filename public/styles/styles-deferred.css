@@ -1117,3 +1117,29 @@ x-dialog a {
     margin: auto;
     display: block;
 }
+
+/* Center the localized OR/OU caption over the horizontal divider. */
+.hr-note {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+.hr-note > div {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    transform: none;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+.hr-note > div > span {
+    display: inline-block;
+    max-width: calc(100% - 16px);
+    text-align: center;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 3px;
+}
