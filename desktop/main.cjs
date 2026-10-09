@@ -76,7 +76,7 @@ async function createWindow() {
 
   const windowIcon = process.platform === 'win32'
     ? path.join(app.getAppPath(), 'desktop', 'assets', 'icon.ico')
-    : path.join(app.getAppPath(), 'public', 'images', 'icon-drop.svg');
+    : path.join(app.getAppPath(), 'packaging', 'linux', 'icons', 'android-chrome-512x512.png');
 
   mainWindow = new BrowserWindow({
     width: 1200,
