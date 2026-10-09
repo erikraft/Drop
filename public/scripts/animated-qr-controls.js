@@ -121,8 +121,8 @@
 /* Keep modal surfaces and centered title rows in the selected light/dark theme. */
 #animated-qr-send-dialog .erikraft-qr-paper,
 #animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
-    background: var(--dialog-bg-color, #fff);
-    color: rgb(var(--text-color, 33, 37, 41));
+    background-color: var(--dialog-bg-color);
+    color: rgb(var(--text-color));
 }
 
 /* Size the single QR code by width and aspect ratio; never crop the generated SVG viewport. */
