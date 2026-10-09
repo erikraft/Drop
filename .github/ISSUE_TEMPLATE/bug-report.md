@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain the problem.
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
  - Browser [e.g. chrome, safari]
- - App version: [e.g. v10.1.7]
+ - App version: [e.g. v10.1.9]
  - Browser version [e.g. 153]
 
 **Smartphone (please complete the following information):**
@@ -37,7 +37,7 @@ If applicable, add screenshots to help explain the problem.
 
 **Bug occurs on official ErikrafT Drop™ instance https://drop.erikraft.com/**
 No | Yes
-Version: v10.1.7
+Version: v10.1.9
 
 **Bug occurs on self-hosted ErikrafT Drop™ instance**
 No | Yes
@@ -45,7 +45,7 @@ No | Yes
 **Self-Hosted Setup**
 Proxy: Nginx | Apache2
 Deployment: docker run | docker compose | npm run start:prod
-Version: v10.1.7
+Version: v10.1.9
 
 **Additional context**
 Add any other context about the problem here.

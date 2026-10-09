@@ -256,3 +256,29 @@
         scroll-behavior: auto !important;
     }
 }
+
+
+/* Keep animated QR content below its title and inside the dialog scroll area. */
+#animated-qr-send-dialog .erikraft-qr-paper { min-height: 0; overflow: hidden; }
+#animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
+    position: relative; z-index: 4; flex: 0 0 auto; background: var(--paper-color, #fff);
+}
+#animated-qr-send-dialog #qr-send-active-view {
+    position: relative; z-index: 1; min-height: 0; flex: 1 1 auto;
+    overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+#animated-qr-send-dialog #qr-send-canvas-container {
+    position: relative; z-index: 2; isolation: isolate; display: flex;
+    align-items: center; justify-content: center;
+    width: min(360px, calc(100% - 16px), calc(100vw - 48px), calc(100dvh - 300px));
+    max-width: 100%; min-width: 0; min-height: 0;
+    margin: 12px auto 20px !important; overflow: visible !important; box-sizing: border-box;
+}
+#animated-qr-send-dialog #qr-send-canvas-container > canvas,
+#animated-qr-send-dialog #qr-send-canvas-container > svg,
+#animated-qr-send-dialog #qr-send-canvas-container > img {
+    display: block; width: 100% !important; height: auto !important;
+    max-width: 100% !important; min-width: 0 !important; min-height: 0 !important;
+    aspect-ratio: 1 / 1;
+}

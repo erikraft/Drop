@@ -27,6 +27,8 @@ assert.match(awake, /aria-pressed/);
 assert.match(awake, /Não desligar Tela \(Clique aqui\)/);
 assert.match(awake, /Screen always on: Enabled/);
 assert.match(awake, /isKeepScreenOnEnabled/);
+assert.match(awake, /button.hidden = !!android\(\) \|\| !isSupported\(\)/);
+assert.match(awake, /if \(android\(\)\) \{/);
 assert.match(awake, /btn btn-rounded btn-dark/);
 
 assert.match(index, /id="qr-send-canvas-container"/);
