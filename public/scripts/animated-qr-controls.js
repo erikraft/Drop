@@ -27,7 +27,7 @@
         style.textContent = `
 #animated-qr-send-dialog .erikraft-qr-paper{display:flex;flex-direction:column;min-height:0;width:min(720px,calc(100vw - 20px));max-width:720px;max-height:calc(100dvh - 16px);overflow:hidden;box-sizing:border-box}
 #animated-qr-send-dialog #qr-send-active-view,#animated-qr-send-dialog #qr-send-compose-view{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden;width:100%;box-sizing:border-box;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
-#animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--paper-color,var(--background-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
+#animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--dialog-bg-color,var(--bg-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
 #animated-qr-send-dialog #qr-send-active-view>.column{min-width:0;width:100%}
 #animated-qr-send-dialog #qr-send-canvas-container{
     position:relative;
@@ -116,6 +116,13 @@
     justify-content: flex-start;
     min-height: max-content;
     padding-bottom: 32px;
+}
+
+/* Keep modal surfaces and centered title rows in the selected light/dark theme. */
+#animated-qr-send-dialog .erikraft-qr-paper,
+#animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
+    background: var(--dialog-bg-color, #fff);
+    color: rgb(var(--text-color, 33, 37, 41));
 }
 
 /* Size the single QR code by width and aspect ratio; never crop the generated SVG viewport. */
