@@ -3,12 +3,12 @@ productName: ErikrafT Drop™
 executableName: erikraft-drop
 artifactName: ${name}-${version}-${os}-${arch}.${ext}
 directories:
+  buildResources: desktop/assets
   output: dist/desktop
 files:
   - desktop/**
   - server/**
   - public/**
-  - packaging/linux/icons/android-chrome-512x512.png
   - package.json
 extraMetadata:
   main: desktop/main.cjs
@@ -23,8 +23,8 @@ linux:
       arch:
         - x64
   category: Network;Utility;
-  # Use the branded Drop icon for Linux packages and generate the required sizes from it.
-  icon: packaging/linux/icons/android-chrome-512x512.png
+  # Intentionally leave linux.icon unset: electron-builder generates Linux icon sizes
+  # from the same desktop/assets/icon.ico used by the Windows build.
   desktop:
     entry:
       Name: ErikrafT Drop™
