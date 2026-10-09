@@ -2369,3 +2369,54 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     min-width: 0;
     box-sizing: border-box;
 }
+
+/* Match the breathing room of .erikraft-qr-textarea without letting card contents touch the edges. */
+#animated-qr-main-dialog .erikraft-qr-card-send,
+#animated-qr-main-dialog .erikraft-qr-card-receive {
+    padding: 16px clamp(16px, 4vw, 24px);
+    gap: 16px;
+}
+
+#animated-qr-main-dialog .erikraft-qr-card-send > .row.gap-2.fw.center.wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+#animated-qr-main-dialog .erikraft-qr-card-send > .row.gap-2.fw.center.wrap > .btn {
+    flex: 1 1 130px;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Use the active theme variables for every centered row inside animated-QR papers. */
+.erikraft-qr-dialog .erikraft-qr-paper > .row.center {
+    color: rgb(var(--text-color));
+    background-color: transparent;
+}
+
+.erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
+    color: rgb(var(--text-color));
+    background-color: var(--dialog-bg-color);
+}
+
+@media (max-width: 390px) {
+    #animated-qr-main-dialog .erikraft-qr-card-send,
+    #animated-qr-main-dialog .erikraft-qr-card-receive {
+        padding: 14px 16px;
+    }
+
+    #animated-qr-main-dialog .erikraft-qr-card-send > .row.gap-2.fw.center.wrap {
+        padding: 0;
+        gap: 8px;
+    }
+}
