@@ -4,6 +4,8 @@ import fs from 'node:fs';
 const controls = fs.readFileSync('public/scripts/animated-qr-controls.js', 'utf8');
 const awake = fs.readFileSync('public/scripts/animated-qr-screen-awake.js', 'utf8');
 const index = fs.readFileSync('public/index.html', 'utf8');
+const mainCss = fs.readFileSync('public/styles/styles-main.css', 'utf8');
+const deferredCss = fs.readFileSync('public/styles/styles-deferred.css', 'utf8');
 
 assert.match(controls, /#animated-qr-send-dialog #qr-send-canvas-container\{?/);
 assert.match(controls, /width:min\(360px,calc\(100% - 16px\),calc\(100vw - 48px\),calc\(100dvh - 300px\)\)!important/);
@@ -27,13 +29,20 @@ assert.match(awake, /aria-pressed/);
 assert.match(awake, /Não desligar Tela \(Clique aqui\)/);
 assert.match(awake, /Screen always on: Enabled/);
 assert.match(awake, /isKeepScreenOnEnabled/);
-assert.match(awake, /button.hidden = !!android\(\) \|\| !isSupported\(\)/);
+assert.match(awake, /const hidden = !!android\(\) \|\| !isSupported\(\)/);
+assert.match(awake, /button.textContent !== label/);
+assert.match(awake, /button.hasAttribute\('title'\)/);
+assert.match(awake, /if \(record.type === 'childList'\)/);
 assert.match(awake, /if \(android\(\)\) \{/);
 assert.match(awake, /btn btn-rounded btn-dark/);
 
 assert.match(index, /id="qr-send-canvas-container"/);
 assert.match(index, /id="qr-send-active-view"[^>]*hidden/);
 assert.match(index, /<div class="hr-note">\s*<hr>\s*<div>\s*<span data-i18n-key="dialogs\.hr-or" data-i18n-attrs="text">OU<\/span>/);
+assert.match(controls, /#animated-qr-send-dialog #qr-send-active-view\.row\.center,[\s\S]*?align-items:\s*stretch;[\s\S]*?justify-content:\s*flex-start;/);
+assert.match(controls, /#animated-qr-send-dialog #qr-send-canvas-container\.layout-1[\s\S]*?height:\s*auto\s*!important;[\s\S]*?aspect-ratio:\s*1 \/ 1;/);
+assert.match(mainCss, /#animated-qr-main-dialog \.erikraft-qr-card-send,[\s\S]*?box-sizing:\s*border-box;/);
+assert.match(deferredCss, /\.hr-note > div \{[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;/);
 assert.doesNotMatch(index, /optical-matrix/);
 
 console.log('Animated QR responsive/theme static checks passed.');
