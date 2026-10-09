@@ -8,6 +8,7 @@ files:
   - desktop/**
   - server/**
   - public/**
+  - packaging/linux/icons/android-chrome-512x512.png
   - package.json
 extraMetadata:
   main: desktop/main.cjs
