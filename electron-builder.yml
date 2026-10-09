@@ -8,6 +8,7 @@ files:
   - desktop/**
   - server/**
   - public/**
+  - packaging/linux/icons/android-chrome-512x512.png
   - package.json
 extraMetadata:
   main: desktop/main.cjs
@@ -22,9 +23,8 @@ linux:
       arch:
         - x64
   category: Network;Utility;
-  # Keep the repository's Linux icon assets available for manual customization.
-  # When no linux.icon is set, electron-builder generates the Linux icon set from
-  # the official Windows ICO configured below, keeping one official source icon.
+  # Use the branded Drop icon for Linux packages and generate the required sizes from it.
+  icon: packaging/linux/icons/android-chrome-512x512.png
   desktop:
     entry:
       Name: ErikrafT Drop™
