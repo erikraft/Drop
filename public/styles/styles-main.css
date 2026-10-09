@@ -2409,6 +2409,12 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     background-color: var(--dialog-bg-color);
 }
 
+/* The generic dialog stylesheet forces titles to white; override it for this
+   theme-colored QR header so light, dark, and automatic modes stay readable. */
+.erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) .dialog-title {
+    color: rgb(var(--text-color));
+}
+
 @media (max-width: 390px) {
     #animated-qr-main-dialog .erikraft-qr-card-send,
     #animated-qr-main-dialog .erikraft-qr-card-receive {
