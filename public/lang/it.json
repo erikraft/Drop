@@ -11,30 +11,30 @@
         "pair-device_title": "Abbina i tuoi dispositivi permanentemente",
         "edit-paired-devices_title": "Modifica i dispositivi abbinati",
         "join-public-room_title": "Unisciti ad una stanza pubblica temporaneamente",
-        "lan-mode_title": "",
+        "lan-mode_title": "Modalità LAN",
         "cancel-share-mode": "Annulla",
         "edit-share-mode": "Modifica",
         "expand_title": "Espandi la riga dei pulsanti nell'intestazione",
         "webchat": "Chat",
         "ai-variation": "Generate AI variation",
         "ai-generate": "Create new AI image",
-        "scan-qr_title": "Scan QR Code",
+        "scan-qr_title": "Scansiona codice QR",
         "scan-qr": {
-            "title": "Scan QR Code"
+            "title": "Scansiona codice QR"
         },
-        "animated-qr_title": "Transfer via Animated QR",
+        "animated-qr_title": "Trasferisci tramite QR animato",
         "animated-qr": {
-            "title": "Transfer via Animated QR"
+            "title": "Trasferisci tramite QR animato"
         },
-        "scan-qr_aria-label": "Scan QR Code",
-        "animated-qr_aria-label": "Transfer via Animated QR",
+        "scan-qr_aria-label": "Scansiona codice QR",
+        "animated-qr_aria-label": "Trasferisci tramite QR animato",
         "webchat_title": "WebChat",
         "webchat_aria-label": "WebChat",
-        "android_title": "Download APK",
-        "android_aria-label": "Download APK",
+        "android_title": "Scarica APK",
+        "android_aria-label": "Scarica APK",
         "bluetooth_title": "Bluetooth",
         "browseros_title": "BrowserOS",
-        "cloud_title": "Cloud Upload",
+        "cloud_title": "Carica sul cloud",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
         "limewire_title": "LimeWire"
@@ -242,7 +242,7 @@
     },
     "about": {
         "close-about_aria-label": "Chiudi Informazioni su ErikrafT Drop™",
-        "claim": undefined,
+        "claim": "Il modo più semplice per trasferire file sul Web, Windows, Linux, Android, estensioni e altro",
         "github_title": "ErikrafT Drop™ su GitHub",
         "buy-me-a-coffee_title": "Offrimi un caffè!",
         "tweet_title": "Twitta riguardo ErikrafT Drop™",
