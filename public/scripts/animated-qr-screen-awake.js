@@ -181,10 +181,6 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
                 catch (error) { lastError = error; }
             }
         }
-        if (android()?.setKeepScreenOn) {
-            try { android().setKeepScreenOn(true); acquired = true; }
-            catch (error) { lastError = error; }
-        }
         return acquired;
     }
 
@@ -192,9 +188,6 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
         requested = false;
         if (wakeLock) { try { await wakeLock.release(); } catch (error) { console.warn('[Animated QR] Falha ao liberar Wake Lock:', error); } wakeLock = null; }
         if (noSleep && typeof noSleep.disable === 'function') { try { noSleep.disable(); } catch (error) { console.warn('[Animated QR] Falha ao desativar NoSleep:', error); } }
-        if (android()?.setKeepScreenOn) {
-            try { android().setKeepScreenOn(false); } catch (error) { console.warn('[Animated QR] Android screen-awake release failed:', error); }
-        }
         updateButton();
     }
 
@@ -343,13 +336,11 @@ x-dialog:has(#chat-send) .chat-footer__content{min-width:0;max-width:100%;box-si
     document.addEventListener('visibilitychange', () => {
         if (!requested || document.visibilityState !== 'visible') return;
         if (!wakeLock && 'wakeLock' in navigator) acquire().then(updateButton).catch(() => updateButton());
-        else if (android()?.setKeepScreenOn) { try { android().setKeepScreenOn(true); } catch (_) {} }
         else updateButton();
     });
 
     window.addEventListener('pagehide', () => {
         if (noSleep && typeof noSleep.disable === 'function') { try { noSleep.disable(); } catch (_) {} }
-        if (android()?.setKeepScreenOn) { try { android().setKeepScreenOn(false); } catch (_) {} }
         wakeLock = null;
         requested = false;
     });
