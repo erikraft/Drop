@@ -42,6 +42,8 @@ assert.match(index, /id="qr-send-active-view"[^>]*hidden/);
 assert.match(index, /<div class="hr-note">\s*<hr>\s*<div>\s*<span data-i18n-key="dialogs\.hr-or" data-i18n-attrs="text">OU<\/span>/);
 assert.match(controls, /#animated-qr-send-dialog #qr-send-active-view\.row\.center,[\s\S]*?align-items:\s*stretch;[\s\S]*?justify-content:\s*flex-start;/);
 assert.match(controls, /#animated-qr-send-dialog #qr-send-canvas-container\.layout-1[\s\S]*?height:\s*auto\s*!important;[\s\S]*?aspect-ratio:\s*1 \/ 1;/);
+assert.match(controls, /#animated-qr-send-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \{\s*background-color:\s*var\(--primary-color\) !important;\s*color:\s*#fff !important;/);
+assert.match(controls, /#animated-qr-send-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \.dialog-title \{\s*color:\s*#fff !important;/);
 assert.match(controls, /background:\s*var\(--dialog-bg-color,\s*#fff\)/);
 assert.doesNotMatch(controls, /background:var\(--paper-color,var\(--background-color,#fff\)\)/);
 assert.match(mainCss, /#animated-qr-main-dialog \.erikraft-qr-card-send,[\s\S]*?box-sizing:\s*border-box;/);
