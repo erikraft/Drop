@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Bilatu hizkuntzak",
+        "language-search_aria-label": "Bilatu hizkuntzak",
+        "language-search-empty": "Ez da hizkuntzarik aurkitu"
     },
     "about": {
         "close-about_aria-label": "Itxi ErikrafT Drop™ buruz",
