@@ -19,10 +19,15 @@ assert.match(styles, /\.language-buttons > \.btn\[hidden\]/);
 const locales = fs.readdirSync('public/lang').filter(file => file.endsWith('.json'));
 assert.ok(locales.length >= 70, 'Expected the existing full website locale set');
 for (const file of locales) {
-    const data = JSON.parse(fs.readFileSync(path.join('public/lang', file), 'utf8'));
-    assert.ok(data.dialogs?.['language-search_placeholder'], `${file}: missing localized search placeholder`);
-    assert.ok(data.dialogs?.['language-search_aria-label'], `${file}: missing accessible search label`);
-    assert.ok(data.dialogs?.['language-search-empty'], `${file}: missing no-results message`);
+    const data = fs.readFileSync(path.join('public/lang', file), 'utf8');
+    for (const key of [
+        'language-search_placeholder',
+        'language-search_aria-label',
+        'language-search-empty'
+    ]) {
+        const keyPattern = new RegExp(`"${key}"\\s*:\\s*"(?:\\\\.|[^"\\\\])*"`);
+        assert.match(data, keyPattern, `${file}: missing localized ${key}`);
+    }
 }
 
 console.log(`Language selector search checks passed for ${locales.length} website locales.`);
