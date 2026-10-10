@@ -14,6 +14,7 @@ assert.match(ui, /filterLanguages\(\)/);
 assert.match(ui, /\.normalize\("NFD"\)/);
 assert.match(ui, /visibleCount > 0/);
 assert.match(styles, /#language-search-input:focus-visible/);
+assert.match(styles, /#language-search-input\s*\{[^}]*top:\s*-2px/s, "Search input should be nudged up to correct its visual vertical alignment");
 assert.match(styles, /\.language-buttons > \.btn\[hidden\]/);
 
 const locales = fs.readdirSync('public/lang').filter(file => file.endsWith('.json'));
