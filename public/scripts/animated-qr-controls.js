@@ -118,16 +118,17 @@
     padding-bottom: 32px;
 }
 
-/* The paper/body follows the selected theme; the title bar must stay blue. */
+/* Keep the paper/body theme-aware while forcing the Send Text/File
+   dialog header to match the blue "Definir idioma" title bar. */
 #animated-qr-send-dialog .erikraft-qr-paper {
     background-color: var(--dialog-bg-color);
     color: rgb(var(--text-color));
 }
-#animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
-    background-color: var(--primary-color) !important;
+#animated-qr-send-dialog x-paper > .row:first-of-type {
+    background-color: var(--primary-color, #4285f4) !important;
     color: #fff !important;
 }
-#animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) .dialog-title {
+#animated-qr-send-dialog x-paper > .row:first-of-type .dialog-title {
     color: #fff !important;
 }
 
