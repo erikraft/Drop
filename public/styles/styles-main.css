@@ -2398,21 +2398,26 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     box-sizing: border-box;
 }
 
-/* Use the active theme variables for every centered row inside animated-QR papers. */
+/* Match the standard dialogs (for example, "Definir idioma"):
+   keep the accent-colored header and white title, while the paper/body follows
+   the active light, dark, or system-selected theme. */
+.erikraft-qr-dialog .erikraft-qr-paper {
+    color: rgb(var(--text-color));
+    background-color: var(--dialog-bg-color);
+}
+
 .erikraft-qr-dialog .erikraft-qr-paper > .row.center {
     color: rgb(var(--text-color));
     background-color: transparent;
 }
 
 .erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
-    color: rgb(var(--text-color));
-    background-color: var(--dialog-bg-color);
+    color: white;
+    background-color: var(--accent-color, var(--primary-color));
 }
 
-/* The generic dialog stylesheet forces titles to white; override it for this
-   theme-colored QR header so light, dark, and automatic modes stay readable. */
 .erikraft-qr-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) .dialog-title {
-    color: rgb(var(--text-color));
+    color: white;
 }
 
 @media (max-width: 390px) {
