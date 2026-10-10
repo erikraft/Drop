@@ -11,30 +11,30 @@
         "pair-device_title": "Связать ваши устройства навсегда",
         "edit-paired-devices_title": "Редактировать связанные устройства",
         "join-public-room_title": "Войти на время в публичную комнату",
-        "lan-mode_title": "",
+        "lan-mode_title": "Режим LAN",
         "cancel-share-mode": "Выполнено",
         "edit-share-mode": "Редактировать",
         "expand_title": "Развернуть ряд кнопок заголовка",
         "webchat": "Чат",
         "ai-variation": "Создать вариант AI",
         "ai-generate": "Создать новую AI-изображение",
-        "scan-qr_title": "Scan QR Code",
+        "scan-qr_title": "Сканировать QR-код",
         "scan-qr": {
-            "title": "Scan QR Code"
+            "title": "Сканировать QR-код"
         },
-        "animated-qr_title": "Transfer via Animated QR",
+        "animated-qr_title": "Передать через анимированный QR-код",
         "animated-qr": {
-            "title": "Transfer via Animated QR"
+            "title": "Передать через анимированный QR-код"
         },
-        "scan-qr_aria-label": "Scan QR Code",
-        "animated-qr_aria-label": "Transfer via Animated QR",
+        "scan-qr_aria-label": "Сканировать QR-код",
+        "animated-qr_aria-label": "Передать через анимированный QR-код",
         "webchat_title": "WebChat",
         "webchat_aria-label": "WebChat",
-        "android_title": "Download APK",
-        "android_aria-label": "Download APK",
+        "android_title": "Скачать APK",
+        "android_aria-label": "Скачать APK",
         "bluetooth_title": "Bluetooth",
         "browseros_title": "BrowserOS",
-        "cloud_title": "Cloud Upload",
+        "cloud_title": "Загрузить в облако",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
         "limewire_title": "LimeWire"
