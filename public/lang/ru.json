@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Выбранный файл",
-        "animated-qr-change-file": "Изменить файл"
+        "animated-qr-change-file": "Изменить файл",
+        "language-search_placeholder": "Поиск языков",
+        "language-search_aria-label": "Поиск языков",
+        "language-search-empty": "Языки не найдены"
     },
     "about": {
         "close-about_aria-label": "Закрыть страницу \"О сервисе\"",

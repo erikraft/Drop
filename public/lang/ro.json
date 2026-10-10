@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Caută limbi",
+        "language-search_aria-label": "Caută limbi",
+        "language-search-empty": "Nu s-au găsit limbi"
     },
     "about": {
         "close-about_aria-label": "Închide Despre ErikrafT Drop™",
