@@ -11,30 +11,30 @@
         "pair-device_title": "Empareja tus dispositivos permanentemente",
         "edit-paired-devices_title": "Editar dispositivos emparejados",
         "join-public-room_title": "Unirse a una sala pública temporalmente",
-        "lan-mode_title": "",
+        "lan-mode_title": "Modo LAN",
         "cancel-share-mode": "Listo",
         "edit-share-mode": "Editar",
         "expand_title": "Ampliar la fila de botones de la cabecera",
         "webchat": "Chat",
         "ai-variation": "Generar variación AI",
         "ai-generate": "Crear nueva imagen AI",
-        "scan-qr_title": "Scan QR Code",
+        "scan-qr_title": "Escanear código QR",
         "scan-qr": {
-            "title": "Scan QR Code"
+            "title": "Escanear código QR"
         },
-        "animated-qr_title": "Transfer via Animated QR",
+        "animated-qr_title": "Transferir mediante QR animado",
         "animated-qr": {
-            "title": "Transfer via Animated QR"
+            "title": "Transferir mediante QR animado"
         },
-        "scan-qr_aria-label": "Scan QR Code",
-        "animated-qr_aria-label": "Transfer via Animated QR",
+        "scan-qr_aria-label": "Escanear código QR",
+        "animated-qr_aria-label": "Transferir mediante QR animado",
         "webchat_title": "WebChat",
         "webchat_aria-label": "WebChat",
-        "android_title": "Download APK",
-        "android_aria-label": "Download APK",
+        "android_title": "Descargar APK",
+        "android_aria-label": "Descargar APK",
         "bluetooth_title": "Bluetooth",
         "browseros_title": "BrowserOS",
-        "cloud_title": "Cloud Upload",
+        "cloud_title": "Subir a la nube",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
         "limewire_title": "LimeWire"
