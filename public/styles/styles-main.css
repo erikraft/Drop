@@ -2420,6 +2420,18 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
     color: white;
 }
 
+/* Keep both the chooser and its Send Text/Send File dialog blue even when
+   later theme-specific rules target generic .row.center elements. */
+#animated-qr-main-dialog x-paper > .row:first-of-type,
+#animated-qr-send-dialog x-paper > .row:first-of-type {
+    background-color: var(--primary-color, #4285f4) !important;
+    color: #fff !important;
+}
+#animated-qr-main-dialog x-paper > .row:first-of-type .dialog-title,
+#animated-qr-send-dialog x-paper > .row:first-of-type .dialog-title {
+    color: #fff !important;
+}
+
 @media (max-width: 390px) {
     #animated-qr-main-dialog .erikraft-qr-card-send,
     #animated-qr-main-dialog .erikraft-qr-card-receive {
