@@ -4,8 +4,9 @@ class Localization {
 
         Localization.defaultLocale = "en";
         Localization.supportedLocales = [
-            "ar", "be", "bg", "ca", "cs", "da", "de", "en", "es", "et", "eu", "fa", "fr", "he", "hu", "id", "it", "ja",
-            "kn", "ko", "nb", "nl", "nn", "pl", "pt-BR", "ro", "ru", "sk", "ta", "tr", "uk", "zh-CN", "zh-HK", "zh-TW"
+            "af-ZA", "ar", "be", "bg", "ca", "cs", "da", "de", "el-GR", "en", "es", "et", "eu", "fa", "fi-FI",
+            "fr", "he", "hu", "id", "it", "ja", "kn", "ko", "nb", "nl", "nn", "pl", "pt-BR", "pt-PT", "ro", "ru",
+            "sk", "sr-SP", "sv-SE", "ta", "tr", "uk", "vi-VN", "zh-CN", "zh-HK", "zh-TW"
         ];
         Localization.supportedLocalesRtl = ["ar", "he"];
 
