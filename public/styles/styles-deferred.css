@@ -354,15 +354,19 @@ x-paper .dialog-title {
     color: white;
 }
 
-/* Keep the animated QR dialog title bar blue, matching the standard
-   "Definir idioma" dialog header regardless of the body theme. */
-.erikraft-qr-dialog x-paper > .row:first-of-type {
-    background-color: var(--primary-color);
+/* Match the standard "Definir idioma" header explicitly in both QR
+   dialogs. These IDs win over generic row/theme rules in the send/receive
+   chooser and the follow-up Send Text/Send File dialog. */
+#animated-qr-main-dialog x-paper > .row:first-of-type,
+#animated-qr-send-dialog x-paper > .row:first-of-type {
+    background-color: var(--primary-color, #4285f4) !important;
+    color: #fff !important;
     margin-bottom: 5px;
 }
 
-.erikraft-qr-dialog x-paper .dialog-title {
-    color: white;
+#animated-qr-main-dialog x-paper > .row:first-of-type .dialog-title,
+#animated-qr-send-dialog x-paper > .row:first-of-type .dialog-title {
+    color: #fff !important;
 }
 
 #pair-device-dialog,
