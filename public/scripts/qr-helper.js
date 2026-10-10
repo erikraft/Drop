@@ -33,7 +33,17 @@ class ErikrafTDropQR {
         const isFileTransfer = isAnimatedTransfer && !!fileInfo && !!fileInfo.textContent.trim();
         const effectiveMargin = Number.isFinite(options.margin) ? options.margin : (isFileTransfer ? 4 : 8);
         const logoPath = options.logoPath || 'images/icon-drop-blue.svg';
-        if (!isAnimatedTransfer && !this._logoState.attempted) this._ensureLogoLoaded(logoPath);
+
+        // Wait for the shared brand asset before the first non-animated QR render.
+        // Starting fetch and immediately checking availability caused the first QR
+        // (often the public-room QR) to be created without its centered logo.
+        if (!isAnimatedTransfer && !options._logoReady && !this._logoState.available) {
+            return this._ensureLogoLoaded(logoPath).then(() => {
+                if (!container.isConnected) return null;
+                return this.render(container, data, { ...options, _logoReady: true });
+            });
+        }
+
         if (container._qrInstance && typeof container._qrInstance.update === 'function') {
             try {
                 const updateOptions = { data };
