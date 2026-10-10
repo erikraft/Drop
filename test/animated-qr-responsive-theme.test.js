@@ -31,6 +31,7 @@ assert.match(awake, /aria-pressed/);
 assert.match(awake, /Não desligar Tela \(Clique aqui\)/);
 assert.match(awake, /Screen always on: Enabled/);
 assert.match(awake, /isKeepScreenOnEnabled/);
+assert.doesNotMatch(awake, /android\(\)\.setKeepScreenOn\(/);
 assert.match(awake, /const hidden = !!android\(\) \|\| !isSupported\(\)/);
 assert.match(awake, /button.textContent !== label/);
 assert.match(awake, /button.hasAttribute\('title'\)/);
