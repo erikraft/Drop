@@ -34,7 +34,10 @@
         "compress": "Kemmed",
         "edit-ai": "Edit with AI",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Nadi tutlayin",
+        "language-search_aria-label": "Nadi tutlayin",
+        "language-search-empty": "Ulac tutlayt yettwafen"
     },
     "about": {
         "github_title": "ErikrafT Drop™ deg GitHub",

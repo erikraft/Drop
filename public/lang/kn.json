@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "ಭಾಷೆಗಳನ್ನು ಹುಡುಕಿ",
+        "language-search_aria-label": "ಭಾಷೆಗಳನ್ನು ಹುಡುಕಿ",
+        "language-search-empty": "ಯಾವುದೇ ಭಾಷೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ"
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™ ಕುರಿತು ಪುಟವನ್ನು ಮುಚ್ಚಿ",
