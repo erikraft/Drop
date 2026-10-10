@@ -790,13 +790,18 @@ x-paper > .btn-row {
 }
 
 .language-search-wrap {
-    padding: 8px 16px 0;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
 }
 
 #language-search-input {
     display: block;
+    flex: 1 1 auto;
     width: 100%;
+    min-width: 0;
     min-height: 42px;
+    margin: 0;
     box-sizing: border-box;
     padding: 9px 12px;
     border: 1px solid var(--lang-hr-color);
@@ -804,6 +809,7 @@ x-paper > .btn-row {
     color: rgb(var(--text-color));
     background: var(--bg-color-secondary);
     font: inherit;
+    vertical-align: middle;
 }
 
 #language-search-input:focus-visible {
