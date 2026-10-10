@@ -118,11 +118,17 @@
     padding-bottom: 32px;
 }
 
-/* Keep modal surfaces and centered title rows in the selected light/dark theme. */
-#animated-qr-send-dialog .erikraft-qr-paper,
-#animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
+/* The paper/body follows the selected theme; the title bar must stay blue. */
+#animated-qr-send-dialog .erikraft-qr-paper {
     background-color: var(--dialog-bg-color);
     color: rgb(var(--text-color));
+}
+#animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+#animated-qr-send-dialog .erikraft-qr-paper > .row.center:has(.dialog-title) .dialog-title {
+    color: #fff !important;
 }
 
 /* Size the single QR code by width and aspect ratio; never crop the generated SVG viewport. */
