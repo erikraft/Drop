@@ -851,7 +851,7 @@ class LanguageSelectDialog extends Dialog {
     filterLanguages() {
         const normalize = value => String(value || "")
             .normalize("NFD")
-            .replace(/[\\u0300-\\u036f]/g, "")
+            .replace(/[\u0300-\u036f]/g, "")
             .toLocaleLowerCase();
         const query = normalize(this.$languageSearch?.value?.trim() || "");
         let visibleCount = 0;
