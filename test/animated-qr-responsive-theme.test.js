@@ -3,6 +3,7 @@ import fs from 'node:fs';
 
 const controls = fs.readFileSync('public/scripts/animated-qr-controls.js', 'utf8');
 const awake = fs.readFileSync('public/scripts/animated-qr-screen-awake.js', 'utf8');
+const qrHelper = fs.readFileSync('public/scripts/qr-helper.js', 'utf8');
 const index = fs.readFileSync('public/index.html', 'utf8');
 const mainCss = fs.readFileSync('public/styles/styles-main.css', 'utf8');
 const deferredCss = fs.readFileSync('public/styles/styles-deferred.css', 'utf8');
@@ -47,9 +48,12 @@ assert.match(mainCss, /#animated-qr-main-dialog \.erikraft-qr-card-send,[\s\S]*?
 assert.match(mainCss, /padding:\s*16px clamp\(16px, 4vw, 24px\)/);
 assert.match(mainCss, /\.erikraft-qr-card-send > \.row\.gap-2\.fw\.center\.wrap > \.btn[\s\S]*?flex:\s*1 1 130px/);
 assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center \{[\s\S]*?color:\s*rgb\(var\(--text-color\)\)/);
-assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\)[\s\S]*?background-color:\s*var\(--dialog-bg-color\)/);
-assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \.dialog-title \{[\s\S]*?color:\s*rgb\(var\(--text-color\)\)/);
-assert.doesNotMatch(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \.dialog-title \{[^}]*color:\s*white/i);
+assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper \{[\s\S]*?background-color:\s*var\(--dialog-bg-color\)/);
+assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\)[\s\S]*?background-color:\s*var\(--accent-color,\s*var\(--primary-color\)\)/);
+assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \.dialog-title \{[\s\S]*?color:\s*white/i);
+assert.match(qrHelper, /Wait for the shared brand asset before the first non-animated QR render/);
+assert.match(qrHelper, /!isAnimatedTransfer && !options\._logoReady && !this\._logoState\.available/);
+assert.match(qrHelper, /return this\._ensureLogoLoaded\(logoPath\)\.then\(/);
 assert.match(deferredCss, /\.hr-note > div \{[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;/);
 assert.doesNotMatch(index, /optical-matrix/);
 
