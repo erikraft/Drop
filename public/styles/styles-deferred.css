@@ -804,6 +804,8 @@ x-paper > .btn-row {
     margin: 0;
     box-sizing: border-box;
     padding: 9px 12px;
+    position: relative;
+    top: -2px;
     border: 1px solid var(--lang-hr-color);
     border-radius: 10px;
     color: rgb(var(--text-color));
