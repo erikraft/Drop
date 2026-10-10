@@ -128,7 +128,10 @@
         "compress": "Compress",
         "edit-ai": "Edit with AI",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Pesquisar idiomas",
+        "language-search_aria-label": "Pesquisar idiomas",
+        "language-search-empty": "Nenhum idioma encontrado"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

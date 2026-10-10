@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Archivo seleccionado",
-        "animated-qr-change-file": "Cambiar Archivo"
+        "animated-qr-change-file": "Cambiar Archivo",
+        "language-search_placeholder": "Buscar idiomas",
+        "language-search_aria-label": "Buscar idiomas",
+        "language-search-empty": "No se encontraron idiomas"
     },
     "about": {
         "close-about_aria-label": "Cerrar Sobre ErikrafT Drop™",

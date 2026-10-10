@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Hledat jazyky",
+        "language-search_aria-label": "Hledat jazyky",
+        "language-search-empty": "Nebyly nalezeny žádné jazyky"
     },
     "about": {
         "close-about_aria-label": "Zavřít O ErikrafT Drop™",

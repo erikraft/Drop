@@ -247,7 +247,10 @@
         "spam-content-detected": "Possível spam/golpe detectado",
         "offensive-content-detected": "Conteúdo ofensivo detectado",
         "publish-instagram": "Publicar no Instagram",
-        "publish-youtube": "Publicar no YouTube"
+        "publish-youtube": "Publicar no YouTube",
+        "language-search_placeholder": "Pesquisar idiomas",
+        "language-search_aria-label": "Pesquisar idiomas",
+        "language-search-empty": "Nenhum idioma encontrado"
     },
     "about": {
         "close-about_aria-label": "Fechar informações sobre o ErikrafT Drop™",

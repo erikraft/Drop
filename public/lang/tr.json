@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Dilleri ara",
+        "language-search_aria-label": "Dilleri ara",
+        "language-search-empty": "Dil bulunamadı"
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™ Hakkında'yı Kapat",

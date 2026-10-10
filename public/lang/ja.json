@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "選択されたファイル",
-        "animated-qr-change-file": "ファイルを変更"
+        "animated-qr-change-file": "ファイルを変更",
+        "language-search_placeholder": "言語を検索",
+        "language-search_aria-label": "言語を検索",
+        "language-search-empty": "言語が見つかりません"
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™についてを閉じる",

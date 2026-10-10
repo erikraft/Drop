@@ -241,7 +241,10 @@
         "spam-content-detected": "Possible Spam/Scam Detected",
         "offensive-content-detected": "Offensive Content Detected",
         "publish-instagram": "Publish to Instagram",
-        "publish-youtube": "Publish to YouTube"
+        "publish-youtube": "Publish to YouTube",
+        "language-search_placeholder": "Dilleri ara",
+        "language-search_aria-label": "Dilleri ara",
+        "language-search-empty": "Dil bulunamadı"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

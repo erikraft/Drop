@@ -241,7 +241,10 @@
         "spam-content-detected": "Possible Spam/Scam Detected",
         "offensive-content-detected": "Offensive Content Detected",
         "publish-instagram": "Publish to Instagram",
-        "publish-youtube": "Publish to YouTube"
+        "publish-youtube": "Publish to YouTube",
+        "language-search_placeholder": "மொழிகளைத் தேடு",
+        "language-search_aria-label": "மொழிகளைத் தேடு",
+        "language-search-empty": "மொழிகள் எதுவும் கிடைக்கவில்லை"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

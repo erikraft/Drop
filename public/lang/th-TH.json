@@ -241,7 +241,10 @@
         "spam-content-detected": "Possible Spam/Scam Detected",
         "offensive-content-detected": "Offensive Content Detected",
         "publish-instagram": "Publish to Instagram",
-        "publish-youtube": "Publish to YouTube"
+        "publish-youtube": "Publish to YouTube",
+        "language-search_placeholder": "ค้นหาภาษา",
+        "language-search_aria-label": "ค้นหาภาษา",
+        "language-search-empty": "ไม่พบภาษา"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",

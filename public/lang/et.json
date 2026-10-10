@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Otsi keeli",
+        "language-search_aria-label": "Otsi keeli",
+        "language-search-empty": "Keeli ei leitud"
     },
     "about": {
         "close-about_aria-label": "Sulge ErikrafT Drop™i teave",

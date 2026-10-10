@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Cerca idiomes",
+        "language-search_aria-label": "Cerca idiomes",
+        "language-search-empty": "No s'han trobat idiomes"
     },
     "about": {
         "close-about_aria-label": "Tanca Sobre ErikrafT Drop™",

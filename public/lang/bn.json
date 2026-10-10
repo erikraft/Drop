@@ -53,7 +53,10 @@
         "compress": "সংকুচিত করুন",
         "edit-ai": "AI দিয়ে সম্পাদনা করুন",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "ভাষা খুঁজুন",
+        "language-search_aria-label": "ভাষা খুঁজুন",
+        "language-search-empty": "কোনো ভাষা পাওয়া যায়নি"
     },
     "site": {
         "biodrop": "Site"

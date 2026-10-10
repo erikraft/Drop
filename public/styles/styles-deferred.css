@@ -789,6 +789,55 @@ x-paper > .btn-row {
     font-size: 12px;
 }
 
+.language-search-wrap {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+}
+
+#language-search-input {
+    display: block;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 9px 12px;
+    position: relative;
+    top: -2px;
+    border: 1px solid var(--lang-hr-color);
+    border-radius: 10px;
+    color: rgb(var(--text-color));
+    background: var(--bg-color-secondary);
+    font: inherit;
+    vertical-align: middle;
+}
+
+#language-search-input:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.language-buttons {
+    max-height: 55vh;
+    max-height: min(55vh, 480px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.language-buttons > .btn[hidden],
+#language-search-empty[hidden] {
+    display: none !important;
+}
+
+.language-search-empty {
+    margin: 0;
+    padding: 14px 18px;
+    color: rgb(var(--text-color));
+    text-align: center;
+}
+
 .language-buttons > .btn:last-of-type {
     border-bottom: solid var(--lang-hr-color) 2px;
 }
