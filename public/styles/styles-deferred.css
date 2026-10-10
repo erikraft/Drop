@@ -354,6 +354,17 @@ x-paper .dialog-title {
     color: white;
 }
 
+/* Keep the animated QR dialog title bar blue, matching the standard
+   "Definir idioma" dialog header regardless of the body theme. */
+.erikraft-qr-dialog x-paper > .row:first-of-type {
+    background-color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.erikraft-qr-dialog x-paper .dialog-title {
+    color: white;
+}
+
 #pair-device-dialog,
 #edit-paired-devices-dialog {
     --accent-color: var(--paired-device-color);
