@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Пошук моў",
+        "language-search_aria-label": "Пошук моў",
+        "language-search-empty": "Моў не знойдзена"
     },
     "about": {
         "close-about_aria-label": "Закрыць Аб ErikrafT Drop™",

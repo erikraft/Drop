@@ -128,7 +128,10 @@
         "compress": "Compress",
         "edit-ai": "Edit with AI",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Soek tale",
+        "language-search_aria-label": "Soek tale",
+        "language-search-empty": "Geen tale gevind nie"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",
