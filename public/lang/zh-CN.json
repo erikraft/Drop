@@ -18,23 +18,23 @@
         "webchat": "聊天",
         "ai-variation": "生成 AI 变体",
         "ai-generate": "创建新的 AI 图像",
-        "scan-qr_title": "Scan QR Code",
+        "scan-qr_title": "扫描二维码",
         "scan-qr": {
-            "title": "Scan QR Code"
+            "title": "扫描二维码"
         },
-        "animated-qr_title": "Transfer via Animated QR",
+        "animated-qr_title": "通过动态二维码传输",
         "animated-qr": {
-            "title": "Transfer via Animated QR"
+            "title": "通过动态二维码传输"
         },
-        "scan-qr_aria-label": "Scan QR Code",
-        "animated-qr_aria-label": "Transfer via Animated QR",
+        "scan-qr_aria-label": "扫描二维码",
+        "animated-qr_aria-label": "通过动态二维码传输",
         "webchat_title": "WebChat",
         "webchat_aria-label": "WebChat",
-        "android_title": "Download APK",
-        "android_aria-label": "Download APK",
+        "android_title": "下载 APK",
+        "android_aria-label": "下载 APK",
         "bluetooth_title": "Bluetooth",
         "browseros_title": "BrowserOS",
-        "cloud_title": "Cloud Upload",
+        "cloud_title": "上传到云端",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
         "limewire_title": "LimeWire"

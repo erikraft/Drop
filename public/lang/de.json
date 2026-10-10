@@ -11,30 +11,30 @@
         "pair-device_title": "Kopple deine Geräte dauerhaft",
         "edit-paired-devices_title": "Gekoppelte Geräte bearbeiten",
         "join-public-room_title": "Öffentlichen Raum temporär betreten",
-        "lan-mode_title": "",
+        "lan-mode_title": "LAN-Modus",
         "cancel-share-mode": "Fertig",
         "edit-share-mode": "Bearbeiten",
         "expand_title": "Schaltflächenzeile ausklappen",
         "webchat": "Chat",
         "ai-variation": "Generiere AI-Variante",
         "ai-generate": "Erstelle neue AI-Bild",
-        "scan-qr_title": "Scan QR Code",
+        "scan-qr_title": "QR-Code scannen",
         "scan-qr": {
-            "title": "Scan QR Code"
+            "title": "QR-Code scannen"
         },
-        "animated-qr_title": "Transfer via Animated QR",
+        "animated-qr_title": "Über animierten QR-Code übertragen",
         "animated-qr": {
-            "title": "Transfer via Animated QR"
+            "title": "Über animierten QR-Code übertragen"
         },
-        "scan-qr_aria-label": "Scan QR Code",
-        "animated-qr_aria-label": "Transfer via Animated QR",
+        "scan-qr_aria-label": "QR-Code scannen",
+        "animated-qr_aria-label": "Über animierten QR-Code übertragen",
         "webchat_title": "WebChat",
         "webchat_aria-label": "WebChat",
-        "android_title": "Download APK",
-        "android_aria-label": "Download APK",
+        "android_title": "APK herunterladen",
+        "android_aria-label": "APK herunterladen",
         "bluetooth_title": "Bluetooth",
         "browseros_title": "BrowserOS",
-        "cloud_title": "Cloud Upload",
+        "cloud_title": "In die Cloud hochladen",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
         "limewire_title": "LimeWire"
@@ -242,7 +242,7 @@
     },
     "about": {
         "close-about_aria-label": "Schließe Über ErikrafT Drop™",
-        "claim": undefined,
+        "claim": "Der einfachste Weg, Dateien über das Web, Windows, Linux, Android, Erweiterungen und mehr zu übertragen",
         "github_title": "ErikrafT Drop™ auf GitHub",
         "buy-me-a-coffee_title": "Kauf mir einen Kaffee!",
         "tweet_title": "Über ErikrafT Drop™ twittern",
