@@ -40,7 +40,10 @@
         "compress": "Pakkaa",
         "edit-ai": "Edit with AI",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Hae kieliä",
+        "language-search_aria-label": "Hae kieliä",
+        "language-search-empty": "Kieliä ei löytynyt"
     },
     "site": {
         "biodrop": "Site"
