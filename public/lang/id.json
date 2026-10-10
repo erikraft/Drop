@@ -235,7 +235,10 @@
         "publish-instagram": "Publish to Instagram",
         "publish-youtube": "Publish to YouTube",
         "animated-qr-file-selected": "Selected file",
-        "animated-qr-change-file": "Change File"
+        "animated-qr-change-file": "Change File",
+        "language-search_placeholder": "Cari bahasa",
+        "language-search_aria-label": "Cari bahasa",
+        "language-search-empty": "Bahasa tidak ditemukan"
     },
     "about": {
         "close-about_aria-label": "Tutup Tentang ErikrafT Drop™",
