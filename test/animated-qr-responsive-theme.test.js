@@ -49,6 +49,7 @@ assert.match(mainCss, /padding:\s*16px clamp\(16px, 4vw, 24px\)/);
 assert.match(mainCss, /\.erikraft-qr-card-send > \.row\.gap-2\.fw\.center\.wrap > \.btn[\s\S]*?flex:\s*1 1 130px/);
 assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center \{[\s\S]*?color:\s*rgb\(var\(--text-color\)\)/);
 assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper \{[\s\S]*?background-color:\s*var\(--dialog-bg-color\)/);
+assert.match(deferredCss, /\.erikraft-qr-dialog x-paper > \.row:first-of-type \{[\s\S]*?background-color:\s*var\(--primary-color\)/);
 assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\)[\s\S]*?background-color:\s*var\(--accent-color,\s*var\(--primary-color\)\)/);
 assert.match(mainCss, /\.erikraft-qr-dialog \.erikraft-qr-paper > \.row\.center:has\(\.dialog-title\) \.dialog-title \{[\s\S]*?color:\s*white/i);
 assert.match(qrHelper, /Wait for the shared brand asset before the first non-animated QR render/);
