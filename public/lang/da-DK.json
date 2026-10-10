@@ -241,7 +241,10 @@
         "spam-content-detected": "Possible Spam/Scam Detected",
         "offensive-content-detected": "Offensive Content Detected",
         "publish-instagram": "Publish to Instagram",
-        "publish-youtube": "Publish to YouTube"
+        "publish-youtube": "Publish to YouTube",
+        "language-search_placeholder": "Søg efter sprog",
+        "language-search_aria-label": "Søg efter sprog",
+        "language-search-empty": "Ingen sprog fundet"
     },
     "about": {
         "close-about_aria-label": "Close About ErikrafT Drop™",
