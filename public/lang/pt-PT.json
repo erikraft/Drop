@@ -1,6 +1,6 @@
 {
     "header": {
-        "lan-mode_title": "",
+        "lan-mode_title": "Modo LAN",
         "about_title": "About ErikrafT Drop™",
         "language-selector_title": "Set Language",
         "about_aria-label": "Open About ErikrafT Drop™",
@@ -17,7 +17,20 @@
         "expand_title": "Expand header button row",
         "webchat": "WebChat",
         "ai-variation": "Generate AI variation",
-        "ai-generate": "Create new AI image"
+        "ai-generate": "Create new AI image",
+        "scan-qr_title": "Ler código QR",
+        "scan-qr": {
+            "title": "Ler código QR"
+        },
+        "scan-qr_aria-label": "Ler código QR",
+        "animated-qr_title": "Transferir através de QR animado",
+        "animated-qr": {
+            "title": "Transferir através de QR animado"
+        },
+        "animated-qr_aria-label": "Transferir através de QR animado",
+        "android_title": "Transferir APK",
+        "android_aria-label": "Transferir APK",
+        "cloud_title": "Carregar para a nuvem"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Release to select recipient",
