@@ -789,6 +789,46 @@ x-paper > .btn-row {
     font-size: 12px;
 }
 
+.language-search-wrap {
+    padding: 8px 16px 0;
+}
+
+#language-search-input {
+    display: block;
+    width: 100%;
+    min-height: 42px;
+    box-sizing: border-box;
+    padding: 9px 12px;
+    border: 1px solid var(--lang-hr-color);
+    border-radius: 10px;
+    color: rgb(var(--text-color));
+    background: var(--bg-color-secondary);
+    font: inherit;
+}
+
+#language-search-input:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.language-buttons {
+    max-height: min(55dvh, 480px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.language-buttons > .btn[hidden],
+#language-search-empty[hidden] {
+    display: none !important;
+}
+
+.language-search-empty {
+    margin: 0;
+    padding: 14px 18px;
+    color: rgb(var(--text-color));
+    text-align: center;
+}
+
 .language-buttons > .btn:last-of-type {
     border-bottom: solid var(--lang-hr-color) 2px;
 }

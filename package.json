@@ -1,45 +1,45 @@
 {
-  "name": "erikraft-drop",
-  "version": "10.1.9",
-  "type": "module",
-  "description": "File sharing by ErikrafT",
-  "main": "server/index.js",
-  "scripts": {
-    "start": "node server/index.js",
-    "start:prod": "node server/index.js --rate-limit --auto-restart",
-    "build": "echo 'Build step complete'",
-    "package:linux": "npm run validate:linux-icon && npx --yes electron-builder@27.0.0-alpha.9 --linux deb --x64 --publish never",
-    "package:windows": "npm run prepare:winsparkle && npm run validate:linux-icon && npx --yes electron-builder@27.0.0-alpha.9 --win nsis --x64 --publish never",
-    "package:flatpak": "npm run validate:linux-icon && flatpak-builder --force-clean --repo=dist/flatpak-repo dist/flatpak flatpak/io.github.erikraft.Drop.yml",
-    "validate:linux-icon": "node scripts/validate-linux-icon.js",
-    "test": "node test/android-webview-locale-sync.test.js && node test/android-app-shortcuts.test.js && node test/isearch-cli.test.js && node test/erikraft-qr.test.js && node test/animated-qr-responsive-theme.test.js && node test/interoperability.test.js && node test/service-worker-cache.test.js && node test/received-media-metadata.test.js && node test/desktop-startup-regressions.test.js && node test/page-agent-ai.test.js && node test/page-agent-browser-ide.test.js && node test/webchat-page-agent-layout.test.js && node test/metadata-media-notifications.test.js && npm run test:desktop-version && npm run test:desktop-update",
-    "test:desktop-version": "node -e \"const p=require('./package.json'); if(p.version!=='10.1.9') throw new Error('Expected desktop version 10.1.9, got '+p.version); console.log('Desktop version:',p.version)\"",
-    "test:desktop-update": "node --test test/desktop-update.test.js",
-    "prepare:winsparkle": "node scripts/prepare-winsparkle.cjs"
-  },
-  "author": {
-    "name": "ErikrafT",
-    "email": "contact+app@erikraft.com",
-    "url": "https://github.com/erikraft"
-  },
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^2.3.0",
-    "dotenv": "^16.6.1",
-    "express": "^5.2.1",
-    "express-rate-limit": "^7.5.1",
-    "qr-code-styling": "^1.9.2",
-    "ua-parser-js": "^2.0.5",
-    "unique-names-generator": "^4.7.1",
-    "ws": "^8.21.1",
-    "koffi": "2.16.3"
-  },
-  "devDependencies": {
-    "electron": "^41.10.5"
-  },
-  "engines": {
-    "node": ">=22.12.0"
-  },
-  "private": true,
-  "homepage": "https://drop.erikraft.com/"
+    "name": "erikraft-drop",
+    "version": "10.1.9",
+    "type": "module",
+    "description": "File sharing by ErikrafT",
+    "main": "server/index.js",
+    "scripts": {
+        "start": "node server/index.js",
+        "start:prod": "node server/index.js --rate-limit --auto-restart",
+        "build": "echo 'Build step complete'",
+        "package:linux": "npm run validate:linux-icon && npx --yes electron-builder@27.0.0-alpha.9 --linux deb --x64 --publish never",
+        "package:windows": "npm run prepare:winsparkle && npm run validate:linux-icon && npx --yes electron-builder@27.0.0-alpha.9 --win nsis --x64 --publish never",
+        "package:flatpak": "npm run validate:linux-icon && flatpak-builder --force-clean --repo=dist/flatpak-repo dist/flatpak flatpak/io.github.erikraft.Drop.yml",
+        "validate:linux-icon": "node scripts/validate-linux-icon.js",
+        "test": "node test/language-selector-search.test.js && node test/android-webview-locale-sync.test.js && node test/android-app-shortcuts.test.js && node test/isearch-cli.test.js && node test/erikraft-qr.test.js && node test/animated-qr-responsive-theme.test.js && node test/interoperability.test.js && node test/service-worker-cache.test.js && node test/received-media-metadata.test.js && node test/desktop-startup-regressions.test.js && node test/page-agent-ai.test.js && node test/page-agent-browser-ide.test.js && node test/webchat-page-agent-layout.test.js && node test/metadata-media-notifications.test.js && npm run test:desktop-version && npm run test:desktop-update",
+        "test:desktop-version": "node -e \"const p=require('./package.json'); if(p.version!=='10.1.9') throw new Error('Expected desktop version 10.1.9, got '+p.version); console.log('Desktop version:',p.version)\"",
+        "test:desktop-update": "node --test test/desktop-update.test.js",
+        "prepare:winsparkle": "node scripts/prepare-winsparkle.cjs"
+    },
+    "author": {
+        "name": "ErikrafT",
+        "email": "contact+app@erikraft.com",
+        "url": "https://github.com/erikraft"
+    },
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^2.3.0",
+        "dotenv": "^16.6.1",
+        "express": "^5.2.1",
+        "express-rate-limit": "^7.5.1",
+        "qr-code-styling": "^1.9.2",
+        "ua-parser-js": "^2.0.5",
+        "unique-names-generator": "^4.7.1",
+        "ws": "^8.21.1",
+        "koffi": "2.16.3"
+    },
+    "devDependencies": {
+        "electron": "^41.10.5"
+    },
+    "engines": {
+        "node": ">=22.12.0"
+    },
+    "private": true,
+    "homepage": "https://drop.erikraft.com/"
 }

@@ -808,9 +808,12 @@ class LanguageSelectDialog extends Dialog {
         this.$languageSelectBtn.addEventListener('click', _ => this.show());
 
         this.$languageButtons = this.$el.querySelectorAll(".language-buttons .btn");
+        this.$languageSearch = $('language-search-input');
+        this.$languageSearchEmpty = $('language-search-empty');
         this.$languageButtons.forEach($btn => {
             $btn.addEventListener("click", e => this.selectLanguage(e));
-        })
+        });
+        this.$languageSearch?.addEventListener("input", () => this.filterLanguages());
         Events.on('keydown', e => this._onKeyDown(e));
     }
 
@@ -824,19 +827,45 @@ class LanguageSelectDialog extends Dialog {
 
     show() {
         let locale = Localization.getLocale();
+        if (this.$languageSearch) this.$languageSearch.value = "";
+        this.filterLanguages();
+
         this.currentLanguageBtn = Localization.isSystemLocale()
             ? this.$languageButtons[0]
             : this.$el.querySelector(`.btn[value="${locale}"]`);
 
-        this.currentLanguageBtn.classList.add("current");
+        this.currentLanguageBtn?.classList.add("current");
 
         super.show();
     }
 
     hide() {
-        this.currentLanguageBtn.classList.remove("current");
+        this.currentLanguageBtn?.classList.remove("current");
+        this.currentLanguageBtn = null;
+        if (this.$languageSearch) this.$languageSearch.value = "";
+        this.filterLanguages();
 
         super.hide();
+    }
+
+    filterLanguages() {
+        const normalize = value => String(value || "")
+            .normalize("NFD")
+            .replace(/[\\u0300-\\u036f]/g, "")
+            .toLocaleLowerCase();
+        const query = normalize(this.$languageSearch?.value?.trim() || "");
+        let visibleCount = 0;
+
+        this.$languageButtons.forEach($btn => {
+            const searchText = normalize(($btn.textContent || "") + " " + ($btn.value || ""));
+            const matches = !query || searchText.includes(query);
+            $btn.hidden = !matches;
+            if (matches) visibleCount++;
+        });
+
+        if (this.$languageSearchEmpty) {
+            this.$languageSearchEmpty.hidden = !query || visibleCount > 0;
+        }
     }
 
     selectLanguage(e) {
