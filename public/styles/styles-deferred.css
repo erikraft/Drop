@@ -354,6 +354,21 @@ x-paper .dialog-title {
     color: white;
 }
 
+/* Match the standard "Definir idioma" header explicitly in both QR
+   dialogs. These IDs win over generic row/theme rules in the send/receive
+   chooser and the follow-up Send Text/Send File dialog. */
+#animated-qr-main-dialog x-paper > .row:first-of-type,
+#animated-qr-send-dialog x-paper > .row:first-of-type {
+    background-color: var(--primary-color, #4285f4) !important;
+    color: #fff !important;
+    margin-bottom: 5px;
+}
+
+#animated-qr-main-dialog x-paper > .row:first-of-type .dialog-title,
+#animated-qr-send-dialog x-paper > .row:first-of-type .dialog-title {
+    color: #fff !important;
+}
+
 #pair-device-dialog,
 #edit-paired-devices-dialog {
     --accent-color: var(--paired-device-color);
@@ -1116,4 +1131,30 @@ x-dialog a {
     max-height: 40vh;
     margin: auto;
     display: block;
+}
+
+/* Center the localized OR/OU caption over the horizontal divider. */
+.hr-note {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+.hr-note > div {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    transform: none;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+.hr-note > div > span {
+    display: inline-block;
+    max-width: calc(100% - 16px);
+    text-align: center;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 3px;
 }

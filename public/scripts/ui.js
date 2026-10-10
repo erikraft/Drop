@@ -2369,7 +2369,8 @@ class TorDialog extends Dialog {
                     <strong data-i18n-key="dialogs.tor-unavailable-title" data-i18n-attrs="text"></strong>
                 </div>
                 <p class="font-caption text-secondary mt-1" style="opacity: 0.8; margin: 8px 0;" data-i18n-key="dialogs.tor-unavailable-desc" data-i18n-attrs="text"></p>
-                <button id="tor-refresh-btn" type="button" class="btn btn-small btn-rounded btn-outline-tor mt-1">
+                <button id="tor-refresh-btn" type="button" class="btn btn-small btn-rounded btn-outline-tor mt-1"
+                    aria-label="Refresh Tor address">
                     <span data-i18n-key="dialogs.tor-refresh" data-i18n-attrs="text"></span>
                 </button>
             </div>
@@ -2380,6 +2381,14 @@ class TorDialog extends Dialog {
 
         const $refreshBtn = $('tor-refresh-btn');
         if ($refreshBtn) {
+            // Keep an accessible name even before the translated child span is painted.
+            if (window.Localization && typeof Localization.getTranslation === 'function') {
+                try {
+                    $refreshBtn.setAttribute('aria-label', Localization.getTranslation('dialogs.tor-refresh'));
+                } catch (_) {
+                    // The static aria-label remains a valid fallback if localization is not ready.
+                }
+            }
             $refreshBtn.addEventListener('click', _ => this._fetchOnionAddress());
         }
 

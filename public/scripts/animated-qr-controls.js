@@ -27,7 +27,7 @@
         style.textContent = `
 #animated-qr-send-dialog .erikraft-qr-paper{display:flex;flex-direction:column;min-height:0;width:min(720px,calc(100vw - 20px));max-width:720px;max-height:calc(100dvh - 16px);overflow:hidden;box-sizing:border-box}
 #animated-qr-send-dialog #qr-send-active-view,#animated-qr-send-dialog #qr-send-compose-view{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden;width:100%;box-sizing:border-box;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
-#animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--paper-color,var(--background-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
+#animated-qr-send-dialog #qr-send-compose-buttons{position:relative;flex:0 0 auto;z-index:2;width:100%;box-sizing:border-box;margin:0;padding:10px max(12px,2vw) max(12px,env(safe-area-inset-bottom));background:var(--dialog-bg-color,var(--bg-color,#fff));border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);overflow:visible;justify-content:center;align-items:center}
 #animated-qr-send-dialog #qr-send-active-view>.column{min-width:0;width:100%}
 #animated-qr-send-dialog #qr-send-canvas-container{
     position:relative;
@@ -96,6 +96,69 @@
 #animated-qr-send-dialog #qr-send-bytes-per-frame,#animated-qr-send-dialog #qr-send-ecc-level,#animated-qr-send-dialog #qr-send-layout,#animated-qr-send-dialog #qr-send-display-size{min-width:0;max-width:100%;box-sizing:border-box}
 @media(max-width:600px){#animated-qr-send-dialog .erikraft-qr-paper{width:calc(100vw - 12px);max-height:calc(100dvh - 8px)}#animated-qr-send-dialog #qr-send-active-view,#animated-qr-send-dialog #qr-send-compose-view{padding:12px!important}#animated-qr-send-dialog #qr-send-compose-buttons{padding-left:10px;padding-right:10px;gap:8px}#animated-qr-send-dialog #qr-send-compose-buttons>.btn{flex:1 1 calc(50% - 8px);min-width:0;max-width:none;min-height:44px}#animated-qr-send-dialog #qr-send-canvas-container{width:min(280px,calc(100vw - 48px));height:min(280px,calc(100vw - 48px))}}
 @media(max-width:360px){#animated-qr-send-dialog #qr-send-compose-buttons>.btn{flex-basis:100%}#animated-qr-send-dialog #qr-send-canvas-container{width:min(240px,calc(100vw - 40px));height:min(240px,calc(100vw - 40px))}}
+
+/* Keep the animated QR at the top of its own scroll area instead of clipping a vertically centered flex child. */
+#animated-qr-send-dialog #qr-send-active-view.row.center,
+#animated-qr-send-dialog #qr-send-compose-view.row.center {
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    max-height: none;
+    height: auto;
+    flex: 1 1 auto;
+    scrollbar-gutter: stable;
+}
+#animated-qr-send-dialog #qr-send-active-view.row.center > .column,
+#animated-qr-send-dialog #qr-send-compose-view.row.center > .column {
+    align-self: stretch;
+    justify-content: flex-start;
+    min-height: max-content;
+    padding-bottom: 32px;
+}
+
+/* Keep the paper/body theme-aware while forcing the Send Text/File
+   dialog header to match the blue "Definir idioma" title bar. */
+#animated-qr-send-dialog .erikraft-qr-paper {
+    background-color: var(--dialog-bg-color);
+    color: rgb(var(--text-color));
+}
+#animated-qr-send-dialog x-paper > .row:first-of-type {
+    background-color: var(--primary-color, #4285f4) !important;
+    color: #fff !important;
+}
+#animated-qr-send-dialog x-paper > .row:first-of-type .dialog-title {
+    color: #fff !important;
+}
+
+/* Size the single QR code by width and aspect ratio; never crop the generated SVG viewport. */
+#animated-qr-send-dialog #qr-send-canvas-container.layout-1 {
+    width: min(320px, calc(100vw - 32px)) !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
+#animated-qr-send-dialog #qr-send-canvas-container.layout-1 > svg,
+#animated-qr-send-dialog #qr-send-canvas-container.layout-1 > canvas,
+#animated-qr-send-dialog #qr-send-canvas-container.layout-1 > img {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    overflow: visible !important;
+    flex: 0 1 auto;
+}
         `;
         document.head.appendChild(style);
     }
