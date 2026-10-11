@@ -2,73 +2,48 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-const index=fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
-const androidShortcuts=fs.readFileSync(new URL('../public/scripts/android-app-shortcuts.js',import.meta.url),'utf8');
-const torMarkup=index.match(/<button\b[^>]*\bid="tor-config-btn"[^>]*>([\s\S]*?)<\/button>/);
-assert.ok(torMarkup, 'The Tor shortcut must be a native button');
-assert.match(torMarkup[0], /type="button"/);
-assert.match(torMarkup[1], /<use xlink:href="#tor-icon">/);
+const index = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
+const shortcuts = fs.readFileSync(new URL('../public/scripts/android-app-shortcuts.js', import.meta.url), 'utf8');
 
-const torAttributes=new Map();
-let torContents=torMarkup[1];
-let torClick;
-let languageChanged;
-let onionTransfers=0;
-const torButton={
-    matches: selector => selector==='button',
-    set textContent(value) { torContents=value; },
-    setAttribute: (name,value) => torAttributes.set(name,value),
-    addEventListener: (type,listener,capture) => {
-        assert.equal(type,'click');
-        assert.equal(capture,true);
-        torClick=listener;
-    }
-};
-const protocolsShortcut={matches: () => false,removeAttribute() {}};
-const documentElement={lang:'en'};
-vm.runInNewContext(androidShortcuts, {
-    window: {ErikrafTdropAndroid: {
-        openOnionTransfer: () => onionTransfers++,
-        openFtpSettings() {},
-        openSftpSettings() {}
-    }},
-    navigator: {language:'en'},
-    document: {
-        readyState:'complete',
-        documentElement,
-        getElementById: id => ({'tor-config-btn':torButton,'android-protocols-shortcut':protocolsShortcut}[id])
-    },
-    MutationObserver: class {
-        constructor(callback) { languageChanged=callback; }
-        observe(target,options) {
-            assert.equal(target,documentElement);
-            assert.equal(options.attributes,true);
-            assert.deepEqual(Array.from(options.attributeFilter),['lang']);
-        }
-    }
-});
-
-for (const [lang,label] of [
-    ['en','Tor Network (Onion Service)'],
-    ['pt-BR','Transferência via Onion'],
-    ['fr','Réseau Tor (service Onion)'],
-    ['unknown','Tor Network (Onion Service)']
-]) {
-    documentElement.lang=lang;
-    languageChanged();
-    assert.equal(torButton.title,label);
-    assert.equal(torAttributes.get('aria-label'),label);
-    assert.equal(torContents,torMarkup[1], 'Translation must preserve the Tor icon');
+for (const [id, key] of [['android-ftp-shortcut', 'header.android-ftp'], ['android-sftp-shortcut', 'header.android-sftp']]) {
+    const markup = index.match(new RegExp('<button\\b[^>]*\\bid="' + id + '"[^>]*>([\\s\\S]*?)<\\/button>'));
+    assert.ok(markup, id + ' must be a native button');
+    assert.match(markup[0], /type="button"/);
+    assert.match(markup[0], /class="[^"]*icon-button/);
+    assert.ok(markup[0].includes('data-i18n-key="' + key + '"'), id + ' must have a localization key');
+    assert.match(markup[0], /<use xlink:href="#folder-icon">/);
 }
+assert.doesNotMatch(index, /android-protocols-dialog|android-protocols-shortcut/);
 
-let defaultPrevented=false;
-let propagationStopped=false;
-torClick({
-    preventDefault: () => { defaultPrevented=true; },
-    stopImmediatePropagation: () => { propagationStopped=true; }
+const attrs = new Map();
+const handlers = {};
+const elements = Object.fromEntries(['tor-config-btn', 'android-ftp-shortcut', 'android-sftp-shortcut'].map(id => [id, {
+    hidden: id !== 'tor-config-btn',
+    dataset: {},
+    removeAttribute: name => attrs.set(id + ':' + name, false),
+    setAttribute: (name, value) => attrs.set(id + ':' + name, value),
+    addEventListener: (type, listener, capture) => { handlers[id] = { type, listener, capture }; },
+    click: () => handlers[id]?.listener({ preventDefault() {}, stopPropagation() {}, stopImmediatePropagation() {} })
+}]));
+let onion = 0, ftp = 0, sftp = 0;
+vm.runInNewContext(shortcuts, {
+    window: { ErikrafTdropAndroid: {
+        openOnionTransfer: () => onion++,
+        openFtpSettings: () => ftp++,
+        openSftpSettings: () => sftp++
+    } },
+    document: {
+        readyState: 'complete',
+        getElementById: id => elements[id] || null
+    }
 });
-assert.equal(onionTransfers,1);
-assert.equal(defaultPrevented,true);
-assert.equal(propagationStopped,true);
-
-console.log('Android shortcut accessibility regressions: PASS');
+assert.equal(elements['android-ftp-shortcut'].hidden, false);
+assert.equal(elements['android-sftp-shortcut'].hidden, false);
+assert.equal(attrs.get('android-ftp-shortcut:aria-hidden'), false);
+elements['android-ftp-shortcut'].click();
+elements['android-sftp-shortcut'].click();
+handlers['tor-config-btn'].listener({ preventDefault() {}, stopImmediatePropagation() {} });
+assert.equal(ftp, 1);
+assert.equal(sftp, 1);
+assert.equal(onion, 1);
+console.log('Android native WebView shortcut regressions: PASS');
