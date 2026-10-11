@@ -7,7 +7,7 @@ const locales = fs.readdirSync('public/lang').filter(name => name.endsWith('.jso
 const english = JSON.parse(fs.readFileSync('public/lang/en.json', 'utf8'));
 
 assert.match(source, /translationRequestId/, 'translation changes must be race-safe');
-assert.match(source, /requestId !== Localization\\.translationRequestId/, 'older translation requests must not overwrite a newer app locale');
+assert.ok(source.includes('requestId !== Localization.translationRequestId'), 'older translation requests must not overwrite a newer app locale');
 
 for (const file of locales) {
     let locale;
