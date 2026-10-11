@@ -37,7 +37,11 @@
         "cloud_title": "Cloud Upload",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
-        "limewire_title": "LimeWire"
+        "limewire_title": "LimeWire",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "送信したいデバイスの上でドロップしてください",
@@ -242,7 +246,7 @@
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™についてを閉じる",
-        "claim": undefined,
+        "claim": "The easiest way to transfer files across the Web, Windows, Linux, Android, extensions and more",
         "github_title": "GitHub上のErikrafT Drop™プロジェクト",
         "buy-me-a-coffee_title": "コーヒーを一杯おごってください！",
         "tweet_title": "ErikrafT Drop™についてポスト",
