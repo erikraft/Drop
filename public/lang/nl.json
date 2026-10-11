@@ -37,7 +37,11 @@
         "cloud_title": "Cloud Upload",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
-        "limewire_title": "LimeWire"
+        "limewire_title": "LimeWire",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Loslaten om ontvanger te kiezen",
@@ -242,7 +246,7 @@
     },
     "about": {
         "close-about_aria-label": "Sluit Over ErikrafT Drop™",
-        "claim": undefined,
+        "claim": "The easiest way to transfer files across the Web, Windows, Linux, Android, extensions and more",
         "github_title": "ErikrafT Drop™ op GitHub",
         "buy-me-a-coffee_title": "Koop een kopje koffie voor mij!",
         "tweet_title": "Tweet over ErikrafT Drop™",
