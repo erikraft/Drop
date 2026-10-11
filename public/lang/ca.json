@@ -37,7 +37,11 @@
         "cloud_title": "Cloud Upload",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
-        "limewire_title": "LimeWire"
+        "limewire_title": "LimeWire",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Allibera per seleccionar destinatari",
