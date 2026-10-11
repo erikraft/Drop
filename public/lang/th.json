@@ -80,7 +80,11 @@
         "language-selector_title": "เลือกภาษา",
         "webchat": "WebChat",
         "ai-variation": "Generate AI variation",
-        "ai-generate": "Create new AI image"
+        "ai-generate": "Create new AI image",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "notifications": {
         "lan-disabled": "",
@@ -99,7 +103,7 @@
     },
     "about": {
         "bluesky_title": "ติดตามเราได้ที่ BlueSky",
-        "claim": undefined,
+        "claim": "The easiest way to transfer files across the Web, Windows, Linux, Android, extensions and more",
         "github_title": "ErikrafT Drop™ บน GitHub",
         "buy-me-a-coffee_title": "ซื้อกาแฟให้ฉันหน่อย! (บริจาค)",
         "tweet_title": "ทวีตเกี่ยวกับ ErikrafT Drop™",
