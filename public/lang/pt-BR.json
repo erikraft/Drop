@@ -39,7 +39,11 @@
         "discord_title": "Discord",
         "torrent_title": "Torrent",
         "torrent_aria-label": "Torrent",
-        "limewire_title": "LimeWire"
+        "limewire_title": "LimeWire",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Solte para selecionar o destinatário",
