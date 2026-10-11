@@ -17,7 +17,11 @@
         "expand_title": "হেডার বোতামের সারিটি বড় করুন",
         "webchat": "WebChat",
         "ai-variation": "এই AI ভার্সন তৈরি করুন",
-        "ai-generate": "AI এবং তৈরি করুন"
+        "ai-generate": "AI এবং তৈরি করুন",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "activate-share-mode-and-other-file": "আর একটি ফাইল যোগ করুন",

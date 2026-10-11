@@ -484,7 +484,7 @@
      ]
    }
    </script>
-<style>.erikraft-android-only-shortcut[hidden],.erikraft-android-only-dialog[hidden]{display:none!important}.erikraft-android-shortcuts-content{display:flex;flex-direction:column;gap:10px;padding:16px}#android-protocols-dialog x-paper{max-width:520px}#android-protocols-close{margin-left:auto}</style></head>
+<style>.erikraft-android-only-shortcut[hidden]{display:none!important}</style></head>
 
 <body translate="no">
     <header class="row-reverse wrap opacity-0">
@@ -565,9 +565,12 @@
                 <use xlink:href="#public-room-icon"></use>
             </svg>
         </div>
-        <div id="android-protocols-shortcut" class="icon-button erikraft-android-only-shortcut" hidden aria-hidden="true" tabindex="-1">
+        <button id="android-ftp-shortcut" type="button" class="icon-button erikraft-android-only-shortcut" data-i18n-key="header.android-ftp" data-i18n-attrs="title aria-label" hidden aria-hidden="true" tabindex="-1">
             <svg class="icon" aria-hidden="true"><use xlink:href="#folder-icon"></use></svg>
-        </div>
+        </button>
+        <button id="android-sftp-shortcut" type="button" class="icon-button erikraft-android-only-shortcut" data-i18n-key="header.android-sftp" data-i18n-attrs="title aria-label" hidden aria-hidden="true" tabindex="-1">
+            <svg class="icon" aria-hidden="true"><use xlink:href="#folder-icon"></use></svg>
+        </button>
         <button id="tor-config-btn" type="button" class="icon-button" data-i18n-key="footer.use-tor" data-i18n-attrs="title">
             <svg class="icon">
                 <use xlink:href="#tor-icon"></use>
@@ -604,16 +607,6 @@
     </header>
 
     <!-- Center -->
-    <x-dialog id="android-protocols-dialog" class="erikraft-android-only-dialog" hidden>
-        <x-background><x-paper>
-            <div class="dialog-header row center"><h2 id="android-protocols-title"></h2><button id="android-protocols-close" class="icon-button" type="button">×</button></div>
-            <div class="erikraft-android-shortcuts-content"><p id="android-protocols-description"></p>
-                <button id="android-ftp-shortcut" class="btn btn-rounded btn-dark" type="button"></button>
-                <button id="android-sftp-shortcut" class="btn btn-rounded btn-dark" type="button"></button>
-            </div>
-        </x-paper></x-background>
-    </x-dialog>
-
     <div id="center" class="opacity-0">
         <!-- Peers -->
         <x-peers class="center grow-5"></x-peers>

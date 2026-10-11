@@ -37,7 +37,11 @@
         "cloud_title": "Cloud Upload",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
-        "limewire_title": "LimeWire"
+        "limewire_title": "LimeWire",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Адпусціце, каб выбраць атрымальніка",
@@ -242,7 +246,7 @@
     },
     "about": {
         "close-about_aria-label": "Закрыць Аб ErikrafT Drop™",
-        "claim": undefined,
+        "claim": "Самы просты спосаб перадаваць файлы праз вэб, Windows, Linux, Android, пашырэнні і не толькі",
         "github_title": "ErikrafT Drop™ на GitHub",
         "buy-me-a-coffee_title": "Купіць мне кавы!",
         "tweet_title": "Твіт пра ErikrafT Drop™",

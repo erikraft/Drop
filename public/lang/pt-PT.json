@@ -30,7 +30,11 @@
         "animated-qr_aria-label": "Transferir através de QR animado",
         "android_title": "Transferir APK",
         "android_aria-label": "Transferir APK",
-        "cloud_title": "Carregar para a nuvem"
+        "cloud_title": "Carregar para a nuvem",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Release to select recipient",

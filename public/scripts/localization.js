@@ -56,28 +56,41 @@ class Localization {
         await Localization.setTranslation(Localization.initialLocale)
     }
 
-    static async setTranslation(locale) {
-        if (!locale) locale = Localization.systemLocale;
+    static translationRequestId = 0;
 
-        await Localization.fetchTranslations(locale)
+    static async setTranslation(locale) {
+        locale = locale || Localization.systemLocale;
+        if (!Localization.localeIsSupported(locale)) return false;
+
+        // A WebView can request its native app locale while the initial page
+        // translation is still loading. Only the most recent request may commit.
+        const requestId = ++Localization.translationRequestId;
+        let translations = Localization.translations;
+
+        if (locale !== Localization.locale || !translations || Object.keys(translations).length === 0) {
+            translations = await Localization.fetchTranslationsFor(locale);
+            if (!translations || requestId !== Localization.translationRequestId) return false;
+            Localization.locale = locale;
+            Localization.translations = translations;
+        }
+
+        if (requestId !== Localization.translationRequestId) return false;
         await Localization.translatePage();
+        if (requestId !== Localization.translationRequestId) return false;
 
         if (Localization.localeIsRtl(locale)) {
             Localization.$htmlRoot.setAttribute('dir', 'rtl');
-        }
-        else {
+        } else {
             Localization.$htmlRoot.removeAttribute('dir');
         }
 
         Localization.$htmlRoot.setAttribute('lang', locale);
-
-
         console.log("Page successfully translated",
             `System language: ${Localization.systemLocale}`,
             `Selected language: ${locale}`
         );
-
         Events.fire("translation-loaded");
+        return true;
     }
 
     static async fetchDefaultTranslations() {
@@ -85,14 +98,16 @@ class Localization {
     }
 
     static async fetchTranslations(newLocale) {
-        if (newLocale === Localization.locale) return false;
+        if (newLocale === Localization.locale && Object.keys(Localization.translations || {}).length) return true;
+        if (!Localization.localeIsSupported(newLocale)) return false;
 
+        const requestId = ++Localization.translationRequestId;
         const newTranslations = await Localization.fetchTranslationsFor(newLocale);
-
-        if(!newTranslations) return false;
+        if (!newTranslations || requestId !== Localization.translationRequestId) return false;
 
         Localization.locale = newLocale;
         Localization.translations = newTranslations;
+        return true;
     }
 
     static getLocale() {
