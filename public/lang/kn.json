@@ -37,7 +37,11 @@
         "cloud_title": "Cloud Upload",
         "comet_title": "Comet Browser",
         "discord_title": "Discord",
-        "limewire_title": "LimeWire"
+        "limewire_title": "LimeWire",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "ಸ್ವೀಕರಿಸುವವರನ್ನು ಆಯ್ಕೆ ಮಾಡಲು ಬಿಡುಗಡೆ ಮಾಡಿ",
@@ -242,7 +246,7 @@
     },
     "about": {
         "close-about_aria-label": "ErikrafT Drop™ ಕುರಿತು ಪುಟವನ್ನು ಮುಚ್ಚಿ",
-        "claim": undefined,
+        "claim": "The easiest way to transfer files across the Web, Windows, Linux, Android, extensions and more",
         "github_title": "GitHub ನಲ್ಲಿ ErikrafT Drop™",
         "buy-me-a-coffee_title": "ನನಗೆ ಕಾಫಿ ಖರೀದಿಸಿ!",
         "tweet_title": "ErikrafT Drop™ ಕುರಿತು ಟ್ವೀಟ್ ಮಾಡಿ",
