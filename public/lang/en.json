@@ -39,7 +39,11 @@
         "discord_title": "Discord",
         "torrent_title": "Torrent",
         "torrent_aria-label": "Torrent",
-        "limewire_title": "LimeWire"
+        "limewire_title": "LimeWire",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Release to select recipient",
@@ -100,7 +104,6 @@
         "optical-matrix-experimental": "Experimental",
         "optical-matrix-description": "A high-density colour-and-symbol optical matrix. It is separate from Animated QR — Legacy/Compatibility.",
         "optical-matrix-open": "Open Optical Matrix",
-
         "pair-devices-title": "Pair Devices Permanently",
         "input-key-on-this-device": "Input this key on another device",
         "scan-qr-code": "or scan the QR-code.",
