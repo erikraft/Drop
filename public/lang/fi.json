@@ -16,7 +16,11 @@
         "edit-share-mode": "Muokkaa",
         "webchat": "WebChat",
         "ai-variation": "Generate AI variation",
-        "ai-generate": "Create new AI image"
+        "ai-generate": "Create new AI image",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers-title": "Avaa ErikrafT Drop™ muilla laitteilla lähettääksesi tiedostoja",
