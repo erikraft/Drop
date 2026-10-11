@@ -17,7 +17,11 @@
         "expand_title": "Expand header button row",
         "webchat": "WebChat",
         "ai-variation": "Generate AI variation",
-        "ai-generate": "Create new AI image"
+        "ai-generate": "Create new AI image",
+        "android-ftp_title": "FTP/FTPS",
+        "android-ftp_aria-label": "FTP/FTPS",
+        "android-sftp_title": "SFTP",
+        "android-sftp_aria-label": "SFTP"
     },
     "instructions": {
         "no-peers_data-drop-bg": "Release to select recipient",
