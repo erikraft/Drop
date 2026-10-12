@@ -29,6 +29,24 @@ function readSavedServer() {
   }
 }
 
+async function verifyCustomServer(url) {
+  let response;
+  try {
+    response = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(8000) });
+  } catch {
+    throw new Error('Could not verify the server. Check the URL and your connection.');
+  }
+
+  if (!response.ok) {
+    throw new Error('Could not verify the server. Check the URL and your connection.');
+  }
+
+  const html = await response.text();
+  if (!/<x-peers(?:\\s|>)/i.test(html)) {
+    throw new Error('This URL is not a compatible ErikrafT Drop/PairDrop instance.');
+  }
+}
+
 function saveServer(url) {
   const normalizedUrl = normalizeServerUrl(url);
   const settingsPath = getSettingsPath();
