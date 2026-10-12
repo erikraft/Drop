@@ -2454,3 +2454,50 @@ See note here: https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
         gap: 8px;
     }
 }
+
+
+/*
+ * Platform-specific client branding.
+ * Keep all room types in one platform palette instead of mixing the
+ * default LAN (blue), public-room (yellow), and paired-device (teal) colors.
+ */
+html[data-erikraft-client-type="discord-bot"] body,
+html[data-erikraft-client-type="discord-activity"] body {
+    --primary-color: #5865F2;
+    --accent-color: #5865F2;
+    --paired-device-color: #5865F2;
+    --public-room-color: #5865F2;
+}
+
+html[data-erikraft-client-type="open-vsx-registry-extension"] body {
+    --primary-color: #A60EE5;
+    --accent-color: #A60EE5;
+    --paired-device-color: #A60EE5;
+    --public-room-color: #A60EE5;
+}
+
+html[data-erikraft-client-type="vs-code-extension"] body {
+    --primary-color: #0084D0;
+    --accent-color: #0084D0;
+    --paired-device-color: #0084D0;
+    --public-room-color: #0084D0;
+}
+
+/* Room and network badges share the client brand background in every mode. */
+html[data-erikraft-client-type="open-vsx-registry-extension"] body .badge-room-ip,
+html[data-erikraft-client-type="open-vsx-registry-extension"] body .badge-room-lan,
+html[data-erikraft-client-type="open-vsx-registry-extension"] body .badge-room-secret,
+html[data-erikraft-client-type="open-vsx-registry-extension"] body .badge-room-public-id,
+html[data-erikraft-client-type="open-vsx-registry-extension"] body .badge-tor-network {
+    background-color: #A60EE5;
+    background-image: linear-gradient(135deg, #C160EF 0%, #A60EE5 100%);
+}
+
+html[data-erikraft-client-type="vs-code-extension"] body .badge-room-ip,
+html[data-erikraft-client-type="vs-code-extension"] body .badge-room-lan,
+html[data-erikraft-client-type="vs-code-extension"] body .badge-room-secret,
+html[data-erikraft-client-type="vs-code-extension"] body .badge-room-public-id,
+html[data-erikraft-client-type="vs-code-extension"] body .badge-tor-network {
+    background-color: #0084D0;
+    background-image: linear-gradient(135deg, #23AAF2 0%, #0084D0 50%, #0076B8 100%);
+}
