@@ -42,7 +42,7 @@ async function verifyCustomServer(url) {
   }
 
   const html = await response.text();
-  if (!/<x-peers(?:\\s|>)/i.test(html)) {
+  if (!/<x-peers(?:\s|>)/i.test(html)) {
     throw new Error('This URL is not a compatible ErikrafT Drop/PairDrop instance.');
   }
 }
