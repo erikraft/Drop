@@ -8,6 +8,7 @@ const { DEFAULT_SERVER_URL, SERVER_INSTANCES, normalizeServerUrl } = require('..
 const main = fs.readFileSync(new URL('../desktop/main.cjs', import.meta.url), 'utf8');
 const selector = fs.readFileSync(new URL('../desktop/server-selector.html', import.meta.url), 'utf8');
 const preload = fs.readFileSync(new URL('../desktop/server-selector-preload.cjs', import.meta.url), 'utf8');
+const serverConfig = fs.readFileSync(new URL('../desktop/server-config.cjs', import.meta.url), 'utf8');
 
 test('Desktop server list contains the three official instances', () => {
   assert.equal(DEFAULT_SERVER_URL, 'https://drop.erikraft.com/');
@@ -44,6 +45,6 @@ test('server selector exposes only a narrow IPC bridge and supports custom URLs'
   assert.match(preload, /contextBridge\.exposeInMainWorld\('desktopServerSelector'/);
   assert.match(preload, /ipcRenderer\.invoke\('desktop-server:save', url\)/);
   assert.match(selector, /type="url"/);
-  assert.match(selector, /https:\/\/drop-fallback\.erikraft\.com\//);
+  assert.match(serverConfig, /https:\/\/drop-fallback\.erikraft\.com\//);
   assert.match(selector, /desktopServerSelector\.saveServer\(url/);
 });
