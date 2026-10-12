@@ -33,6 +33,8 @@ test('localizes all native desktop menu headings and detects regional system loc
   assert.equal(getDesktopMenuTranslations('pt-PT').view, 'Ver');
   assert.equal(getDesktopMenuTranslations('de-DE').window, 'Fenster');
   assert.equal(getDesktopMenuTranslations('zh-CN').edit, '编辑');
+  assert.equal(getDesktopMenuTranslations('zh-Hant-TW').edit, '編輯');
+  assert.equal(getServerMenuLabel('pt').toString(), 'Alterar servidor…');
   assert.equal(getDesktopMenuTranslations('en-US').view, 'View');
   assert.match(main, /getDesktopMenuTranslations\(app\.getLocale\(\)\)/);
   assert.match(main, /title: `\$\{getServerMenuLabel\(app\.getLocale\(\)\)\} — ErikrafT Drop™`/);
