@@ -39,7 +39,7 @@ test('Desktop startup uses the selected remote origin rather than starting a bun
   assert.match(main, /desktop-server:save/);
   assert.match(main, /async function verifyCustomServer/);
   assert.match(main, /<x-peers\(\?:\\s\|>\)/);
-  assert.match(main, /Change server/);
+  assert.match(main, /getServerMenuLabel\(app\.getLocale\(\)\)/);
   assert.match(main, /new URL\(webContents\.getURL\(\)\)\.origin === new URL\(selectedServer\)\.origin/);
 });
 
