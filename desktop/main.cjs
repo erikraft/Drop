@@ -4,6 +4,7 @@ const fs = require('fs');
 const {
   DEFAULT_SERVER_URL,
   SERVER_INSTANCES,
+  getServerMenuLabel,
   normalizeServerUrl
 } = require('./server-config.cjs');
 
@@ -93,7 +94,7 @@ function createApplicationMenu() {
       label: 'ErikrafT Drop™',
       submenu: [
         {
-          label: 'Change server…',
+          label: getServerMenuLabel(app.getLocale()),
           click: async () => {
             const previousServer = selectedServer;
             const nextServer = await showServerSelector();
