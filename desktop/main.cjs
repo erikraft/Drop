@@ -92,7 +92,7 @@ function showServerSelector() {
       minWidth: 540,
       minHeight: 520,
       resizable: true,
-      title: `${getServerMenuLabel(app.getLocale())} — ErikrafT Drop™`,
+      title: 'ErikrafT Drop™',
       autoHideMenuBar: true,
       webPreferences: {
         preload: path.join(__dirname, 'server-selector-preload.cjs'),
