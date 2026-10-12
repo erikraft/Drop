@@ -22,9 +22,19 @@ const SERVER_MENU_LABELS = Object.freeze({
   'zh-cn': '更改服务器…', 'zh-tw': '更改伺服器…'
 });
 
+function resolveDesktopLocale(locale) {
+  const normalized = String(locale || 'en').replace(/_/g, '-').toLowerCase();
+  if (normalized.startsWith('zh-hant') || normalized.startsWith('zh-tw')) return 'zh-tw';
+  if (normalized.startsWith('zh-hans') || normalized.startsWith('zh-cn') || normalized === 'zh') return 'zh-cn';
+  if (normalized.startsWith('pt-br')) return 'pt-br';
+  if (normalized.startsWith('pt-pt')) return 'pt-pt';
+  if (normalized === 'pt') return 'pt-br';
+  return SERVER_MENU_LABELS[normalized] ? normalized :
+    (SERVER_MENU_LABELS[normalized.split('-')[0]] ? normalized.split('-')[0] : 'en');
+}
+
 function getServerMenuLabel(locale) {
-  const normalized = String(locale || 'en').replace('_', '-').toLowerCase();
-  return SERVER_MENU_LABELS[normalized] || SERVER_MENU_LABELS[normalized.split('-')[0]] || SERVER_MENU_LABELS.en;
+  return SERVER_MENU_LABELS[resolveDesktopLocale(locale)] || SERVER_MENU_LABELS.en;
 }
 
 
@@ -70,10 +80,7 @@ const DESKTOP_MENU_TRANSLATIONS = Object.freeze({
 });
 
 function getDesktopMenuTranslations(locale) {
-  const normalized = String(locale || 'en').replace(/_/g, '-').toLowerCase();
-  return DESKTOP_MENU_TRANSLATIONS[normalized] ||
-    DESKTOP_MENU_TRANSLATIONS[normalized.split('-')[0]] ||
-    DESKTOP_MENU_TRANSLATIONS.en;
+  return DESKTOP_MENU_TRANSLATIONS[resolveDesktopLocale(locale)] || DESKTOP_MENU_TRANSLATIONS.en;
 }
 
 function normalizeServerUrl(value) {
