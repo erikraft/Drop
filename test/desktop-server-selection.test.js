@@ -4,7 +4,7 @@ import test from 'node:test';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { DEFAULT_SERVER_URL, SERVER_INSTANCES, SERVER_MENU_LABELS, getServerMenuLabel, normalizeServerUrl } = require('../desktop/server-config.cjs');
+const { DEFAULT_SERVER_URL, SERVER_INSTANCES, SERVER_MENU_LABELS, DESKTOP_MENU_TRANSLATIONS, getServerMenuLabel, getDesktopMenuTranslations, normalizeServerUrl } = require('../desktop/server-config.cjs');
 const main = fs.readFileSync(new URL('../desktop/main.cjs', import.meta.url), 'utf8');
 const selector = fs.readFileSync(new URL('../desktop/server-selector.html', import.meta.url), 'utf8');
 const preload = fs.readFileSync(new URL('../desktop/server-selector-preload.cjs', import.meta.url), 'utf8');
@@ -24,6 +24,20 @@ test('provides localized server menu labels for all supported app locales', () =
   assert.equal(getServerMenuLabel('pt_BR'), 'Alterar servidor…');
   assert.equal(getServerMenuLabel('zh-TW'), '更改伺服器…');
   assert.equal(getServerMenuLabel('en-US'), 'Change server…');
+});
+
+
+test('localizes all native desktop menu headings and detects regional system locales', () => {
+  assert.equal(Object.keys(DESKTOP_MENU_TRANSLATIONS).length, 38);
+  assert.equal(getDesktopMenuTranslations('pt_BR').edit, 'Editar');
+  assert.equal(getDesktopMenuTranslations('pt-PT').view, 'Ver');
+  assert.equal(getDesktopMenuTranslations('de-DE').window, 'Fenster');
+  assert.equal(getDesktopMenuTranslations('zh-CN').edit, '编辑');
+  assert.equal(getDesktopMenuTranslations('en-US').view, 'View');
+  assert.match(main, /getDesktopMenuTranslations\(app\.getLocale\(\)\)/);
+  assert.match(main, /title: `\$\{getServerMenuLabel\(app\.getLocale\(\)\)\} — ErikrafT Drop™`/);
+  assert.match(selector, /navigator\.language/);
+  assert.match(selector, /document\.documentElement\.lang = languageKey/);
 });
 
 test('normalizes valid HTTP(S) custom server URLs', () => {
