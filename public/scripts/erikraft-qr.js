@@ -261,7 +261,12 @@ class ErikrafTQRScanner {
                     this.stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment', width: {ideal: 1280}, height: {ideal: 720}}});
                 } catch (envErr) {
                     console.warn('Facing mode environment failed, falling back to default camera:', envErr);
-                    this.stream = await navigator.mediaDevices.getUserMedia({video: {width: {ideal: 1280}, height: {ideal: 720}}});
+                    try {
+                        this.stream = await navigator.mediaDevices.getUserMedia({video: {width: {ideal: 1280}, height: {ideal: 720}}});
+                    } catch (constraintErr) {
+                        console.warn('Camera constraints failed, retrying with the browser default:', constraintErr);
+                        this.stream = await navigator.mediaDevices.getUserMedia({video: true});
+                    }
                 }
                 if (this.videoEl) {
                     this.videoEl.srcObject = this.stream;
