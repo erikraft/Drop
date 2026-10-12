@@ -1,14 +1,140 @@
-const { app, BrowserWindow, shell, session } = require('electron');
+const { app, BrowserWindow, Menu, shell, session, ipcMain } = require('electron');
 const path = require('path');
-const { pathToFileURL } = require('url');
 const fs = require('fs');
+const {
+  DEFAULT_SERVER_URL,
+  SERVER_INSTANCES,
+  normalizeServerUrl
+} = require('./server-config.cjs');
 
-const PORT = process.env.ERIKRAFT_DROP_DESKTOP_PORT || '33571';
 let mainWindow;
+let selectorWindow;
+let selectedServer = DEFAULT_SERVER_URL;
 
 const WINSPARKLE_APPCAST_URL = 'https://github.com/erikraft/Drop/releases/latest/download/winsparkle-appcast.xml';
 const WINSPARKLE_PUBLIC_KEY = 'qviSQDE3gE0r4NBLiLlBRMkPWQ7MbNnSZGnP4zlD4XI=';
 let winSparkle;
+
+function getSettingsPath() {
+  return path.join(app.getPath('userData'), 'server-settings.json');
+}
+
+function readSavedServer() {
+  try {
+    const settings = JSON.parse(fs.readFileSync(getSettingsPath(), 'utf8'));
+    return normalizeServerUrl(settings.serverUrl);
+  } catch {
+    return null;
+  }
+}
+
+function saveServer(url) {
+  const normalizedUrl = normalizeServerUrl(url);
+  const settingsPath = getSettingsPath();
+  fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+  fs.writeFileSync(settingsPath, JSON.stringify({ serverUrl: normalizedUrl }, null, 2), 'utf8');
+  selectedServer = normalizedUrl;
+  return normalizedUrl;
+}
+
+function isSelectorSender(event) {
+  return Boolean(selectorWindow && event.sender === selectorWindow.webContents);
+}
+
+ipcMain.handle('desktop-server:get-options', (event) => {
+  if (!isSelectorSender(event)) throw new Error('Unauthorized server selector request.');
+  return { currentServer: selectedServer, servers: SERVER_INSTANCES };
+});
+
+ipcMain.handle('desktop-server:save', (event, url) => {
+  if (!isSelectorSender(event)) throw new Error('Unauthorized server selector request.');
+  return saveServer(url);
+});
+
+ipcMain.on('desktop-server:close', (event) => {
+  if (isSelectorSender(event)) selectorWindow.close();
+});
+
+function showServerSelector() {
+  if (selectorWindow) {
+    selectorWindow.focus();
+    return Promise.resolve(selectedServer);
+  }
+
+  return new Promise((resolve) => {
+    selectorWindow = new BrowserWindow({
+      width: 620,
+      height: 600,
+      minWidth: 540,
+      minHeight: 520,
+      resizable: true,
+      title: 'ErikrafT Drop™ — Server',
+      autoHideMenuBar: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'server-selector-preload.cjs'),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: true
+      }
+    });
+
+    selectorWindow.on('closed', () => {
+      selectorWindow = null;
+      resolve(selectedServer || DEFAULT_SERVER_URL);
+    });
+
+    selectorWindow.loadFile(path.join(__dirname, 'server-selector.html'));
+  });
+}
+
+function createApplicationMenu() {
+  const template = [
+    {
+      label: 'ErikrafT Drop™',
+      submenu: [
+        {
+          label: 'Change server…',
+          click: async () => {
+            const previousServer = selectedServer;
+            const nextServer = await showServerSelector();
+            if (mainWindow && nextServer && nextServer !== previousServer) {
+              await mainWindow.loadURL(nextServer);
+            }
+          }
+        },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'selectAll' }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { role: 'toggleDevTools' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Window',
+      submenu: [{ role: 'minimize' }, { role: 'close' }]
+    }
+  ];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
 
 function initializeWinSparkle() {
   if (process.platform !== 'win32') return;
@@ -50,26 +176,17 @@ function initializeWinSparkle() {
   }
 }
 
-async function startBundledServer() {
-  process.env.PORT = PORT;
-  process.env.WS_FALLBACK = process.env.WS_FALLBACK || 'true';
-
-  const serverEntry = path.join(app.getAppPath(), 'server', 'index.js');
-  await import(pathToFileURL(serverEntry).href);
-}
-
 async function createWindow() {
-  await startBundledServer();
-
-  // WebRTC and other permissions handling
   session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
-    const url = webContents.getURL();
-    // Only allow permissions for our local server
-    if (url.startsWith(`http://127.0.0.1:${PORT}`) || url.startsWith(`http://localhost:${PORT}`)) {
-      const allowedPermissions = ['media', 'display-capture', 'mediaKeySystem'];
-      if (allowedPermissions.includes(permission)) {
-        return callback(true);
-      }
+    let matchesSelectedServer = false;
+    try {
+      matchesSelectedServer = new URL(webContents.getURL()).origin === new URL(selectedServer).origin;
+    } catch {
+      matchesSelectedServer = false;
+    }
+
+    if (matchesSelectedServer && ['media', 'display-capture', 'mediaKeySystem'].includes(permission)) {
+      return callback(true);
     }
     callback(false);
   });
@@ -97,11 +214,20 @@ async function createWindow() {
     return { action: 'deny' };
   });
 
-  await mainWindow.loadURL(`http://127.0.0.1:${PORT}`);
+  await mainWindow.loadURL(selectedServer);
   initializeWinSparkle();
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  selectedServer = readSavedServer() || DEFAULT_SERVER_URL;
+  createApplicationMenu();
+
+  if (!readSavedServer()) {
+    await showServerSelector();
+  }
+
+  await createWindow();
+});
 
 app.on('before-quit', () => {
   if (winSparkle) {
