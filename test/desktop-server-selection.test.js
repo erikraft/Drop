@@ -36,7 +36,7 @@ test('Desktop startup uses the selected remote origin rather than starting a bun
   assert.doesNotMatch(main, /await startBundledServer\(/);
   assert.match(main, /await mainWindow\.loadURL\(selectedServer\)/);
   assert.match(main, /app\.getPath\('userData'\)/);
-  assert.match(main, /desktop-server:save/);
+  assert.match(main, /desktop-server:save/);\n  assert.match(main, /async function verifyCustomServer/);\n  assert.match(main, /<x-peers\(\?:\\\\s\|>\)/);
   assert.match(main, /Change server/);
   assert.match(main, /new URL\(webContents\.getURL\(\)\)\.origin === new URL\(selectedServer\)\.origin/);
 });
