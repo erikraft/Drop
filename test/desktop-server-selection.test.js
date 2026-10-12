@@ -19,7 +19,14 @@ test('Desktop server list contains the three official instances', () => {
   ]);
 });
 
-test('provides localized server menu labels for all supported app locales', () => {\n  assert.equal(Object.keys(SERVER_MENU_LABELS).length, 38);\n  assert.equal(getServerMenuLabel('pt_BR'), 'Alterar servidor…');\n  assert.equal(getServerMenuLabel('zh-TW'), '更改伺服器…');\n  assert.equal(getServerMenuLabel('en-US'), 'Change server…');\n});\n\ntest('normalizes valid HTTP(S) custom server URLs', () => {
+test('provides localized server menu labels for all supported app locales', () => {
+  assert.equal(Object.keys(SERVER_MENU_LABELS).length, 38);
+  assert.equal(getServerMenuLabel('pt_BR'), 'Alterar servidor…');
+  assert.equal(getServerMenuLabel('zh-TW'), '更改伺服器…');
+  assert.equal(getServerMenuLabel('en-US'), 'Change server…');
+});
+
+test('normalizes valid HTTP(S) custom server URLs', () => {
   assert.equal(normalizeServerUrl(' https://example.com/path#fragment '), 'https://example.com/path');
   assert.equal(normalizeServerUrl('http://192.168.1.20:3000'), 'http://192.168.1.20:3000/');
 });
