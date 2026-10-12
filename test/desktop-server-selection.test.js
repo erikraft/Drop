@@ -37,7 +37,7 @@ test('localizes all native desktop menu headings and detects regional system loc
   assert.equal(getServerMenuLabel('pt').toString(), 'Alterar servidor…');
   assert.equal(getDesktopMenuTranslations('en-US').view, 'View');
   assert.match(main, /getDesktopMenuTranslations\(app\.getLocale\(\)\)/);
-  assert.match(main, /title: `\$\{getServerMenuLabel\(app\.getLocale\(\)\)\} — ErikrafT Drop™`/);
+  assert.match(main, /title: 'ErikrafT Drop™'/);
   assert.match(selector, /navigator\.language/);
   assert.match(selector, /document\.documentElement\.lang = languageKey/);
 });
