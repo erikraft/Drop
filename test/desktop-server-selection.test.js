@@ -4,7 +4,7 @@ import test from 'node:test';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { DEFAULT_SERVER_URL, SERVER_INSTANCES, normalizeServerUrl } = require('../desktop/server-config.cjs');
+const { DEFAULT_SERVER_URL, SERVER_INSTANCES, SERVER_MENU_LABELS, getServerMenuLabel, normalizeServerUrl } = require('../desktop/server-config.cjs');
 const main = fs.readFileSync(new URL('../desktop/main.cjs', import.meta.url), 'utf8');
 const selector = fs.readFileSync(new URL('../desktop/server-selector.html', import.meta.url), 'utf8');
 const preload = fs.readFileSync(new URL('../desktop/server-selector-preload.cjs', import.meta.url), 'utf8');
@@ -19,7 +19,7 @@ test('Desktop server list contains the three official instances', () => {
   ]);
 });
 
-test('normalizes valid HTTP(S) custom server URLs', () => {
+test('provides localized server menu labels for all supported app locales', () => {\n  assert.equal(Object.keys(SERVER_MENU_LABELS).length, 38);\n  assert.equal(getServerMenuLabel('pt_BR'), 'Alterar servidor…');\n  assert.equal(getServerMenuLabel('zh-TW'), '更改伺服器…');\n  assert.equal(getServerMenuLabel('en-US'), 'Change server…');\n});\n\ntest('normalizes valid HTTP(S) custom server URLs', () => {
   assert.equal(normalizeServerUrl(' https://example.com/path#fragment '), 'https://example.com/path');
   assert.equal(normalizeServerUrl('http://192.168.1.20:3000'), 'http://192.168.1.20:3000/');
 });
