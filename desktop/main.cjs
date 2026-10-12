@@ -65,9 +65,13 @@ ipcMain.handle('desktop-server:get-options', (event) => {
   return { currentServer: selectedServer, servers: SERVER_INSTANCES };
 });
 
-ipcMain.handle('desktop-server:save', (event, url) => {
+ipcMain.handle('desktop-server:save', async (event, url) => {
   if (!isSelectorSender(event)) throw new Error('Unauthorized server selector request.');
-  return saveServer(url);
+  const normalizedUrl = normalizeServerUrl(url);
+  if (!SERVER_INSTANCES.some((server) => server.url === normalizedUrl)) {
+    await verifyCustomServer(normalizedUrl);
+  }
+  return saveServer(normalizedUrl);
 });
 
 ipcMain.on('desktop-server:close', (event) => {
