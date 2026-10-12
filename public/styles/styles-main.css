@@ -1291,6 +1291,17 @@ button::-moz-focus-inner {
     background: transparent;
 }
 
+/* Native button defaults must not add a filled button surface to these icon-only shortcuts. */
+#android-ftp-shortcut,
+#android-sftp-shortcut {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+}
+
 /* Info Animation */
 #about {
     --about-padding-top: 24px;
