@@ -91,9 +91,11 @@
       hi: { heading: 'सर्वर चुनें', description: 'वह इंस्टेंस चुनें जिसका उपयोग सभी डिवाइस करेंगे। इसे बाद में सर्वर मेनू से बदला जा सकता है।', instances: 'ErikrafT Drop™ इंस्टेंस', custom: 'कस्टम URL', cancel: 'रद्द करें', connect: 'कनेक्ट करें', invalid: 'एक मान्य HTTP या HTTPS URL दर्ज करें।' }
     };
     const language = navigator.language || 'en';
-    const languageKey = language.toLowerCase().startsWith('zh-tw') ? 'zh-TW' :
+    const languageKey = language.toLowerCase().startsWith('zh-hant') || language.toLowerCase().startsWith('zh-tw') ? 'zh-TW' :
+      language.toLowerCase().startsWith('zh-hans') ? 'zh' :
       language.toLowerCase().startsWith('pt-br') ? 'pt-BR' :
-      language.toLowerCase().startsWith('pt') ? 'pt-PT' :
+      language.toLowerCase().startsWith('pt-pt') ? 'pt-PT' :
+      language.toLowerCase() === 'pt' ? 'pt-BR' :
       (Object.keys(translations).find(key => language.toLowerCase().startsWith(key.toLowerCase())) || 'en');
     const t = translations[languageKey] || translations.en;
     document.documentElement.lang = languageKey;
