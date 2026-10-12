@@ -3376,12 +3376,17 @@ class QRScannerDialog extends Dialog {
                     });
                 } catch (envErr) {
                     console.warn('Facing mode environment failed, falling back to default camera:', envErr);
-                    this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: {
-                            width: { ideal: 1280 },
-                            height: { ideal: 720 }
-                        }
-                    });
+                    try {
+                        this.stream = await navigator.mediaDevices.getUserMedia({
+                            video: {
+                                width: { ideal: 1280 },
+                                height: { ideal: 720 }
+                            }
+                        });
+                    } catch (constraintErr) {
+                        console.warn('Camera constraints failed, retrying with the browser default:', constraintErr);
+                        this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    }
                 }
 
                 if (this.$video) {
@@ -3408,6 +3413,7 @@ class QRScannerDialog extends Dialog {
                         if (this.$status) this.$status.textContent = Localization.getTranslation('dialogs.camera-searching');
                     } catch (playErr) {
                         console.warn('Video play interrupted or rejected:', playErr);
+                        this.stopCamera();
                         if (this.$status) {
                             this.$status.textContent = Localization.getTranslation('dialogs.camera-error-play');
                         }
@@ -3417,6 +3423,7 @@ class QRScannerDialog extends Dialog {
                 }
             } catch (err) {
                 console.warn('Camera access error:', err);
+                this.stopCamera();
                 if (this.$status) {
                     const isPermissionError = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
                     this.$status.textContent = isPermissionError
