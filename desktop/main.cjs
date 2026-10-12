@@ -5,6 +5,7 @@ const {
   DEFAULT_SERVER_URL,
   SERVER_INSTANCES,
   getServerMenuLabel,
+  getDesktopMenuTranslations,
   normalizeServerUrl
 } = require('./server-config.cjs');
 
@@ -91,7 +92,7 @@ function showServerSelector() {
       minWidth: 540,
       minHeight: 520,
       resizable: true,
-      title: 'ErikrafT Drop™ — Server',
+      title: `${getServerMenuLabel(app.getLocale())} — ErikrafT Drop™`,
       autoHideMenuBar: true,
       webPreferences: {
         preload: path.join(__dirname, 'server-selector-preload.cjs'),
@@ -111,9 +112,10 @@ function showServerSelector() {
 }
 
 function createApplicationMenu() {
+  const labels = getDesktopMenuTranslations(app.getLocale());
   const template = [
     {
-      label: 'ErikrafT Drop™',
+      label: labels.app,
       submenu: [
         {
           label: getServerMenuLabel(app.getLocale()),
@@ -130,7 +132,7 @@ function createApplicationMenu() {
       ]
     },
     {
-      label: 'Edit',
+      label: labels.edit,
       submenu: [
         { role: 'undo' },
         { role: 'redo' },
@@ -142,7 +144,7 @@ function createApplicationMenu() {
       ]
     },
     {
-      label: 'View',
+      label: labels.view,
       submenu: [
         { role: 'reload' },
         { role: 'forceReload' },
@@ -152,7 +154,7 @@ function createApplicationMenu() {
       ]
     },
     {
-      label: 'Window',
+      label: labels.window,
       submenu: [{ role: 'minimize' }, { role: 'close' }]
     }
   ];
