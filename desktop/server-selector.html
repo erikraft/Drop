@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ErikrafT Drop™ — Server</title>
+  <style>
+    :root { color-scheme: light dark; font-family: "Segoe UI", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 28px; background: Canvas; color: CanvasText; }
+    main { max-width: 560px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    p { line-height: 1.5; opacity: .78; }
+    fieldset { border: 1px solid color-mix(in srgb, CanvasText 20%, transparent); border-radius: 12px; padding: 12px; margin: 20px 0; }
+    legend { padding: 0 8px; font-weight: 600; }
+    .option { display: flex; gap: 12px; align-items: flex-start; padding: 12px 10px; border-radius: 8px; cursor: pointer; }
+    .option:hover { background: color-mix(in srgb, CanvasText 6%, transparent); }
+    .option input { margin-top: 4px; }
+    .option span { display: block; min-width: 0; }
+    .label { font-weight: 600; }
+    .url { display: block; margin-top: 4px; font-size: 12px; opacity: .72; overflow-wrap: anywhere; }
+    input[type="url"] { width: 100%; margin-top: 10px; padding: 11px 12px; border: 1px solid color-mix(in srgb, CanvasText 25%, transparent); border-radius: 8px; background: Field; color: FieldText; font: inherit; }
+    .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+    button { padding: 10px 18px; border-radius: 8px; border: 1px solid color-mix(in srgb, CanvasText 24%, transparent); background: ButtonFace; color: ButtonText; font: inherit; cursor: pointer; }
+    button.primary { background: #867d6c; color: #fff; border-color: transparent; font-weight: 600; }
+    button:focus-visible, input:focus-visible { outline: 2px solid #867d6c; outline-offset: 2px; }
+    #error { min-height: 1.4em; color: #d84a4a; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="heading">Choose a server</h1>
+    <p id="description">Select the instance all devices you want to connect must use. You can change this later from the Server menu.</p>
+    <form id="server-form">
+      <fieldset>
+        <legend id="instances-legend">ErikrafT Drop™ instances</legend>
+        <div id="server-options"></div>
+        <label class="option" for="custom-option">
+          <input id="custom-option" type="radio" name="server" value="custom">
+          <span><span class="label" id="custom-label">Custom URL</span>
+            <input id="custom-url" type="url" inputmode="url" placeholder="https://example.com/" autocomplete="url" aria-label="Custom server URL">
+          </span>
+        </label>
+      </fieldset>
+      <p id="error" role="alert" aria-live="polite"></p>
+      <div class="actions">
+        <button type="button" id="cancel-button">Cancel</button>
+        <button type="submit" class="primary" id="connect-button">Connect</button>
+      </div>
+    </form>
+  </main>
+  <script>
+    const translations = {
+      en: { heading: 'Choose a server', description: 'Select the instance all devices you want to connect must use. You can change this later from the Server menu.', instances: 'ErikrafT Drop™ instances', custom: 'Custom URL', cancel: 'Cancel', connect: 'Connect', invalid: 'Enter a valid HTTP or HTTPS URL.' },
+      'pt-BR': { heading: 'Escolher servidor', description: 'Selecione a instância que todos os dispositivos devem usar. Você poderá alterá-la depois no menu Servidor.', instances: 'Instâncias do ErikrafT Drop™', custom: 'URL personalizada', cancel: 'Cancelar', connect: 'Conectar', invalid: 'Insira uma URL HTTP ou HTTPS válida.' },
+      af: { heading: 'Kies ’n bediener', description: 'Kies die instansie wat al jou toestelle moet gebruik. Jy kan dit later in die Bediener-kieslys verander.', instances: 'ErikrafT Drop™-instansies', custom: 'Pasgemaakte URL', cancel: 'Kanselleer', connect: 'Koppel', invalid: 'Voer ’n geldige HTTP- of HTTPS-URL in.' },
+      bg: { heading: 'Изберете сървър', description: 'Изберете инстанцията за всички устройства. Можете да я промените по-късно от менюто „Сървър“.', instances: 'Инстанции на ErikrafT Drop™', custom: 'Персонализиран URL адрес', cancel: 'Отказ', connect: 'Свързване', invalid: 'Въведете валиден HTTP или HTTPS URL адрес.' },
+      ca: { heading: 'Tria un servidor', description: 'Tria la instància que han d’utilitzar tots els dispositius. La pots canviar més tard al menú Servidor.', instances: 'Instàncies d’ErikrafT Drop™', custom: 'URL personalitzada', cancel: 'Cancel·la', connect: 'Connecta', invalid: 'Introdueix una URL HTTP o HTTPS vàlida.' },
+      cs: { heading: 'Vybrat server', description: 'Vyberte instanci pro všechna zařízení. Později ji můžete změnit v nabídce Server.', instances: 'Instance ErikrafT Drop™', custom: 'Vlastní URL', cancel: 'Zrušit', connect: 'Připojit', invalid: 'Zadejte platnou adresu HTTP nebo HTTPS.' },
+      da: { heading: 'Vælg server', description: 'Vælg den instans, som alle enheder skal bruge. Du kan ændre den senere i menuen Server.', instances: 'ErikrafT Drop™-instanser', custom: 'Brugerdefineret URL', cancel: 'Annuller', connect: 'Opret forbindelse', invalid: 'Indtast en gyldig HTTP- eller HTTPS-URL.' },
+      el: { heading: 'Επιλογή διακομιστή', description: 'Επιλέξτε την παρουσία που θα χρησιμοποιούν όλες οι συσκευές. Μπορείτε να την αλλάξετε αργότερα από το μενού Διακομιστής.', instances: 'Παρουσίες ErikrafT Drop™', custom: 'Προσαρμοσμένο URL', cancel: 'Ακύρωση', connect: 'Σύνδεση', invalid: 'Εισαγάγετε ένα έγκυρο URL HTTP ή HTTPS.' },
+      fi: { heading: 'Valitse palvelin', description: 'Valitse instanssi kaikille laitteille. Voit vaihtaa sen myöhemmin Palvelin-valikosta.', instances: 'ErikrafT Drop™ -instanssit', custom: 'Mukautettu URL', cancel: 'Peruuta', connect: 'Yhdistä', invalid: 'Anna kelvollinen HTTP- tai HTTPS-URL.' },
+      he: { heading: 'בחירת שרת', description: 'בחרו את המופע שבו ישתמשו כל המכשירים. ניתן לשנות זאת בהמשך בתפריט השרת.', instances: 'מופעי ErikrafT Drop™', custom: 'כתובת URL מותאמת אישית', cancel: 'ביטול', connect: 'התחברות', invalid: 'יש להזין כתובת HTTP או HTTPS תקינה.' },
+      hr: { heading: 'Odaberi poslužitelj', description: 'Odaberite instancu koju će koristiti svi uređaji. Kasnije je možete promijeniti u izborniku Poslužitelj.', instances: 'ErikrafT Drop™ instance', custom: 'Prilagođeni URL', cancel: 'Odustani', connect: 'Poveži se', invalid: 'Unesite valjan HTTP ili HTTPS URL.' },
+      hu: { heading: 'Kiszolgáló kiválasztása', description: 'Válassza ki a minden eszközön használandó példányt. Később a Kiszolgáló menüben módosíthatja.', instances: 'ErikrafT Drop™ példányok', custom: 'Egyéni URL', cancel: 'Mégse', connect: 'Csatlakozás', invalid: 'Adjon meg érvényes HTTP- vagy HTTPS-URL-t.' },
+      id: { heading: 'Pilih server', description: 'Pilih instans yang akan digunakan semua perangkat. Anda dapat mengubahnya nanti dari menu Server.', instances: 'Instans ErikrafT Drop™', custom: 'URL khusus', cancel: 'Batal', connect: 'Hubungkan', invalid: 'Masukkan URL HTTP atau HTTPS yang valid.' },
+      mk: { heading: 'Изберете сервер', description: 'Изберете инстанца што ќе ја користат сите уреди. Подоцна можете да ја смените од менито Сервер.', instances: 'Инстанци на ErikrafT Drop™', custom: 'Прилагодена URL-адреса', cancel: 'Откажи', connect: 'Поврзи се', invalid: 'Внесете валидна HTTP или HTTPS URL-адреса.' },
+      ne: { heading: 'सर्भर छान्नुहोस्', description: 'सबै उपकरणले प्रयोग गर्ने इन्स्ट्यान्स छान्नुहोस्। पछि सर्भर मेनुबाट परिवर्तन गर्न सक्नुहुन्छ।', instances: 'ErikrafT Drop™ इन्स्ट्यान्सहरू', custom: 'अनुकूलित URL', cancel: 'रद्द गर्नुहोस्', connect: 'जडान गर्नुहोस्', invalid: 'मान्य HTTP वा HTTPS URL प्रविष्ट गर्नुहोस्।' },
+      no: { heading: 'Velg server', description: 'Velg instansen alle enheter skal bruke. Du kan endre den senere fra Server-menyen.', instances: 'ErikrafT Drop™-instanser', custom: 'Egendefinert URL', cancel: 'Avbryt', connect: 'Koble til', invalid: 'Skriv inn en gyldig HTTP- eller HTTPS-URL.' },
+      pl: { heading: 'Wybierz serwer', description: 'Wybierz instancję używaną przez wszystkie urządzenia. Później możesz ją zmienić w menu Serwer.', instances: 'Instancje ErikrafT Drop™', custom: 'Niestandardowy URL', cancel: 'Anuluj', connect: 'Połącz', invalid: 'Wprowadź prawidłowy adres URL HTTP lub HTTPS.' },
+      ro: { heading: 'Alegeți un server', description: 'Selectați instanța folosită de toate dispozitivele. O puteți schimba ulterior din meniul Server.', instances: 'Instanțe ErikrafT Drop™', custom: 'URL personalizat', cancel: 'Anulare', connect: 'Conectare', invalid: 'Introduceți un URL HTTP sau HTTPS valid.' },
+      sk: { heading: 'Vybrať server', description: 'Vyberte inštanciu pre všetky zariadenia. Neskôr ju môžete zmeniť v ponuke Server.', instances: 'Inštancie ErikrafT Drop™', custom: 'Vlastná URL adresa', cancel: 'Zrušiť', connect: 'Pripojiť', invalid: 'Zadajte platnú HTTP alebo HTTPS URL adresu.' },
+      sl: { heading: 'Izberite strežnik', description: 'Izberite instanco, ki jo bodo uporabljale vse naprave. Pozneje jo lahko spremenite v meniju Strežnik.', instances: 'Instance ErikrafT Drop™', custom: 'URL po meri', cancel: 'Prekliči', connect: 'Poveži', invalid: 'Vnesite veljaven HTTP ali HTTPS URL.' },
+      sr: { heading: 'Изаберите сервер', description: 'Изаберите инстанцу коју ће користити сви уређаји. Касније је можете променити у менију Сервер.', instances: 'ErikrafT Drop™ инстанце', custom: 'Прилагођени URL', cancel: 'Откажи', connect: 'Повежи', invalid: 'Унесите важећи HTTP или HTTPS URL.' },
+      sv: { heading: 'Välj server', description: 'Välj den instans som alla enheter ska använda. Du kan ändra den senare i Server-menyn.', instances: 'ErikrafT Drop™-instanser', custom: 'Anpassad URL', cancel: 'Avbryt', connect: 'Anslut', invalid: 'Ange en giltig HTTP- eller HTTPS-URL.' },
+      tr: { heading: 'Sunucu seçin', description: 'Tüm cihazların kullanacağı örneği seçin. Daha sonra Sunucu menüsünden değiştirebilirsiniz.', instances: 'ErikrafT Drop™ örnekleri', custom: 'Özel URL', cancel: 'İptal', connect: 'Bağlan', invalid: 'Geçerli bir HTTP veya HTTPS URL girin.' },
+      vi: { heading: 'Chọn máy chủ', description: 'Chọn phiên bản mà tất cả thiết bị sẽ sử dụng. Bạn có thể đổi sau trong menu Máy chủ.', instances: 'Các phiên bản ErikrafT Drop™', custom: 'URL tùy chỉnh', cancel: 'Hủy', connect: 'Kết nối', invalid: 'Nhập URL HTTP hoặc HTTPS hợp lệ.' },
+      'zh-TW': { heading: '選擇伺服器', description: '請選擇所有裝置要使用的執行個體。之後可在「伺服器」選單中變更。', instances: 'ErikrafT Drop™ 執行個體', custom: '自訂 URL', cancel: '取消', connect: '連線', invalid: '請輸入有效的 HTTP 或 HTTPS URL。' },
+      'pt-PT': { heading: 'Escolher servidor', description: 'Selecione a instância que todos os dispositivos devem utilizar. Pode alterá-la mais tarde no menu Servidor.', instances: 'Instâncias do ErikrafT Drop™', custom: 'URL personalizada', cancel: 'Cancelar', connect: 'Ligar', invalid: 'Introduza um URL HTTP ou HTTPS válido.' },
+      es: { heading: 'Elegir servidor', description: 'Seleccione la instancia que deben usar todos los dispositivos. Puede cambiarla después en el menú Servidor.', instances: 'Instancias de ErikrafT Drop™', custom: 'URL personalizada', cancel: 'Cancelar', connect: 'Conectar', invalid: 'Introduzca una URL HTTP o HTTPS válida.' },
+      fr: { heading: 'Choisir un serveur', description: 'Sélectionnez l’instance que tous les appareils doivent utiliser. Vous pourrez la modifier dans le menu Serveur.', instances: 'Instances ErikrafT Drop™', custom: 'URL personnalisée', cancel: 'Annuler', connect: 'Connecter', invalid: 'Saisissez une URL HTTP ou HTTPS valide.' },
+      de: { heading: 'Server auswählen', description: 'Wählen Sie die Instanz, die alle Geräte verwenden sollen. Sie können sie später im Menü Server ändern.', instances: 'ErikrafT Drop™-Instanzen', custom: 'Benutzerdefinierte URL', cancel: 'Abbrechen', connect: 'Verbinden', invalid: 'Geben Sie eine gültige HTTP- oder HTTPS-URL ein.' },
+      it: { heading: 'Scegli un server', description: 'Seleziona l’istanza da usare su tutti i dispositivi. Puoi modificarla in seguito dal menu Server.', instances: 'Istanze ErikrafT Drop™', custom: 'URL personalizzato', cancel: 'Annulla', connect: 'Connetti', invalid: 'Inserisci un URL HTTP o HTTPS valido.' },
+      nl: { heading: 'Kies een server', description: 'Kies de instantie die alle apparaten moeten gebruiken. Je kunt dit later wijzigen via het menu Server.', instances: 'ErikrafT Drop™-instanties', custom: 'Aangepaste URL', cancel: 'Annuleren', connect: 'Verbinden', invalid: 'Voer een geldige HTTP- of HTTPS-URL in.' },
+      ru: { heading: 'Выберите сервер', description: 'Выберите экземпляр для всех устройств. Позже его можно изменить в меню «Сервер».', instances: 'Экземпляры ErikrafT Drop™', custom: 'Свой URL', cancel: 'Отмена', connect: 'Подключиться', invalid: 'Введите корректный URL HTTP или HTTPS.' },
+      uk: { heading: 'Виберіть сервер', description: 'Виберіть екземпляр для всіх пристроїв. Його можна змінити пізніше в меню «Сервер».', instances: 'Екземпляри ErikrafT Drop™', custom: 'Власна URL-адреса', cancel: 'Скасувати', connect: 'Підключитися', invalid: 'Введіть дійсну URL-адресу HTTP або HTTPS.' },
+      ja: { heading: 'サーバーを選択', description: '接続するすべてのデバイスで同じインスタンスを選択してください。後でサーバーメニューから変更できます。', instances: 'ErikrafT Drop™ インスタンス', custom: 'カスタム URL', cancel: 'キャンセル', connect: '接続', invalid: '有効な HTTP または HTTPS URL を入力してください。' },
+      ko: { heading: '서버 선택', description: '연결할 모든 기기에서 사용할 인스턴스를 선택하세요. 나중에 서버 메뉴에서 변경할 수 있습니다.', instances: 'ErikrafT Drop™ 인스턴스', custom: '사용자 지정 URL', cancel: '취소', connect: '연결', invalid: '올바른 HTTP 또는 HTTPS URL을 입력하세요.' },
+      zh: { heading: '选择服务器', description: '请选择所有要连接的设备使用的实例。之后可以在“服务器”菜单中更改。', instances: 'ErikrafT Drop™ 实例', custom: '自定义 URL', cancel: '取消', connect: '连接', invalid: '请输入有效的 HTTP 或 HTTPS URL。' },
+      ar: { heading: 'اختيار خادم', description: 'اختر المثيل الذي ستستخدمه جميع الأجهزة. يمكنك تغييره لاحقًا من قائمة الخادم.', instances: 'مثيلات ErikrafT Drop™', custom: 'عنوان URL مخصص', cancel: 'إلغاء', connect: 'اتصال', invalid: 'أدخل عنوان URL صالحًا يبدأ بـ HTTP أو HTTPS.' },
+      hi: { heading: 'सर्वर चुनें', description: 'वह इंस्टेंस चुनें जिसका उपयोग सभी डिवाइस करेंगे। इसे बाद में सर्वर मेनू से बदला जा सकता है।', instances: 'ErikrafT Drop™ इंस्टेंस', custom: 'कस्टम URL', cancel: 'रद्द करें', connect: 'कनेक्ट करें', invalid: 'एक मान्य HTTP या HTTPS URL दर्ज करें।' }
+    };
+    const language = navigator.language || 'en';
+    const languageKey = language.toLowerCase().startsWith('zh-hant') || language.toLowerCase().startsWith('zh-tw') ? 'zh-TW' :
+      language.toLowerCase().startsWith('zh-hans') ? 'zh' :
+      language.toLowerCase().startsWith('pt-br') ? 'pt-BR' :
+      language.toLowerCase().startsWith('pt-pt') ? 'pt-PT' :
+      language.toLowerCase() === 'pt' ? 'pt-BR' :
+      (Object.keys(translations).find(key => language.toLowerCase().startsWith(key.toLowerCase())) || 'en');
+    const t = translations[languageKey] || translations.en;
+    document.documentElement.lang = languageKey;
+    document.title = `${t.heading} — ErikrafT Drop™`;
+    document.getElementById('custom-url').setAttribute('aria-label', t.custom);
+    document.getElementById('heading').textContent = t.heading;
+    document.getElementById('description').textContent = t.description;
+    document.getElementById('instances-legend').textContent = t.instances;
+    document.getElementById('custom-label').textContent = t.custom;
+    document.getElementById('cancel-button').textContent = t.cancel;
+    document.getElementById('connect-button').textContent = t.connect;
+
+    const form = document.getElementById('server-form');
+    const optionsContainer = document.getElementById('server-options');
+    const customOption = document.getElementById('custom-option');
+    const customUrl = document.getElementById('custom-url');
+    const error = document.getElementById('error');
+    let currentServer = 'https://drop.erikraft.com/';
+
+    function selectCustom() {
+      customOption.checked = true;
+    }
+    customUrl.addEventListener('focus', selectCustom);
+    customUrl.addEventListener('input', selectCustom);
+    document.getElementById('cancel-button').addEventListener('click', () => window.desktopServerSelector.close());
+
+    window.desktopServerSelector.getOptions().then(({ currentServer: saved, servers }) => {
+      currentServer = saved;
+      for (const server of servers) {
+        const label = document.createElement('label');
+        label.className = 'option';
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'server';
+        radio.value = server.url;
+        radio.checked = server.url === saved;
+        const text = document.createElement('span');
+        const title = document.createElement('span');
+        title.className = 'label';
+        title.textContent = server.label;
+        const url = document.createElement('span');
+        url.className = 'url';
+        url.textContent = server.url;
+        text.append(title, url);
+        label.append(radio, text);
+        optionsContainer.append(label);
+      }
+      if (!servers.some(server => server.url === saved)) {
+        customOption.checked = true;
+        customUrl.value = saved;
+      }
+    }).catch(() => {
+      error.textContent = t.invalid;
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      error.textContent = '';
+      const selected = form.querySelector('input[name="server"]:checked');
+      const url = selected && selected.value !== 'custom' ? selected.value : customUrl.value;
+      try {
+        await window.desktopServerSelector.saveServer(url || currentServer);
+        window.desktopServerSelector.close();
+      } catch (e) {
+        error.textContent = t.invalid;
+        customOption.checked = true;
+      }
+    });
+  </script>
+</body>
+</html>
