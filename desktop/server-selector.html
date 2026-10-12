@@ -97,6 +97,8 @@
       (Object.keys(translations).find(key => language.toLowerCase().startsWith(key.toLowerCase())) || 'en');
     const t = translations[languageKey] || translations.en;
     document.documentElement.lang = languageKey;
+    document.title = `${t.heading} — ErikrafT Drop™`;
+    document.getElementById('custom-url').setAttribute('aria-label', t.custom);
     document.getElementById('heading').textContent = t.heading;
     document.getElementById('description').textContent = t.description;
     document.getElementById('instances-legend').textContent = t.instances;
@@ -156,7 +158,7 @@
         await window.desktopServerSelector.saveServer(url || currentServer);
         window.desktopServerSelector.close();
       } catch (e) {
-        error.textContent = e && e.message ? e.message : t.invalid;
+        error.textContent = t.invalid;
         customOption.checked = true;
       }
     });
