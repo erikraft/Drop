@@ -269,7 +269,7 @@
     </style>
     <script>
         (function () {
-            const allowedClientTypes = new Set(['browser', 'android', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser', 'isearch-cli']);
+            const allowedClientTypes = new Set(['browser', 'android', 'onion', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'comet-browser', 'browseros-browser', 'isearch-cli']);
             const sessionKey = 'client_type';
 
             const params = new URLSearchParams(window.location.search);
@@ -304,7 +304,8 @@
             var forcedType = normalizeClientType(params.get('client_type'));
             var storedTypeNormalized = normalizeClientType(storedType);
 
-            var clientType = forcedType || storedTypeNormalized || detectedType;
+            var isOnionClient = window.location.hostname.toLowerCase().endsWith('.onion');
+            var clientType = isOnionClient ? 'onion' : (forcedType || (storedTypeNormalized === 'onion' ? '' : storedTypeNormalized) || detectedType);
 
             if (clientType === 'browser' && detectedType !== 'browser') {
                 clientType = detectedType;
@@ -323,7 +324,7 @@
                     // ignore storage errors
                 }
             }
-            else {
+            else if (!isOnionClient) {
                 try {
                     sessionStorage.setItem(sessionKey, clientType);
                 }
