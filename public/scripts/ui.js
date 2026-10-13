@@ -480,6 +480,12 @@ class PeerUI {
 
         Object.keys(this._peer._roomIds).forEach(roomType => this.$el.classList.add(`type-${roomType}`));
 
+        // Brand each remote client independently of the room type or viewer's client.
+        const clientType = this._peer?.name?.clientType;
+        if (['discord-bot', 'discord-activity', 'open-vsx-registry-extension', 'vs-code-extension'].includes(clientType)) {
+            this.$el.classList.add(`client-${clientType}`);
+        }
+
         if (!this._peer.rtcSupported || !window.isRtcSupported) this.$el.classList.add('ws-peer');
     }
 
