@@ -1207,3 +1207,45 @@ x-dialog a {
     border-style: solid;
     border-width: 3px;
 }
+
+
+/* Remote client branding: the peer's identity wins over the viewer's room palette. */
+x-peer.client-discord-bot .icon-wrapper,
+x-peer.client-discord-activity .icon-wrapper {
+    --accent-color: #5865F2;
+    background-color: #5865F2;
+    background-image: none;
+}
+
+x-peer.client-open-vsx-registry-extension .icon-wrapper {
+    --accent-color: #A60EE5;
+    background-color: #A60EE5;
+    background-image: linear-gradient(135deg, #C160EF 0%, #A60EE5 100%);
+}
+
+x-peer.client-vs-code-extension .icon-wrapper {
+    --accent-color: #0084D0;
+    background-color: #0084D0;
+    background-image: linear-gradient(135deg, #23AAF2 0%, #0084D0 50%, #0076B8 100%);
+}
+
+x-peer.client-discord-bot .device-descriptor .name,
+x-peer.client-discord-activity .device-descriptor .name {
+    color: #5865F2;
+}
+
+x-peer.client-open-vsx-registry-extension .device-descriptor .name {
+    color: #A60EE5;
+    background-image: linear-gradient(90deg, #C160EF 0%, #A60EE5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+x-peer.client-vs-code-extension .device-descriptor .name {
+    color: #0084D0;
+    background-image: linear-gradient(90deg, #23AAF2 0%, #0084D0 50%, #0076B8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
