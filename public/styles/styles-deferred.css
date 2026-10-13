@@ -1249,3 +1249,19 @@ x-peer.client-vs-code-extension .device-descriptor .name {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+
+/* Tor/Onion peers retain their identity regardless of the room they share. */
+x-peer.client-onion .icon-wrapper {
+    --accent-color: #59316B;
+    background-color: #59316B;
+    background-image: linear-gradient(135deg, #7D4698 0%, #59316B 100%);
+}
+
+x-peer.client-onion .device-descriptor .name {
+    color: #59316B;
+    background-image: linear-gradient(90deg, #7D4698 0%, #59316B 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
