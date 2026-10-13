@@ -5,7 +5,7 @@ import { cyrb53, hasher } from "./helper.js";
 
 export const ISEARCH_CLI_CLIENT_TYPE = 'isearch-cli';
 export const ISEARCH_CLI_NAME = 'iSearch CLI™';
-export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', ISEARCH_CLI_CLIENT_TYPE]);
+export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'onion', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', ISEARCH_CLI_CLIENT_TYPE]);
 
 export function isISearchCliRequest(req) {
     const searchParams = new URL(req.url, 'http://server').searchParams;
@@ -205,6 +205,10 @@ export default class Peer {
                 deviceName: 'Open VSX Extension',
                 browser: 'Open VSX'
             },
+            onion: {
+                deviceName: 'ErikrafT Drop Onion',
+                browser: 'Tor / Onion'
+            },
             [ISEARCH_CLI_CLIENT_TYPE]: {
                 deviceName: ISEARCH_CLI_NAME,
                 browser: ISEARCH_CLI_NAME
@@ -278,6 +282,13 @@ export default class Peer {
     }
 
     _resolveClientType(req) {
+        // The official Tor hidden service identifies the connecting client by its host,
+        // so other peers can render its Onion branding without relying on a query parameter.
+        const host = (req.headers.host || '').split(':')[0].toLowerCase();
+        if (host.endsWith('.onion')) {
+            return 'onion';
+        }
+
         if (isISearchCliRequest(req)) {
             return ISEARCH_CLI_CLIENT_TYPE;
         }
