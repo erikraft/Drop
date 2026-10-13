@@ -31,7 +31,7 @@ test('VS Code uses its requested blue gradient for all room/network badges', () 
 test('remote peer UI maps supported client types to peer-scoped branding classes', () => {
   const ui = fs.readFileSync(new URL('../public/scripts/ui.js', import.meta.url), 'utf8');
   assert.match(ui, /const clientType = this\._peer\?\.name\?\.clientType/);
-  assert.match(ui, /\['discord-bot', 'discord-activity', 'open-vsx-registry-extension', 'vs-code-extension'\]/);
+  assert.match(ui, /\['onion', 'discord-bot', 'discord-activity', 'open-vsx-registry-extension', 'vs-code-extension'\]/);
 });
 
 test('remote Discord peers keep Discord branding regardless of room type', () => {
