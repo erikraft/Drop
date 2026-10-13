@@ -2501,3 +2501,14 @@ html[data-erikraft-client-type="vs-code-extension"] body .badge-tor-network {
     background-color: #0084D0;
     background-image: linear-gradient(135deg, #23AAF2 0%, #0084D0 50%, #0076B8 100%);
 }
+
+
+/* Official ErikrafT Drop Onion client palette; other clients keep their own room colors. */
+html[data-erikraft-client-type="onion"] body .badge-room-ip,
+html[data-erikraft-client-type="onion"] body .badge-room-lan,
+html[data-erikraft-client-type="onion"] body .badge-room-secret,
+html[data-erikraft-client-type="onion"] body .badge-room-public-id,
+html[data-erikraft-client-type="onion"] body .badge-tor-network {
+    background-color: #59316B;
+    background-image: linear-gradient(135deg, #7D4698 0%, #59316B 100%);
+}
