@@ -47,3 +47,22 @@ test('remote Open VSX and VS Code peers use their gradients on logo backgrounds 
   assert.match(deferredCss, /x-peer\.client-open-vsx-registry-extension \.device-descriptor \.name/);
   assert.match(deferredCss, /x-peer\.client-vs-code-extension \.device-descriptor \.name/);
 });
+
+
+test('official Onion-hosted clients are identified as Onion peers by the server', () => {
+  const peer = fs.readFileSync(new URL('../server/peer.js', import.meta.url), 'utf8');
+  assert.match(peer, /host\.endsWith\('\.onion'\)/);
+  assert.match(peer, /deviceName: 'ErikrafT Drop Onion'/);
+});
+
+test('Onion URL overrides stored client type without persisting Onion across clearnet visits', () => {
+  assert.match(html, /var isOnionClient = window\.location\.hostname\.toLowerCase\(\)\.endsWith\('\.onion'\)/);
+  assert.match(html, /isOnionClient \? 'onion'/);
+  assert.match(html, /else if \(!isOnionClient\)/);
+});
+
+test('Onion peers use the purple gradient for their remote logo and name', () => {
+  const deferredCss = fs.readFileSync(new URL('../public/styles/styles-deferred.css', import.meta.url), 'utf8');
+  assert.match(deferredCss, /x-peer\.client-onion \.icon-wrapper[\s\S]*?linear-gradient\(135deg, #7D4698 0%, #59316B 100%\)/);
+  assert.match(deferredCss, /x-peer\.client-onion \.device-descriptor \.name/);
+});
