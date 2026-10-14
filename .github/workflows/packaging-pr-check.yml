@@ -17,7 +17,9 @@ permissions:
 
 env:
   ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
-  ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+  # Keep electron-builder's generated helper scripts outside the repository.
+  # Otherwise root "type": "module" makes cached CommonJS helpers load as ESM.
+  ELECTRON_BUILDER_CACHE: ${{ runner.temp }}/electron-builder-cache
 
 jobs:
   linux-deb:
@@ -36,10 +38,10 @@ jobs:
         with:
           path: |
             .cache/electron
-            .cache/electron-builder
-          key: ${{ runner.os }}-electron-${{ hashFiles('package-lock.json') }}
+            ${{ runner.temp }}/electron-builder-cache
+          key: builder-cache-outside-root-v1-${{ runner.os }}-electron-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-electron-
+            builder-cache-outside-root-v1-${{ runner.os }}-electron-
       - name: Install dependencies
         shell: bash
         run: |
@@ -75,10 +77,10 @@ jobs:
         with:
           path: |
             .cache/electron
-            .cache/electron-builder
-          key: ${{ runner.os }}-electron-${{ hashFiles('package-lock.json') }}
+            ${{ runner.temp }}/electron-builder-cache
+          key: builder-cache-outside-root-v1-${{ runner.os }}-electron-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-electron-
+            builder-cache-outside-root-v1-${{ runner.os }}-electron-
       - name: Install dependencies
         shell: pwsh
         run: |
@@ -98,4 +100,3 @@ jobs:
           $exe = Get-ChildItem -Path dist/desktop -Filter *.exe | Select-Object -First 1
           if (-not $exe -or $exe.Length -le 0) { throw 'Windows installer was not generated.' }
           Write-Host "Generated: $($exe.FullName)"
-
