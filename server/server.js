@@ -126,6 +126,61 @@ export default class ErikrafTdropServer {
             return res.json({ success: false, onionAddress: null });
         });
 
+        // Public, read-only API discovery endpoint. This describes supported
+        // integration surfaces; it does not expose room secrets or transfer contents.
+        const apiCapabilitiesLimiter = RateLimit({
+            windowMs: 60 * 1000,
+            max: 60,
+            message: { error: 'rate_limit_exceeded', message: 'Too many capability requests. Please retry later.' },
+            standardHeaders: true,
+            legacyHeaders: false
+        });
+
+        app.get('/api/v1/capabilities', apiCapabilitiesLimiter, (req, res) => {
+            res.setHeader('Cache-Control', 'public, max-age=60');
+            res.json({
+                apiVersion: 'v1',
+                product: {
+                    name: 'ErikrafT Drop',
+                    website: 'https://drop.erikraft.com'
+                },
+                endpoints: {
+                    capabilities: '/api/v1/capabilities',
+                    cliMetadata: '/api/cli',
+                    configuration: '/config',
+                    signalingWebSocket: '/server'
+                },
+                integrations: {
+                    web: { supported: true, transport: ['HTTP', 'WebSocket', 'WebRTC'] },
+                    desktop: { supported: true, transport: ['HTTP', 'WebSocket', 'WebRTC'] },
+                    android: { supported: true, transport: ['HTTP', 'WebSocket', 'WebRTC'] },
+                    cli: {
+                        supported: true,
+                        clientType: 'isearch-cli',
+                        protocolVersion: 1,
+                        webrtcRequiredForPeerToPeer: true,
+                        websocketFallbackConfigured: Boolean(conf.wsFallback)
+                    }
+                },
+                capabilities: {
+                    deviceDiscovery: true,
+                    devicePairing: true,
+                    fileTransfer: true,
+                    transferProgressEvents: true,
+                    endToEndEncryptedWebRtc: true
+                },
+                security: {
+                    apiKeyRequired: false,
+                    filesStoredByThisService: false,
+                    executeReceivedFiles: false,
+                    executeReceivedCode: false,
+                    rateLimitEnabled: Boolean(conf.rateLimit),
+                    note: 'Public metadata only. Signaling and transfer operations remain subject to the existing client protocol and server protections.'
+                },
+                documentation: 'https://docsdrop.erikraft.com'
+            });
+        });
+
         app.get('/api/cli', (req, res) => {
             res.json({
                 version: 1,
