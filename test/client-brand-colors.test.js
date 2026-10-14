@@ -66,3 +66,13 @@ test('Onion peers use the purple gradient for their remote logo and name', () =>
   assert.match(deferredCss, /x-peer\.client-onion \.icon-wrapper[\s\S]*?linear-gradient\(135deg, #7D4698 0%, #59316B 100%\)/);
   assert.match(deferredCss, /x-peer\.client-onion \.device-descriptor \.name/);
 });
+
+
+test('remote Onion peers use the official Tor Browser logo with a generic-icon fallback', () => {
+  const ui = fs.readFileSync(new URL('../public/scripts/ui.js', import.meta.url), 'utf8');
+  const deferredCss = fs.readFileSync(new URL('../public/styles/styles-deferred.css', import.meta.url), 'utf8');
+  assert.match(ui, /https:\/\/www\.torproject\.org\/static\/images\/tor-browser\/Browser_Icon\.svg/);
+  assert.match(ui, /peerIcon\.hidden = true/);
+  assert.match(ui, /onionLogo\.addEventListener\('error'/);
+  assert.match(deferredCss, /x-peer\.client-onion \.icon-wrapper img\.client-logo[\s\S]*?filter: brightness\(0\) invert\(1\)/);
+});
