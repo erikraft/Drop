@@ -128,7 +128,15 @@ export default class ErikrafTdropServer {
 
         // Public, read-only API discovery endpoint. This describes supported
         // integration surfaces; it does not expose room secrets or transfer contents.
-        app.get('/api/v1/capabilities', (req, res) => {
+        const apiCapabilitiesLimiter = RateLimit({
+            windowMs: 60 * 1000,
+            max: 60,
+            message: { error: 'rate_limit_exceeded', message: 'Too many capability requests. Please retry later.' },
+            standardHeaders: true,
+            legacyHeaders: false
+        });
+
+        app.get('/api/v1/capabilities', apiCapabilitiesLimiter, (req, res) => {
             res.setHeader('Cache-Control', 'public, max-age=60');
             res.json({
                 apiVersion: 'v1',
