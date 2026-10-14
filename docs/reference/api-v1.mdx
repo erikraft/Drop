@@ -40,7 +40,7 @@ The API does not upload or store files. Discovery and signaling use the existing
 
 ## Public access and limits
 
-The capability endpoint is public and does not require an API key. It is intended for low-volume discovery and may be subject to deployment-level rate limits. Do not embed private credentials in browser or CLI clients.
+The capability endpoint is public and does not require an API key. It is limited to 60 requests per minute per server process, and may also be subject to deployment-level limits. In horizontally scaled or serverless deployments, this in-memory limit is not a shared global quota. Do not embed private credentials in browser or CLI clients.
 
 ## Current scope
 
