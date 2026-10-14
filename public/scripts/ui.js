@@ -465,7 +465,24 @@ class PeerUI {
                 </div>
             </label>`;
 
-        this.$el.querySelector('svg use').setAttribute('xlink:href', this._icon());
+        const peerIcon = this.$el.querySelector('svg.icon');
+        peerIcon.querySelector('use').setAttribute('xlink:href', this._icon());
+
+        if (this._peer?.name?.clientType === 'onion') {
+            const onionLogo = document.createElement('img');
+            onionLogo.className = 'icon client-logo';
+            onionLogo.alt = '';
+            onionLogo.setAttribute('aria-hidden', 'true');
+            onionLogo.src = 'https://www.torproject.org/static/images/tor-browser/Browser_Icon.svg';
+            onionLogo.addEventListener('load', () => {
+                peerIcon.hidden = true;
+            }, { once: true });
+            onionLogo.addEventListener('error', () => {
+                onionLogo.remove();
+            }, { once: true });
+            peerIcon.insertAdjacentElement('afterend', onionLogo);
+        }
+
         this.$el.querySelector('.name').textContent = this._displayName();
         this.$el.querySelector('.device-name').textContent = this._deviceName();
 
