@@ -1269,8 +1269,8 @@ x-peer.client-onion .device-descriptor .name {
 
 /* Use the official Tor Browser mark at the same size as other peer client logos. */
 x-peer.client-onion .icon-wrapper img.client-logo {
-    width: 32px;
-    height: 32px;
+    width: var(--icon-size);
+    height: var(--icon-size);
     object-fit: contain;
     filter: brightness(0) invert(1);
 }
