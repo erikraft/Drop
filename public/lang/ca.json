@@ -355,5 +355,11 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "promo-ai": {
+        "eyebrow": "PUBLICITAT",
+        "description": "Converteix les teves idees en imatges amb IA.",
+        "cta": "Descobreix ErikrafT AI™",
+        "dismiss": "Tanca l’anunci"
+    }
 }

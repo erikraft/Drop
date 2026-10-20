@@ -355,5 +355,11 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "promo-ai": {
+        "eyebrow": "РЕКЛАМА",
+        "description": "Перетворюйте свої ідеї на зображення за допомогою ШІ.",
+        "cta": "Відкрийте ErikrafT AI™",
+        "dismiss": "Закрити рекламу"
+    }
 }

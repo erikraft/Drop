@@ -235,5 +235,11 @@
         "room_select_title": "",
         "discover_paired": "",
         "discovery": ""
+    },
+    "promo-ai": {
+        "eyebrow": "ОГЛАС",
+        "description": "Pretvorite svoje ideje u slike pomoću AI.",
+        "cta": "Otkrijte ErikrafT AI™",
+        "dismiss": "Zatvori oglas"
     }
 }

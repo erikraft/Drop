@@ -355,5 +355,11 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "promo-ai": {
+        "eyebrow": "広告",
+        "description": "AIでアイデアを画像に変えましょう。",
+        "cta": "ErikrafT AI™ を見る",
+        "dismiss": "広告を閉じる"
+    }
 }

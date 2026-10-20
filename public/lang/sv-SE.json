@@ -235,5 +235,11 @@
         "room_select_title": "",
         "discover_paired": "",
         "discovery": ""
+    },
+    "promo-ai": {
+        "eyebrow": "ANNONS",
+        "description": "Förvandla dina idéer till bilder med AI.",
+        "cta": "Upptäck ErikrafT AI™",
+        "dismiss": "Stäng annonsen"
     }
 }

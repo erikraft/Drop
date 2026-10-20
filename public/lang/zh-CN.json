@@ -380,5 +380,11 @@
         "instagram_controlled": "Instagram controls the final interface and recognition.",
         "share_unsupported": "File sharing is not supported in this browser.",
         "share_failed": "Sharing failed: {{error}}"
+    },
+    "promo-ai": {
+        "eyebrow": "广告",
+        "description": "用 AI 将你的创意变成图像。",
+        "cta": "了解 ErikrafT AI™",
+        "dismiss": "关闭广告"
     }
 }
