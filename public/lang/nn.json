@@ -355,5 +355,11 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "promo-ai": {
+        "eyebrow": "ANNONSE",
+        "description": "Gjer ideane dine om til bilete med KI.",
+        "cta": "Utforsk ErikrafT AI™",
+        "dismiss": "Lukk annonsen"
+    }
 }

@@ -235,5 +235,11 @@
         "room_select_title": "",
         "discover_paired": "",
         "discovery": ""
+    },
+    "promo-ai": {
+        "eyebrow": "QUẢNG CÁO",
+        "description": "Biến ý tưởng thành hình ảnh bằng AI.",
+        "cta": "Khám phá ErikrafT AI™",
+        "dismiss": "Đóng quảng cáo"
     }
 }

@@ -355,5 +355,11 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "promo-ai": {
+        "eyebrow": "PUBLICITÉ",
+        "description": "Transformez vos idées en images grâce à l’IA.",
+        "cta": "Découvrir ErikrafT AI™",
+        "dismiss": "Fermer la publicité"
+    }
 }

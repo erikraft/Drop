@@ -235,5 +235,11 @@
         "room_select_title": "",
         "discover_paired": "",
         "discovery": ""
+    },
+    "promo-ai": {
+        "eyebrow": "ADVERTENSIE",
+        "description": "Verander jou idees in beelde met KI.",
+        "cta": "Ontdek ErikrafT AI™",
+        "dismiss": "Maak advertensie toe"
     }
 }

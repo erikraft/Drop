@@ -355,5 +355,11 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "promo-ai": {
+        "eyebrow": "ANNONCE",
+        "description": "Gør dine idéer til billeder med AI.",
+        "cta": "Oplev ErikrafT AI™",
+        "dismiss": "Luk annoncen"
+    }
 }

@@ -380,5 +380,11 @@
         "instagram_controlled": "Instagram controls the final interface and recognition.",
         "share_unsupported": "File sharing is not supported in this browser.",
         "share_failed": "Sharing failed: {{error}}"
+    },
+    "promo-ai": {
+        "eyebrow": "MAINOS",
+        "description": "Muuta ideasi kuviksi tekoälyn avulla.",
+        "cta": "Tutustu ErikrafT AI™ -palveluun",
+        "dismiss": "Sulje mainos"
     }
 }

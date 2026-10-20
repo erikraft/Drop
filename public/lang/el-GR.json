@@ -235,5 +235,11 @@
         "room_select_title": "",
         "discover_paired": "",
         "discovery": ""
+    },
+    "promo-ai": {
+        "eyebrow": "ΔΙΑΦΗΜΙΣΗ",
+        "description": "Μετατρέψτε τις ιδέες σας σε εικόνες με AI.",
+        "cta": "Ανακαλύψτε το ErikrafT AI™",
+        "dismiss": "Κλείσιμο διαφήμισης"
     }
 }

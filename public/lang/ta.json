@@ -355,5 +355,11 @@
     "share_title": "Share",
     "share_aria-label": "Share",
     "download": "Download",
-    "title-file": "File"
+    "title-file": "File",
+    "promo-ai": {
+        "eyebrow": "விளம்பரம்",
+        "description": "AI மூலம் உங்கள் யோசனைகளைப் படங்களாக மாற்றுங்கள்.",
+        "cta": "ErikrafT AI™-ஐ அறியுங்கள்",
+        "dismiss": "விளம்பரத்தை மூடு"
+    }
 }
