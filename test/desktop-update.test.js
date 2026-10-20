@@ -10,13 +10,13 @@ const indexHtml = fs.readFileSync(new URL('../public/index.html', import.meta.ur
 const serviceWorker = fs.readFileSync(new URL('../public/service-worker.js', import.meta.url), 'utf8');
 const manifest = JSON.parse(fs.readFileSync(new URL('../public/manifest.json', import.meta.url), 'utf8'));
 
-test('desktop/web release version is 10.1.7', () => {
-  assert.equal(packageJson.version, '10.1.7');
-  assert.equal(manifest.version, '10.1.7');
+test('desktop/web release version is 10.1.9', () => {
+  assert.equal(packageJson.version, '10.1.9');
+  assert.equal(manifest.version, '10.1.9');
   assert.match(serviceWorker, /cacheVersion = 'v10\.1\.7'/);
   assert.match(serviceWorker, /version: '10\.1\.7'/);
   assert.match(indexHtml, /"softwareVersion": "10\.1\.7"/);
-  assert.ok(indexHtml.includes('class="font-subheading">v10.1.7</div>'));
+  assert.ok(indexHtml.includes('class="font-subheading">v10.1.9</div>'));
 });
 
 test('WinSparkle is the Windows desktop update mechanism', () => {
