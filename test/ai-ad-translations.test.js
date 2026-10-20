@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const localizationSource = fs.readFileSync('public/scripts/localization.js', 'utf8');
-const supportedBlock = localizationSource.match(/Localization\\.supportedLocales = \\[([\\s\\S]*?)\\];/);
+const supportedBlock = localizationSource.match(/Localization\.supportedLocales = \[([\s\S]*?)\];/);
 assert.ok(supportedBlock, 'supportedLocales list must exist');
 const supportedLocales = [...supportedBlock[1].matchAll(/"([^"]+)"/g)].map(match => match[1]);
 assert.ok(supportedLocales.length > 0, 'at least one supported locale must exist');
@@ -29,8 +29,7 @@ assert.equal(en.description, 'Turn your ideas into images with AI.');
 
 const html = fs.readFileSync('public/index.html', 'utf8');
 for (const key of requiredKeys) {
-    assert.ok(html.includes('data-i18n-key="promo-ai.' + key + '"') ||
-        (key === 'dismiss' && html.includes('data-i18n-key="promo-ai.dismiss"')),
+    assert.ok(html.includes('data-i18n-key="promo-ai.' + key + '"'),
         'popup markup must use localization key promo-ai.' + key);
 }
 assert.ok(!html.includes('var copy={'), 'popup translations must not be duplicated in inline JavaScript');
