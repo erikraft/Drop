@@ -24,7 +24,7 @@ linux:
         - x64
   category: Network;Utility;
   # Dedicated Linux desktop icon requested for Linux Mint.
-  icon: packaging/linux/icons/ErikrafT_Drop_Linux.ico
+  icon: packaging/linux/icons/icon-drop.svg
   desktop:
     entry:
       Name: ErikrafT Drop™
