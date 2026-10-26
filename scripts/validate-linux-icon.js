@@ -19,10 +19,6 @@ const icons = [
     label: 'Linux 512px maskable PNG customization asset',
     path: 'packaging/linux/icons/android-chrome-512x512-maskable.png',
   },
-  {
-    label: 'Linux ICO source asset',
-    path: 'packaging/linux/icons/ErikrafT_Drop_Linux.ico',
-  },
 ];
 
 for (const icon of icons) {
