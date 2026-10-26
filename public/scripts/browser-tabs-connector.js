@@ -135,7 +135,7 @@ class BrowserTabsConnector {
             #about .about-title-runtime { width:100%; margin:0; padding:0; display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; }
             #about .about-title-runtime h1 { margin:0; line-height:1.15; }
             #about .about-subtitle-runtime,#about .about-note-runtime { width:min(760px,100%); margin:0; text-align:center; line-height:1.5; }
-            #about .about-feature-list-runtime { box-sizing:border-box; width:100%; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:stretch; gap:12px; margin:0; }
+            #about .about-feature-list-runtime { box-sizing:border-box; width:100%; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:stretch; gap:12px; margin:0; }
             #about .about-feature-runtime { box-sizing:border-box; min-width:0; width:100%; min-height:112px; margin:0; padding:16px; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:10px; border:1px solid rgba(127,127,127,.22); border-radius:14px; background:rgba(127,127,127,.06); text-align:left; }
             #about .about-feature-icon-runtime { width:38px; height:38px; flex:0 0 38px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:rgba(127,127,127,.10); }
             #about .about-feature-icon-runtime i { font-size:18px; line-height:1; }
