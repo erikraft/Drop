@@ -45,20 +45,6 @@ class BrowserTabsConnector {
     }
 }
 
-(function loadWebTorrentBeta() {
-    const load = () => {
-        if (document.querySelector('script[data-erikraft-webtorrent="true"]')) return;
-        const script = document.createElement('script');
-        script.src = 'scripts/webtorrent-transfer.js';
-        script.defer = true;
-        script.dataset.erikraftWebtorrent = 'true';
-        script.onerror = error => console.warn('[WebTorrent] Beta module failed to load:', error);
-        document.head.appendChild(script);
-    };
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load, { once: true });
-    else load();
-}());
-
 (function refreshWeb10UI() {
     let originalAboutHTML = null;
     let originalAboutClass = null;
@@ -120,7 +106,6 @@ class BrowserTabsConnector {
             <p class="about-subtitle-runtime">Transferência de arquivos peer-to-peer, sem cadastro.</p>
             <div class="about-feature-list-runtime" role="list">
                 <article class="about-feature-runtime" role="listitem"><div class="about-feature-icon-runtime"><i class="fa-solid fa-wifi" aria-hidden="true"></i></div><div class="about-feature-copy-runtime"><strong>Descoberta na rede</strong><span>Encontre dispositivos compatíveis na mesma rede.</span></div></article>
-                <article class="about-feature-runtime" role="listitem"><div class="about-feature-icon-runtime"><i class="fa-solid fa-network-wired" aria-hidden="true"></i></div><div class="about-feature-copy-runtime"><strong>WebTorrent (Beta)</strong><span>Transferência P2P baseada em WebRTC para peers compatíveis.</span></div></article>
                 <article class="about-feature-runtime" role="listitem"><div class="about-feature-icon-runtime"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div><div class="about-feature-copy-runtime"><strong>Privacidade</strong><span>Sem banco de dados central para armazenar os arquivos transferidos.</span></div></article>
             </div>
             <div class="social-buttons-runtime" role="navigation" aria-label="Links oficiais">
@@ -130,7 +115,7 @@ class BrowserTabsConnector {
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://www.instagram.com/erikraft_drop" title="Instagram" aria-label="Instagram"><svg class="icon"><use xlink:href="#instagram"></use></svg></a>
                 <a class="icon-button" target="_blank" rel="noreferrer" href="https://ko-fi.com/erikraft" title="Apoiar" aria-label="Apoiar"><svg class="icon"><use xlink:href="#donation"></use></svg></a>
             </div>
-            <p class="about-note-runtime">WebTorrent e recursos relacionados estão em Beta e podem depender do suporte do navegador e da conectividade entre peers.</p><p class="about-note-runtime">IA opcional com <a href="https://alibaba.github.io/page-agent/" target="_blank" rel="noopener noreferrer">Page Agent</a>, por Alibaba, sob licença MIT.</p>`;
+            <p class="about-note-runtime">IA opcional com <a href="https://alibaba.github.io/page-agent/" target="_blank" rel="noopener noreferrer">Page Agent</a>, por Alibaba, sob licença MIT.</p>`;
 
         const branding = content.querySelector('.about-branding-runtime');
         if (logo) branding.appendChild(logo);
