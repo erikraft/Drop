@@ -56,6 +56,7 @@ assert.match(source,/querySelector\('\.btn-row'\)/);
 assert.match(source,/data-ek-media-action/);
 assert.doesNotMatch(source,/host\.querySelector\('\#ek-actions'\)/);
 assert.match(source,/RBM Convert/);
+assert.doesNotMatch(source,/Spin View/i, 'RBM Convert must replace the former Spin View action wording.');
 assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
