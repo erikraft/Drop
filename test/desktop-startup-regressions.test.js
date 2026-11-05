@@ -10,7 +10,9 @@ const cursor=fs.readFileSync(new URL('../Website About/NEW/js/cursor.js',import.
 
 assert.match(network,/window\.erikrafTDisplayName = msg\.displayName/);
 assert.match(uiMain,/window\.erikrafTDisplayName === 'string'/);
-assert.match(uiMain,/this\._onDisplayName\(window\.erikrafTDisplayName\)/);\nassert.match(uiMain,/placeholder', serverDisplayName/);\nassert.match(uiMain,/Could not load the saved device name/);
+assert.match(uiMain,/this\._onDisplayName\(window\.erikrafTDisplayName\)/);
+assert.match(uiMain,/placeholder', serverDisplayName/);
+assert.match(uiMain,/Could not load the saved device name/);
 assert.match(index,/lang\/en\.json" as="fetch" crossorigin="use-credentials"/);
 
 for (const translations of [en,pt]) {
