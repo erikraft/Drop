@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ErikrafT Drop™">
     <meta name="application-name" content="ErikrafT Drop™">
-    <meta name="application-version" content="10.1.9">
+    <meta name="application-version" content="10.1.10">
     <meta name="iSearch-cli" content="true">
     <meta name="iSearch-cli-version" content="1">
     <meta name="iSearch-cli-endpoint" content="https://drop.erikraft.com/api/cli">
@@ -2178,7 +2178,7 @@
             if (clientType !== 'browser') return;
 
             try {
-                if (sessionStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
+                if (localStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
             } catch (error) {
                 // Storage may be unavailable.
             }
@@ -2188,7 +2188,7 @@
                 close.addEventListener('click', function () {
                     ad.hidden = true;
                     try {
-                        sessionStorage.setItem('erikraft-ai-ad-dismissed', '1');
+                        localStorage.setItem('erikraft-ai-ad-dismissed', '1');
                     } catch (error) {
                         // Storage may be unavailable.
                     }
