@@ -218,7 +218,7 @@ async function createWindow() {
 
   const windowIcon = process.platform === 'win32'
     ? path.join(app.getAppPath(), 'desktop', 'assets', 'icon.ico')
-    : path.join(app.getAppPath(), 'desktop', 'assets', 'icon-drop.svg');
+    : path.join(app.getAppPath(), 'desktop', 'assets', 'icon.ico');
 
   mainWindow = new BrowserWindow({
     width: 1200,
