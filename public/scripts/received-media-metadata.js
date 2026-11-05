@@ -65,11 +65,11 @@ function simulator(file){
  const closeLabel=(()=>{try{return Localization.getTranslation('dialogs.close',null)}catch(_){return'Close'}})();
  card.innerHTML='<h2>'+esc(tr('instagram_story','Instagram Story'))+'</h2><p>'+esc(controlled)+'</p><div class="ek-story"><div class="ek-ring">⌁</div><img alt="Instagram Story" src="'+src+'" style="transform:translate(0,0) scale(1.08)"><div class="ek-badge">'+esc(tr('instagram_story','Instagram Story'))+</div></div><p id="ek-motion">Gyroscope unavailable</p><div id="ek-actions"><button id="ek-move" class="ek-btn">Ativar movimento</button><button id="ek-static" class="ek-btn">Modo sem movimento</button><button id="ek-close" class="ek-btn">'+esc(closeLabel)+'</button></div>';
  p.append(card);document.body.append(p);
- let targetX=0,targetY=0,currentX=0,currentY=0,frameId=0,active=true;
+ let targetX=0,targetY=0,currentX=0,currentY=0,frameId=null,active=true;
  const img=card.querySelector('img'),status=card.querySelector('#ek-motion');
  const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const render=()=>{
-   frameId=0;if(!active)return;
+   frameId=null;if(!active)return;
    currentX+=(targetX-currentX)*.12;currentY+=(targetY-currentY)*.12;
    img.style.transform='translate('+currentX+'px,'+currentY+'px) scale(1.08)';
    if(!reducedMotion&&(Math.abs(targetX-currentX)>.15||Math.abs(targetY-currentY)>.15))frameId=requestAnimationFrame(render);
@@ -77,12 +77,12 @@ function simulator(file){
  const scheduleRender=()=>{
    if(!active)return;
    if(reducedMotion){currentX=targetX;currentY=targetY;img.style.transform='translate('+currentX+'px,'+currentY+'px) scale(1.08)';return}
-   if(!frameId)frameId=requestAnimationFrame(render);
+   if(frameId===null)frameId=requestAnimationFrame(render);
  };
  const orientation=event=>{targetX=Math.max(-45,Math.min(45,(event.gamma||0)*.7));targetY=Math.max(-45,Math.min(45,(event.beta||0)*.35));scheduleRender()};
  const cleanup=()=>{
    if(!active)return;active=false;
-   if(frameId)cancelAnimationFrame(frameId);
+   if(frameId!==null){cancelAnimationFrame(frameId);frameId=null;}
    removeEventListener('deviceorientation',orientation);
    URL.revokeObjectURL(src);p.remove();
  };
