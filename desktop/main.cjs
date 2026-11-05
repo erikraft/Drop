@@ -235,7 +235,16 @@ async function createWindow() {
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    try {
+      const externalUrl = new URL(url);
+      if (['http:', 'https:', 'mailto:'].includes(externalUrl.protocol)) {
+        void shell.openExternal(externalUrl.toString()).catch(error => {
+          console.warn('Unable to open external link:', error);
+        });
+      }
+    } catch (error) {
+      console.warn('Blocked invalid external link:', error);
+    }
     return { action: 'deny' };
   });
 
