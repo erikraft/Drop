@@ -2183,10 +2183,13 @@
                 // Storage may be unavailable.
             }
 
-            var close = ad.querySelector('[data-ai-ad-dismiss]');
+            var showTimer = null;
+            var close = ad.querySelector('.ai-ad-close, [data-ai-ad-dismiss]');
             if (close) {
                 close.addEventListener('click', function () {
+                    if (showTimer !== null) window.clearTimeout(showTimer);
                     ad.hidden = true;
+                    ad.remove();
                     try {
                         localStorage.setItem('erikraft-ai-ad-dismissed', '1');
                     } catch (error) {
@@ -2196,7 +2199,13 @@
             }
 
             window.addEventListener('DOMContentLoaded', function () {
-                window.setTimeout(function () {
+                showTimer = window.setTimeout(function () {
+                    try {
+                        if (localStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
+                    } catch (error) {
+                        // Storage may be unavailable.
+                    }
+                    if (!ad.isConnected) return;
                     ad.hidden = false;
                 }, 1400);
             }, { once: true });
