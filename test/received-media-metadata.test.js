@@ -59,7 +59,7 @@ assert.match(source,/com\.apple\.quicktime\.content\.identifier/);
 assert.match(source,/video\/quicktime/);
 assert.match(source,/Criar Live\/Motion Photo/);
 assert.match(source,/id="ek-close"/);
-assert.match(source,/id="ek-actions"/);
+assert.match(source,/actions\.id='ek-actions'/);
 assert.match(source,/querySelector\('\.btn-row'\)/);
 assert.match(source,/data-ek-media-action/);
 assert.doesNotMatch(source,/addDialogAction\(tr\('instagram'/, 'Instagram publishing must not be added to the receive dialog.');
