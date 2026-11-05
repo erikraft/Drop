@@ -65,19 +65,6 @@ function panel(title,content,buttons=[]){
 }
 function notify(s){try{Events.fire('notify-user',s)}catch(_){console.warn(s)}}function download(f){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(u),5000)}async function shareFiles(files,title='ErikrafT Drop™'){const list=files.filter(Boolean);if(!navigator.share||!navigator.canShare?.({files:list}))return notify(tr('share_unsupported','File sharing is not supported in this browser.'));try{await navigator.share({files:list,title})}catch(e){if(e.name!=='AbortError')notify(tr('share_failed','Sharing failed: {{error}}',{error:e.message}))}}
 async function share(f){return shareFiles([f],f.name)}
-function androidBridge(){return typeof ErikrafTdropAndroid!=='undefined'?ErikrafTdropAndroid:null}
-function downloadForAndroidTarget(f,target){const bridge=androidBridge();if(!bridge||typeof bridge.requestExternalShare!=='function')return false;try{bridge.requestExternalShare(f.name,f.type||'application/octet-stream',target);download(f);return true}catch(e){console.warn('[MediaShare] Android bridge unavailable',e);return false}}
-const isMobileDevice=()=>Boolean(navigator.userAgentData?.mobile)||/Android|iPhone|iPad|iPod|Windows Phone|Mobile/i.test(navigator.userAgent||'');
-async function shareInstagram(f,story=false){
- if(!isMobileDevice())return;
- if(downloadForAndroidTarget(f,story?'instagram-story':'instagram'))return;
- try{
-   if(/Android/i.test(navigator.userAgent||'')){window.location.href='intent://story-camera#Intent;package=com.instagram.android;scheme=instagram;end';return}
-   window.location.href='instagram://story-camera';
-   setTimeout(()=>{if(document.visibilityState==='visible')share(f)},900);
- }catch(_){await share(f)}
-}
-
 async function inspector(file){
  await session.set(file);
  const metadata=await inspect(file),entries=rows(metadata);
