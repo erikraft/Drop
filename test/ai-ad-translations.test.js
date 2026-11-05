@@ -34,5 +34,8 @@ for (const key of requiredKeys) {
 }
 assert.ok(!html.includes('var copy={'), 'popup translations must not be duplicated in inline JavaScript');
 assert.ok(!html.includes('data-ai-ad-copy='), 'legacy popup-only translation attributes must be removed');
+assert.match(html, /localStorage\.getItem\('erikraft-ai-ad-dismissed'\)/, 'AI ad dismissal must persist across browser sessions.');
+assert.match(html, /localStorage\.setItem\('erikraft-ai-ad-dismissed', '1'\)/, 'Closing the AI ad must persist its dismissal.');
+assert.doesNotMatch(html, /sessionStorage\.(?:get|set)Item\('erikraft-ai-ad-dismissed'/, 'AI ad dismissal must not be limited to a tab session.');
 
 console.log('ErikrafT AI advertisement translations validated for ' + supportedLocales.length + ' supported locales.');
