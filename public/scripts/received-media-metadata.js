@@ -61,12 +61,22 @@ function simulator(file){
  const p=document.createElement('div');p.id='ek-panel';
  const card=document.createElement('div');card.id='ek-card';
  const src=URL.createObjectURL(file);
- const controlled=tr('instagram_controlled','Instagram controls the final interface and recognition.');
+ const title=document.createElement('h2');title.textContent=tr('instagram_story','Instagram Story');
+ const description=document.createElement('p');description.textContent=tr('instagram_controlled','Instagram controls the final interface and recognition.');
+ const story=document.createElement('div');story.className='ek-story';
+ const ring=document.createElement('div');ring.className='ek-ring';ring.textContent='⌁';
+ const img=document.createElement('img');img.alt=tr('instagram_story','Instagram Story');img.src=src;img.style.transform='translate(0,0) scale(1.08)';
+ const badge=document.createElement('div');badge.className='ek-badge';badge.textContent=tr('instagram_story','Instagram Story');
+ story.append(ring,img,badge);
+ const status=document.createElement('p');status.id='ek-motion';status.textContent='Gyroscope unavailable';
+ const actions=document.createElement('div');actions.id='ek-actions';
  const closeLabel=(()=>{try{return Localization.getTranslation('dialogs.close',null)}catch(_){return'Close'}})();
- card.innerHTML='<h2>'+esc(tr('instagram_story','Instagram Story'))+'</h2><p>'+esc(controlled)+'</p><div class="ek-story"><div class="ek-ring">⌁</div><img alt="Instagram Story" src="'+src+'" style="transform:translate(0,0) scale(1.08)"><div class="ek-badge">'+esc(tr('instagram_story','Instagram Story'))+</div></div><p id="ek-motion">Gyroscope unavailable</p><div id="ek-actions"><button id="ek-move" class="ek-btn">Ativar movimento</button><button id="ek-static" class="ek-btn">Modo sem movimento</button><button id="ek-close" class="ek-btn">'+esc(closeLabel)+'</button></div>';
- p.append(card);document.body.append(p);
+ const createAction=(id,label)=>{const button=document.createElement('button');button.id=id;button.type='button';button.className='ek-btn';button.textContent=label;actions.append(button);return button};
+ const moveButton=createAction('ek-move','Ativar movimento');
+ const staticButton=createAction('ek-static','Modo sem movimento');
+ const closeButton=createAction('ek-close',closeLabel);
+ card.append(title,description,story,status,actions);p.append(card);document.body.append(p);
  let targetX=0,targetY=0,currentX=0,currentY=0,frameId=null,active=true;
- const img=card.querySelector('img'),status=card.querySelector('#ek-motion');
  const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const render=()=>{
    frameId=null;if(!active)return;
@@ -82,21 +92,21 @@ function simulator(file){
  const orientation=event=>{targetX=Math.max(-45,Math.min(45,(event.gamma||0)*.7));targetY=Math.max(-45,Math.min(45,(event.beta||0)*.35));scheduleRender()};
  const cleanup=()=>{
    if(!active)return;active=false;
-   if(frameId!==null){cancelAnimationFrame(frameId);frameId=null;}
+   if(frameId!==null){cancelAnimationFrame(frameId);frameId=null}
    removeEventListener('deviceorientation',orientation);
    URL.revokeObjectURL(src);p.remove();
  };
- card.querySelector('#ek-move').onclick=async()=>{
+ moveButton.onclick=async()=>{
    try{
      if(typeof DeviceOrientationEvent==='undefined')throw Error('DeviceOrientation unavailable');
      if(typeof DeviceOrientationEvent.requestPermission==='function'&&await DeviceOrientationEvent.requestPermission()!=='granted')throw Error('Permission denied');
      addEventListener('deviceorientation',orientation);status.textContent='Gyroscope detected';
    }catch(error){status.textContent='Gyroscope unavailable · '+error.message}
  };
- card.querySelector('#ek-static').onclick=()=>{
+ staticButton.onclick=()=>{
    removeEventListener('deviceorientation',orientation);targetX=targetY=0;scheduleRender();status.textContent='Modo sem movimento';
  };
- card.querySelector('#ek-close').onclick=cleanup;
+ closeButton.onclick=cleanup;
  p.onclick=event=>{if(event.target===p)cleanup()};
 }
 function addActions(file){
