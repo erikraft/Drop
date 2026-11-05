@@ -7,6 +7,7 @@ const index=fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf
 const en=fs.readFileSync(new URL('../public/lang/en.json',import.meta.url),'utf8');
 const pt=fs.readFileSync(new URL('../public/lang/pt-BR.json',import.meta.url),'utf8');
 const cursor=fs.readFileSync(new URL('../Website About/NEW/js/cursor.js',import.meta.url),'utf8');
+const desktopMain=fs.readFileSync(new URL('../desktop/main.cjs',import.meta.url),'utf8');
 
 assert.match(network,/window\.erikrafTDisplayName = msg\.displayName/);
 assert.match(uiMain,/window\.erikrafTDisplayName === 'string'/);
@@ -25,5 +26,8 @@ for (const translations of [en,pt]) {
 }
 
 assert.match(cursor,/requestAnimationFrame\(render\)/);
+assert.match(desktopMain,/new URL\(url\)/, 'External desktop URLs must be parsed before opening.');
+assert.match(desktopMain,/\['http:', 'https:', 'mailto:'\]\.includes\(externalUrl\.protocol\)/);
+assert.doesNotMatch(desktopMain,/shell\.openExternal\(url\)/, 'Unvalidated external URLs must never be passed to shell.openExternal.');
 assert.doesNotMatch(cursor,/const loop\s*=|requestAnimationFrame\(update\)/, 'BioDrop cursor must not run an idle animation loop.');
 console.log('desktop startup regressions: PASS');
