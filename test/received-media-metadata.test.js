@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 
 const source=fs.readFileSync(new URL('../public/scripts/received-media-metadata.js',import.meta.url),'utf8');
 const localization=fs.readFileSync(new URL('../public/scripts/localization.js',import.meta.url),'utf8');
-const localeMatch=localization.match(/Localization\\.supportedLocales\\s*=\\s*\\[([\\s\\S]*?)\\];/);
+const localeMatch=localization.match(/Localization\.supportedLocales\s*=\s*\[([\s\S]*?)\];/);
 assert.ok(localeMatch, 'supported locale list must be discoverable');
 const locales=[...localeMatch[1].matchAll(/"([^"]+)"/g)].map(match=>match[1]);
 for(const locale of locales){
