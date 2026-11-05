@@ -48,6 +48,7 @@ function paragraph(parts){
  return p;
 }
 function strong(text){return textElement('b',text)}
+function dialogCloseLabel(){try{return Localization.getTranslation('dialogs.close',null)||'Close'}catch(_){return'Close'}}
 function panel(title,content,buttons=[]){
  close();style();
  const p=document.createElement('div');p.id='ek-panel';
@@ -59,7 +60,7 @@ function panel(title,content,buttons=[]){
  p.onclick=event=>event.target===p&&close();
  document.body.append(p);
  buttons.forEach(button=>tools.append(button));
- tools.append(btn(tr('close','Close'),close));
+ tools.append(btn(dialogCloseLabel(),close));
  return card;
 }
 function notify(s){try{Events.fire('notify-user',s)}catch(_){console.warn(s)}}function download(f){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(u),5000)}async function shareFiles(files,title='ErikrafT Drop™'){const list=files.filter(Boolean);if(!navigator.share||!navigator.canShare?.({files:list}))return notify(tr('share_unsupported','File sharing is not supported in this browser.'));try{await navigator.share({files:list,title})}catch(e){if(e.name!=='AbortError')notify(tr('share_failed','Sharing failed: {{error}}',{error:e.message}))}}
