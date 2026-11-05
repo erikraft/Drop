@@ -54,9 +54,51 @@ async function shareInstagram(f,story=false){
 
 async function inspector(file){await session.set(file);const m=await inspect(file),rs=rows(m);panel('Metadata Inspector — '+file.name,'<p><b>Fonte:</b> arquivo REALMENTE recebido · <b>SHA-256:</b> '+esc(m.FILE.hash)+'</p><table>'+rs.map(x=>'<tr><td>'+esc(x[0])+'</td><td class="'+(x[1]==='Unsupported'?'ek-unsupported':x[1]==='Not found'?'ek-missing':'ek-found')+'">'+esc(x[1])+'</td><td>'+esc(x[2])+'</td></tr>').join('')+'</table>',[btn(tr('download','Download'),()=>download(file)),btn(tr('share','Share'),()=>share(file))])}
 async function removeMode(mode){try{const original=session.file,before=await inspect(original),out=await sanitize(original,mode),after=await inspect(out);session.sanitized=out;const b=rows(before),a=rows(after),privateBefore=b.filter(x=>PRIVATE_FIELDS.has(x[0].split('.').pop())&&x[1]==='Found'),privateAfter=a.filter(x=>PRIVATE_FIELDS.has(x[0].split('.').pop())&&x[1]==='Found'),changed=privateBefore.filter(x=>!privateAfter.some(y=>y[0]===x[0]));panel(mode==='all'?'Antes × Depois — Todos os metadados':'Antes × Depois — Dados privados','<p>Original: '+bytes(original.size)+' · Novo arquivo: '+bytes(out.size)+'</p><p>Resultado reaberto e inspecionado; original intacto.</p><p><b>Campos privados removidos/verificados:</b> '+(changed.map(x=>esc(x[0])).join(', ')||'nenhum detectado')+'</p>'+(mode==='all'?'<div class="ek-warning">Remover todos os metadados pode remover informações necessárias para determinados recursos de compatibilidade, incluindo perfis experimentais de Smart Glasses.</div>':''),[btn('Inspecionar resultado',()=>inspector(out)),btn('Baixar novo arquivo',()=>download(out)),btn('Compartilhar novo arquivo',()=>share(out))])}catch(e){notify('Não foi possível concluir a remoção: '+e.message)}}
-async function spinPhoto(){try{const out=await preparePhoto(session.file),m=await inspect(out);session.prepared=out;panel('Technical compatibility','<p><b>Perfil:</b> Smart Glasses Photo — 3:4</p><p>✓ '+esc(m.IMAGE.width)+' × '+esc(m.IMAGE.height)+' · exportado e reaberto</p><p>Valores experimentais; não são especificações oficiais da Meta. O Instagram controla a ativação final.</p>',[btn('Baixar Prepared',()=>download(out)),btn('Compartilhar Prepared',()=>share(out)),btn('RBM Convert',()=>simulator(out))])}catch(e){notify('Preparação de foto falhou: '+e.message)}}
-async function spinVideo(){try{const r=await prepareVideo(session.file);if(r.state!=='Prepared')return notify('Vídeo não pode ser preparado neste navegador: '+r.reason);session.prepared=r.file;const c=await inspect(r.file);panel('Technical compatibility — vídeo','<p><b>Perfil experimental:</b> 3:4 · 1360×1808 · 60fps · HEVC quando suportado.</p><p>Encoder: '+esc(r.encoder)+'</p><p>Container: '+esc(c.VIDEO.container||'não identificado')+'</p><p>Tracks: '+esc((c.VIDEO.videoTracks?.length||1)+' vídeo · '+(c.VIDEO.audioTracks?.length||0)+' áudio')+'</p><p>Arquivo reaberto e validado. Sem garantia de reconhecimento pelo Instagram.</p>',[btn('Baixar Prepared',()=>download(r.file)),btn('Compartilhar Prepared',()=>share(r.file))])}catch(e){notify('Preparação de vídeo falhou: '+e.message)}}
-function simulator(file){style();const p=document.createElement('div');p.id='ek-panel';const c=document.createElement('div');c.id='ek-card';const src=URL.createObjectURL(file);c.innerHTML='<h2>Instagram Story — simulação</h2><p>O Instagram controla a interface final. O ícone coral/rosa é somente simulação e não é embutido na mídia.</p><div class="ek-story"><div class="ek-ring">⌁</div><img alt="RBM Convert" src="'+src+'" style="transform:translate(0,0) scale(1.08)"><div class="ek-badge">RBM Convert</div></div><p id="ek-motion">Gyroscope unavailable</p><div id="ek-actions"><button id="ek-move" class="ek-btn">Ativar movimento</button><button id="ek-static" class="ek-btn">Modo sem movimento</button><button id="ek-close" class="ek-btn">Fechar</button></div>';p.append(c);document.body.append(p);let tx=0,ty=0,x=0,y=0;const img=c.querySelector('img'),status=c.querySelector('#ek-motion');const loop=()=>{x+=(tx-x)*.12;y+=(ty-y)*.12;img.style.transform='translate('+x+'px,'+y+'px) scale(1.08)';if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(loop)};loop();const ori=e=>{tx=Math.max(-45,Math.min(45,(e.gamma||0)*.7));ty=Math.max(-45,Math.min(45,(e.beta||0)*.35))};c.querySelector('#ek-move').onclick=async()=>{try{if(typeof DeviceOrientationEvent==='undefined')throw Error('DeviceOrientation unavailable');if(typeof DeviceOrientationEvent.requestPermission==='function'&&await DeviceOrientationEvent.requestPermission()!=='granted')throw Error('Permission denied');addEventListener('deviceorientation',ori);status.textContent='Gyroscope detected'}catch(e){status.textContent='Gyroscope unavailable · '+e.message}};c.querySelector('#ek-static').onclick=()=>{removeEventListener('deviceorientation',ori);tx=ty=0;status.textContent='Modo sem movimento'};c.querySelector('#ek-close').onclick=()=>{removeEventListener('deviceorientation',ori);URL.revokeObjectURL(src);close()};p.onclick=e=>{if(e.target===p){removeEventListener('deviceorientation',ori);URL.revokeObjectURL(src);close()}}}
+async function spinPhoto(){try{const out=await preparePhoto(session.file),m=await inspect(out);session.prepared=out;panel('Technical compatibility','<p><b>Perfil:</b> Smart Glasses Photo — 3:4</p><p>✓ '+esc(m.IMAGE.width)+' × '+esc(m.IMAGE.height)+' · exportado e reaberto</p><p>Valores experimentais; não são especificações oficiais da Meta. O Instagram controla a ativação final.</p>',[btn(tr('download','Download'),()=>download(out)),btn(tr('share','Share'),()=>share(out)),btn('RBM Convert',()=>simulator(out))])}catch(e){notify('Preparação de foto falhou: '+e.message)}}
+async function spinVideo(){try{const r=await prepareVideo(session.file);if(r.state!=='Prepared')return notify('Vídeo não pode ser preparado neste navegador: '+r.reason);session.prepared=r.file;const c=await inspect(r.file);panel('Technical compatibility — vídeo','<p><b>Perfil experimental:</b> 3:4 · 1360×1808 · 60fps · HEVC quando suportado.</p><p>Encoder: '+esc(r.encoder)+'</p><p>Container: '+esc(c.VIDEO.container||'não identificado')+'</p><p>Tracks: '+esc((c.VIDEO.videoTracks?.length||1)+' vídeo · '+(c.VIDEO.audioTracks?.length||0)+' áudio')+'</p><p>Arquivo reaberto e validado. Sem garantia de reconhecimento pelo Instagram.</p>',[btn(tr('download','Download'),()=>download(r.file)),btn(tr('share','Share'),()=>share(r.file))])}catch(e){notify('Preparação de vídeo falhou: '+e.message)}}
+function simulator(file){
+ style();
+ const p=document.createElement('div');p.id='ek-panel';
+ const card=document.createElement('div');card.id='ek-card';
+ const src=URL.createObjectURL(file);
+ const controlled=tr('instagram_controlled','Instagram controls the final interface and recognition.');
+ const closeLabel=(()=>{try{return Localization.getTranslation('dialogs.close',null)}catch(_){return'Close'}})();
+ card.innerHTML='<h2>'+esc(tr('instagram_story','Instagram Story'))+'</h2><p>'+esc(controlled)+'</p><div class="ek-story"><div class="ek-ring">⌁</div><img alt="RBM Convert" src="'+src+'" style="transform:translate(0,0) scale(1.08)"><div class="ek-badge">RBM Convert</div></div><p id="ek-motion">Gyroscope unavailable</p><div id="ek-actions"><button id="ek-move" class="ek-btn">Enable motion</button><button id="ek-static" class="ek-btn">Static mode</button><button id="ek-close" class="ek-btn">'+esc(closeLabel)+'</button></div>';
+ p.append(card);document.body.append(p);
+ let targetX=0,targetY=0,currentX=0,currentY=0,frameId=0,active=true;
+ const img=card.querySelector('img'),status=card.querySelector('#ek-motion');
+ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const render=()=>{
+   frameId=0;if(!active)return;
+   currentX+=(targetX-currentX)*.12;currentY+=(targetY-currentY)*.12;
+   img.style.transform='translate('+currentX+'px,'+currentY+'px) scale(1.08)';
+   if(!reducedMotion&&(Math.abs(targetX-currentX)>.15||Math.abs(targetY-currentY)>.15))frameId=requestAnimationFrame(render);
+ };
+ const scheduleRender=()=>{
+   if(!active)return;
+   if(reducedMotion){currentX=targetX;currentY=targetY;img.style.transform='translate('+currentX+'px,'+currentY+'px) scale(1.08)';return}
+   if(!frameId)frameId=requestAnimationFrame(render);
+ };
+ const orientation=event=>{targetX=Math.max(-45,Math.min(45,(event.gamma||0)*.7));targetY=Math.max(-45,Math.min(45,(event.beta||0)*.35));scheduleRender()};
+ const cleanup=()=>{
+   if(!active)return;active=false;
+   if(frameId)cancelAnimationFrame(frameId);
+   removeEventListener('deviceorientation',orientation);
+   URL.revokeObjectURL(src);p.remove();
+ };
+ card.querySelector('#ek-move').onclick=async()=>{
+   try{
+     if(typeof DeviceOrientationEvent==='undefined')throw Error('DeviceOrientation unavailable');
+     if(typeof DeviceOrientationEvent.requestPermission==='function'&&await DeviceOrientationEvent.requestPermission()!=='granted')throw Error('Permission denied');
+     addEventListener('deviceorientation',orientation);status.textContent='Gyroscope detected';
+   }catch(error){status.textContent='Gyroscope unavailable · '+error.message}
+ };
+ card.querySelector('#ek-static').onclick=()=>{
+   removeEventListener('deviceorientation',orientation);targetX=targetY=0;scheduleRender();status.textContent='Static mode';
+ };
+ card.querySelector('#ek-close').onclick=cleanup;
+ p.onclick=event=>{if(event.target===p)cleanup()};
+}
 function addActions(file){
  const getSupportedVideoMimeType=()=>{if(typeof MediaRecorder==='undefined')return null;const candidates=['video/quicktime;codecs="avc1"','video/quicktime','video/mp4;codecs="avc1.42E01E,mp4a.40.2"','video/mp4;codecs="avc1.42E01E"','video/mp4'];return candidates.find(mimeType=>MediaRecorder.isTypeSupported(mimeType))||null};
  const mp4Mime=()=>{const mimeType=getSupportedVideoMimeType();return mimeType&&/^video\/mp4/i.test(mimeType)?mimeType:null};
