@@ -1,7 +1,6 @@
 (()=>{'use strict';
 const metadataProfiles={photo:{smartGlassesPhoto3x4:{width:3024,height:4032,colorSpace:'sRGB',make:'Meta AI',model:'Ray-Ban Meta Smart Glasses',experimental:true}},video:{smartGlassesVideo3x4:{width:1360,height:1808,fps:60,codec:'hvc1',container:'video/mp4',experimental:true}}};
 const compatibilityProfiles=metadataProfiles;window.metadataProfiles=metadataProfiles;window.compatibilityProfiles=compatibilityProfiles;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tr=(key,fallback,data={})=>{try{if(typeof Localization!=='undefined'&&typeof Localization.getTranslation==='function')return Localization.getTranslation('media.'+key,null,data)}catch(_){ }return fallback};
 const bytes=n=>{if(!Number.isFinite(n))return'—';const u=['B','KB','MB','GB'];let i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?2:0)+' '+u[i]};
 const u16=(v,o,l)=>l?v[o]|v[o+1]<<8:v[o]<<8|v[o+1],u32=(v,o,l)=>l?(v[o]|v[o+1]<<8|v[o+2]<<16|v[o+3]*16777216)>>>0:(v[o]*16777216|v[o+1]<<16|v[o+2]<<8|v[o+3])>>>0;
