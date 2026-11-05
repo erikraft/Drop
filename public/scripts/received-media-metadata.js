@@ -63,7 +63,7 @@ function simulator(file){
  const src=URL.createObjectURL(file);
  const controlled=tr('instagram_controlled','Instagram controls the final interface and recognition.');
  const closeLabel=(()=>{try{return Localization.getTranslation('dialogs.close',null)}catch(_){return'Close'}})();
- card.innerHTML='<h2>'+esc(tr('instagram_story','Instagram Story'))+'</h2><p>'+esc(controlled)+'</p><div class="ek-story"><div class="ek-ring">⌁</div><img alt="Instagram Story" src="'+src+'" style="transform:translate(0,0) scale(1.08)"><div class="ek-badge">'+esc(tr('instagram_story','Instagram Story'))+</div></div><p id="ek-motion">Gyroscope unavailable</p><div id="ek-actions"><button id="ek-move" class="ek-btn">Enable motion</button><button id="ek-static" class="ek-btn">Static mode</button><button id="ek-close" class="ek-btn">'+esc(closeLabel)+'</button></div>';
+ card.innerHTML='<h2>'+esc(tr('instagram_story','Instagram Story'))+'</h2><p>'+esc(controlled)+'</p><div class="ek-story"><div class="ek-ring">⌁</div><img alt="Instagram Story" src="'+src+'" style="transform:translate(0,0) scale(1.08)"><div class="ek-badge">'+esc(tr('instagram_story','Instagram Story'))+</div></div><p id="ek-motion">Gyroscope unavailable</p><div id="ek-actions"><button id="ek-move" class="ek-btn">Ativar movimento</button><button id="ek-static" class="ek-btn">Modo sem movimento</button><button id="ek-close" class="ek-btn">'+esc(closeLabel)+'</button></div>';
  p.append(card);document.body.append(p);
  let targetX=0,targetY=0,currentX=0,currentY=0,frameId=0,active=true;
  const img=card.querySelector('img'),status=card.querySelector('#ek-motion');
@@ -94,7 +94,7 @@ function simulator(file){
    }catch(error){status.textContent='Gyroscope unavailable · '+error.message}
  };
  card.querySelector('#ek-static').onclick=()=>{
-   removeEventListener('deviceorientation',orientation);targetX=targetY=0;scheduleRender();status.textContent='Static mode';
+   removeEventListener('deviceorientation',orientation);targetX=targetY=0;scheduleRender();status.textContent='Modo sem movimento';
  };
  card.querySelector('#ek-close').onclick=cleanup;
  p.onclick=event=>{if(event.target===p)cleanup()};
