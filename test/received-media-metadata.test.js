@@ -57,6 +57,9 @@ assert.match(source,/data-ek-media-action/);
 assert.doesNotMatch(source,/host\.querySelector\(['"]#ek-actions['"]\)/);
 assert.match(source,/RBM Convert/);
 assert.doesNotMatch(source,/Spin View/i, 'RBM Convert must replace the former Spin View action wording.');
+assert.match(source,/cancelAnimationFrame\(frameId\)/);
+assert.match(source,/URL\.revokeObjectURL\(src\);p\.remove\(\)/);
+assert.doesNotMatch(source,/requestAnimationFrame\(loop\)/, 'RBM preview must not leave an unbounded animation loop running.');
 assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
