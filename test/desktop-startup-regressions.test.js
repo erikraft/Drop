@@ -21,4 +21,5 @@ for (const translations of [en,pt]) {
     assert.match(translations,/"optical-matrix-open":/);
 }
 
-assert.match(cursor,/requestAnimationFrame\(render\)/);\nassert.doesNotMatch(cursor,/const loop\s*=|requestAnimationFrame\(update\)/, 'BioDrop cursor must not run an idle animation loop.');\nconsole.log('desktop startup regressions: PASS');
+assert.match(cursor,/requestAnimationFrame\(render\)/);
+assert.doesNotMatch(cursor,/const loop\s*=|requestAnimationFrame\(update\)/, 'BioDrop cursor must not run an idle animation loop.');\nconsole.log('desktop startup regressions: PASS');
