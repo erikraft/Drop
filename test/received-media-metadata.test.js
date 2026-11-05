@@ -62,6 +62,7 @@ assert.match(source,/id="ek-close"/);
 assert.match(source,/id="ek-actions"/);
 assert.match(source,/querySelector\('\.btn-row'\)/);
 assert.match(source,/data-ek-media-action/);
+assert.doesNotMatch(source,/addDialogAction\(tr\('instagram'/, 'Instagram publishing must not be added to the receive dialog.');
 assert.doesNotMatch(source,/host\.querySelector\(['"]#ek-actions['"]\)/);
 assert.match(source,/RBM Convert/);
 assert.doesNotMatch(source,/Spin View/i, 'RBM Convert must replace the former Spin View action wording.');
