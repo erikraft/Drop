@@ -361,5 +361,8 @@
         "description": "AI ಬಳಸಿ ನಿಮ್ಮ ಆಲೋಚನೆಗಳನ್ನು ಚಿತ್ರಗಳಾಗಿ ರೂಪಿಸಿ.",
         "cta": "ErikrafT AI™ ಅನ್ವೇಷಿಸಿ",
         "dismiss": "ಜಾಹೀರಾತು ಮುಚ್ಚಿ"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

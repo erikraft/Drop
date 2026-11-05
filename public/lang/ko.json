@@ -361,5 +361,8 @@
         "description": "AI로 아이디어를 이미지로 만들어 보세요.",
         "cta": "ErikrafT AI™ 알아보기",
         "dismiss": "광고 닫기"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

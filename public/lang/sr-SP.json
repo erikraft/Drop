@@ -241,5 +241,8 @@
         "description": "Pretvorite svoje ideje u slike pomoću AI.",
         "cta": "Otkrijte ErikrafT AI™",
         "dismiss": "Zatvori oglas"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

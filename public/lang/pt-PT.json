@@ -254,5 +254,8 @@
         "description": "Transforme as suas ideias em imagens com inteligência artificial.",
         "cta": "Conheça o ErikrafT AI™",
         "dismiss": "Fechar publicidade"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

@@ -241,5 +241,8 @@
         "description": "Förvandla dina idéer till bilder med AI.",
         "cta": "Upptäck ErikrafT AI™",
         "dismiss": "Stäng annonsen"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

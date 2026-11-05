@@ -241,5 +241,8 @@
         "description": "Verander jou idees in beelde met KI.",
         "cta": "Ontdek ErikrafT AI™",
         "dismiss": "Maak advertensie toe"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

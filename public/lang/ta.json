@@ -361,5 +361,8 @@
         "description": "AI மூலம் உங்கள் யோசனைகளைப் படங்களாக மாற்றுங்கள்.",
         "cta": "ErikrafT AI™-ஐ அறியுங்கள்",
         "dismiss": "விளம்பரத்தை மூடு"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

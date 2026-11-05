@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ErikrafT Drop™">
     <meta name="application-name" content="ErikrafT Drop™">
-    <meta name="application-version" content="10.1.9">
+    <meta name="application-version" content="10.1.10">
     <meta name="iSearch-cli" content="true">
     <meta name="iSearch-cli-version" content="1">
     <meta name="iSearch-cli-endpoint" content="https://drop.erikraft.com/api/cli">
@@ -167,7 +167,7 @@
            "https://github.com/erikraft/Drop-Android",
            "https://docsdrop.erikraft.com/",
            "https://discord.gg/KWvqwRxjnA",
-           "https://ko-fi.com/erikraft",
+           "https://biodrop.erikraft.com/donation.html",
            "https://linkedin.com/company/erikraft-drop"
          ],
          "founder": {
@@ -191,7 +191,7 @@
          "applicationCategory": "UtilitiesApplication",
          "operatingSystem": "Windows, Linux, macOS, Android, iOS, ChromeOS",
          "browserRequirements": "Requires JavaScript and a modern WebRTC-compatible browser",
-         "softwareVersion": "10.1.9",
+         "softwareVersion": "10.1.10",
          "image": "https://drop.erikraft.com/images/logo_transparent_512x512.png",
          "description": "Open source WebRTC-based file sharing platform with peer-to-peer encrypted transfers and no registration required.",
          "downloadUrl": "https://github.com/erikraft/Drop/releases/latest",
@@ -1573,7 +1573,7 @@
             </svg>
             <div class="title-wrapper" dir="ltr">
                 <h1>ErikrafT Drop™</h1>
-                <div class="font-subheading">v10.1.9</div>
+                <div class="font-subheading">v10.1.10</div>
             </div>
             <div class="font-subheading" data-i18n-key="about.claim" data-i18n-attrs="text">
                 A maneira mais fácil de transferir arquivos entre dispositivos
@@ -1590,7 +1590,7 @@
                 </a>
 
                 <!-- Doação -->
-                <a class="icon-button" id="donation-btn" target="_blank" href="https://ko-fi.com/erikraft"
+                <a class="icon-button" id="donation-btn" target="_blank" href="https://biodrop.erikraft.com/donation.html"
                     rel="noreferrer" data-i18n-key="about.buy-me-a-coffee" data-i18n-attrs="title">
                     <lord-icon src="https://cdn.lordicon.com/xuyycdjx.json" trigger="loop" delay="2000"
                         colors="primary:#ffffff" style="width:24px;height:24px">
@@ -1713,7 +1713,7 @@
                 <a href="https://addons.mozilla.org/firefox/addon/erikraft-drop/" target="_blank" rel="noreferrer">
                     <img src="./images/badges/Firefox Browser ADD-ONS.png" alt="Firefox Browser ADD-ONS">
                 </a>
-                <a href="https://ko-fi.com/erikraft" target="_blank" rel="noreferrer">
+                <a href="https://biodrop.erikraft.com/donation.html" target="_blank" rel="noreferrer">
                     <img src="./images/badges/Support_me_on_Ko-fi.png" alt="Support me on Ko-fi">
                 </a>
             </div>
@@ -2178,17 +2178,20 @@
             if (clientType !== 'browser') return;
 
             try {
-                if (sessionStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
+                if (localStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
             } catch (error) {
                 // Storage may be unavailable.
             }
 
-            var close = ad.querySelector('[data-ai-ad-dismiss]');
+            var showTimer = null;
+            var close = ad.querySelector('.ai-ad-close, [data-ai-ad-dismiss]');
             if (close) {
                 close.addEventListener('click', function () {
+                    if (showTimer !== null) window.clearTimeout(showTimer);
                     ad.hidden = true;
+                    ad.remove();
                     try {
-                        sessionStorage.setItem('erikraft-ai-ad-dismissed', '1');
+                        localStorage.setItem('erikraft-ai-ad-dismissed', '1');
                     } catch (error) {
                         // Storage may be unavailable.
                     }
@@ -2196,7 +2199,13 @@
             }
 
             window.addEventListener('DOMContentLoaded', function () {
-                window.setTimeout(function () {
+                showTimer = window.setTimeout(function () {
+                    try {
+                        if (localStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
+                    } catch (error) {
+                        // Storage may be unavailable.
+                    }
+                    if (!ad.isConnected) return;
                     ad.hidden = false;
                 }, 1400);
             }, { once: true });

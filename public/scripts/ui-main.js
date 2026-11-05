@@ -758,8 +758,13 @@ class FooterUI {
     }
 
     async showLoading() {
+        // Do not expose the translated "Loading…" placeholder as the device name.
+        // The server will replace this empty fallback when its display-name message arrives.
+        const serverDisplayName = typeof window !== 'undefined' && typeof window.erikrafTDisplayName === 'string'
+            ? window.erikrafTDisplayName.trim()
+            : '';
         [this.$displayName, this.$chatDisplayName].filter(Boolean).forEach(displayNameEl => {
-            displayNameEl.setAttribute('placeholder', displayNameEl.dataset.placeholder);
+            displayNameEl.setAttribute('placeholder', serverDisplayName);
         });
     }
 
@@ -829,12 +834,18 @@ class FooterUI {
     }
 
     async _onDisplayName(displayNameServer) {
-        // load saved displayname first to prevent flickering
-        await this._loadSavedDisplayName();
+        // Keep the server-provided name available even if saved-name storage fails.
+        try {
+            await this._loadSavedDisplayName();
+        } catch (error) {
+            console.warn('Could not load the saved device name:', error);
+        }
 
-        // set original display name as placeholder
+        const safeDisplayName = typeof displayNameServer === 'string' ? displayNameServer.trim() : '';
+        if (!safeDisplayName) return;
+
         [this.$displayName, this.$chatDisplayName].filter(Boolean).forEach(displayNameEl => {
-            displayNameEl.setAttribute('placeholder', displayNameServer);
+            displayNameEl.setAttribute('placeholder', safeDisplayName);
         });
     }
 

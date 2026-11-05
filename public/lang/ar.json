@@ -361,5 +361,8 @@
         "description": "حوّل أفكارك إلى صور باستخدام الذكاء الاصطناعي.",
         "cta": "اكتشف ErikrafT AI™",
         "dismiss": "إغلاق الإعلان"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

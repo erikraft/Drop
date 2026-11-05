@@ -4,6 +4,15 @@ import vm from 'node:vm';
 import crypto from 'node:crypto';
 
 const source=fs.readFileSync(new URL('../public/scripts/received-media-metadata.js',import.meta.url),'utf8');
+assert.doesNotThrow(()=>new vm.Script(source,{filename:'received-media-metadata.js'}),'received media script must parse as valid JavaScript');
+const localization=fs.readFileSync(new URL('../public/scripts/localization.js',import.meta.url),'utf8');
+const localeMatch=localization.match(/Localization\.supportedLocales\s*=\s*\[([\s\S]*?)\];/);
+assert.ok(localeMatch, 'supported locale list must be discoverable');
+const locales=[...localeMatch[1].matchAll(/"([^"]+)"/g)].map(match=>match[1]);
+for(const locale of locales){
+    const translations=JSON.parse(fs.readFileSync(new URL('../public/lang/'+locale+'.json',import.meta.url),'utf8'));
+    assert.equal(translations.media?.prepare_spin,'RBM Convert',`RBM Convert label missing for ${locale}`);
+}
 const context={
   console,crypto:{subtle:crypto.webcrypto.subtle,randomUUID:crypto.randomUUID.bind(crypto)},TextEncoder,TextDecoder,File,Blob,URL,
   window:{},document:{readyState:'complete',getElementById:()=>null,createElement:()=>({}),head:{appendChild(){}}},matchMedia:()=>({matches:false}),
@@ -51,7 +60,31 @@ assert.match(source,/com\.apple\.quicktime\.content\.identifier/);
 assert.match(source,/video\/quicktime/);
 assert.match(source,/Criar Live\/Motion Photo/);
 assert.match(source,/id="ek-close"/);
-assert.match(source,/id="ek-actions"/);
-assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id="metadata-btn"/);
+assert.match(source,/actions\.id='ek-actions'/);
+assert.match(source,/querySelector\('\.btn-row'\)/);
+assert.match(source,/data-ek-media-action/);
+assert.doesNotMatch(source,/addDialogAction\(tr\('instagram'/, 'Instagram publishing must not be added to the receive dialog.');
+assert.doesNotMatch(source,/host\.querySelector\(['"]#ek-actions['"]\)/);
+assert.match(source,/RBM Convert/);
+assert.doesNotMatch(source,/Spin View/i, 'RBM Convert must replace the former Spin View action wording.');
+assert.match(source,/cancelAnimationFrame\(frameId\)/);
+assert.match(source,/URL\.revokeObjectURL\(src\);p\.remove\(\)/);
+assert.doesNotMatch(source,/requestAnimationFrame\(loop\)/, 'RBM preview must not leave an unbounded animation loop running.');
+const simulator=source.slice(source.indexOf('function simulator(file){'),source.indexOf('function addActions(file){'));
+assert.doesNotMatch(simulator,/\bclose\(\)/, 'Closing the RBM preview must not attempt to close the browser window.');
+assert.doesNotMatch(simulator,/innerHTML/, 'RBM preview must construct user-facing content with safe DOM APIs.');
+assert.doesNotMatch(source,/innerHTML/, 'Media inspector panels must not inject dynamic HTML.');
+const indexHtml=fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
+const dialogStart=indexHtml.indexOf('id="receive-file-dialog"');
+const dialogEnd=indexHtml.indexOf('</x-dialog>',dialogStart);
+assert.ok(dialogStart>=0&&dialogEnd>dialogStart, 'receive-file-dialog markup must exist');
+const dialogHtml=indexHtml.slice(dialogStart,dialogEnd);
+assert.match(dialogHtml,/class="row-reverse center btn-row wrap"/);
+for(const id of ['share-btn','copy-image-btn','compress-btn','download-btn'])assert.match(dialogHtml,new RegExp('id="'+id+'"'));
+assert.match(dialogHtml,/data-i18n-key="dialogs.close"/);
+assert.doesNotMatch(dialogHtml,/id="ek-actions"/);
+const activeDialogHtml=dialogHtml.replace(/<!--[\\s\\S]*?-->/g,'');
+assert.doesNotMatch(activeDialogHtml,/ai-edit-btn|publish-youtube-btn|publish-instagram-btn/);
+assert.doesNotMatch(indexHtml,/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');

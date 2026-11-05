@@ -361,5 +361,8 @@
         "description": "Gjør ideene dine om til bilder med KI.",
         "cta": "Utforsk ErikrafT AI™",
         "dismiss": "Lukk annonsen"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

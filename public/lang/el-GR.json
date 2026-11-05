@@ -241,5 +241,8 @@
         "description": "Μετατρέψτε τις ιδέες σας σε εικόνες με AI.",
         "cta": "Ανακαλύψτε το ErikrafT AI™",
         "dismiss": "Κλείσιμο διαφήμισης"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }
