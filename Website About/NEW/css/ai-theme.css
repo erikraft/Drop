@@ -136,6 +136,7 @@ footer,
 }
 
 @media (max-width: 767px) {
+  body { background-attachment: scroll; }
   .header-container { backdrop-filter: blur(14px); }
   .glass-card, .feature-card, .self-host-card { border-radius: 15px !important; }
 }
