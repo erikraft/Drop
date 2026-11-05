@@ -242,7 +242,7 @@ function addActions(file){
  addDialogAction(tr('inspector','Metadata Inspector'),()=>inspector(file));
  addDialogAction(tr('remove_private','Remove private data'),()=>removeMode('private'));
  addDialogAction(tr('remove_all','Remove all metadata'),()=>removeMode('all'));
- addDialogAction(tr('prepare_spin','RBM Convert'),()=>/^video\\//.test(file.type)?spinVideo():spinPhoto());
+ addDialogAction(tr('prepare_spin','RBM Convert'),()=>/^video\//.test(file.type)?spinVideo():spinPhoto());
  addDialogAction(tr('motion_photo','Criar Live/Motion Photo'),addMotionPhoto);
 }
 function hook(){if(window.__ekReceivedMediaHook)return;window.__ekReceivedMediaHook=true;style();if(typeof Events!=='undefined')Events.on('files-received',async e=>{const files=e.detail?.files||[];if(!files.length)return;await session.set(files[0],files);addActions(files[0])})}
