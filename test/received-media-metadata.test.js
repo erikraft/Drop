@@ -72,6 +72,7 @@ assert.doesNotMatch(source,/requestAnimationFrame\(loop\)/, 'RBM preview must no
 const simulator=source.slice(source.indexOf('function simulator(file){'),source.indexOf('function addActions(file){'));
 assert.doesNotMatch(simulator,/\bclose\(\)/, 'Closing the RBM preview must not attempt to close the browser window.');
 assert.doesNotMatch(simulator,/innerHTML/, 'RBM preview must construct user-facing content with safe DOM APIs.');
+assert.doesNotMatch(source,/innerHTML/, 'Media inspector panels must not inject dynamic HTML.');
 const indexHtml=fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
 const dialogStart=indexHtml.indexOf('id="receive-file-dialog"');
 const dialogEnd=indexHtml.indexOf('</x-dialog>',dialogStart);
