@@ -4,6 +4,14 @@ import vm from 'node:vm';
 import crypto from 'node:crypto';
 
 const source=fs.readFileSync(new URL('../public/scripts/received-media-metadata.js',import.meta.url),'utf8');
+const localization=fs.readFileSync(new URL('../public/scripts/localization.js',import.meta.url),'utf8');
+const localeMatch=localization.match(/Localization\\.supportedLocales\\s*=\\s*\\[([\\s\\S]*?)\\];/);
+assert.ok(localeMatch, 'supported locale list must be discoverable');
+const locales=[...localeMatch[1].matchAll(/"([^"]+)"/g)].map(match=>match[1]);
+for(const locale of locales){
+    const translations=JSON.parse(fs.readFileSync(new URL('../public/lang/'+locale+'.json',import.meta.url),'utf8'));
+    assert.equal(translations.media?.prepare_spin,'RBM Convert',`RBM Convert label missing for ${locale}`);
+}
 const context={
   console,crypto:{subtle:crypto.webcrypto.subtle,randomUUID:crypto.randomUUID.bind(crypto)},TextEncoder,TextDecoder,File,Blob,URL,
   window:{},document:{readyState:'complete',getElementById:()=>null,createElement:()=>({}),head:{appendChild(){}}},matchMedia:()=>({matches:false}),
