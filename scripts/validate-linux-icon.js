@@ -12,10 +12,6 @@ const icons = [
     path: 'packaging/linux/icons/icon-drop.svg',
   },
   {
-    label: 'Bundled Linux runtime window icon',
-    path: 'desktop/assets/icon-drop.svg',
-  },
-  {
     label: 'Linux 512px PNG customization asset',
     path: 'packaging/linux/icons/android-chrome-512x512.png',
   },
