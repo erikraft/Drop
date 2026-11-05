@@ -5,7 +5,7 @@ const network=fs.readFileSync(new URL('../public/scripts/network.js',import.meta
 const uiMain=fs.readFileSync(new URL('../public/scripts/ui-main.js',import.meta.url),'utf8');
 const index=fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
 const en=fs.readFileSync(new URL('../public/lang/en.json',import.meta.url),'utf8');
-const pt=fs.readFileSync(new URL('../public/lang/pt-BR.json',import.meta.url),'utf8');
+const pt=fs.readFileSync(new URL('../public/lang/pt-BR.json',import.meta.url),'utf8');\nconst cursor=fs.readFileSync(new URL('../Website About/NEW/js/cursor.js',import.meta.url),'utf8');
 
 assert.match(network,/window\.erikrafTDisplayName = msg\.displayName/);
 assert.match(uiMain,/window\.erikrafTDisplayName === 'string'/);
@@ -21,4 +21,4 @@ for (const translations of [en,pt]) {
     assert.match(translations,/"optical-matrix-open":/);
 }
 
-console.log('desktop startup regressions: PASS');
+assert.match(cursor,/requestAnimationFrame\(render\)/);\nassert.doesNotMatch(cursor,/const loop\s*=|requestAnimationFrame\(update\)/, 'BioDrop cursor must not run an idle animation loop.');\nconsole.log('desktop startup regressions: PASS');
