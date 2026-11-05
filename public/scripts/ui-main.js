@@ -758,8 +758,13 @@ class FooterUI {
     }
 
     async showLoading() {
+        // Do not expose the translated "Loading…" placeholder as the device name.
+        // The server will replace this empty fallback when its display-name message arrives.
+        const serverDisplayName = typeof window !== 'undefined' && typeof window.erikrafTDisplayName === 'string'
+            ? window.erikrafTDisplayName.trim()
+            : '';
         [this.$displayName, this.$chatDisplayName].filter(Boolean).forEach(displayNameEl => {
-            displayNameEl.setAttribute('placeholder', displayNameEl.dataset.placeholder);
+            displayNameEl.setAttribute('placeholder', serverDisplayName);
         });
     }
 
