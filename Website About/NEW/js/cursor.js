@@ -29,23 +29,23 @@
 
    let mouseX = 0;
    let mouseY = 0;
-   let frameId = 0;
+   let frameId = null;
 
    const render = () => {
-      frameId = 0;
+      frameId = null;
       cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
    };
 
    const scheduleRender = () => {
-      if (!frameId) frameId = requestAnimationFrame(render);
+      if (frameId === null) frameId = requestAnimationFrame(render);
    };
 
    const show = () => cursor.classList.add('is-visible');
    const hide = () => {
       cursor.classList.remove('is-visible');
-      if (frameId) {
+      if (frameId !== null) {
          cancelAnimationFrame(frameId);
-         frameId = 0;
+         frameId = null;
       }
    };
 
