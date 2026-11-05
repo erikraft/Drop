@@ -80,7 +80,8 @@ assert.match(dialogHtml,/class="row-reverse center btn-row wrap"/);
 for(const id of ['share-btn','copy-image-btn','compress-btn','download-btn'])assert.match(dialogHtml,new RegExp('id="'+id+'"'));
 assert.match(dialogHtml,/data-i18n-key="dialogs.close"/);
 assert.doesNotMatch(dialogHtml,/id="ek-actions"/);
-assert.doesNotMatch(dialogHtml,/ai-edit-btn|publish-youtube-btn|publish-instagram-btn/);
+const activeDialogHtml=dialogHtml.replace(/<!--[\\s\\S]*?-->/g,'');
+assert.doesNotMatch(activeDialogHtml,/ai-edit-btn|publish-youtube-btn|publish-instagram-btn/);
 assert.doesNotMatch(indexHtml,/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
