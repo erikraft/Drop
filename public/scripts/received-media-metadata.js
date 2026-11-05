@@ -36,7 +36,32 @@ async function preparePhoto(file){const p=metadataProfiles.photo.smartGlassesPho
 async function prepareVideo(file){const p=metadataProfiles.video.smartGlassesVideo3x4;if(!window.MediaRecorder)return{state:'Unsupported',reason:'MediaRecorder unavailable'};const candidates=['video/mp4;codecs="hvc1"','video/mp4;codecs="hev1"','video/mp4;codecs="avc1.42E01E"','video/mp4'],mime=candidates.find(x=>MediaRecorder.isTypeSupported(x));if(!mime)return{state:'Unsupported',reason:'No supported MP4 encoder'};const video=document.createElement('video');video.muted=true;video.playsInline=true;video.preload='auto';const u=URL.createObjectURL(file);try{await new Promise((ok,no)=>{video.onloadedmetadata=ok;video.onerror=()=>no(Error('Video decode unsupported'));video.src=u});const c=document.createElement('canvas');c.width=p.width;c.height=p.height;const ctx=c.getContext('2d',{colorSpace:'srgb'});if(!ctx)throw Error('Canvas unavailable');const stream=c.captureStream(p.fps),rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:4000000}),chunks=[];rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);const stopped=new Promise((ok,no)=>{rec.onstop=ok;rec.onerror=e=>no(e.error||Error('Encoding failed'))});rec.start(250);const draw=()=>{if(rec.state!=='recording')return;const s=Math.max(c.width/video.videoWidth,c.height/video.videoHeight),w=video.videoWidth*s,h=video.videoHeight*s;ctx.drawImage(video,(c.width-w)/2,(c.height-h)/2,w,h);if(!video.ended)requestAnimationFrame(draw)};video.onended=()=>{if(rec.state==='recording')rec.stop()};await video.play();draw();await stopped;return{state:'Prepared',file:build(chunks,'video/mp4',file.name.replace(/\.[^.]+$/,'')+'-spin-view.mp4'),encoder:mime,requestedProfile:p}}finally{video.pause();URL.revokeObjectURL(u)}}
 function rows(o,p='',r=[]){for(const[k,v]of Object.entries(o||{})){const q=p?p+'.'+k:k;if(v&&typeof v==='object'&&!Array.isArray(v)&&('state'in v||'value'in v))r.push([q,v.state,v.value??'']);else if(v&&typeof v==='object'&&!Array.isArray(v))rows(v,q,r);else r.push([q,'Found',v])}return r}
 function style(){if(document.getElementById('ek-media-style'))return;const s=document.createElement('style');s.id='ek-media-style';s.textContent='#ek-actions{display:flex;flex-direction:row-reverse;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center;justify-content:center}.ek-btn{appearance:none;border:0;background:var(--bg-color-secondary);color:rgb(var(--text-color));border-radius:12px;padding:8px 16px;min-height:40px;line-height:1.2;font:inherit;cursor:pointer;white-space:normal;text-align:center;word-break:break-word;transition:background .2s,border-color .2s,transform .15s}.ek-btn:hover{background:var(--bg-color-secondary);border-color:rgba(var(--text-color),.32)}.ek-btn:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}.ek-btn:active{transform:translateY(1px)}.ek-btn.ek-danger{border-color:rgba(220,53,69,.55);background:rgba(220,53,69,.1);color:#d52f42}.ek-btn.ek-danger:hover{background:rgba(220,53,69,.18)}#ek-panel{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.45);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px}#ek-card{width:min(980px,100%);max-height:90vh;overflow:auto;background:var(--dialog-bg-color);color:rgb(var(--text-color));border:1px solid rgba(var(--text-color),.16);border-radius:20px;padding:20px;box-shadow:0 16px 60px rgba(0,0,0,.28)}#ek-card h2{margin-top:0}#ek-card table{width:100%;border-collapse:collapse;font-size:13px}#ek-card td{padding:7px;border-bottom:1px solid rgba(var(--text-color),.12)}.ek-found{color:#278b5b}.ek-missing{color:rgba(var(--text-color),.62)}.ek-unsupported{color:#b36b00}.ek-story{width:min(340px,85vw);aspect-ratio:9/16;position:relative;overflow:hidden;border-radius:28px;background:var(--bg-color-secondary)}.ek-story img{width:100%;height:100%;object-fit:cover}.ek-ring{position:absolute;top:16px;left:16px;border:4px solid #ff6f91;border-radius:50%;width:56px;height:56px;display:grid;place-items:center;background:rgba(0,0,0,.72);color:#fff}.ek-badge{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#ff6f91e8;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px}.ek-warning{padding:10px;border-radius:12px;background:rgba(139,91,16,.12);border:1px solid rgba(139,91,16,.32)}@media (max-width:768px){#ek-card{max-height:92vh;padding:16px}#ek-actions{flex-direction:column-reverse;width:100%}#ek-actions .ek-btn{width:100%;min-height:42px}}';document.head.appendChild(s)}
-const btn=(label,fn,options={})=>{const b=document.createElement('button');b.className='ek-btn'+(options.danger?' ek-danger':'');b.type='button';b.textContent=label;b.onclick=fn;return b};const close=()=>document.getElementById('ek-panel')?.remove();function panel(title,html,buttons=[]){close();style();const p=document.createElement('div');p.id='ek-panel';const c=document.createElement('div');c.id='ek-card';c.innerHTML='<h2>'+esc(title)+'</h2>'+html+'<div id="ek-tools"></div>';p.append(c);p.onclick=e=>e.target===p&&close();document.body.append(p);const t=c.querySelector('#ek-tools');buttons.forEach(b=>t.append(b));t.append(btn('Fechar',close));return c}
+const btn=(label,fn,options={})=>{const b=document.createElement('button');b.className='ek-btn'+(options.danger?' ek-danger':'');b.type='button';b.textContent=label;b.onclick=fn;return b};const close=()=>document.getElementById('ek-panel')?.remove();function textElement(tag,text,className){
+ const element=document.createElement(tag);
+ if(className)element.className=className;
+ if(text!==undefined)element.textContent=String(text);
+ return element;
+}
+function paragraph(parts){
+ const p=document.createElement('p');
+ parts.forEach(part=>p.append(typeof part==='string'?document.createTextNode(part):part));
+ return p;
+}
+function strong(text){return textElement('b',text)}
+function panel(title,content,buttons=[]){
+ close();style();
+ const p=document.createElement('div');p.id='ek-panel';
+ const card=document.createElement('div');card.id='ek-card';
+ card.append(textElement('h2',title));
+ (Array.isArray(content)?content:[content]).filter(Boolean).forEach(node=>card.append(node));
+ const tools=document.createElement('div');tools.id='ek-tools';
+ card.append(tools);p.append(card);
+ p.onclick=event=>event.target===p&&close();
+ document.body.append(p);
+ buttons.forEach(button=>tools.append(button));
+ tools.append(btn(tr('close','Close'),close));
+ return card;
+}
 function notify(s){try{Events.fire('notify-user',s)}catch(_){console.warn(s)}}function download(f){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(u),5000)}async function shareFiles(files,title='ErikrafT Drop™'){const list=files.filter(Boolean);if(!navigator.share||!navigator.canShare?.({files:list}))return notify(tr('share_unsupported','File sharing is not supported in this browser.'));try{await navigator.share({files:list,title})}catch(e){if(e.name!=='AbortError')notify(tr('share_failed','Sharing failed: {{error}}',{error:e.message}))}}
 async function share(f){return shareFiles([f],f.name)}
 function androidBridge(){return typeof ErikrafTdropAndroid!=='undefined'?ErikrafTdropAndroid:null}
@@ -52,10 +77,77 @@ async function shareInstagram(f,story=false){
  }catch(_){await share(f)}
 }
 
-async function inspector(file){await session.set(file);const m=await inspect(file),rs=rows(m);panel('Metadata Inspector — '+file.name,'<p><b>Fonte:</b> arquivo REALMENTE recebido · <b>SHA-256:</b> '+esc(m.FILE.hash)+'</p><table>'+rs.map(x=>'<tr><td>'+esc(x[0])+'</td><td class="'+(x[1]==='Unsupported'?'ek-unsupported':x[1]==='Not found'?'ek-missing':'ek-found')+'">'+esc(x[1])+'</td><td>'+esc(x[2])+'</td></tr>').join('')+'</table>',[btn(tr('download','Download'),()=>download(file)),btn(tr('share','Share'),()=>share(file))])}
-async function removeMode(mode){try{const original=session.file,before=await inspect(original),out=await sanitize(original,mode),after=await inspect(out);session.sanitized=out;const b=rows(before),a=rows(after),privateBefore=b.filter(x=>PRIVATE_FIELDS.has(x[0].split('.').pop())&&x[1]==='Found'),privateAfter=a.filter(x=>PRIVATE_FIELDS.has(x[0].split('.').pop())&&x[1]==='Found'),changed=privateBefore.filter(x=>!privateAfter.some(y=>y[0]===x[0]));panel(mode==='all'?'Antes × Depois — Todos os metadados':'Antes × Depois — Dados privados','<p>Original: '+bytes(original.size)+' · Novo arquivo: '+bytes(out.size)+'</p><p>Resultado reaberto e inspecionado; original intacto.</p><p><b>Campos privados removidos/verificados:</b> '+(changed.map(x=>esc(x[0])).join(', ')||'nenhum detectado')+'</p>'+(mode==='all'?'<div class="ek-warning">Remover todos os metadados pode remover informações necessárias para determinados recursos de compatibilidade, incluindo perfis experimentais de Smart Glasses.</div>':''),[btn('Inspecionar resultado',()=>inspector(out)),btn('Baixar novo arquivo',()=>download(out)),btn('Compartilhar novo arquivo',()=>share(out))])}catch(e){notify('Não foi possível concluir a remoção: '+e.message)}}
-async function spinPhoto(){try{const out=await preparePhoto(session.file),m=await inspect(out);session.prepared=out;panel('Technical compatibility','<p><b>Perfil:</b> Smart Glasses Photo — 3:4</p><p>✓ '+esc(m.IMAGE.width)+' × '+esc(m.IMAGE.height)+' · exportado e reaberto</p><p>Valores experimentais; não são especificações oficiais da Meta. O Instagram controla a ativação final.</p>',[btn(tr('download','Download'),()=>download(out)),btn(tr('share','Share'),()=>share(out)),btn(tr('instagram_story','Instagram Story'),()=>simulator(out))])}catch(e){notify('Preparação de foto falhou: '+e.message)}}
-async function spinVideo(){try{const r=await prepareVideo(session.file);if(r.state!=='Prepared')return notify('Vídeo não pode ser preparado neste navegador: '+r.reason);session.prepared=r.file;const c=await inspect(r.file);panel('Technical compatibility — vídeo','<p><b>Perfil experimental:</b> 3:4 · 1360×1808 · 60fps · HEVC quando suportado.</p><p>Encoder: '+esc(r.encoder)+'</p><p>Container: '+esc(c.VIDEO.container||'não identificado')+'</p><p>Tracks: '+esc((c.VIDEO.videoTracks?.length||1)+' vídeo · '+(c.VIDEO.audioTracks?.length||0)+' áudio')+'</p><p>Arquivo reaberto e validado. Sem garantia de reconhecimento pelo Instagram.</p>',[btn(tr('download','Download'),()=>download(r.file)),btn(tr('share','Share'),()=>share(r.file))])}catch(e){notify('Preparação de vídeo falhou: '+e.message)}}
+async function inspector(file){
+ await session.set(file);
+ const metadata=await inspect(file),entries=rows(metadata);
+ const summary=paragraph([strong('Fonte:'),' arquivo REALMENTE recebido · ',strong('SHA-256:'),' ',metadata.FILE.hash]);
+ const table=document.createElement('table');
+ entries.forEach(([field,status,value])=>{
+   const row=document.createElement('tr');
+   const fieldCell=textElement('td',field);
+   const statusClass=status==='Unsupported'?'ek-unsupported':status==='Not found'?'ek-missing':'ek-found';
+   const statusCell=textElement('td',status,statusClass);
+   const valueCell=textElement('td',value);
+   row.append(fieldCell,statusCell,valueCell);table.append(row);
+ });
+ panel('Metadata Inspector — '+file.name,[summary,table],[btn(tr('download','Download'),()=>download(file)),btn(tr('share','Share'),()=>share(file))]);
+}
+async function removeMode(mode){
+ try{
+   const original=session.file,before=await inspect(original),out=await sanitize(original,mode),after=await inspect(out);
+   session.sanitized=out;
+   const beforeRows=rows(before),afterRows=rows(after);
+   const privateBefore=beforeRows.filter(row=>PRIVATE_FIELDS.has(row[0].split('.').pop())&&row[1]==='Found');
+   const privateAfter=afterRows.filter(row=>PRIVATE_FIELDS.has(row[0].split('.').pop())&&row[1]==='Found');
+   const changed=privateBefore.filter(row=>!privateAfter.some(next=>next[0]===row[0]));
+   const content=[
+     paragraph(['Original: ',bytes(original.size),' · Novo arquivo: ',bytes(out.size)]),
+     paragraph(['Resultado reaberto e inspecionado; original intacto.']),
+     paragraph([strong('Campos privados removidos/verificados:'),' ',changed.map(row=>row[0]).join(', ')||'nenhum detectado'])
+   ];
+   if(mode==='all')content.push(textElement('div','Remover todos os metadados pode remover informações necessárias para determinados recursos de compatibilidade, incluindo perfis experimentais de Smart Glasses.','ek-warning'));
+   panel(mode==='all'?'Antes × Depois — Todos os metadados':'Antes × Depois — Dados privados',content,[
+     btn('Inspecionar resultado',()=>inspector(out)),
+     btn('Baixar novo arquivo',()=>download(out)),
+     btn('Compartilhar novo arquivo',()=>share(out))
+   ]);
+ }catch(error){notify('Não foi possível concluir a remoção: '+error.message)}
+}
+async function spinPhoto(){
+ try{
+   const out=await preparePhoto(session.file),metadata=await inspect(out);session.prepared=out;
+   const content=[
+     paragraph([strong('Perfil:'),' Smart Glasses Photo — 3:4']),
+     paragraph(['✓ ',metadata.IMAGE.width,' × ',metadata.IMAGE.height,' · exportado e reaberto']),
+     paragraph(['Valores experimentais; não são especificações oficiais da Meta. O Instagram controla a ativação final.'])
+   ];
+   panel('Technical compatibility',content,[
+     btn(tr('download','Download'),()=>download(out)),
+     btn(tr('share','Share'),()=>share(out)),
+     btn(tr('instagram_story','Instagram Story'),()=>simulator(out))
+   ]);
+ }catch(error){notify('Preparação de foto falhou: '+error.message)}
+}
+async function spinVideo(){
+ try{
+   const result=await prepareVideo(session.file);
+   if(result.state!=='Prepared')return notify('Vídeo não pode ser preparado neste navegador: '+result.reason);
+   session.prepared=result.file;
+   const metadata=await inspect(result.file);
+   const tracks=(metadata.VIDEO.videoTracks?.length||1)+' vídeo · '+(metadata.VIDEO.audioTracks?.length||0)+' áudio';
+   const content=[
+     paragraph([strong('Perfil experimental:'),' 3:4 · 1360×1808 · 60fps · HEVC quando suportado.']),
+     paragraph(['Encoder: ',result.encoder]),
+     paragraph(['Container: ',metadata.VIDEO.container||'não identificado']),
+     paragraph(['Tracks: ',tracks]),
+     paragraph(['Arquivo reaberto e validado. Sem garantia de reconhecimento pelo Instagram.'])
+   ];
+   panel('Technical compatibility — vídeo',content,[
+     btn(tr('download','Download'),()=>download(result.file)),
+     btn(tr('share','Share'),()=>share(result.file))
+   ]);
+ }catch(error){notify('Preparação de vídeo falhou: '+error.message)}
+}
 function simulator(file){
  style();
  const p=document.createElement('div');p.id='ek-panel';
@@ -125,7 +217,37 @@ function addActions(file){
  const createSilentVideoFromImage=async (imageFile,preferredMimeType=mp4Mime())=>{const mimeType=preferredMimeType;if(!mimeType)throw Error(tr('motion_photo_mp4_unsupported','Este navegador não consegue gerar o vídeo MP4 necessário para o Motion Photo.'));const img=document.createElement('img');const u=URL.createObjectURL(imageFile);try{await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(Error('Image decode failed'));img.src=u});const max=1920,scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const canvas=document.createElement('canvas');canvas.width=Math.max(2,Math.round(img.naturalWidth*scale));canvas.height=Math.max(2,Math.round(img.naturalHeight*scale));const ctx=canvas.getContext('2d');if(!ctx)throw Error('Canvas unavailable');ctx.drawImage(img,0,0,canvas.width,canvas.height);const stream=canvas.captureStream(24),recorder=new MediaRecorder(stream,{mimeType:mimeType});const chunks=[];const stopped=new Promise((ok,no)=>{recorder.onstop=ok;recorder.onerror=e=>no(e.error||Error('MP4 recording failed'))});recorder.ondataavailable=e=>e.data.size&&chunks.push(e.data);recorder.start(250);await new Promise(r=>setTimeout(r,1500));if(recorder.state==='recording')recorder.stop();await stopped;stream.getTracks().forEach(track=>track.stop());return build(chunks,'video/mp4',imageFile.name.replace(/\.[^.]+$/,'')+'-motion.mp4')}finally{URL.revokeObjectURL(u);img.remove()}};
  const createAppleLivePhoto=async file=>{const assetId=uuid();let image=file,video;if(/^video\//.test(file.type)||/\.(mp4|mov|m4v)$/i.test(file.name)){image=await createStillFromVideo(file);const sourceMime=getSupportedVideoMimeType();if(!sourceMime)throw Error('Este navegador não possui MediaRecorder compatível para criar o vídeo do Live Photo.');video=/^video\/quicktime$/i.test(file.type)&&/\.mov$/i.test(file.name)?file:await recordMediaElement(file,sourceMime)}else{const source=file instanceof File?file:session.file;const quicktimeMime=getSupportedVideoMimeType();if(!quicktimeMime)throw Error('Este navegador não consegue gerar o vídeo QuickTime necessário para um Live Photo válido.');video=await createSilentVideoFromImage(source,quicktimeMime)}const jpeg=await normalizeJpeg(image);const liveJpeg=build([injectLivePhotoMakerNote(jpeg,assetId)],'image/jpeg',image.name.replace(/\.[^.]+$/,'')+'.jpg');let movBytes=new Uint8Array(await video.arrayBuffer());if(/^video\/mp4/i.test(video.type)||/\.mp4$/i.test(video.name))movBytes=addLivePhotoMetadataToMov(movBytes,assetId);const mov=build([movBytes],'video/quicktime',liveJpeg.name.replace(/\.jpg$/i,'')+'.mov');return{assetId,image:liveJpeg,video:mov}};
  const createMotionPhotoFromSingle=async file=>{if(/^video\//.test(file.type)||/\.(mp4|mov|m4v)$/i.test(file.name)){const image=await createStillFromVideo(file);const video=/^video\/mp4$/i.test(file.type)||/\.mp4$/i.test(file.name)?file:await recordMediaElement(file,mp4Mime());return createMotionPhoto(image,video)}if(/^image\//.test(file.type)||/\.(jpe?g|png|webp|heic|heif|avif)$/i.test(file.name)){const video=session.receivedFiles.find(f=>/^video\/mp4$/i.test(f?.type||'')||/\.mp4$/i.test(f?.name||''));if(video)return createMotionPhoto(file,video);const generated=await createSilentVideoFromImage(file);return createMotionPhoto(file,generated)}throw Error('Formato de mídia incompatível')};
- const addMotionPhoto=async()=>{try{const quicktimeAvailable=Boolean(getSupportedVideoMimeType());if(quicktimeAvailable){const pair=await createAppleLivePhoto(file);session.motionPhoto={image:pair.image,video:pair.video,assetId:pair.assetId};panel(tr('motion_photo_title','Live Photo'),'<p><b>Formato:</b> par Apple Live Photo (JPEG + MOV).</p><p><b>Asset Identifier:</b> '+esc(pair.assetId)+'</p><p>Os dois arquivos usam o mesmo identificador para o pareamento.</p>',[btn(tr('download','Baixar foto'),()=>download(pair.image)),btn(tr('download','Baixar vídeo'),()=>download(pair.video)),btn(tr('share','Compartilhar os dois'),()=>shareFiles([pair.image,pair.video],'ErikrafT Drop™ Live Photo'))])}else{const out=await createMotionPhotoFromSingle(file);session.motionPhoto=out;const m=await inspect(out);panel(tr('motion_photo_title','Motion Photo'),'<p><b>Formato:</b> JPEG + MP4 no container Motion Photo.</p><p><b>Validação:</b> '+esc(m.FILE.size)+' bytes · arquivo reaberto pelo inspector.</p><p>Este navegador não expõe gravação QuickTime; foi usado o formato Motion Photo compatível como fallback.</p>',[btn(tr('download','Download'),()=>download(out)),btn(tr('share','Share'),()=>share(out))])}}catch(e){notify('Não foi possível criar a Live/Motion Photo: '+e.message)}};
+ const addMotionPhoto=async()=>{
+ try{
+   const quicktimeAvailable=Boolean(getSupportedVideoMimeType());
+   if(quicktimeAvailable){
+     const pair=await createAppleLivePhoto(file);
+     session.motionPhoto={image:pair.image,video:pair.video,assetId:pair.assetId};
+     const content=[
+       paragraph([strong('Formato:'),' par Apple Live Photo (JPEG + MOV).']),
+       paragraph([strong('Asset Identifier:'),' ',pair.assetId]),
+       paragraph(['Os dois arquivos usam o mesmo identificador para o pareamento.'])
+     ];
+     panel(tr('motion_photo_title','Live Photo'),content,[
+       btn(tr('download','Baixar foto'),()=>download(pair.image)),
+       btn(tr('download','Baixar vídeo'),()=>download(pair.video)),
+       btn(tr('share','Compartilhar os dois'),()=>shareFiles([pair.image,pair.video],'ErikrafT Drop™ Live Photo'))
+     ]);
+   }else{
+     const out=await createMotionPhotoFromSingle(file);session.motionPhoto=out;
+     const metadata=await inspect(out);
+     const content=[
+       paragraph([strong('Formato:'),' JPEG + MP4 no container Motion Photo.']),
+       paragraph([strong('Validação:'),' ',metadata.FILE.size,' bytes · arquivo reaberto pelo inspector.']),
+       paragraph(['Este navegador não expõe gravação QuickTime; foi usado o formato Motion Photo compatível como fallback.'])
+     ];
+     panel(tr('motion_photo_title','Motion Photo'),content,[
+       btn(tr('download','Download'),()=>download(out)),
+       btn(tr('share','Share'),()=>share(out))
+     ]);
+   }
+ }catch(error){notify('Não foi possível criar a Live/Motion Photo: '+error.message)}
+};
  const host=document.getElementById('receive-file-dialog');if(!host)return;
  const actions=host.querySelector('.btn-row');if(!actions)return;
  actions.querySelectorAll('[data-ek-media-action]').forEach(button=>button.remove());
