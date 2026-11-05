@@ -123,7 +123,7 @@ function addActions(file){
  addDialogAction(tr('inspector','Metadata Inspector'),()=>inspector(file));
  addDialogAction(tr('remove_private','Remove private data'),()=>removeMode('private'));
  addDialogAction(tr('remove_all','Remove all metadata'),()=>removeMode('all'));
- addDialogAction('RBM Convert',()=>/^video\\//.test(file.type)?spinVideo():spinPhoto());
+ addDialogAction(tr('prepare_spin','RBM Convert'),()=>/^video\\//.test(file.type)?spinVideo():spinPhoto());
  if(isMobileDevice())addDialogAction(tr('instagram','Instagram'),()=>shareInstagram(file,false));
  addDialogAction(tr('motion_photo','Criar Live/Motion Photo'),addMotionPhoto);
 }
