@@ -60,6 +60,7 @@ assert.doesNotMatch(source,/Spin View/i, 'RBM Convert must replace the former Sp
 assert.match(source,/cancelAnimationFrame\(frameId\)/);
 assert.match(source,/URL\.revokeObjectURL\(src\);p\.remove\(\)/);
 assert.doesNotMatch(source,/requestAnimationFrame\(loop\)/, 'RBM preview must not leave an unbounded animation loop running.');
+assert.doesNotMatch(source,/\bclose\(\)/, 'Closing the RBM preview must not attempt to close the browser window.');
 assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
