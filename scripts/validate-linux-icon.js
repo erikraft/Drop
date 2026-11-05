@@ -1,11 +1,12 @@
-import fs from 'fs/promises';
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 const root = process.cwd();
-const icon = {
-  label: 'Linux .deb source icon (shared ICO)',
-  path: 'desktop/assets/icon.ico',
-};
+const iconPath = 'packaging/linux/icons/icon-drop.svg';
+const icon = await fs.readFile(path.join(root, iconPath), 'utf8');
 
-await fs.access(path.join(root, icon.path));
-console.log(`${icon.label}: ${icon.path}`);
+if (!/^\s*<svg\b/.test(icon) || !/\bviewBox="[^"]+"/.test(icon)) {
+  throw new Error(`Invalid Linux SVG icon: ${iconPath}`);
+}
+
+console.log(`Linux .deb source icon (SVG): ${iconPath}`);

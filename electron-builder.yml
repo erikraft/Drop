@@ -23,7 +23,8 @@ linux:
       arch:
         - x64
   category: Network;Utility;
-  # Let electron-builder generate Linux icon sizes from desktop/assets/icon.ico.
+  # Use a dedicated SVG source; the Linux icon tool does not accept ICO input.
+  icon: packaging/linux/icons/icon-drop.svg
   desktop:
     entry:
       Name: ErikrafT Drop™
