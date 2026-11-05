@@ -361,5 +361,8 @@
         "description": "Zet je ideeën om in afbeeldingen met AI.",
         "cta": "Ontdek ErikrafT AI™",
         "dismiss": "Advertentie sluiten"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

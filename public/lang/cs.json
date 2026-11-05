@@ -361,5 +361,8 @@
         "description": "Proměňte své nápady v obrázky pomocí AI.",
         "cta": "Objevte ErikrafT AI™",
         "dismiss": "Zavřít reklamu"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

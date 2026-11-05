@@ -241,5 +241,8 @@
         "description": "Biến ý tưởng thành hình ảnh bằng AI.",
         "cta": "Khám phá ErikrafT AI™",
         "dismiss": "Đóng quảng cáo"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

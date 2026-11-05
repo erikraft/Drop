@@ -361,5 +361,8 @@
         "description": "ایده‌های خود را با هوش مصنوعی به تصویر تبدیل کنید.",
         "cta": "آشنایی با ErikrafT AI™",
         "dismiss": "بستن تبلیغ"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }

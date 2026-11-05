@@ -361,5 +361,8 @@
         "description": "Bihurtu zure ideiak irudi AI bidez.",
         "cta": "Ezagutu ErikrafT AI™",
         "dismiss": "Itxi iragarkia"
+    },
+    "media": {
+        "prepare_spin": "RBM Convert"
     }
 }
