@@ -71,6 +71,16 @@ assert.match(source,/URL\.revokeObjectURL\(src\);p\.remove\(\)/);
 assert.doesNotMatch(source,/requestAnimationFrame\(loop\)/, 'RBM preview must not leave an unbounded animation loop running.');
 const simulator=source.slice(source.indexOf('function simulator(file){'),source.indexOf('function addActions(file){'));
 assert.doesNotMatch(simulator,/\bclose\(\)/, 'Closing the RBM preview must not attempt to close the browser window.');
-assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id="metadata-btn"/);
+const indexHtml=fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
+const dialogStart=indexHtml.indexOf('id="receive-file-dialog"');
+const dialogEnd=indexHtml.indexOf('</x-dialog>',dialogStart);
+assert.ok(dialogStart>=0&&dialogEnd>dialogStart, 'receive-file-dialog markup must exist');
+const dialogHtml=indexHtml.slice(dialogStart,dialogEnd);
+assert.match(dialogHtml,/class="row-reverse center btn-row wrap"/);
+for(const id of ['share-btn','copy-image-btn','compress-btn','download-btn'])assert.match(dialogHtml,new RegExp('id="'+id+'"'));
+assert.match(dialogHtml,/data-i18n-key="dialogs.close"/);
+assert.doesNotMatch(dialogHtml,/id="ek-actions"/);
+assert.doesNotMatch(dialogHtml,/ai-edit-btn|publish-youtube-btn|publish-instagram-btn/);
+assert.doesNotMatch(indexHtml,/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
