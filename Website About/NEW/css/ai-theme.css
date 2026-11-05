@@ -144,3 +144,52 @@ footer,
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Hero, section rhythm and primary actions */
+.gradient-bg {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(66, 133, 244, .2), transparent 48%),
+    linear-gradient(180deg, #0a090b 0%, #0d0c10 100%) !important;
+}
+.gradient-bg .bg-white {
+  background: var(--bio-blue) !important;
+  color: #fff !important;
+}
+.gradient-bg .bg-white:hover { background: var(--bio-blue-hover) !important; }
+.gradient-bg .bg-slate-800\/50 {
+  background: rgba(17, 16, 19, .82) !important;
+  border-color: var(--bio-border) !important;
+  color: var(--bio-text);
+}
+#features,
+#how-it-works,
+#advantages,
+#self-host,
+#reviews,
+#partnership {
+  background: transparent !important;
+  border-top: 1px solid rgba(42, 48, 64, .58);
+}
+section h2 {
+  letter-spacing: -.035em;
+  line-height: 1.12;
+}
+section h3 { letter-spacing: -.02em; }
+.feature-card,
+.glass-card { overflow: hidden; }
+.glass-card > div:first-child {
+  border-radius: 12px;
+}
+input,
+textarea,
+select {
+  background: rgba(10, 9, 11, .82) !important;
+  border-color: var(--bio-border) !important;
+  color: var(--bio-text) !important;
+}
+input::placeholder,
+textarea::placeholder { color: #8994a8 !important; }
+.terminal-command-row {
+  background: rgba(10, 9, 11, .9);
+  border-color: var(--bio-border);
+}
