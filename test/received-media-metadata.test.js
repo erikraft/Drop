@@ -51,7 +51,7 @@ assert.match(source,/com\.apple\.quicktime\.content\.identifier/);
 assert.match(source,/video\/quicktime/);
 assert.match(source,/Criar Live\/Motion Photo/);
 assert.match(source,/id="ek-close"/);
-assert.match(source,/id="ek-actions"/);
+assert.match(source,/id="ek-actions"/);\nassert.match(source,/querySelector\('\.btn-row'\)/);\nassert.match(source,/data-ek-media-action/);\nassert.doesNotMatch(source,/host\.querySelector\('\#ek-actions'\)/);\nassert.match(source,/RBM Convert/);
 assert.doesNotMatch(fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
