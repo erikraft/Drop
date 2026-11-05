@@ -23,8 +23,7 @@ linux:
       arch:
         - x64
   category: Network;Utility;
-  # Dedicated Linux desktop icon requested for Linux Mint.
-  icon: packaging/linux/icons/icon-drop.svg
+  # Let electron-builder generate Linux icon sizes from desktop/assets/icon.ico.
   desktop:
     entry:
       Name: ErikrafT Drop™
