@@ -35,6 +35,22 @@ assert.equal(new TextDecoder().decode(await privateJ.arrayBuffer()).includes('Ex
 const allJ=await api.sanitize(jf,'all');
 assert.equal(new TextDecoder().decode(await allJ.arrayBuffer()).includes('ICC_PROFILE'),false);
 
+const jpegWithApp1=payload=>{
+    const length=payload.length+2;
+    return concat(new Uint8Array([0xff,0xd8,0xff,0xe1,(length>>>8)&255,length&255]),payload,new Uint8Array([0xff,0xda,0,2]));
+};
+const xmpPayload=concat(new TextEncoder().encode('http://ns.adobe.com/xap/1.0/\0'),new TextEncoder().encode('<x:xmpmeta/>'));
+const xmpFile=new File([jpegWithApp1(xmpPayload)],'xmp.jpg',{type:'image/jpeg'});
+await context.window.erikrafTReceivedMediaSession.set(xmpFile);
+const xmpMetadata=await api.inspect(xmpFile);
+assert.equal(xmpMetadata.JFIF.XMP,'Found','a JPEG APP1 segment with the XMP identifier at byte zero must be detected');
+
+const prefixedXmpPayload=new TextEncoder().encode('https://example.invalid/http://ns.adobe.com/xap/1.0/');
+const prefixedXmpFile=new File([jpegWithApp1(prefixedXmpPayload)],'prefixed-xmp.jpg',{type:'image/jpeg'});
+await context.window.erikrafTReceivedMediaSession.set(prefixedXmpFile);
+const prefixedXmpMetadata=await api.inspect(prefixedXmpFile);
+assert.equal(prefixedXmpMetadata.JFIF.XMP,'Not found','an XMP-like substring inside another prefix must not be accepted');
+
 const png=concat(new Uint8Array([137,80,78,71,13,10,26,10]),new Uint8Array([0,0,0,4,116,69,88,116,84,69,83,84]),new Uint8Array([0,0,0,0]),new Uint8Array([0,0,0,0,73,69,78,68]),new Uint8Array([0,0,0,0]));
 const pf=new File([png],'photo.png',{type:'image/png'});
 const ps=await api.sanitize(pf,'private');
@@ -83,8 +99,21 @@ assert.match(dialogHtml,/class="row-reverse center btn-row wrap"/);
 for(const id of ['share-btn','copy-image-btn','compress-btn','download-btn'])assert.match(dialogHtml,new RegExp('id="'+id+'"'));
 assert.match(dialogHtml,/data-i18n-key="dialogs.close"/);
 assert.doesNotMatch(dialogHtml,/id="ek-actions"/);
-const activeDialogHtml=dialogHtml.replace(/<!--[\\s\\S]*?-->/g,'');
-assert.doesNotMatch(activeDialogHtml,/ai-edit-btn|publish-youtube-btn|publish-instagram-btn/);
+const activeDialogTags=[];
+for(let cursor=0;cursor<dialogHtml.length;){
+    const opening=dialogHtml.indexOf('<',cursor);
+    if(opening<0)break;
+    if(dialogHtml.startsWith('<!--',opening)){
+        const commentEnd=dialogHtml.indexOf('-->',opening+4);
+        cursor=commentEnd<0?dialogHtml.length:commentEnd+3;
+        continue;
+    }
+    const closing=dialogHtml.indexOf('>',opening+1);
+    if(closing<0)break;
+    activeDialogTags.push(dialogHtml.slice(opening,closing+1));
+    cursor=closing+1;
+}
+assert.doesNotMatch(activeDialogTags.join('\n'),/ai-edit-btn|publish-youtube-btn|publish-instagram-btn/);
 assert.doesNotMatch(indexHtml,/id="metadata-btn"/);
 
 console.log('received-media-metadata: PASS');
