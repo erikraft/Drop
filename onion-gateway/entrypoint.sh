@@ -81,7 +81,7 @@ fi
 
 echo "[DROP] Starting ErikrafT Drop..."
 export PORT="$DROP_PORT"
-npm start &
+su-exec node npm start &
 DROP_PID=$!
 
 wait "$DROP_PID" 2>/dev/null || wait
