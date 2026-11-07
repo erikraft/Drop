@@ -76,3 +76,65 @@ test("room removal leaves unrelated rooms and peers intact", () => {
     assert.equal(server._rooms["b".repeat(64)][carol.id], carol);
     assert.equal(server._rooms["a".repeat(64)][alice.id], undefined);
 });
+
+
+test("room identifiers cannot collide with object prototype properties", () => {
+    const server = createServer();
+    const first = createPeer("11111111-1111-4111-8111-111111111111");
+    const second = createPeer("22222222-2222-4222-8222-222222222222");
+
+    server._joinRoom(first, "secret", "__proto__");
+    server._joinRoom(second, "secret", "constructor");
+
+    assert.equal(Object.getPrototypeOf(server._rooms), null);
+    assert.equal(server._rooms["__proto__"][first.id], first);
+    assert.equal(server._rooms.constructor[second.id], second);
+});
+
+test("a peer cannot relay a message into a room it has not joined", () => {
+    const server = createServer();
+    const sender = createPeer("11111111-1111-4111-8111-111111111111");
+    const recipient = createPeer("22222222-2222-4222-8222-222222222222");
+    const senderRoom = "a".repeat(64);
+    const recipientRoom = "b".repeat(64);
+
+    server._joinRoom(sender, "secret", senderRoom);
+    server._joinRoom(recipient, "secret", recipientRoom);
+
+    server._signalAndRelay(sender, {
+        type: "text",
+        roomType: "secret",
+        roomId: recipientRoom,
+        to: recipient.id,
+        text: "cross-room"
+    });
+
+    assert.equal(recipient.messages.some(message => message.type === "text"), false);
+});
+
+test("malformed room-secret deletion requests do not throw or delete another peer's room", () => {
+    const server = createServer();
+    const owner = createPeer("11111111-1111-4111-8111-111111111111");
+    const outsider = createPeer("22222222-2222-4222-8222-222222222222");
+    const roomSecret = "a".repeat(64);
+
+    server._joinSecretRoom(owner, roomSecret);
+
+    assert.doesNotThrow(() => server._onRoomSecretsDeleted(outsider, {}));
+    server._onRoomSecretsDeleted(outsider, { roomSecrets: [roomSecret] });
+
+    assert.equal(server._rooms[roomSecret][owner.id], owner);
+});
+
+test("a non-member cannot regenerate another peer's secret room", () => {
+    const server = createServer();
+    const owner = createPeer("11111111-1111-4111-8111-111111111111");
+    const outsider = createPeer("22222222-2222-4222-8222-222222222222");
+    const roomSecret = "a".repeat(64);
+
+    server._joinSecretRoom(owner, roomSecret);
+    server._onRegenerateRoomSecret(outsider, { roomSecret });
+
+    assert.equal(server._rooms[roomSecret][owner.id], owner);
+    assert.equal(owner.messages.some(message => message.type === "room-secret-regenerated"), false);
+});
