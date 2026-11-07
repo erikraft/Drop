@@ -94,9 +94,14 @@ jobs:
             }
           }
           exit 1
+      - name: Test portable Windows packaging configuration
+        run: node --test test/desktop-portable.test.js
       - run: npm run package:windows
       - shell: pwsh
         run: |
-          $exe = Get-ChildItem -Path dist/desktop -Filter *.exe | Select-Object -First 1
-          if (-not $exe -or $exe.Length -le 0) { throw 'Windows installer was not generated.' }
-          Write-Host "Generated: $($exe.FullName)"
+          $installer = Get-ChildItem -Path dist/desktop -Filter '*-win-x64.exe' | Select-Object -First 1
+          $portable = Get-ChildItem -Path dist/desktop -Filter '*-win-x64-portable.exe' | Select-Object -First 1
+          if (-not $installer -or $installer.Length -le 0) { throw 'Windows NSIS installer was not generated.' }
+          if (-not $portable -or $portable.Length -le 0) { throw 'Windows portable executable was not generated.' }
+          Write-Host "Installer: $($installer.FullName)"
+          Write-Host "Portable: $($portable.FullName)"
