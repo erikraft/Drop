@@ -34,12 +34,13 @@ export default class ErikrafTdropWsServer {
     constructor(server, conf) {
         this._conf = conf
 
-        this._rooms = {}; // { roomId: peers[] }
+        this._rooms = Object.create(null); // { roomId: peers[] }
 
-        this._roomSecrets = {}; // { pairKey: roomSecret }
-        this._keepAliveTimers = {};
+        this._roomSecrets = Object.create(null); // { pairKey: roomSecret }
+        this._keepAliveTimers = Object.create(null);
 
-        this._wss = new WebSocketServer({ server });
+        // Bound individual WebSocket messages; relay chunks are much smaller than this limit.
+        this._wss = new WebSocketServer({ server, maxPayload: 8 * 1024 * 1024 });
         this._wss.on('connection', (socket, request) => this._onConnection(new Peer(socket, request, conf)));
     }
 
@@ -83,6 +84,11 @@ export default class ErikrafTdropWsServer {
             message = JSON.parse(message);
         } catch (e) {
             console.warn("WS: Received JSON is malformed");
+            return;
+        }
+
+        if (!message || typeof message !== 'object' || Array.isArray(message) || typeof message.type !== 'string') {
+            console.warn('WS: Ignoring message with invalid JSON shape');
             return;
         }
 
@@ -153,18 +159,20 @@ export default class ErikrafTdropWsServer {
         const room = message.roomType === 'ip'
             ? sender.ip
             : message.roomId;
+        const members = typeof room === 'string' ? this._rooms[room] : null;
 
-        // relay message to recipient
-        if (message.to && Peer.isValidUuid(message.to) && this._rooms[room]) {
-            const recipient = this._rooms[room][message.to];
-            delete message.to;
-            // add sender
-            message.sender = {
-                id: sender.id,
-                rtcSupported: sender.rtcSupported
-            };
-            this._send(recipient, message);
-        }
+        // Relay only when the sender and recipient are both members of the same room.
+        if (!members || members[sender.id] !== sender || !message.to || !Peer.isValidUuid(message.to)) return;
+
+        const recipient = members[message.to];
+        if (!recipient) return;
+
+        delete message.to;
+        message.sender = {
+            id: sender.id,
+            rtcSupported: sender.rtcSupported
+        };
+        this._send(recipient, message);
     }
 
     _onDisconnect(sender) {
@@ -186,20 +194,23 @@ export default class ErikrafTdropWsServer {
     }
 
     _onRoomSecrets(sender, message) {
-        if (!message.roomSecrets) return;
+        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > 64) return;
 
         const roomSecrets = message.roomSecrets.filter(roomSecret => {
-            return /^[\x00-\x7F]{64,256}$/.test(roomSecret);
-        })
-
-        if (!roomSecrets) return;
+            return typeof roomSecret === 'string' && /^[\\x00-\\x7F]{64,256}$/.test(roomSecret);
+        });
 
         this._joinSecretRooms(sender, roomSecrets);
     }
 
     _onRoomSecretsDeleted(sender, message) {
-        for (let i = 0; i<message.roomSecrets.length; i++) {
-            this._deleteSecretRoom(message.roomSecrets[i]);
+        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > 64) return;
+
+        for (const roomSecret of message.roomSecrets) {
+            const room = typeof roomSecret === 'string' ? this._rooms[roomSecret] : null;
+            if (room && room[sender.id] === sender) {
+                this._deleteSecretRoom(roomSecret);
+            }
         }
     }
 
@@ -237,6 +248,11 @@ export default class ErikrafTdropWsServer {
     }
 
     _onPairDeviceJoin(sender, message) {
+        if (typeof message.pairKey !== 'string' || !/^\\d{5}$/.test(message.pairKey)) {
+            this._send(sender, { type: 'pair-device-join-key-invalid' });
+            return;
+        }
+
         if (sender.rateLimitReached()) {
             this._send(sender, { type: 'join-key-rate-limit' });
             return;
@@ -293,13 +309,19 @@ export default class ErikrafTdropWsServer {
             return;
         }
 
-        if (!this._rooms[message.publicRoomId] && !message.createIfInvalid) {
+        const publicRoomId = typeof message.publicRoomId === 'string' ? message.publicRoomId.toLowerCase() : '';
+        if (!/^[a-z]{5}$/.test(publicRoomId)) {
             this._send(sender, { type: 'public-room-id-invalid', publicRoomId: message.publicRoomId });
             return;
         }
 
+        if (!this._rooms[publicRoomId] && message.createIfInvalid !== true) {
+            this._send(sender, { type: 'public-room-id-invalid', publicRoomId });
+            return;
+        }
+
         this._leavePublicRoom(sender);
-        this._joinPublicRoom(sender, message.publicRoomId);
+        this._joinPublicRoom(sender, publicRoomId);
     }
 
     _onLeavePublicRoom(sender) {
@@ -309,11 +331,15 @@ export default class ErikrafTdropWsServer {
 
     _onRegenerateRoomSecret(sender, message) {
         const oldRoomSecret = message.roomSecret;
+        if (typeof oldRoomSecret !== 'string' || !/^[\\x00-\\x7F]{64,256}$/.test(oldRoomSecret)) return;
+        const oldRoom = this._rooms[oldRoomSecret];
+        if (!oldRoom || oldRoom[sender.id] !== sender) return;
+
         const newRoomSecret = randomizer.getRandomString(256);
 
         // notify all other peers
-        for (const peerId in this._rooms[oldRoomSecret]) {
-            const peer = this._rooms[oldRoomSecret][peerId];
+        for (const peerId in oldRoom) {
+            const peer = oldRoom[peerId];
             this._send(peer, {
                 type: 'room-secret-regenerated',
                 oldRoomSecret: oldRoomSecret,
@@ -368,6 +394,8 @@ export default class ErikrafTdropWsServer {
 
     _joinRoom(peer, roomType, roomId) {
         // roomType: 'ip', 'secret' or 'public-id'
+        if (typeof roomId !== 'string' || roomId.length === 0 || roomId.length > 256) return;
+
         if (this._rooms[roomId] && this._rooms[roomId][peer.id]) {
             // ensures that otherPeers never receive `peer-left` after `peer-joined` on reconnect.
             this._leaveRoom(peer, roomType, roomId);
@@ -375,7 +403,7 @@ export default class ErikrafTdropWsServer {
 
         // if room doesn't exist, create it
         if (!this._rooms[roomId]) {
-            this._rooms[roomId] = {};
+            this._rooms[roomId] = Object.create(null);
         }
 
         // add peer to room before notifying peers to prevent race conditions during list generation
