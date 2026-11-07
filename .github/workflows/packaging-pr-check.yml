@@ -11,6 +11,8 @@ on:
       - 'public/**'
       - 'packaging/**'
       - 'scripts/**'
+      - 'server/**'
+      - 'test/**'
 
 permissions:
   contents: read
@@ -56,6 +58,8 @@ jobs:
             fi
           done
           exit 1
+      - name: Run repository test suite
+        run: npm test
       - run: npm run package:linux
       - run: |
           test -s dist/desktop/erikraft-drop-linux-amd64.deb
