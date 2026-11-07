@@ -197,7 +197,7 @@ export default class ErikrafTdropWsServer {
         if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > 64) return;
 
         const roomSecrets = message.roomSecrets.filter(roomSecret => {
-            return typeof roomSecret === 'string' && /^[\\x00-\\x7F]{64,256}$/.test(roomSecret);
+            return typeof roomSecret === 'string' && /^[\x00-\x7F]{64,256}$/.test(roomSecret);
         });
 
         this._joinSecretRooms(sender, roomSecrets);
@@ -248,7 +248,7 @@ export default class ErikrafTdropWsServer {
     }
 
     _onPairDeviceJoin(sender, message) {
-        if (typeof message.pairKey !== 'string' || !/^\\d{5}$/.test(message.pairKey)) {
+        if (typeof message.pairKey !== 'string' || !/^\d{5}$/.test(message.pairKey)) {
             this._send(sender, { type: 'pair-device-join-key-invalid' });
             return;
         }
@@ -331,7 +331,7 @@ export default class ErikrafTdropWsServer {
 
     _onRegenerateRoomSecret(sender, message) {
         const oldRoomSecret = message.roomSecret;
-        if (typeof oldRoomSecret !== 'string' || !/^[\\x00-\\x7F]{64,256}$/.test(oldRoomSecret)) return;
+        if (typeof oldRoomSecret !== 'string' || !/^[\x00-\x7F]{64,256}$/.test(oldRoomSecret)) return;
         const oldRoom = this._rooms[oldRoomSecret];
         if (!oldRoom || oldRoom[sender.id] !== sender) return;
 
