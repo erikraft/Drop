@@ -48,6 +48,7 @@ deb:
 win:
   target:
     - nsis
+    - portable
   # Official Windows application/installer icon.
   icon: desktop/assets/icon.ico
 nsis:
@@ -59,3 +60,6 @@ nsis:
   shortcutName: ErikrafT Drop™
   installerIcon: desktop/assets/icon.ico
   uninstallerIcon: desktop/assets/icon.ico
+
+portable:
+  artifactName: ${name}-${version}-${os}-${arch}-portable.${ext}

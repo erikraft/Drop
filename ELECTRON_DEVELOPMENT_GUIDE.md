@@ -366,3 +366,32 @@ const { startBundledServer } = await import('./server-loader.js');
 **Versão**: 10.1.6
 **Plataformas**: Linux, Windows
 **Status**: ✅ Pronto para Produção
+
+## 3.1️⃣ Executável portátil para Wine e Winlator (Windows x64)
+
+O comando `npm run package:windows` gera agora duas variantes:
+
+- `erikraft-drop-<versão>-win-x64.exe`: instalador NSIS tradicional, com atalhos e desinstalador.
+- `erikraft-drop-<versão>-win-x64-portable.exe`: executável portátil, sem instalação NSIS.
+
+### Wine (Linux)
+
+Execute o arquivo terminado em `-win-x64-portable.exe` com Wine:
+
+```bash
+wine ./dist/desktop/erikraft-drop-<versão>-win-x64-portable.exe
+```
+
+### Winlator (Android)
+
+1. Use um container Windows x86_64 compatível com Box64/Wine.
+2. Copie o arquivo `*-win-x64-portable.exe` para uma pasta acessível dentro do container.
+3. Execute o arquivo pelo Winlator ou crie um atalho para ele.
+
+### Limitações importantes
+
+- O binário gerado é **Windows x64**; não é um APK Android nem um binário ARM nativo.
+- O modo portátil ignora o WinSparkle, que depende de uma DLL nativa. Atualizações dessa variante devem ser feitas baixando uma nova versão manualmente.
+- Wine e Winlator são camadas de compatibilidade: a geração do arquivo não garante que WebRTC, áudio/vídeo, permissões, aceleração gráfica ou conectividade funcionem em toda combinação de versão/dispositivo. O funcionamento precisa ser validado no ambiente específico.
+- O instalador NSIS existente continua disponível e mantém o fluxo de atualização WinSparkle.
+

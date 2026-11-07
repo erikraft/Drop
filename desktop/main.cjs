@@ -162,7 +162,9 @@ function createApplicationMenu() {
 }
 
 function initializeWinSparkle() {
-  if (process.platform !== 'win32') return;
+  // electron-builder sets this for portable builds; keep the Wine/Winlator
+  // executable independent from the native WinSparkle updater DLL.
+  if (process.platform !== 'win32' || process.env.PORTABLE_EXECUTABLE_FILE) return;
 
   try {
     const koffi = require('koffi');
