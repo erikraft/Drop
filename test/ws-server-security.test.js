@@ -38,9 +38,9 @@ function createPeer(id) {
 function createServer() {
     const server = Object.create(ErikrafTdropWsServer.prototype);
     server._conf = { wsFallback: true };
-    server._rooms = {};
-    server._roomSecrets = {};
-    server._keepAliveTimers = {};
+    server._rooms = Object.create(null);
+    server._roomSecrets = Object.create(null);
+    server._keepAliveTimers = Object.create(null);
     server._wss = { OPEN: 1, readyState: 1 };
     return server;
 }
