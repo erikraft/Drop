@@ -3,6 +3,7 @@ import crypto from "crypto"
 
 import Peer from "./peer.js";
 import {hasher, randomizer} from "./helper.js";
+import {isAllowedWebSocketOrigin} from "./websocket-origin.js";
 
 const LOCAL_IPV4_PATTERNS = [
     /^10\./,
@@ -39,9 +40,26 @@ export default class ErikrafTdropWsServer {
         this._roomSecrets = Object.create(null); // { pairKey: roomSecret }
         this._keepAliveTimers = Object.create(null);
 
-        // Bound individual WebSocket messages; relay chunks are much smaller than this limit.
-        this._wss = new WebSocketServer({ server, maxPayload: 8 * 1024 * 1024 });
+        // Bound individual frames and validate browser Origin before upgrading.
+        // Origin is a browser CSWSH defense, not an authentication mechanism.
+        this._wss = new WebSocketServer({ noServer: true, maxPayload: 8 * 1024 * 1024 });
         this._wss.on('connection', (socket, request) => this._onConnection(new Peer(socket, request, conf)));
+
+        server.on('upgrade', (request, socket, head) => {
+            if (!isAllowedWebSocketOrigin(
+                request.headers.origin,
+                request.headers.host,
+                this._conf.wsAllowedOrigins
+            )) {
+                socket.write('HTTP/1.1 403 Forbidden\\r\\nConnection: close\\r\\nContent-Length: 0\\r\\n\\r\\n');
+                socket.destroy();
+                return;
+            }
+
+            this._wss.handleUpgrade(request, socket, head, upgradedSocket => {
+                this._wss.emit('connection', upgradedSocket, request);
+            });
+        });
     }
 
     _onConnection(peer) {
