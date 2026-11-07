@@ -185,6 +185,20 @@ export default class ErikrafTdropWsServer {
         const recipient = members[message.to];
         if (!recipient) return;
 
+        // IP-room membership is authorized using sender.ip, not the client-supplied
+        // roomId. Canonicalize both protocol fields before forwarding so a peer
+        // cannot make recipients render a forged room identifier.
+        if (message.roomType === 'ip') {
+            message.roomId = sender.ip;
+
+            if ((message.type === 'chat-message' || message.type === 'chat-ack')
+                    && message.payload && typeof message.payload === 'object'
+                    && !Array.isArray(message.payload)) {
+                message.payload.roomType = 'ip';
+                message.payload.roomId = sender.ip;
+            }
+        }
+
         delete message.to;
         message.sender = {
             id: sender.id,
