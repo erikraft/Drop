@@ -39,6 +39,20 @@ conf.debugMode = process.env.DEBUG_MODE === "true";
 conf.port = process.env.PORT || 3000;
 
 conf.wsFallback = process.argv.includes('--include-ws-fallback') || process.env.WS_FALLBACK !== "false";
+const rawAllowedOrigins = process.env.WS_ALLOWED_ORIGINS || "";
+conf.wsAllowedOrigins = rawAllowedOrigins.split(",").map(origin => origin.trim()).filter(Boolean).map(origin => {
+    let parsed;
+    try {
+        parsed = new URL(origin);
+    } catch {
+        throw new Error("WS_ALLOWED_ORIGINS must contain valid HTTP(S) origins separated by commas.");
+    }
+    if ((parsed.protocol !== "https:" && parsed.protocol !== "http:")
+            || parsed.username || parsed.password || parsed.pathname !== "/" || parsed.search || parsed.hash) {
+        throw new Error("WS_ALLOWED_ORIGINS must contain HTTP(S) origins only (no paths, queries or credentials).");
+    }
+    return parsed.origin;
+});
 
 conf.rtcConfig = process.env.RTC_CONFIG && process.env.RTC_CONFIG !== "false"
     ? JSON.parse(fs.readFileSync(process.env.RTC_CONFIG, 'utf8'))
