@@ -51,7 +51,7 @@ export default class ErikrafTdropWsServer {
                 request.headers.host,
                 this._conf.wsAllowedOrigins
             )) {
-                socket.write('HTTP/1.1 403 Forbidden\r\\nConnection: close\r\\nContent-Length: 0\r\\n\r\\n');
+                socket.write('HTTP/1.1 403 Forbidden\r\nConnection: close\r\nContent-Length: 0\r\n\r\n');
                 socket.destroy();
                 return;
             }
