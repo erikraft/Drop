@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
 
 import ErikrafTdropWsServer from "../server/ws-server.js";
 
@@ -162,4 +163,45 @@ test("rejects malformed and non-http browser Origins but preserves native client
     assert.equal(isAllowedWebSocketOrigin("not a URL", "drop.example.com"), false);
     assert.equal(isAllowedWebSocketOrigin("file:///tmp/index.html", "drop.example.com"), false);
     assert.equal(isAllowedWebSocketOrigin(undefined, "drop.example.com"), true);
+});
+
+
+test("IP-room chat relays must canonicalize both room identifiers", () => {
+    const server = createServer();
+    const sender = createPeer("11111111-1111-4111-8111-111111111111");
+    const recipient = createPeer("22222222-2222-4222-8222-222222222222");
+    const canonicalRoomId = sender.ip;
+    const attackerRoomId = '" onfocus="alert(1)';
+
+    server._joinRoom(sender, "ip", canonicalRoomId);
+    server._joinRoom(recipient, "ip", canonicalRoomId);
+    sender.messages.length = 0;
+    recipient.messages.length = 0;
+
+    server._signalAndRelay(sender, {
+        type: "chat-message",
+        roomType: "ip",
+        roomId: attackerRoomId,
+        to: recipient.id,
+        payload: {
+            roomType: "ip",
+            roomId: attackerRoomId,
+            text: "test"
+        }
+    });
+
+    const relayed = recipient.messages.find(message => message.type === "chat-message");
+    assert.ok(relayed, "the message should still reach the authorized IP-room peer");
+    assert.equal(relayed.roomId, canonicalRoomId);
+    assert.equal(relayed.payload.roomType, "ip");
+    assert.equal(relayed.payload.roomId, canonicalRoomId);
+});
+
+test("chat room options are built with DOM properties, not interpolated HTML", () => {
+    const ui = fs.readFileSync(new URL("../public/scripts/ui.js", import.meta.url), "utf8");
+    assert.match(ui, /const option = document\.createElement\(['"]option['"]\)/);
+    assert.match(ui, /option\.value = room\.key/);
+    assert.match(ui, /option\.textContent = label/);
+    assert.match(ui, /this\.\$roomSelect\.replaceChildren\(\.\.\.options\)/);
+    assert.doesNotMatch(ui, /this\.\$roomSelect\.innerHTML\s*=\s*rooms\.map/);
 });
