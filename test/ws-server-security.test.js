@@ -138,3 +138,28 @@ test("a non-member cannot regenerate another peer's secret room", () => {
     assert.equal(server._rooms[roomSecret][owner.id], owner);
     assert.equal(owner.messages.some(message => message.type === "room-secret-regenerated"), false);
 });
+
+
+test("allows a same-host browser Origin when no explicit allowlist is configured", async () => {
+    const { isAllowedWebSocketOrigin } = await import("../server/websocket-origin.js");
+    assert.equal(isAllowedWebSocketOrigin("https://drop.example.com", "drop.example.com"), true);
+});
+
+test("rejects a cross-origin browser websocket request by default", async () => {
+    const { isAllowedWebSocketOrigin } = await import("../server/websocket-origin.js");
+    assert.equal(isAllowedWebSocketOrigin("https://evil.example", "drop.example.com"), false);
+});
+
+test("accepts only exact origins from an explicit allowlist", async () => {
+    const { isAllowedWebSocketOrigin } = await import("../server/websocket-origin.js");
+    const allowed = ["https://app.example.com", "https://mobile.example.com"];
+    assert.equal(isAllowedWebSocketOrigin("https://mobile.example.com", "drop.example.com", allowed), true);
+    assert.equal(isAllowedWebSocketOrigin("https://evil.example", "drop.example.com", allowed), false);
+});
+
+test("rejects malformed and non-http browser Origins but preserves native clients without Origin", async () => {
+    const { isAllowedWebSocketOrigin } = await import("../server/websocket-origin.js");
+    assert.equal(isAllowedWebSocketOrigin("not a URL", "drop.example.com"), false);
+    assert.equal(isAllowedWebSocketOrigin("file:///tmp/index.html", "drop.example.com"), false);
+    assert.equal(isAllowedWebSocketOrigin(undefined, "drop.example.com"), true);
+});
