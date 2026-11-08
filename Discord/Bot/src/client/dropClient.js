@@ -4,6 +4,9 @@ import WebSocket from 'ws';
 const CHUNK_SIZE = 64_000; // 64 KB
 const MAX_PARTITION_SIZE = 1_000_000; // 1 MB
 const ACK_TIMEOUT_MS = 30_000;
+const MAX_INCOMING_FILES = 10;
+const MAX_INCOMING_FILE_SIZE = 25 * 1024 * 1024;
+const MAX_INCOMING_TOTAL_SIZE = 100 * 1024 * 1024;
 
 function buildSignalUrl(baseUrl, overrideUrl) {
     let url;
@@ -427,23 +430,47 @@ export default class DropTransferClient extends EventEmitter {
         }
 
         const header = Array.isArray(message.header) ? message.header : [];
-        this._expectedFiles = header.map(item => ({
-            name: item?.name || 'arquivo',
-            size: Number(item?.size) || 0,
-            mime: sanitizeMime(item?.mime)
-        }));
 
-        this._totalBytesExpected = typeof message.totalSize === 'number'
-            ? message.totalSize
-            : this._expectedFiles.reduce((acc, item) => acc + item.size, 0);
-
-        this._incomingSenderInfo = message.sender || null;
-
-        if (!this._expectedFiles.length) {
+        if (!header.length) {
             this._sendToPeer({ type: 'files-transfer-response', accepted: false });
             this._fail(new Error('Nenhum arquivo foi informado pelo remetente.'));
             return;
         }
+
+        if (header.length > MAX_INCOMING_FILES) {
+            this._sendToPeer({ type: 'files-transfer-response', accepted: false, reason: 'resource-limit' });
+            this._fail(new Error(`A transferência excede o limite de ${MAX_INCOMING_FILES} arquivos.`));
+            return;
+        }
+
+        const validSizes = header.every(item => {
+            return item
+                && Number.isSafeInteger(item.size)
+                && item.size >= 0
+                && item.size <= MAX_INCOMING_FILE_SIZE;
+        });
+        const computedTotalSize = validSizes
+            ? header.reduce((total, item) => total + item.size, 0)
+            : Number.POSITIVE_INFINITY;
+        const declaredTotalSize = message.totalSize;
+
+        if (!validSizes
+                || !Number.isSafeInteger(computedTotalSize)
+                || computedTotalSize > MAX_INCOMING_TOTAL_SIZE
+                || (typeof declaredTotalSize === 'number' && declaredTotalSize !== computedTotalSize)) {
+            this._sendToPeer({ type: 'files-transfer-response', accepted: false, reason: 'resource-limit' });
+            this._fail(new Error('A transferência excede os limites de tamanho permitidos pelo bot.'));
+            return;
+        }
+
+        this._expectedFiles = header.map(item => ({
+            name: typeof item.name === 'string' && item.name ? item.name : 'arquivo',
+            size: item.size,
+            mime: sanitizeMime(item.mime)
+        }));
+
+        this._totalBytesExpected = computedTotalSize;
+        this._incomingSenderInfo = message.sender || null;
 
         this._emitStatus({
             stage: 'request-received',
@@ -461,9 +488,24 @@ export default class DropTransferClient extends EventEmitter {
         }
 
         const index = this._receivedFiles.length;
-        const expected = this._expectedFiles[index] || {};
-        const size = Number(message.size) || expected.size || 0;
-        const name = message.name || expected.name || `Arquivo ${index + 1}`;
+        const expected = this._expectedFiles[index];
+        if (!expected) {
+            this._fail(new Error('O remetente enviou mais arquivos do que os anunciados.'));
+            return;
+        }
+
+        const size = message.size;
+        if (!Number.isSafeInteger(size)
+                || size < 0
+                || size > MAX_INCOMING_FILE_SIZE
+                || size !== expected.size) {
+            this._fail(new Error('O cabeçalho do arquivo não corresponde ao tamanho anunciado na solicitação.'));
+            return;
+        }
+
+        const name = typeof message.name === 'string' && message.name
+            ? message.name
+            : expected.name;
         const mime = sanitizeMime(message.mime || expected.mime);
 
         this._currentIncomingFile = {
@@ -501,16 +543,21 @@ export default class DropTransferClient extends EventEmitter {
             return;
         }
 
-        this._currentIncomingFile.chunks.push(chunk);
-        this._currentIncomingFile.received += chunk.length;
-        this._bytesReceived += chunk.length;
-
         const { expectedSize, received, name, index } = this._currentIncomingFile;
 
-        if (expectedSize && received > expectedSize) {
+        if (expectedSize && received + chunk.length > expectedSize) {
             this._fail(new Error(`Quantidade de dados recebida para "${name}" excede o esperado.`));
             return;
         }
+
+        if (this._bytesReceived + chunk.length > MAX_INCOMING_TOTAL_SIZE) {
+            this._fail(new Error('A transferência excedeu o limite total de memória permitido pelo bot.'));
+            return;
+        }
+
+        this._currentIncomingFile.chunks.push(chunk);
+        this._currentIncomingFile.received += chunk.length;
+        this._bytesReceived += chunk.length;
 
         const progress = expectedSize ? received / expectedSize : 1;
         this._emitStatus({
