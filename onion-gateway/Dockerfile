@@ -1,12 +1,12 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache tor
+RUN apk add --no-cache tor su-exec
 
 WORKDIR /home/node/app
 
 COPY package*.json ./
 
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 COPY . .
 
