@@ -5005,10 +5005,14 @@ class ChatUI {
         }
 
         this.$roomSelect.removeAttribute('disabled');
-        this.$roomSelect.innerHTML = rooms.map(room => {
+        const options = rooms.map(room => {
             const label = `${this._roomLabel(room.roomType, room.roomId)} (${room.peers.size})`;
-            return `<option value="${room.key}">${label}</option>`;
-        }).join('');
+            const option = document.createElement('option');
+            option.value = room.key;
+            option.textContent = label;
+            return option;
+        });
+        this.$roomSelect.replaceChildren(...options);
 
         if (!this._currentRoomKey || !this._rooms.has(this._currentRoomKey)) {
             this._currentRoomKey = rooms[0].key;
