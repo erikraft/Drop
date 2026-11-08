@@ -1,0 +1,48 @@
+---
+title: "Wine and Winlator"
+description: "Best-effort guidance for running the Windows x64 desktop build under Wine or Winlator."
+icon: "wine-glass"
+---
+
+# Wine and Winlator compatibility
+
+The ErikrafT Drop™ desktop executable is built for Windows x64. Wine on Linux and Winlator on Android can provide a compatibility layer, but neither environment is an officially certified target. The result depends on the Wine version, translation layer, device architecture, GPU, audio stack and network configuration.
+
+## Which executable should I use?
+
+Prefer the portable artifact whose filename ends in -win-x64-portable.exe when it is available. It avoids the NSIS installation flow and skips the native WinSparkle updater.
+
+The latest published release checked for this update is v10.1.7 (2026-10-07). Its published Windows asset is erikraft-drop-10.1.7-win-x64.exe, the NSIS installer. That release does not contain the portable executable. The current source configures the portable target and the release workflow validates it; check the assets on each new release.
+
+## Wine on Linux
+
+Create a clean 64-bit prefix using WINEARCH=win64 and WINEPREFIX="$HOME/.wine-erikraft-drop", then initialize it with wineboot --init.
+
+Run the Windows x64 executable inside that prefix. If the portable artifact is not available, run the NSIS installer in the same prefix and launch the installed application.
+
+The desktop wrapper detects common Wine environment markers and skips WinSparkle initialization. If your launcher does not pass those variables to the process, set ERIKRAFT_DROP_COMPATIBILITY_RUNTIME=1 in the Wine environment.
+
+This compatibility flag disables the native updater integration only. It does not disable the transfer application.
+
+## Winlator on Android
+
+1. Create a Windows x64 container using a compatible Wine and Box64/translation configuration.
+2. Copy the portable x64 executable into the container when it is available.
+3. Launch it through Winlator or create a shortcut.
+4. If the updater initialization is incompatible with the environment, set ERIKRAFT_DROP_COMPATIBILITY_RUNTIME=1.
+
+The executable is not an Android APK and is not an ARM-native application. Winlator must translate the x64 Windows process. Performance and hardware integration vary significantly between devices.
+
+## Known limitations
+
+- The repository's packaging workflow builds on native Linux and Windows runners; it does not run Wine or Winlator integration tests.
+- WebRTC may fail under some compatibility/network configurations. Check firewall, DNS, STUN/TURN and WebSocket fallback settings.
+- GPU acceleration can cause blank windows on some Wine configurations; test a shortcut with --disable-gpu only as a troubleshooting measure.
+- Camera, microphone, clipboard, notifications and auto-updater behavior depend on the compatibility layer.
+- The NSIS installer and portable executable are different artifacts; do not assume an older release contains both.
+
+## Related pages
+
+- [Desktop development and packaging](https://github.com/erikraft/Drop/blob/master/ELECTRON_DEVELOPMENT_GUIDE.md)
+- [Release assets](https://github.com/erikraft/Drop/releases)
+- [Configuration](configuration)
