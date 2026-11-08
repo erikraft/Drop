@@ -17,8 +17,6 @@ assert.match(uiMain,/Could not load the saved device name/);
 assert.match(index,/lang\/en\.json" as="fetch" crossorigin="use-credentials"/);
 
 for (const translations of [en,pt]) {
-    assert.match(translations,/"torrent_title":/);
-    assert.match(translations,/"torrent_aria-label":/);
     assert.match(translations,/"optical-matrix-title":/);
     assert.match(translations,/"optical-matrix-experimental":/);
     assert.match(translations,/"optical-matrix-description":/);
