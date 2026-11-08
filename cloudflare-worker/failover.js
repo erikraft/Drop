@@ -85,7 +85,7 @@ async function healthCheckPrimary() {
 /**
  * Get the target host based on health status
  */
-async function getTargetHost() {
+export async function getTargetHost() {
   const healthy = await healthCheckPrimary();
   return healthy ? PRIMARY_HOST : FALLBACK_HOST;
 }
