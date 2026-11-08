@@ -7,7 +7,7 @@ class BrowserTabsConnector {
     }
     _broadcastSend(message) { this.bc.postMessage(message); }
     _onMessage(e) {
-        console.log('Broadcast:', e.data);
+        console.log('Broadcast:', e.data?.type || 'unknown');
         switch (e.data.type) {
             case 'self-display-name-changed': Events.fire('self-display-name-changed', e.data.detail); break;
         }
