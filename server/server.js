@@ -27,6 +27,22 @@ export default class ErikrafTdropServer {
     constructor(conf) {
         const app = express();
 
+        // Apply baseline browser security headers to every response, including
+        // static assets, API responses, redirects, and rate-limit responses.
+        app.use((req, res, next) => {
+            res.setHeader('X-Content-Type-Options', 'nosniff');
+            res.setHeader('X-Frame-Options', 'DENY');
+            res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+            res.setHeader('Permissions-Policy', 'camera=(self), microphone=(self), geolocation=()');
+            res.setHeader('Content-Security-Policy', "frame-ancestors 'none'; object-src 'none'; base-uri 'self'");
+
+            if (process.env.NODE_ENV === 'production') {
+                res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+            }
+
+            next();
+        });
+
         if (conf.rateLimit) {
             const limiter = RateLimit({
                 windowMs: 5 * 60 * 1000, // 5 minutes
