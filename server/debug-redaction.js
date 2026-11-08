@@ -1,4 +1,4 @@
-const SENSITIVE_CONFIG_KEY = /password|credential|secret|token|api[_-]?key|private[_-]?key/i;
+const SENSITIVE_CONFIG_KEY = /password|credential|secret|token|username|api[_-]?key|private[_-]?key/i;
 
 export function redactSensitiveConfig(value) {
     if (Array.isArray(value)) {
