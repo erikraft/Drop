@@ -75,7 +75,7 @@ assert.match(source,/injectLivePhotoMakerNote/);
 assert.match(source,/com\.apple\.quicktime\.content\.identifier/);
 assert.match(source,/video\/quicktime/);
 assert.match(source,/Criar Live\/Motion Photo/);
-assert.match(source,/id="ek-close"/);
+assert.match(source,/createAction\('ek-close',closeLabel\)/);
 assert.match(source,/actions\.id='ek-actions'/);
 assert.match(source,/querySelector\('\.btn-row'\)/);
 assert.match(source,/data-ek-media-action/);
