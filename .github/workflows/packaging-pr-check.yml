@@ -19,9 +19,6 @@ permissions:
 
 env:
   ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
-  # Keep electron-builder's generated helper scripts outside the repository.
-  # Otherwise root "type": "module" makes cached CommonJS helpers load as ESM.
-  ELECTRON_BUILDER_CACHE: ${{ runner.temp }}/electron-builder-cache
 
 jobs:
   linux-deb:
@@ -60,7 +57,11 @@ jobs:
           exit 1
       - name: Run repository test suite
         run: npm test
-      - run: npm run package:linux
+      - name: Build Linux package
+        env:
+          # runner context is available at step scope, not workflow-level env.
+          ELECTRON_BUILDER_CACHE: ${{ runner.temp }}/electron-builder-cache
+        run: npm run package:linux
       - run: |
           test -s dist/desktop/erikraft-drop-linux-amd64.deb
           dpkg-deb --info dist/desktop/erikraft-drop-linux-amd64.deb >/dev/null
@@ -100,7 +101,11 @@ jobs:
           exit 1
       - name: Test portable Windows packaging configuration
         run: node --test test/desktop-portable.test.js
-      - run: npm run package:windows
+      - name: Build Windows installer and portable executable
+        env:
+          # Keep electron-builder's CommonJS helper cache outside the ESM project root.
+          ELECTRON_BUILDER_CACHE: ${{ runner.temp }}/electron-builder-cache
+        run: npm run package:windows
       - shell: pwsh
         run: |
           $installer = Get-ChildItem -Path dist/desktop -Filter '*-win-x64.exe' | Select-Object -First 1
