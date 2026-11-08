@@ -1,3 +1,31 @@
+## 🚀 Release Notes — Desktop/Web 10.1.7
+
+**Published version:** v10.1.7  
+**Published:** 2026-10-07  
+**Source repository version checked:** 10.1.10 (not yet published as a release at the time of this documentation update)
+
+### ✨ Novidades e melhorias
+
+* 📱 Atalhos nativos de transferência no Android integrados à interface web.
+* 🔄 Reutilização do botão Onion para iniciar o atalho nativo no Android, sem duplicar controles.
+* 🧹 Remoção da implementação antiga do WebTorrent e ajustes nos atalhos específicos do Android.
+* 🌐 Melhorias nas traduções das informações de disponibilidade de plataformas.
+* 🔎 Melhorias de SEO e descoberta do produto e das opções de download.
+* 🛠️ Ajustes de qualidade e manutenção do código.
+
+### 📦 Assets publicados
+
+* Windows x64: `erikraft-drop-10.1.7-win-x64.exe` (instalador NSIS).
+* Linux x64: `erikraft-drop-linux-amd64.deb`.
+* CLI: `erikraftdrop-cli.zip`.
+* Atualizador Windows: `winsparkle-appcast.xml`.
+
+> O release publicado v10.1.7 não inclui o executável portátil `-win-x64-portable.exe`. O alvo portátil está configurado no código atual e será disponibilizado quando estiver presente nos assets de um release futuro.
+
+[Ver todas as alterações do release](https://github.com/erikraft/Drop/compare/v10.1.6...v10.1.7) · [Assets do release](https://github.com/erikraft/Drop/releases/tag/v10.1.7)
+
+---
+
 ## 🚀 Release Notes — Desktop 10.1.6
 
 **Version:** v10.1.6
