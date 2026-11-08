@@ -5,6 +5,8 @@ import Peer from "./peer.js";
 import {hasher, randomizer} from "./helper.js";
 import {isAllowedWebSocketOrigin} from "./websocket-origin.js";
 
+const MAX_SECRET_ROOMS_PER_PEER = 64;
+
 const LOCAL_IPV4_PATTERNS = [
     /^10\./,
     /^192\.168\./,
@@ -226,11 +228,24 @@ export default class ErikrafTdropWsServer {
     }
 
     _onRoomSecrets(sender, message) {
-        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > 64) return;
+        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > MAX_SECRET_ROOMS_PER_PEER) return;
+        if (sender.rateLimitReached()) {
+            this._send(sender, { type: 'join-key-rate-limit' });
+            return;
+        }
 
-        const roomSecrets = message.roomSecrets.filter(roomSecret => {
-            return typeof roomSecret === 'string' && /^[\x00-\x7F]{64,256}$/.test(roomSecret);
-        });
+        const currentSecrets = Array.isArray(sender.roomSecrets) ? sender.roomSecrets : [];
+        const availableSlots = MAX_SECRET_ROOMS_PER_PEER - currentSecrets.length;
+        if (availableSlots <= 0) return;
+
+        const knownSecrets = new Set(currentSecrets);
+        const roomSecrets = [];
+        for (const roomSecret of message.roomSecrets) {
+            if (typeof roomSecret !== 'string' || !/^[\x00-\x7F]{64,256}$/.test(roomSecret) || knownSecrets.has(roomSecret)) continue;
+            knownSecrets.add(roomSecret);
+            roomSecrets.push(roomSecret);
+            if (roomSecrets.length >= availableSlots) break;
+        }
 
         this._joinSecretRooms(sender, roomSecrets);
     }
@@ -263,6 +278,12 @@ export default class ErikrafTdropWsServer {
     }
 
     _onPairDeviceInitiate(sender) {
+        if (sender.rateLimitReached()) {
+            this._send(sender, { type: 'join-key-rate-limit' });
+            return;
+        }
+        if (Array.isArray(sender.roomSecrets) && sender.roomSecrets.length >= MAX_SECRET_ROOMS_PER_PEER) return;
+
         let roomSecret = randomizer.getRandomString(256);
         let pairKey = this._createPairKey(sender, roomSecret);
 
@@ -280,7 +301,7 @@ export default class ErikrafTdropWsServer {
     }
 
     _onPairDeviceJoin(sender, message) {
-        if (typeof message.pairKey !== 'string' || !/^\d{5}$/.test(message.pairKey)) {
+        if (typeof message.pairKey !== 'string' || !/^\d{6}$/.test(message.pairKey)) {
             this._send(sender, { type: 'pair-device-join-key-invalid' });
             return;
         }
@@ -409,6 +430,9 @@ export default class ErikrafTdropWsServer {
     }
 
     _joinSecretRoom(peer, roomSecret) {
+        const roomSecrets = Array.isArray(peer.roomSecrets) ? peer.roomSecrets : [];
+        if (roomSecrets.includes(roomSecret) || roomSecrets.length >= MAX_SECRET_ROOMS_PER_PEER) return;
+
         this._joinRoom(peer, 'secret', roomSecret);
 
         // add secret to peer
@@ -534,8 +558,8 @@ export default class ErikrafTdropWsServer {
     }
 
     _leaveAllSecretRooms(peer, disconnect = false) {
-        for (let i=0; i<peer.roomSecrets.length; i++) {
-            this._leaveSecretRoom(peer, peer.roomSecrets[i], disconnect);
+        for (const roomSecret of [...peer.roomSecrets]) {
+            this._leaveSecretRoom(peer, roomSecret, disconnect);
         }
     }
 
