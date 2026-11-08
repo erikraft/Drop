@@ -290,13 +290,17 @@ export default class ErikrafTdropWsServer {
             return;
         }
 
-        if (!this._roomSecrets[message.pairKey] || sender.id === this._roomSecrets[message.pairKey].creator.id) {
+        const pairEntry = this._roomSecrets[message.pairKey];
+        if (!pairEntry || pairEntry.expiresAt <= Date.now() || sender.id === pairEntry.creator.id) {
+            if (pairEntry && pairEntry.expiresAt <= Date.now()) {
+                this._removePairKey(message.pairKey);
+            }
             this._send(sender, { type: 'pair-device-join-key-invalid' });
             return;
         }
 
-        const roomSecret = this._roomSecrets[message.pairKey].roomSecret;
-        const creator = this._roomSecrets[message.pairKey].creator;
+        const roomSecret = pairEntry.roomSecret;
+        const creator = pairEntry.creator;
         this._removePairKey(message.pairKey);
         this._send(sender, {
             type: 'pair-device-joined',
@@ -391,7 +395,8 @@ export default class ErikrafTdropWsServer {
 
         this._roomSecrets[pairKey] = {
             roomSecret: roomSecret,
-            creator: creator
+            creator: creator,
+            expiresAt: Date.now() + 5 * 60 * 1000
         }
 
         return pairKey;
