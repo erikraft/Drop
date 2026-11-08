@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import test from 'node:test';
 import {
     MAX_BINARY_CHUNK_SIZE,
@@ -77,4 +78,12 @@ test('only accepts HTTPS URLs on the Discord attachment CDN', () => {
     assert.equal(isTrustedDiscordAttachmentUrl('https://cdn.discordapp.com.evil.invalid/attachments/1/2/file.bin'), false);
     assert.equal(isTrustedDiscordAttachmentUrl('https://attacker.invalid/file.bin'), false);
     assert.equal(isTrustedDiscordAttachmentUrl('https://user:pass@cdn.discordapp.com/file.bin'), false);
+});
+
+test('Discord bot uses the server-supported ws-chunk relay and pins the remote peer', () => {
+    const client = fs.readFileSync(new URL('../src/client/dropClient.js', import.meta.url), 'utf8');
+    assert.match(client, /this\\._sendToPeer\\(encodeBinaryChunk\\(chunk\\)\\)/);
+    assert.match(client, /case 'ws-chunk'/);
+    assert.match(client, /message\\.sender\\?\\.id !== this\\._remotePeerId/);
+    assert.doesNotMatch(client, /this\\._ws\\.send\\(chunk\\)/);
 });
