@@ -64,3 +64,12 @@ O ErikrafT Drop™ credita o projeto **Alibaba Page Agent**, seus mantenedores e
 ## Licença
 
 A integração usa o Page Agent como software MIT-licensed. Os avisos e créditos do projeto original devem ser preservados quando componentes do projeto forem redistribuídos.
+
+
+## Segurança e uso responsável
+
+A página aberta e seu conteúdo devem ser tratados como entrada não confiável. Conteúdo de terceiros pode incluir instruções de prompt injection; revise o resultado antes de utilizá-lo e não permita que a IA envie mensagens ou execute ações fora do campo autorizado.
+
+A chave LLM fica em sessionStorage, mas endpoint/modelo e o token de integração podem permanecer no armazenamento do navegador conforme a configuração. Use somente instâncias e provedores confiáveis, não cole tokens em páginas não confiáveis e limpe a sessão ao terminar em dispositivos compartilhados.
+
+O bundle demo carregado por CDN é uma dependência de terceiros. Use a integração de avaliação somente para testes e não envie dados sensíveis para endpoints de demonstração.
