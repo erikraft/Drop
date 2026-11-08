@@ -124,15 +124,11 @@ If you host your own instance and want to support devices that do not support We
 
 ErikrafT Drop™ is designed around peer-to-peer file transfer.
 
-Files are not uploaded to a normal file-storage database on the ErikrafT Drop™ signaling service.
+ErikrafT Drop™ does not store transferred files in a central file database, but the server processes connection metadata such as IP addresses, user agents, display names, peer IDs and temporary room identifiers.
 
-ErikrafT Drop™ does not use a database for storing transferred files.
+WebRTC DataChannel traffic is encrypted between peers. TURN can relay encrypted WebRTC packets. WebSocket fallback is different: when enabled, payloads pass through the server and are not end-to-end confidential from that server. The fallback is enabled by default unless WS_FALLBACK=false is configured.
 
-You can inspect the [signaling server source code](https://github.com/erikraft/Drop/blob/master/server/ws-server.js).
-
-When a direct WebRTC connection cannot be established and a TURN server is required, the TURN server can relay the encrypted WebRTC traffic.
-
-See the [Technical Documentation](technical-documentation.md#encryption-webrtc-stun-and-turn) for more information.
+See the [Technical Documentation](technical-documentation.md) for the difference between WebRTC, TURN and WebSocket fallback.
 
 Users should still use trusted instances and consider the security and privacy practices of any self-hosted or third-party instance.
 
@@ -140,7 +136,7 @@ Users should still use trusted instances and consider the security and privacy p
 
 Yes.
 
-Files transferred through WebRTC are encrypted in transit by the WebRTC transport.
+Files transferred through WebRTC are encrypted in transit by the WebRTC transport. The WebSocket fallback is relayed by the server and does not provide the same end-to-end confidentiality guarantee.
 
 The signaling connection is also protected when using a secure HTTPS/WSS deployment.
 
@@ -264,3 +260,8 @@ They are not official ErikrafT Drop™ applications and are not maintained by th
 Feel free to create compatible third-party software, but clearly identify it as third-party software and do not imply that it is an official ErikrafT Drop™ application.
 
 [\< Back](/README.md)
+
+
+### Can I run the Windows desktop app with Wine or Winlator?
+
+The Windows desktop artifact is x64 and Wine/Winlator support is best-effort, not certified. Prefer the portable executable when a release publishes it. The latest published v10.1.7 release checked for this update contains the NSIS installer only. See [Wine and Winlator](wine-winlator.md).
