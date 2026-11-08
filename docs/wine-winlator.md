@@ -9,7 +9,7 @@ ErikrafT Drop™ for Windows is an x64 Electron application. It can be attempted
 3. If the release only contains `-win-x64.exe`, that file is the NSIS installer. Install it inside the Wine prefix and launch ErikrafT Drop™ from that prefix.
 4. Use a 64-bit Wine prefix for the x64 Windows build.
 
-The portable target is configured in `electron-builder.yml` and the release workflow validates and uploads both Windows executables. The currently published release may predate that change; check the actual asset list rather than assuming that every old release contains the portable executable.
+The portable target is configured in `electron-builder.yml` and the release workflow validates and uploads both Windows executables. **The latest published release checked for this documentation update is `v10.1.7` (2026-10-07), and its asset list contains the NSIS installer but no portable executable.** The portable target is available in the current source/build workflow, but users must check the actual assets of each release rather than assume that an older release contains it.
 
 ## WinSparkle updater
 
