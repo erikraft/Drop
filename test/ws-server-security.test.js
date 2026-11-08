@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 
 import ErikrafTdropWsServer from "../server/ws-server.js";
+import Peer from "../server/peer.js";
 
 function createPeer(id) {
     const messages = [];
@@ -248,4 +249,23 @@ test("duplicate room secrets are not retained and disconnect cleanup removes eve
 
     assert.equal(peer.roomSecrets.length, 0);
     for (const secret of secrets) assert.equal(server._rooms[secret], undefined);
+});
+
+
+test("Peer room-secret tracking deduplicates, caps, and removes values", () => {
+    const peer = Object.create(Peer.prototype);
+    peer.roomSecrets = [];
+
+    peer.addRoomSecret("a".repeat(64));
+    peer.addRoomSecret("a".repeat(64));
+    assert.deepEqual(peer.roomSecrets, ["a".repeat(64)]);
+
+    for (let i = 0; i < 70; i++) {
+        peer.addRoomSecret(String(i).padStart(64, "b"));
+    }
+    assert.equal(peer.roomSecrets.length, 64);
+
+    peer.removeRoomSecret("a".repeat(64));
+    assert.equal(peer.roomSecrets.includes("a".repeat(64)), false);
+    assert.equal(peer.roomSecrets.length, 63);
 });
