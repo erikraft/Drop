@@ -1,6 +1,7 @@
 import EventEmitter from 'node:events';
 import WebSocket from 'ws';
 import {
+    MAX_BINARY_CHUNK_SIZE,
     MAX_INCOMING_TRANSFER_SIZE,
     decodeBinaryChunk,
     encodeBinaryChunk,
@@ -290,8 +291,6 @@ export default class DropTransferClient extends EventEmitter {
         this._sendToPeer(headerPayload);
 
         if (!data || !data.length) {
-            // Envie um chunk vazio para que o receptor finalize o fluxo corretamente.
-            this._ws.send(Buffer.alloc(0));
             await this._awaitFileConfirmation();
             return;
         }
@@ -518,6 +517,11 @@ export default class DropTransferClient extends EventEmitter {
         const chunk = chunkData instanceof Buffer
             ? chunkData
             : Buffer.from(chunkData);
+
+        if (chunk.length > MAX_BINARY_CHUNK_SIZE) {
+            this._fail(new Error('O bloco recebido excede o limite permitido.'));
+            return;
+        }
 
         if (!chunk.length) {
             return;
