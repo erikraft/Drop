@@ -46,6 +46,24 @@ function createServer() {
     return server;
 }
 
+test("server-generated six-digit pairing keys are accepted by the join flow", () => {
+    const server = createServer();
+    const creator = createPeer("11111111-1111-4111-8111-111111111111");
+    const joiner = createPeer("22222222-2222-4222-8222-222222222222");
+    const roomSecret = "c".repeat(256);
+    const pairKey = server._createPairKey(creator, roomSecret);
+
+    assert.match(pairKey, /^\\d{6}$/);
+
+    server._onPairDeviceJoin(joiner, { pairKey });
+
+    assert.equal(server._rooms[roomSecret][creator.id], creator);
+    assert.equal(server._rooms[roomSecret][joiner.id], joiner);
+    assert.equal(joiner.messages.some(message => message.type === "pair-device-joined"), true);
+    assert.equal(creator.messages.some(message => message.type === "pair-device-joined"), true);
+    assert.equal(server._roomSecrets[pairKey], undefined);
+});
+
 test("existing room join behavior notifies peers without crossing rooms", () => {
     const server = createServer();
     const alice = createPeer("11111111-1111-4111-8111-111111111111");
