@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
+import compatibility from '../desktop/runtime-compatibility.cjs';
 
 const packageJson = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const builderConfig = fs.readFileSync(new URL('../electron-builder.yml', import.meta.url), 'utf8');
@@ -15,11 +16,30 @@ test('Windows packaging keeps NSIS and adds a separately named portable x64 targ
   assert.doesNotMatch(packageJson.scripts['package:windows'], /--win nsis\b/);
 });
 
+test('electron-builder cache uses runner.temp only in supported step-level contexts', () => {
+  const workflowEnv = packagingWorkflow.split(/^jobs:/m, 1)[0];
+  assert.doesNotMatch(workflowEnv, /\$\{\{\s*runner\.temp/);
+  assert.match(packagingWorkflow, /ELECTRON_BUILDER_CACHE:\s*\$\{\{\s*runner\.temp\s*\}\}\/electron-builder-cache/);
+  assert.match(packagingWorkflow, /path:[\s\S]*?\$\{\{\s*runner\.temp\s*\}\}\/electron-builder-cache/);
+});
+
 test('portable Windows startup skips the optional native WinSparkle updater', () => {
   const initializer = desktopMain.match(/function initializeWinSparkle\(\) \{([\s\S]*?)\n\}/)?.[1];
   assert.ok(initializer, 'WinSparkle initializer must remain available for the installer build');
   assert.match(initializer, /process\.env\.PORTABLE_EXECUTABLE_FILE/);
   assert.match(initializer, /process\.platform !== 'win32' \|\| process\.env\.PORTABLE_EXECUTABLE_FILE/);
+});
+
+test('Wine and Winlator environments skip the optional native updater', () => {
+  const initializer = desktopMain.match(/function initializeWinSparkle\(\) \{([\s\S]*?)\n\}/)?.[1];
+  assert.ok(initializer, 'WinSparkle initializer must remain available for native Windows builds');
+  assert.match(initializer, /isCompatibilityRuntime\(\)/);
+  assert.equal(compatibility.isCompatibilityRuntime({ WINEPREFIX: '/compat/prefix' }), true);
+  assert.equal(compatibility.isCompatibilityRuntime({ WINELOADERNOEXEC: '1' }), true);
+  assert.equal(compatibility.isCompatibilityRuntime({ WINEDLLPATH: '/compat/dlls' }), true);
+  assert.equal(compatibility.isCompatibilityRuntime({ ERIKRAFT_DROP_COMPATIBILITY_RUNTIME: '1' }), true);
+  assert.equal(compatibility.isCompatibilityRuntime({ ERIKRAFT_DROP_DISABLE_NATIVE_UPDATER: '1' }), true);
+  assert.equal(compatibility.isCompatibilityRuntime({}), false);
 });
 
 test('PR packaging validation checks both executable variants', () => {
