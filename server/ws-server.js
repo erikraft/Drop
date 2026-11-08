@@ -1,11 +1,9 @@
 import {WebSocketServer} from "ws";
 import crypto from "crypto"
 
-import Peer from "./peer.js";
+import Peer, {MAX_ROOM_SECRETS_PER_PEER} from "./peer.js";
 import {hasher, randomizer} from "./helper.js";
 import {isAllowedWebSocketOrigin} from "./websocket-origin.js";
-
-const MAX_SECRET_ROOMS_PER_PEER = 64;
 
 const LOCAL_IPV4_PATTERNS = [
     /^10\./,
@@ -228,14 +226,14 @@ export default class ErikrafTdropWsServer {
     }
 
     _onRoomSecrets(sender, message) {
-        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > MAX_SECRET_ROOMS_PER_PEER) return;
+        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > MAX_ROOM_SECRETS_PER_PEER) return;
         if (sender.rateLimitReached()) {
             this._send(sender, { type: 'join-key-rate-limit' });
             return;
         }
 
         const currentSecrets = Array.isArray(sender.roomSecrets) ? sender.roomSecrets : [];
-        const availableSlots = MAX_SECRET_ROOMS_PER_PEER - currentSecrets.length;
+        const availableSlots = MAX_ROOM_SECRETS_PER_PEER - currentSecrets.length;
         if (availableSlots <= 0) return;
 
         const knownSecrets = new Set(currentSecrets);
@@ -282,7 +280,7 @@ export default class ErikrafTdropWsServer {
             this._send(sender, { type: 'join-key-rate-limit' });
             return;
         }
-        if (Array.isArray(sender.roomSecrets) && sender.roomSecrets.length >= MAX_SECRET_ROOMS_PER_PEER) return;
+        if (Array.isArray(sender.roomSecrets) && sender.roomSecrets.length >= MAX_ROOM_SECRETS_PER_PEER) return;
 
         let roomSecret = randomizer.getRandomString(256);
         let pairKey = this._createPairKey(sender, roomSecret);
@@ -431,7 +429,7 @@ export default class ErikrafTdropWsServer {
 
     _joinSecretRoom(peer, roomSecret) {
         const roomSecrets = Array.isArray(peer.roomSecrets) ? peer.roomSecrets : [];
-        if (roomSecrets.includes(roomSecret) || roomSecrets.length >= MAX_SECRET_ROOMS_PER_PEER) return;
+        if (roomSecrets.includes(roomSecret) || roomSecrets.length >= MAX_ROOM_SECRETS_PER_PEER) return;
 
         this._joinRoom(peer, 'secret', roomSecret);
 
