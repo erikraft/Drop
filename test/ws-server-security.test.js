@@ -53,7 +53,7 @@ test("server-generated six-digit pairing keys are accepted by the join flow", ()
     const roomSecret = "c".repeat(256);
     const pairKey = server._createPairKey(creator, roomSecret);
 
-    assert.match(pairKey, /^\\d{6}$/);
+    assert.match(pairKey, /^\d{6}$/);
 
     server._onPairDeviceJoin(joiner, { pairKey });
 
