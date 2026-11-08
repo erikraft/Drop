@@ -1,4 +1,5 @@
 import "dotenv/config";
+import {redactSensitiveConfig} from "./debug-redaction.js";
 import {spawn} from "child_process";
 import fs from "fs";
 
@@ -168,13 +169,7 @@ if (conf.debugMode) {
     console.log("DEBUG_MODE is active. To protect privacy, do not use in production.");
     console.debug("\n");
     console.debug("----DEBUG ENVIRONMENT VARIABLES----")
-    console.debug(JSON.stringify({
-        port: conf.port,
-        wsFallback: conf.wsFallback,
-        ipv6Localize: conf.ipv6Localize,
-        autoStart: conf.autoStart,
-        hasRtcConfig: Boolean(conf.rtcConfig)
-    }, null, 4));
+    console.debug(JSON.stringify(redactSensitiveConfig(conf), null, 4));
     console.debug("\n");
 }
 
