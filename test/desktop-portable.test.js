@@ -24,9 +24,9 @@ test('portable Windows startup skips the optional native WinSparkle updater', ()
 });
 
 test('Wine and Winlator environments skip the optional native updater', () => {
-  const initializer = desktopMain.match(/function initializeWinSparkle\\(\\) \\{([\\s\\S]*?)\\n\\}/)?.[1];
+  const initializer = desktopMain.match(/function initializeWinSparkle\(\) \{([\s\S]*?)\n\}/)?.[1];
   assert.ok(initializer, 'WinSparkle initializer must remain available for native Windows builds');
-  assert.match(initializer, /isCompatibilityRuntime\\(\\)/);
+  assert.match(initializer, /isCompatibilityRuntime\(\)/);
   assert.equal(compatibility.isCompatibilityRuntime({ WINEPREFIX: '/compat/prefix' }), true);
   assert.equal(compatibility.isCompatibilityRuntime({ WINELOADERNOEXEC: '1' }), true);
   assert.equal(compatibility.isCompatibilityRuntime({ WINEDLLPATH: '/compat/dlls' }), true);
