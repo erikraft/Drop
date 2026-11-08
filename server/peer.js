@@ -3,6 +3,7 @@ import { UAParser } from "ua-parser-js";
 import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { cyrb53, hasher } from "./helper.js";
 
+export const MAX_ROOM_SECRETS_PER_PEER = 64;
 export const ISEARCH_CLI_CLIENT_TYPE = 'isearch-cli';
 export const ISEARCH_CLI_NAME = 'iSearch CLI™';
 export const ALLOWED_CLIENT_TYPES = new Set(['browser', 'onion', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', ISEARCH_CLI_CLIENT_TYPE]);
@@ -318,14 +319,19 @@ export default class Peer {
     }
 
     addRoomSecret(roomSecret) {
-        if (!(roomSecret in this.roomSecrets)) {
-            this.roomSecrets.push(roomSecret);
+        if (typeof roomSecret !== 'string'
+                || this.roomSecrets.length >= MAX_ROOM_SECRETS_PER_PEER
+                || this.roomSecrets.includes(roomSecret)) {
+            return;
         }
+
+        this.roomSecrets.push(roomSecret);
     }
 
     removeRoomSecret(roomSecret) {
-        if (roomSecret in this.roomSecrets) {
-            delete this.roomSecrets[roomSecret];
+        const index = this.roomSecrets.indexOf(roomSecret);
+        if (index !== -1) {
+            this.roomSecrets.splice(index, 1);
         }
     }
 }

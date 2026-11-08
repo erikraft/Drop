@@ -1,5 +1,13 @@
 import EventEmitter from 'node:events';
 import WebSocket from 'ws';
+import {
+    MAX_BINARY_CHUNK_SIZE,
+    MAX_INCOMING_TRANSFER_SIZE,
+    decodeBinaryChunk,
+    encodeBinaryChunk,
+    validateIncomingFileHeader,
+    validateIncomingTransfer
+} from './transfer-security.js';
 
 const CHUNK_SIZE = 64_000; // 64 KB
 const MAX_PARTITION_SIZE = 1_000_000; // 1 MB
@@ -106,7 +114,7 @@ export default class DropTransferClient extends EventEmitter {
         const wsUrl = buildSignalUrl(this.baseUrl, this.signalOverride);
         const headers = { 'User-Agent': 'ErikrafT-Drop-DiscordBot' };
 
-        this._ws = new WebSocket(wsUrl, { headers });
+        this._ws = new WebSocket(wsUrl, { headers, maxPayload: 8 * 1024 * 1024 });
 
         this._ws.on('open', () => {
             this._emitStatus({ stage: 'socket-open' });
@@ -133,9 +141,11 @@ export default class DropTransferClient extends EventEmitter {
             message = JSON.parse(rawMessage.toString());
         }
         catch (error) {
-            console.warn('Mensagem inválida recebida do servidor:', rawMessage);
+            console.warn('Mensagem inválida recebida do servidor.');
             return;
         }
+
+        if (this._remotePeerId && message.sender?.id && message.sender.id !== this._remotePeerId) return;
 
         switch (message.type) {
             case 'ws-config':
@@ -152,6 +162,16 @@ export default class DropTransferClient extends EventEmitter {
                 break;
             case 'ping':
                 this._sendRaw({ type: 'pong' });
+                break;
+            case 'ws-chunk':
+                if (this._mode === 'receive' && message.sender?.id === this._remotePeerId) {
+                    try {
+                        this._handleBinaryChunk(decodeBinaryChunk(message.chunk));
+                    }
+                    catch (error) {
+                        this._fail(error);
+                    }
+                }
                 break;
             case 'pair-device-join-key-invalid':
                 this._fail(new Error('A chave de pareamento informada é inválida ou expirou.'));
@@ -191,12 +211,12 @@ export default class DropTransferClient extends EventEmitter {
                 }
                 break;
             case 'progress':
-                if (typeof message.progress === 'number') {
+                if (message.sender?.id === this._remotePeerId && typeof message.progress === 'number') {
                     this._emitStatus({ stage: 'progress', value: message.progress, direction: 'send' });
                 }
                 break;
             case 'file-transfer-complete':
-                if (this._mode === 'send') {
+                if (this._mode === 'send' && message.sender?.id === this._remotePeerId) {
                     this._onFileTransferComplete();
                 }
                 break;
@@ -216,7 +236,7 @@ export default class DropTransferClient extends EventEmitter {
                 }
                 break;
             case 'message-transfer-complete':
-                if (this._mode === 'text-send') {
+                if (this._mode === 'text-send' && message.sender?.id === this._remotePeerId) {
                     this._onTextTransferComplete();
                 }
                 break;
@@ -274,8 +294,6 @@ export default class DropTransferClient extends EventEmitter {
         this._sendToPeer(headerPayload);
 
         if (!data || !data.length) {
-            // Envie um chunk vazio para que o receptor finalize o fluxo corretamente.
-            this._ws.send(Buffer.alloc(0));
             await this._awaitFileConfirmation();
             return;
         }
@@ -287,7 +305,7 @@ export default class DropTransferClient extends EventEmitter {
         while (offset < data.length) {
             const end = Math.min(offset + CHUNK_SIZE, data.length);
             const chunk = data.subarray(offset, end);
-            this._ws.send(chunk);
+            this._sendToPeer(encodeBinaryChunk(chunk));
             offset = end;
             partitionBytes += chunk.length;
 
@@ -315,6 +333,7 @@ export default class DropTransferClient extends EventEmitter {
     }
 
     _onPartitionReceived(message) {
+        if (message.sender?.id !== this._remotePeerId) return;
         const ack = this._pendingPartitions.get(message.offset);
         if (!ack) return;
         clearTimeout(ack.timeout);
@@ -425,8 +444,9 @@ export default class DropTransferClient extends EventEmitter {
     }
 
     _onIncomingRequest(message) {
-        if (message.sender?.id) {
-            this._remotePeerId ||= message.sender.id;
+        if (!message.sender?.id || message.sender.id !== this._remotePeerId) {
+            this._sendToPeer({ type: 'files-transfer-response', accepted: false });
+            return;
         }
 
         const header = Array.isArray(message.header) ? message.header : [];
@@ -483,7 +503,7 @@ export default class DropTransferClient extends EventEmitter {
     }
 
     _onIncomingFileHeader(message) {
-        if (!this._expectedFiles.length) {
+        if (!message.sender?.id || message.sender.id !== this._remotePeerId || !this._expectedFiles.length) {
             return;
         }
 
@@ -539,6 +559,11 @@ export default class DropTransferClient extends EventEmitter {
             ? chunkData
             : Buffer.from(chunkData);
 
+        if (chunk.length > MAX_BINARY_CHUNK_SIZE) {
+            this._fail(new Error('O bloco recebido excede o limite permitido.'));
+            return;
+        }
+
         if (!chunk.length) {
             return;
         }
@@ -547,6 +572,11 @@ export default class DropTransferClient extends EventEmitter {
 
         if (expectedSize && received + chunk.length > expectedSize) {
             this._fail(new Error(`Quantidade de dados recebida para "${name}" excede o esperado.`));
+            return;
+        }
+        if (this._bytesReceived > this._totalBytesExpected
+                || this._bytesReceived > MAX_INCOMING_TRANSFER_SIZE) {
+            this._fail(new Error('A transferência excedeu o limite total permitido.'));
             return;
         }
 
@@ -620,7 +650,7 @@ export default class DropTransferClient extends EventEmitter {
     }
 
     _onPartitionRequest(message) {
-        if (typeof message.offset !== 'number') return;
+        if (message.sender?.id !== this._remotePeerId || typeof message.offset !== 'number') return;
         this._sendToPeer({ type: 'partition-received', offset: message.offset });
     }
 
@@ -663,7 +693,7 @@ export default class DropTransferClient extends EventEmitter {
     }
 
     _onIncomingText(message) {
-        if (typeof message.text !== 'string') {
+        if (message.sender?.id !== this._remotePeerId || typeof message.text !== 'string') {
             return;
         }
 

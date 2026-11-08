@@ -12,5 +12,7 @@ services:
         value: production
       - key: PORT
         value: "3000"
+      - key: RATE_LIMIT
+        value: "5"
       - key: ONION_PRIVATE_KEY_BASE64
         sync: false

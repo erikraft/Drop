@@ -85,8 +85,8 @@ async function healthCheckPrimary() {
 /**
  * Get the target host based on health status
  */
-function getTargetHost() {
-  const healthy = healthCheckPrimary();
+export async function getTargetHost() {
+  const healthy = await healthCheckPrimary();
   return healthy ? PRIMARY_HOST : FALLBACK_HOST;
 }
 
@@ -95,7 +95,7 @@ function getTargetHost() {
  */
 export default {
   async fetch(request, env, ctx) {
-    const targetHost = getTargetHost();
+    const targetHost = await getTargetHost();
     const url = new URL(request.url);
 
     // Build target URL

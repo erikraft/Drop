@@ -1,7 +1,7 @@
 import {WebSocketServer} from "ws";
 import crypto from "crypto"
 
-import Peer from "./peer.js";
+import Peer, {MAX_ROOM_SECRETS_PER_PEER} from "./peer.js";
 import {hasher, randomizer} from "./helper.js";
 import {isAllowedWebSocketOrigin} from "./websocket-origin.js";
 
@@ -226,11 +226,24 @@ export default class ErikrafTdropWsServer {
     }
 
     _onRoomSecrets(sender, message) {
-        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > 64) return;
+        if (!Array.isArray(message.roomSecrets) || message.roomSecrets.length > MAX_ROOM_SECRETS_PER_PEER) return;
+        if (sender.rateLimitReached()) {
+            this._send(sender, { type: 'join-key-rate-limit' });
+            return;
+        }
 
-        const roomSecrets = message.roomSecrets.filter(roomSecret => {
-            return typeof roomSecret === 'string' && /^[\x00-\x7F]{64,256}$/.test(roomSecret);
-        });
+        const currentSecrets = Array.isArray(sender.roomSecrets) ? sender.roomSecrets : [];
+        const availableSlots = MAX_ROOM_SECRETS_PER_PEER - currentSecrets.length;
+        if (availableSlots <= 0) return;
+
+        const knownSecrets = new Set(currentSecrets);
+        const roomSecrets = [];
+        for (const roomSecret of message.roomSecrets) {
+            if (typeof roomSecret !== 'string' || !/^[\x00-\x7F]{64,256}$/.test(roomSecret) || knownSecrets.has(roomSecret)) continue;
+            knownSecrets.add(roomSecret);
+            roomSecrets.push(roomSecret);
+            if (roomSecrets.length >= availableSlots) break;
+        }
 
         this._joinSecretRooms(sender, roomSecrets);
     }
@@ -263,6 +276,12 @@ export default class ErikrafTdropWsServer {
     }
 
     _onPairDeviceInitiate(sender) {
+        if (sender.rateLimitReached()) {
+            this._send(sender, { type: 'join-key-rate-limit' });
+            return;
+        }
+        if (Array.isArray(sender.roomSecrets) && sender.roomSecrets.length >= MAX_ROOM_SECRETS_PER_PEER) return;
+
         let roomSecret = randomizer.getRandomString(256);
         let pairKey = this._createPairKey(sender, roomSecret);
 
@@ -280,7 +299,7 @@ export default class ErikrafTdropWsServer {
     }
 
     _onPairDeviceJoin(sender, message) {
-        if (typeof message.pairKey !== 'string' || !/^\d{5}$/.test(message.pairKey)) {
+        if (typeof message.pairKey !== 'string' || !/^\d{6}$/.test(message.pairKey)) {
             this._send(sender, { type: 'pair-device-join-key-invalid' });
             return;
         }
@@ -290,13 +309,17 @@ export default class ErikrafTdropWsServer {
             return;
         }
 
-        if (!this._roomSecrets[message.pairKey] || sender.id === this._roomSecrets[message.pairKey].creator.id) {
+        const pairEntry = this._roomSecrets[message.pairKey];
+        if (!pairEntry || pairEntry.expiresAt <= Date.now() || sender.id === pairEntry.creator.id) {
+            if (pairEntry && pairEntry.expiresAt <= Date.now()) {
+                this._removePairKey(message.pairKey);
+            }
             this._send(sender, { type: 'pair-device-join-key-invalid' });
             return;
         }
 
-        const roomSecret = this._roomSecrets[message.pairKey].roomSecret;
-        const creator = this._roomSecrets[message.pairKey].creator;
+        const roomSecret = pairEntry.roomSecret;
+        const creator = pairEntry.creator;
         this._removePairKey(message.pairKey);
         this._send(sender, {
             type: 'pair-device-joined',
@@ -391,7 +414,8 @@ export default class ErikrafTdropWsServer {
 
         this._roomSecrets[pairKey] = {
             roomSecret: roomSecret,
-            creator: creator
+            creator: creator,
+            expiresAt: Date.now() + 5 * 60 * 1000
         }
 
         return pairKey;
@@ -409,6 +433,9 @@ export default class ErikrafTdropWsServer {
     }
 
     _joinSecretRoom(peer, roomSecret) {
+        const roomSecrets = Array.isArray(peer.roomSecrets) ? peer.roomSecrets : [];
+        if (roomSecrets.includes(roomSecret) || roomSecrets.length >= MAX_ROOM_SECRETS_PER_PEER) return;
+
         this._joinRoom(peer, 'secret', roomSecret);
 
         // add secret to peer
@@ -534,8 +561,8 @@ export default class ErikrafTdropWsServer {
     }
 
     _leaveAllSecretRooms(peer, disconnect = false) {
-        for (let i=0; i<peer.roomSecrets.length; i++) {
-            this._leaveSecretRoom(peer, peer.roomSecrets[i], disconnect);
+        for (const roomSecret of [...peer.roomSecrets]) {
+            this._leaveSecretRoom(peer, roomSecret, disconnect);
         }
     }
 
