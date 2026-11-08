@@ -138,7 +138,7 @@ export default class DropTransferClient extends EventEmitter {
             message = JSON.parse(rawMessage.toString());
         }
         catch (error) {
-            console.warn('Mensagem inválida recebida do servidor:', rawMessage);
+            console.warn('Mensagem inválida recebida do servidor.');
             return;
         }
 
