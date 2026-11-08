@@ -2,23 +2,19 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "ErikrafT Drop™",
   "theme": "mint",
-
   "logo": {
     "light": "/images/Logo_Rectangular_LightMode.png",
     "dark": "/images/Logo_Rectangular_DarkMode.png"
   },
-
   "favicon": {
     "light": "/images/favicon-light.png",
     "dark": "/images/favicon-dark.png"
   },
-
   "colors": {
     "primary": "#4285f4",
     "light": "#4285f4",
     "dark": "#4285f4"
   },
-
   "contextual": {
     "options": [
       "copy",
@@ -40,7 +36,6 @@
       "devin-mcp"
     ]
   },
-
   "navigation": {
     "tabs": [
       {
@@ -105,6 +100,7 @@
               "reference/configuration",
               "reference/faq",
               "reference/host-your-own",
+              "reference/wine-winlator",
               "reference/how-to",
               "reference/technical-documentation",
               "reference/docker-swarm-usage"
