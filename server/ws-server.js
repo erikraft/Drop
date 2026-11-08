@@ -280,7 +280,7 @@ export default class ErikrafTdropWsServer {
     }
 
     _onPairDeviceJoin(sender, message) {
-        if (typeof message.pairKey !== 'string' || !/^\d{5}$/.test(message.pairKey)) {
+        if (typeof message.pairKey !== 'string' || !/^\d{6}$/.test(message.pairKey)) {
             this._send(sender, { type: 'pair-device-join-key-invalid' });
             return;
         }
