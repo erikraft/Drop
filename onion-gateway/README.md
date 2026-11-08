@@ -9,9 +9,9 @@ This directory contains the Tor Onion Gateway configuration and entrypoint scrip
 1. **Single Web Service Container:** The same Render Web Service runs both Tor (in the background) and the ErikrafT Drop™ Node.js server.
 2. **Domain Integrity:** The domain `https://drop.erikraft.com` remains unchanged.
 3. **Port Binding:** Tor listens for incoming Onion Service connections on port 80 and forwards them internally to `127.0.0.1:$PORT` (where ErikrafT Drop™ listens).
-4. **Persistence via Secret:** Storing the Base64-encoded `hs_ed25519_secret_key` in the `ONION_PRIVATE_KEY_BASE64` environment variable ensures the `.onion` hostname never changes across redeploys or service restarts.
+4. **Persistence via Secret:** Storing the Base64-encoded `hs_ed25519_secret_key` in the `ONION_PRIVATE_KEY_BASE64` environment variable keeps the `.onion` hostname stable across redeploys and restarts. The value must remain a hosting secret and must never be committed.
 5. **Non-blocking Startup:** ErikrafT Drop™ starts listening on `$PORT` immediately upon container launch, ensuring Render health checks pass without delay.
-6. **Public API Discovery:** The `/api/onion-info` endpoint exposes only public Onion information (`hostname` and status) to the frontend UI. Private keys are never exposed via logs or API endpoints.
+6. **Public API Discovery:** The `/api/onion-info` endpoint exposes only public Onion information (`hostname` and status) to the frontend UI. Private keys are not returned by the public API. Keep DEBUG_MODE disabled and verify logs from the deployed container do not contain the secret.
 
 ---
 
@@ -48,7 +48,8 @@ To run Tor Onion Gateway on Render:
    `onion-gateway/Dockerfile` (or keep default `Dockerfile`, as both now include Tor support).
 4. Under **Environment Variables**, configure:
    - `ONION_PRIVATE_KEY_BASE64`: *(Your Base64 encoded private key)*
-   - `WS_FALLBACK`: `true` *(Enables WebSocket fallback for browsers like Tor Browser where WebRTC is restricted)*
+   - `WS_FALLBACK`: `true` *(explicitly enables the WebSocket relay fallback; this is already the application default)*
+   - `RATE_LIMIT`: `5` *(enables HTTP rate limiting and configures the trusted proxy hop count; verify this against the actual Render proxy chain)*
 5. Deploy or restart the Web Service.
 
 ---
