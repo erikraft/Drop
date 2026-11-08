@@ -7,6 +7,8 @@ on:
   schedule:
     - cron: '0 6 * * *' # todo dia às 6h UTC
   workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   autofix:
