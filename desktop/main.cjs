@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, shell, session, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { isCompatibilityRuntime } = require('./runtime-compatibility.cjs');
 const {
   DEFAULT_SERVER_URL,
   SERVER_INSTANCES,
@@ -164,7 +165,7 @@ function createApplicationMenu() {
 function initializeWinSparkle() {
   // electron-builder sets this for portable builds; keep the Wine/Winlator
   // executable independent from the native WinSparkle updater DLL.
-  if (process.platform !== 'win32' || process.env.PORTABLE_EXECUTABLE_FILE) return;
+  if (process.platform !== 'win32' || process.env.PORTABLE_EXECUTABLE_FILE || isCompatibilityRuntime()) return;
 
   try {
     const koffi = require('koffi');
