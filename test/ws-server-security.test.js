@@ -64,6 +64,21 @@ test("server-generated six-digit pairing keys are accepted by the join flow", ()
     assert.equal(server._roomSecrets[pairKey], undefined);
 });
 
+test("expired device pairing keys are rejected and removed", () => {
+    const server = createServer();
+    const creator = createPeer("11111111-1111-4111-8111-111111111111");
+    const joiner = createPeer("22222222-2222-4222-8222-222222222222");
+    const roomSecret = "d".repeat(256);
+    const pairKey = server._createPairKey(creator, roomSecret);
+    server._roomSecrets[pairKey].expiresAt = Date.now() - 1;
+
+    server._onPairDeviceJoin(joiner, { pairKey });
+
+    assert.equal(joiner.messages.at(-1).type, "pair-device-join-key-invalid");
+    assert.equal(server._roomSecrets[pairKey], undefined);
+    assert.equal(server._rooms[roomSecret][joiner.id], undefined);
+});
+
 test("existing room join behavior notifies peers without crossing rooms", () => {
     const server = createServer();
     const alice = createPeer("11111111-1111-4111-8111-111111111111");
