@@ -10,7 +10,7 @@ function sanitizeFileName(value, index) {
     if (typeof value !== 'string') return `arquivo-${index + 1}`;
     const sanitized = value
         .replace(/[\\/]/g, '_')
-        .replace(/[\\x00-\\x1F\\x7F]/g, '')
+        .replace(/[\x00-\x1F\x7F]/g, '')
         .trim()
         .slice(0, 255);
     return sanitized || `arquivo-${index + 1}`;
@@ -18,7 +18,7 @@ function sanitizeFileName(value, index) {
 
 function sanitizeMimeType(value) {
     return typeof value === 'string' && value.length <= 127
-        && /^[A-Za-z0-9.+-]+\\/[A-Za-z0-9.+-]+$/.test(value)
+        && /^[A-Za-z0-9.+-]+\/[A-Za-z0-9.+-]+$/.test(value)
         ? value
         : 'application/octet-stream';
 }
