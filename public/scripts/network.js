@@ -1298,7 +1298,7 @@ class RTCPeer extends Peer {
 
     _onMessage(message) {
         if (typeof message === 'string') {
-            console.log('RTC: data channel message:', JSON.parse(message)?.type || 'unknown');
+            console.log('RTC: data channel message received');
         }
         super._onMessage(message);
     }
