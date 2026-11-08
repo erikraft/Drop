@@ -1,3 +1,5 @@
+> 🗃️ **Documento histórico:** este arquivo registra uma análise/checklist de uma versão anterior do empacotamento Electron. Não use suas versões, comandos ou conclusões como referência para o estado atual. Consulte o [guia atual de desenvolvimento](ELECTRON_DEVELOPMENT_GUIDE.md), o [guia Wine/Winlator](docs/wine-winlator.md) e o [índice da documentação](DOCUMENTATION_INDEX.md).
+
 # 🔄 Guia de Migração: Electron Builder 24.x/25.x → 26.x
 
 Para usuários que precisam migrar de versões antigas do Electron Builder.
