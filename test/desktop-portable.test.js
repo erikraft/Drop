@@ -15,6 +15,13 @@ test('Windows packaging keeps NSIS and adds a separately named portable x64 targ
   assert.doesNotMatch(packageJson.scripts['package:windows'], /--win nsis\b/);
 });
 
+test('electron-builder cache uses runner.temp only in supported step-level contexts', () => {
+  const workflowEnv = packagingWorkflow.split(/^jobs:/m, 1)[0];
+  assert.doesNotMatch(workflowEnv, /\\$\\{\\{\\s*runner\\.temp/);
+  assert.match(packagingWorkflow, /ELECTRON_BUILDER_CACHE:\\s*\\$\\{\\{\\s*runner\\.temp\\s*\\}\\}\\/electron-builder-cache/);
+  assert.match(packagingWorkflow, /path:[\\s\\S]*?\\$\\{\\{\\s*runner\\.temp\\s*\\}\\}\\/electron-builder-cache/);
+});
+
 test('portable Windows startup skips the optional native WinSparkle updater', () => {
   const initializer = desktopMain.match(/function initializeWinSparkle\(\) \{([\s\S]*?)\n\}/)?.[1];
   assert.ok(initializer, 'WinSparkle initializer must remain available for the installer build');
