@@ -19,6 +19,7 @@ const server = http.createServer(app);
 const conf = {
     debugMode: false,
     wsFallback: true,
+    wsAllowedOrigins: ['https://drop.erikraft.com'],
     rtcConfig: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
 };
 
