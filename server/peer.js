@@ -318,14 +318,19 @@ export default class Peer {
     }
 
     addRoomSecret(roomSecret) {
-        if (!(roomSecret in this.roomSecrets)) {
-            this.roomSecrets.push(roomSecret);
+        if (typeof roomSecret !== 'string'
+                || this.roomSecrets.length >= 64
+                || this.roomSecrets.includes(roomSecret)) {
+            return;
         }
+
+        this.roomSecrets.push(roomSecret);
     }
 
     removeRoomSecret(roomSecret) {
-        if (roomSecret in this.roomSecrets) {
-            delete this.roomSecrets[roomSecret];
+        const index = this.roomSecrets.indexOf(roomSecret);
+        if (index !== -1) {
+            this.roomSecrets.splice(index, 1);
         }
     }
 }
