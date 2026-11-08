@@ -82,8 +82,8 @@ test('only accepts HTTPS URLs on the Discord attachment CDN', () => {
 
 test('Discord bot uses the server-supported ws-chunk relay and pins the remote peer', () => {
     const client = fs.readFileSync(new URL('../src/client/dropClient.js', import.meta.url), 'utf8');
-    assert.match(client, /this\\._sendToPeer\\(encodeBinaryChunk\\(chunk\\)\\)/);
+    assert.match(client, /this\._sendToPeer\(encodeBinaryChunk\(chunk\)\)/);
     assert.match(client, /case 'ws-chunk'/);
-    assert.match(client, /message\\.sender\\?\\.id !== this\\._remotePeerId/);
-    assert.doesNotMatch(client, /this\\._ws\\.send\\(chunk\\)/);
+    assert.match(client, /message\.sender\?\.id !== this\._remotePeerId/);
+    assert.doesNotMatch(client, /this\._ws\.send\(chunk\)/);
 });
