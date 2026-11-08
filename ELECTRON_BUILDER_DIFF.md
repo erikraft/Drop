@@ -1,3 +1,5 @@
+> 🗃️ **Documento histórico:** este arquivo registra uma análise/checklist de uma versão anterior do empacotamento Electron. Não use suas versões, comandos ou conclusões como referência para o estado atual. Consulte o [guia atual de desenvolvimento](ELECTRON_DEVELOPMENT_GUIDE.md), o [guia Wine/Winlator](docs/wine-winlator.md) e o [índice da documentação](DOCUMENTATION_INDEX.md).
+
 # 📊 Diff Detalhado: electron-builder.yml
 
 ## Alterações Realizadas para Compatibilidade com Electron Builder 26.8.1
