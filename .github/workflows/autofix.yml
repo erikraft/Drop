@@ -7,8 +7,6 @@ on:
   schedule:
     - cron: '0 6 * * *' # todo dia às 6h UTC
   workflow_dispatch:
-  pull_request:
-    types: [opened, synchronize]
 
 jobs:
   autofix:
@@ -17,17 +15,17 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0 # necessário para PRs
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 18
 
       - name: Install autofix CLI
-        run: npm install -g autofix-dev/autofix
+        run: npm install -g autofix-dev/autofix#91dcac09ce8456c9611dc7b66c1d38a3665a936f
 
       - name: Run autofix
         run: autofix --write
@@ -48,7 +46,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.changes.outputs.no_changes == 'false'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
           commit-message: "✨ Autofix: correções automáticas de código"
