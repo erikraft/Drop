@@ -1,5 +1,6 @@
 import { AttachmentBuilder, SlashCommandBuilder } from 'discord.js';
 import DropTransferClient from '../client/dropClient.js';
+import { MAX_DISCORD_ATTACHMENT_SIZE } from '../client/transfer-security.js';
 
 const DROP_BASE_URL = process.env.DROP_BASE_URL || 'https://drop.erikraft.com/';
 const DROP_SIGNALING_URL = process.env.DROP_SIGNALING_URL;
@@ -190,7 +191,6 @@ export async function execute(interaction) {
         }
 
         const formattedKey = formatPairKey(pairKey);
-        const MAX_DISCORD_ATTACHMENT_SIZE = 25 * 1024 * 1024;
         const replyAttachments = [];
         const skipped = [];
         const needsTextAttachment = hasReceivedText && receivedText.length > INLINE_TEXT_THRESHOLD;

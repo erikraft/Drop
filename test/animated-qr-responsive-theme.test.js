@@ -46,7 +46,7 @@ assert.match(controls, /#animated-qr-send-dialog #qr-send-active-view\.row\.cent
 assert.match(controls, /#animated-qr-send-dialog #qr-send-canvas-container\.layout-1[\s\S]*?height:\s*auto\s*!important;[\s\S]*?aspect-ratio:\s*1 \/ 1;/);
 assert.match(controls, /#animated-qr-send-dialog x-paper > \.row:first-of-type \{\s*background-color:\s*var\(--primary-color, #4285f4\) !important;\s*color:\s*#fff !important;/);
 assert.match(controls, /#animated-qr-send-dialog x-paper > \.row:first-of-type \.dialog-title \{\s*color:\s*#fff !important;/);
-assert.match(controls, /background:\s*var\(--dialog-bg-color,\s*#fff\)/);
+assert.match(controls, /background-color:\s*var\(--dialog-bg-color\)/);
 assert.doesNotMatch(controls, /background:var\(--paper-color,var\(--background-color,#fff\)\)/);
 assert.match(mainCss, /#animated-qr-main-dialog \.erikraft-qr-card-send,[\s\S]*?box-sizing:\s*border-box;/);
 assert.match(mainCss, /padding:\s*16px clamp\(16px, 4vw, 24px\)/);
