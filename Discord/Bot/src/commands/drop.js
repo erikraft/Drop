@@ -1,5 +1,6 @@
 import { AttachmentBuilder, SlashCommandBuilder } from 'discord.js';
 import DropTransferClient from '../client/dropClient.js';
+import { MAX_DISCORD_ATTACHMENT_SIZE, isTrustedDiscordAttachmentUrl } from '../client/transfer-security.js';
 
 const DROP_BASE_URL = process.env.DROP_BASE_URL || 'https://drop.erikraft.com/';
 const DROP_SIGNALING_URL = process.env.DROP_SIGNALING_URL;
@@ -53,15 +54,56 @@ function formatCodeBlock(text) {
 }
 
 async function fetchAttachment(attachment) {
+    if (!attachment || !isTrustedDiscordAttachmentUrl(attachment.url)) {
+        throw new Error('The attachment URL is not a trusted Discord CDN URL.');
+    }
+    if (!Number.isSafeInteger(attachment.size) || attachment.size < 0
+            || attachment.size > MAX_DISCORD_ATTACHMENT_SIZE) {
+        throw new Error(`The attachment ${attachment.name || ''} exceeds the allowed download size.`);
+    }
+
     const headers = DISCORD_TOKEN ? { Authorization: `Bot ${DISCORD_TOKEN}` } : undefined;
-    const response = await fetch(attachment.url, { headers });
+    const response = await fetch(attachment.url, { headers, redirect: 'error' });
 
     if (!response.ok) {
         throw new Error(`Unable to download the attachment ${attachment.name}.`);
     }
 
-    const arrayBuffer = await response.arrayBuffer();
-    return Buffer.from(arrayBuffer);
+    const contentLength = Number(response.headers.get('content-length'));
+    if (Number.isFinite(contentLength) && contentLength > MAX_DISCORD_ATTACHMENT_SIZE) {
+        throw new Error('The Discord CDN response exceeds the allowed download size.');
+    }
+
+    if (!response.body) {
+        if (attachment.size === 0) return Buffer.alloc(0);
+        throw new Error('The Discord CDN response has no readable body.');
+    }
+
+    const reader = response.body.getReader();
+    const chunks = [];
+    let totalSize = 0;
+
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            totalSize += value.byteLength;
+            if (totalSize > MAX_DISCORD_ATTACHMENT_SIZE) {
+                await reader.cancel();
+                throw new Error('The Discord CDN response exceeds the allowed download size.');
+            }
+            chunks.push(Buffer.from(value));
+        }
+    }
+    finally {
+        reader.releaseLock();
+    }
+
+    if (totalSize !== attachment.size) {
+        throw new Error('The downloaded attachment size does not match Discord metadata.');
+    }
+
+    return Buffer.concat(chunks, totalSize);
 }
 
 function normalizePairKey(rawKey) {
@@ -367,7 +409,6 @@ export async function execute(interaction) {
                 return;
             }
 
-            const MAX_DISCORD_ATTACHMENT_SIZE = 25 * 1024 * 1024;
             const replyAttachments = [];
             const skipped = [];
             const needsTextAttachment = hasReceivedText && receivedText.length > INLINE_TEXT_THRESHOLD;

@@ -28,7 +28,6 @@
 
     const notify = message => {
         if (typeof Events !== 'undefined') Events.fire('notify-user', message);
-        console.info('[Page Agent]', message);
     };
 
     const t = (key, fallback) => {
@@ -476,7 +475,7 @@
             return true;
         } catch (error) {
             restoreTarget(target, before);
-            console.error('[Page Agent] execution failed:', error);
+            console.error('[Page Agent] execution failed:', error?.name || 'Error');
             notify(error?.message || t('ai.failed', 'Falha ao executar o Page Agent.'));
             return false;
         } finally {

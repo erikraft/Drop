@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 
 import ErikrafTdropWsServer from "../server/ws-server.js";
+import Peer from "../server/peer.js";
 
 function createPeer(id) {
     const messages = [];
@@ -45,6 +46,39 @@ function createServer() {
     server._wss = { OPEN: 1, readyState: 1 };
     return server;
 }
+
+test("server-generated six-digit pairing keys are accepted by the join flow", () => {
+    const server = createServer();
+    const creator = createPeer("11111111-1111-4111-8111-111111111111");
+    const joiner = createPeer("22222222-2222-4222-8222-222222222222");
+    const roomSecret = "c".repeat(256);
+    const pairKey = server._createPairKey(creator, roomSecret);
+
+    assert.match(pairKey, /^\d{6}$/);
+
+    server._onPairDeviceJoin(joiner, { pairKey });
+
+    assert.equal(server._rooms[roomSecret][creator.id], creator);
+    assert.equal(server._rooms[roomSecret][joiner.id], joiner);
+    assert.equal(joiner.messages.some(message => message.type === "pair-device-joined"), true);
+    assert.equal(creator.messages.some(message => message.type === "pair-device-joined"), true);
+    assert.equal(server._roomSecrets[pairKey], undefined);
+});
+
+test("expired device pairing keys are rejected and removed", () => {
+    const server = createServer();
+    const creator = createPeer("11111111-1111-4111-8111-111111111111");
+    const joiner = createPeer("22222222-2222-4222-8222-222222222222");
+    const roomSecret = "d".repeat(256);
+    const pairKey = server._createPairKey(creator, roomSecret);
+    server._roomSecrets[pairKey].expiresAt = Date.now() - 1;
+
+    server._onPairDeviceJoin(joiner, { pairKey });
+
+    assert.equal(joiner.messages.at(-1).type, "pair-device-join-key-invalid");
+    assert.equal(server._roomSecrets[pairKey], undefined);
+    assert.equal(server._rooms[roomSecret][joiner.id], undefined);
+});
 
 test("existing room join behavior notifies peers without crossing rooms", () => {
     const server = createServer();
@@ -204,4 +238,67 @@ test("chat room options are built with DOM properties, not interpolated HTML", (
     assert.match(ui, /option\.textContent = label/);
     assert.match(ui, /this\.\$roomSelect\.replaceChildren\(\.\.\.options\)/);
     assert.doesNotMatch(ui, /this\.\$roomSelect\.innerHTML\s*=\s*rooms\.map/);
+});
+
+
+test("generated six-digit pairing keys are accepted by the join handler", () => {
+    const server = createServer();
+    const creator = createPeer("11111111-1111-4111-8111-111111111111");
+    const joiner = createPeer("22222222-2222-4222-8222-222222222222");
+    const roomSecret = "a".repeat(64);
+    const pairKey = server._createPairKey(creator, roomSecret);
+
+    assert.match(pairKey, /^\\d{6}$/);
+    server._onPairDeviceJoin(joiner, { pairKey });
+
+    assert.equal(joiner.messages.some(message => message.type === "pair-device-joined"), true);
+    assert.equal(creator.messages.some(message => message.type === "pair-device-joined"), true);
+    assert.equal(server._rooms[roomSecret][joiner.id], joiner);
+});
+
+test("a peer cannot create more than 64 remembered secret rooms", () => {
+    const server = createServer();
+    const peer = createPeer("11111111-1111-4111-8111-111111111111");
+    const firstBatch = Array.from({ length: 64 }, (_, i) => String(i).padStart(64, "a"));
+    const secondBatch = Array.from({ length: 64 }, (_, i) => String(i + 64).padStart(64, "b"));
+
+    server._onRoomSecrets(peer, { roomSecrets: firstBatch });
+    server._onRoomSecrets(peer, { roomSecrets: secondBatch });
+
+    assert.equal(peer.roomSecrets.length, 64);
+    assert.equal(new Set(peer.roomSecrets).size, 64);
+    assert.equal(Object.keys(server._rooms).length, 64);
+});
+
+test("duplicate room secrets are not retained and disconnect cleanup removes every room", () => {
+    const server = createServer();
+    const peer = createPeer("11111111-1111-4111-8111-111111111111");
+    const secrets = ["a".repeat(64), "b".repeat(64), "c".repeat(64)];
+
+    server._onRoomSecrets(peer, { roomSecrets: [...secrets, ...secrets] });
+    assert.equal(peer.roomSecrets.length, 3);
+
+    server._leaveAllSecretRooms(peer, true);
+
+    assert.equal(peer.roomSecrets.length, 0);
+    for (const secret of secrets) assert.equal(server._rooms[secret], undefined);
+});
+
+
+test("Peer room-secret tracking deduplicates, caps, and removes values", () => {
+    const peer = Object.create(Peer.prototype);
+    peer.roomSecrets = [];
+
+    peer.addRoomSecret("a".repeat(64));
+    peer.addRoomSecret("a".repeat(64));
+    assert.deepEqual(peer.roomSecrets, ["a".repeat(64)]);
+
+    for (let i = 0; i < 70; i++) {
+        peer.addRoomSecret(String(i).padStart(64, "b"));
+    }
+    assert.equal(peer.roomSecrets.length, 64);
+
+    peer.removeRoomSecret("a".repeat(64));
+    assert.equal(peer.roomSecrets.includes("a".repeat(64)), false);
+    assert.equal(peer.roomSecrets.length, 63);
 });
