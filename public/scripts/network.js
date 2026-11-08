@@ -47,7 +47,7 @@ class ServerConnection {
                 if (xhr.status === 200) {
                     // Config received
                     let config = JSON.parse(xhr.responseText);
-                    console.log("Config loaded:", config)
+                    console.log("Config loaded:", { wsFallback: Boolean(config?.wsFallback), rtcConfigured: Boolean(config?.rtcConfig?.iceServers?.length) })
                     this._config = config;
                     Events.fire('config', config);
                     resolve()
@@ -153,7 +153,7 @@ class ServerConnection {
 
     _onMessage(msg) {
         msg = JSON.parse(msg);
-        if (msg.type !== 'ping') console.log('WS receive:', msg);
+        if (msg.type !== 'ping') console.log('WS receive:', msg.type);
         switch (msg.type) {
             case 'ws-config':
                 if (this._lanMode.enabled && msg.wsConfig) {
@@ -232,13 +232,13 @@ class ServerConnection {
                 }
                 break;
             default:
-                console.error('WS receive: unknown message type', msg);
+                console.error('WS receive: unknown message type', msg.type);
         }
     }
 
     send(msg) {
         if (!this._isConnected()) return;
-        if (msg.type !== 'pong') console.log("WS send:", msg)
+        if (msg.type !== 'pong') console.log("WS send:", msg.type)
         this._socket.send(JSON.stringify(msg));
     }
 
@@ -678,7 +678,7 @@ class Peer {
             PersistentStorage
                 .deleteRoomSecret(this._getPairSecret())
                 .then(deletedRoomSecret => {
-                    if (deletedRoomSecret) console.log("Successfully deleted duplicate room secret with same peer: ", deletedRoomSecret);
+                    if (deletedRoomSecret) console.log("Successfully deleted duplicate room secret with same peer.");
                 });
         }
 
@@ -1178,7 +1178,7 @@ class RTCPeer extends Peer {
     }
 
     _openConnection() {
-        console.log('RTC: opening connection with config:', this.rtcConfig);
+        console.log('RTC: opening connection');
         this._conn = new RTCPeerConnection(this.rtcConfig);
         this._conn.onicecandidate = e => this._onIceCandidate(e);
         this._conn.onicecandidateerror = e => {
@@ -1298,7 +1298,7 @@ class RTCPeer extends Peer {
 
     _onMessage(message) {
         if (typeof message === 'string') {
-            console.log('RTC:', JSON.parse(message));
+            console.log('RTC: data channel message:', JSON.parse(message)?.type || 'unknown');
         }
         super._onMessage(message);
     }
