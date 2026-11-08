@@ -13,7 +13,8 @@
   },
   "scripts": {
     "start": "node ./src/index.js",
-    "register:commands": "node ./src/registerCommands.js"
+    "register:commands": "node ./src/registerCommands.js",
+    "test": "node --test ./test/*.test.js"
   },
   "dependencies": {
     "discord.js": "^14.25.1",
