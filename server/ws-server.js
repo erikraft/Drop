@@ -348,6 +348,11 @@ export default class ErikrafTdropWsServer {
     }
 
     _onCreatePublicRoom(sender) {
+        if (sender.rateLimitReached()) {
+            this._send(sender, { type: 'join-key-rate-limit' });
+            return;
+        }
+
         let publicRoomId = randomizer.getRandomString(5, true).toLowerCase();
 
         this._send(sender, {
