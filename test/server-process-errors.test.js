@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -32,4 +33,15 @@ test("unhandled promise rejections retain Node's fail-closed default behavior", 
     assert.equal(result.error, undefined, "child process must exit instead of hanging");
     assert.notEqual(result.status, 0, "unhandled rejection must terminate the process");
     assert.match(`${result.stdout}\n${result.stderr}`, /fatal rejection regression/);
+});
+
+test("Docker onion entrypoint uses the server auto-restart supervisor", () => {
+    const entrypointPath = new URL("../onion-gateway/entrypoint.sh", import.meta.url);
+    const entrypoint = readFileSync(entrypointPath, "utf8");
+    const syntax = spawnSync("sh", ["-n", fileURLToPath(entrypointPath)], {
+        encoding: "utf8"
+    });
+
+    assert.equal(syntax.status, 0, syntax.stderr || "entrypoint shell syntax must be valid");
+    assert.match(entrypoint, /npm start -- --auto-restart/);
 });
