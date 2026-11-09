@@ -473,10 +473,12 @@ PRIVACYPOLICY_BUTTON_TITLE="Open our privacy policy"
 
 ## HTTP-Server
 
-When running ErikrafT Drop™, the `X-Forwarded-For` header has to be set by a proxy. \
-Otherwise, all clients will be mutually visible.
+When running ErikrafT Drop™, the `X-Forwarded-For` header has to be set by a trusted proxy.
+Otherwise, all clients may be treated as if they share the proxy's address and become mutually visible.
 
-To check if your setup is configured correctly [use the environment variable `DEBUG_MODE="true"`](#debug-mode).
+**Security requirement:** the reverse proxy must overwrite incoming `X-Forwarded-For` values with the actual client address. Do not pass through a value supplied by the connecting client. The server also recognizes `CF-Connecting-IP`; trust that header only when requests are guaranteed to pass through Cloudflare and the origin cannot be reached directly. If an attacker can connect to the origin and supply forwarding headers, IP-based discovery and rate-limit identity can be spoofed.
+
+To check if your setup is configured correctly [use the environment variable `DEBUG_MODE="true"`](#debug-mode), then disable debug mode again after checking.
 
 ### Using nginx
 
