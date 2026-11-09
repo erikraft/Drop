@@ -10,8 +10,8 @@ const indexHtml = fs.readFileSync(new URL('../public/index.html', import.meta.ur
 const serviceWorker = fs.readFileSync(new URL('../public/service-worker.js', import.meta.url), 'utf8');
 const manifest = JSON.parse(fs.readFileSync(new URL('../public/manifest.json', import.meta.url), 'utf8'));
 
-test('desktop/web release version is 10.1.9', () => {
-  assert.equal(packageJson.version, '10.1.9');
+test('desktop package and web application versions are checked independently', () => {
+  assert.equal(packageJson.version, '10.1.10');
   assert.equal(manifest.version, '10.1.9');
   assert.match(serviceWorker, /cacheVersion = 'v10\.1\.7'/);
   assert.match(serviceWorker, /version: '10\.1\.7'/);
