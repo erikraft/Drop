@@ -248,9 +248,10 @@ test("generated six-digit pairing keys are accepted by the join handler", () => 
     const creator = createPeer("11111111-1111-4111-8111-111111111111");
     const joiner = createPeer("22222222-2222-4222-8222-222222222222");
     const roomSecret = "a".repeat(64);
+    server._joinSecretRoom(creator, roomSecret);
     const pairKey = server._createPairKey(creator, roomSecret);
 
-    assert.match(pairKey, /^\\d{6}$/);
+    assert.match(pairKey, /^\d{6}$/);
     server._onPairDeviceJoin(joiner, { pairKey });
 
     assert.equal(joiner.messages.some(message => message.type === "pair-device-joined"), true);
