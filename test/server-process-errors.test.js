@@ -43,5 +43,7 @@ test("Docker onion entrypoint uses the server auto-restart supervisor", () => {
     });
 
     assert.equal(syntax.status, 0, syntax.stderr || "entrypoint shell syntax must be valid");
-    assert.match(entrypoint, /npm start -- --auto-restart/);
+    assert.match(entrypoint, /if wait "\\$DROP_PID"; then/);
+    assert.match(entrypoint, /kill -TERM "\\$TOR_PID"/);
+    assert.match(entrypoint, /exit "\\$DROP_STATUS"/);
 });
