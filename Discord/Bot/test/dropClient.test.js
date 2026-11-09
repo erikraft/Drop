@@ -17,8 +17,7 @@ test('accepts a well-formed incoming file request', () => {
     client._onIncomingRequest({
         sender: { id: '11111111-1111-4111-8111-111111111111' },
         header: [{ name: 'example.txt', size: 5, mime: 'text/plain' }],
-        totalSize: 5,
-        sender: { id: '11111111-1111-4111-8111-111111111111' }
+        totalSize: 5
     });
 
     assert.equal(client._completed, false);
@@ -29,7 +28,7 @@ test('accepts a well-formed incoming file request', () => {
 test('rejects an incoming request without file metadata', () => {
     const client = createClient();
 
-    client._onIncomingRequest({ header: [], totalSize: 0 });
+    client._onIncomingRequest({ sender: { id: '11111111-1111-4111-8111-111111111111' }, header: [], totalSize: 0 });
 
     assert.equal(client._completed, true);
 });
@@ -43,7 +42,7 @@ test('rejects requests with more than ten files', () => {
         mime: 'text/plain'
     }));
 
-    client._onIncomingRequest({ header, totalSize: 11 });
+    client._onIncomingRequest({ sender: { id: '11111111-1111-4111-8111-111111111111' }, header, totalSize: 11 });
 
     assert.equal(client._completed, true);
     assert.equal(client._expectedFiles.length, 0);
@@ -72,7 +71,7 @@ test('rejects an aggregate transfer larger than 100 MiB before accepting', () =>
         mime: 'application/octet-stream'
     }));
 
-    client._onIncomingRequest({ header, totalSize: size * 5 });
+    client._onIncomingRequest({ sender: { id: '11111111-1111-4111-8111-111111111111' }, header, totalSize: size * 5 });
 
     assert.equal(client._completed, true);
     assert.equal(client._expectedFiles.length, 0);
@@ -96,6 +95,7 @@ test('rejects an incoming file header that changes the announced size', () => {
     client._expectedFiles = [{ name: 'example.txt', size: 5, mime: 'text/plain' }];
 
     client._onIncomingFileHeader({
+        sender: { id: '11111111-1111-4111-8111-111111111111' },
         name: 'example.txt',
         size: 6,
         mime: 'text/plain'
