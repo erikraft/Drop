@@ -35,7 +35,7 @@ test("unhandled promise rejections retain Node's fail-closed default behavior", 
     assert.match(`${result.stdout}\n${result.stderr}`, /fatal rejection regression/);
 });
 
-test("Docker onion entrypoint uses the server auto-restart supervisor", () => {
+test("Docker onion entrypoint exits after the server process stops", () => {
     const entrypointPath = new URL("../onion-gateway/entrypoint.sh", import.meta.url);
     const entrypoint = readFileSync(entrypointPath, "utf8");
     const syntax = spawnSync("sh", ["-n", fileURLToPath(entrypointPath)], {
@@ -43,7 +43,7 @@ test("Docker onion entrypoint uses the server auto-restart supervisor", () => {
     });
 
     assert.equal(syntax.status, 0, syntax.stderr || "entrypoint shell syntax must be valid");
-    assert.match(entrypoint, /if wait "\\$DROP_PID"; then/);
-    assert.match(entrypoint, /kill -TERM "\\$TOR_PID"/);
-    assert.match(entrypoint, /exit "\\$DROP_STATUS"/);
+    assert.match(entrypoint, /if wait "\$DROP_PID"; then/);
+    assert.match(entrypoint, /kill -TERM "\$TOR_PID"/);
+    assert.match(entrypoint, /exit "\$DROP_STATUS"/);
 });
