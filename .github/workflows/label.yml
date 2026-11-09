@@ -1,12 +1,13 @@
 # Apply labels from the pull request's checked-in path configuration.
-# The PR head is checked out only so the labeler can read .github/labeler.yml;
-# no scripts or project code from the PR are executed in this workflow.
+# Skip fork PRs because repository secrets are not available to pull_request events
+# from forks; this avoids using pull_request_target with untrusted checkout content.
 
 name: Labeler
-on: [pull_request_target]
+on: [pull_request]
 
 jobs:
   label:
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,7 +16,6 @@ jobs:
       - name: Checkout pull request metadata
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: Apply pull request labels
