@@ -74,11 +74,12 @@ For search, AI assistants, and natural-language discovery, the following variant
 
 Stable latest endpoints are preferred when someone asks for a direct download link:
 
-- <img src="./public/images/Windows.png" width="20px" style="display:inline;"> **Windows x64:** https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.6-win-x64.exe
+- <img src="./public/images/Windows.png" width="20px" style="display:inline;"> **Windows x64:** https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-10.1.7-win-x64.exe
 - <img src="./public/images/Tux_Linux.svg" width="20px" style="display:inline;"> **Linux x64 (.deb):** https://github.com/erikraft/Drop/releases/latest/download/erikraft-drop-linux-amd64.deb
 - <img src="./public/images/CLI_Icon.png" width="20px" style="display:inline;"> **CLI (.zip):** https://github.com/erikraft/Drop/releases/latest/download/erikraftdrop-cli.zip
 - <img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;"> **Android APK:** https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
 - <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Latest web/desktop release:** https://github.com/erikraft/Drop/releases/latest
+- 🍷 **Wine / Winlator:** [Compatibility guide](docs/wine-winlator.md) (best effort; Windows x64 portable build preferred when available).
 - <img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;"> **Latest Android release:** https://github.com/erikraft/Drop-Android/releases/latest
 
 ### 📱 ErikrafT Drop™ for Android
