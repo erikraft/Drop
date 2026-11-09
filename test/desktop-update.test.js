@@ -13,8 +13,8 @@ const manifest = JSON.parse(fs.readFileSync(new URL('../public/manifest.json', i
 test('desktop package and PWA metadata versions match the package release', () => {
   assert.equal(packageJson.version, '10.1.10');
   assert.equal(manifest.version, '10.1.10');
-  assert.match(serviceWorker, /cacheVersion = 'v10\.1\.7'/);
-  assert.match(serviceWorker, /version: '10\.1\.7'/);
+  assert.match(serviceWorker, /cacheVersion = 'v10.1.10'/);
+  assert.match(serviceWorker, /version: '10.1.10'/);
   assert.match(indexHtml, /"softwareVersion": "10\.1\.10"/);
   assert.ok(indexHtml.includes('class="font-subheading">v10.1.9</div>'));
 });
