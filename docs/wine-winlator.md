@@ -21,7 +21,12 @@ export WINEARCH=win64
 export ERIKRAFT_DROP_COMPATIBILITY_RUNTIME=1
 
 wineboot -u
-wine "$HOME/Downloads/erikraft-drop-10.1.10-win-x64-portable.exe"
+APP_EXE=$(find "$HOME/Downloads" -maxdepth 1 -type f -name 'erikraft-drop-*-win-x64-portable.exe' -print -quit)
+if [ -z "$APP_EXE" ]; then
+  echo "No portable Windows executable found. Check the release assets."
+  exit 1
+fi
+wine "$APP_EXE"
 ```
 
 Replace the download path with the exact filename you downloaded. The explicit compatibility variable asks the application to skip its optional native WinSparkle updater. It does **not** disable file transfers or the main application.
