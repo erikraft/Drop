@@ -1,297 +1,57 @@
-# 🔄 Guia de Migração: Electron Builder 24.x/25.x → 26.x
+# 🔄 Desktop Packaging and Migration Guide
 
-Para usuários que precisam migrar de versões antigas do Electron Builder.
+This guide describes how to work with the current desktop packaging configuration. It replaces the old Electron Builder 24.x/25.x/26.x migration checklist.
 
----
+## 1. Check the current versions
 
-## 🚀 Mudanças Principais entre Versões
+Before changing Electron or Electron Builder, inspect:
 
-### Electron Builder 24.x → 25.x
-- ✅ Sem mudanças quebradas no `electron-builder.yml`
-- 🎯 Melhorias internas
+- `package.json` for the Electron dependency, package version, scripts, and Node.js engine.
+- `package-lock.json` for the exact resolved dependency versions.
+- `electron-builder.yml` for the platform targets and packaging options.
+- The two desktop workflows under `.github/workflows/`.
 
-### Electron Builder 25.x → 26.0
-- ⚠️ **MUDANÇA QUEBRADA**: `linux.desktop` reformatada
+Do not infer the current version from old reports or release notes.
 
-| Versão | `linux.desktop` | Formato |
-|--------|-----------------|---------|
-| < 26.0 | Propriedades flat | `Name:`, `Comment:`, etc como chaves diretas |
-| ≥ 26.0 | Estrutura aninhada | `entry:` com propriedades aninhadas |
+## 2. Keep artifact names stable
 
----
+The current Windows release includes two distinct assets:
 
-## 📋 Checklist de Migração
+- `*-win-x64.exe`: NSIS installer.
+- `*-win-x64-portable.exe`: portable executable.
 
-### Se você tem versão < 26.0:
+The release workflow uses the installer as the WinSparkle update target. Do not sign or publish the portable artifact as if it were the installer.
 
-- [ ] **Passo 1**: Backup do `electron-builder.yml`
-  ```bash
-  cp electron-builder.yml electron-builder.yml.backup
-  ```
+The Linux x64 artifact is `erikraft-drop-linux-amd64.deb`.
 
-- [ ] **Passo 2**: Atualizar package.json
-  ```bash
-  npm install --save-dev electron-builder@^26.8.1
-  ```
-
-- [ ] **Passo 3**: Refatorar `linux.desktop`
-
-  **ANTES**:
-  ```yaml
-  linux:
-    desktop:
-      Name: Seu App
-      Comment: Descrição
-      Icon: seu-app
-      Terminal: 'false'
-      Type: Application
-      Categories: Utility;
-  ```
-
-  **DEPOIS**:
-  ```yaml
-  linux:
-    desktop:
-      entry:
-        Name: Seu App
-        Comment: Descrição
-        Icon: seu-app
-        Terminal: 'false'
-        Type: Application
-        Categories: Utility;
-  ```
-
-- [ ] **Passo 4**: Verificar ícone Windows
-
-  Se usar SVG e construir em Linux:
-  ```yaml
-  # ❌ Pode falhar em Linux
-  win:
-    icon: app/icon.svg
-
-  # ✅ Use PNG ou espere Windows
-  win:
-    icon: app/icon-512x512.png
-  ```
-
-- [ ] **Passo 5**: Validar build
-
-  ```bash
-  npm run package:linux
-  npm run package:windows  # (em Windows ou com Wine)
-  ```
-
----
-
-## 🔍 Detecção de Incompatibilidade
-
-### Script para Verificar seu electron-builder.yml
-
-```javascript
-// check-compat.js
-const fs = require('fs');
-const yaml = require('js-yaml');
-
-const config = yaml.load(fs.readFileSync('electron-builder.yml', 'utf8'));
-
-const issues = [];
-
-// Check 1: linux.desktop properties
-if (config.linux?.desktop) {
-  const desktop = config.linux.desktop;
-
-  // Se for flat (qualquer chave que não seja 'entry')
-  if (!desktop.entry && (desktop.Name || desktop.Comment || desktop.Icon)) {
-    issues.push('❌ linux.desktop usa formato antigo (flat)');
-    issues.push('   Solução: Aninhe propriedades em linux.desktop.entry');
-  }
-}
-
-// Check 2: Windows icon formato
-if (config.win?.icon?.endsWith('.svg')) {
-  issues.push('⚠️  win.icon usa SVG (pode falhar em Linux)');
-  issues.push('   Solução: Use PNG ou ICO em vez de SVG');
-}
-
-// Check 3: Propriedades removidas
-const deprecated = ['proton', 'libui', 'nsis.useUninstaller'];
-deprecated.forEach(prop => {
-  if (config[prop] !== undefined) {
-    issues.push(`❌ Propriedade removida: ${prop}`);
-  }
-});
-
-if (issues.length === 0) {
-  console.log('✅ Configuração compatível com Electron Builder 26.x');
-} else {
-  console.log('Problemas encontrados:');
-  issues.forEach(issue => console.log(issue));
-}
-```
-
-**Usar**:
-```bash
-node check-compat.js
-```
-
----
-
-## 🆘 Problemas Comuns Pós-Migração
-
-### Problema 1: "Unknown property 'Name'"
-
-```
-electron-builder 26.8.1 has been initialized using a configuration object that
-does not match the API schema.
-- configuration.linux has an unknown property 'Name'
-```
-
-**Solução**:
-```yaml
-# ❌ ERRADO
-linux:
-  desktop:
-    Name: App
-
-# ✅ CORRETO
-linux:
-  desktop:
-    entry:
-      Name: App
-```
-
----
-
-### Problema 2: "wine is required" (Build Windows no Linux)
-
-```
-⨯ wine is required, please see
-https://electron.build/multi-platform-build#linux
-```
-
-**Soluções**:
-
-**Opção A**: Instalar Wine
-```bash
-sudo apt update
-sudo apt install wine wine32 wine64
-npm run package:windows
-```
-
-**Opção B**: Build em Windows nativo (recomendado)
-```bash
-# Windows
-npm run package:windows
-```
-
-**Opção C**: CI/CD com build multi-plataforma
-```yaml
-# .github/workflows/build.yml
-jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-  build-windows:
-    runs-on: windows-latest
-```
-
----
-
-### Problema 3: Ícone SVG falha em Linux
-
-```
-open : no such file or directory
-ConvertIcon: Failed to process SVG
-```
-
-**Solução**:
-
-Usar PNG em vez de SVG para Windows:
-```yaml
-win:
-  # ❌ Problema
-  icon: public/icon.svg
-
-  # ✅ Solução
-  icon: public/icon-512x512.png
-```
-
----
-
-## 📚 Referências Úteis
-
-### Documentação Oficial
-
-- [Electron Builder 26 - Linux](https://www.electron.build/linux)
-- [Electron Builder 26 - Windows](https://www.electron.build/win)
-- [FreeDesktop Desktop Entry Spec](https://specifications.freedesktop.org/desktop-entry-spec/)
-
-### Exemplos
-
-- [Projeto atual (ErikrafT Drop™)](../electron-builder.yml)
-- [Comunidade Electron](https://github.com/electron/electron/discussions)
-
-### Ferramentas
+## 3. Validate changes
 
 ```bash
-# Validar Desktop Entry Linux
-desktop-file-validate /usr/share/applications/seu-app.desktop
-
-# Validar SVG
-xmllint --noout seu-icon.svg
-
-# Converter imagens
-convert icon.svg icon-512x512.png      # SVG → PNG
-convert icon.png -define icon:auto-resize=256,128,96,64,48,32,16 icon.ico  # PNG → ICO
+npm ci
+node --test test/desktop-portable.test.js
+npm run test:desktop-version
+npm run test:desktop-update
 ```
 
----
+Then run the appropriate platform package script and inspect the matching GitHub Actions job. The packaging PR workflow runs the repository test suite and validates both platform packages.
 
-## 🎯 Roadmap Futuro
+## 4. Wine and Winlator
 
-### Electron Builder 27.0 (Planejado)
+The x64 portable executable is the recommended first attempt. The desktop app skips the optional native WinSparkle updater for portable builds and detected Wine environments. This is a compatibility measure, not a promise that all Electron, GPU, media, or networking features work.
 
-- `syncDesktopName` será `true` por padrão
-- Suporte para assinatura automática
-- Melhorias em notarização macOS
+See [docs/wine-winlator.md](docs/wine-winlator.md).
 
-### Sua Ação
+## 5. Updating Electron or Electron Builder safely
 
-```yaml
-# Preparar-se para v27
-linux:
-  syncDesktopName: true    # (Será padrão em v27)
-```
+1. Review upstream release notes and security advisories.
+2. Update the dependency in `package.json` and regenerate `package-lock.json` with the supported Node/npm toolchain.
+3. Run the desktop-focused tests and full test suite.
+4. Build the Windows installer, Windows portable executable, and Linux package.
+5. Check the updater signing and appcast workflow.
+6. Test upgrades from the previous supported release before publishing.
 
----
+Do not change the public WinSparkle verification key without a coordinated signing-key migration. A mismatch can prevent clients from accepting future signed updates.
 
-## ✅ Validação Pós-Migração
+## 6. Rollback
 
-Use este checklist depois de atualizar:
-
-- [ ] `npm install` executado
-- [ ] `npm run package:linux` bem-sucedido
-- [ ] Arquivo .deb criado
-- [ ] Instalação do .deb bem-sucedida (`sudo dpkg -i ...`)
-- [ ] Aplicativo inicia corretamente
-- [ ] Ícone renderiza
-- [ ] Desktop Entry validado: `desktop-file-validate`
-- [ ] `npm run package:windows` executado (Windows nativo)
-- [ ] Arquivo .exe/NSIS criado
-- [ ] Instalação Windows bem-sucedida
-- [ ] Atalhos criados (Desktop + Menu Iniciar)
-
----
-
-## 📞 Suporte
-
-Se encontrar problemas:
-
-1. **Consulte a documentação**: https://www.electron.build/
-2. **Abra issue**: https://github.com/electron-userland/electron-builder/issues
-3. **Comunidade**: Discord da comunidade Electron
-
----
-
-**Guia de Migração Versão**: 1.0
-**Atualizado**: 2026-06-05
-**Compatibilidade**: Electron Builder 24.x → 26.x
+If a packaging update breaks a release, revert the packaging change in a new commit/PR and publish a corrected release using the previously supported signing configuration. Do not overwrite or rotate the WinSparkle private key as an ad-hoc rollback.
