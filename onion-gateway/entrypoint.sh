@@ -84,4 +84,17 @@ export PORT="$DROP_PORT"
 su-exec node npm start &
 DROP_PID=$!
 
-wait "$DROP_PID" 2>/dev/null || wait
+if wait "$DROP_PID"; then
+    DROP_STATUS=0
+else
+    DROP_STATUS=$?
+fi
+
+# Stop Tor when the application exits so the container can terminate and the
+# platform's restart policy can recover the service after a fatal Node.js error.
+if [ -n "$TOR_PID" ] && kill -0 "$TOR_PID" 2>/dev/null; then
+    kill -TERM "$TOR_PID" 2>/dev/null || true
+    wait "$TOR_PID" 2>/dev/null || true
+fi
+
+exit "$DROP_STATUS"
