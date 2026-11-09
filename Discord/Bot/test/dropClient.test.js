@@ -3,16 +3,19 @@ import assert from 'node:assert/strict';
 import DropTransferClient from '../src/client/dropClient.js';
 
 function createClient() {
-    return new DropTransferClient({
+    const client = new DropTransferClient({
         baseUrl: 'https://drop.erikraft.com/',
         pairKey: '123456'
     });
+    client._remotePeerId = '11111111-1111-4111-8111-111111111111';
+    return client;
 }
 
 test('accepts a well-formed incoming file request', () => {
     const client = createClient();
 
     client._onIncomingRequest({
+        sender: { id: '11111111-1111-4111-8111-111111111111' },
         header: [{ name: 'example.txt', size: 5, mime: 'text/plain' }],
         totalSize: 5,
         sender: { id: '11111111-1111-4111-8111-111111111111' }
@@ -51,6 +54,7 @@ test('rejects a file larger than the Discord attachment budget before accepting'
     const size = 25 * 1024 * 1024 + 1;
 
     client._onIncomingRequest({
+        sender: { id: '11111111-1111-4111-8111-111111111111' },
         header: [{ name: 'large.bin', size, mime: 'application/octet-stream' }],
         totalSize: size
     });
@@ -78,6 +82,7 @@ test('rejects a declared total size that does not match the file headers', () =>
     const client = createClient();
 
     client._onIncomingRequest({
+        sender: { id: '11111111-1111-4111-8111-111111111111' },
         header: [{ name: 'example.txt', size: 5, mime: 'text/plain' }],
         totalSize: 4
     });
