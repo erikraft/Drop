@@ -10,8 +10,8 @@ const css = fs.readFileSync('public/styles/styles-main.css', 'utf8');
 
 assert(media.includes('id=\'ek-actions\''));
 assert(media.includes("options.danger?' ek-danger':'"));
-assert(media.includes("btn(tr('remove_private'"));
-assert(media.includes("btn(tr('remove_all'"));
+assert(media.includes("addDialogAction(tr('remove_private'"));
+assert(media.includes("addDialogAction(tr('remove_all'"));
 assert(media.includes('const isMobileDevice='));
 assert(media.includes('package=com.instagram.android'));
 assert(media.includes("instagram://story-camera"));
