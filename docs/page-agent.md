@@ -1,39 +1,39 @@
-# Page Agent no ErikrafT Drop™
+# Page Agent in ErikrafT Drop™
 
-O Page Agent é uma integração opcional de automação assistida por IA. Ele não é necessário para descobrir dispositivos nem para transferir arquivos.
+Page Agent is an optional AI-assisted automation integration. It is not required for device discovery or file transfers.
 
-## Onde funciona
+## Availability
 
-A integração é disponibilizada pela interface web do ErikrafT Drop™. O comportamento final depende do navegador, do provedor/modelo configurado e da biblioteca Page Agent externa.
+The integration is exposed by the ErikrafT Drop™ web interface. Its behavior depends on the browser, the configured model/provider, and the external Page Agent library.
 
 ## Page Agent Ext
 
-A extensão complementar pode fornecer autenticação e recursos adicionais ao Page Agent. O token de autenticação da extensão é mantido no armazenamento local do navegador. Não compartilhe esse token em capturas de tela, logs ou mensagens de suporte.
+The companion extension may provide authentication and additional features. Its authentication token is stored in the browser's local storage. Do not include this token in screenshots, logs, issue reports, or support messages.
 
-## Ações rápidas
+## Quick actions
 
-O ErikrafT Drop™ fornece atalhos e controles de interface para iniciar a integração. A execução de ações e a interpretação do conteúdo da página são feitas pela biblioteca/agente externo, não pelo servidor de transferência do Drop.
+ErikrafT Drop™ provides interface controls to start the integration. The external Page Agent library performs page interpretation and automation; the Drop transfer server does not implement the model or the agent's action planner.
 
-## Configuração LLM
+## LLM configuration
 
-A configuração do modelo e da chave de API é feita pelo usuário no fluxo do Page Agent. A chave de sessão usada pelo código do Drop permanece em memória durante a sessão e não é gravada pelo Drop em uma tabela ou banco de dados.
+The user configures the model and API key in the Page Agent flow. The session API key held by the Drop integration remains in memory for the session; the Drop code does not write it to a database.
 
-Verifique as políticas de retenção, privacidade, faturamento e uso de dados do provedor de IA escolhido. O custo do modelo é responsabilidade da conta/provedor configurado pelo usuário.
+Review the selected provider's retention, privacy, billing, and data-use policies. Model usage costs are charged by the provider/account configured by the user.
 
-## CDN e cadeia de fornecimento
+## CDN and software supply chain
 
-A integração carrega a biblioteca Page Agent de um CDN externo e possui uma origem alternativa. Esse código é executado no contexto da página do Drop e, por isso, deve ser tratado como uma dependência de terceiros com acesso à interface e ao armazenamento do navegador.
+The integration loads the Page Agent library from an external CDN and has an alternate source. This code runs in the Drop page context and must be treated as a third-party dependency with access to the page interface and browser storage.
 
-Use a integração somente quando confiar na biblioteca e no provedor. Não cole chaves permanentes ou credenciais que não devam ficar acessíveis a scripts executados na página.
+Use the integration only when you trust the library and provider. Do not enter permanent keys or credentials that must not be accessible to scripts running in the page.
 
-## Prompt injection e permissões
+## Prompt injection and permissions
 
-Páginas externas podem conter instruções maliciosas destinadas a influenciar agentes de IA. Revise as ações sugeridas antes de permitir que o agente clique, navegue, envie conteúdo ou altere dados em páginas externas. O repositório do Drop não controla o modelo remoto nem comprova os mecanismos internos de proteção contra prompt injection da biblioteca Page Agent.
+External pages may contain malicious instructions intended to influence AI agents. Review suggested actions before allowing the agent to click, navigate, submit content, or change data on external pages. The Drop repository does not control the remote model and cannot verify the Page Agent library's internal prompt-injection defenses.
 
-## Privacidade
+## Privacy
 
-O uso do Page Agent é opcional. O servidor de transferência do Drop não recebe automaticamente o conteúdo de todas as páginas visitadas pelo usuário; o que o agente lê ou envia depende da biblioteca, do modelo e das ações autorizadas na sessão.
+Page Agent is optional. The Drop transfer server does not automatically receive the contents of every page visited by the user; what the agent reads or sends depends on the external library, model, and actions authorized in the session.
 
-## Créditos e licença
+## Credits and licensing
 
-Consulte a licença e a documentação oficiais do Page Agent e da extensão complementar antes de redistribuir ou modificar esses componentes.
+Check the official Page Agent and companion-extension documentation and licenses before redistributing or modifying those components.
