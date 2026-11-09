@@ -16,7 +16,7 @@ test('desktop package and PWA metadata versions match the package release', () =
   assert.match(serviceWorker, /cacheVersion = 'v10.1.10'/);
   assert.match(serviceWorker, /version: '10.1.10'/);
   assert.match(indexHtml, /"softwareVersion": "10\.1\.10"/);
-  assert.ok(indexHtml.includes('class="font-subheading">v10.1.9</div>'));
+  assert.ok(indexHtml.includes('class="font-subheading">v10.1.10</div>'));
 });
 
 test('WinSparkle is the Windows desktop update mechanism', () => {
