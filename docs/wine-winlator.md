@@ -1,40 +1,65 @@
 # Wine and Winlator compatibility
 
-ErikrafT Drop™ for Windows is an x64 Electron application. It can be attempted under Wine and Winlator, but these environments are **best-effort compatibility targets**, not officially certified platforms. A successful launch does not guarantee that every browser, media, GPU, or network feature will work.
+ErikrafT Drop™ for Windows is currently packaged as an **x64 Electron application**. The Windows executable can be attempted with Wine or Winlator, but compatibility is **best effort**: the project does not claim official certification or a successful runtime test on every Wine/Winlator version or Android device.
 
-## Recommended executable
+## Which executable should I use?
 
-1. Open the [GitHub Releases page](https://github.com/erikraft/Drop/releases).
-2. Prefer the asset whose name ends in `-win-x64-portable.exe`, when that asset is available.
-3. If the release only contains `-win-x64.exe`, that file is the NSIS installer. Install it inside the Wine prefix and launch ErikrafT Drop™ from that prefix.
-4. Use a 64-bit Wine prefix for the x64 Windows build.
+1. Open the [ErikrafT Drop™ releases](https://github.com/erikraft/Drop/releases).
+2. Prefer the asset ending in `-win-x64-portable.exe`. It does not require the NSIS installation flow.
+3. If the portable asset is unavailable, use the `-win-x64.exe` NSIS installer inside a dedicated Wine prefix.
+4. Use a 64-bit Wine prefix. The current Windows target is x64; ARM devices depend on the compatibility layer's x64 translation support.
 
-The portable target is configured in `electron-builder.yml` and the release workflow validates and uploads both Windows executables. The currently published release may predate that change; check the actual asset list rather than assuming that every old release contains the portable executable.
+Do not assume older releases contain the portable executable. Check the assets attached to the release you are downloading.
 
-## WinSparkle updater
+## Wine (Linux)
 
-The native WinSparkle updater is optional. The application skips it for portable builds and when Wine-related environment markers are visible to the process. This avoids loading the optional native updater DLL in compatibility environments; it does not disable file transfers or the main application.
+Example using a dedicated prefix:
 
-If Wine/Winlator does not pass its environment markers to the Windows process, set one of these variables in the launch environment:
+```bash
+export WINEPREFIX="$HOME/.wine-erikraft-drop"
+export WINEARCH=win64
+export ERIKRAFT_DROP_COMPATIBILITY_RUNTIME=1
+
+wineboot -u
+wine "$HOME/Downloads/erikraft-drop-10.1.10-win-x64-portable.exe"
+```
+
+Replace the download path with the exact filename you downloaded. The explicit compatibility variable asks the application to skip its optional native WinSparkle updater. It does **not** disable file transfers or the main application.
+
+If you prefer the installer, run the NSIS `-win-x64.exe` file with Wine and then launch ErikrafT Drop™ from the same prefix.
+
+## Winlator (Android)
+
+1. Create or select a 64-bit container with x64 translation enabled.
+2. Copy the `-win-x64-portable.exe` file into the container's accessible storage.
+3. Launch it from Winlator's file manager or shortcut.
+4. If the container exposes environment-variable settings, set `ERIKRAFT_DROP_COMPATIBILITY_RUNTIME=1` before launch.
+
+Winlator configurations differ substantially. A successful process start does not guarantee that GPU rendering, audio/video capture, clipboard, filesystem access, WebRTC, or WebSocket fallback will work on a particular device.
+
+## Optional updater behavior
+
+The desktop application skips WinSparkle when it detects a portable build, a known Wine environment variable, or either explicit compatibility variable:
 
 - `ERIKRAFT_DROP_COMPATIBILITY_RUNTIME=1`
 - `ERIKRAFT_DROP_DISABLE_NATIVE_UPDATER=1`
 
-Both options only disable the native WinSparkle updater. They do not disable application updates from the Releases page.
+The updater is optional. Compatibility mode only disables the native WinSparkle integration; it does not change the server selected by the user or the transfer protocol. If the compatibility layer does not pass its Wine environment markers to the Windows process, use one of the explicit variables above where the launcher supports it.
 
 ## Troubleshooting
 
-- **Window opens but stays blank or rendering is unstable:** try adding Chromium's `--disable-gpu` argument to the shortcut/launcher. This is a compatibility workaround and may reduce performance.
-- **Camera or microphone does not work:** verify Wine/Winlator permissions and device passthrough. These features depend on the host environment and are not guaranteed.
-- **Devices are not discovered:** verify that the environment has network access and that WebSocket/WebRTC traffic is not blocked by its firewall or network translation.
-- **Transfers fail over WebRTC:** the server's WebSocket fallback must be enabled for that instance. Fallback can improve connectivity but is not a replacement for a working network path.
-- **Installer fails:** use the portable executable if the current release publishes it. Do not run the Windows installer with elevated privileges unless the Wine prefix specifically requires it.
+- **Blank window or unstable rendering:** try launching with Chromium's `--disable-gpu` switch. This may reduce performance.
+- **Camera or microphone unavailable:** check host permissions and Wine/Winlator device passthrough.
+- **Devices are not discovered:** verify that the container has network access and that its firewall allows WebSocket and WebRTC traffic.
+- **WebRTC transfer fails:** the selected server must have its WebSocket fallback configured for fallback transfers to be available. Fallback is not a guarantee that every network path will work.
+- **Installer does not start:** prefer the portable executable, if published. Avoid elevated execution unless the prefix specifically requires it.
 
 ## Known limitations
 
-- Winlator runs Windows software through a layered Android/Linux compatibility stack. GPU drivers, audio/video capture, filesystem permissions, clipboard integration, and WebRTC behavior vary by device and Winlator configuration.
-- The application loads the selected ErikrafT Drop™ server over HTTP(S); this desktop wrapper does not make the remote service available offline.
-- No Wine or Winlator runtime test is claimed by the repository's Windows packaging CI. The CI validates that Windows installer and portable artifacts are produced on a native Windows runner.
+- No Wine or Winlator runtime test is performed by the repository's Windows packaging workflow. CI builds and checks the installer and portable artifacts on a native Windows runner.
+- The app wrapper loads the selected ErikrafT Drop™ server over HTTP(S); it is not an offline copy of the web application.
+- Android CPU architecture, graphics drivers, audio/video permissions, networking, and Winlator translation settings can affect compatibility.
+- The x64 Windows executable is not a native Android APK and does not guarantee support on ARM devices.
 
 ## Related documentation
 
