@@ -55,6 +55,10 @@ jobs:
             fi
           done
           exit 1
+      - name: Audit npm dependency trees
+        run: |
+          npm audit --audit-level=high
+          npm --prefix Discord/Bot audit --audit-level=high
       - name: Run repository test suite
         run: npm test
       - name: Build Linux package
