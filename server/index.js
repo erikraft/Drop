@@ -1,5 +1,6 @@
 import "dotenv/config";
 import {redactSensitiveConfig} from "./debug-redaction.js";
+import {installProcessErrorLogging} from "./process-error-handlers.js";
 import {spawn} from "child_process";
 import fs from "fs";
 
@@ -18,19 +19,8 @@ process.on('SIGTERM', () => {
     process.exit(0)
 })
 
-// Handle APP ERRORS
-process.on('uncaughtException', (error, origin) => {
-    console.log('----- Uncaught exception -----')
-    console.log(error)
-    console.log('----- Exception origin -----')
-    console.log(origin)
-})
-process.on('unhandledRejection', (reason, promise) => {
-    console.log('----- Unhandled Rejection at -----')
-    console.log(promise)
-    console.log('----- Reason -----')
-    console.log(reason)
-})
+// Log fatal process errors without suppressing Node's default exit behavior.
+installProcessErrorLogging();
 
 // Evaluate arguments for deployment with Docker and Node.js
 let conf = {};
