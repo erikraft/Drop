@@ -1,3 +1,24 @@
+## 🚀 Release Notes — Desktop 10.1.7
+
+**Released:** 2026-10-07
+
+### ✨ New and improved
+
+- 📱 Added native Android transfer shortcuts integrated with the ErikrafT Drop™ interface.
+- 🔄 Reused the existing Onion button to launch the Android transfer shortcut instead of adding a duplicate control.
+- 🧹 Removed the legacy WebTorrent implementation and adjusted Android-specific shortcuts.
+- 🌐 Improved translations describing platform availability on the About page.
+- 🔎 Improved SEO entity identification and discovery of product pages and download options.
+- 🛠️ Applied internal code-quality and maintenance fixes.
+
+### 📦 Compatibility
+
+The release maintains the integration between the web experience and the Android application while keeping platform-specific features separate.
+
+[Compare v10.1.6...v10.1.7](https://github.com/erikraft/Drop/compare/v10.1.6...v10.1.7) · [Release assets](https://github.com/erikraft/Drop/releases/tag/v10.1.7)
+
+---
+
 ## 🚀 Release Notes — Desktop 10.1.6
 
 **Version:** v10.1.6

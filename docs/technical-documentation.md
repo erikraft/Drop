@@ -1,82 +1,58 @@
 # Technical Documentation
-## Encryption, WebRTC, STUN and TURN
 
-Encryption is mandatory for WebRTC connections and completely done by the browser itself.
+## Architecture overview
 
-When the peers are first connecting, \
-a channel is created by exchanging their signaling info. \
-This signaling information includes some sort of public key \
-and is specific to the clients IP address. \
-That is what the STUN Server is used for: \
-it simply returns your public IP address \
-as you only know your local ip address \
-if behind a NAT (router).
+ErikrafT Drop™ is a browser-based peer-to-peer transfer application. The web server provides the application shell, peer discovery, signaling, and an optional WebSocket transfer fallback. It does not need a user account or a database for the normal transfer flow.
 
-The transfer of the signaling info is done by the \
-ErikrafT Drop™ / PairDrop / Snapdrop server using secure websockets. \
-After that the channel itself is completely peer-to-peer \
-and all info can only be decrypted by the receiver. \
-When the two peers are on the same network \
-or when they are not behind any NAT system \
-(which they are always for classic \
-Snapdrop and for not paired users on ErikrafT Drop™) \
-the files are send directly peer-to-peer.
+### Discovery and signaling
 
-When a user is behind a NAT (behind a router) \
-the contents are channeled through a TURN server. \
-But again, the contents send via the channel \
-can only be decrypted by the receiver. \
-So a rogue TURN server could only \
-see that there is a connection, but not what is sent. \
-Obviously, connections which are channeled through a TURN server \
-are not as fast as peer-to-peer.
+- Browser clients open a WebSocket connection to the server.
+- Clients discover peers through IP-based rooms and optional persistent secret rooms.
+- Pairing creates a high-entropy room secret and a short numeric pairing code. The code is temporary; the room secret is the longer-lived capability used for subsequent discovery.
+- The server checks room membership before relaying signaling and peer messages.
+- IP-based discovery depends on the reverse proxy supplying a trustworthy client IP. A proxy must overwrite, not blindly forward, client-supplied `X-Forwarded-For` or `CF-Connecting-IP` values.
 
-The selection whether a TURN server is needed \
-or not is also done automatically by the web browser. \
-It simply iterated through the configured \
-RTC iceServers and checks what works. \
-Only if the STUN server is not sufficient, \
-the TURN server is used.
+### WebRTC, STUN, and TURN
 
-![img](https://www.wowza.com/wp-content/uploads/WeRTC-Encryption-Diagrams-01.jpg)
-_Diagram created by wowza.com_
+WebRTC data channels use the browser's WebRTC security mechanisms, including DTLS encryption. The application does not implement a separate custom encryption layer for the data channel.
 
-Good thing: if your device has an IPv6 address \
-it is uniquely reachable by that address. \
-As I understand it, when both devices are using \
-IPv6 addresses there is no need for a TURN server in any scenario.
+- **STUN** helps a browser discover the network address candidates it can use for a direct connection.
+- **TURN** relays encrypted WebRTC traffic when a direct path cannot be established. A TURN operator can observe connection metadata such as addresses, timing, and traffic volume, but does not receive the decrypted WebRTC data-channel payload.
+- **WebSocket fallback** is a separate relay path used when the client cannot use the normal WebRTC transfer path. In this mode, transfer data passes through the ErikrafT Drop™ server and should be treated as server-relayed traffic.
 
-Learn more by reading https://www.wowza.com/blog/webrtc-encryption-and-security \
-which gives a good insight into STUN, TURN and WebRTC.
+The server sends the configured `rtcConfig` to connected clients in its `ws-config` message. If a self-hosted deployment configures TURN, those credentials are therefore visible to clients. Use short-lived, scoped TURN credentials; do not place a reusable provider master secret in the client configuration.
 
+![WebRTC encryption diagram](https://www.wowza.com/wp-content/uploads/WeRTC-Encryption-Diagrams-01.jpg)
 
-## Device Pairing
+_Diagram reference: Wowza._
 
-The pairing functionality uses the [IndexedDB API](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API).
+## Pairing and room secrets
 
-It works by creating long secrets that are served \
-by the server to the initiating and requesting pair peer, \
-when the inserted key is correct. \
-These long secrets are then saved to an \
-indexedDB database in the web browser. \
-IndexedDB is somewhat the successor of localStorage \
-as saved data is shared between all tabs. \
-It goes one step further by making the data persistent \
-and available offline if implemented to a PWA.
+Persistent pairing uses browser storage and server-side room membership:
 
-All secrets a client has saved to its database \
-are sent to the ErikrafT Drop™ server. \
-Peers with a common secret are discoverable \
-to each other analog to peers with the same \
-IP address are discoverable by each other.
+1. The initiating client asks the server to create a pairing.
+2. The server creates a high-entropy room secret and a temporary numeric pairing code.
+3. The joining client submits the numeric code over its WebSocket connection.
+4. The server validates the code and joins the peer to the corresponding secret room.
+5. Clients persist the room secret locally so they can discover each other in later sessions.
 
-What I really like about this approach (and the reason I implemented it) \
-is that devices on the same network are always \
-visible regardless whether any devices are paired or not. \
-The main user flow is never obstructed. \
-Paired devices are simply shown additionally. \
-This makes it in my idea better than the idea of \
-using a room system as [discussed here](https://github.com/RobinLinus/snapdrop/pull/214).
+The room secret is a bearer capability: anyone who obtains it may be able to join that room while it remains valid. Do not publish pairing secrets or include them in support screenshots or logs.
 
+## Data handling
 
-[< Back](/README.md)
+- The normal WebRTC path transfers data between peers.
+- TURN relays encrypted WebRTC traffic when required.
+- WebSocket fallback relays data through the application server.
+- The server does not provide a persistent file-upload library or a user file repository for the normal transfer flow.
+- Peer names, peer IDs, IP-derived room identifiers, and room secrets are used for discovery and signaling. The deployment operator can observe connection metadata.
+
+## Self-hosting security requirements
+
+- Serve the application over HTTPS.
+- Put the server behind a trusted reverse proxy and overwrite client-supplied forwarding headers.
+- Do not expose a Render or other origin hostname as a bypass around Cloudflare/WAF controls.
+- If TURN is configured, use time-limited credentials and restrict their permissions.
+- Keep `ONION_PRIVATE_KEY_BASE64`, TURN provider secrets, and signing keys out of source control and logs.
+- Keep the server and dependencies updated.
+
+See [Self-hosting](host-your-own.md), [Failover architecture](failover-architecture.md), and the [Security Policy](../SECURITY.md).

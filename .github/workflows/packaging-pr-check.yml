@@ -19,8 +19,6 @@ permissions:
 
 env:
   ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
-  # Keep electron-builder's CommonJS helper cache outside the ESM project root.
-  ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/../electron-builder-cache
 
 jobs:
   linux-deb:
@@ -39,10 +37,10 @@ jobs:
         with:
           path: |
             .cache/electron
-            ${{ github.workspace }}/../electron-builder-cache
-          key: builder-cache-outside-root-v2-electron-${{ hashFiles('package-lock.json') }}
+            ${{ runner.temp }}/electron-builder-cache
+          key: builder-cache-runner-temp-v3-electron-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            builder-cache-outside-root-v2-electron-
+            builder-cache-runner-temp-v3-electron-
       - name: Install dependencies
         shell: bash
         run: |
@@ -57,9 +55,15 @@ jobs:
             fi
           done
           exit 1
+      - name: Audit npm dependency trees
+        run: |
+          npm audit --audit-level=high
+          npm --prefix Discord/Bot audit --audit-level=high
       - name: Run repository test suite
         run: npm test
       - name: Build Linux package
+        env:
+          ELECTRON_BUILDER_CACHE: ${{ runner.temp }}/electron-builder-cache
         run: npm run package:linux
       - run: |
           test -s dist/desktop/erikraft-drop-linux-amd64.deb
@@ -81,10 +85,10 @@ jobs:
         with:
           path: |
             .cache/electron
-            ${{ github.workspace }}/../electron-builder-cache
-          key: builder-cache-outside-root-v2-electron-${{ hashFiles('package-lock.json') }}
+            ${{ runner.temp }}/electron-builder-cache
+          key: builder-cache-runner-temp-v3-electron-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            builder-cache-outside-root-v2-electron-
+            builder-cache-runner-temp-v3-electron-
       - name: Install dependencies
         shell: pwsh
         run: |
@@ -101,6 +105,8 @@ jobs:
       - name: Test portable Windows packaging configuration
         run: node --test test/desktop-portable.test.js
       - name: Build Windows installer and portable executable
+        env:
+          ELECTRON_BUILDER_CACHE: ${{ runner.temp }}/electron-builder-cache
         run: npm run package:windows
       - shell: pwsh
         run: |
