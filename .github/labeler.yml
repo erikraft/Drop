@@ -1,4 +1,3 @@
-# Automatically label pull requests by the files they change.
 documentation:
   - changed-files:
       - any-glob-to-any-file: '**/*.md'

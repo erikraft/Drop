@@ -305,3 +305,29 @@ test("Peer room-secret tracking deduplicates, caps, and removes values", () => {
     assert.equal(peer.roomSecrets.includes("a".repeat(64)), false);
     assert.equal(peer.roomSecrets.length, 63);
 });
+
+
+test("public room creation preserves the existing create-and-join behavior", () => {
+    const server = createServer();
+    const peer = createPeer("11111111-1111-4111-8111-111111111111");
+
+    server._onCreatePublicRoom(peer);
+
+    const created = peer.messages.find(message => message.type === "public-room-created");
+    assert.ok(created);
+    assert.match(created.roomId, /^[a-z]{5}$/);
+    assert.equal(server._rooms[created.roomId][peer.id], peer);
+    assert.equal(peer.publicRoomId, created.roomId);
+});
+
+test("rate-limited peers cannot repeatedly create public rooms", () => {
+    const server = createServer();
+    const peer = createPeer("11111111-1111-4111-8111-111111111111");
+    peer.rateLimitReached = () => true;
+
+    server._onCreatePublicRoom(peer);
+
+    assert.deepEqual(peer.messages, [{ type: "join-key-rate-limit" }]);
+    assert.equal(Object.keys(server._rooms).length, 0);
+    assert.equal(peer.publicRoomId, null);
+});
