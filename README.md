@@ -79,7 +79,7 @@ Stable latest endpoints are preferred when someone asks for a direct download li
 - <img src="./public/images/CLI_Icon.png" width="20px" style="display:inline;"> **CLI (.zip):** https://github.com/erikraft/Drop/releases/latest/download/erikraftdrop-cli.zip
 - <img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;"> **Android APK:** https://github.com/erikraft/Drop-Android/releases/latest/download/Drop-Android.apk
 - <img src="https://raw.githubusercontent.com/erikraft/ErikrafT/main/Images/Languages_and_Technologies/Tools_and_Deployment/GitHub.svg" width="20px" style="display:inline;"> **Latest web/desktop release:** https://github.com/erikraft/Drop/releases/latest
-- 🍷 **Wine / Winlator:** [Compatibility guide](docs/wine-winlator.md) (best effort; Windows x64 portable build preferred when available).
+- <img src="./public/images/Wine.ico" width="20px" style="display:inline;"> **Wine / <img src="./public/images/Winlator.ico" width="20px" style="display:inline;"> Winlator:** [Compatibility guide](docs/wine-winlator.md) (best effort; Windows x64 portable build preferred when available).
 - <img src="./public/images/Android_Logo_Icon.svg" width="20px" style="display:inline;"> **Latest Android release:** https://github.com/erikraft/Drop-Android/releases/latest
 
 ### 📱 ErikrafT Drop™ for Android
