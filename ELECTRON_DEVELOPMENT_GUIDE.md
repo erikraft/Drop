@@ -1,397 +1,86 @@
-# 🚀 Guia Prático: Desenvolvimento e Deploy do ErikrafT Drop™ Desktop
+# 🚀 ErikrafT Drop™ Desktop — Development and Packaging Guide
 
-## 1️⃣ Desenvolvimento Local
+## 1. Requirements
 
-### Iniciar o Aplicativo Electron em Modo Desenvolvimento
+- Node.js 22.12.0 or newer.
+- npm.
+- Windows for a native Windows package build.
+- Linux and `dpkg-deb` for validating the Debian package.
+- Network access for npm and Electron Builder artifact downloads.
 
-```bash
-# Terminal 1: Instalar dependências
-npm install
+The exact versions are defined in `package.json` and `package-lock.json`.
 
-# Terminal 2: Iniciar o aplicativo Electron
-npx electron desktop/main.cjs
-```
+## 2. Install dependencies
 
-**O que acontece**:
-1. Electron inicia
-2. Servidor Node.js é iniciado automaticamente na porta 33571
-3. BrowserWindow abre e carrega http://127.0.0.1:33571
-4. Interface do ErikrafT Drop™ aparece em uma janela própria
-
-### Variáveis de Ambiente (Opcional)
+From the repository root:
 
 ```bash
-# Porta customizada (padrão: 33571)
-ERIKRAFT_DROP_DESKTOP_PORT=4000 npx electron desktop/main.cjs
-
-# Debug mode
-DEBUG_MODE=true npx electron desktop/main.cjs
-
-# WebSocket fallback
-WS_FALLBACK=true npx electron desktop/main.cjs
+npm ci
 ```
 
----
+Use `npm ci` to install the exact dependency tree recorded in the lockfile. Do not replace it with an unpinned global Electron Builder install.
 
-## 2️⃣ Build para Linux
+## 3. Run desktop-focused tests
 
-### Gerar Empacote DEB
+```bash
+node --test test/desktop-portable.test.js
+npm run test:desktop-version
+npm run test:desktop-update
+```
+
+The full repository test suite is available through:
+
+```bash
+npm test
+```
+
+## 4. Build for Linux
+
+On a supported Linux host:
 
 ```bash
 npm run package:linux
 ```
 
-**Saída**: `dist/desktop/erikraft-drop-linux-amd64.deb` (97 MB aprox)
+Expected artifact: `dist/desktop/erikraft-drop-linux-amd64.deb`.
 
-### Testar o Pacote DEB Localmente
+Validate it:
 
 ```bash
-# Instalar o pacote gerado
-sudo dpkg -i dist/desktop/erikraft-drop-linux-amd64.deb
-
-# Iniciar o aplicativo
-erikraft-drop
-
-# Ou via interface gráfica (Applications → Network → ErikrafT Drop™)
-
-# Desinstalar (se necessário)
-sudo apt remove erikraft-drop
+test -s dist/desktop/erikraft-drop-linux-amd64.deb
+dpkg-deb --info dist/desktop/erikraft-drop-linux-amd64.deb
 ```
 
-### Verificar Conteúdo do Pacote DEB
+## 5. Build for Windows
 
-```bash
-# Listar arquivos do pacote
-dpkg -L erikraft-drop
+On Windows:
 
-# Inspecionar metadados
-dpkg -s erikraft-drop
-
-# Ver ícone instalado
-ls -l /usr/share/icons/hicolor/scalable/apps/erikraft-drop.svg
-
-# Ver arquivo .desktop
-cat /usr/share/applications/erikraft-drop.desktop
-```
-
----
-
-## 3️⃣ Build para Windows
-
-### No Windows Nativo (Recomendado)
-
-```bash
-npm install
+```powershell
+npm ci
 npm run package:windows
 ```
 
-**Saída**: `dist/desktop/erikraft-drop-10.1.6-win-x64.exe`
+The command generates both the NSIS installer and portable executable in `dist/desktop/`. CI validates that both expected artifact patterns exist and are non-empty.
 
-**O instalador NSIS incluirá**:
-- ✅ Atalho na Área de Trabalho
-- ✅ Atalho no Menu Iniciar
-- ✅ Opção de escolher diretório de instalação
-- ✅ Desinstalador padrão
+## 6. Wine and Winlator
 
-### No Linux com Wine (Experimental)
+Prefer the `-win-x64-portable.exe` asset. The app skips its optional native WinSparkle updater for portable builds and detected Wine environments. Wine/Winlator runtime compatibility is best effort; the packaging CI runs on native Windows and does not test those compatibility layers.
 
-```bash
-# Instalar Wine primeiro
-sudo apt update
-sudo apt install wine wine32 wine64
+See [docs/wine-winlator.md](docs/wine-winlator.md).
 
-# Depois fazer o build
-npm run package:windows
-```
+## 7. Release workflow
 
-⚠️ **Nota**: Pode ser mais lento e requer Wine completo configurado
+The desktop release workflow builds Linux and Windows artifacts. The WinSparkle private signing key is read from the GitHub Actions secret `WINSPARKLE_ED25519_PRIVATE_KEY`; never commit or print that key. The updater's public verification key in the app is not secret.
 
----
+## 8. GitHub Actions cache context
 
-## 4️⃣ Configuração de Desktop Entry (Linux)
+Do not reference `runner.temp` in workflow-level `env`. The runner context is available in supported step-level contexts. The packaging PR workflow uses the runner temporary directory for the Electron Builder helper cache.
 
-**Arquivo gerado**: `/usr/share/applications/erikraft-drop.desktop`
+## 9. Troubleshooting
 
-```ini
-[Desktop Entry]
-Name=ErikrafT Drop™
-Comment=File sharing by ErikrafT
-Exec=/opt/ErikrafT Drop™/erikraft-drop
-Icon=erikraft-drop
-Terminal=false
-Type=Application
-Categories=Network;Utility;
-Keywords=file;transfer;sharing;
-```
-
-✅ **Propriedades Suportadas**:
-- Aparece em menus de aplicativos
-- Busca por "file", "transfer", "sharing"
-- Associação com tipo: Network Utility
-- Ícone renderizado corretamente
-
----
-
-## 5️⃣ Estrutura de Arquivos Empacotados
-
-### No .deb (Linux)
-
-```
-/opt/ErikrafT Drop™/
-├── erikraft-drop          (executável)
-├── resources/
-│   ├── app.asar           (aplicação)
-│   ├── desktop/main.cjs
-│   ├── server/
-│   ├── public/
-│   └── ...
-└── libffmpeg.so           (dependência)
-
-/usr/share/applications/
-└── erikraft-drop.desktop
-
-/usr/share/icons/
-└── hicolor/scalable/apps/erikraft-drop.svg
-
-/usr/share/pixmaps/        (ícone para aplicativos)
-└── erikraft-drop.svg
-```
-
-### No .exe (Windows)
-
-```
-Program Files/
-└── ErikrafT Drop™/
-    ├── erikraft-drop.exe   (executável)
-    ├── resources/
-    │   ├── app.asar
-    │   └── ...
-    └── ...
-
-Desktop/
-└── ErikrafT Drop™.lnk       (atalho)
-
-Start Menu/
-└── ErikrafT Drop™/
-    └── ErikrafT Drop™.lnk   (atalho)
-```
-
----
-
-## 6️⃣ Troubleshooting
-
-### ❌ "Cannot find module 'electron'"
-
-```bash
-npm install --save-dev electron electron-builder
-```
-
-### ❌ "Falha na validação do ícone SVG"
-
-```bash
-# Validar o SVG manualmente
-file public/images/icon-drop.svg
-
-# Garantir que é SVG válido
-xmllint --noout public/images/icon-drop.svg
-```
-
-### ❌ "Wine is required" (ao fazer build Windows no Linux)
-
-```bash
-# Opção 1: Instalar Wine
-sudo apt install wine wine32 wine64
-
-# Opção 2: Usar Windows nativo (recomendado)
-# Execute o comando em máquina Windows
-
-# Opção 3: Usar CI/CD
-# Veja próxima seção
-```
-
-### ❌ "Servidor não inicia na porta 33571"
-
-```bash
-# Verificar se a porta está livre
-lsof -i :33571
-
-# Usar porta diferente
-ERIKRAFT_DROP_DESKTOP_PORT=4000 npx electron desktop/main.cjs
-```
-
----
-
-## 7️⃣ CI/CD - Build Automatizado
-
-### Building Linux & Flatpak packages (GitHub Actions)
-
-Para gerar os pacotes Linux (.deb e Flatpak) manualmente:
-
-1. Acesse a aba **Actions** no GitHub
-2. Selecione o workflow **Build Linux Packages**
-3. Clique em **Run workflow**
-4. Selecione os pacotes a serem gerados (`build_linux` e/ou `build_flatpak`)
-5. Aguarde a conclusão do pipeline
-6. Baixe os pacotes prontos e o arquivo `SHA256SUMS.txt` na seção **Artifacts**
-
-### Comandos de Build Local
-
-**Linux (.deb)**:
-```bash
-npm run package:linux
-# O arquivo .deb será gerado em: dist/desktop/erikraft-drop-linux-amd64.deb
-```
-
-**Flatpak (.flatpak)**:
-```bash
-npm run package:flatpak
-flatpak build-bundle --architecture=x86_64 dist/flatpak-repo dist/desktop/io.github.erikraft.Drop.flatpak io.github.erikraft.Drop
-# O arquivo .flatpak será gerado em: dist/desktop/io.github.erikraft.Drop.flatpak
-```
-
----
-
-## 8️⃣ Distribuição
-
-### Preparação para Release
-
-1. **Versionar**:
-   ```bash
-   # Atualizar package.json
-   "version": "10.1.6"
-   ```
-
-2. **Build Multi-plataforma**:
-   ```bash
-   # No Linux
-   npm run package:linux
-
-   # No Windows
-   npm run package:windows
-   ```
-
-3. **Assinar (Opcional - Produção)**:
-   ```yaml
-   # electron-builder.yml
-   win:
-     certificateFile: path/to/certificate.pfx
-     certificatePassword: ${env.CERTIFICATE_PASSWORD}
-
-   linux:
-     # Linux geralmente assina via GPG
-   ```
-
-4. **Publicar**:
-   - Upload para GitHub Releases
-   - Website: drop.erikraft.com
-   - Flatpak (veja: `flatpak/`)
-   - AUR (Arch Linux)
-
----
-
-## 9️⃣ Monitoramento em Produção
-
-### Logs do Aplicativo Instalado
-
-**Linux**:
-```bash
-# Executar com DEBUG
-DEBUG_MODE=true erikraft-drop
-
-# Ver logs do systemd (se instalado como serviço)
-journalctl -u erikraft-drop -f
-```
-
-**Windows**:
-```bash
-# Executar com console (cmd)
-"C:\Program Files\ErikrafT Drop™\erikraft-drop.exe" --enable-logging
-
-# Logs em: %APPDATA%/ErikrafT Drop™/logs/
-```
-
----
-
-## 🔟 Performance & Otimizações
-
-### Reduzir Tamanho do Pacote
-
-```yaml
-# electron-builder.yml - Adicionar compressão
-compression: maximum
-
-# Ou usar asar com unpacking seletivo
-asar:
-  smartUnpack: true
-```
-
-### Melhorar Inicialização
-
-```javascript
-// desktop/main.cjs
-// Lazy load módulos pesados
-const { startBundledServer } = await import('./server-loader.js');
-```
-
----
-
-## 📋 Checklist de Release
-
-- ✅ Testes funcionais no desktop
-- ✅ Build Linux (.deb) testado
-- ✅ Build Windows (.exe) testado
-- ✅ Ícones renderizam corretamente
-- ✅ Atalhos criados (Windows) / Desktop Entry (Linux)
-- ✅ Versão atualizada em package.json
-- ✅ Documentação atualizada
-- ✅ Hash/Checksum calculado (para download seguro)
-- ✅ Release notes preparadas
-- ✅ Assets enviados para repositório
-
----
-
-## 📞 Referências Rápidas
-
-| Comando | Descrição |
-|---------|-----------|
-| `npm install` | Instalar dependências |
-| `npx electron desktop/main.cjs` | Executar em desenvolvimento |
-| `npm run package:linux` | Build para Linux (DEB) |
-| `npm run package:windows` | Build para Windows (EXE) |
-| `npm run validate:linux-icon` | Validar ícone SVG |
-
----
-
-**Última Atualização**: 2026-10-02
-**Versão**: 10.1.6
-**Plataformas**: Linux, Windows
-**Status**: ✅ Pronto para Produção
-
-## 3.1️⃣ Executável portátil para Wine e Winlator (Windows x64)
-
-O comando `npm run package:windows` gera agora duas variantes:
-
-- `erikraft-drop-<versão>-win-x64.exe`: instalador NSIS tradicional, com atalhos e desinstalador.
-- `erikraft-drop-<versão>-win-x64-portable.exe`: executável portátil, sem instalação NSIS.
-
-### Wine (Linux)
-
-Execute o arquivo terminado em `-win-x64-portable.exe` com Wine:
-
-```bash
-wine ./dist/desktop/erikraft-drop-<versão>-win-x64-portable.exe
-```
-
-### Winlator (Android)
-
-1. Use um container Windows x86_64 compatível com Box64/Wine.
-2. Copie o arquivo `*-win-x64-portable.exe` para uma pasta acessível dentro do container.
-3. Execute o arquivo pelo Winlator ou crie um atalho para ele.
-
-### Limitações importantes
-
-- O binário gerado é **Windows x64**; não é um APK Android nem um binário ARM nativo.
-- O modo portátil ignora o WinSparkle, que depende de uma DLL nativa. Atualizações dessa variante devem ser feitas baixando uma nova versão manualmente.
-- Wine e Winlator são camadas de compatibilidade: a geração do arquivo não garante que WebRTC, áudio/vídeo, permissões, aceleração gráfica ou conectividade funcionem em toda combinação de versão/dispositivo. O funcionamento precisa ser validado no ambiente específico.
-- O instalador NSIS existente continua disponível e mantém o fluxo de atualização WinSparkle.
+- **Missing WinSparkle DLL:** run `npm run prepare:winsparkle`; the preparation script checks the downloaded archive's SHA-256 before extracting the DLL.
+- **Windows package fails on Linux:** use the native Windows CI job or a supported Windows build host; do not assume Wine-based packaging is equivalent.
+- **Blank window under Wine/Winlator:** try Chromium's `--disable-gpu` switch.
+- **Transfer discovery fails:** verify network access, WebSocket connectivity, and WebRTC support in the host environment.
+- **Build output missing:** inspect the relevant GitHub Actions log and confirm the script completed before looking for files in `dist/desktop/`.
 

@@ -1,66 +1,39 @@
-# Page Agent no ErikrafT Drop™
+# Page Agent in ErikrafT Drop™
 
-O ErikrafT Drop™ integra opcionalmente o **Page Agent / Page Agent Ext**, projeto open source sob licença MIT.
+Page Agent is an optional AI-assisted automation integration. It is not required for device discovery or file transfers.
 
-- Oficial: https://alibaba.github.io/page-agent/
-- Repositório: https://github.com/alibaba/page-agent
-- Extensão Chrome: https://chromewebstore.google.com/detail/page-agent-ext/akldabonmimlicnjlflnapfeklbfemhj
-- Versão CDN usada nos atalhos de avaliação: **1.12.4**
+## Availability
 
-## Onde funciona
-
-A integração de IA é intencionalmente habilitada somente em ambientes desktop com ponteiro preciso: Windows, Linux, macOS e navegadores desktop. O Android/iOS/mobile não recebe os controles de IA.
-
-O Electron do ErikrafT Drop™ carrega a mesma aplicação web localmente, portanto a integração é reaproveitada no aplicativo desktop sem criar um segundo motor de IA.
+The integration is exposed by the ErikrafT Drop™ web interface. Its behavior depends on the browser, the configured model/provider, and the external Page Agent library.
 
 ## Page Agent Ext
 
-O caminho principal é a API autorizada da extensão através de `window.PAGE_AGENT_EXT`. O Page Agent Ext exige um token de autorização que o usuário deve copiar do painel da extensão e fornecer ao site. O ErikrafT Drop™ não gera nem descobre esse token.
+The companion extension may provide authentication and additional features. Its authentication token is stored in the browser's local storage. Do not include this token in screenshots, logs, issue reports, or support messages.
 
-A extensão pode controlar páginas e múltiplas abas; por isso as ações do Drop são deliberadamente restritas ao campo de texto/código marcado pelo próprio Drop e instruem o agente a não enviar, submeter ou alterar outros controles.
+## Quick actions
 
-## Ações rápidas
+ErikrafT Drop™ provides interface controls to start the integration. The external Page Agent library performs page interpretation and automation; the Drop transfer server does not implement the model or the agent's action planner.
 
-Nos campos de WebChat e de mensagem iniciada pelo clique direito:
+## LLM configuration
 
-- Melhorar texto
-- Corrigir texto
-- Ajustar texto
-- Corrigir/revisar código
-- Instrução personalizada
+The user configures the model and API key in the Page Agent flow. The session API key held by the Drop integration remains in memory for the session; the Drop code does not write it to a database.
 
-O resultado fica no campo para revisão humana. O ErikrafT Drop™ não envia a mensagem automaticamente.
+Review the selected provider's retention, privacy, billing, and data-use policies. Model usage costs are charged by the provider/account configured by the user.
 
-## Configuração LLM
+## CDN and software supply chain
 
-A integração pede:
+The integration loads the Page Agent library from an external CDN and has an alternate source. This code runs in the Drop page context and must be treated as a third-party dependency with access to the page interface and browser storage.
 
-- endpoint compatível com a API OpenAI;
-- modelo com suporte a tool calls;
-- API key, quando o provedor exigir;
-- token do Page Agent Ext.
+Use the integration only when you trust the library and provider. Do not enter permanent keys or credentials that must not be accessible to scripts running in the page.
 
-Endpoint e modelo ficam em `localStorage`; a API key informada pelo Drop fica somente em `sessionStorage`. O usuário também pode usar um endpoint local como Ollama/LM Studio.
+## Prompt injection and permissions
 
-Nunca coloque uma chave LLM no código-fonte.
+External pages may contain malicious instructions intended to influence AI agents. Review suggested actions before allowing the agent to click, navigate, submit content, or change data on external pages. The Drop repository does not control the remote model and cannot verify the Page Agent library's internal prompt-injection defenses.
 
-## CDN de avaliação
+## Privacy
 
-O menu também oferece os dois caminhos solicitados:
+Page Agent is optional. The Drop transfer server does not automatically receive the contents of every page visited by the user; what the agent reads or sends depends on the external library, model, and actions authorized in the session.
 
-- jsDelivr: `https://cdn.jsdelivr.net/npm/page-agent@1.12.4/dist/iife/page-agent.demo.js`
-- npmmirror: `https://registry.npmmirror.com/page-agent/1.12.4/files/dist/iife/page-agent.demo.js`
+## Credits and licensing
 
-Esses bundles demo usam a API de teste do Page Agent e devem ser tratados somente como **avaliação técnica/R&D**, nunca como backend de produção. Não envie PII, dados financeiros, médicos, confidenciais ou outros dados sensíveis ao usar essa opção.
-
-## Privacidade
-
-O Page Agent é client-side/BYOK. Quando uma tarefa é iniciada, as instruções e uma representação simplificada da página podem ser enviadas ao endpoint LLM configurado pelo usuário. A política do provedor escolhido também se aplica.
-
-## Créditos
-
-O ErikrafT Drop™ credita o projeto **Alibaba Page Agent**, seus mantenedores e o repositório oficial. A integração não reivindica autoria do Page Agent.
-
-## Licença
-
-A integração usa o Page Agent como software MIT-licensed. Os avisos e créditos do projeto original devem ser preservados quando componentes do projeto forem redistribuídos.
+Check the official Page Agent and companion-extension documentation and licenses before redistributing or modifying those components.

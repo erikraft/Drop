@@ -9,7 +9,7 @@ ErikrafT Drop™ follows a rolling security-support policy. The **latest release
 | **10.1.x** | ✅ Supported |
 | 10.0.x and older | ⚠️ Upgrade recommended / not guaranteed |
 
-> **Current release:** `v10.1.5`
+> **Current release:** `v10.1.7`
 >
 > Security fixes may require users to update to the latest release. Older releases are not guaranteed to receive backported fixes.
 

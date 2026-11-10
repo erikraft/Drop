@@ -1,347 +1,52 @@
-# 🎉 ErikrafT Drop™ - Electron Builder 26.8.1 ✅ CORRIGIDO
+# 🖥️ ErikrafT Drop™ Desktop — Quick Start
 
-**Status**: ✅ **PRONTO PARA PRODUÇÃO**
-**Data**: 2026-06-05
-**Versão**: 1.12.4
+This page describes the **current desktop packaging workflow**. It replaces the older Electron Builder 26.8.1 instructions, which no longer match the repository.
 
----
+## 🚀 Requirements
 
-## 🚀 Início Rápido
+- Node.js **22.12.0 or newer** (CI currently uses Node.js 22.23.4).
+- npm and network access to download the pinned Electron/Electron Builder artifacts.
+- Windows for the native Windows packaging job; Linux for the Debian package job.
 
-### Build para Linux (Recomendado em Linux)
+The current package version, Electron version, and scripts are defined in [package.json](package.json). Packaging targets are defined in [electron-builder.yml](electron-builder.yml).
+
+## 📦 Build packages
+
 ```bash
-npm install
+npm ci
 npm run package:linux
-# Resultado: dist/desktop/erikraft-drop-1.12.4-linux-amd64.deb
 ```
 
-### Build para Windows (Recomendado em Windows)
-```bash
-npm install
+On Windows:
+
+```powershell
+npm ci
 npm run package:windows
-# Resultado: dist/desktop/erikraft-drop-1.12.4-win-x64.exe
 ```
 
-### Testar em Desenvolvimento
-```bash
-npm install
-npx electron desktop/main.cjs
-# Abre em: http://127.0.0.1:33571
-```
+Artifacts are written to `dist/desktop/`. The Windows build produces an NSIS installer (`*-win-x64.exe`) and a portable executable (`*-win-x64-portable.exe`). The Linux build produces `erikraft-drop-linux-amd64.deb`.
 
----
+## 🍷 Wine and Winlator
 
-## 📚 Documentação
+Prefer the portable Windows executable when running under Wine or Winlator. The desktop app skips its optional native WinSparkle updater for portable builds and detected compatibility runtimes. Compatibility remains best effort and is not certified by CI.
 
-Criamos **5 documentos de referência** para você:
+See [Wine and Winlator compatibility](docs/wine-winlator.md) for setup and troubleshooting.
 
-### 📄 1. **SUMMARY.md** ⭐ COMECE AQUI
-**Resumo executivo de tudo que foi feito**
-- ✅ O que foi corrigido (3 alterações principais)
-- 🧪 Resultados dos testes
-- 📊 Antes e depois
-- 💻 Como usar
-
-### 📘 2. **ELECTRON_BUILDER_ANALYSIS.md**
-**Análise técnica profunda do projeto**
-- 🔍 Problemas identificados
-- 🎯 Soluções implementadas
-- 📦 Análise da arquitetura Electron
-- 🔒 Verificação de segurança
-- ✅ Checklist de compatibilidade
-
-### 📊 3. **ELECTRON_BUILDER_DIFF.md**
-**Comparação visual das alterações**
-- 🔄 Lado a lado (antes/depois)
-- 📝 Explicação linha por linha
-- 📈 Impacto de cada mudança
-- ✅ Validação de cada componente
-
-### 📚 4. **ELECTRON_DEVELOPMENT_GUIDE.md**
-**Guia prático para desenvolvedores**
-- 💻 Desenvolvimento local
-- 🏗️ Build para Linux e Windows
-- 🧪 Como testar os pacotes
-- 🆘 Troubleshooting comum
-- 🔄 CI/CD com GitHub Actions
-- ⚡ Otimizações de performance
-
-### 🔄 5. **ELECTRON_MIGRATION_GUIDE.md**
-**Guia para migrar de versões antigas**
-- 📋 Mudanças entre versões
-- ✅ Checklist de migração
-- 🔍 Script de detecção de erros
-- 🆘 Soluções para problemas
-- 🚀 Preparação para v27
-
----
-
-## 🎯 O Que Foi Feito
-
-### ✅ Alteração 1: Estrutura `linux.desktop`
-**Problema**: 6 propriedades reportadas como "unknown"
-**Solução**: Aninhamento com chave `entry`
-
-```yaml
-# ANTES ❌
-desktop:
-  Name: ErikrafT Drop™
-  Comment: File sharing by ErikrafT
-
-# DEPOIS ✅
-desktop:
-  entry:
-    Name: ErikrafT Drop™
-    Comment: File sharing by ErikrafT
-```
-
-### ✅ Alteração 2: Ícone Windows
-**Problema**: SVG incompatível em build Linux
-**Solução**: Alterado para PNG 512x512
-
-```yaml
-# ANTES ❌
-win:
-  icon: public/images/icon-drop.svg
-
-# DEPOIS ✅
-win:
-  icon: public/images/android-chrome-512x512.png
-```
-
-### ✅ Alteração 3: Aprimoramentos NSIS
-**Melhoria**: Atalhos automáticos no Windows
-
-```yaml
-nsis:
-  # Adicionado:
-  createDesktopShortcut: true
-  createStartMenuShortcut: true
-  shortcutName: ErikrafT Drop™
-```
-
----
-
-## 🧪 Testes Realizados
-
-### ✅ Build Linux
-```
-PASSOU ✅
-Arquivo gerado: erikraft-drop-1.12.4-linux-amd64.deb (97 MB)
-Status: PRONTO PARA DISTRIBUIÇÃO
-```
-
-### ✅ Configuração Windows
-```
-VALIDADA ✅
-Configuração: OK
-Executar em: Windows nativo ou Linux com Wine
-Resultado esperado: erikraft-drop-1.12.4-win-x64.exe
-```
-
----
-
-## 📋 Checklist de Compatibilidade
-
-- ✅ Seção `linux.desktop` com estrutura `entry`
-- ✅ Propriedades Desktop Entry corretas
-- ✅ Ícone SVG para Linux (mantido)
-- ✅ Ícone PNG para Windows (corrigido)
-- ✅ Configuração NSIS com atalhos
-- ✅ Dependências DEB especificadas
-- ✅ `appId` em reverse-domain: `io.github.erikraft.Drop`
-- ✅ Categorias FreeDesktop válidas
-- ✅ Sem propriedades obsoletas
-- ✅ Build Linux funciona
-- ✅ Build Windows pronto
-
----
-
-## 🎮 Como o Electron Funciona
-
-### Arquitetura
-```
-Usuário clica no .deb / .exe
-    ↓
-Electron app inicia
-    ↓
-Servidor Node.js (Express + WebSocket)
-    inicia em http://127.0.0.1:33571
-    ↓
-BrowserWindow abre e carrega URL local
-    ↓
-Interface web renderiza em janela própria
-    (SEM barra do navegador)
-    ↓
-Usuário inteira com ErikrafT Drop™
-(100% OFFLINE)
-```
-
-### URLs
-- **Desenvolvimento**: http://127.0.0.1:33571 (local)
-- **Produção**: http://127.0.0.1:33571 (local)
-- **Website**: https://drop.erikraft.com (separado)
-
-### Segurança ✅
-- ✅ Sandbox ativo
-- ✅ Context isolation habilitado
-- ✅ Node.js desabilitado
-- ✅ Links externos abrem no navegador padrão
-
----
-
-## 📦 O que Está Incluído no Pacote
-
-### Linux (.deb)
-```
-/opt/ErikrafT Drop™/
-├── erikraft-drop (executável)
-├── resources/app.asar
-└── ...
-
-/usr/share/applications/
-└── erikraft-drop.desktop
-
-/usr/share/icons/
-└── erikraft-drop.svg
-```
-
-### Windows (.exe)
-```
-Program Files/ErikrafT Drop™/
-├── erikraft-drop.exe
-├── resources/
-└── ...
-
-Desktop/
-└── ErikrafT Drop™.lnk (atalho)
-
-Start Menu/
-└── ErikrafT Drop™.lnk (atalho)
-```
-
----
-
-## 🛠️ Troubleshooting Rápido
-
-### Build Linux falha
-```bash
-# Verificar ícone
-file public/images/icon-drop.svg
-
-# Limpar cache
-rm -rf dist node_modules/.cache
-
-# Tentar novamente
-npm run package:linux
-```
-
-### Build Windows em Linux
-```bash
-# Opção 1: Instalar Wine
-sudo apt install wine wine32 wine64
-npm run package:windows
-
-# Opção 2: Usar Windows nativo (recomendado)
-# Copiar projeto para Windows e executar lá
-
-# Opção 3: CI/CD
-# Veja ELECTRON_DEVELOPMENT_GUIDE.md
-```
-
-### Aplicativo não inicia
-```bash
-# Verificar logs
-DEBUG_MODE=true npx electron desktop/main.cjs
-
-# Porta em uso?
-lsof -i :33571
-
-# Usar porta diferente
-ERIKRAFT_DROP_DESKTOP_PORT=4000 npx electron desktop/main.cjs
-```
-
----
-
-## 📞 Precisa de Ajuda?
-
-1. **Leia primeiro**: [SUMMARY.md](SUMMARY.md)
-2. **Guia prático**: [ELECTRON_DEVELOPMENT_GUIDE.md](ELECTRON_DEVELOPMENT_GUIDE.md)
-3. **Tecnical deep-dive**: [ELECTRON_BUILDER_ANALYSIS.md](ELECTRON_BUILDER_ANALYSIS.md)
-4. **Migrando de versão anterior?**: [ELECTRON_MIGRATION_GUIDE.md](ELECTRON_MIGRATION_GUIDE.md)
-
----
-
-## ✅ Verificação Rápida
-
-Teste se tudo está funcionando:
+## 🧪 Validation
 
 ```bash
-# 1. Instalar
-npm install
-
-# 2. Validar configuração
-cat electron-builder.yml | grep -A 8 "desktop:"
-
-# 3. Build Linux (mais rápido)
-npm run package:linux
-
-# 4. Verificar saída
-ls -lh dist/desktop/*.deb
+node --test test/desktop-portable.test.js
+npm run test:desktop-version
+npm run test:desktop-update
 ```
 
-Esperado:
-```
-✅ Arquivo .deb criado
-✅ Sem erros de validação
-✅ Tamanho aprox. 97 MB
-```
+The packaging PR workflow also runs `npm test` and builds both Linux and Windows packages. A test or build is considered passed only when the corresponding GitHub Actions run reports success.
 
----
+## 🔐 Security notes
 
-## 🎯 Resumo das Mudanças
+- Electron windows use context isolation, disabled Node integration, and sandboxing.
+- External links are handed to the system browser.
+- The native WinSparkle updater verifies updates using its configured Ed25519 public key.
+- Never publish the WinSparkle private signing key or store it in source control.
 
-| Item | Antes | Depois | Status |
-|------|-------|--------|--------|
-| Build Linux | ❌ Quebrado | ✅ Funciona | ✅ FIXADO |
-| Build Windows | ⚠️ Config errada | ✅ Correto | ✅ FIXADO |
-| Desktop Entry | ❌ 6 erros | ✅ Válido | ✅ FIXADO |
-| Ícone Linux | ✅ OK | ✅ OK | ✅ OK |
-| Ícone Windows | ❌ SVG incompat. | ✅ PNG | ✅ FIXADO |
-| Atalhos Windows | ⚠️ Padrão | ✅ Custom | ✅ MELHORADO |
-
----
-
-## 🚀 Próximos Passos
-
-1. **Revisar** [SUMMARY.md](SUMMARY.md) para entender as mudanças
-2. **Testar** `npm run package:linux` localmente
-3. **Revisar** [ELECTRON_DEVELOPMENT_GUIDE.md](ELECTRON_DEVELOPMENT_GUIDE.md) para deployment
-4. **Configurar** CI/CD se desejar builds automáticos
-5. **Distribuir** .deb para usuários Linux e .exe para Windows
-
----
-
-## 📄 Licença
-
-O projeto mantém sua licença original (ISC).
-
----
-
-## 🏆 Conclusão
-
-✅ **Seu projeto ErikrafT Drop™ está 100% compatível com Electron Builder 26.8.1**
-
-- ✅ Sem erros de configuração
-- ✅ Builds funcionando
-- ✅ Bem documentado
-- ✅ Pronto para produção
-
-**Happy building! 🚀**
-
----
-
-**Última atualização**: 2026-06-05
-**Versão**: 1.12.4
-**Electron Builder**: 26.8.1
-**Status**: ✅ PRONTO PARA PRODUÇÃO
+Related: [Desktop development guide](ELECTRON_DEVELOPMENT_GUIDE.md) · [Security policy](SECURITY.md).
