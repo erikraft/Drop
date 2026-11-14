@@ -285,6 +285,19 @@ export default class ErikrafTdropWsServer {
     }
 
     _disconnect(sender) {
+        // Release the per-IP connection slot exactly once. Both an explicit
+        // disconnect message and the socket close event can reach this method.
+        if (sender.countedIp) {
+            const countedIp = sender.countedIp;
+            const remaining = (this._connectionsByIp[countedIp] || 0) - 1;
+            if (remaining > 0) {
+                this._connectionsByIp[countedIp] = remaining;
+            } else {
+                delete this._connectionsByIp[countedIp];
+            }
+            sender.countedIp = null;
+        }
+
         this._removePairKey(sender.pairKey);
         sender.pairKey = null;
 
