@@ -43,6 +43,7 @@ function createServer() {
     server._rooms = Object.create(null);
     server._roomSecrets = Object.create(null);
     server._keepAliveTimers = Object.create(null);
+    server._connectionsByIp = Object.create(null);
     server._wss = { OPEN: 1, readyState: 1 };
     return server;
 }
@@ -330,4 +331,33 @@ test("rate-limited peers cannot repeatedly create public rooms", () => {
     assert.deepEqual(peer.messages, [{ type: "join-key-rate-limit" }]);
     assert.equal(Object.keys(server._rooms).length, 0);
     assert.equal(peer.publicRoomId, null);
+});
+
+
+test("disconnect releases the per-IP connection slot", () => {
+    const server = createServer();
+    const peer = createPeer("11111111-1111-4111-8111-111111111111");
+    peer.countedIp = peer.ip;
+    server._connectionsByIp[peer.ip] = 1;
+
+    server._disconnect(peer);
+
+    assert.equal(server._connectionsByIp[peer.ip], undefined);
+    assert.equal(peer.countedIp, null);
+});
+
+test("repeated disconnect cleanup does not decrement another peer's connection slot", () => {
+    const server = createServer();
+    const first = createPeer("11111111-1111-4111-8111-111111111111");
+    const second = createPeer("22222222-2222-4222-8222-222222222222");
+    first.countedIp = first.ip;
+    second.countedIp = second.ip;
+    server._connectionsByIp[first.ip] = 2;
+
+    server._disconnect(first);
+    server._disconnect(first);
+
+    assert.equal(server._connectionsByIp[first.ip], 1);
+    assert.equal(first.countedIp, null);
+    assert.equal(second.countedIp, second.ip);
 });
