@@ -1,4 +1,4 @@
-import {WebSocketServer} from "ws";
+import {WebSocketServer, WebSocket} from "ws";
 import crypto from "crypto"
 
 import Peer, {MAX_ROOM_SECRETS_PER_PEER} from "./peer.js";
@@ -40,6 +40,14 @@ export default class ErikrafTdropWsServer {
         this._roomSecrets = Object.create(null); // { pairKey: roomSecret }
         this._keepAliveTimers = Object.create(null);
 
+        this._connectionsByIp = Object.create(null); // { ip: count }
+        this._pairKeyAttempts = Object.create(null); // { ip: { count, resetAt } }
+        this._publicRoomAttempts = Object.create(null); // { ip: { count, resetAt } }
+        this._maxConnectionsPerIp = Number(conf.wsMaxConnectionsPerIp) || 20;
+        this._maxMessagesPerWindow = Number(conf.wsMaxMessagesPerWindow) || 300;
+        this._maxMessageBytesPerWindow = Number(conf.wsMaxMessageBytesPerWindow) || (32 * 1024 * 1024);
+        this._messageWindowMs = 10 * 1000;
+
         // Bound individual frames and validate browser Origin before upgrading.
         // Origin is a browser CSWSH defense, not an authentication mechanism.
         this._wss = new WebSocketServer({ noServer: true, maxPayload: 8 * 1024 * 1024 });
@@ -72,8 +80,23 @@ export default class ErikrafTdropWsServer {
             return;
         }
 
+        // Bound the number of simultaneous sockets per client IP so a single
+        // host cannot exhaust server memory/CPU with idle connections.
+        const connections = (this._connectionsByIp[peer.ip] || 0) + 1;
+        if (connections > this._maxConnectionsPerIp) {
+            try {
+                peer.socket.close(1013, 'Too many connections');
+            } catch (e) {
+                peer.socket.terminate();
+            }
+            return;
+        }
+        this._connectionsByIp[peer.ip] = connections;
+        peer.countedIp = peer.ip;
+
         peer.socket.on('message', message => this._onMessage(peer, message));
         peer.socket.onerror = e => console.error(e);
+        peer.socket.on('close', () => this._disconnect(peer));
 
         this._keepAlive(peer);
 
@@ -97,6 +120,18 @@ export default class ErikrafTdropWsServer {
     }
 
     _onMessage(sender, message) {
+        // Bound message volume and total bytes per IP over a sliding window.
+        // Large ws-fallback chunks cost proportionally more budget.
+        if (this._messageRateExceeded(sender, message)) {
+            this._send(sender, { type: 'rate-limit' });
+            try {
+                sender.socket.close(1008, 'Rate limit exceeded');
+            } catch (e) {
+                sender.socket.terminate();
+            }
+            return;
+        }
+
         // Try to parse message
         try {
             message = JSON.parse(message);
@@ -171,6 +206,44 @@ export default class ErikrafTdropWsServer {
                     console.log("Websocket fallback is not activated on this instance.")
                 }
         }
+    }
+
+    _messageRateExceeded(peer, rawMessage) {
+        const now = Date.now();
+        const bytes = typeof rawMessage === 'string'
+            ? Buffer.byteLength(rawMessage)
+            : (rawMessage?.length || 0);
+
+        if (!peer.messageWindow || now >= peer.messageWindow.resetAt) {
+            peer.messageWindow = { start: now, resetAt: now + this._messageWindowMs, count: 0, bytes: 0 };
+        }
+
+        if (now - peer.messageWindow.start >= this._messageWindowMs) {
+            peer.messageWindow.start = now;
+            peer.messageWindow.resetAt = now + this._messageWindowMs;
+            peer.messageWindow.count = 0;
+            peer.messageWindow.bytes = 0;
+        }
+
+        peer.messageWindow.count += 1;
+        peer.messageWindow.bytes += bytes;
+
+        return peer.messageWindow.count > this._maxMessagesPerWindow
+            || peer.messageWindow.bytes > this._maxMessageBytesPerWindow;
+    }
+
+    _attemptRateExceeded(storeName, ip, maxAttempts, windowMs) {
+        const store = this[storeName];
+        const now = Date.now();
+        let entry = store[ip];
+
+        if (!entry || now >= entry.resetAt) {
+            entry = { count: 0, resetAt: now + windowMs };
+            store[ip] = entry;
+        }
+
+        entry.count += 1;
+        return entry.count > maxAttempts;
     }
 
     _signalAndRelay(sender, message) {

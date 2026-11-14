@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import proxyaddr from "proxy-addr";
 import { UAParser } from "ua-parser-js";
 import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { cyrb53, hasher } from "./helper.js";
@@ -74,15 +75,14 @@ export default class Peer {
     }
 
     _setIP(request) {
-        if (request.headers['cf-connecting-ip']) {
-            this.ip = request.headers['cf-connecting-ip'].split(/\s*,\s*/)[0];
-        }
-        else if (request.headers['x-forwarded-for']) {
-            this.ip = request.headers['x-forwarded-for'].split(/\s*,\s*/)[0];
-        }
-        else {
-            this.ip = request.socket.remoteAddress ?? '';
-        }
+        // Only honor forwarding headers when the direct peer is a proxy that
+        // the operator explicitly trusts. Otherwise any client could claim an
+        // arbitrary IP and join another peer's IP room.
+        const trust = this.conf.trustedProxies ?? ['loopback'];
+        const remoteAddress = request.socket?.remoteAddress ?? '';
+        const forwardedIp = trust ? proxyaddr(request, trust) : remoteAddress;
+
+        this.ip = forwardedIp || remoteAddress;
 
         // remove the prefix used for IPv4-translated addresses
         if (this.ip.substring(0, 7) === "::ffff:") {
