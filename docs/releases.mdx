@@ -2,7 +2,92 @@
 title: "Releases"
 icon: "tag"
 rss: true
+verification:
+  status: "verified"
+  by:
+    type: "user"
+    id: "6970fc5b1fb5b06919fb165d"
+  at: "2026-11-15T15:20:50.464Z"
 ---
+
+<Update label="Nov 2026" description="v10.1.10 (Web)">
+  ### ✨ New
+
+  - Added a public API v1 endpoint to retrieve available API capabilities
+  - Added RGB rainbow text selection throughout the interface
+  - Added portable Windows executables for Wine and Winlator compatibility
+  - Introduced Liquid Glass styling to the BioDrop website About page
+
+  ### 🛠 Improvements
+
+  - Improved Desktop receiving dialogs, RBM Convert, and BioDrop
+  - Improved compatibility with Linux, Windows, Wine, and Winlator
+  - Updated dependencies and improved build and packaging workflows
+  - Improved WebSocket connection management and resource handling
+  - Improved Cloudflare failover target selection
+  - Updated ErikrafT AI™ promotional content across all supported languages
+  - Fixed Linux `.deb` packaging and icon issues
+
+  ### 🔐 Security
+
+  - Fixed WebSocket room isolation and introduced limits for untrusted messages
+  - Configured the Drop Node.js process to run without root privileges
+  - Added baseline HTTP security headers
+  - Fixed HTML injection in IP-based room chat messages
+  - Improved six-digit device pairing and connection-key validation
+  - Added resource limits for incoming Discord bot transfers
+  - Improved redaction of sensitive information from runtime and debug logs
+  - Enabled HTTP rate limits on Render
+  - Added protection against repeated public room creation
+  - Improved handling of uncaught server errors
+  - Addressed CodeQL media sanitization findings
+
+  ### ⚙️ Infrastructure
+
+  - Improved Discord bot transfer handling and attachment downloads
+  - Updated Node.js and project dependencies
+  - Fixed CI/CD workflow, cache, and packaging issues
+  - Disabled Renovate while retaining Dependabot
+
+  ### 📋 Full Changelog
+
+  - [View all changes](https://github.com/erikraft/Drop/compare/v10.1.8...10.1.10)
+</Update>
+
+<Update label="Nov 2026" description="v10.1.10 (Android)">
+  ### ✨ New
+
+  - Added a read-only TFTP server for file transfers
+  - Added native QR Code scanning and animated QR Code receiving
+  - Introduced translucent Liquid Glass styling across the Android toolbar, menus, and dialogs
+  - Added RGB rainbow text selection to Android WebView pages
+
+  ### 📡 File Transfer
+
+  - Improved FTP/FTPS and SFTP server configuration and access controls
+  - Fixed insecure default configurations for FTP/FTPS and SFTP servers
+  - Updated Apache MINA SSHD to version 2.20.1
+  - Improved native Android integration and documented the public integration boundary
+
+  ### 🔐 Security & Compatibility
+
+  - Blocked external navigation through the WebView when initiated via the native JavaScript bridge
+  - Completely removed Wi-Fi Direct support
+  - Improved separation between native Android functionality and WebView navigation
+  - Updated themed application icons to use the official ErikrafT Drop™ logo
+  - Fixed Liquid Glass dialog dimming behavior
+
+  ### 🛠 Improvements
+
+  - Removed ErikrafT Wi-Fi™ promotional content from the Android application
+  - Adjusted the BETA badge placement in the About section
+  - Improved internal project configuration and maintainability
+  - Disabled Renovate while retaining Dependabot
+
+  ### 📋 Full Changelog
+
+  - [View all changes](https://github.com/erikraft/Drop-Android/compare/v10.1.9...10.1.10)
+</Update>
 
 <Update label="Feb 3 2026" description="v1.12.4 (Web)">
   ### ✨ New
