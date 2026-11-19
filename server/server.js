@@ -114,7 +114,9 @@ export default class ErikrafTdropServer {
         const publicPathAbs = path.join(__dirname, '../public');
         const assetLinksPath = path.join(publicPathAbs, '.well-known', 'assetlinks.json');
         app.get('/.well-known/assetlinks.json', (req, res) => {
-            res.type('application/json').sendFile(assetLinksPath);
+            // Express/send ignores dotfiles by default, including files nested
+            // under .well-known. Explicitly allow this public association file.
+            res.type('application/json').sendFile(assetLinksPath, {dotfiles: 'allow'});
         });
         app.use(express.static(publicPathAbs));
 
