@@ -5,6 +5,7 @@ root.innerHTML='<style>#drop-analog-tools .launch{position:fixed;right:18px;bott
 document.body.appendChild(root);
 const $=id=>root.querySelector("#"+id),dialog=root.querySelector("dialog");
 root.querySelector(".launch").onclick=()=>dialog.showModal();$("at-close").onclick=()=>dialog.close();
+dialog.addEventListener("close",()=>{if(recorder&&recorder.state==="recording")recorder.stop();});
 root.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{root.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("primary",x===b));root.querySelectorAll("[data-panel]").forEach(x=>x.classList.toggle("active",x.dataset.panel===b.dataset.tab));});
 let bitmap=null,wavUrl=null,recUrl=null,receivedBlob=null,recorder=null,stream=null,monitor=null;
 const rate=11025,stat=m=>$("at-status").textContent=m;
