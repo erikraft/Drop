@@ -8,37 +8,22 @@ assert.ok(supportedBlock, 'supportedLocales list must exist');
 const supportedLocales = [...supportedBlock[1].matchAll(/"([^"]+)"/g)].map(match => match[1]);
 assert.ok(supportedLocales.length > 0, 'at least one supported locale must exist');
 
-const requiredKeys = ['eyebrow', 'description', 'cta', 'dismiss'];
+const html = fs.readFileSync('public/index.html', 'utf8');
+assert.doesNotMatch(
+    html,
+    /erikraft-ai-ad|promo-ai\.|data-ai-ad-dismiss|ai-ad-close/,
+    'the removed ErikrafT AI advertisement must not remain in the page markup'
+);
+
 for (const locale of supportedLocales) {
     const file = path.join('public', 'lang', locale + '.json');
     assert.ok(fs.existsSync(file), locale + ': translation file must exist');
     const doc = JSON.parse(fs.readFileSync(file, 'utf8'));
-    assert.ok(doc['promo-ai'], locale + ': promo-ai translations must exist');
-    for (const key of requiredKeys) {
-        assert.equal(typeof doc['promo-ai'][key], 'string', locale + ': ' + key + ' must be a string');
-        assert.ok(doc['promo-ai'][key].trim().length > 0, locale + ': ' + key + ' must not be empty');
-    }
+    assert.equal(
+        Object.hasOwn(doc, 'promo-ai'),
+        false,
+        locale + ': removed advertisement translations must not remain'
+    );
 }
 
-const ptBR = JSON.parse(fs.readFileSync('public/lang/pt-BR.json', 'utf8'))['promo-ai'];
-assert.equal(ptBR.eyebrow, 'PUBLICIDADE');
-assert.equal(ptBR.description, 'Transforme suas ideias em imagens com inteligência artificial.');
-const en = JSON.parse(fs.readFileSync('public/lang/en.json', 'utf8'))['promo-ai'];
-assert.equal(en.eyebrow, 'ADVERTISEMENT');
-assert.equal(en.description, 'Turn your ideas into images with AI.');
-
-const html = fs.readFileSync('public/index.html', 'utf8');
-for (const key of requiredKeys) {
-    assert.ok(html.includes('data-i18n-key="promo-ai.' + key + '"'),
-        'popup markup must use localization key promo-ai.' + key);
-}
-assert.ok(!html.includes('var copy={'), 'popup translations must not be duplicated in inline JavaScript');
-assert.ok(!html.includes('data-ai-ad-copy='), 'legacy popup-only translation attributes must be removed');
-assert.match(html, /localStorage\.getItem\('erikraft-ai-ad-dismissed'\)/, 'AI ad dismissal must persist across browser sessions.');
-assert.match(html, /localStorage\.setItem\('erikraft-ai-ad-dismissed', '1'\)/, 'Closing the AI ad must persist its dismissal.');
-assert.match(html, /ad\.remove\(\)/, 'Closing the AI ad must remove it from the page.');
-assert.match(html, /clearTimeout\(showTimer\)/, 'Closing the AI ad must cancel its pending display timer.');
-assert.match(html, /if \(!ad\.isConnected\) return/, 'A dismissed AI ad must not be displayed by the delayed callback.');
-assert.doesNotMatch(html, /sessionStorage\.(?:get|set)Item\('erikraft-ai-ad-dismissed'/, 'AI ad dismissal must not be limited to a tab session.');
-
-console.log('ErikrafT AI advertisement translations validated for ' + supportedLocales.length + ' supported locales.');
+console.log('Removed ErikrafT AI advertisement markup and translations validated for ' + supportedLocales.length + ' supported locales.');
