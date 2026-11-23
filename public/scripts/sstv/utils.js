@@ -10,17 +10,21 @@ export function lumToFreq(lum) {
   return 1500 + clampedLum * 3.1372549;
 }
 
+export function parabolicPeakInterp(bins, x) {
+  if (!bins || !Number.isInteger(x) || x <= 0 || x >= bins.length - 1) return x;
+  const left = bins[x - 1];
+  const center = bins[x];
+  const right = bins[x + 1];
+  const denominator = left - 2 * center + right;
+  if (!Number.isFinite(left) || !Number.isFinite(center) ||
+      !Number.isFinite(right) || Math.abs(denominator) < Number.EPSILON) return x;
+  const offset = (0.5 * (left - right)) / denominator;
+  if (!Number.isFinite(offset)) return x;
+  return x + Math.max(-0.5, Math.min(0.5, offset));
+}
+
 export function barycentricPeakInterp(bins, x) {
-  // Get amplitude values around the peak
-  const y1 = x <= 0 ? bins[x] : bins[x - 1];
-  const y2 = bins[x];
-  const y3 = x + 1 >= bins.length ? bins[x] : bins[x + 1];
-
-  const denom = y1 + y2 + y3;
-  if (denom === 0) return x;
-
-  // Estimate the sub-bin peak location using barycentric interpolation
-  return x + (y3 - y1) / (2 * denom);
+  return parabolicPeakInterp(bins, x);
 }
 
 export function fft(data, sampleRate = 44100, size) {
