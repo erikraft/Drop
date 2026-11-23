@@ -54,26 +54,7 @@
     <link rel="stylesheet" type="text/css" href="styles/styles-main.css">
     <link rel="stylesheet" type="text/css" href="styles/text-selection.css">
         <link rel="manifest" href="manifest.json">
-    <style>
-        #erikraft-ai-ad{position:fixed;z-index:1000;top:84px;right:18px;width:min(420px,calc(100vw - 36px));padding:22px;color:#f0f3fa;font-family:"DM Sans","Open Sans",sans-serif;background:radial-gradient(ellipse at 100% 0%,rgba(35,104,216,.2),transparent 58%),linear-gradient(145deg,#19161b,#0a090b 78%);border:1px solid rgba(66,133,244,.55);border-radius:18px;box-shadow:0 22px 70px rgba(0,0,0,.48),0 0 32px rgba(66,133,244,.1);animation:erikraft-ai-ad-in .35s ease-out both}
-        #erikraft-ai-ad[hidden]{display:none}
-        #erikraft-ai-ad .ai-ad-header{display:flex;align-items:center;gap:12px;padding-right:30px}
-        #erikraft-ai-ad .ai-ad-brand-mark{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;color:#fff;background:#4285F4;border-radius:13px;box-shadow:0 8px 24px rgba(66,133,244,.28)}
-        #erikraft-ai-ad .ai-ad-brand-mark svg{display:block;width:30px;height:30px}
-        #erikraft-ai-ad .ai-ad-eyebrow{margin:0 0 3px;color:#8bb7ff;font:700 9px/1.5 "Space Mono",monospace;letter-spacing:1.2px;text-transform:uppercase}
-        #erikraft-ai-ad .ai-ad-brand{margin:0;color:#f0f3fa;font-size:17px;line-height:1.3;font-weight:800}
-        #erikraft-ai-ad .ai-ad-brand span{color:#4285F4}
-        #erikraft-ai-ad .ai-ad-description{margin:16px 0 18px;color:#b0bacb;font-size:13px;line-height:1.7}
-        #erikraft-ai-ad .ai-ad-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
-        #erikraft-ai-ad .ai-ad-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:10px 15px;color:#fff;background:#4285F4;border:1px solid #4285F4;border-radius:10px;text-decoration:none;font-size:12px;font-weight:700;transition:background .2s,transform .2s,border-color .2s}
-        #erikraft-ai-ad .ai-ad-cta:hover{color:#fff;background:#2368d8;border-color:#2368d8;transform:translateY(-1px)}
-        #erikraft-ai-ad .ai-ad-cta svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-        #erikraft-ai-ad .ai-ad-close{position:absolute;top:10px;right:10px;display:grid;place-items:center;width:32px;height:32px;padding:0;color:#b0bacb;background:transparent;border:1px solid transparent;border-radius:8px;font:24px/1 "DM Sans",sans-serif;cursor:pointer}
-        #erikraft-ai-ad .ai-ad-close:hover{color:#fff;background:rgba(255,255,255,.06);border-color:#2a3040}
-        @keyframes erikraft-ai-ad-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-        @media(max-width:600px){#erikraft-ai-ad{top:auto;right:12px;bottom:max(12px,env(safe-area-inset-bottom));left:12px;width:auto;padding:18px}#erikraft-ai-ad .ai-ad-description{margin:13px 0 15px}#erikraft-ai-ad .ai-ad-actions{justify-content:stretch}#erikraft-ai-ad .ai-ad-cta{width:100%}}
-        @media(prefers-reduced-motion:reduce){#erikraft-ai-ad{animation:none}}
-    </style>
+    
     <script>
         (function () {
             const allowedClientTypes = new Set(['browser', 'android', 'onion', 'discord-bot', 'discord-activity', 'vs-code-extension', 'open-vsx-registry-extension', 'isearch-cli']);
@@ -282,7 +263,7 @@
 
 <body translate="no">
     <header class="row-reverse wrap opacity-0">
-        <button id="analog-tools-launch" type="button" class="icon-button" data-fa-icon="fa-wave-square" data-i18n-key="header.analog-tools" data-i18n-attrs="title aria-label" title="Communication tools" aria-label="Open communication tools"><svg class="icon" aria-hidden="true" viewBox="0 0 640 512"><path d="M128 64c0-17.7 14.3-32 32-32l160 0c17.7 0 32 14.3 32 32l0 352 96 0 0-160c0-17.7 14.3-32 32-32l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0 0 160c0 17.7-14.3 32-32 32l-160 0c-17.7 0-32-14.3-32-32l0-352-96 0 0 160c0 17.7-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l96 0 0-160z"/></svg></button>
+        <div id="analog-tools-launch" class="icon-button" data-fa-icon="fa-wave-square" data-i18n-key="header.analog-tools" data-i18n-attrs="title aria-label" title="Communication tools" aria-label="Open communication tools" role="button" tabindex="0"><svg class="icon" aria-hidden="true" viewBox="0 0 640 512"><path d="M128 64c0-17.7 14.3-32 32-32l160 0c17.7 0 32 14.3 32 32l0 352 96 0 0-160c0-17.7 14.3-32 32-32l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0 0 160c0 17.7-14.3 32-32 32l-160 0c-17.7 0-32-14.3-32-32l0-352-96 0 0 160c0 17.7-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l96 0 0-160z"/></svg></div>
         <a href="#about" class="icon-button" data-i18n-key="header.about" data-i18n-attrs="title aria-label">
             <svg class="icon">
                 <use xlink:href="#info-outline"></use>
@@ -2161,57 +2142,7 @@
         });
     </script>
 
-    <aside id="erikraft-ai-ad" aria-labelledby="erikraft-ai-ad-title" aria-describedby="erikraft-ai-ad-description" hidden>
-        <button class="ai-ad-close" type="button" data-i18n-key="promo-ai.dismiss" data-i18n-attrs="aria-label" data-ai-ad-dismiss>&times;</button>
-        <div class="ai-ad-header">
-            <span class="ai-ad-brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="currentColor" focusable="false"><path fill-rule="evenodd" d="M36 24h56a12 12 0 0 1 12 12v56a12 12 0 0 1-12 12H36a12 12 0 0 1-12-12V36a12 12 0 0 1 12-12Zm0 8a4 4 0 0 0-4 4v56a4 4 0 0 0 4 4h56a4 4 0 0 0 4-4V36a4 4 0 0 0-4-4H36Z"></path><path d="M40 12h8v12h-8zm20 0h8v12h-8zm20 0h8v12h-8zM40 104h8v12h-8zm20 0h8v12h-8zm20 0h8v12h-8zM12 40h12v8H12zm0 20h12v8H12zm0 20h12v8H12zm92-40h12v8h-12zm0 20h12v8h-12zm0 20h12v8h-12z"></path><path fill-rule="evenodd" d="m41 80 13-36h4l13 36h-9l-2-7H52l-2 7h-9Zm13-15h4l-2-7-2 7Z"></path><path d="M75 44h8v36h-8z"></path></svg></span>
-            <div><p class="ai-ad-eyebrow" data-i18n-key="promo-ai.eyebrow">ADVERTISEMENT</p><h2 class="ai-ad-brand" id="erikraft-ai-ad-title">ErikrafT <span>AI™</span></h2></div>
-        </div>
-        <p class="ai-ad-description" id="erikraft-ai-ad-description" data-i18n-key="promo-ai.description">Turn your ideas into images with AI.</p>
-        <div class="ai-ad-actions"><a class="ai-ad-cta" href="https://ai.erikraft.com/" target="_blank" rel="noopener noreferrer"><span data-i18n-key="promo-ai.cta">Discover ErikrafT AI™</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></a></div>
-    </aside>
-    <script>
-        (function () {
-            var ad = document.getElementById('erikraft-ai-ad');
-            if (!ad) return;
-
-            var clientType = window.erikraftClientType || document.documentElement.dataset.erikraftClientType || 'browser';
-            if (clientType !== 'browser') return;
-
-            try {
-                if (localStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
-            } catch (error) {
-                // Storage may be unavailable.
-            }
-
-            var showTimer = null;
-            var close = ad.querySelector('.ai-ad-close, [data-ai-ad-dismiss]');
-            if (close) {
-                close.addEventListener('click', function () {
-                    if (showTimer !== null) window.clearTimeout(showTimer);
-                    ad.hidden = true;
-                    ad.remove();
-                    try {
-                        localStorage.setItem('erikraft-ai-ad-dismissed', '1');
-                    } catch (error) {
-                        // Storage may be unavailable.
-                    }
-                });
-            }
-
-            window.addEventListener('DOMContentLoaded', function () {
-                showTimer = window.setTimeout(function () {
-                    try {
-                        if (localStorage.getItem('erikraft-ai-ad-dismissed') === '1') return;
-                    } catch (error) {
-                        // Storage may be unavailable.
-                    }
-                    if (!ad.isConnected) return;
-                    ad.hidden = false;
-                }, 1400);
-            }, { once: true });
-        })();
-    </script>
+    
 
     <script type="module" src="scripts/analog-tools.js"></script>
 </body>
