@@ -20,6 +20,7 @@ test("communication tools use delegated click handling so a replaced header node
 test("communication tools dialog has a fallback when showModal is unavailable", () => {
   assert.match(tools, /typeof dialog\.showModal==="function"/);
   assert.match(tools, /dialog\.setAttribute\("open",""\)/);
-  assert.match(tools, /dialog\.style\.display="block"/);
+  assert.match(tools, /dialog\.style\.position="fixed"/);
+  assert.match(tools, /dialog\.style\.zIndex="2147483647"/);
   assert.match(tools, /removeAttribute\("open"\)/);
 });
