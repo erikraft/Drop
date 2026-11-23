@@ -47,7 +47,7 @@ root.innerHTML="<style>
 document.body.appendChild(root);
 const $=id=>root.querySelector("#"+id),dialog=root.querySelector("dialog");
 if(typeof Localization!=="undefined"&&Localization.translations&&Object.keys(Localization.translations).length)Localization.translatePage();
-document.getElementById("analog-tools-launch").onclick=()=>dialog.showModal();$("at-close").onclick=()=>dialog.close();
+const launcher=document.getElementById("analog-tools-launch");launcher.onclick=()=>dialog.showModal();launcher.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();dialog.showModal();}});$("at-close").onclick=()=>dialog.close();
 dialog.addEventListener("close",()=>{if(recorder&&recorder.state==="recording")recorder.stop();});
 root.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{root.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("primary",x===b));root.querySelectorAll("[data-panel]").forEach(x=>x.classList.toggle("active",x.dataset.panel===b.dataset.tab));});
 let bitmap=null,wavUrl=null,recUrl=null,receivedBlob=null,recorder=null,stream=null,monitor=null;
