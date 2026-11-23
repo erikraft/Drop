@@ -25,7 +25,6 @@ function run(command, args) {
 try {
   if (process.platform === 'win32') {
     const psPath = zipPath.replace(/'/g, "''");
-    const extractPath = extractDir.replace(/'/g, "''");
     run('powershell.exe', [
       '-NoProfile',
       '-NonInteractive',
@@ -34,12 +33,9 @@ try {
     ]);
     const digest = crypto.createHash('sha256').update(fs.readFileSync(zipPath)).digest('hex');
     if (digest !== ZIP_SHA256) throw new Error('WinSparkle archive SHA-256 mismatch: ' + digest);
-    run('powershell.exe', [
-      '-NoProfile',
-      '-NonInteractive',
-      '-Command',
-      "$ErrorActionPreference = 'Stop'; Expand-Archive -LiteralPath '" + psPath + "' -DestinationPath '" + extractPath + "' -Force"
-    ]);
+    // Avoid a PowerShell/.NET ZIP extraction overload mismatch on hosted runners.
+    // GitHub-hosted Windows runners include tar.exe with ZIP support.
+    run('tar.exe', ['-xf', zipPath, '-C', extractDir]);
   } else {
     run('curl', ['-fsSL', '--retry', '3', '-o', zipPath, ZIP_URL]);
     const digest = crypto.createHash('sha256').update(fs.readFileSync(zipPath)).digest('hex');
