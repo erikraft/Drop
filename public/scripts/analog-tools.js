@@ -2,8 +2,6 @@ const MORSE={A:".-",B:"-...",C:"-.-.",D:"-..",E:".",F:"..-.",G:"--.",H:"....",I:
 const REV=Object.fromEntries(Object.entries(MORSE).map(([k,v])=>[v,k]));
 const root=document.createElement("div");root.id="drop-analog-tools";
 root.innerHTML="<style>
-#analog-tools-launch{-webkit-appearance:none;appearance:none;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;color:inherit;font:inherit}
-#analog-tools-launch:hover,#analog-tools-launch:focus{background:transparent!important}
 #drop-analog-tools{color:rgb(var(--text-color,51,51,51))}
 #drop-analog-tools dialog{box-sizing:border-box;width:min(960px,calc(100vw - 24px));max-height:90vh;overflow:auto;padding:0;border:1px solid #4285f433;border-radius:18px;background:var(--dialog-bg-color,#fff);color:inherit;box-shadow:0 18px 56px #0003}
 #drop-analog-tools dialog::backdrop{background:#10182899;backdrop-filter:blur(4px)}
