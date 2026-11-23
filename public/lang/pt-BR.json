@@ -446,6 +446,12 @@
         "copied-code": "Código copiado",
         "run-code": "Executar nesta página"
     },
+    "promo-ai": {
+        "eyebrow": "PUBLICIDADE",
+        "description": "Transforme suas ideias em imagens com inteligência artificial.",
+        "cta": "Conheça o ErikrafT AI™",
+        "dismiss": "Fechar publicidade"
+    },
     "analog-tools": {
         "title": "Ferramentas de comunicação",
         "close": "Fechar",
