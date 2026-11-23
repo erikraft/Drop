@@ -5,7 +5,7 @@ const html = fs.readFileSync('public/index.html', 'utf8');
 
 assert.doesNotMatch(
     html,
-    /erikraft-ai-ad|promo-ai\\.|data-ai-ad-dismiss|ai-ad-close/,
+    /erikraft-ai-ad|promo-ai[.]|data-ai-ad-dismiss|ai-ad-close/,
     'the removed ErikrafT AI advertisement must not remain in the page markup'
 );
 
