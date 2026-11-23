@@ -25,7 +25,6 @@ function run(command, args) {
 try {
   if (process.platform === 'win32') {
     const psPath = zipPath.replace(/'/g, "''");
-    const extractPath = extractDir.replace(/'/g, "''");
     run('powershell.exe', [
       '-NoProfile',
       '-NonInteractive',
