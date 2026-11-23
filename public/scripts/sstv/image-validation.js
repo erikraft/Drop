@@ -172,6 +172,27 @@ function parseWebp(bytes) {
   return null;
 }
 
+function detectImageMimeType(bytes) {
+  if (
+    bytes.length >= 8 &&
+    PNG_SIGNATURE.every((value, index) => bytes[index] === value)
+  ) return "image/png";
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+    return "image/jpeg";
+  }
+  if (
+    bytes.length >= 12 &&
+    ascii(bytes, 0, 4) === "RIFF" &&
+    ascii(bytes, 8, 4) === "WEBP"
+  ) return "image/webp";
+  if (bytes.length >= 6) {
+    const signature = ascii(bytes, 0, 6);
+    if (signature === "GIF87a" || signature === "GIF89a") return "image/gif";
+  }
+  if (bytes.length >= 2 && ascii(bytes, 0, 2) === "BM") return "image/bmp";
+  return null;
+}
+
 /**
  * Parse dimensions from image headers before asking the browser to decode pixels.
  * JPEG metadata is inspected up to the first 2 MiB; files with no readable frame
@@ -184,12 +205,14 @@ export function parseImageDimensions(bytes, mimeType) {
     throw new TypeError("Image header must be a Uint8Array.");
   }
 
+  const detectedMimeType = detectImageMimeType(bytes);
+  const resolvedMimeType = detectedMimeType || mimeType;
   let dimensions = null;
-  if (mimeType === "image/png") dimensions = parsePng(bytes);
-  else if (mimeType === "image/jpeg") dimensions = parseJpeg(bytes);
-  else if (mimeType === "image/webp") dimensions = parseWebp(bytes);
-  else if (mimeType === "image/gif") dimensions = parseGif(bytes);
-  else if (mimeType === "image/bmp" || mimeType === "image/x-ms-bmp") dimensions = parseBmp(bytes);
+  if (resolvedMimeType === "image/png") dimensions = parsePng(bytes);
+  else if (resolvedMimeType === "image/jpeg") dimensions = parseJpeg(bytes);
+  else if (resolvedMimeType === "image/webp") dimensions = parseWebp(bytes);
+  else if (resolvedMimeType === "image/gif") dimensions = parseGif(bytes);
+  else if (resolvedMimeType === "image/bmp" || resolvedMimeType === "image/x-ms-bmp") dimensions = parseBmp(bytes);
 
   if (!dimensions) {
     throw new TypeError("The image header is invalid or its dimensions could not be verified.");

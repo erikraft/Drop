@@ -37,6 +37,7 @@ for (const required of [
     'scripts/animated-qr-file-size.js',
     'scripts/animated-qr-screen-awake.js',
     'scripts/android-app-shortcuts.js',
+    'scripts/sstv/encoder-audio.js',
     'scripts/github-folder-zip.js'
 ]) {
     assert.ok(paths.includes(required), `Critical runtime resource is not pre-cached: ${required}`);

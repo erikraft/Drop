@@ -27,6 +27,7 @@ const relativePathsToCache = [
     'scripts/sstv/utils.js',
     'scripts/sstv/decoder.js',
     'scripts/sstv/worker.js',
+    'scripts/sstv/encoder-audio.js',
     'scripts/sstv/tone-generator.js',
     'scripts/sstv/image-validation.js',
     'scripts/github-folder-zip.js',

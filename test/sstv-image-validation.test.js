@@ -66,6 +66,20 @@ test("rejects a file whose header does not match the declared image type", async
   await assert.rejects(() => readImageDimensions(file), /header is invalid/);
 });
 
+test("detects PNG signature even when the declared MIME type is incorrect", () => {
+  assert.deepEqual(parseImageDimensions(pngHeader(320, 256), "image/jpeg"), {
+    width: 320,
+    height: 256,
+  });
+});
+
+test("detects the image signature when the MIME type is empty", () => {
+  assert.deepEqual(parseImageDimensions(pngHeader(320, 256), ""), {
+    width: 320,
+    height: 256,
+  });
+});
+
 test("reads GIF logical screen dimensions", () => {
   const bytes = new Uint8Array([..."GIF89a"].map((char) => char.charCodeAt(0)).concat([0x40, 0x01, 0x00, 0x01]));
   assert.deepEqual(parseImageDimensions(bytes, "image/gif"), { width: 320, height: 256 });
