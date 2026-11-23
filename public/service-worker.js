@@ -27,6 +27,8 @@ const relativePathsToCache = [
     'scripts/sstv/utils.js',
     'scripts/sstv/decoder.js',
     'scripts/sstv/worker.js',
+    'scripts/sstv/tone-generator.js',
+    'scripts/sstv/image-validation.js',
     'scripts/github-folder-zip.js',
     'scripts/security-layer.js',
     'scripts/android-app-shortcuts.js',
