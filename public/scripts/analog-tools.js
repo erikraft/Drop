@@ -48,7 +48,12 @@ root.innerHTML="<style>
 document.body.appendChild(root);
 const $=id=>root.querySelector("#"+id),dialog=root.querySelector("dialog");
 if(typeof Localization!=="undefined"&&Localization.translations&&Object.keys(Localization.translations).length)Localization.translatePage();
-const launcher=document.getElementById("analog-tools-launch");launcher.onclick=()=>dialog.showModal();launcher.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();dialog.showModal();}});$("at-close").onclick=()=>dialog.close();
+function openCommunicationTools(){if(dialog.open)return;try{if(typeof dialog.showModal==="function"){dialog.showModal();return;}}catch(error){console.warn("[Drop] Native communication dialog could not open; using fallback.",error);}dialog.setAttribute("open","");dialog.style.display="block";}
+function closeCommunicationTools(){if(typeof dialog.close==="function"&&dialog.open){try{dialog.close();return;}catch(error){console.warn("[Drop] Native communication dialog could not close; using fallback.",error);}}dialog.removeAttribute("open");dialog.style.removeProperty("display");}
+function getCommunicationToolsLauncher(target){const element=target instanceof Element?target:target?.parentElement;return element?.closest?.("#analog-tools-launch")||null;}
+document.addEventListener("click",event=>{if(!getCommunicationToolsLauncher(event.target))return;event.preventDefault();openCommunicationTools();},true);
+document.addEventListener("keydown",event=>{if((event.key==="Enter"||event.key===" ")&&getCommunicationToolsLauncher(event.target)){event.preventDefault();openCommunicationTools();}},true);
+$("at-close").addEventListener("click",closeCommunicationTools);
 dialog.addEventListener("close",()=>{if(recorder&&recorder.state==="recording")recorder.stop();});
 root.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{root.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("primary",x===b));root.querySelectorAll("[data-panel]").forEach(x=>x.classList.toggle("active",x.dataset.panel===b.dataset.tab));});
 let bitmap=null,wavUrl=null,recUrl=null,receivedBlob=null,recorder=null,stream=null,monitor=null;
