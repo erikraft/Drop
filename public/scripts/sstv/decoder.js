@@ -316,6 +316,7 @@ class SSTVDecoder {
           this._tonePower(porch, 1500),
           this._tonePower(porch, 1200)
         );
+        if (porchScore < 0.15) return -1;
         return transitionScore * 0.65 + porchScore * 0.35;
       }
 
@@ -339,6 +340,7 @@ class SSTVDecoder {
         this._tonePower(porch, 1500),
         this._tonePower(porch, 1200)
       );
+      if (porchScore < 0.15) return -1;
       return syncScore * 0.65 + porchScore * 0.35;
     };
 

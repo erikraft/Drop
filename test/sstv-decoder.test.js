@@ -116,6 +116,33 @@ test("aligns the first Martin 1 image row after the VIS header", async () => {
   );
 });
 
+test("rejects a 1200 Hz pulse without the required 1500 Hz porch", () => {
+  const sampleRate = 44100;
+  const samples = [];
+  const tone = createToneWriter(sampleRate, samples);
+  tone(1900, 0.025);
+  const syncStart = samples.length;
+  tone(1200, R36.SYNC_PULSE);
+  samples.push(...new Array(Math.round(R36.SYNC_PORCH * sampleRate)).fill(0));
+  tone(1900, 0.025);
+
+  const decoder = new SSTVDecoder(
+    Float32Array.from(samples),
+    sampleRate,
+    512
+  );
+  decoder.mode = R36;
+
+  assert.equal(
+    decoder._alignSync(
+      syncStart + Math.round(0.001 * sampleRate),
+      true
+    ),
+    null,
+    "silence after a 1200 Hz pulse must not be accepted as a line porch"
+  );
+});
+
 test("sync alignment validates the 1200 Hz pulse and 1500 Hz porch edges", () => {
   const sampleRate = 44100;
   const samples = [];
