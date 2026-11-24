@@ -270,15 +270,19 @@ class SSTVDecoder {
       : 0;
     const searchRadius = startOfSync
       ? Math.round(Math.max(0.02, this.mode.SYNC_PULSE * 2) * this.sampleRate)
-      : Math.round(2 * this.mode.LINE_TIME * this.sampleRate);
-    const searchStart = startOfSync
-      ? Math.max(syncProbeLength, alignStart - searchRadius)
-      : Math.max(syncProbeLength, alignStart);
+      : Math.max(1, Math.round(0.001 * this.sampleRate));
+    const expectedBoundary = startOfSync
+      ? alignStart
+      : alignStart + syncSamples;
+    const searchStart = Math.max(
+      syncProbeLength,
+      expectedBoundary - searchRadius
+    );
     const searchStop = Math.min(
       this.samples.length - (startOfSync
         ? syncSamples + porchProbeLength
         : porchProbeLength),
-      alignStart + searchRadius
+      expectedBoundary + searchRadius
     );
 
     if (searchStop <= searchStart) return null;
