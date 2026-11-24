@@ -24,3 +24,9 @@ test("communication tools dialog has a fallback when showModal is unavailable", 
   assert.match(tools, /dialog\.style\.zIndex="2147483647"/);
   assert.match(tools, /removeAttribute\("open"\)/);
 });
+
+test("communication tools do not implement ECB or dynamically load remote CryptoJS", () => {
+  assert.doesNotMatch(tools, /AES128ECB|C\.mode\.ECB|C\.AES/);
+  assert.doesNotMatch(tools, /crypto-js@|cdn\.jsdelivr\.net\/npm\/crypto-js/);
+  assert.match(tools, /AES256GCM/);
+});
