@@ -11,8 +11,8 @@ const player = fs.readFileSync(path.join(root, "public", "scripts", "sstv", "aud
 const css = fs.readFileSync(path.join(root, "public", "styles", "sstv-audio-player.css"), "utf8");
 
 test("SSTV tools use the custom player for encoded and received audio", () => {
-  assert.ok(tools.includes(String.raw\`id=\"at-player\" hidden\`));
-  assert.ok(tools.includes(String.raw\`id=\"at-received\" hidden\`));
+  assert.ok(tools.includes('id=\\"at-player\\" hidden'));
+  assert.ok(tools.includes('id=\\"at-received\\" hidden'));
   assert.equal((tools.match(/data-audio-player/g) || []).length, 2);
   assert.ok(tools.includes("initializeAudioPlayers(root)"));
   assert.ok(tools.includes('$("at-player").hidden=false'));
