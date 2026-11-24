@@ -1,5 +1,3 @@
-import "./audio-player.css";
-
 // Font Awesome Free 6.7.2 by @fontawesome, volume-high and volume-xmark.
 // CC BY 4.0: https://fontawesome.com/license/free
 const volumeHighPath =
