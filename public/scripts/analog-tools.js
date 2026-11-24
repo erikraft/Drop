@@ -12,7 +12,7 @@ root.innerHTML=`<style>
 #drop-analog-tools .at-brand{display:flex;align-items:center;gap:13px;min-width:0}
 #drop-analog-tools .at-brand-icon{display:grid;place-items:center;flex:0 0 44px;width:44px;height:44px;border:1px solid #ffffff40;border-radius:12px;background:#ffffff1a}
 #drop-analog-tools .at-brand-icon svg{display:block;width:23px;fill:currentColor}
-#drop-analog-tools .at-title{margin:0;font-size:17px;font-weight:700;line-height:1.35}
+#drop-analog-tools .at-title{margin:0;font-size:17px;font-weight:700;line-height:1.35;color:#fff}
 #drop-analog-tools .at-subtitle{margin:3px 0 0;color:#ffffffd9;font-size:12px}
 #drop-analog-tools #at-close{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:1px solid #ffffff55;border-radius:10px;background:transparent;color:#fff;font-size:23px;line-height:1}
 #drop-analog-tools #at-close:hover{background:#ffffff20}

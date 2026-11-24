@@ -9,6 +9,7 @@ const html = fs.readFileSync(path.join(root, "public", "index.html"), "utf8");
 const tools = fs.readFileSync(path.join(root, "public", "scripts", "analog-tools.js"), "utf8");
 
 test("communication tools launcher exists and remains keyboard reachable", () => {
+  assert.match(tools, /#drop-analog-tools \.at-title\{[^}]*color:#fff/);
   assert.match(html, /id="analog-tools-launch"[^>]*role="button"[^>]*tabindex="0"/);
 });
 
