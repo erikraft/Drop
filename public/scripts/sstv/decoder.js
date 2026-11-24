@@ -203,10 +203,7 @@ class SSTVDecoder {
     const leader2Start = centeredWindowStart(LEADER_OFFSET, VIS_START_OFFSET);
     const visStart = centeredWindowStart(VIS_START_OFFSET, HDR_SIZE);
 
-    const maxHeaderSearchSamples = Math.min(
-      this.samples.length - headerSize,
-      Math.round(60 * this.sampleRate)
-    );
+    const maxHeaderSearchSamples = this.samples.length - headerSize;
     for (let offset = 0; offset <= maxHeaderSearchSamples; offset += jumpSize) {
       this._throwIfCpuBudgetExceeded();
       const f1 = this._peakFreq(this.samples.subarray(offset + leader1Start, offset + leader1Start + windowSize), 1750, 2050);
