@@ -289,6 +289,18 @@ class SSTVDecoder {
       return (expectedPower - competingPower) / total;
     };
 
+    const dominantToneScore = (data, expectedFrequency, alternatives) => {
+      const expectedPower = this._tonePower(data, expectedFrequency);
+      let competingPower = 0;
+      for (const frequency of alternatives) {
+        competingPower = Math.max(
+          competingPower,
+          this._tonePower(data, frequency)
+        );
+      }
+      return contrast(expectedPower, competingPower);
+    };
+
     const scoreAt = (candidate) => {
       if (startOfSync) {
         // A line begins with 1200 Hz sync, followed by the 1500 Hz porch.
@@ -300,10 +312,16 @@ class SSTVDecoder {
           candidate,
           candidate + syncProbeLength
         );
+        const syncToneScore = dominantToneScore(
+          sync,
+          1200,
+          [1500, 1900, 2300]
+        );
         const transitionScore = contrast(
           this._tonePower(sync, 1200),
           this._tonePower(before, 1200)
         );
+        if (transitionScore < 0.15 || syncToneScore < 0.15) return -1;
 
         if (porchProbeLength === 0) return transitionScore;
         const porchInset = Math.max(0, Math.floor((porchSamples - porchProbeLength) / 2));
@@ -312,9 +330,10 @@ class SSTVDecoder {
           porchStart,
           porchStart + porchProbeLength
         );
-        const porchScore = contrast(
-          this._tonePower(porch, 1500),
-          this._tonePower(porch, 1200)
+        const porchScore = dominantToneScore(
+          porch,
+          1500,
+          [1200, 1900, 2300]
         );
         if (porchScore < 0.15) return -1;
         return transitionScore * 0.65 + porchScore * 0.35;
@@ -332,15 +351,17 @@ class SSTVDecoder {
         candidate,
         candidate + porchProbeLength
       );
-      const syncScore = contrast(
-        this._tonePower(sync, 1200),
-        this._tonePower(sync, 1500)
+      const syncScore = dominantToneScore(
+        sync,
+        1200,
+        [1500, 1900, 2300]
       );
-      const porchScore = contrast(
-        this._tonePower(porch, 1500),
-        this._tonePower(porch, 1200)
+      const porchScore = dominantToneScore(
+        porch,
+        1500,
+        [1200, 1900, 2300]
       );
-      if (porchScore < 0.15) return -1;
+      if (syncScore < 0.15 || porchScore < 0.15) return -1;
       return syncScore * 0.65 + porchScore * 0.35;
     };
 
