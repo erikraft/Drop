@@ -1,10 +1,9 @@
 import {
   freqToLum,
-  parabolicPeakInterp,
   hannWindow,
-  fft,
   yuvToRgb,
 } from "./utils.js";
+import FFT from "./fft.js";
 import {
   VIS_MAP,
   COL_FMT,
@@ -17,7 +16,15 @@ import {
 } from "./spec.js";
 
 class SSTVDecoder {
-  constructor(audioBuffer, sampleRate, fftSize = null, onProgress, onStart = null, onLine = null) {
+  constructor(
+    audioBuffer,
+    sampleRate,
+    fftSize = null,
+    onProgress,
+    onStart = null,
+    onLine = null,
+    cpuBudgetSeconds = 600
+  ) {
     this.samples = audioBuffer;
     this.sampleRate = sampleRate;
     this.fftSize = fftSize;
@@ -25,10 +32,19 @@ class SSTVDecoder {
     this.onProgress = onProgress;
     this.onStart = onStart;
     this.onLine = onLine;
+    this.cpuBudgetSeconds = cpuBudgetSeconds;
+    this.decodeDeadline = null;
+    this.hannWindows = new Map();
+    this.frequencyCoefficients = new Map();
+    this.fftInstances = new Map();
+    this.windowedSamples = new Float64Array(0);
   }
 
   async decode() {
+    const now = globalThis.performance?.now?.() ?? Date.now();
+    this.decodeDeadline = now + this.cpuBudgetSeconds * 1000;
     const headerEnd = this._findHeader();
+    this._throwIfCpuBudgetExceeded();
     if (this.onProgress) this.onProgress(5);
 
     this.mode = this._decodeVIS(headerEnd);
@@ -43,23 +59,107 @@ class SSTVDecoder {
 
   _peakFreq(data, minFrequency = 1000, maxFrequency = 2600) {
     if (!data || data.length < 8) return Number.NaN;
-    const window = hannWindow(data.length);
-    const windowedData = data.map((value, index) => value * window[index]);
-    const spectrum = fft(windowedData, this.sampleRate, this.fftSize);
-    const binWidth = this.sampleRate / (2 * spectrum.length);
+    const fftSize = Math.max(
+      this.fftSize ?? 0,
+      2 ** Math.ceil(Math.log2(data.length))
+    );
+    const binWidth = this.sampleRate / fftSize;
     const firstBin = Math.max(1, Math.ceil(minFrequency / binWidth));
-    const lastBin = Math.min(spectrum.length - 2, Math.floor(maxFrequency / binWidth));
+    const lastBin = Math.min(fftSize / 2 - 2, Math.floor(maxFrequency / binWidth));
     if (firstBin > lastBin) return Number.NaN;
-    let peakBin = firstBin;
+
+    let window = this.hannWindows.get(data.length);
+    if (!window) {
+      window = new Float64Array(data.length);
+      for (let index = 0; index < data.length; index++) {
+        window[index] = 0.5 * (1 - Math.cos((2 * Math.PI * index) / (data.length - 1)));
+      }
+      this.hannWindows.set(data.length, window);
+    }
+
+    if (this.windowedSamples.length < data.length) {
+      this.windowedSamples = new Float64Array(data.length);
+    }
+    const windowedSamples = this.windowedSamples;
+    for (let index = 0; index < data.length; index++) {
+      windowedSamples[index] = data[index] * window[index];
+    }
+
+    let coefficients = this.frequencyCoefficients.get(fftSize);
+    if (!coefficients) {
+      coefficients = new Float64Array(fftSize / 2);
+      for (let bin = 0; bin < coefficients.length; bin++) {
+        coefficients[bin] = 2 * Math.cos((2 * Math.PI * bin) / fftSize);
+      }
+      this.frequencyCoefficients.set(fftSize, coefficients);
+    }
+
+    const scanFirstBin = Math.max(1, firstBin - 1);
+    const scanLastBin = Math.min(fftSize / 2 - 1, lastBin + 1);
+    let peakBin = -1;
     let peakMagnitude = -Infinity;
-    for (let bin = firstBin; bin <= lastBin; bin++) {
-      if (spectrum[bin] > peakMagnitude) {
-        peakMagnitude = spectrum[bin];
-        peakBin = bin;
+    let peakLeft = 0;
+    let peakRight = 0;
+    const scanWork = (lastBin - firstBin + 1) * data.length;
+    const fftWork = fftSize * Math.log2(fftSize);
+
+    if (scanWork >= fftWork) {
+      let cached = this.fftInstances.get(fftSize);
+      if (!cached) {
+        cached = { fft: new FFT(fftSize, this.sampleRate), input: new Float32Array(fftSize) };
+        this.fftInstances.set(fftSize, cached);
+      }
+      cached.input.fill(0);
+      cached.input.set(windowedSamples.subarray(0, data.length));
+      const spectrum = cached.fft.forward(cached.input);
+      for (let bin = firstBin; bin <= lastBin; bin++) {
+        if (spectrum[bin] > peakMagnitude) {
+          peakBin = bin;
+          peakMagnitude = spectrum[bin];
+          peakLeft = spectrum[bin - 1];
+          peakRight = spectrum[bin + 1];
+        }
+      }
+    } else {
+      let previousMagnitude = 0;
+      for (let bin = scanFirstBin; bin <= scanLastBin; bin++) {
+        const coefficient = coefficients[bin];
+        let previous = 0;
+        let previousPrevious = 0;
+        for (let index = 0; index < data.length; index++) {
+          const current =
+            coefficient * previous - previousPrevious + windowedSamples[index];
+          previousPrevious = previous;
+          previous = current;
+        }
+        const power =
+          previous * previous +
+          previousPrevious * previousPrevious -
+          coefficient * previous * previousPrevious;
+        const magnitude = Math.sqrt(Math.max(0, power));
+
+        if (bin >= firstBin && bin <= lastBin && magnitude > peakMagnitude) {
+          peakBin = bin;
+          peakMagnitude = magnitude;
+          peakLeft = previousMagnitude;
+          peakRight = 0;
+        } else if (bin === peakBin + 1) {
+          peakRight = magnitude;
+        }
+        previousMagnitude = magnitude;
       }
     }
-    if (!Number.isFinite(peakMagnitude) || peakMagnitude <= 0) return Number.NaN;
-    return parabolicPeakInterp(spectrum, peakBin) * binWidth;
+
+    if (peakBin < 0 || !Number.isFinite(peakMagnitude) || peakMagnitude <= 0) {
+      return Number.NaN;
+    }
+
+    const denominator = peakLeft - 2 * peakMagnitude + peakRight;
+    const offset =
+      Math.abs(denominator) < Number.EPSILON
+        ? 0
+        : Math.max(-0.5, Math.min(0.5, (0.5 * (peakLeft - peakRight)) / denominator));
+    return (peakBin + offset) * binWidth;
   }
 
   _tonePower(data, frequency) {
@@ -83,6 +183,14 @@ class SSTVDecoder {
     return Number.isFinite(power) ? Math.max(0, power) : 0;
   }
 
+  _throwIfCpuBudgetExceeded() {
+    if (this.decodeDeadline === null) return;
+    const now = globalThis.performance?.now?.() ?? Date.now();
+    if (now >= this.decodeDeadline) {
+      throw new Error("SSTV decoding CPU time limit reached.");
+    }
+  }
+
   _findHeader() {
     const headerSize = Math.round(HDR_SIZE * this.sampleRate);
     const windowSize = Math.round(HDR_WINDOW_SIZE * this.sampleRate);
@@ -95,11 +203,16 @@ class SSTVDecoder {
     const leader2Start = centeredWindowStart(LEADER_OFFSET, VIS_START_OFFSET);
     const visStart = centeredWindowStart(VIS_START_OFFSET, HDR_SIZE);
 
-    for (let offset = 0; offset <= this.samples.length - headerSize; offset += jumpSize) {
-      const f1 = this._peakFreq(this.samples.slice(offset + leader1Start, offset + leader1Start + windowSize), 1750, 2050);
-      const f2 = this._peakFreq(this.samples.slice(offset + breakStart, offset + breakStart + windowSize), 1050, 1350);
-      const f3 = this._peakFreq(this.samples.slice(offset + leader2Start, offset + leader2Start + windowSize), 1750, 2050);
-      const f4 = this._peakFreq(this.samples.slice(offset + visStart, offset + visStart + windowSize), 1050, 1350);
+    const maxHeaderSearchSamples = Math.min(
+      this.samples.length - headerSize,
+      Math.round(60 * this.sampleRate)
+    );
+    for (let offset = 0; offset <= maxHeaderSearchSamples; offset += jumpSize) {
+      this._throwIfCpuBudgetExceeded();
+      const f1 = this._peakFreq(this.samples.subarray(offset + leader1Start, offset + leader1Start + windowSize), 1750, 2050);
+      const f2 = this._peakFreq(this.samples.subarray(offset + breakStart, offset + breakStart + windowSize), 1050, 1350);
+      const f3 = this._peakFreq(this.samples.subarray(offset + leader2Start, offset + leader2Start + windowSize), 1750, 2050);
+      const f4 = this._peakFreq(this.samples.subarray(offset + visStart, offset + visStart + windowSize), 1050, 1350);
       if (
         Number.isFinite(f1) && Number.isFinite(f2) &&
         Number.isFinite(f3) && Number.isFinite(f4) &&
@@ -130,7 +243,7 @@ class SSTVDecoder {
         ) {
           let score = 0;
           for (const [windowStart, frequency] of expectedTones) {
-            const segment = this.samples.slice(
+            const segment = this.samples.subarray(
               candidate + windowStart,
               candidate + windowStart + windowSize
             );
@@ -149,24 +262,145 @@ class SSTVDecoder {
   }
 
   _alignSync(alignStart, startOfSync = true) {
-    const syncWindow = Math.round(this.mode.SYNC_PULSE * 1.4 * this.sampleRate);
-    const alignStop = this.samples.length - syncWindow;
+    const syncSamples = Math.round(this.mode.SYNC_PULSE * this.sampleRate);
+    const porchSamples = Math.round(this.mode.SYNC_PORCH * this.sampleRate);
+    const syncProbeLength = Math.max(8, Math.round(syncSamples * 0.4));
+    const porchProbeLength = porchSamples >= 8
+      ? Math.max(8, Math.round(porchSamples * 0.75))
+      : 0;
+    const searchRadius = startOfSync
+      ? Math.round(Math.max(0.02, this.mode.SYNC_PULSE * 2) * this.sampleRate)
+      : Math.max(1, Math.round(0.001 * this.sampleRate));
+    const expectedBoundary = startOfSync
+      ? alignStart
+      : alignStart + syncSamples;
+    const searchStart = Math.max(
+      syncProbeLength,
+      expectedBoundary - searchRadius
+    );
+    const searchStop = Math.min(
+      this.samples.length - (startOfSync
+        ? syncSamples + porchProbeLength
+        : porchProbeLength),
+      expectedBoundary + searchRadius
+    );
 
-    if (alignStop <= alignStart) return null;
+    if (searchStop <= searchStart) return null;
 
-    for (let i = alignStart; i < alignStop; i++) {
-      const section = this.samples.slice(i, i + syncWindow);
-      const freq = this._peakFreq(section, 1050, 2450);
-      if (freq > 1350) {
-        const syncEnd = i + Math.floor(syncWindow / 2);
-        return startOfSync
-          ? syncEnd - Math.round(this.mode.SYNC_PULSE * this.sampleRate)
-          : syncEnd;
+    const contrast = (expectedPower, competingPower) => {
+      const total = expectedPower + competingPower;
+      if (!Number.isFinite(total) || total <= Number.EPSILON) return -1;
+      return (expectedPower - competingPower) / total;
+    };
+
+    const dominantToneScore = (data, expectedFrequency, alternatives) => {
+      const expectedPower = this._tonePower(data, expectedFrequency);
+      let competingPower = 0;
+      for (const frequency of alternatives) {
+        competingPower = Math.max(
+          competingPower,
+          this._tonePower(data, frequency)
+        );
+      }
+      return contrast(expectedPower, competingPower);
+    };
+
+    const scoreAt = (candidate) => {
+      if (startOfSync) {
+        // A line begins with 1200 Hz sync, followed by the 1500 Hz porch.
+        const before = this.samples.subarray(
+          candidate - syncProbeLength,
+          candidate
+        );
+        const sync = this.samples.subarray(
+          candidate,
+          candidate + syncProbeLength
+        );
+        const syncToneScore = dominantToneScore(
+          sync,
+          1200,
+          [1500, 1900, 2300]
+        );
+        const transitionScore = contrast(
+          this._tonePower(sync, 1200),
+          this._tonePower(before, 1200)
+        );
+        if (transitionScore < 0.15 || syncToneScore < 0.15) return -1;
+
+        if (porchProbeLength === 0) return transitionScore;
+        const porchInset = Math.max(0, Math.floor((porchSamples - porchProbeLength) / 2));
+        const porchStart = candidate + syncSamples + porchInset;
+        const porch = this.samples.subarray(
+          porchStart,
+          porchStart + porchProbeLength
+        );
+        const porchScore = dominantToneScore(
+          porch,
+          1500,
+          [1200, 1900, 2300]
+        );
+        if (porchScore < 0.15) return -1;
+        return transitionScore * 0.65 + porchScore * 0.35;
+      }
+
+      // Scottie modes have an initial sync immediately after the VIS stop
+      // tone. That stop tone and the first sync are both 1200 Hz, so their
+      // boundary is not observable. Align to the 1200 -> 1500 porch edge.
+      const sync = this.samples.subarray(
+        candidate - syncProbeLength,
+        candidate
+      );
+      if (porchProbeLength === 0) return -1;
+      const porch = this.samples.subarray(
+        candidate,
+        candidate + porchProbeLength
+      );
+      const syncScore = dominantToneScore(
+        sync,
+        1200,
+        [1500, 1900, 2300]
+      );
+      const porchScore = dominantToneScore(
+        porch,
+        1500,
+        [1200, 1900, 2300]
+      );
+      if (syncScore < 0.15 || porchScore < 0.15) return -1;
+      return syncScore * 0.65 + porchScore * 0.35;
+    };
+
+    let bestCandidate = null;
+    let bestScore = -Infinity;
+    const searchStep = Math.max(1, Math.round(0.00025 * this.sampleRate));
+
+    for (
+      let candidate = searchStart;
+      candidate <= searchStop;
+      candidate += searchStep
+    ) {
+      this._throwIfCpuBudgetExceeded();
+      const score = scoreAt(candidate);
+      if (score > bestScore) {
+        bestScore = score;
+        bestCandidate = candidate;
       }
     }
-    return null;
-  }
 
+    if (bestCandidate === null || bestScore < 0.25) return null;
+
+    const refineStart = Math.max(searchStart, bestCandidate - searchStep);
+    const refineStop = Math.min(searchStop, bestCandidate + searchStep);
+    for (let candidate = refineStart; candidate <= refineStop; candidate++) {
+      this._throwIfCpuBudgetExceeded();
+      const score = scoreAt(candidate);
+      if (score > bestScore) {
+        bestScore = score;
+        bestCandidate = candidate;
+      }
+    }
+
+    return bestCandidate;
+  }
   _decodeVIS(visStart) {
     const bitSize = Math.round(VIS_BIT_SIZE * this.sampleRate);
     const visBits = [];
@@ -176,7 +410,7 @@ class SSTVDecoder {
       const start = visStart + i * bitSize + Math.floor((bitSize - bitWindowSize) / 2);
       const end = start + bitWindowSize;
       if (end > this.samples.length) throw new Error("SSTV VIS header is incomplete.");
-      const section = this.samples.slice(start, end);
+      const section = this.samples.subarray(start, end);
       const freq = this._peakFreq(section, 1000, 1400);
       if (!Number.isFinite(freq)) throw new Error("Could not read the SSTV VIS header.");
       visBits.push(freq <= 1200 ? 1 : 0);
@@ -222,6 +456,7 @@ class SSTVDecoder {
     }
 
     for (let line = 0; line < height; line++) {
+      this._throwIfCpuBudgetExceeded();
       if (this.onProgress && line % 5 === 0) {
         const percent = 10 + Math.round((line / height) * 90);
         this.onProgress(percent);
@@ -237,8 +472,14 @@ class SSTVDecoder {
           if (line > 0 || chan > 0) {
             seqStart += Math.round(mode.LINE_TIME * this.sampleRate);
           }
-          const aligned = this._alignSync(seqStart);
-          if (aligned !== null) seqStart = aligned;
+          // The first Martin/Robot sync starts immediately after the known VIS
+          // stop bit, so its position is already exact. Only align later lines,
+          // or modes that carry an initial scan before their first sync pulse.
+          const shouldAlignSync = line > 0 || chan > 0 || mode.HAS_START_SYNC;
+          if (shouldAlignSync) {
+            const aligned = this._alignSync(seqStart);
+            if (aligned !== null) seqStart = aligned;
+          }
         }
 
         for (let px = 0; px < width; px++) {
@@ -263,7 +504,7 @@ class SSTVDecoder {
             return imageData;
           }
 
-          const pixelArea = this.samples.slice(pxStart, pxEnd);
+          const pixelArea = this.samples.subarray(pxStart, pxEnd);
           const freq = this._peakFreq(pixelArea, 1400, 2400);
           imageData[line][chan][px] = freqToLum(freq);
         }
