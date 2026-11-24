@@ -19,6 +19,11 @@ test("SSTV tools use the custom player for encoded and received audio", () => {
   assert.ok(tools.includes('$("at-received").hidden=false'));
 });
 
+test("player CSS is loaded by the Drop document, not an SSTV-relative module import", () => {
+  assert.ok(html.includes("styles/sstv-audio-player.css"));
+  assert.ok(!player.startsWith('import "./audio-player.css"'));
+});
+
 test("Drop loads responsive custom player styling", () => {
   assert.ok(html.includes("styles/sstv-audio-player.css"));
   assert.ok(css.includes(".sstv-audio-player__controls"));
