@@ -1,0 +1,48 @@
+/* ErikrafT Drop — optical liquid glass fallback and rim treatment. */
+:root {
+  --drop-glass-surface: rgba(17, 25, 40, .64);
+  --drop-glass-edge: rgba(255, 255, 255, .18);
+  --drop-glass-shine: rgba(255, 255, 255, .11);
+}
+body > header,
+#center .panel.column,
+#center .panel.row,
+.chat-panel,
+.realtime-panels .panel,
+[role="dialog"],
+.modal-card {
+  border-color: var(--drop-glass-edge);
+  background: linear-gradient(145deg, rgba(33, 45, 66, .72), var(--drop-glass-surface));
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .22), inset 0 1px 0 var(--drop-glass-shine);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35);
+  backdrop-filter: blur(20px) saturate(1.35);
+}
+body > header {
+  border: 1px solid var(--drop-glass-edge);
+  border-radius: 18px;
+}
+#center .panel.column,
+#center .panel.row,
+.realtime-panels .panel,
+.chat-panel {
+  border: 1px solid var(--drop-glass-edge);
+}
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid rgba(147, 197, 253, .95);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-transparency: reduce) {
+  body > header,
+  #center .panel.column,
+  #center .panel.row,
+  .chat-panel,
+  .realtime-panels .panel,
+  [role="dialog"],
+  .modal-card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: #172033;
+  }
+}
