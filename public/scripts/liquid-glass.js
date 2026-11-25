@@ -17,6 +17,7 @@
     "[data-liquid-glass]",
     "body > header",
     "header.site-header",
+    ".header-container",
     "header.topbar",
     ".site-header",
     ".site-nav",
