@@ -38,7 +38,10 @@
     ".project-card",
     ".lang-dropdown",
     ".mobile-menu",
-    ".menu-dropdown"
+    ".menu-dropdown",
+    ".shr-panel",
+    ".discovery-wrapper",
+    "x-paper"
   ].join(",");
 
   const isChromium = /(?:Chrome|Chromium|Edg|OPR|Brave)/i.test(navigator.userAgent || "");

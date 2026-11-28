@@ -26,6 +26,7 @@ class ErikrafTdrop {
             'scripts/network.js',
             ...(window.erikraftClientType === 'android' ? [] : ['scripts/page-agent-ai.js']),
             'scripts/ui.js',
+            'scripts/liquid-glass.js',
             'scripts/libs/heic2any.min.js',
             'scripts/libs/no-sleep.min.js',
             'scripts/libs/zip.min.js',
